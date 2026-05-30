@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.typemanagement.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.core.resources.IFile;
@@ -21,11 +22,15 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -49,6 +54,13 @@ class StructDataTypeRenameTest {
 
 	private IProject project;
 	private TypeLibrary typeLibrary;
+
+	@BeforeAll
+	static void preloadSystemManager() {
+		// Touch the SystemManager singleton so its resource change listener is
+		// active before any fixture project is imported.
+		SystemManager.INSTANCE.name();
+	}
 
 	@BeforeEach
 	void loadFixture() throws Exception {
@@ -76,19 +88,23 @@ class StructDataTypeRenameTest {
 	@Test
 	void renameInnerStruct_updatesDataTypeNameInLibrary() throws Exception {
 		assertEquals(OLD_NAME, structuredType(INNER_STRUCT).getName());
+		assertTypeEntry(file(INNER_FILE), INNER_STRUCT);
 
 		renameInnerStruct();
 
 		assertEquals(NEW_NAME, structuredType(INNER_STRUCT_RENAMED).getName());
+		assertTypeEntry(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
 	}
 
 	@Test
 	void renameInnerStruct_updatesOuterStructMemberReference() throws Exception {
 		assertOuterMember(OLD_NAME, INNER_STRUCT);
+		assertTypeEntry(file(INNER_FILE), INNER_STRUCT);
 
 		renameInnerStruct();
 
 		assertOuterMember(NEW_NAME, INNER_STRUCT_RENAMED);
+		assertTypeEntry(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
 	}
 
 	// Undo renames the .dtp file back but leaves its internal DataType name as
@@ -124,7 +140,16 @@ class StructDataTypeRenameTest {
 	private void assertOuterMember(final String expectedName, final String expectedQualifiedType) {
 		final VarDeclaration inner = structuredType(OUTER_STRUCT).getMemberVariables().get(0);
 		assertEquals(expectedName, inner.getTypeName());
-		assertEquals(structuredType(expectedQualifiedType), inner.getType());
+		// Comparing the resolved type by identity is fragile because the library
+		// can be reloaded during the refactoring; compare full-qualified names.
+		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(inner.getType()));
+	}
+
+	private void assertTypeEntry(final IFile typeFile, final String expectedFullTypeName) {
+		final TypeEntry entry = typeLibrary.getTypeEntry(typeFile);
+		assertNotNull(entry);
+		assertFalse(entry.hasError());
+		assertEquals(expectedFullTypeName, entry.getFullTypeName());
 	}
 
 	private StructuredType structuredType(final String qualifiedName) {
