@@ -31,6 +31,8 @@ public class ComparisonService {
 		void columnsChanged(List<ComparisonColumn> columns);
 	}
 
+	private long id = 0; // for generating unique column IDs
+
 	private static final ComparisonService INSTANCE = new ComparisonService();
 
 	public static ComparisonService getInstance() {
@@ -42,6 +44,10 @@ public class ComparisonService {
 	private final List<Listener> listeners = new CopyOnWriteArrayList<>();
 
 	private ComparisonService() {
+	}
+
+	public String generateUniqueColumnId() {
+		return Long.toString(id++);
 	}
 
 	public synchronized void addColumn(final ComparisonColumn column) {
@@ -68,7 +74,9 @@ public class ComparisonService {
 	}
 
 	public void addListener(final Listener l) {
+		final List<ComparisonColumn> snapshot = List.copyOf(columns.values());
 		listeners.add(l);
+		l.columnsChanged(snapshot); // initial notification with current state
 	}
 
 	public void removeListener(final Listener l) {

@@ -23,9 +23,6 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.swt.graphics.Color;
 
 /**
  * @brief A figure representing an event marker in the timeline.
@@ -35,14 +32,7 @@ import org.eclipse.swt.graphics.Color;
  */
 public class EventMarkerFigure extends Figure {
 
-	private static final Color CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
-			.get(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR);
-	private static final Color NOT_CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
-			.get(DeploymentDebugModelPresentation.WATCH_COLOR);
-	private static final Color INVALID_COLOR = ColorConstants.gray;
-
 	private final int eventIndex;
-	private boolean isCurrentEvent = false;
 	private boolean readOnly = false;
 
 	public EventMarkerFigure(final int eventIndex) {
@@ -75,18 +65,6 @@ public class EventMarkerFigure extends Figure {
 
 	public void setIsReadOnly(final boolean isReadOnly) {
 		this.readOnly = isReadOnly;
-	}
-
-	public void setIsValid(final boolean isValid) {
-		if (!isValid) {
-			setBackgroundColor(INVALID_COLOR);
-		} else {
-			setBackgroundColor(isCurrentEvent ? CURRENT_EVENT_COLOR : NOT_CURRENT_EVENT_COLOR);
-		}
-	}
-
-	public void setIsCurrentEvent(final boolean isCurrentEvent) {
-		this.isCurrentEvent = isCurrentEvent;
 	}
 
 	@Override

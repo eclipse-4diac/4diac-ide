@@ -18,11 +18,13 @@ import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteEventsCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.EventMarkerFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
+import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
@@ -33,6 +35,8 @@ import org.eclipse.gef.editpolicies.AbstractEditPolicy;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -51,6 +55,12 @@ import org.eclipse.swt.widgets.Display;
  */
 public class EventMarkerEditPart extends AbstractGraphicalEditPart
 		implements EventMarkerFigure.SelectedEventListener, PropertyChangeListener {
+
+	private static final Color CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
+			.get(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR);
+	private static final Color NOT_CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
+			.get(DeploymentDebugModelPresentation.WATCH_COLOR);
+	private static final Color INVALID_COLOR = ColorConstants.gray;
 
 	@Override
 	protected IFigure createFigure() {
@@ -89,9 +99,16 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		final var figure = getFigure();
-		figure.setIsCurrentEvent(getModel().getIsCurrentEvent());
-		figure.setIsValid(getModel().getValid());
 		figure.setIsReadOnly(getModel().getIsReadOnly());
+
+		if (getModel().getColor() != null) {
+			figure.setBackgroundColor(getModel().getColor());
+		} else if (!getModel().getValid()) {
+			figure.setBackgroundColor(INVALID_COLOR);
+		} else {
+			figure.setBackgroundColor(getModel().getIsCurrentEvent() ? CURRENT_EVENT_COLOR : NOT_CURRENT_EVENT_COLOR);
+		}
+
 		figure.repaint();
 	}
 

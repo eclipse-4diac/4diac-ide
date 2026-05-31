@@ -26,8 +26,10 @@ import java.util.stream.Collectors;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonColumn;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
 
-public class TimelineModel implements Timeline.StructureListener {
+public class TimelineModel implements Timeline.StructureListener, ComparisonService.Listener {
 
 	private final Timeline timeline;
 	private TimelineConnection connectionToParentTimelineModel;
@@ -60,6 +62,7 @@ public class TimelineModel implements Timeline.StructureListener {
 		updateReadOnlyMarkers();
 
 		timeline.addStructureListener(this);
+		ComparisonService.getInstance().addListener(this);
 	}
 
 	public List<EventMarker> getEventMarkers() {
@@ -136,6 +139,7 @@ public class TimelineModel implements Timeline.StructureListener {
 
 	public void dispose() {
 		timeline.removeStructureListener(this);
+		ComparisonService.getInstance().removeListener(this);
 	}
 
 	private void eventSelected(final Integer index) {
@@ -190,6 +194,19 @@ public class TimelineModel implements Timeline.StructureListener {
 	@Override
 	public void timelineStateChanged(final Timeline timeline) {
 		updateReadOnlyMarkers();
+	}
+
+	@Override
+	public void columnsChanged(final List<ComparisonColumn> columns) {
+		for (final var eventMarker : eventMarkers) {
+			eventMarker.setColor(null);
+		}
+		for (final var column : columns) {
+			if (column.getEventPosition().timeline() == timeline) {
+				eventMarkers.get(column.getEventPosition().eventNumber()).setColor(column.getColor());
+			}
+		}
+
 	}
 
 	// Listener to this

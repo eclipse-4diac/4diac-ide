@@ -17,6 +17,9 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
+import org.eclipse.swt.graphics.Color;
+
 /**
  * Represents a column in the states comparison table.
  *
@@ -29,12 +32,17 @@ public class ComparisonColumn {
 	private static final String EMPTY_VALUE = ""; //$NON-NLS-1$
 
 	private final String columnId; // unique, e.g. element UUID
-	private final String label; // shown in table header
+	private final EventPosition eventPosition;
+	private final String label;
 	private final Map<String, String> cells; // rowKey → displayValue
+	private final Color color; // for coloring the column
 
-	public ComparisonColumn(final String columnId, final String label, final Map<String, String> cells) {
+	public ComparisonColumn(final String columnId, final EventPosition eventPosition, final String label,
+			final Map<String, String> cells, final Color color) {
 		this.columnId = columnId;
+		this.eventPosition = eventPosition;
 		this.label = label;
+		this.color = color;
 		this.cells = Map.copyOf(cells); // defensive copy
 	}
 
@@ -42,8 +50,8 @@ public class ComparisonColumn {
 		return columnId;
 	}
 
-	public String getLabel() {
-		return label;
+	public EventPosition getEventPosition() {
+		return eventPosition;
 	}
 
 	public String getCell(final String rowKey) {
@@ -52,6 +60,10 @@ public class ComparisonColumn {
 
 	public Set<String> getRowKeys() {
 		return cells.keySet();
+	}
+
+	public Color getColor() {
+		return color;
 	}
 
 }
