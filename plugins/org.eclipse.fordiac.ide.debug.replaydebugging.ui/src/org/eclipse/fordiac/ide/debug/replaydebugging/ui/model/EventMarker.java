@@ -26,7 +26,7 @@ public class EventMarker {
 	private boolean isCurrentEvent = false;
 	private boolean isValid = false;
 	private boolean isReadOnly = false;
-	private Color color = null;
+	private Color comparisonColor = null;
 
 	public static final String PROPERTY_EVENT_CHANGED = "eventChanged"; //$NON-NLS-1$
 
@@ -42,12 +42,12 @@ public class EventMarker {
 		return index;
 	}
 
-	public Color getColor() {
-		return color;
+	public Color getComparisonColor() {
+		return comparisonColor;
 	}
 
-	public void setColor(final Color color) {
-		this.color = color;
+	public void setComparisonColor(final Color color) {
+		this.comparisonColor = color;
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_CHANGED, null, null);
 	}
 

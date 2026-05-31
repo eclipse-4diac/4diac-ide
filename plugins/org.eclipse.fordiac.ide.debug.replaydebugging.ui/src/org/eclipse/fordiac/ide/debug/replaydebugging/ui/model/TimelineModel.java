@@ -199,11 +199,11 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	@Override
 	public void columnsChanged(final List<ComparisonColumn> columns) {
 		for (final var eventMarker : eventMarkers) {
-			eventMarker.setColor(null);
+			eventMarker.setComparisonColor(null);
 		}
 		for (final var column : columns) {
 			if (column.getEventPosition().timeline() == timeline) {
-				eventMarkers.get(column.getEventPosition().eventNumber()).setColor(column.getColor());
+				eventMarkers.get(column.getEventPosition().eventNumber()).setComparisonColor(column.getColor());
 			}
 		}
 

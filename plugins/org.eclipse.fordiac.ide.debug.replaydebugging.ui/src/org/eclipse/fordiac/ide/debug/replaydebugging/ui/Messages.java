@@ -19,6 +19,7 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 	public static String AddToComparisonCommand_Text;
+	public static String RemoveFromComparisonCommand_Text;
 	public static String OpenStatesComparisonHandler_OpenTableViewError;
 	public static String StatesComparisonView_AlphabeticallyAscendingOrderLabel;
 	public static String StatesComparisonView_AlphabeticallyDescendingOrderLabel;

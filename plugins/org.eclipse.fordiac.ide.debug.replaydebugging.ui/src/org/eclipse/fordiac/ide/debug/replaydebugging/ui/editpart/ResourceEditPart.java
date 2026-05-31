@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveDownCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveLeftCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveRightCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveUpCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.RemoveFromComparisonCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.NameStackedFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
 import org.eclipse.gef.EditPolicy;
@@ -85,6 +86,9 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())) {
 					return new AddToComparisonCommand(getModel().getReplayNavigator(),
 							getModel().getReplayNavigator().getCurrentEventPosition());
+				}
+				if (CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())) {
+					return new RemoveFromComparisonCommand(getModel().getReplayNavigator().getCurrentEventPosition());
 				}
 				return null;
 			}

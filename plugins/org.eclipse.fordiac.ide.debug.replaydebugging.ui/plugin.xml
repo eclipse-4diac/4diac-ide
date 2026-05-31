@@ -42,8 +42,8 @@
              name="Delete Timeline"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
              name="Add To Comparison"/>
-
-
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
+             name="Remove From Comparison"/>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
@@ -110,6 +110,15 @@
         </with>
       </activeWhen>
     </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveFromComparisonHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
   </extension>
 
   <extension point="org.eclipse.ui.menus">
@@ -142,8 +151,24 @@
         </visibleWhen>
       </command>
 
+      <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonSeparator" visible="true"/>
+
       <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
                label="%command.add_to_comparison_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
+               label="%command.remove_from_comparison_label">
         <visibleWhen checkEnabled="true">
           <with variable="selection">
             <iterate ifEmpty="false">
