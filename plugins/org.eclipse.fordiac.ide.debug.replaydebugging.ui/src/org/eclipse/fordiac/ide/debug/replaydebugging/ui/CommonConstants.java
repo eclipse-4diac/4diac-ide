@@ -23,4 +23,5 @@ public class CommonConstants {
 
 	public static String DELETE_TIMELINE_REQUEST = "DeleteTimeline"; //$NON-NLS-1$
 	public static String ADD_TO_COMPARISON_REQUEST = "AddToComparison"; //$NON-NLS-1$
+	public static String REMOVE_FROM_COMPARISON_REQUEST = "RemoveFromComparison"; //$NON-NLS-1$
 }

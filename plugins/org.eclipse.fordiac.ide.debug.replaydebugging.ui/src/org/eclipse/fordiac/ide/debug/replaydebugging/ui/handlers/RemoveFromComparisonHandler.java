@@ -23,11 +23,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class AddToComparisonHandler extends AbstractHandler {
+public class RemoveFromComparisonHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		HandlerHelper.executeOrBubbleUp(event, new Request(CommonConstants.ADD_TO_COMPARISON_REQUEST));
+		HandlerHelper.executeOrBubbleUp(event, new Request(CommonConstants.REMOVE_FROM_COMPARISON_REQUEST));
 		return null;
 	}
 
@@ -36,7 +36,7 @@ public class AddToComparisonHandler extends AbstractHandler {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
 			setBaseEnabled(!s.isEmpty() && s.getFirstElement() instanceof final EventMarkerEditPart ep
-					&& ep.getModel().getComparisonColor() == null);
+					&& ep.getModel().getComparisonColor() != null);
 		}
 	}
 }
