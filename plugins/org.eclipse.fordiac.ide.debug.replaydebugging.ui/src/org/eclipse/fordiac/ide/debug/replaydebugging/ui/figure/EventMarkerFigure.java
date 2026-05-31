@@ -22,6 +22,8 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
 
 /**
@@ -32,8 +34,10 @@ import org.eclipse.swt.graphics.Color;
  */
 public class EventMarkerFigure extends Figure {
 
-	private static final Color CURRENT_EVENT_COLOR = ColorConstants.yellow;
-	private static final Color NOT_CURRENT_EVENT_COLOR = ColorConstants.blue;
+	private static final Color CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
+			.get(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR);
+	private static final Color NOT_CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
+			.get(DeploymentDebugModelPresentation.WATCH_COLOR);
 	private static final Color INVALID_COLOR = ColorConstants.gray;
 
 	private final int eventIndex;

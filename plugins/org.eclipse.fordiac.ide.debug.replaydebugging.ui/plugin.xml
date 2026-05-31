@@ -159,4 +159,17 @@
     </menuContribution>
   </extension>
 
+  <extension point="org.eclipse.ui.themes">
+	<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDiffColor"
+			label="%comparisonDiffColor.label"
+			value="255,255,150"/>
+    <colorDefinition
+    		categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDisabledColor"
+			label="%comparisonDisabledColor.label"
+			value="150,150,150"/>
+  </extension>
+
 </plugin>
