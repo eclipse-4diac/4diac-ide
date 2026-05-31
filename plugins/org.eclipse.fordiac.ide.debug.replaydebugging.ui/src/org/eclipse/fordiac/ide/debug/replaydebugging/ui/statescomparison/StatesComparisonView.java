@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.Compari
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -50,6 +51,11 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	public static final String VIEW_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.StatesComparisonView"; //$NON-NLS-1$
 
 	private static final String EMPTY = ""; //$NON-NLS-1$
+
+	private static final Color DIFF_HIGHLIGHT_COLOR = JFaceResources.getColorRegistry()
+			.get("org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDiffColor"); //$NON-NLS-1$
+	private static final Color DISABLED_TEXT_COLOR = JFaceResources.getColorRegistry()
+			.get("org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDisabledColor"); //$NON-NLS-1$
 
 	// ── State ────────────────────────────────────────────────────────────
 
@@ -205,7 +211,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			@Override
 			public Color getForeground(final Object element) {
 				if (columnState.isDisabled()) {
-					return tableViewer.getTable().getDisplay().getSystemColor(SWT.COLOR_GRAY);
+					return DISABLED_TEXT_COLOR;
 				}
 				return null;
 			}
@@ -217,7 +223,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 					return null;
 				}
 				if (isUnique(r.rowKey(), columnState)) {
-					return tableViewer.getTable().getDisplay().getSystemColor(SWT.COLOR_YELLOW);
+					return DIFF_HIGHLIGHT_COLOR;
 				}
 				return null;
 			}
