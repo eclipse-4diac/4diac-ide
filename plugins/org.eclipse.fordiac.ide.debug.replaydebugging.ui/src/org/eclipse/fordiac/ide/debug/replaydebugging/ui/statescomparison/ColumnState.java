@@ -21,6 +21,7 @@ public class ColumnState {
 
 	private final ComparisonColumn column;
 	private boolean disabled;
+	private boolean showColor = true;
 
 	public ColumnState(final ComparisonColumn column) {
 		this.column = column;
@@ -33,6 +34,18 @@ public class ColumnState {
 
 	public boolean isDisabled() {
 		return disabled;
+	}
+
+	public boolean isShowColor() {
+		return showColor;
+	}
+
+	public void setShowColor(final boolean show) {
+		this.showColor = show;
+	}
+
+	public void toggleShowColor() {
+		this.showColor = !this.showColor;
 	}
 
 	public void setDisabled(final boolean d) {

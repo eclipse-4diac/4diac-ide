@@ -19,22 +19,23 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventP
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonColumn;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
+import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.graphics.Color;
 
 public class AddToComparisonCommand extends Command {
 
-	private static long idCounter = 0; // for generating unique column IDs if needed
-
-	private final ComparisonService service;
 	private final ReplayNavigator replayNavigator;
 	private final EventPosition eventPosition;
 	private ComparisonColumn column = null;
 	private ComparisonColumn previousColumn = null; // for undo
 
-	public AddToComparisonCommand(final ComparisonService service, final ReplayNavigator replayNavigator,
+	private static final float COLOR_SATURATION = 0.75f;
+	private static final float COLOR_BRIGHTNESS = 0.75f;
+
+	public AddToComparisonCommand(final ReplayNavigator replayNavigator,
 			final ReplayNavigator.EventPosition eventPosition) {
 		super(Messages.AddToComparisonCommand_Text);
-		this.service = service;
 		this.replayNavigator = replayNavigator;
 		this.eventPosition = eventPosition;
 	}
@@ -43,28 +44,30 @@ public class AddToComparisonCommand extends Command {
 	public void execute() {
 		final var snapshot = replayNavigator.getStateAtEventPosition(eventPosition);
 
-		column = new ComparisonColumn(Long.toString(idCounter++), // unique column ID
-				"", //$NON-NLS-1$ header, empty for now
-				snapshot); // cell data
+		final var rgb = ColorHelper.createRandomColor(COLOR_SATURATION, COLOR_BRIGHTNESS);
+
+		// label empty for now
+		column = new ComparisonColumn(ComparisonService.getInstance().generateUniqueColumnId(), eventPosition, "", //$NON-NLS-1$
+				snapshot, new Color(rgb.red, rgb.green, rgb.blue));
 
 		// Capture previous state for undo
-		previousColumn = service.getColumns().stream().filter(c -> c.getColumnId().equals(column.getColumnId()))
-				.findFirst().orElse(null);
-		service.addColumn(column);
+		previousColumn = ComparisonService.getInstance().getColumns().stream()
+				.filter(c -> c.getColumnId().equals(column.getColumnId())).findFirst().orElse(null);
+		ComparisonService.getInstance().addColumn(column);
 	}
 
 	@Override
 	public void undo() {
 		if (previousColumn != null) {
-			service.replaceColumn(previousColumn); // restore prior snapshot
+			ComparisonService.getInstance().replaceColumn(previousColumn); // restore prior snapshot
 		} else {
-			service.removeColumn(column.getColumnId()); // it was new, remove it
+			ComparisonService.getInstance().removeColumn(column.getColumnId()); // it was new, remove it
 		}
 	}
 
 	@Override
 	public void redo() {
-		service.addColumn(column);
+		ComparisonService.getInstance().addColumn(column);
 	}
 
 	@Override

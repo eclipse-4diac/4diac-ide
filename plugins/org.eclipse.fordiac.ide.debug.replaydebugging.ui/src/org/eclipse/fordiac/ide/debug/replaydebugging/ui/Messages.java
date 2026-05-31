@@ -28,6 +28,8 @@ public class Messages extends NLS {
 	public static String StatesComparisonView_RemoveColumnLabel;
 	public static String StatesComparisonView_ShowOnlyDiffLabel;
 	public static String StatesComparisonView_SortByDiffLabel;
+	public static String StatesComparisonView_HideColumnColor;
+	public static String StatesComparisonView_ShowColumnColor;
 	public static String DeleteEventsCommand_Label;
 	public static String DeleteTimelineCommand_Label;
 	public static String LaunchConfigurationTab_BrowseButtonText;

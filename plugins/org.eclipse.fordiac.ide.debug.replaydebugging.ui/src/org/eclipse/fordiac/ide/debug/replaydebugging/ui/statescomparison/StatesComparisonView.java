@@ -27,9 +27,12 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.Compari
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -57,9 +60,14 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	private static final Color DISABLED_TEXT_COLOR = JFaceResources.getColorRegistry()
 			.get("org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDisabledColor"); //$NON-NLS-1$
 
+	private static final int KEY_COLUMN_WIDTH_DEFAULT = 200;
+	private static final int DATA_COLUMN_WIDTH_DEFAULT = 100;
+
 	// ── State ────────────────────────────────────────────────────────────
 
 	private TableViewer tableViewer;
+	private Composite tableComposite;
+	private TableViewerColumn fillerColumn;
 	private final List<ColumnState> columnStates = new ArrayList<>();
 	private final List<TableViewerColumn> viewerColumns = new ArrayList<>();
 	private Listener headerMenuListener;
@@ -77,7 +85,11 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		tableViewer = new TableViewer(parent,
+		tableComposite = new Composite(parent, SWT.NONE);
+		final TableColumnLayout tableLayout = new TableColumnLayout();
+		tableComposite.setLayout(tableLayout);
+
+		tableViewer = new TableViewer(tableComposite,
 				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -135,6 +147,11 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			viewerColumns.forEach(vc -> vc.getColumn().dispose());
 			viewerColumns.clear();
 
+			if (fillerColumn != null && !fillerColumn.getColumn().isDisposed()) {
+				fillerColumn.getColumn().dispose();
+				fillerColumn = null;
+			}
+
 			if (columnStates.isEmpty()) {
 				tableViewer.setInput(Collections.emptyList());
 				updateSorterAndFilter();
@@ -155,13 +172,55 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			updateSorterAndFilter();
 			tableViewer.setInput(rows);
 			tableViewer.refresh();
-			viewerColumns.forEach(viewerColumn -> viewerColumn.getColumn().pack());
+
+			viewerColumns.forEach(TableViewerColumn::getColumn);
+
+			applyColumnWidths();
 
 			attachHeaderMenuListener();
+
+			addFillerColumn();
 
 		} finally {
 			table.setRedraw(true);
 		}
+	}
+
+	private void addFillerColumn() {
+		// Dispose previous filler if present
+		if (fillerColumn != null && !fillerColumn.getColumn().isDisposed()) {
+			fillerColumn.getColumn().dispose();
+		}
+
+		fillerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		fillerColumn.getColumn().setResizable(false);
+		fillerColumn.getColumn().setMoveable(false);
+		fillerColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return EMPTY;
+			}
+		});
+
+		// Give it weight=1 via ColumnWeightData so it absorbs all remaining
+		// space — real columns use ColumnPixelData so they are unaffected
+		final TableColumnLayout layout = (TableColumnLayout) tableComposite.getLayout();
+		layout.setColumnData(fillerColumn.getColumn(), new ColumnWeightData(1, 0, false)); // weight=1, minWidth=0,
+																							// resizable=false
+
+		tableComposite.layout(true, true);
+	}
+
+	private void applyColumnWidths() {
+		final TableColumnLayout layout = (TableColumnLayout) tableComposite.getLayout();
+
+		for (int i = 0; i < viewerColumns.size(); i++) {
+			final int width = (i == 0) ? KEY_COLUMN_WIDTH_DEFAULT : DATA_COLUMN_WIDTH_DEFAULT;
+
+			layout.setColumnData(viewerColumns.get(i).getColumn(), new ColumnPixelData(width, true, false));
+		}
+
+		tableComposite.layout(true, true);
 	}
 
 	// ── Column Factory ───────────────────────────────────────────────────
@@ -169,7 +228,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	private void createRowKeyColumn() {
 		final TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.NONE);
 		col.getColumn().setText(Messages.StatesComparisonView_DatapointsHeader);
-		col.getColumn().setWidth(180);
+		col.getColumn().setWidth(KEY_COLUMN_WIDTH_DEFAULT);
 		col.getColumn().setResizable(true);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -192,7 +251,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	 */
 	private static void styleColumnHeader(final TableViewerColumn col, final ColumnState columnState) {
 		col.getColumn().setText(EMPTY); // do not show any label in the header for now
-		col.getColumn().setWidth(160);
+		col.getColumn().setWidth(DATA_COLUMN_WIDTH_DEFAULT);
 		col.getColumn().setResizable(true);
 		col.getColumn().setMoveable(true);
 	}
@@ -224,6 +283,9 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 				}
 				if (isUnique(r.rowKey(), columnState)) {
 					return DIFF_HIGHLIGHT_COLOR;
+				}
+				if (columnState.isShowColor()) {
+					return columnState.getColumn().getColor();
 				}
 				return null;
 			}
@@ -315,6 +377,15 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		toggleItem.setSelection(!columnState.isDisabled()); // checked = enabled
 		toggleItem.addListener(SWT.Selection, e -> {
 			columnState.setDisabled(!columnState.isDisabled());
+			rebuildTable();
+		});
+
+		// Show/hide colors toggle
+		final MenuItem showHideColor = new MenuItem(menu, SWT.PUSH);
+		showHideColor.setText(columnState.isShowColor() ? Messages.StatesComparisonView_HideColumnColor
+				: Messages.StatesComparisonView_ShowColumnColor);
+		showHideColor.addListener(SWT.Selection, e -> {
+			columnState.toggleShowColor();
 			rebuildTable();
 		});
 	}

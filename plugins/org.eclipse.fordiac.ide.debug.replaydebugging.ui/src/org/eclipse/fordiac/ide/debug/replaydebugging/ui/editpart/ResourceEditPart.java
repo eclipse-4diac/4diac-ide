@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveRightCommand
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveUpCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.NameStackedFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -84,7 +83,7 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 			@Override
 			public Command getCommand(final Request request) {
 				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())) {
-					return new AddToComparisonCommand(ComparisonService.getInstance(), getModel().getReplayNavigator(),
+					return new AddToComparisonCommand(getModel().getReplayNavigator(),
 							getModel().getReplayNavigator().getCurrentEventPosition());
 				}
 				return null;

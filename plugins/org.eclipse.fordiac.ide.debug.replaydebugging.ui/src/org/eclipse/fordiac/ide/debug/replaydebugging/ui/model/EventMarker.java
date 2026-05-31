@@ -17,6 +17,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.function.Consumer;
 
+import org.eclipse.swt.graphics.Color;
+
 public class EventMarker {
 	private final int index;
 	private final TimelineModel parentTimeline;
@@ -24,6 +26,7 @@ public class EventMarker {
 	private boolean isCurrentEvent = false;
 	private boolean isValid = false;
 	private boolean isReadOnly = false;
+	private Color color = null;
 
 	public static final String PROPERTY_EVENT_CHANGED = "eventChanged"; //$NON-NLS-1$
 
@@ -37,6 +40,15 @@ public class EventMarker {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(final Color color) {
+		this.color = color;
+		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_CHANGED, null, null);
 	}
 
 	public void setIsReadOnly(final boolean isReadOnly) {
@@ -83,4 +95,5 @@ public class EventMarker {
 	public void removePropertyChangeListener(final PropertyChangeListener listener) {
 		propertyChangeSupport.removePropertyChangeListener(listener);
 	}
+
 }
