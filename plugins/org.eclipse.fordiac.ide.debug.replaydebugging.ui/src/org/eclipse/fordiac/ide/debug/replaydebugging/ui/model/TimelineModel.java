@@ -57,6 +57,7 @@ public class TimelineModel implements Timeline.StructureListener {
 		for (final var spawnedTimeline : timeline.getSpawnedTimelines()) {
 			addNewSpawnedTimeline(spawnedTimeline);
 		}
+		updateReadOnlyMarkers();
 
 		timeline.addStructureListener(this);
 	}
@@ -177,6 +178,18 @@ public class TimelineModel implements Timeline.StructureListener {
 			final int spawnedAtEventNumber) {
 		spawnedConnections.removeIf(timelineConnection -> timelineConnection.child().timeline == removedTimeline);
 		propertyChangeSupport.firePropertyChange(PROPERTY_TIMELINE_DELETED, null, null);
+	}
+
+	private void updateReadOnlyMarkers() {
+		final var firstDeletableEventIndex = timeline.getFirstDeletableEventIndex();
+		for (var i = 0; i < eventMarkers.size(); i++) {
+			eventMarkers.get(i).setIsReadOnly(i < firstDeletableEventIndex);
+		}
+	}
+
+	@Override
+	public void timelineStateChanged(final Timeline timeline) {
+		updateReadOnlyMarkers();
 	}
 
 	// Listener to this

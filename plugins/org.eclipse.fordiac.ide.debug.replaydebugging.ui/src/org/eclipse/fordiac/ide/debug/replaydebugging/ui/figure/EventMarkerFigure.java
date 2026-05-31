@@ -22,6 +22,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
@@ -42,6 +43,7 @@ public class EventMarkerFigure extends Figure {
 
 	private final int eventIndex;
 	private boolean isCurrentEvent = false;
+	private boolean readOnly = false;
 
 	public EventMarkerFigure(final int eventIndex) {
 		this.eventIndex = eventIndex;
@@ -71,6 +73,10 @@ public class EventMarkerFigure extends Figure {
 		return eventIndex;
 	}
 
+	public void setIsReadOnly(final boolean isReadOnly) {
+		this.readOnly = isReadOnly;
+	}
+
 	public void setIsValid(final boolean isValid) {
 		if (!isValid) {
 			setBackgroundColor(INVALID_COLOR);
@@ -85,7 +91,37 @@ public class EventMarkerFigure extends Figure {
 
 	@Override
 	protected void paintFigure(final Graphics g) {
-		g.fillOval(getBounds());
+		final Rectangle b = getBounds();
+
+		g.setBackgroundColor(getBackgroundColor());
+		g.fillOval(b);
+
+		if (readOnly) {
+			drawLockBadge(g, b);
+		}
+	}
+
+	private static void drawLockBadge(final Graphics g, final Rectangle b) {
+		// Position the badge in the top-right quadrant
+		final int size = Math.max(6, b.width / 4);
+		final int bx = b.x + b.width - size - 1;
+		final int by = b.y + 1;
+
+		// Badge background — small white filled circle
+		g.setBackgroundColor(ColorConstants.white);
+		g.fillOval(bx, by, size, size);
+
+		// Shackle (the arc on top of the padlock body)
+		g.setForegroundColor(ColorConstants.darkGray);
+		g.setLineWidth(1);
+		final int shackleInset = size / 4;
+		g.drawArc(bx + shackleInset, by, size - shackleInset * 2, size - shackleInset * 2, 0, 180);
+
+		// Body (the rectangular base of the padlock)
+		final int bodyH = size / 2;
+		final int bodyY = by + size - bodyH;
+		g.setBackgroundColor(ColorConstants.darkGray);
+		g.fillRoundRectangle(new Rectangle(bx, bodyY, size, bodyH), 2, 2);
 	}
 
 	// Listener

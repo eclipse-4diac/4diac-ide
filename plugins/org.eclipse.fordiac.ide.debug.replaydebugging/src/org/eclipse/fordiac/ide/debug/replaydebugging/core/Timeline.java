@@ -39,6 +39,8 @@ public class Timeline {
 		void timelineSpawned(Timeline spawnedTimeline);
 
 		void timelineRemoved(Timeline parentTimeline, Timeline removedTimeline, int spawnedAtEventNumber);
+
+		void timelineStateChanged(Timeline timeline);
 	}
 
 	private Timeline parentTimeline = null;
@@ -49,13 +51,24 @@ public class Timeline {
 
 	private final Set<StructureListener> structureListeners = new HashSet<>();
 
+	private int firstDeletableEventIndex = 0;
+
+	public int getFirstDeletableEventIndex() {
+		return firstDeletableEventIndex;
+	}
+
+	public void setFirstDeletableEventIndex(final int firstDeletableEventIndex) {
+		this.firstDeletableEventIndex = firstDeletableEventIndex;
+		notifyTimelineStateChanged();
+	}
+
 	public void addEventChange(final List<DataPointChange> newValues) {
 		eventChanges.add(new EventChange(eventChanges.size(), newValues));
 		notifyNewEvent();
 	}
 
 	public void removeEventsFrom(final int eventNumber) {
-		if (eventNumber < 0 || eventNumber >= eventChanges.size()) {
+		if (eventNumber < 0 || eventNumber >= eventChanges.size() || eventNumber < firstDeletableEventIndex) {
 			return;
 		}
 
@@ -252,6 +265,12 @@ public class Timeline {
 	private void notifyNewSpawnedTimeline(final Timeline spawnedTimeline) {
 		for (final var listener : structureListeners) {
 			listener.timelineSpawned(spawnedTimeline);
+		}
+	}
+
+	private void notifyTimelineStateChanged() {
+		for (final var listener : structureListeners) {
+			listener.timelineStateChanged(this);
 		}
 	}
 

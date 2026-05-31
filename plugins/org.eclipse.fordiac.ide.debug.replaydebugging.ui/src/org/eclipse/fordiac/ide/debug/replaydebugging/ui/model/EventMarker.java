@@ -23,6 +23,7 @@ public class EventMarker {
 	private final Consumer<Integer> eventSelected;
 	private boolean isCurrentEvent = false;
 	private boolean isValid = false;
+	private boolean isReadOnly = false;
 
 	public static final String PROPERTY_EVENT_CHANGED = "eventChanged"; //$NON-NLS-1$
 
@@ -36,6 +37,15 @@ public class EventMarker {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public void setIsReadOnly(final boolean isReadOnly) {
+		this.isReadOnly = isReadOnly;
+		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_CHANGED, null, null);
+	}
+
+	public boolean getIsReadOnly() {
+		return isReadOnly;
 	}
 
 	public boolean getIsCurrentEvent() {

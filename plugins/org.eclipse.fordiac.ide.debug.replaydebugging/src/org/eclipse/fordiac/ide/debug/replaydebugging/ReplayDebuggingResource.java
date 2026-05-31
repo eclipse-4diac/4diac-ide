@@ -105,6 +105,7 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		replayNavigator.addStateChangeListener(this);
 		ReplayNavigatorManager.getDefault().registerNavigator(replayNavigator);
 		runAllEvents();
+		replayNavigator.markCurrentStateAsNotDeletable();
 	}
 
 	/**

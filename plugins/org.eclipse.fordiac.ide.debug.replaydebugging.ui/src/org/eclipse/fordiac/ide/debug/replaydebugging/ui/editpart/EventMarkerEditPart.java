@@ -91,6 +91,7 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 		final var figure = getFigure();
 		figure.setIsCurrentEvent(getModel().getIsCurrentEvent());
 		figure.setIsValid(getModel().getValid());
+		figure.setIsReadOnly(getModel().getIsReadOnly());
 		figure.repaint();
 	}
 

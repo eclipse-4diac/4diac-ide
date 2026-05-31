@@ -110,6 +110,17 @@ public class ReplayNavigator implements Timeline.StructureListener {
 		moveToEvent(new EventPosition(timelineToAdd, timelineToAdd.getMaxEventNumber()));
 	}
 
+	public void markCurrentStateAsNotDeletable() {
+		markCurrentStateAsNotDeletable(rootTimeline);
+	}
+
+	private static void markCurrentStateAsNotDeletable(final Timeline timeline) {
+		timeline.setFirstDeletableEventIndex(timeline.getMaxEventNumber() + 1);
+		for (final Timeline spawnedTimeline : timeline.getSpawnedTimelines()) {
+			markCurrentStateAsNotDeletable(spawnedTimeline);
+		}
+	}
+
 	public Timeline getRootTimeline() {
 		return rootTimeline;
 	}
@@ -405,6 +416,11 @@ public class ReplayNavigator implements Timeline.StructureListener {
 			updateCache(changedValues);
 		}
 		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
+	}
+
+	@Override
+	public void timelineStateChanged(final Timeline timeline) {
+		// nothing to do here
 	}
 
 }
