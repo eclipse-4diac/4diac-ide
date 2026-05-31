@@ -118,7 +118,7 @@
       <!-- Delete Event — only shown when an EventMarkerEditPart is selected -->
       <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
                label="%command.delete_event_label">
-        <visibleWhen checkEnabled="false">
+        <visibleWhen checkEnabled="true">
           <with variable="selection">
             <iterate ifEmpty="false">
               <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>

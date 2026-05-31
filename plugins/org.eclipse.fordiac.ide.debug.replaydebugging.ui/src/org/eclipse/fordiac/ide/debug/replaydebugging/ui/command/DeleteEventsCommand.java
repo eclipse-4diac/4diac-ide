@@ -59,7 +59,8 @@ public class DeleteEventsCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return timeline != null && eventIndex >= 0 && eventIndex <= timeline.getMaxEventNumber();
+		return timeline != null && eventIndex >= 0 && eventIndex <= timeline.getMaxEventNumber()
+				&& eventIndex >= timeline.getFirstDeletableEventIndex();
 	}
 
 	@Override
