@@ -462,6 +462,7 @@ public abstract class CommonElementImporter {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
 		variable.setName(name);
+		variable.setType(GenericTypes.ANY);
 
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null == value) {
