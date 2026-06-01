@@ -760,15 +760,10 @@ public class FBTImporter extends BlockTypeImporter {
 		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		readNameCommentAttributes(fb);
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FBTypeEntry entry = getTypeEntry(typeFbElement, getTypeLibrary()::getFBTypeEntry);
-		if (entry == null) {
-			fb.setTypeEntry(addDependency(
-					getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType())));
-			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		} else {
-			fb.setTypeEntry(entry);
-			fb.setInterface(entry.getInterface().instanceCopy());
-		}
+		final FBTypeEntry entry = getTypeEntry(typeFbElement, getTypeLibrary()::getFBTypeEntry,
+				LibraryElementPackage.Literals.FB_TYPE);
+		fb.setTypeEntry(entry);
+		fb.setInterface(entry.getInterface().instanceCopy());
 		type.getInternalFbs().add(fb);
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 	}

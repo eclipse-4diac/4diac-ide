@@ -200,11 +200,8 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	private FB createFBInstance(final String typeName) {
-		FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry);
-		if (null == entry) {
-			entry = (FBTypeEntry) addDependency(
-					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.eINSTANCE.getFBType()));
-		}
+		final FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry,
+				LibraryElementPackage.Literals.FB_TYPE);
 		final FB fb = BlockInstanceFactory.createFBInstanceForTypeEntry(entry);
 		fb.setInterface(entry.getInterface().instanceCopy());
 		fb.setTypeEntry(entry);

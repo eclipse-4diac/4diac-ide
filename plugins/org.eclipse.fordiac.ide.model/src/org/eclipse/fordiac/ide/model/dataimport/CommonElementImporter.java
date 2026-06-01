@@ -41,6 +41,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -79,6 +80,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -434,13 +436,9 @@ public abstract class CommonElementImporter {
 			// use element for resolving import since confObject may not have been added to
 			// enclosing type yet
 			final AttributeTypeEntry attributeTypeEntry = getTypeEntry(attribute.getName(),
-					getTypeLibrary()::getAttributeTypeEntry);
-			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
-				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
-				attribute.setType(attributeTypeEntry.getType().getType());
-			} else {
-				FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
-			}
+					getTypeLibrary()::getAttributeTypeEntry, LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION);
+			attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+			attribute.setType(attributeTypeEntry.getType().getType());
 		}
 
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
@@ -801,13 +799,10 @@ public abstract class CommonElementImporter {
 
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeName != null) {
-			final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry);
-			if (null != entry) {
-				resource.setTypeEntry(entry);
-				createParameters(resource);
-			}
-		}
+		final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry,
+				LibraryElementPackage.Literals.RESOURCE_TYPE);
+		resource.setTypeEntry(entry);
+		createParameters(resource);
 	}
 
 	protected String readCDataSection() throws XMLStreamException {
@@ -919,15 +914,18 @@ public abstract class CommonElementImporter {
 		return libraryElement;
 	}
 
-	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver) {
-		if (name == null) {
+	@SuppressWarnings("unchecked")
+	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver,
+			final EClass typeClass) {
+		if (name == null || name.isEmpty()) {
 			return null;
 		}
-		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
+		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver,
+				typeName -> (T) getTypeLibrary().createErrorTypeEntry(typeName, typeClass)));
 	}
 
 	protected DataType getDataType(final String name) {
-		if (name == null) {
+		if (name == null || name.isEmpty()) {
 			return GenericTypes.ANY;
 		}
 		return addDependency(ImportHelper.resolveImport(name, getElement(), getDataTypeLibrary()::getTypeIfExists,
