@@ -575,10 +575,7 @@ public class FBTImporter extends BlockTypeImporter {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANASITION_CONDITION_EXCEPTION);
 		}
 		validateTransitionCondition(ecTransition, condition);
-		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			ecTransition.setComment(comment);
-		}
+		readCommentAttribute().ifPresent(ecTransition::setComment);
 		getXandY(ecTransition);
 		proceedToEndElementNamed(LibraryElementTags.ECTRANSITION_ELEMENT);
 		ecc.getECTransition().add(ecTransition);
