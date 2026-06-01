@@ -185,11 +185,8 @@ public class InterfaceListImporter extends TypeImporter {
 		if (null == typeName) {
 			throw new TypeImportException(Messages.FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION);
 		}
-		AdapterTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getAdapterTypeEntry);
-		if (entry == null) {
-			entry = (AdapterTypeEntry) addDependency(
-					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.Literals.ADAPTER_TYPE));
-		}
+		final AdapterTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getAdapterTypeEntry,
+				LibraryElementPackage.Literals.ADAPTER_TYPE);
 		a.setType(entry.getType());
 
 		createAdapterFB(a);

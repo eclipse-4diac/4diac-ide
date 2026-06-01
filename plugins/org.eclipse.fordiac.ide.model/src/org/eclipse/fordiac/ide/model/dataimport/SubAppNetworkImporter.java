@@ -88,11 +88,8 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	}
 
 	public TypedSubApp createTypedSubapp(final String typeName) {
-		SubAppTypeEntry subEntry = getTypeEntry(typeName, getTypeLibrary()::getSubAppTypeEntry);
-		if (subEntry == null) {
-			subEntry = (SubAppTypeEntry) addDependency(
-					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.eINSTANCE.getSubAppType()));
-		}
+		final SubAppTypeEntry subEntry = getTypeEntry(typeName, getTypeLibrary()::getSubAppTypeEntry,
+				LibraryElementPackage.eINSTANCE.getSubAppType());
 		final TypedSubApp subApp = LibraryElementFactory.eINSTANCE.createTypedSubApp();
 		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getInterface().instanceCopy());
