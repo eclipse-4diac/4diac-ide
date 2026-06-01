@@ -157,6 +157,7 @@ public class SystemImporter extends CommonElementImporter {
 		final SegmentTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getSegmentTypeEntry,
 				LibraryElementPackage.Literals.SEGMENT_TYPE);
 		segment.setTypeEntry(entry);
+		createParameters(segment, entry);
 		parseCommunication(segment);
 		parseSegmentNodeChildren(segment);
 		return segment;
@@ -238,7 +239,7 @@ public class SystemImporter extends CommonElementImporter {
 		final DeviceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getDeviceTypeEntry,
 				LibraryElementPackage.Literals.DEVICE_TYPE);
 		device.setTypeEntry(entry);
-		createParameters(device);
+		createParameters(device, entry);
 	}
 
 	private void parseMapping() throws XMLStreamException {

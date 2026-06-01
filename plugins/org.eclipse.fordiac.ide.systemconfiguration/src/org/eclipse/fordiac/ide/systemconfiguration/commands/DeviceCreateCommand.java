@@ -71,7 +71,7 @@ public class DeviceCreateCommand extends Command {
 	public void execute() {
 		createDevice();
 		device.setTypeEntry(entry);
-		CommonElementImporter.createParameters(device);
+		CommonElementImporter.createParameters(device, entry);
 		setDeviceProfile();
 		device.setPosition(pos);
 		parent.getDevices().add(device);
