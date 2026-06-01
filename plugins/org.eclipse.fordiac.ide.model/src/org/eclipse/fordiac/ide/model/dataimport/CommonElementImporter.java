@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -401,10 +402,12 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void readCommentAttribute(final INamedElement namedElement) {
+		readCommentAttribute().ifPresent(namedElement::setComment);
+	}
+
+	protected Optional<String> readCommentAttribute() {
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			namedElement.setComment(fullyUnEscapeValue(comment));
-		}
+		return Optional.ofNullable(comment).map(CommonElementImporter::fullyUnEscapeValue);
 	}
 
 	protected void parseGenericAttributeNode(final ConfigurableObject confObject)
