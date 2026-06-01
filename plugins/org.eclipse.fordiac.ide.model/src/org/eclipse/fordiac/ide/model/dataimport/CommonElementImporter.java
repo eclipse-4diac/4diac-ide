@@ -84,9 +84,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
@@ -803,7 +801,7 @@ public abstract class CommonElementImporter {
 		final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry,
 				LibraryElementPackage.Literals.RESOURCE_TYPE);
 		resource.setTypeEntry(entry);
-		createParameters(resource);
+		createParameters(resource, entry);
 	}
 
 	protected String readCDataSection() throws XMLStreamException {
@@ -816,46 +814,14 @@ public abstract class CommonElementImporter {
 	}
 
 	/** Creates the values. */
-	public static void createParameters(final IVarElement element) {
-		if (element instanceof Device) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		if (element instanceof Resource) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		if (element instanceof Segment) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
-			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			varDecl.setValue(value);
-			final VarDeclaration typeVar = getTypeVariable(varDecl);
-			if (null != typeVar && null != typeVar.getValue()) {
-				value.setValue(typeVar.getValue().getValue());
-			}
-		}
-	}
-
-	private static VarDeclaration getTypeVariable(final VarDeclaration variable) {
-		EList<VarDeclaration> varList = null;
-		if (variable.eContainer() instanceof final Device dev) {
-			if (null != dev.getType()) {
-				varList = dev.getType().getVarDeclaration();
-			}
-		} else if ((variable.eContainer() instanceof final Resource res) && (null != res.getType())) {
-			varList = res.getType().getVarDeclaration();
-		}
-
-		if (null != varList) {
-			return getParamter(varList, variable.getName());
-		}
-		return null;
+	public static void createParameters(final IVarElement element, final TypeEntry entry) {
+		final List<VarDeclaration> typeVariables = switch (entry) {
+		case final DeviceTypeEntry deviceEntry -> deviceEntry.getType().getVarDeclaration();
+		case final ResourceTypeEntry resourceEntry -> resourceEntry.getType().getVarDeclaration();
+		case final SegmentTypeEntry segmentEntry -> segmentEntry.getType().getVarDeclaration();
+		case null, default -> List.of();
+		};
+		element.getVarDeclarations().addAll(EcoreUtil.copyAll(typeVariables));
 	}
 
 	protected static VarDeclaration getParamter(final EList<VarDeclaration> paramList, final String name) {
