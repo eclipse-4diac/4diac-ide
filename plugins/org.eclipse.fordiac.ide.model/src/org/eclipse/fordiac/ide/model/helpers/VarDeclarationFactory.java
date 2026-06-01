@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.helpers;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -22,6 +23,7 @@ public final class VarDeclarationFactory {
 	public static VarDeclaration createVarDecl(final DataType type) {
 		return switch (type) {
 		case final StructuredType structType -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
+		case final ErrorDataType errorType -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
 		default -> LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		};
