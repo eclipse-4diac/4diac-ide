@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -329,6 +330,25 @@ public class GitLabDownloader implements IArchiveDownloader {
 			return new DownloadResult<>(leaves.stream().map(LeafNode::getVersion).toList());
 		}
 		return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
+	}
+
+	@Override
+	public DownloadResult<Map<String, List<String>>> availableLibrariesAndVersions(final IProgressMonitor monitor)
+			throws OperationCanceledException {
+		final SubMonitor progress = SubMonitor.convert(monitor, "Fetching available libraries and versions", 5); //$NON-NLS-1$
+		final var fetchResult = fetchProjectsAndPackages();
+		progress.worked(4);
+		if (fetchResult.status() != DownloadResult.Status.OK) {
+			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
+		}
+
+		final Map<String, List<String>> versionRegistry = packagesAndLeaves.entrySet().stream()
+				.filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey,
+						e -> e.getValue().stream().map(LeafNode::getVersion).toList()));
+
+		progress.worked(1);
+
+		return new DownloadResult<>(versionRegistry);
 	}
 
 	@Override
