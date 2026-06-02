@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FbtMacroPatternElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
@@ -30,7 +29,6 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor;
-import org.eclipse.mylyn.wikitext.asciidoc.AsciiDocLanguage;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
@@ -44,31 +42,6 @@ import org.eclipse.ui.part.FileEditorInput;
 
 @SuppressWarnings("restriction")
 public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEditorPage {
-
-	public static final class FordiacAsciiDocLanguage extends AsciiDocLanguage {
-
-		LibraryElement libEl;
-
-		public FordiacAsciiDocLanguage() {
-			// needed for the clone implementation
-		}
-
-		public FordiacAsciiDocLanguage(final LibraryElement libEl) {
-			this.libEl = libEl;
-		}
-
-		@Override
-		protected void addPhraseModifierExtensions(final PatternBasedSyntax phraseModifierSyntax) {
-			phraseModifierSyntax.add(new FbtMacroPatternElement(libEl));
-		}
-
-		@Override
-		public MarkupLanguage clone() {
-			final FordiacAsciiDocLanguage clone = (FordiacAsciiDocLanguage) super.clone();
-			clone.libEl = this.libEl;
-			return clone;
-		}
-	}
 
 	// The editor input of the type file given to us.
 	IEditorInput originEditorInput;
@@ -143,12 +116,10 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	@Override
 	public void setMarkupLanguage(final MarkupLanguage markupLanguage, final boolean persistSetting) {
-		if (markupLanguage == null) {
-			super.setMarkupLanguage(markupLanguage, persistSetting);
-			return;
+		if (markupLanguage != null) {
+			markupLanguage.configure(new FordiacAsciiDocLanguageConfiguration(getType()));
 		}
-		final AsciiDocLanguage ownLang = new FordiacAsciiDocLanguage(getType());
-		super.setMarkupLanguage(ownLang, persistSetting);
+		super.setMarkupLanguage(markupLanguage, persistSetting);
 	}
 
 	@Override
