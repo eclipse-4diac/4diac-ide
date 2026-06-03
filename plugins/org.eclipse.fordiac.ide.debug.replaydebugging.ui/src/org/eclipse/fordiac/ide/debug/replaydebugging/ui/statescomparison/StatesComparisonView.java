@@ -228,7 +228,6 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	private void createRowKeyColumn() {
 		final TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.NONE);
 		col.getColumn().setText(Messages.StatesComparisonView_DatapointsHeader);
-		col.getColumn().setWidth(KEY_COLUMN_WIDTH_DEFAULT);
 		col.getColumn().setResizable(true);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -250,8 +249,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	 * Sets the column header text and greys it out when disabled.
 	 */
 	private static void styleColumnHeader(final TableViewerColumn col, final ColumnState columnState) {
-		col.getColumn().setText(EMPTY); // do not show any label in the header for now
-		col.getColumn().setWidth(DATA_COLUMN_WIDTH_DEFAULT);
+		col.getColumn().setText(columnState.getColumn().getLabel());
 		col.getColumn().setResizable(true);
 		col.getColumn().setMoveable(true);
 	}

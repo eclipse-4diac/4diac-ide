@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -67,6 +68,16 @@ public class ComparisonService {
 	public synchronized void clearAll() {
 		columns.clear();
 		notifyListeners();
+	}
+
+	public synchronized void updateColumnLabel(final EventPosition eventPosition, final String newLabel) {
+		for (final var column : columns.values()) {
+			if (column.getEventPosition().equals(eventPosition)) {
+				column.setLabel(newLabel);
+				notifyListeners();
+				break;
+			}
+		}
 	}
 
 	public synchronized List<ComparisonColumn> getColumns() {

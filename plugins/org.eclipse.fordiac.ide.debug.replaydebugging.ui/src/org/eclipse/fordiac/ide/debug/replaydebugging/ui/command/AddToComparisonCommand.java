@@ -28,16 +28,19 @@ public class AddToComparisonCommand extends Command {
 	private final ReplayNavigator replayNavigator;
 	private final EventPosition eventPosition;
 	private ComparisonColumn column = null;
+	private final String label;
 	private ComparisonColumn previousColumn = null; // for undo
 
 	private static final float COLOR_SATURATION = 0.75f;
 	private static final float COLOR_BRIGHTNESS = 0.75f;
+	private static final String DEFAULT_LABEL = ""; //$NON-NLS-1$
 
 	public AddToComparisonCommand(final ReplayNavigator replayNavigator,
-			final ReplayNavigator.EventPosition eventPosition) {
+			final ReplayNavigator.EventPosition eventPosition, final String label) {
 		super(Messages.AddToComparisonCommand_Text);
 		this.replayNavigator = replayNavigator;
 		this.eventPosition = eventPosition;
+		this.label = label != null ? label : DEFAULT_LABEL;
 	}
 
 	@Override
@@ -47,7 +50,7 @@ public class AddToComparisonCommand extends Command {
 		final var rgb = ColorHelper.createRandomColor(COLOR_SATURATION, COLOR_BRIGHTNESS);
 
 		// label empty for now
-		column = new ComparisonColumn(ComparisonService.getInstance().generateUniqueColumnId(), eventPosition, "", //$NON-NLS-1$
+		column = new ComparisonColumn(ComparisonService.getInstance().generateUniqueColumnId(), eventPosition, label,
 				snapshot, new Color(rgb.red, rgb.green, rgb.blue));
 
 		// Capture previous state for undo

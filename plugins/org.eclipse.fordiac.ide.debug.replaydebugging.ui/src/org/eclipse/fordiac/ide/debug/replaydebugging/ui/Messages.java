@@ -18,7 +18,11 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+	public static String AddEditEventCommentCommand_Text;
+	public static String AddEventCommentHandler_DialogTitle;
+	public static String AddEventCommentHandler_HintForTheUser;
 	public static String AddToComparisonCommand_Text;
+	public static String RemoveEventCommentCommand_Text;
 	public static String RemoveFromComparisonCommand_Text;
 	public static String OpenStatesComparisonHandler_OpenTableViewError;
 	public static String StatesComparisonView_AlphabeticallyAscendingOrderLabel;

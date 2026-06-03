@@ -44,6 +44,10 @@
              name="Add To Comparison"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
              name="Remove From Comparison"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+             name="Add/edit event comment"/>
+     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
+             name="Remove event comment"/>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
@@ -83,7 +87,6 @@
         </activeWhen>
     </handler>
 
-
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
              class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.DeleteEventHandler">
       <activeWhen>
@@ -119,6 +122,25 @@
         </with>
       </activeWhen>
     </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.AddEventCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveEventCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
   </extension>
 
   <extension point="org.eclipse.ui.menus">
@@ -174,6 +196,34 @@
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.eventCommentsSeparator" visible="true"/>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+               label="%command.add_event_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
+               label="%command.remove_event_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
                 <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
               </or>
             </iterate>
