@@ -251,9 +251,11 @@ public class GitLabDownloader implements IArchiveDownloader {
 					project = new Project(Long.valueOf(m.group(PROJECT_ID)), m.group(PROJECT_NAME));
 					projectAndPackageMap.put(project, new ArrayList<>());
 				}
+			} catch (final IOException e) {
+				throw new IOException(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()));
 			}
 		}
-
 	}
 
 	private void getPackages(final Project project) throws IOException {
