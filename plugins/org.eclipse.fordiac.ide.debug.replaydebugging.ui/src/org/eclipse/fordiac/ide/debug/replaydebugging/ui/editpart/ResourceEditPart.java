@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.AddToComparisonCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveDownCommand;
@@ -85,7 +86,8 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 			public Command getCommand(final Request request) {
 				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())) {
 					return new AddToComparisonCommand(getModel().getReplayNavigator(),
-							getModel().getReplayNavigator().getCurrentEventPosition());
+							getModel().getReplayNavigator().getCurrentEventPosition(), CommentsHandler.getInstance()
+									.getComment(getModel().getReplayNavigator().getCurrentEventPosition()));
 				}
 				if (CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())) {
 					return new RemoveFromComparisonCommand(getModel().getReplayNavigator().getCurrentEventPosition());

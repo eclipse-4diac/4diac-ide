@@ -59,6 +59,14 @@ public class EventMarkerFigure extends Figure {
 
 	}
 
+	public void setTooltipText(final String tooltipText) {
+		if (tooltipText != null && !tooltipText.isEmpty()) {
+			setToolTip(new TooltipFigure(tooltipText));
+		} else {
+			setToolTip(null);
+		}
+	}
+
 	public int getEventIndex() {
 		return eventIndex;
 	}
@@ -76,6 +84,9 @@ public class EventMarkerFigure extends Figure {
 
 		if (readOnly) {
 			drawLockBadge(g, b);
+		}
+		if (getToolTip() != null) {
+			drawCommentBadge(g, b);
 		}
 	}
 
@@ -100,6 +111,53 @@ public class EventMarkerFigure extends Figure {
 		final int bodyY = by + size - bodyH;
 		g.setBackgroundColor(ColorConstants.darkGray);
 		g.fillRoundRectangle(new Rectangle(bx, bodyY, size, bodyH), 2, 2);
+	}
+
+	private static void drawCommentBadge(final Graphics g, final Rectangle b) {
+		final int size = Math.max(6, b.width / 4);
+		final int bx = b.x + 1; // top-left corner
+		final int by = b.y + 1;
+		final int fold = size / 3; // size of the folded corner
+
+		g.pushState();
+
+		// ── Page body ────────────────────────────────────────────────────────
+		// A rectangle with the top-right corner cut off, drawn as a polygon:
+		//
+		// (bx, by) ────────── (bx+size-fold, by)
+		// | \
+		// | (bx+size, by+fold)
+		// | |
+		// (bx, by+size) ──── (bx+size, by+size)
+		//
+		final int[] pageBody = { bx, by, bx + size - fold, by, bx + size, by + fold, bx + size, by + size, bx,
+				by + size };
+
+		g.setBackgroundColor(ColorConstants.white);
+		g.fillPolygon(pageBody);
+		g.setForegroundColor(ColorConstants.darkGray);
+		g.setLineWidth(1);
+		g.drawPolygon(pageBody);
+
+		// ── Folded corner triangle ────────────────────────────────────────────
+		final int[] foldTriangle = { bx + size - fold, by, bx + size - fold, by + fold, bx + size, by + fold };
+
+		g.setBackgroundColor(ColorConstants.lightGray);
+		g.fillPolygon(foldTriangle);
+		g.drawPolygon(foldTriangle);
+
+		// ── Text lines (three horizontal rules suggesting content) ────────────
+		g.setForegroundColor(ColorConstants.gray);
+		final int lineStartX = bx + 2;
+		final int lineEndX = bx + size - 2;
+		final int lineSpacing = (size - fold) / 3;
+
+		for (int i = 1; i <= 2; i++) {
+			final int lineY = by + fold + (i * lineSpacing);
+			g.drawLine(lineStartX, lineY, lineEndX, lineY);
+		}
+
+		g.popState();
 	}
 
 	// Listener

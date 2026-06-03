@@ -26,10 +26,11 @@ import java.util.stream.Collectors;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonColumn;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
 
-public class TimelineModel implements Timeline.StructureListener, ComparisonService.Listener {
+public class TimelineModel implements Timeline.StructureListener, ComparisonService.Listener, CommentsHandler.Listener {
 
 	private final Timeline timeline;
 	private TimelineConnection connectionToParentTimelineModel;
@@ -63,10 +64,11 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 		timeline.addStructureListener(this);
 		ComparisonService.getInstance().addListener(this);
+		CommentsHandler.getInstance().addListener(this);
 	}
 
 	public List<EventMarker> getEventMarkers() {
-		return eventMarkers;
+		return List.copyOf(eventMarkers);
 	}
 
 	public int getFirstInvalid() {
@@ -140,6 +142,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	public void dispose() {
 		timeline.removeStructureListener(this);
 		ComparisonService.getInstance().removeListener(this);
+		CommentsHandler.getInstance().removeListener(this);
 	}
 
 	private void eventSelected(final Integer index) {
@@ -206,7 +209,22 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 				eventMarkers.get(column.getEventPosition().eventNumber()).setComparisonColor(column.getColor());
 			}
 		}
+	}
 
+	@Override
+	public void eventCommentChanged(final EventPosition position, final String comment) {
+		if (position.timeline() != timeline) {
+			return;
+		}
+		eventMarkers.get(position.eventNumber()).setComment(comment);
+		// update column header if it's present in the comparison table
+		for (final var column : ComparisonService.getInstance().getColumns()) {
+			if (column.getEventPosition().eventNumber() == position.eventNumber()) {
+				column.setLabel(comment);
+				ComparisonService.getInstance().replaceColumn(column);
+				break;
+			}
+		}
 	}
 
 	// Listener to this

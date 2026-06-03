@@ -18,10 +18,16 @@ public class CommonConstants {
 		// this class should not be instantiated
 	}
 
-	public static String NAVIGATION_POLICY = "Navigation"; //$NON-NLS-1$
-	public static String COMPARISON_POLICY = "Comparison"; //$NON-NLS-1$
+	public static final String NAVIGATION_POLICY = "Navigation"; //$NON-NLS-1$
+	public static final String COMPARISON_POLICY = "Comparison"; //$NON-NLS-1$
 
-	public static String DELETE_TIMELINE_REQUEST = "DeleteTimeline"; //$NON-NLS-1$
-	public static String ADD_TO_COMPARISON_REQUEST = "AddToComparison"; //$NON-NLS-1$
-	public static String REMOVE_FROM_COMPARISON_REQUEST = "RemoveFromComparison"; //$NON-NLS-1$
+	public static final String DELETE_TIMELINE_REQUEST = "DeleteTimeline"; //$NON-NLS-1$
+
+	public static final String ADD_TO_COMPARISON_REQUEST = "AddToComparison"; //$NON-NLS-1$
+	public static final String REMOVE_FROM_COMPARISON_REQUEST = "RemoveFromComparison"; //$NON-NLS-1$
+
+	public static final String ADD_EDIT_EVENT_COMMENT_REQUEST = "AddEditEventComment"; //$NON-NLS-1$
+	public static final String ADD_EDIT_EVENT_COMMENT_DATA = "AddEditEventCommentData"; //$NON-NLS-1$
+	public static final String REMOVE_EVENT_COMMENT_REQUEST = "RemoveEventComment"; //$NON-NLS-1$
+
 }

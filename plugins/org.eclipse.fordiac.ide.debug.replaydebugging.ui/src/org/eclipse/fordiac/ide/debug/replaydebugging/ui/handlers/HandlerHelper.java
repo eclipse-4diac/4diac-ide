@@ -72,7 +72,7 @@ public class HandlerHelper {
 		return viewer;
 	}
 
-	private static EditPart getSelectedEditPart(final ExecutionEvent event) {
+	public static EditPart getSelectedEditPart(final ExecutionEvent event) {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 		if (selection.isEmpty()) {
 			return null;

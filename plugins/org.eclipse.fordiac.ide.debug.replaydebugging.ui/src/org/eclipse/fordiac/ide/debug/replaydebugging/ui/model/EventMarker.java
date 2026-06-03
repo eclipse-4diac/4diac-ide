@@ -27,6 +27,7 @@ public class EventMarker {
 	private boolean isValid = false;
 	private boolean isReadOnly = false;
 	private Color comparisonColor = null;
+	private String comment = null;
 
 	public static final String PROPERTY_EVENT_CHANGED = "eventChanged"; //$NON-NLS-1$
 
@@ -84,6 +85,15 @@ public class EventMarker {
 
 	public void eventSelected() {
 		eventSelected.accept(Integer.valueOf(index));
+	}
+
+	public void setComment(final String comment) {
+		this.comment = comment;
+		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_CHANGED, null, null);
+	}
+
+	public String getComment() {
+		return comment;
 	}
 
 	// Listener to this
