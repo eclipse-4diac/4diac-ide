@@ -1,0 +1,7 @@
+a#4diac-noteworthy img {
+	background-image: url(../graphics/4diac_icon.png);
+}
+
+a#4diac-noteworthy:hover img {
+	background-image: url(../graphics/4diac_icon.svg);
+}

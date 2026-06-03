@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -41,6 +42,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -79,12 +81,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
@@ -401,10 +402,12 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void readCommentAttribute(final INamedElement namedElement) {
+		readCommentAttribute().ifPresent(namedElement::setComment);
+	}
+
+	protected Optional<String> readCommentAttribute() {
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			namedElement.setComment(fullyUnEscapeValue(comment));
-		}
+		return Optional.ofNullable(comment).map(CommonElementImporter::fullyUnEscapeValue);
 	}
 
 	protected void parseGenericAttributeNode(final ConfigurableObject confObject)
@@ -434,13 +437,9 @@ public abstract class CommonElementImporter {
 			// use element for resolving import since confObject may not have been added to
 			// enclosing type yet
 			final AttributeTypeEntry attributeTypeEntry = getTypeEntry(attribute.getName(),
-					getTypeLibrary()::getAttributeTypeEntry);
-			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
-				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
-				attribute.setType(attributeTypeEntry.getType().getType());
-			} else {
-				FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
-			}
+					getTypeLibrary()::getAttributeTypeEntry, LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION);
+			attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+			attribute.setType(attributeTypeEntry.getType().getType());
 		}
 
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
@@ -464,6 +463,7 @@ public abstract class CommonElementImporter {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
 		variable.setName(name);
+		variable.setType(GenericTypes.ANY);
 
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null == value) {
@@ -801,13 +801,10 @@ public abstract class CommonElementImporter {
 
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeName != null) {
-			final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry);
-			if (null != entry) {
-				resource.setTypeEntry(entry);
-				createParameters(resource);
-			}
-		}
+		final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry,
+				LibraryElementPackage.Literals.RESOURCE_TYPE);
+		resource.setTypeEntry(entry);
+		createParameters(resource, entry);
 	}
 
 	protected String readCDataSection() throws XMLStreamException {
@@ -820,46 +817,14 @@ public abstract class CommonElementImporter {
 	}
 
 	/** Creates the values. */
-	public static void createParameters(final IVarElement element) {
-		if (element instanceof Device) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		if (element instanceof Resource) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		if (element instanceof Segment) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
-			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			varDecl.setValue(value);
-			final VarDeclaration typeVar = getTypeVariable(varDecl);
-			if (null != typeVar && null != typeVar.getValue()) {
-				value.setValue(typeVar.getValue().getValue());
-			}
-		}
-	}
-
-	private static VarDeclaration getTypeVariable(final VarDeclaration variable) {
-		EList<VarDeclaration> varList = null;
-		if (variable.eContainer() instanceof final Device dev) {
-			if (null != dev.getType()) {
-				varList = dev.getType().getVarDeclaration();
-			}
-		} else if ((variable.eContainer() instanceof final Resource res) && (null != res.getType())) {
-			varList = res.getType().getVarDeclaration();
-		}
-
-		if (null != varList) {
-			return getParamter(varList, variable.getName());
-		}
-		return null;
+	public static void createParameters(final IVarElement element, final TypeEntry entry) {
+		final List<VarDeclaration> typeVariables = switch (entry) {
+		case final DeviceTypeEntry deviceEntry -> deviceEntry.getType().getVarDeclaration();
+		case final ResourceTypeEntry resourceEntry -> resourceEntry.getType().getVarDeclaration();
+		case final SegmentTypeEntry segmentEntry -> segmentEntry.getType().getVarDeclaration();
+		case null, default -> List.of();
+		};
+		element.getVarDeclarations().addAll(EcoreUtil.copyAll(typeVariables));
 	}
 
 	protected static VarDeclaration getParamter(final EList<VarDeclaration> paramList, final String name) {
@@ -919,15 +884,18 @@ public abstract class CommonElementImporter {
 		return libraryElement;
 	}
 
-	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver) {
-		if (name == null) {
+	@SuppressWarnings("unchecked")
+	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver,
+			final EClass typeClass) {
+		if (name == null || name.isEmpty()) {
 			return null;
 		}
-		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
+		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver,
+				typeName -> (T) getTypeLibrary().createErrorTypeEntry(typeName, typeClass)));
 	}
 
 	protected DataType getDataType(final String name) {
-		if (name == null) {
+		if (name == null || name.isEmpty()) {
 			return GenericTypes.ANY;
 		}
 		return addDependency(ImportHelper.resolveImport(name, getElement(), getDataTypeLibrary()::getTypeIfExists,

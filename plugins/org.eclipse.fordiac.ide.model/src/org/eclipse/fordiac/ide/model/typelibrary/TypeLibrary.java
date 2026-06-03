@@ -608,6 +608,37 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		return true;
 	}
 
+	void dispose() {
+		if (!referencedProjects.isEmpty()) {
+			disposeReferencedProjects();
+		}
+		adapterTypes.clear();
+		attributeTypes.clear();
+		deviceTypes.clear();
+		fbTypes.clear();
+		resourceTypes.clear();
+		segmentTypes.clear();
+		subAppTypes.clear();
+		systems.clear();
+		globalConstants.clear();
+		programTypes.clear();
+		dataTypeLib.clear();
+		fileMap.clear();
+		packages.clear();
+		duplicates.clear();
+		referencedProjects.clear();
+		eAdapters().clear();
+	}
+
+	private void disposeReferencedProjects() {
+		for (final IProject referencedProject : referencedProjects) {
+			final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryIfPresent(referencedProject);
+			if (referencedTypeLibrary != null) {
+				referencedTypeLibrary.eAdapters().remove(typeLibraryAdapter);
+			}
+		}
+	}
+
 	private Stream<TypeEntry> getAllPublicTypes() {
 		return fileMap.values().stream().filter(this::isPublicNameReference);
 	}

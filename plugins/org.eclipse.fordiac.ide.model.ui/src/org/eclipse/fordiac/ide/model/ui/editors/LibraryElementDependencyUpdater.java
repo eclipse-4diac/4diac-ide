@@ -64,6 +64,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 				}
 				// react to TYPE_ENTRY_FULL_TYPE_NAME_FEATURE for renamed dependencies
 				if (TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE.equals(notification.getFeature())) {
+					// use the old type name here to explicitly request an error type, which is
+					// needed for correct behavior when a type is renamed outside of a refactoring
 					Display.getDefault()
 							.asyncExec(() -> updateDependency(dependency, notification.getOldStringValue()));
 				}

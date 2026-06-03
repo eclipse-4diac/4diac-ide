@@ -67,6 +67,12 @@ public enum TypeLibraryManager {
 		}
 	}
 
+	public TypeLibrary getTypeLibraryIfPresent(final IProject proj) {
+		synchronized (typeLibraryList) {
+			return typeLibraryList.get(proj);
+		}
+	}
+
 	public TypeLibrary getTypeLibraryFromContext(final EObject context) {
 		// attempt to get from root library element
 		if (EcoreUtil.getRootContainer(context) instanceof final LibraryElement libraryElement) {
@@ -108,9 +114,14 @@ public enum TypeLibraryManager {
 	}
 
 	public void removeProject(final IProject project) {
+		final TypeLibrary typeLibrary;
 		synchronized (typeLibraryList) {
-			typeLibraryList.remove(project);
+			typeLibrary = typeLibraryList.remove(project);
+			if (typeLibrary == null) {
+				return;
+			}
 		}
+		typeLibrary.dispose();
 	}
 
 	public void renameProject(final IProject oldProject, final IProject newProject) {
