@@ -524,7 +524,9 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		// check content changed
 		if (isFileContentChanged()) {
 			// load type name
-			loadTypeNameFromFile();
+			final String typeName = loadTypeNameFromFile();
+			// update type name
+			notifications = basicSetFullTypeName(typeName, notifications);
 			// clear cached type
 			notifications = basicSetType(null, notifications);
 			// also notify changed contents
