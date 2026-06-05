@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.CommandCompositeChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeModelEdit;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
@@ -302,18 +303,16 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	}
 
 	private void update(final FBType sourceType, final FBType destinationType) {
-		final Map<AutomationSystem, List<URI>> updateMap = new HashMap<>();
-		createUpdateChanges(sourceType, updateMap);
+		createUpdateChanges(sourceType);
 		if (!sourceURI.toString().equals(destinationURI.toString())) {
-			createUpdateChanges(destinationType, updateMap);
+			createUpdateChanges(destinationType);
 		}
-		updateMap.entrySet().forEach(entry -> modelEdits
-				.add(new SystemUpdateFBModelEdit(EcoreUtil.getURI(entry.getKey()), entry.getValue())));
 	}
 
-	private static void createUpdateChanges(final FBType sourceType, final Map<AutomationSystem, List<URI>> updateMap) {
+	private void createUpdateChanges(final FBType sourceType) {
 		new BlockTypeInstanceSearch(sourceType.getTypeEntry()).performSearch().stream()
-				.map(FBNetworkElement.class::cast).forEach(instance -> addToMap(updateMap, instance));
+				.filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
+				.forEach(instance -> modelEdits.add(new UpdateFBTypeModelEdit(instance, sourceType.getTypeEntry())));
 	}
 
 	private void connect(final FBType sourceType, final FBType destinationType) {

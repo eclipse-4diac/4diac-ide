@@ -26,8 +26,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateConfigurableFBModelEdit;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
 public class SafeStructDeletionChange extends CompositeChange {
@@ -64,13 +64,19 @@ public class SafeStructDeletionChange extends CompositeChange {
 					} else if (isFbTypePin(varDecl)) {
 						handleTransitiveRefactoring(varDecl, doneElements);
 					}
-				} else if (eObject instanceof final StructManipulator muxer && doneElements.add(muxer)) {
-					changes.add(new UpdateManipulatorModelEdit(muxer));
+				} else if (eObject instanceof final ConfigurableFB configurableFB && doneElements.add(configurableFB)) {
+					addUpdateConfigurableFBEdit(configurableFB);
 				} else if (eObject instanceof final Attribute attribute) {
 					changes.add(new DeleteAttributeModelEdit(attribute, IecTypes.GenericTypes.ANY_STRUCT));
 				}
 			});
 		}
+	}
+
+	private void addUpdateConfigurableFBEdit(final ConfigurableFB configurableFB) {
+		final ModelEdit<?> updateConfigurableFBEdit = new UpdateConfigurableFBModelEdit(configurableFB, null);
+		updateConfigurableFBEdit.setEnabled(false);
+		changes.add(updateConfigurableFBEdit);
 	}
 
 	/**

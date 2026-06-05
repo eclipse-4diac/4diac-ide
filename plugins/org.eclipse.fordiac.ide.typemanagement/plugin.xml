@@ -638,7 +638,7 @@
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteInternalFBModelEdit"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinModelEdit"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorModelEdit"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateConfigurableFBModelEdit"/>
    <instanceof
          value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteAttributeModelEdit">
    </instanceof>
