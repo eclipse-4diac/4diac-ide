@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -54,10 +55,11 @@ public class UpdateConfigurableFBModelEdit extends ModelEdit<ConfigurableFB> {
 
 	@Override
 	protected Command createCommand(final ConfigurableFB element) {
+		final var dataType = typeEntry != null ? typeEntry.getType() : IecTypes.GenericTypes.ANY;
 		if (element instanceof final StructManipulator structManipulator) {
-			return new ChangeStructCommand(structManipulator, typeEntry.getType());
+			return new ChangeStructCommand(structManipulator, dataType);
 		}
 
-		return new ConfigureFBCommand(element, typeEntry.getType());
+		return new ConfigureFBCommand(element, dataType);
 	}
 }
