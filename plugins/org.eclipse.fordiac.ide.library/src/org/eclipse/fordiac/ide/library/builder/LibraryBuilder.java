@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.builder;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class LibraryBuilder extends IncrementalProjectBuilder {
@@ -78,20 +76,24 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 
 	@Override
 	protected void clean(final IProgressMonitor monitor) throws CoreException {
-		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary, 2);
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary,
+				LibraryManager.LIBRARY_FOLDERS.size() + 1);
 
 		// clean manifest library marker
-		FordiacMarkerHelper.updateMarkers(getProject().getFile(LibraryManager.MANIFEST),
-				FordiacErrorMarker.LIBRARY_MARKER, Collections.emptyList(), true);
+		final IFile manifestFile = getProject().getFile(LibraryManager.MANIFEST);
+		if (manifestFile.exists()) {
+			manifestFile.deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, true, IResource.DEPTH_ZERO);
+		}
 		progress.worked(1);
 
 		// clean broken link markers
-		LibraryManager.LIBRARY_FOLDERS.stream().map(name -> getProject().getFolder(name))
-				.forEach(folder -> FordiacMarkerHelper.updateMarkers(folder, FordiacErrorMarker.LIBRARY_MARKER,
-						Collections.emptyList(), true));
-		progress.worked(1);
-
-		SubMonitor.done(monitor);
+		for (final String name : LibraryManager.LIBRARY_FOLDERS) {
+			final IFolder folder = getProject().getFolder(name);
+			if (folder.exists()) {
+				folder.deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, true, IResource.DEPTH_ONE);
+			}
+			progress.worked(1);
+		}
 	}
 
 	@Override

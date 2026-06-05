@@ -632,7 +632,8 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private void disposeReferencedProjects() {
 		for (final IProject referencedProject : referencedProjects) {
-			final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryIfPresent(referencedProject);
+			final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE
+					.getTypeLibraryIfPresent(referencedProject);
 			if (referencedTypeLibrary != null) {
 				referencedTypeLibrary.eAdapters().remove(typeLibraryAdapter);
 			}
@@ -701,15 +702,16 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private void createTypeLibraryMarker(final IResource resource, final String message) {
 		if (resource != null && project.equals(resource.getProject())) {
-			FordiacMarkerHelper.createMarkers(resource, List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message)
-					.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
+			FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER,
+					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message)
+							.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
 		}
 	}
 
 	private void deleteTypeLibraryMarkers(final IResource resource) {
 		if (resource != null && project.equals(resource.getProject())) {
-			FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList(),
-					true);
+			FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER,
+					Collections.emptyList());
 		}
 	}
 
