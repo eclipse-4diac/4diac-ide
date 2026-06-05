@@ -180,7 +180,7 @@ public class FordiacNature implements IProjectNature {
 					.setCode(WRONG_BUILDER_ORDER));
 		}
 
-		FordiacMarkerHelper.updateMarkers(project, FordiacErrorMarker.PROJECT_CONFIGURATION_MARKER, builders, true);
+		FordiacMarkerHelper.updateMarkers(project, FordiacErrorMarker.PROJECT_CONFIGURATION_MARKER, builders);
 	}
 
 	public boolean hasExportBuilderCommand() throws CoreException {

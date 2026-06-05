@@ -258,6 +258,11 @@ public final class FordiacMarkerHelper {
 	}
 
 	public static void updateMarkers(final IResource resource, final String type,
+			final List<ErrorMarkerBuilder> builders) {
+		updateMarkers(resource, type, builders, false);
+	}
+
+	public static void updateMarkers(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders, final boolean force) {
 		if (resource != null && resource.isAccessible()
 				&& (force || errorMarkersNeedsUpdate(resource, type, builders))) {
@@ -289,7 +294,7 @@ public final class FordiacMarkerHelper {
 	private static void updateMarkersInWorkspace(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders) {
 		try {
-			resource.deleteMarkers(type, true, IResource.DEPTH_INFINITE);
+			resource.deleteMarkers(type, true, IResource.DEPTH_ZERO);
 			for (final var builder : builders) {
 				builder.createMarker(resource);
 			}
@@ -314,7 +319,7 @@ public final class FordiacMarkerHelper {
 	private static boolean errorMarkersNeedsUpdate(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders) {
 		try {
-			return !builders.isEmpty() || resource.findMarkers(type, true, IResource.DEPTH_INFINITE).length != 0;
+			return !builders.isEmpty() || resource.findMarkers(type, true, IResource.DEPTH_ZERO).length != 0;
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning("Couldn't determine marker state of resoruce: " + resource.getName(), e); //$NON-NLS-1$
 
