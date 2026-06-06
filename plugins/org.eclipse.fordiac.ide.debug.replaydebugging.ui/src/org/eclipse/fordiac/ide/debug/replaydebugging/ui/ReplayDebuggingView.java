@@ -29,6 +29,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -63,6 +64,9 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 		viewer.setEditDomain(new DefaultEditDomain(null));
 
 		setMenu();
+
+		getSite().getService(IContextService.class)
+				.activateContext("org.eclipse.fordiac.ide.debug.replaydebugging.context"); //$NON-NLS-1$
 
 		ReplayNavigatorManager.getDefault().addListener(this);
 		SelectionService.getDefault().install(getSite().getPage());
