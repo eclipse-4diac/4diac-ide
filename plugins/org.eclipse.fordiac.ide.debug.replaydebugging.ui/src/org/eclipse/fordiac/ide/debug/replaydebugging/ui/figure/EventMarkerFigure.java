@@ -34,6 +34,7 @@ public class EventMarkerFigure extends Figure {
 
 	private final int eventIndex;
 	private boolean readOnly = false;
+	private boolean isHighlighted = false;
 
 	public EventMarkerFigure(final int eventIndex) {
 		this.eventIndex = eventIndex;
@@ -75,12 +76,31 @@ public class EventMarkerFigure extends Figure {
 		this.readOnly = isReadOnly;
 	}
 
+	public void setIsHighlighted(final boolean isHighlighted) {
+		this.isHighlighted = isHighlighted;
+	}
+
 	@Override
 	protected void paintFigure(final Graphics g) {
 		final Rectangle b = getBounds();
+		final int highlightedThickness = b.height * 20 / 100;
 
-		g.setBackgroundColor(getBackgroundColor());
-		g.fillOval(b);
+		if (isHighlighted) {
+			// Fill the full oval with the highlight color — this becomes
+			// the visible ring since the inner circle paints over the centre
+			g.setBackgroundColor(ColorConstants.black);
+			g.fillOval(b);
+
+			// Paint the actual circle inset by the ring thickness,
+			// so the highlight color is only visible as a border ring
+			final Rectangle inner = b.getCopy().shrink(highlightedThickness, highlightedThickness);
+			g.setBackgroundColor(getBackgroundColor());
+			g.fillOval(inner);
+
+		} else {
+			g.setBackgroundColor(getBackgroundColor());
+			g.fillOval(b);
+		}
 
 		if (readOnly) {
 			drawLockBadge(g, b);

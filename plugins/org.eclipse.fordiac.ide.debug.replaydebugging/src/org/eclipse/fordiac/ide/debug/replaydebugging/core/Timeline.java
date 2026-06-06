@@ -51,10 +51,31 @@ public class Timeline {
 
 	private final Set<StructureListener> structureListeners = new HashSet<>();
 
+	// map from datapoints to the event numbers where they are changed
+	private final HashMap<String, Set<Integer>> eventsWhereDatapointsChange = new HashMap<>();
+
 	private int firstDeletableEventIndex = 0;
 
 	public int getFirstDeletableEventIndex() {
 		return firstDeletableEventIndex;
+	}
+
+	public Set<Integer> getEventsThatTouch(final List<String> datapoints) {
+
+		final Set<Integer> result = new HashSet<>();
+		if (datapoints == null) {
+			return result;
+		}
+
+		for (final var datapoint : datapoints) {
+			if (!eventsWhereDatapointsChange.containsKey(datapoint)) {
+				continue;
+			}
+			for (final var eventIntex : eventsWhereDatapointsChange.get(datapoint)) {
+				result.add(eventIntex);
+			}
+		}
+		return result;
 	}
 
 	public void setFirstDeletableEventIndex(final int firstDeletableEventIndex) {
@@ -64,6 +85,11 @@ public class Timeline {
 
 	public void addEventChange(final List<DataPointChange> newValues) {
 		eventChanges.add(new EventChange(eventChanges.size(), newValues));
+		// add mapping from datapoints to event numbers
+		for (final var newValue : newValues) {
+			eventsWhereDatapointsChange.computeIfAbsent(newValue.datapoint(), k -> new HashSet<>());
+			eventsWhereDatapointsChange.get(newValue.datapoint()).add(Integer.valueOf(eventChanges.size() - 1));
+		}
 		notifyNewEvent();
 	}
 
@@ -74,6 +100,13 @@ public class Timeline {
 
 		// a view to actual values
 		final var toRemove = eventChanges.subList(eventNumber, eventChanges.size());
+
+		// remove mapping from datapoints to event numbers
+		for (var i = eventNumber; i < eventChanges.size(); i++) {
+			for (final var datapointChange : toRemove.get(i).newValues()) {
+				eventsWhereDatapointsChange.get(datapointChange.datapoint()).remove(Integer.valueOf(i));
+			}
+		}
 
 		// create a deep copy of toRemove
 		final var toRemoveCopy = new ArrayList<>(toRemove);

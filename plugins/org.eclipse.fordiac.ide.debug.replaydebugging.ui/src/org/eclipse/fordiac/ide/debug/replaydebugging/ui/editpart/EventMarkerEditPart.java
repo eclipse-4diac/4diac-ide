@@ -101,6 +101,7 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 		final var figure = getFigure();
 		figure.setIsReadOnly(getModel().getIsReadOnly());
 		figure.setTooltipText(getModel().getComment());
+		figure.setIsHighlighted(getModel().getIsHighlighted());
 
 		if (getModel().getComparisonColor() != null) {
 			figure.setBackgroundColor(getModel().getComparisonColor());

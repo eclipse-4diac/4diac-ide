@@ -65,7 +65,11 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 		setMenu();
 
 		ReplayNavigatorManager.getDefault().addListener(this);
-		parent.addDisposeListener(e -> ReplayNavigatorManager.getDefault().removeListener(this));
+		SelectionService.getDefault().install(getSite().getPage());
+		parent.addDisposeListener(e -> {
+			ReplayNavigatorManager.getDefault().removeListener(this);
+			SelectionService.getDefault().uninstall(getSite().getPage());
+		});
 		viewer.setContents(session);
 
 	}
