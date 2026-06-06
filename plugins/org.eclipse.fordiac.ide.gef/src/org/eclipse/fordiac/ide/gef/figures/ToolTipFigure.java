@@ -66,7 +66,7 @@ public class ToolTipFigure extends Figure {
 		}
 
 		if (annotationModel != null) {
-			annotationModel.getAnnotations(element).stream().forEach(annotation -> line
+			annotationModel.getAnnotations(element).forEach(annotation -> line
 					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
 		}
 	}

@@ -110,7 +110,7 @@ public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 
 	protected static String createEventName(final List<OutputPrimitive> testOutputs) {
 		final StringBuilder sb = new StringBuilder();
-		testOutputs.stream().forEach(n -> sb.append(n.getEvent() + "_")); //$NON-NLS-1$
+		testOutputs.forEach(n -> sb.append(n.getEvent() + "_")); //$NON-NLS-1$
 		sb.append("expected"); //$NON-NLS-1$
 		return sb.toString();
 	}

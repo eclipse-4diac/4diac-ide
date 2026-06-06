@@ -274,7 +274,7 @@ public class MoveAndReconnectCommand extends Command implements QualNameAffected
 								.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
 										conn.getDestination(), conn, false)));
 					} else {
-						ie.getOutputConnections().stream().forEach(conn -> cmd.add(
+						ie.getOutputConnections().forEach(conn -> cmd.add(
 								new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true)));
 					}
 				}));

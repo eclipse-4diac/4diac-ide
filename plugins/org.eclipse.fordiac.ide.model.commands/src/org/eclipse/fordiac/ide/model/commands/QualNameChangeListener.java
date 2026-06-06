@@ -109,7 +109,7 @@ public abstract class QualNameChangeListener {
 				// editors before editing plant hierachy
 			}
 
-			operations.stream().forEach(this::executeOperation);
+			operations.forEach(this::executeOperation);
 		}
 
 		pendingChanges.remove(key);

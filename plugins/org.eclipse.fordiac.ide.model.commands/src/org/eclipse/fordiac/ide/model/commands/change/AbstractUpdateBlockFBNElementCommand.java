@@ -345,7 +345,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	}
 
 	private void createValues() {
-		newElement.getInterface().getInputVars().stream().forEach(inVar -> {
+		newElement.getInterface().getInputVars().forEach(inVar -> {
 			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			checkSourceParam(inVar);
 		});

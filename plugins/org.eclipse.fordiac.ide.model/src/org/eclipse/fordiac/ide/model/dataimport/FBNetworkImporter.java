@@ -100,7 +100,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	private void moveElementsToGroup() {
-		getFbNetwork().getNetworkElements().stream().forEach(el -> {
+		getFbNetwork().getNetworkElements().forEach(el -> {
 			final Attribute groupAttr = el.getAttribute(LibraryElementTags.GROUP_NAME);
 			if ((groupAttr != null) && (fbNetworkElementMap.get(groupAttr.getValue()) instanceof final Group group)) {
 				el.setGroup(group);

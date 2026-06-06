@@ -213,10 +213,9 @@ public class FBEndpointFinder {
 
 		// trace connections
 		final Set<IInterfaceElement> connectedIfs = new HashSet<>();
-		ifs.stream()
-				.forEach(ifElem -> (ifElem.isIsInput() ? ifElem.getInputConnections() : ifElem.getOutputConnections())
-						.forEach(con -> trace(new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(),
-								(ifElem.isIsInput() ? con.getSource() : con.getDestination()), connectedIfs, false))));
+		ifs.forEach(ifElem -> (ifElem.isIsInput() ? ifElem.getInputConnections() : ifElem.getOutputConnections())
+				.forEach(con -> trace(new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(),
+						(ifElem.isIsInput() ? con.getSource() : con.getDestination()), connectedIfs, false))));
 
 		// count connections between blocks
 		final Map<BlockFBNetworkElement, Integer> result = new HashMap<>();

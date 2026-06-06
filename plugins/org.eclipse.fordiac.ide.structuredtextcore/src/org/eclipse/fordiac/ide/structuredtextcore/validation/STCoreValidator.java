@@ -227,14 +227,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
-			varDeclaration.getRanges().stream().forEach(this::checkRangeOnValidity);
+			varDeclaration.getRanges().forEach(this::checkRangeOnValidity);
 		}
 	}
 
 	@Check
 	public void checkIndexRangeValueType(final STTypeDeclaration typeDeclaration) {
 		if (typeDeclaration.isArray()) {
-			typeDeclaration.getRanges().stream().forEach(this::checkRangeOnValidity);
+			typeDeclaration.getRanges().forEach(this::checkRangeOnValidity);
 		}
 	}
 

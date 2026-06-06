@@ -240,7 +240,7 @@ public class AddDeleteWidget {
 	protected static void executeCompoundCommandForList(final TableViewer viewer, final List<?> selection,
 			final CommandExecutor executor, final CommandProvider commandProvider) {
 		final CompoundCommand cmd = new CompoundCommand();
-		selection.stream().forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+		selection.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
 		executor.executeCommand(cmd);
 		viewer.refresh();
 	}

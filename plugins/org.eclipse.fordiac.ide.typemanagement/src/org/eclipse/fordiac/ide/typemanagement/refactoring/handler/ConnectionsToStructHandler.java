@@ -49,7 +49,7 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 				final FBType sourceType = connections.get(0).getSourceElement().getType();
 				final FBType destinationType = connections.get(0).getDestinationElement().getType();
 				final Map<String, String> replacableConMap = new HashMap<>();
-				connections.stream().forEach(
+				connections.forEach(
 						con -> replacableConMap.put(con.getSource().getName(), con.getDestination().getName()));
 
 				final ConnectionsToStructRefactoring refactoring = new ConnectionsToStructRefactoring(sourceType,
