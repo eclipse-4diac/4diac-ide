@@ -31,7 +31,7 @@
 			<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202505141345"/>
+			<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202605071334"/>
 			<unit id="org.eclipse.emf.compare.egit.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="0.0.0"/>
