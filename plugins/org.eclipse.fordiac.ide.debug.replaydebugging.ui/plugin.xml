@@ -31,6 +31,16 @@
       </launchConfigurationTypeImage>
    </extension>
 
+ 	<extension
+		point="org.eclipse.ui.contexts">
+		<context
+			description="%context.description"
+			id="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+			name="%context.name"
+			parentId="org.eclipse.ui.contexts.window">
+		</context>
+	</extension>
+
    <extension point="org.eclipse.ui.commands">
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"  name="Move Left"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight" name="Move Right"/>
@@ -303,5 +313,25 @@
 			label="%comparisonDisabledColor.label"
 			value="150,150,150"/>
   </extension>
+
+    <!-- Key bindings -->
+<extension point="org.eclipse.ui.bindings">
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_LEFT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_RIGHT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_UP"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_DOWN"/>
+</extension>
 
 </plugin>
