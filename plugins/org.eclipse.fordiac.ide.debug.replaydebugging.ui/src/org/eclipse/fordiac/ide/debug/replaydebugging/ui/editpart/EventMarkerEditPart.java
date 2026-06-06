@@ -103,14 +103,13 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 		figure.setTooltipText(getModel().getComment());
 		figure.setIsHighlighted(getModel().getIsHighlighted());
 
-		if (getModel().getComparisonColor() != null) {
-			figure.setBackgroundColor(getModel().getComparisonColor());
-		} else if (!getModel().getValid()) {
+		if (!getModel().getValid()) {
 			figure.setBackgroundColor(INVALID_COLOR);
 		} else {
 			figure.setBackgroundColor(getModel().getIsCurrentEvent() ? CURRENT_EVENT_COLOR : NOT_CURRENT_EVENT_COLOR);
 		}
 
+		figure.setSecondColor(getModel().getComparisonColor());
 		figure.repaint();
 	}
 

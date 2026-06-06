@@ -23,6 +23,7 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * @brief A figure representing an event marker in the timeline.
@@ -35,6 +36,7 @@ public class EventMarkerFigure extends Figure {
 	private final int eventIndex;
 	private boolean readOnly = false;
 	private boolean isHighlighted = false;
+	private Color secondColor = null;
 
 	public EventMarkerFigure(final int eventIndex) {
 		this.eventIndex = eventIndex;
@@ -68,6 +70,10 @@ public class EventMarkerFigure extends Figure {
 		}
 	}
 
+	public void setSecondColor(final Color secondColor) {
+		this.secondColor = secondColor;
+	}
+
 	public int getEventIndex() {
 		return eventIndex;
 	}
@@ -82,31 +88,33 @@ public class EventMarkerFigure extends Figure {
 
 	@Override
 	protected void paintFigure(final Graphics g) {
-		final Rectangle b = getBounds();
-		final int highlightedThickness = b.height * 20 / 100;
+		final Rectangle completeBound = getBounds();
+		final int highlightedThickness = completeBound.height * 15 / 100;
+		var colorBounds = completeBound;
 
 		if (isHighlighted) {
 			// Fill the full oval with the highlight color — this becomes
 			// the visible ring since the inner circle paints over the centre
 			g.setBackgroundColor(ColorConstants.black);
-			g.fillOval(b);
+			g.fillOval(completeBound);
 
 			// Paint the actual circle inset by the ring thickness,
 			// so the highlight color is only visible as a border ring
-			final Rectangle inner = b.getCopy().shrink(highlightedThickness, highlightedThickness);
-			g.setBackgroundColor(getBackgroundColor());
-			g.fillOval(inner);
+			colorBounds = completeBound.getCopy().shrink(highlightedThickness, highlightedThickness);
 
+		}
+		if (secondColor != null) {
+			paintSplitCircle(g, colorBounds);
 		} else {
 			g.setBackgroundColor(getBackgroundColor());
-			g.fillOval(b);
+			g.fillOval(colorBounds);
 		}
 
 		if (readOnly) {
-			drawLockBadge(g, b);
+			drawLockBadge(g, completeBound);
 		}
 		if (getToolTip() != null) {
-			drawCommentBadge(g, b);
+			drawCommentBadge(g, completeBound);
 		}
 	}
 
@@ -177,6 +185,22 @@ public class EventMarkerFigure extends Figure {
 			g.drawLine(lineStartX, lineY, lineEndX, lineY);
 		}
 
+		g.popState();
+	}
+
+	private void paintSplitCircle(final Graphics g, final Rectangle b) {
+		final int midX = b.x + b.width / 2;
+
+		g.pushState();
+		g.clipRect(new Rectangle(b.x, b.y, b.width / 2, b.height));
+		g.setBackgroundColor(getBackgroundColor());
+		g.fillOval(b);
+		g.popState();
+
+		g.pushState();
+		g.clipRect(new Rectangle(midX, b.y, b.width - b.width / 2, b.height));
+		g.setBackgroundColor(secondColor);
+		g.fillOval(b);
 		g.popState();
 	}
 
