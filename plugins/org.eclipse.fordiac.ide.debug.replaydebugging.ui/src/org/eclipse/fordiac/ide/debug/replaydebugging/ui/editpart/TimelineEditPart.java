@@ -176,6 +176,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		super.refreshVisuals();
 		final var fig = getFigure();
 		fig.getLineFigure().setFirstInvalid(getModel().getFirstInvalid());
+		fig.setTooltipText(getModel().getComment());
 	}
 
 	@Override

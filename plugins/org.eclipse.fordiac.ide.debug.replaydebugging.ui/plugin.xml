@@ -48,6 +48,10 @@
              name="Add/edit event comment"/>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
              name="Remove event comment"/>
+     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
+             name="Add/edit timeline comment"/>
+     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
+             name="Remove timeline comment"/>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
@@ -141,6 +145,24 @@
       </activeWhen>
     </handler>
 
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.AddTimelineCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveTimelineCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
   </extension>
 
   <extension point="org.eclipse.ui.menus">
@@ -225,6 +247,41 @@
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+
+
+
+
+
+       <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.timelineCommentsSeparator" visible="true"/>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
+               label="%command.add_timeline_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+ 			    <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
+               label="%command.remove_timeline_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
               </or>
             </iterate>
           </with>

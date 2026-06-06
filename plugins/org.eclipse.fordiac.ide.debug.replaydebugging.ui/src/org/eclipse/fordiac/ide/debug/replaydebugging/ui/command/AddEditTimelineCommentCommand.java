@@ -11,40 +11,43 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.command;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.gef.commands.Command;
 
-public class RemoveEventCommentCommand extends Command {
-	private final EventPosition eventPosition;
+public class AddEditTimelineCommentCommand extends Command {
+	private final Timeline timeline;
+	private final String newComment;
 	private String previousComment = null; // for undo
 
-	public RemoveEventCommentCommand(final EventPosition eventPosition) {
-		super(Messages.RemoveEventCommentCommand_Text);
-		this.eventPosition = eventPosition;
+	public AddEditTimelineCommentCommand(final Timeline timeline, final String newComment) {
+		super(Messages.AddEditTimelineCommentCommand_Text);
+		this.timeline = timeline;
+		this.newComment = newComment;
 	}
 
 	@Override
 	public void execute() {
-		previousComment = CommentsHandler.getInstance().getComment(eventPosition);
-		CommentsHandler.getInstance().removeComment(eventPosition);
+		previousComment = CommentsHandler.getInstance().getComment(timeline);
+		CommentsHandler.getInstance().setComment(timeline, newComment);
 	}
 
 	@Override
 	public void undo() {
-		CommentsHandler.getInstance().setComment(eventPosition, previousComment); // restore prior comment
+		CommentsHandler.getInstance().setComment(timeline, previousComment); // restore prior comment
 	}
 
 	@Override
 	public void redo() {
-		CommentsHandler.getInstance().removeComment(eventPosition);
+		CommentsHandler.getInstance().setComment(timeline, newComment);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return CommentsHandler.getInstance().getComment(eventPosition) != null;
+		return true;
 	}
 }

@@ -38,6 +38,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	private final List<TimelineConnection> spawnedConnections = new ArrayList<>();
 	private final List<EventMarker> eventMarkers = new ArrayList<>();
 	private final BiConsumer<Timeline, Integer> eventSelected;
+	private String comment = null;
 
 	private int firstInvalid = -1;
 
@@ -81,6 +82,10 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	public Timeline getTimeline() {
 		return timeline;
+	}
+
+	public String getComment() {
+		return comment;
 	}
 
 	public List<TimelineModel> getSpawnedTimelineModels() {
@@ -225,6 +230,15 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 				break;
 			}
 		}
+	}
+
+	@Override
+	public void timelineCommentChanged(final Timeline timeline, final String comment) {
+		if (timeline != this.timeline) {
+			return;
+		}
+		this.comment = comment;
+		propertyChangeSupport.firePropertyChange(PROPERTY_STATE_CHANGED, null, null);
 	}
 
 	// Listener to this
