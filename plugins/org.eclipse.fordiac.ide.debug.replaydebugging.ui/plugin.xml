@@ -44,6 +44,8 @@
    <extension point="org.eclipse.ui.commands">
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"  name="Move Left"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight" name="Move Right"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"  name="Jump Left"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight" name="Jump Right"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"    name="Move Up"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"  name="Move Down"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
@@ -76,6 +78,24 @@
 
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight"
          class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.MoveRightHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpLeftHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpRightHandler">
         <activeWhen>
             <with variable="activePartId">
                 <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
@@ -324,6 +344,14 @@
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="ARROW_RIGHT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_LEFT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_RIGHT"/>
     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"

@@ -74,8 +74,8 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 				return switch (nav.getDirection()) {
 				case UP -> new MoveUpCommand(getModel().getReplayNavigator());
 				case DOWN -> new MoveDownCommand(getModel().getReplayNavigator());
-				case LEFT -> new MoveLeftCommand(getModel().getReplayNavigator());
-				case RIGHT -> new MoveRightCommand(getModel().getReplayNavigator());
+				case LEFT -> new MoveLeftCommand(getModel().getReplayNavigator(), nav.isJump(), nav.getHighlighted());
+				case RIGHT -> new MoveRightCommand(getModel().getReplayNavigator(), nav.isJump(), nav.getHighlighted());
 				default -> null;
 				};
 			}

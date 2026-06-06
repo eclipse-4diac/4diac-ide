@@ -13,6 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.gef.Request;
 
@@ -23,13 +26,29 @@ public class NavigationRequest extends Request {
 	}
 
 	private final Direction direction;
+	private final boolean jump;
+	private Set<Integer> highlighted = new HashSet<>();
 
-	public NavigationRequest(final Direction direction) {
+	public NavigationRequest(final Direction direction, final boolean jump) {
 		super(Messages.NavigationRequest_Type);
 		this.direction = direction;
+		this.jump = jump;
 	}
 
 	public Direction getDirection() {
 		return direction;
 	}
+
+	public boolean isJump() {
+		return jump;
+	}
+
+	public Set<Integer> getHighlighted() {
+		return highlighted;
+	}
+
+	public void setHighlighted(final Set<Integer> highlighted) {
+		this.highlighted = highlighted;
+	}
+
 }
