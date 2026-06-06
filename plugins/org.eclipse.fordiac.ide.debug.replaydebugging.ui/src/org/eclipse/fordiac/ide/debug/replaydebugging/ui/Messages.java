@@ -52,11 +52,14 @@ public class Messages extends NLS {
 	public static String LaunchConfigurationTab_SelectPathDialogText;
 	public static String LaunchConfigurationTab_SystemSelectionButtonText;
 	public static String LaunchConfigurationTab_TracePathSelectionText;
+
 	public static String MoveDownCommand_Label;
 	public static String MoveLeftCommand_Label;
 	public static String MoveRightCommand_Label;
 	public static String MoveUpCommand_Label;
 	public static String NavigationRequest_Type;
+	public static String JumpLeftCommand_Label;
+	public static String JumpRightCommand_Label;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

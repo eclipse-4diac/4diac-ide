@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.command;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
@@ -84,6 +85,26 @@ public class NavigationHelper {
 			collectTimelinesBFS(spawned, result);
 		}
 
+	}
+
+	public static int getJumpDestination(final int currentEvent, final int maxEventValue, final boolean forward,
+			final Set<Integer> highlighted) {
+		if (highlighted.isEmpty()) {
+			return forward ? maxEventValue : 0;
+		}
+
+		final List<Integer> highlightedList = new ArrayList<>(highlighted);
+		Collections.sort(highlightedList);
+		final int index = Collections.binarySearch(highlightedList, Integer.valueOf(currentEvent));
+
+		if (forward) {
+			final int nextIndex = (index >= 0) ? index + 1 : -(index + 1);
+
+			return nextIndex < highlightedList.size() ? highlightedList.get(nextIndex).intValue() : maxEventValue;
+		}
+		final int prevIndex = (index >= 0) ? index - 1 : -(index + 1) - 1;
+
+		return prevIndex >= 0 ? highlightedList.get(prevIndex).intValue() : 0;
 	}
 
 }

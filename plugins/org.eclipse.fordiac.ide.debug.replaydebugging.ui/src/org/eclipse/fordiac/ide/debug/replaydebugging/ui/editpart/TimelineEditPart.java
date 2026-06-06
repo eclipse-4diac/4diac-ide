@@ -92,6 +92,9 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		installEditPolicy(CommonConstants.NAVIGATION_POLICY, new AbstractEditPolicy() {
 			@Override
 			public Command getCommand(final Request request) {
+				if (request instanceof final NavigationRequest nav && nav.isJump()) {
+					nav.setHighlighted(getModel().getHighlighted());
+				}
 				return null; // bubble all navigation to parent
 			}
 		});

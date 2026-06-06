@@ -19,7 +19,9 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -42,6 +44,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	private final List<EventMarker> eventMarkers = new ArrayList<>();
 	private final BiConsumer<Timeline, Integer> eventSelected;
 	private String comment = null;
+	private Set<Integer> highlightedEvents = new HashSet<>();
 
 	private int firstInvalid = -1;
 
@@ -168,6 +171,10 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 		return connectionToParentTimelineModel == null ? List.of() : List.of(connectionToParentTimelineModel);
 	}
 
+	public Set<Integer> getHighlighted() {
+		return highlightedEvents;
+	}
+
 	// Callbacks from the timeline
 
 	@Override
@@ -256,9 +263,9 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	}
 
 	private void setHighlighted(final List<String> selectedElements) {
-		final var selected = timeline.getEventsThatTouch(selectedElements);
+		highlightedEvents = timeline.getEventsThatTouch(selectedElements);
 		for (final var eventMarker : eventMarkers) {
-			eventMarker.setIsHighlighted(selected.contains(Integer.valueOf(eventMarker.getIndex())));
+			eventMarker.setIsHighlighted(highlightedEvents.contains(Integer.valueOf(eventMarker.getIndex())));
 		}
 	}
 
