@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.model;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -27,10 +28,12 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.SelectionService;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonColumn;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
 
-public class TimelineModel implements Timeline.StructureListener, ComparisonService.Listener, CommentsHandler.Listener {
+public class TimelineModel implements Timeline.StructureListener, ComparisonService.Listener, CommentsHandler.Listener,
+		PropertyChangeListener {
 
 	private final Timeline timeline;
 	private TimelineConnection connectionToParentTimelineModel;
@@ -62,10 +65,19 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 			addNewSpawnedTimeline(spawnedTimeline);
 		}
 		updateReadOnlyMarkers();
+		setHighlighted(SelectionService.getDefault().getSelectedElements());
 
 		timeline.addStructureListener(this);
 		ComparisonService.getInstance().addListener(this);
 		CommentsHandler.getInstance().addListener(this);
+		SelectionService.getDefault().addPropertyChangeListener(this);
+	}
+
+	public void dispose() {
+		timeline.removeStructureListener(this);
+		ComparisonService.getInstance().removeListener(this);
+		CommentsHandler.getInstance().removeListener(this);
+		SelectionService.getDefault().removePropertyChangeListener(this);
 	}
 
 	public List<EventMarker> getEventMarkers() {
@@ -144,12 +156,6 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 		}
 	}
 
-	public void dispose() {
-		timeline.removeStructureListener(this);
-		ComparisonService.getInstance().removeListener(this);
-		CommentsHandler.getInstance().removeListener(this);
-	}
-
 	private void eventSelected(final Integer index) {
 		eventSelected.accept(timeline, index);
 	}
@@ -167,6 +173,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	@Override
 	public void eventAdded(final Timeline timeline) {
 		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this, this::eventSelected));
+		setHighlighted(SelectionService.getDefault().getSelectedElements());
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_ADDED, null, null);
 	}
 
@@ -239,6 +246,20 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 		}
 		this.comment = comment;
 		propertyChangeSupport.firePropertyChange(PROPERTY_STATE_CHANGED, null, null);
+	}
+
+	@Override
+	public void propertyChange(final PropertyChangeEvent evt) {
+		if (SelectionService.PROPERTY_SELECTION.equals(evt.getPropertyName())) {
+			setHighlighted(SelectionService.getDefault().getSelectedElements());
+		}
+	}
+
+	private void setHighlighted(final List<String> selectedElements) {
+		final var selected = timeline.getEventsThatTouch(selectedElements);
+		for (final var eventMarker : eventMarkers) {
+			eventMarker.setIsHighlighted(selected.contains(Integer.valueOf(eventMarker.getIndex())));
+		}
 	}
 
 	// Listener to this

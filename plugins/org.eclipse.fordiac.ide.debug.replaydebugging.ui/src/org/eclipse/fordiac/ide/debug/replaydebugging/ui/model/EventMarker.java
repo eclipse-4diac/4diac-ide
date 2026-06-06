@@ -26,6 +26,7 @@ public class EventMarker {
 	private boolean isCurrentEvent = false;
 	private boolean isValid = false;
 	private boolean isReadOnly = false;
+	private boolean isHightlighted = false;
 	private Color comparisonColor = null;
 	private String comment = null;
 
@@ -94,6 +95,15 @@ public class EventMarker {
 
 	public String getComment() {
 		return comment;
+	}
+
+	public boolean getIsHighlighted() {
+		return isHightlighted;
+	}
+
+	public void setIsHighlighted(final boolean isHightlighted) {
+		this.isHightlighted = isHightlighted;
+		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_CHANGED, null, null);
 	}
 
 	// Listener to this
