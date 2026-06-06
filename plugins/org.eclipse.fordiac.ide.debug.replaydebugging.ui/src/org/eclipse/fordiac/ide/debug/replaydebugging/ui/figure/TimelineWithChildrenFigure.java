@@ -75,12 +75,20 @@ public class TimelineWithChildrenFigure extends Figure {
 		return childrenFigure;
 	}
 
+	public void setTooltipText(final String tooltipText) {
+		if (tooltipText != null && !tooltipText.isEmpty()) {
+			timelineFigure.setToolTip(new TooltipFigure(tooltipText));
+		} else {
+			timelineFigure.setToolTip(null);
+		}
+	}
+
 	public void updateMaxNumberOfEvents(final int maxNumberOfEvents) {
 		lineFigure.setMaxNumberOfEvents(maxNumberOfEvents);
 
 		final int newWidth = maxNumberOfEvents * CommonFigureConstants.TOTAL_MARKER_SPACE;
-		timelineFigure.setConstraint(lineFigure, new Rectangle(startPosition * CommonFigureConstants.TOTAL_MARKER_SPACE, 0,
-				newWidth, CommonFigureConstants.MARKER_SIZE));
+		timelineFigure.setConstraint(lineFigure, new Rectangle(startPosition * CommonFigureConstants.TOTAL_MARKER_SPACE,
+				0, newWidth, CommonFigureConstants.MARKER_SIZE));
 
 		revalidate();
 		repaint();
@@ -91,7 +99,8 @@ public class TimelineWithChildrenFigure extends Figure {
 		final Dimension timelineSize = lineFigure.getPreferredSize();
 		final Dimension contentSize = childrenFigure.getPreferredSize();
 
-		final int width = Math.max(startPosition * CommonFigureConstants.MARKER_SIZE + timelineSize.width, contentSize.width);
+		final int width = Math.max(startPosition * CommonFigureConstants.MARKER_SIZE + timelineSize.width,
+				contentSize.width);
 		final int height = timelineSize.height + contentSize.height + SPACING_BETWEEN_TIMELINES;
 
 		return new Dimension(width, height);

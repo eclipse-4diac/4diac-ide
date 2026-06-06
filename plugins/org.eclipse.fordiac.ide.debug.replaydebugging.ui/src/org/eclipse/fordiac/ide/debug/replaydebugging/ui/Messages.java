@@ -22,8 +22,15 @@ public class Messages extends NLS {
 	public static String AddEventCommentHandler_DialogTitle;
 	public static String AddEventCommentHandler_HintForTheUser;
 	public static String AddToComparisonCommand_Text;
+
+	public static String AddEditTimelineCommentCommand_Text;
+	public static String AddTimelineCommentHandler_DialogTitle;
+	public static String AddTimelineCommentHandler_HintForTheUser;
+	public static String RemoveTimelineCommentCommand_Text;
+
 	public static String RemoveEventCommentCommand_Text;
 	public static String RemoveFromComparisonCommand_Text;
+
 	public static String OpenStatesComparisonHandler_OpenTableViewError;
 	public static String StatesComparisonView_AlphabeticallyAscendingOrderLabel;
 	public static String StatesComparisonView_AlphabeticallyDescendingOrderLabel;
