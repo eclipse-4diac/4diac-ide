@@ -65,7 +65,7 @@ public class DeleteApplicationCommand extends Command {
 	}
 
 	private void getUnmappCommands() {
-		application.getFBNetwork().getNetworkElements().stream().forEach(element -> {
+		application.getFBNetwork().getNetworkElements().forEach(element -> {
 			final Mapping mapping = element.getMapping();
 			if (null != mapping) {
 				unmappApplicationElements.add(new UnmapCommand(element));

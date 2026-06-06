@@ -84,7 +84,7 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 	}
 
 	private void setSelection(final IFordiacPreviewChange delChange) {
-		choices.keySet().stream().forEach(i -> i.setChecked(false));
+		choices.keySet().forEach(i -> i.setChecked(false));
 		change = delChange;
 
 		// initialize UI from change state

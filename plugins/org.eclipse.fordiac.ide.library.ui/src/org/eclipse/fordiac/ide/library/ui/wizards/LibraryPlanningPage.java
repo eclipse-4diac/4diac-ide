@@ -144,12 +144,12 @@ public class LibraryPlanningPage extends WizardPage {
 
 	private List<LibraryDescriptorNode> getViewerInput() {
 		final LibraryDescriptorNode stdLib = new LibraryDescriptorNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
-		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME)).stream().forEach(
+		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME)).forEach(
 				lib -> stdLib.addChild(new LibraryDescriptorNode(lib.symbolicName(), lib.version().toString())));
 		stdLib.setAction(null);
 
 		final LibraryDescriptorNode extLib = new LibraryDescriptorNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
-		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)).stream().forEach(
+		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)).forEach(
 				lib -> extLib.addChild(new LibraryDescriptorNode(lib.symbolicName(), lib.version().toString())));
 		extLib.setAction(null);
 		return List.of(extLib, stdLib);

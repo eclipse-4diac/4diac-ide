@@ -52,9 +52,8 @@ public class SimpleFBTypeAnnotations {
 	private static boolean addEventWarnings(final Set<Event> events, final DiagnosticChain diagnostics,
 			final String messagePattern) {
 		if (diagnostics != null) {
-			events.stream()
-					.forEach(event -> diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING,
-							LibraryElementValidator.DIAGNOSTIC_SOURCE,
+			events.forEach(event -> diagnostics
+					.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 							LibraryElementValidator.SIMPLE_FB_TYPE__VALIDATE_EVENT_USAGE,
 							MessageFormat.format(messagePattern, event.getName()), FordiacMarkerHelper
 									.getDiagnosticData(event, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME))));

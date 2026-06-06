@@ -42,7 +42,7 @@ public class ErrorMessageHandler {
 	public synchronized void setHover(final boolean hovering) {
 		this.hovering = hovering;
 		if (!hovering) {
-			messages.stream().forEach(ErrorMessage::setInvalid);
+			messages.forEach(ErrorMessage::setInvalid);
 			closeAllDialogs();
 		}
 	}

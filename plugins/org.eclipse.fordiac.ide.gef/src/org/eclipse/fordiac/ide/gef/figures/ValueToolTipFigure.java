@@ -29,7 +29,7 @@ public class ValueToolTipFigure extends ToolTipFigure {
 			final GraphicalAnnotationModel annotationModel) {
 		super(element, null); // pass null here to avoid showing annotations for element
 		if (annotationModel != null) {
-			annotationModel.getAnnotations(value).stream().forEach(annotation -> getLine()
+			annotationModel.getAnnotations(value).forEach(annotation -> getLine()
 					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
 		}
 	}

@@ -33,8 +33,7 @@ public class TestCase {
 
 	public static TestCase createTestCase(final ServiceSequence serviceSequence) {
 		final TestCase testCase = new TestCase(serviceSequence);
-		serviceSequence.getServiceTransaction().stream()
-				.forEach(n -> testCase.testStates.add(TestState.createTestState(n)));
+		serviceSequence.getServiceTransaction().forEach(n -> testCase.testStates.add(TestState.createTestState(n)));
 		return testCase;
 	}
 

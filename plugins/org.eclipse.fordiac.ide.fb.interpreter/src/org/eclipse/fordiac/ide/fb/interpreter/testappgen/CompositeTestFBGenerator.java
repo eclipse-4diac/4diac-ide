@@ -288,7 +288,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 	@Override
 	protected void createEvents() {
 		// each testCase needs an input event
-		getTestCases().stream().forEach(n -> getEventInputs().add(createInputEvent(n.getName() + "_TEST"))); //$NON-NLS-1$
+		getTestCases().forEach(n -> getEventInputs().add(createInputEvent(n.getName() + "_TEST"))); //$NON-NLS-1$
 
 		// event input to run all tests
 		getEventInputs().add(createInputEvent(EVENT_RUNALL)); // $NON-NLS-1$

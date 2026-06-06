@@ -66,7 +66,7 @@ public class ConnectionTooltipFigure extends Figure {
 		setConstraint(connNameLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
 		if (connection != null && annotationModel != null) {
-			annotationModel.getAnnotations(connection).stream().forEach(annotation -> add(
+			annotationModel.getAnnotations(connection).forEach(annotation -> add(
 					new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
 		}
 	}

@@ -181,16 +181,15 @@ public final class RuntimeFactory {
 
 			// initialize internal data connections
 			final var map = containerRuntime.getTransferData();
-			networkElement.getInterface().getOutputVars()
-					.forEach(pin -> pin.getOutputConnections().stream().forEach(conn -> {
-						if (map.get(conn) != null) {
-							return;
-						}
-						final String val = InitialValueHelper.getInitialOrDefaultValue(pin);
-						final Value value = LibraryElementFactory.eINSTANCE.createValue();
-						value.setValue(val);
-						map.put(conn, value);
-					}));
+			networkElement.getInterface().getOutputVars().forEach(pin -> pin.getOutputConnections().forEach(conn -> {
+				if (map.get(conn) != null) {
+					return;
+				}
+				final String val = InitialValueHelper.getInitialOrDefaultValue(pin);
+				final Value value = LibraryElementFactory.eINSTANCE.createValue();
+				value.setValue(val);
+				map.put(conn, value);
+			}));
 
 			if (containerRuntime.getTypeRuntimes().get(networkElement) != null) {
 				return; // runtime already created

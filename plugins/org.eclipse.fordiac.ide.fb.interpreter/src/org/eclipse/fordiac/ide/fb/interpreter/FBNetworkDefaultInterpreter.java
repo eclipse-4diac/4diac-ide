@@ -136,8 +136,8 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 		final EMap<Connection, Value> map = runtime.getTransferData();
 		// if connection does not have a value yet, initialize it with the default value
 		final FBType type = eo.getParentFB().getType();
-		type.getInterfaceList().getOutputVars().forEach(pin -> getEquivalentNetworkPin(runtime, eo.getParentFB(), pin)
-				.getOutputConnections().stream().forEach(conn -> {
+		type.getInterfaceList().getOutputVars().forEach(
+				pin -> getEquivalentNetworkPin(runtime, eo.getParentFB(), pin).getOutputConnections().forEach(conn -> {
 					if (map.get(conn) == null) {
 						final String val = InitialValueHelper.getInitialOrDefaultValue(pin);
 						final Value value = LibraryElementFactory.eINSTANCE.createValue();
@@ -148,7 +148,7 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 
 		final EList<VarDeclaration> networkVarsSample = getAssociatedDataPins(eo, runtime);
 
-		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream().forEach(outputConnection -> {
+		networkVarsSample.forEach(variable -> variable.getOutputConnections().forEach(outputConnection -> {
 			var value = map.get(outputConnection);
 			if (value == null) {
 				value = map.put(outputConnection, LibraryElementFactory.eINSTANCE.createValue());

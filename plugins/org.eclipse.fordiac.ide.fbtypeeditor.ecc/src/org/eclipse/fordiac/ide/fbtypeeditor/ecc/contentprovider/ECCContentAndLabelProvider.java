@@ -46,9 +46,9 @@ public final class ECCContentAndLabelProvider {
 		final List<Event> events = new ArrayList<>();
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventOutputs());
-			type.getInterfaceList().getSockets().stream()
+			type.getInterfaceList().getSockets()
 					.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventInputs()));
-			type.getInterfaceList().getPlugs().stream()
+			type.getInterfaceList().getPlugs()
 					.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventInputs()));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
@@ -70,9 +70,9 @@ public final class ECCContentAndLabelProvider {
 		final List<Event> events = new ArrayList<>();
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventInputs());
-			type.getInterfaceList().getSockets().stream()
+			type.getInterfaceList().getSockets()
 					.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventOutputs()));
-			type.getInterfaceList().getPlugs().stream()
+			type.getInterfaceList().getPlugs()
 					.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventOutputs()));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
