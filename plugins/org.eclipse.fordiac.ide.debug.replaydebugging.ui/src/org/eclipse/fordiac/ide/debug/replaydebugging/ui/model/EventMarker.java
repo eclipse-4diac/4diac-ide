@@ -32,6 +32,8 @@ public class EventMarker {
 
 	public static final String PROPERTY_EVENT_CHANGED = "eventChanged"; //$NON-NLS-1$
 
+	public static final String PROPERTY_IS_CURRENT_CHANGED = "isCurrentChanged"; //$NON-NLS-1$
+
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 	public EventMarker(final int index, final TimelineModel parentTimeline, final Consumer<Integer> eventSelected) {
@@ -72,7 +74,7 @@ public class EventMarker {
 
 	public void setIsCurrentEvent(final boolean isCurrentEvent) {
 		this.isCurrentEvent = isCurrentEvent;
-		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_CHANGED, null, null);
+		propertyChangeSupport.firePropertyChange(PROPERTY_IS_CURRENT_CHANGED, null, null);
 	}
 
 	public boolean getValid() {

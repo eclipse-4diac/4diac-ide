@@ -26,6 +26,8 @@ public class CommonConstants {
 	public static final String ADD_TO_COMPARISON_REQUEST = "AddToComparison"; //$NON-NLS-1$
 	public static final String REMOVE_FROM_COMPARISON_REQUEST = "RemoveFromComparison"; //$NON-NLS-1$
 
+	public static final String SELECTED_EVENT_POSITION = "SelectedEventPosition"; //$NON-NLS-1$
+
 	public static final String ADD_EDIT_EVENT_COMMENT_REQUEST = "AddEditEventComment"; //$NON-NLS-1$
 	public static final String ADD_EDIT_EVENT_COMMENT_DATA = "AddEditEventCommentData"; //$NON-NLS-1$
 	public static final String REMOVE_EVENT_COMMENT_REQUEST = "RemoveEventComment"; //$NON-NLS-1$
