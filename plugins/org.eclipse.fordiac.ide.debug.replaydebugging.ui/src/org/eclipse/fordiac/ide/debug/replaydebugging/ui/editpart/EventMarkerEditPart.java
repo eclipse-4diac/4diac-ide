@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteEventsCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.EventMarkerFigure;
@@ -93,6 +94,18 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 			}
 		});
 
+		installEditPolicy(CommonConstants.COMPARISON_POLICY, new AbstractEditPolicy() {
+			@Override
+			public Command getCommand(final Request request) {
+				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())
+						|| CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())) {
+					request.getExtendedData().put(CommonConstants.SELECTED_EVENT_POSITION,
+							new EventPosition(getModel().getParentTimeline().getTimeline(), getModel().getIndex()));
+				}
+				return null;
+			}
+		});
+
 	}
 
 	@Override
@@ -113,11 +126,14 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 		figure.repaint();
 	}
 
-	private void safeRefresh() {
+	private void safeRefresh(final boolean reveal) {
 		final Display display = getViewer().getControl().getDisplay();
 		display.asyncExec(() -> {
 			if (isActive()) {
 				refreshVisuals();
+				if (getModel().getIsCurrentEvent() && reveal) {
+					getViewer().reveal(this);
+				}
 			}
 		});
 	}
@@ -164,7 +180,9 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(EventMarker.PROPERTY_EVENT_CHANGED)) {
-			safeRefresh();
+			safeRefresh(false);
+		} else if (evt.getPropertyName().equals(EventMarker.PROPERTY_IS_CURRENT_CHANGED)) {
+			safeRefresh(true);
 		}
 	}
 

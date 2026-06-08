@@ -46,7 +46,9 @@ public class EventMarkerFigure extends Figure {
 
 			@Override
 			public void mousePressed(final MouseEvent me) {
-				notifyListeners();
+				if (me.button == 1) { // left-click only
+					notifyListeners();
+				}
 			}
 
 			@Override

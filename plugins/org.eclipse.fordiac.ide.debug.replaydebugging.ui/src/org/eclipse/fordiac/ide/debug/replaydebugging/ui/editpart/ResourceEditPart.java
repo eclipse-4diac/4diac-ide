@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.AddToComparisonCommand;
@@ -26,8 +27,10 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveUpCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.RemoveFromComparisonCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.NameStackedFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.AbstractEditPolicy;
@@ -63,6 +66,15 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
+	public EditPart getTargetEditPart(final Request request) {
+		if (RequestConstants.REQ_SELECTION.equals(request.getType())) {
+			return getEditPartFromCurrentEventPosition();
+		}
+
+		return super.getTargetEditPart(request);
+	}
+
+	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new NonResizableEditPolicy());
 		installEditPolicy(CommonConstants.NAVIGATION_POLICY, new AbstractEditPolicy() {
@@ -85,17 +97,61 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 			@Override
 			public Command getCommand(final Request request) {
 				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())) {
-					return new AddToComparisonCommand(getModel().getReplayNavigator(),
-							getModel().getReplayNavigator().getCurrentEventPosition(), CommentsHandler.getInstance()
-									.getComment(getModel().getReplayNavigator().getCurrentEventPosition()));
+					var eventPosition = (EventPosition) request.getExtendedData()
+							.get(CommonConstants.SELECTED_EVENT_POSITION);
+					if (eventPosition == null) {
+						eventPosition = getModel().getReplayNavigator().getCurrentEventPosition();
+					}
+
+					return new AddToComparisonCommand(getModel().getReplayNavigator(), eventPosition,
+							CommentsHandler.getInstance().getComment(eventPosition));
 				}
 				if (CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())) {
-					return new RemoveFromComparisonCommand(getModel().getReplayNavigator().getCurrentEventPosition());
+					var eventPosition = (EventPosition) request.getExtendedData()
+							.get(CommonConstants.SELECTED_EVENT_POSITION);
+					if (eventPosition == null) {
+						eventPosition = getModel().getReplayNavigator().getCurrentEventPosition();
+					}
+					return new RemoveFromComparisonCommand(eventPosition);
 				}
 				return null;
 			}
 		});
+	}
 
+	private EditPart getEditPartFromCurrentEventPosition() {
+		final var currentEventPosition = getModel().getReplayNavigator().getCurrentEventPosition();
+		return getEventMarkerEditPart(getTimelineEditPart(currentEventPosition, this), currentEventPosition);
+	}
+
+	private static TimelineEditPart getTimelineEditPart(final EventPosition currentEventPosition,
+			final EditPart sourceEditPart) {
+		for (final Object child : sourceEditPart.getChildren()) {
+			if (child instanceof final TimelineEditPart tep) {
+				if (currentEventPosition.timeline() == tep.getModel().getTimeline()) {
+					return tep;
+				}
+				final var possibleEditPart = getTimelineEditPart(currentEventPosition, tep);
+				if (possibleEditPart != null) {
+					return possibleEditPart;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static EditPart getEventMarkerEditPart(final TimelineEditPart sourceEditPart,
+			final EventPosition currentEventPosition) {
+		if (sourceEditPart == null) {
+			return null;
+		}
+		for (final Object child : sourceEditPart.getChildren()) {
+			if ((child instanceof final EventMarkerEditPart ep)
+					&& currentEventPosition.eventNumber() == ep.getModel().getIndex()) {
+				return ep;
+			}
+		}
+		return null;
 	}
 
 	@Override
