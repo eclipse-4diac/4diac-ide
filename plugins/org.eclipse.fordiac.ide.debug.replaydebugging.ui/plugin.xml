@@ -213,7 +213,7 @@
     <!-- Delete Timeline — shown for both Timeline and Event selection -->
       <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteTimeline"
                label="%command.delete_timeline_label">
-        <visibleWhen checkEnabled="false">
+        <visibleWhen checkEnabled="true">
           <with variable="selection">
             <iterate ifEmpty="false">
               <or>

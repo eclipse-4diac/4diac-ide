@@ -99,7 +99,7 @@ public class TimelineWithChildrenFigure extends Figure {
 		final Dimension timelineSize = lineFigure.getPreferredSize();
 		final Dimension contentSize = childrenFigure.getPreferredSize();
 
-		final int width = Math.max(startPosition * CommonFigureConstants.MARKER_SIZE + timelineSize.width,
+		final int width = Math.max(startPosition * CommonFigureConstants.TOTAL_MARKER_SPACE + timelineSize.width,
 				contentSize.width);
 		final int height = timelineSize.height + contentSize.height + SPACING_BETWEEN_TIMELINES;
 
