@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,24 +14,35 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.BasicDiagnostic;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
 public final class InterfaceElementAnnotations {
-	private static final String NAMED_ELEMENTS_KEY = InterfaceElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
-
 	public static List<String> getBlockRelativePath(final IInterfaceElement element) {
 		final List<String> path = (element.eContainer() instanceof final IInterfaceElement parent)
 				? parent.getBlockRelativePath()
@@ -94,26 +105,96 @@ public final class InterfaceElementAnnotations {
 
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (isErrorMarker(element) || isInTypedInstance(element)) {
-			return true; // do not check error markers or inside typed instances
+		if (isErrorMarker(element) || isDerivedInstance(element) || isOutMappedInOutVar(element)) {
+			return true; // do not check error markers, derived instances (from a type or via mapping),
+							// or out-mapped InOut variables
 		}
-		if (!NamedElementAnnotations.validateName(element, diagnostics, context)) {
-			return false;
+		return NamedElementAnnotations.validateName(element, diagnostics, context)
+				&& NamedElementAnnotations.validateDuplicateName(element, diagnostics, context);
+	}
+
+	public static boolean validateUnused(final IInterfaceElement element, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (isErrorMarker(element) || isDerivedInstance(element) || isOutMappedInOutVar(element)) {
+			return true; // do not check error markers, derived instances (from a type or via mapping),
+							// or out-mapped InOut variables
 		}
-		if (!isOutMappedInOutVar(element)
-				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context)) {
+		if (element.getBlockFBNetworkElement() instanceof UntypedSubApp) {
+			if (!hasInternalConnections(element)) {
+				addUnusedDiagnostic(Messages.InterfaceElementAnnotations_UnusedInternal, element, diagnostics);
+				return false;
+			}
+			if (!hasExternalConnections(element) && !hasResourceExternalConnections(element)
+					&& !(element instanceof final VarDeclaration varDeclaration && varDeclaration.hasValue())) {
+				addUnusedDiagnostic(Messages.InterfaceElementAnnotations_UnusedExternal, element, diagnostics);
+				return false;
+			}
+		} else if (element.getFBType() instanceof CompositeFBType && !hasInternalConnections(element)
+				&& (element.getFBType() instanceof SubAppType || !(element instanceof AdapterDeclaration))) {
+			addUnusedDiagnostic(Messages.InterfaceElementAnnotations_UnusedInternal, element, diagnostics);
 			return false;
 		}
 		return true;
+	}
+
+	private static boolean hasInternalConnections(final IInterfaceElement element) {
+		return !getInternalConnections(element).isEmpty()
+				|| (element instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
+						&& !getInternalConnections(varDeclaration.getInOutVarOpposite()).isEmpty());
+	}
+
+	private static boolean hasExternalConnections(final IInterfaceElement element) {
+		return !getExternalConnections(element).isEmpty()
+				|| (element instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
+						&& !getExternalConnections(varDeclaration.getInOutVarOpposite()).isEmpty());
+	}
+
+	private static EList<Connection> getInternalConnections(final IInterfaceElement element) {
+		return element.isIsInput() ? element.getOutputConnections() : element.getInputConnections();
+	}
+
+	private static EList<Connection> getExternalConnections(final IInterfaceElement element) {
+		return element.isIsInput() ? element.getInputConnections() : element.getOutputConnections();
+	}
+
+	private static boolean hasResourceExternalConnections(final IInterfaceElement element) {
+		if (element == null) {
+			return false;
+		}
+
+		final BlockFBNetworkElement fbne = element.getBlockFBNetworkElement();
+		if (fbne == null || !fbne.isMapped()) {
+			return false;
+		}
+
+		final IInterfaceElement oppositeElement = fbne.getOpposite().getInterface().getInterfaceElement(element);
+		if (oppositeElement == null) {
+			return false;
+		}
+
+		return hasExternalConnections(oppositeElement);
+	}
+
+	private static void addUnusedDiagnostic(final String message, final IInterfaceElement element,
+			final DiagnosticChain diagnostics) {
+		if (diagnostics != null) {
+			diagnostics.add(new BasicDiagnostic(
+					ValidationPreferences.getDiagnosticSeverity(ValidationPreferences.UNUSED_INTERFACE_ELEMENT,
+							Diagnostic.WARNING, element),
+					LibraryElementValidator.DIAGNOSTIC_SOURCE,
+					LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_UNUSED,
+					MessageFormat.format(message, element.getQualifiedName()), FordiacMarkerHelper
+							.getDiagnosticData(element, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME)));
+		}
 	}
 
 	private static boolean isErrorMarker(final IInterfaceElement element) {
 		return element instanceof ErrorMarkerInterface;
 	}
 
-	private static boolean isInTypedInstance(final IInterfaceElement element) {
-		final FBNetworkElement fbNetworkElement = element.getBlockFBNetworkElement();
-		return fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null;
+	private static boolean isDerivedInstance(final IInterfaceElement element) {
+		final FBNetworkElement fbne = element.getBlockFBNetworkElement();
+		return fbne != null && (fbne.getTypeEntry() != null || (fbne.isMapped() && fbne.getMapping().getTo() == fbne));
 	}
 
 	private static boolean isOutMappedInOutVar(final IInterfaceElement element) {
