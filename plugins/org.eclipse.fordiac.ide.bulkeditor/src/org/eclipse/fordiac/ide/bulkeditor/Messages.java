@@ -74,6 +74,9 @@ public final class Messages extends NLS {
 
 	public static String UnexpectedValue;
 
+	public static String Tab_Controls;
+	public static String Tab_Result;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
