@@ -38,7 +38,11 @@ public class AddEditTimelineCommentCommand extends Command {
 
 	@Override
 	public void undo() {
-		CommentsHandler.getInstance().setComment(timeline, previousComment); // restore prior comment
+		if (previousComment == null) {
+			CommentsHandler.getInstance().removeComment(timeline);
+		} else {
+			CommentsHandler.getInstance().setComment(timeline, previousComment); // restore prior comment
+		}
 	}
 
 	@Override

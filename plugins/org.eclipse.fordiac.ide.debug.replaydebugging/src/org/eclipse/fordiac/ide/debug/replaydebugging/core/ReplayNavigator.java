@@ -409,11 +409,13 @@ public class ReplayNavigator implements Timeline.StructureListener {
 				changedValues.putAll(temp.getInitialStateAtLeavingTimeline());
 				currentEventPosition = new EventPosition(timeline.getParentTimeline(),
 						timeline.getParentTimeline().getSpawnedTimelineEventNumber(timeline));
-				timeline.getParentTimeline().removeSpawnedTimeline(timeline);
 			} else {
 				currentEventPosition = new EventPosition(timeline, removedStartEventIndex - 1);
 			}
 			updateCache(changedValues);
+		}
+		if (removedStartEventIndex == 0) {
+			timeline.getParentTimeline().removeSpawnedTimeline(timeline);
 		}
 		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
 	}
