@@ -38,7 +38,11 @@ public class AddEditEventCommentCommand extends Command {
 
 	@Override
 	public void undo() {
-		CommentsHandler.getInstance().setComment(eventPosition, previousComment); // restore prior comment
+		if (previousComment == null) {
+			CommentsHandler.getInstance().removeComment(eventPosition);
+		} else {
+			CommentsHandler.getInstance().setComment(eventPosition, previousComment); // restore prior comment
+		}
 	}
 
 	@Override

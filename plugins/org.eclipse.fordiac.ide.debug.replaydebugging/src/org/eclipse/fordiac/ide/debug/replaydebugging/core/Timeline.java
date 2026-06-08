@@ -102,9 +102,9 @@ public class Timeline {
 		final var toRemove = eventChanges.subList(eventNumber, eventChanges.size());
 
 		// remove mapping from datapoints to event numbers
-		for (var i = eventNumber; i < eventChanges.size(); i++) {
+		for (var i = 0; i < eventChanges.size() - eventNumber; i++) {
 			for (final var datapointChange : toRemove.get(i).newValues()) {
-				eventsWhereDatapointsChange.get(datapointChange.datapoint()).remove(Integer.valueOf(i));
+				eventsWhereDatapointsChange.get(datapointChange.datapoint()).remove(Integer.valueOf(i + eventNumber));
 			}
 		}
 
@@ -284,13 +284,15 @@ public class Timeline {
 	}
 
 	private void notifyRemoveEvents(final int removedStartEventIndex, final List<EventChange> removedChanges) {
-		for (final var listener : structureListeners) {
+		// defense copy when removing events, as listeners might remove timelines and
+		// thus modify the list of listeners while we are notifying
+		for (final var listener : new HashSet<>(structureListeners)) {
 			listener.eventsRemoved(this, removedStartEventIndex, removedChanges);
 		}
 	}
 
 	private void notifyRemovedSpawnedTimeline(final Timeline removedTimeline, final int spawnedAtEventNumber) {
-		for (final var listener : structureListeners) {
+		for (final var listener : new HashSet<>(structureListeners)) {
 			listener.timelineRemoved(this, removedTimeline, spawnedAtEventNumber);
 		}
 	}

@@ -29,11 +29,15 @@ public class DeleteEventsCommand extends Command {
 	private final Timeline timeline;
 	private final int eventIndex;
 	private List<EventChange> eventChanges; // Store event data for undo
+	private final int spawningIndex;
+	private final Timeline parentTimeline;
 
 	public DeleteEventsCommand(final Timeline timeline, final int eventIndex) {
 		super(Messages.DeleteEventsCommand_Label);
 		this.timeline = timeline;
 		this.eventIndex = eventIndex;
+		parentTimeline = timeline.getParentTimeline();
+		spawningIndex = (parentTimeline != null) ? parentTimeline.getSpawnedTimelineEventNumber(timeline) : -1;
 	}
 
 	@Override
@@ -45,6 +49,10 @@ public class DeleteEventsCommand extends Command {
 
 	@Override
 	public void undo() {
+		// the timeline was removed from the parent, so we need to re-add it
+		if ((eventIndex == 0) && (parentTimeline != null)) {
+			parentTimeline.addSpawnedTimeline(timeline, spawningIndex);
+		}
 		// Restore the event with its previous data
 		for (final var eventChange : eventChanges) {
 			timeline.addEventChange(eventChange.newValues());
