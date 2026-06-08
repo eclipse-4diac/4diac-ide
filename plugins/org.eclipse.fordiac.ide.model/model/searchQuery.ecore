@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="search" nsURI="org.eclipse.fordiac.ide.model.search" nsPrefix="search">
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//FieldConstraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//FieldConstraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comment" eType="#//FieldConstraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//FieldConstraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldConstraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseSensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wholeWord" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entire" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="regex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint" eSuperTypes="#//Constraint"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="InstanceOccurrence">
+    <eLiterals name="Application"/>
+    <eLiterals name="CompositeFB"/>
+    <eLiterals name="TypedSubapp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" upperBound="-1"
+        eType="#//Placeholder" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Target" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="place" lowerBound="1" eType="#//Place"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Placeholder">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="val" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Target">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//TargetOption" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TargetOption" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Place">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFB" eType="#//SimpleFB"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basicFB" eType="#//BasicFB"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedSubapp" eType="#//TypedSubapp"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="untypedSubapp" eType="#//UntypedSubapp"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="simpleType" eType="#//SimpleType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basicType" eType="#//BasicType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subappType" eType="#//SubappType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structType" eType="#//StructType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeType" eType="#//AttributeType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SearchTarget" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConstraint" eType="#//AttributeConstraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//SearchTarget"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubappType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Instance" abstract="true" eSuperTypes="#//SearchTarget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" upperBound="-1"
+        eType="#//InstanceOccurrence"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleFB" eSuperTypes="#//Instance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicFB" eSuperTypes="#//Instance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedSubapp" eSuperTypes="#//Instance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UntypedSubapp" eSuperTypes="#//Instance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PIN" eSuperTypes="#//TargetOption #//SearchTarget"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//TargetOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contraint" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.commands.CreateAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.commands.DeleteAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.nattable.BulkEditorNatTable;
+import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer;
 import org.eclipse.fordiac.ide.bulkeditor.search.EditorSearchExecutor;
 import org.eclipse.fordiac.ide.bulkeditor.search.SearchHelper;
 import org.eclipse.fordiac.ide.bulkeditor.search.SearchParameters;
@@ -72,6 +73,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -81,6 +83,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, CommandStackEventListener {
 
@@ -102,6 +105,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	private BulkEditorControls controls;
 	private BulkEditorNatTable natTable;
+	private QueryViewer queryViewer;
 
 	// Latest successful search result (mapped to editable counterparts).
 	private List<EObject> editableSearchResult;
@@ -149,6 +153,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	protected void createPages() {
 		createControlsPage();
 		createResultPage();
+		createQueryViewerPage();
 	}
 
 	private void createControlsPage() {
@@ -180,6 +185,20 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 		final int index = addPage(pageComposite);
 		setPageText(index, Messages.Tab_Result);
+	}
+
+	private void createQueryViewerPage() {
+		final Composite pageComposite = new Composite(getContainer(), SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
+		final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		pageComposite.setLayoutData(gd);
+
+		queryViewer = new QueryViewer(pageComposite, this.project);
+		getSite().setSelectionProvider(queryViewer.getSelectionProvider());
+		pageComposite.layout();
+
+		final int index = addPage(pageComposite);
+		setPageText(index, Messages.Tab_Query);
 	}
 
 	public IProject getProject() {
@@ -409,6 +428,9 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		}
 		if (adapter == ActionRegistry.class) {
 			return adapter.cast(actionRegistry);
+		}
+		if (IPropertySheetPage.class.equals(adapter)) {
+			return adapter.cast(queryViewer.createPropertySheetPage());
 		}
 		return super.getAdapter(adapter);
 	}

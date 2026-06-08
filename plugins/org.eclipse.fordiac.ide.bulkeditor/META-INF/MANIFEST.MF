@@ -21,7 +21,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.search,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.zest.core,
+ org.eclipse.zest.layouts
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.bulkeditor
 Bundle-ActivationPolicy: lazy
