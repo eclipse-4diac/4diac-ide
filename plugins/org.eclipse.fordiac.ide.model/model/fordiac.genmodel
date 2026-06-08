@@ -624,6 +624,11 @@
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/validateUnused"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateUnused(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateUnused/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateUnused/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/findInTypeInterface"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getBlockRelativePath"

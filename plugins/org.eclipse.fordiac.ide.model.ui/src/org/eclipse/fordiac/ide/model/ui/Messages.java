@@ -89,6 +89,7 @@ public final class Messages extends NLS {
 	public static String ValidationPreferencePage_NoValueForGenericTypeVariable;
 	public static String ValidationPreferencePage_PotentialProgrammingProblems;
 	public static String ValidationPreferencePage_UnusedInstance;
+	public static String ValidationPreferencePage_UnusedInterfaceElement;
 	public static String ValidationPreferencePage_ValueForGenericInstanceVariable;
 
 	static {

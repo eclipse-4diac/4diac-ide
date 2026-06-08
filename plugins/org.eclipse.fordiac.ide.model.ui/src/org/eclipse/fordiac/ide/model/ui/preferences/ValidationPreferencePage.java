@@ -76,6 +76,8 @@ public class ValidationPreferencePage extends FordiacPropertyPreferencePage {
 				potentialProblemsSection));
 		addField(new ComboFieldEditor(ValidationPreferences.UNUSED_INSTANCE,
 				Messages.ValidationPreferencePage_UnusedInstance, SEVERITIES, potentialProblemsSection));
+		addField(new ComboFieldEditor(ValidationPreferences.UNUSED_INTERFACE_ELEMENT,
+				Messages.ValidationPreferencePage_UnusedInterfaceElement, SEVERITIES, potentialProblemsSection));
 	}
 
 	private static Composite createSection(final String label, final Composite composite, final boolean expanded) {
