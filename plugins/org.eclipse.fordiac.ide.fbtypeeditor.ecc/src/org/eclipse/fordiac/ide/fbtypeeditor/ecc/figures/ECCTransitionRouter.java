@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.draw2d.Bendpoint;
 import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.Connection;
+import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
@@ -34,7 +35,8 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 	@Override
 	public void route(final Connection conn) {
 
-		if (!(conn instanceof ECTransitionFigure)) {
+		if (!(conn instanceof ECTransitionFigure) || !isValidAnchor(conn.getSourceAnchor())
+				|| !isValidAnchor(conn.getTargetAnchor())) {
 			super.route(conn);
 			return;
 		}
@@ -100,6 +102,10 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 
 		final Vector normal = EdgeDirection.of(toPoint(anchor), bounds).toNormal();
 		return translate(anchor, normal, distance);
+	}
+
+	private static boolean isValidAnchor(final ConnectionAnchor anchor) {
+		return anchor != null && anchor.getOwner() != null;
 	}
 
 	private static Vector getNormalized(final Vector v) {
