@@ -60,6 +60,7 @@
 			<unit id="org.eclipse.draw2d.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.gef.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.gef.sdk.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.zest.feature.group" version="0.0.0"/>
 			<unit id="com.google.gson" version="0.0.0"/>
 			<unit id="org.eclipse.mylyn.wikitext.feature.feature.group" version="0.0.0"/>
 			<unit id="junit-jupiter-api" version="0.0.0"/>

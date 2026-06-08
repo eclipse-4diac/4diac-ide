@@ -76,6 +76,7 @@ public final class Messages extends NLS {
 
 	public static String Tab_Controls;
 	public static String Tab_Result;
+	public static String Tab_Query;
 
 	static {
 		// initialize resource bundle
