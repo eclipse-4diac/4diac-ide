@@ -13,35 +13,21 @@
 package org.eclipse.fordiac.ide.debug;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.resources.IMarkerDelta;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.model.IBreakpoint;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
+import org.eclipse.fordiac.ide.debug.breakpoint.IEvaluatorBreakpoint;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorDebugger;
-import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
-import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 
@@ -54,7 +40,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	private final ConcurrentHashMap<Thread, EvaluatorDebugThread> threads = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Evaluator, EvaluatorDebugStackFrame> stackFrames = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Variable<?>, EvaluatorDebugVariable> variables = new ConcurrentHashMap<>();
-	private final Set<IBreakpoint> breakpoints = ConcurrentHashMap.newKeySet();
+	private final Set<IEvaluatorBreakpoint> breakpoints = ConcurrentHashMap.newKeySet();
 	private final AtomicBoolean suspendOnFirstLine = new AtomicBoolean();
 
 	/**
@@ -126,47 +112,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 
 	protected boolean anyBreakpointMatches(final EvaluatorDebugStackFrame frame, final Object context) {
 		return DebugPlugin.getDefault().getBreakpointManager().isEnabled()
-				&& breakpoints.stream().anyMatch(breakpoint -> breakpointMatches(breakpoint, frame, context));
-	}
-
-	protected boolean breakpointMatches(final IBreakpoint breakpoint, final EvaluatorDebugStackFrame frame,
-			final Object context) {
-		try {
-			if (!breakpoint.isEnabled()) {
-				return false;
-			}
-			final IResource resource = getResource(context);
-			final int lineNumber = getLineNumber(context);
-			if (breakpoint instanceof final EvaluatorLineBreakpoint evaluatorLineBreakpoint
-					&& evaluatorLineBreakpoint.isApplicable(frame.getEvaluator())
-					&& Objects.equals(breakpoint.getMarker().getResource(), resource)
-					&& evaluatorLineBreakpoint.getLineNumber() == lineNumber) {
-				if (evaluatorLineBreakpoint.isConditionEnabled()) {
-					return evaluateBreakpointCondition(evaluatorLineBreakpoint, frame);
-				}
-				return true;
-			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
-			// ignore (we don't care about broken breakpoints)
-		}
-		return false;
-	}
-
-	protected static boolean evaluateBreakpointCondition(final EvaluatorLineBreakpoint breakpoint,
-			final EvaluatorDebugStackFrame frame) {
-		try {
-			final Evaluator evaluator = EvaluatorFactory.createEvaluator(breakpoint.getCondition(), String.class, null,
-					null, frame.getEvaluator());
-			final Value result = evaluator.evaluate();
-			return ValueOperations.asBoolean(result);
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();
-			return false;
-		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Couldn't evaluate breakpoint condition: " + e.getMessage(), e); //$NON-NLS-1$
-			return false;
-		}
+				&& breakpoints.stream().anyMatch(breakpoint -> breakpoint.matches(frame, context));
 	}
 
 	protected void handleResumeRequest(final DebugEvent request, final EvaluatorDebugThread thread,
@@ -195,24 +141,6 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			}
 			}
 		}
-	}
-
-	protected IResource getResource(final Object context) {
-		if (context instanceof final EObject eo) {
-			final EObject root = EcoreUtil.getRootContainer(eo);
-			if (root instanceof final FBType fbType) {
-				return fbType.getTypeEntry().getFile();
-			}
-			return getResource(((EObject) context).eResource());
-		}
-		if (context instanceof final Resource resource) {
-			final URI uri = resource.getURI();
-			if (uri.isPlatformResource()) {
-				final String path = uri.toPlatformString(true);
-				return ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(path));
-			}
-		}
-		return null;
 	}
 
 	protected static Evaluator getPersistentEvaluator(Evaluator eval) {
@@ -247,7 +175,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	 *
 	 * @param breakpoint The breakpoint
 	 */
-	public void addBreakpoint(final IBreakpoint breakpoint) {
+	public void addBreakpoint(final IEvaluatorBreakpoint breakpoint) {
 		breakpoints.add(breakpoint);
 	}
 
@@ -257,7 +185,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	 * @param breakpoint The breakpoint
 	 * @param delta      The marker delta
 	 */
-	public void removeBreakpoint(final IBreakpoint breakpoint, final IMarkerDelta delta) {
+	public void removeBreakpoint(final IEvaluatorBreakpoint breakpoint, final IMarkerDelta delta) {
 		breakpoints.remove(breakpoint);
 	}
 
@@ -267,7 +195,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	 * @param breakpoint The breakpoint
 	 * @param delta      The marker delta
 	 */
-	public void updateBreakpoint(final IBreakpoint breakpoint, final IMarkerDelta delta) {
+	public void updateBreakpoint(final IEvaluatorBreakpoint breakpoint, final IMarkerDelta delta) {
 		// do nothing
 	}
 

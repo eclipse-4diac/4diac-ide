@@ -12,14 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.breakpoint;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.LineBreakpoint;
-import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.debug.CommonEvaluatorDebugger;
+import org.eclipse.fordiac.ide.debug.EvaluatorDebugStackFrame;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public abstract class EvaluatorLineBreakpoint extends LineBreakpoint {
+public abstract class EvaluatorLineBreakpoint extends LineBreakpoint implements IEvaluatorBreakpoint {
 
 	public static final String DEBUG_MODEL = "org.eclipse.fordiac.ide.debug.model"; //$NON-NLS-1$
 
@@ -48,6 +52,35 @@ public abstract class EvaluatorLineBreakpoint extends LineBreakpoint {
 		return marker;
 	}
 
+	@Override
+	public boolean matches(final EvaluatorDebugStackFrame frame, final Object context) {
+		try {
+			if (!isApplicable(frame.getEvaluator()) || !isEnabled()) {
+				return false;
+			}
+
+			final IResource resource = BreakpointUtils.getResource(context);
+			if (!Objects.equals(getMarker().getResource(), resource)) {
+				return false;
+			}
+
+			final CommonEvaluatorDebugger debugger = frame.getDebugTarget().getDebugger();
+			final int lineNumber = debugger.getLineNumber(context);
+			if (getLineNumber() != lineNumber) {
+				return false;
+			}
+
+			if (isConditionEnabled()) {
+				return BreakpointUtils.evaluateBreakpointCondition(getCondition(), frame);
+			}
+			return true;
+		} catch (final CoreException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
+			// ignore (we don't care about broken breakpoints)
+			return false;
+		}
+	}
+
 	public boolean isConditionEnabled() {
 		final IMarker m = getMarker();
 		if (m != null) {
@@ -71,8 +104,6 @@ public abstract class EvaluatorLineBreakpoint extends LineBreakpoint {
 	public void setCondition(final String condition) throws CoreException {
 		setAttribute(CONDITION, condition);
 	}
-
-	public abstract boolean isApplicable(Evaluator evaluator);
 
 	@SuppressWarnings("static-method")
 	public String getMarkerId() {
