@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University
+ * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,6 +23,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.TypePinProperty;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
@@ -65,6 +66,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 	private final TypeLibrary typeLib;
 
 	private DiagramFontChangeListener fontChangeListener;
+	private FigureFollower figFollower;
 
 	public TypeEditPart(final TypeLibrary typeLib) {
 		this.typeLib = typeLib;
@@ -74,12 +76,17 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 	public void activate() {
 		super.activate();
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
+		figFollower = new FigureFollower(this, getModel().getPin());
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
+		if (figFollower != null) {
+			figFollower.unhookFromRefFigure();
+			figFollower = null;
+		}
 	}
 
 	@Override
@@ -119,12 +126,12 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 
 	@Override
 	public IInterfaceElement getCastedModel() {
-		return getModel().getReferencedElement();
+		return getModel().getPin();
 	}
 
 	@Override
-	public TypeField getModel() {
-		return (TypeField) super.getModel();
+	public TypePinProperty getModel() {
+		return (TypePinProperty) super.getModel();
 	}
 
 	@Override
@@ -151,12 +158,12 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel().getReferencedElement(), event,
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel().getPin(), event,
 				FordiacAnnotationUtil::showOnTargetType);
 	}
 
 	private String getTypeName() {
-		return getModel().getLabel();
+		return getModel().getPin().getFullTypeName();
 	}
 
 	@Override

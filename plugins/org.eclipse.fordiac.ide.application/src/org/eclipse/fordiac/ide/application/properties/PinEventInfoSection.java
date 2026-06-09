@@ -64,8 +64,9 @@ public class PinEventInfoSection extends AbstractDoubleColumnSection {
 			protected void onNameChange(final Text name) {
 				final ChangeNameCommand changeNameCommand = ChangeNameCommand.forName(getType(), name.getText());
 				if (isExpandedSubappPin()) {
-					executeCommand(new ResizeGroupOrSubappCommand(GetEditPartFromGraficalViewerHelper
-							.findAbstractContainerContentEditFromInterfaceElement(getType()), changeNameCommand));
+					executeCommand(
+							changeNameCommand.chain(new ResizeGroupOrSubappCommand(GetEditPartFromGraficalViewerHelper
+									.findAbstractContainerContentEditFromInterfaceElement(getType()))));
 				} else {
 					executeCommand(changeNameCommand);
 				}

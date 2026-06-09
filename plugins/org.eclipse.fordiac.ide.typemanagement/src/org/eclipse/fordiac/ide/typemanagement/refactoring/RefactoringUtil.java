@@ -25,13 +25,50 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public final class RefactoringUtil {
 
 	public static void saveAllAndBuild() throws InvocationTargetException, InterruptedException {
+		checkDirtyEditors();
 		PlatformUI.getWorkbench().saveAllEditors(false);
 		PlatformUI.getWorkbench().getProgressService().busyCursorWhile(RefactoringUtil::waitForBuild);
+	}
+
+	public static void checkDirtyEditors() throws OperationCanceledException {
+		if (Display.getCurrent() != null && hasDirtyEditors() && !promptSaveAll()) {
+			throw new OperationCanceledException();
+		}
+	}
+
+	private static boolean hasDirtyEditors() {
+		for (final IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+			for (final IWorkbenchPage page : window.getPages()) {
+				for (final IEditorReference editorReference : page.getEditorReferences()) {
+					final IEditorPart editor = editorReference.getEditor(false);
+					if (editor != null && editor.isDirty()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean promptSaveAll() {
+		return MessageDialog.open(MessageDialog.CONFIRM,
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), Messages.RefactoringUtil_SaveAllTitle,
+				Messages.RefactoringUtil_SaveAllMessage, SWT.NONE, Messages.RefactoringUtil_SaveAllButton,
+				IDialogConstants.CANCEL_LABEL) == 0;
 	}
 
 	private static void waitForBuild(final IProgressMonitor monitor)

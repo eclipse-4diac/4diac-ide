@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import java.util.Collection;
 import java.util.Objects;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -63,16 +64,43 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 				}
 				// react to TYPE_ENTRY_FULL_TYPE_NAME_FEATURE for renamed dependencies
 				if (TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE.equals(notification.getFeature())) {
+					// use the old type name here to explicitly request an error type, which is
+					// needed for correct behavior when a type is renamed outside of a refactoring
 					Display.getDefault()
 							.asyncExec(() -> updateDependency(dependency, notification.getOldStringValue()));
 				}
 			}
+		} else if (notification.getNotifier() instanceof TypeLibrary
+				&& TypeLibrary.TYPE_ENTRY_NAME_REFERENCES_FEATURE.equals(notification.getFeature())) {
+			// react when a dependency is no longer visible through this library
+			updateTypeLibraryDependency(notification);
 		} else {
 			super.notifyChanged(notification);
 		}
 	}
 
+	private void updateTypeLibraryDependency(final Notification notification) {
+		switch (notification.getEventType()) {
+		case Notification.REMOVE ->
+			updateRemovedTypeEntryNameReference(notification.getOldValue());
+		case Notification.REMOVE_MANY ->
+			((Collection<?>) notification.getOldValue()).forEach(this::updateRemovedTypeEntryNameReference);
+		default -> {
+			// ignore
+		}
+		}
+	}
+
+	private void updateRemovedTypeEntryNameReference(final Object object) {
+		if (object instanceof final TypeEntry dependency && getDependencies().contains(dependency)) {
+			Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
+		}
+	}
+
 	public void updateDependency(final TypeEntry dependency, final String fullTypeName) {
+		if (libraryElement == null) {
+			return;
+		}
 		final TypeLibrary typeLibrary = libraryElement.getTypeLibrary();
 		if (typeLibrary == null) {
 			return;
@@ -233,6 +261,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 		if (libraryElement != null) {
 			libraryElement.eAdapters().remove(this);
 		}
+		getDependencies().stream().map(TypeEntry::getTypeLibrary).filter(Objects::nonNull).distinct()
+				.forEach(typeLibrary -> typeLibrary.eAdapters().remove(this));
 	}
 
 	@Override
@@ -241,6 +271,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 			if (!typeEntry.eAdapters().contains(this)) {
 				typeEntry.eAdapters().add(this);
 			}
+			addTypeLibraryAdapter(typeEntry);
 			return true;
 		}
 		return false;
@@ -249,9 +280,24 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	@Override
 	protected boolean removeDependency(final TypeEntry typeEntry) {
 		if (super.removeDependency(typeEntry)) {
+			removeTypeLibraryAdapter(typeEntry);
 			typeEntry.eAdapters().remove(this);
 			return true;
 		}
 		return false;
+	}
+
+	private void addTypeLibraryAdapter(final TypeEntry typeEntry) {
+		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
+		if (typeLibrary != null && !typeLibrary.eAdapters().contains(this)) {
+			typeLibrary.eAdapters().add(this);
+		}
+	}
+
+	private void removeTypeLibraryAdapter(final TypeEntry typeEntry) {
+		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
+		if (typeLibrary != null && getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
+			typeLibrary.eAdapters().remove(this);
+		}
 	}
 }

@@ -27,14 +27,12 @@ import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.FreeformViewport;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
+import org.eclipse.draw2d.backgrounds.shadows.RectangleDropShadowBorder;
 import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.BackgroundFreeformFigure;
@@ -44,6 +42,7 @@ import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.GuideLayer;
+import org.eclipse.gef.editparts.HierarchicalGridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -60,112 +59,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 
 public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPart {
-
-	/**
-	 * Grid layer that draws the grid in dashed lines and every X line solid to give
-	 * the grid more structure
-	 */
-	private static class MajorMinorGridLayer extends GridLayer {
-		private static final double MIN_ABSOLUTE_INTERLEAVE = 5.0;
-
-		private static final int MAJOR_INTERLEAVE = 10; // draw each 10th line thicker dashed to give the grid more
-		// structure
-		private static final int MEDIUM_INTERLEAVE = 5; // draw each 5th line medium dashed to give the grid more
-		// structure
-
-		private static final float[] GRID_MINOR_DASHES_STYLE = new float[] { 1.0f, 5.0f };
-		private static final float[] GRID_MEDIUM_DASHES_STYLE = new float[] { 2.0f, 4.0f };
-		private static final float[] GRID_MAJOR_DASHES_STYLE = new float[] { 4.0f, 2.0f };
-		private static final int DASH_REPEAT = 6; // 1+5 = 2+4 = 4+2 = 6
-
-		@Override
-		protected void paintGrid(final Graphics g) {
-			final int origLineStyle = g.getLineStyle();
-			g.setLineStyle(Graphics.LINE_CUSTOM);
-
-			final Rectangle clip = g.getClip(Rectangle.SINGLETON);
-
-			if (gridX > 0) {
-				drawVerLines(g, clip);
-			}
-
-			if (gridY > 0) {
-				drawHorLines(g, clip);
-			}
-			g.setLineStyle(origLineStyle);
-		}
-
-		private void drawVerLines(final Graphics g, final Rectangle clip) {
-			final int majorInterleaveX = gridX * MAJOR_INTERLEAVE;
-			final int medInterleaveX = gridX * MEDIUM_INTERLEAVE;
-			final int realInterleaveX = determineInterleave(gridX, medInterleaveX, majorInterleaveX,
-					g.getAbsoluteScale());
-
-			if (realInterleaveX > 0) {
-				final int clipYSnapped = snap2DashGrid(clip.y);
-				for (int i = getLineStart(origin.x, clip.x, realInterleaveX); i < clip.x
-						+ clip.width; i += realInterleaveX) {
-					setLineStyle(g, i, origin.x, majorInterleaveX, medInterleaveX);
-					g.drawLine(i, clipYSnapped, i, clip.y + clip.height);
-				}
-			}
-		}
-
-		private void drawHorLines(final Graphics g, final Rectangle clip) {
-			final int majorInterleaveY = gridY * MAJOR_INTERLEAVE;
-			final int medInterleaveY = gridY * MEDIUM_INTERLEAVE;
-			final int realInterleaveY = determineInterleave(gridY, medInterleaveY, majorInterleaveY,
-					g.getAbsoluteScale());
-
-			if (realInterleaveY > 0) {
-				final int clipXSnapped = snap2DashGrid(clip.x);
-				for (int i = getLineStart(origin.y, clip.y, realInterleaveY); i < clip.y
-						+ clip.height; i += realInterleaveY) {
-					setLineStyle(g, i, origin.y, majorInterleaveY, medInterleaveY);
-					g.drawLine(clipXSnapped, i, clip.x + clip.width, i);
-				}
-			}
-		}
-
-		private static int determineInterleave(final int interleave, final int medInterleave, final int majorInterleave,
-				final double absoluteScale) {
-			if (interleave * absoluteScale > MIN_ABSOLUTE_INTERLEAVE) {
-				return interleave;
-			}
-
-			if (medInterleave * absoluteScale > MIN_ABSOLUTE_INTERLEAVE) {
-				return medInterleave;
-			}
-
-			if (majorInterleave * absoluteScale > MIN_ABSOLUTE_INTERLEAVE) {
-				return majorInterleave;
-			}
-			return -1;
-		}
-
-		private static int getLineStart(final int origin, final int clip, final int distance) {
-			if (origin >= clip) {
-				return origin - Math.floorDiv(origin - clip, distance) * distance;
-			}
-			return origin + Math.ceilDiv(clip - origin, distance) * distance;
-		}
-
-		private static int snap2DashGrid(final int value) {
-			return Math.floorDiv(value, DASH_REPEAT) * DASH_REPEAT;
-		}
-
-		private static void setLineStyle(final Graphics g, final int currLinePos, final int origin,
-				final int majorInterleave, final int mediumInterleave) {
-			final int delta = origin - currLinePos;
-			if (0 == (delta % majorInterleave)) {
-				g.setLineDash(GRID_MAJOR_DASHES_STYLE);
-			} else if (0 == (delta % mediumInterleave)) {
-				g.setLineDash(GRID_MEDIUM_DASHES_STYLE);
-			} else {
-				g.setLineDash(GRID_MINOR_DASHES_STYLE);
-			}
-		}
-	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
 
@@ -194,7 +87,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 	@Override
 	protected GridLayer createGridLayer() {
-		return new MajorMinorGridLayer();
+		return new HierarchicalGridLayer();
 	}
 
 	// Duplicated and adjusted this method from base class to allow moving the

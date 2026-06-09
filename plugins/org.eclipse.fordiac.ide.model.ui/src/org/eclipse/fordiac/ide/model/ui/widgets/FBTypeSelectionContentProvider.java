@@ -13,9 +13,11 @@
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -23,7 +25,14 @@ public class FBTypeSelectionContentProvider implements ITypeSelectionContentProv
 
 	public static final FBTypeSelectionContentProvider INSTANCE = new FBTypeSelectionContentProvider();
 
+	private final Predicate<FBTypeEntry> filter;
+
 	protected FBTypeSelectionContentProvider() {
+		this(unused -> true);
+	}
+
+	public FBTypeSelectionContentProvider(final Predicate<FBTypeEntry> filter) {
+		this.filter = filter;
 	}
 
 	@Override
@@ -34,7 +43,7 @@ public class FBTypeSelectionContentProvider implements ITypeSelectionContentProv
 	@Override
 	public Stream<TypeEntry> getTypeEntries(final Object input) {
 		if (input instanceof final TypeLibrary typeLibrary) {
-			return typeLibrary.getFbTypes().map(Function.identity());
+			return typeLibrary.getFbTypes().filter(filter).map(Function.identity());
 		}
 		return Stream.empty();
 	}

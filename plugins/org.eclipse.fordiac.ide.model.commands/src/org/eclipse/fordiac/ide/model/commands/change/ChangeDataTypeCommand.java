@@ -19,9 +19,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.SequencedSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -127,18 +127,17 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 		if (getInterfaceElement() instanceof VarDeclaration
 				&& getInterfaceElement().eContainer() instanceof final StructuredType parentStruct
 				&& dataType instanceof final StructuredType structType) {
-			final Set<String> structs = new HashSet<>();
+			final SequencedSet<String> structs = new LinkedHashSet<>();
 			structs.add(PackageNameHelper.getFullTypeName(parentStruct));
-			final boolean hasRecursion = hasRecursionCheck(structs, structType);
-			if (hasRecursion) {
+			if (hasRecursionCheck(structs, structType)) {
 				ErrorMessenger.popUpErrorMessage(Messages.ChangeDataTypeCommand_RecursiveStructError);
+				return false;
 			}
-			return !hasRecursion;
 		}
 		return true;
 	}
 
-	private boolean hasRecursionCheck(final Set<String> structs, final StructuredType structuredType) {
+	private boolean hasRecursionCheck(final SequencedSet<String> structs, final StructuredType structuredType) {
 		if (!structs.add(PackageNameHelper.getFullTypeName(structuredType))) {
 			return true;
 		}
@@ -148,6 +147,7 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 				return true;
 			}
 		}
+		structs.removeLast();
 		return false;
 	}
 

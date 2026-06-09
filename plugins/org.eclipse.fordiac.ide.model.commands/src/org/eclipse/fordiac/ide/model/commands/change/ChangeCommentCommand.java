@@ -79,6 +79,10 @@ public class ChangeCommentCommand extends Command implements ScopedCommand {
 		namedElement.setComment(comment);
 	}
 
+	public INamedElement getNamedElement() {
+		return namedElement;
+	}
+
 	@Override
 	public Set<EObject> getAffectedObjects() {
 		return Set.of(namedElement);

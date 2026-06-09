@@ -68,6 +68,9 @@ public final class Messages extends NLS {
 
 	public static String FileLibraryElementProvider_LibraryElementCannotBeLoaded;
 	public static String FileLibraryElementProvider_LibraryElementDoesNotExist;
+	public static String FileLibraryElementProvider_RefreshJobName;
+	public static String FileLibraryElementProvider_MoveJobName;
+	public static String FileLibraryElementProvider_DeleteJobName;
 	public static String LibraryElementActivationListener_FileChangedMessage;
 	public static String LibraryElementActivationListener_FileChangedTitle;
 	public static String LibraryElementActivationListener_IgnoreChangeButton;
@@ -82,8 +85,10 @@ public final class Messages extends NLS {
 	public static String ValidationJob_UpdateJobName;
 	public static String ValidationJob_ValidationJobName;
 
+	public static String ValidationPreferencePage_EventMultipleOutputConnections;
 	public static String ValidationPreferencePage_NoValueForGenericTypeVariable;
 	public static String ValidationPreferencePage_PotentialProgrammingProblems;
+	public static String ValidationPreferencePage_UnusedInstance;
 	public static String ValidationPreferencePage_ValueForGenericInstanceVariable;
 
 	static {

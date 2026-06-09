@@ -76,7 +76,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 					refresh();
 				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 					updateConnectorBorderColor();
-					refreshToolTip();
+					getFigure().setToolTip(new ToolTipFigure(getModel(),
+							FordiacAnnotationUtil.getAnnotationModel(UntypedSubAppInterfaceElementEditPart.this)));
 				}
 			}
 			super.notifyChanged(notification);
@@ -128,7 +129,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 					final ChangeNameCommand changeNameCmd = ChangeNameCommand.forName(getModel(),
 							(String) request.getCellEditor().getValue());
 					if (isInExpandedSubapp()) {
-						return new ResizeGroupOrSubappCommand((GraphicalEditPart) editPart.getParent(), changeNameCmd);
+						return changeNameCmd
+								.chain(new ResizeGroupOrSubappCommand((GraphicalEditPart) editPart.getParent()));
 					}
 					return changeNameCmd;
 				}
@@ -194,11 +196,6 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	public void refresh() {
 		super.refresh();
 		getNameLabel().setText(getLabelText());
-		refreshToolTip();
-	}
-
-	private void refreshToolTip() {
-		getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
 	}
 
 	@Override

@@ -63,6 +63,6 @@ class STMethodSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_METHOD
 				"""));
 		assertNoMatch(type.getCallables().getLast(), new NameMatcher("TEST1"));
-		assertMatch(type.getCallables().getLast(), new NameMatcher("TEST2"), 3, 42, 5);
+		assertMatch(type.getCallables().getLast(), new NameMatcher("TEST2"), 4, 43, 5);
 	}
 }

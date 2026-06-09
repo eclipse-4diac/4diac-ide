@@ -78,6 +78,7 @@ import org.eclipse.xtext.formatting2.regionaccess.ITextRegionDiffBuilder;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
+import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
@@ -559,7 +560,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	protected void createMissingVariable(final EObject element, final VarDeclarationKind kind) {
 		if (element instanceof final STFeatureExpression expression) {
-			final ICallable callable = EcoreUtil2.getContainerOfType(expression, ICallable.class);
+			final ICallable callable = findCallable(expression);
 			final String name = getFeatureText(expression);
 			final LibraryElement type = findNonGenericType(getExpectedFeatureType(expression));
 			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty()
@@ -567,6 +568,15 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 				createMissingVariable(callable, name, dataType, kind);
 			}
 		}
+	}
+
+	private static ICallable findCallable(final EObject object) {
+		final ICallable callable = EcoreUtil2.getContainerOfType(object, ICallable.class);
+		if (callable != null) {
+			return callable;
+		}
+		return object.eResource().getContents().stream().filter(ICallable.class::isInstance).map(ICallable.class::cast)
+				.findFirst().orElse(null);
 	}
 
 	@SuppressWarnings("static-method") // subclasses may override
@@ -601,7 +611,9 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	protected static String getFeatureText(final STFeatureExpression element) {
 		return NodeModelUtils.findNodesForFeature(element, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE)
-				.stream().map(INode::getText).map(String::trim).collect(Collectors.joining());
+				.stream().flatMap(node -> StreamSupport.stream(node.getLeafNodes().spliterator(), false))
+				.filter(Predicate.not(ILeafNode::isHidden)).map(INode::getText).map(String::trim)
+				.collect(Collectors.joining());
 	}
 
 	protected static LibraryElement getExpectedFeatureType(final STFeatureExpression element) {

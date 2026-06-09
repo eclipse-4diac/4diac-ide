@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2011 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved openEditor helper function to EditorUtils
  *   Alois Zoitl - added diagram font preference
+ *   Alois Zoitl - reworked background color handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -118,7 +119,7 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		return new ResourceFigure();
 	}
 
@@ -166,11 +167,6 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	@Override
 	public Label getNameLabel() {
 		return getFigure().getInstanceName();
-	}
-
-	@Override
-	protected void backgroundColorChanged(final IFigure figure) {
-		// currently nothing to be done here
 	}
 
 	@Override

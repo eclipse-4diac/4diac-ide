@@ -29,6 +29,8 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarDeclarationFactory;
@@ -67,22 +69,35 @@ public class ContainerVarDeclarationAnnotations {
 			return null;
 		}
 
-		final VarDeclaration memVar = getMember(contVarDeclaration, memberName);
-
-		if (memVar == null) {
+		final DataType memberType = getMemberType(contVarDeclaration, memberName);
+		if (memberType == null) {
 			return null;
 		}
 
-		final VarDeclaration newVisibleMember = VarDeclarationFactory.createVarDecl(memVar.getType());
+		final VarDeclaration newVisibleMember = VarDeclarationFactory.createVarDecl(memberType);
 		newVisibleMember.setName(memberName);
-		newVisibleMember.setType(memVar.getType());
-		setArraySize(newVisibleMember, getArraySize(memVar));
+		newVisibleMember.setType(memberType);
+		final VarDeclaration memVar = getMember(contVarDeclaration, memberName);
+		if (memVar != null) {
+			setArraySize(newVisibleMember, getArraySize(memVar));
+		}
 		newVisibleMember.setIsInput(contVarDeclaration.isIsInput());
 		insertNewVisibleMember(contVarDeclaration, newVisibleMember);
 		if (newVisibleMember.isIsInput()) {
 			newVisibleMember.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
 		return newVisibleMember;
+	}
+
+	private static DataType getMemberType(final ContainerVarDeclaration contVarDeclaration, final String memberName) {
+		final VarDeclaration memVar = getMember(contVarDeclaration, memberName);
+		if (memVar != null) {
+			return memVar.getType();
+		}
+		if (contVarDeclaration.getType() instanceof final ErrorDataType errorDataType) {
+			return errorDataType;
+		}
+		return null;
 	}
 
 	private static VarDeclaration getMember(final ContainerVarDeclaration structVarDeclarationImpl,

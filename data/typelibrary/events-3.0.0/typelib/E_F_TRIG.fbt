@@ -15,7 +15,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="EO" Type="Event" Comment="confirmation that an falling edge was detected">
+			<Event Name="EO" Type="Event" Comment="confirmation that a falling edge was detected">
 			</Event>
 		</EventOutputs>
 		<InputVars>

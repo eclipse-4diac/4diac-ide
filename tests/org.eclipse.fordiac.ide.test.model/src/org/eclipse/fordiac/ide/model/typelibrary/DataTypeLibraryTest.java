@@ -33,7 +33,7 @@ class DataTypeLibraryTest {
 
 	@BeforeAll
 	static void setup() {
-		dataTypeLibrary = new DataTypeLibrary();
+		dataTypeLibrary = new DataTypeLibrary(null);
 	}
 
 	@Test

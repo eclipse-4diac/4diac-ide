@@ -255,7 +255,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		return new VirtualInputOutputFigure();
 	}
 

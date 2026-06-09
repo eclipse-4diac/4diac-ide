@@ -116,6 +116,11 @@ public final class WStringValueConverter implements ValueConverter<String> {
 		return result.toString();
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
+
 	protected static void escape(final int value, final StringBuilder result) {
 		switch (value) {
 		case '$' -> result.append("$$"); //$NON-NLS-1$

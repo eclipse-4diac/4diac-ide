@@ -285,6 +285,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	public class InterfaceFigure extends SetableAlphaLabel {
 
 		public InterfaceFigure() {
+			pinLabelStyle = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getPinLabelStyle();
+
 			setOpaque(false);
 			setText(getLabelText());
 			setBorder(new ConnectorBorder(getModel()));
@@ -514,6 +516,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	@Override
+	public void refresh() {
+		super.refresh();
+		getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
+	}
+
+	@Override
 	public void activate() {
 		super.activate();
 		final var storeProvider = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
@@ -702,5 +710,4 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
 		getFigure().setToolTip(new ToolTipFigure(getModel(), event.getModel()));
 	}
-
 }

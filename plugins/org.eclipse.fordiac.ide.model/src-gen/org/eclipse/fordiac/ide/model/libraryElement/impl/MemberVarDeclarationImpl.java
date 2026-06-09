@@ -22,8 +22,7 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 
@@ -78,7 +77,7 @@ public class MemberVarDeclarationImpl extends VarDeclarationImpl implements Memb
 	@Override
 	public EList<String> getParentNames() {
 		if (parentNames == null) {
-			parentNames = new EDataTypeUniqueEList<String>(String.class, this, LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES);
+			parentNames = new EDataTypeEList<String>(String.class, this, LibraryElementPackage.MEMBER_VAR_DECLARATION__PARENT_NAMES);
 		}
 		return parentNames;
 	}

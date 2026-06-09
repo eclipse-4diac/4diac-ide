@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, fortiss GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,25 +32,14 @@ public class ECCEditPartFactory extends Abstract4diacEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof ECC) {
-			return new ECCRootEditPart();
-		}
-		if (modelElement instanceof ECState) {
-			return new ECStateEditPart();
-		}
-		if (modelElement instanceof ECTransition) {
-			return new ECTransitionEditPart();
-		}
-
-		if (modelElement instanceof ECActionAlgorithm) {
-			return new ECActionAlgorithmEditPart();
-		}
-
-		if (modelElement instanceof ECActionOutputEvent) {
-			return new ECActionOutputEventEditPart();
-		}
-
-		throw createEditpartCreationException(context, modelElement);
+		return switch (modelElement) {
+		case final ECC ecc -> new ECCEditPart();
+		case final ECState state -> new ECStateEditPart();
+		case final ECTransition trans -> new ECTransitionEditPart();
+		case final ECActionAlgorithm alg -> new ECActionAlgorithmEditPart();
+		case final ECActionOutputEvent eo -> new ECActionOutputEventEditPart();
+		default -> throw createEditpartCreationException(context, modelElement);
+		};
 	}
 
 }

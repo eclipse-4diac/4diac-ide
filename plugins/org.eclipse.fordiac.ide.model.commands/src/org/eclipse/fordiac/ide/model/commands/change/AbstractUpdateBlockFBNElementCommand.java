@@ -353,7 +353,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	private void transferInstanceComments() {
 		oldElement.getInterface().getAllInterfaceElements().filter(ie -> !ie.getComment().isBlank()).forEach(ie -> {
-			final IInterfaceElement newIE = newElement.getInterface().getInterfaceElement(ie);
+			final IInterfaceElement newIE = getNewInterfaceElementForPreservingInstanceData(ie);
 			if (newIE != null) {
 				newIE.setComment(ie.getComment());
 			}
@@ -579,11 +579,19 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	private void copyAttributes() {
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
 		oldElement.getInterface().getAllInterfaceElements().filter(ie -> !ie.getAttributes().isEmpty()).forEach(ie -> {
-			final IInterfaceElement newIE = newElement.getInterface().getInterfaceElement(ie);
+			final IInterfaceElement newIE = getNewInterfaceElementForPreservingInstanceData(ie);
 			if (newIE != null) {
 				newIE.getAttributes().addAll(EcoreUtil.copyAll(ie.getAttributes()));
 			}
 		});
+	}
+
+	private IInterfaceElement getNewInterfaceElementForPreservingInstanceData(
+			final IInterfaceElement oldInterfaceElement) {
+		if (oldInterfaceElement.eContainer() instanceof IInterfaceElement) {
+			return newElement.getInterface().getInterfaceElement(oldInterfaceElement.getBlockRelativePath(), true);
+		}
+		return newElement.getInterface().getInterfaceElement(oldInterfaceElement);
 	}
 
 	protected abstract BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement);

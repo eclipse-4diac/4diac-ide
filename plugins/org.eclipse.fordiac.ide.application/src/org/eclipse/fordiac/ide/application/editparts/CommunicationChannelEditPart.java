@@ -14,24 +14,12 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.Segment;
-
 public class CommunicationChannelEditPart extends FBEditPart {
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = super.getModelChildren();
 		elements.remove(getInstanceName());
 		return elements;
-	}
-
-	@Override
-	protected Segment findDevice() {
-		MappingTarget tgt = null;
-		if ((null != getModel()) && getModel().isMapped()) {
-			tgt = (MappingTarget) getModel().getOpposite().eContainer();
-		}
-		return (null != tgt) ? (Segment) tgt.eContainer().eContainer() : null;
 	}
 
 }

@@ -43,6 +43,7 @@ public final class Messages extends NLS {
 	public static String UntypeSubappCommand_Label;
 
 	public static String UpdateFBTypeCommand_Pin_not_found;
+	public static String HidePinCommand_ConnectedPin;
 
 	static {
 		// initialize resource bundle

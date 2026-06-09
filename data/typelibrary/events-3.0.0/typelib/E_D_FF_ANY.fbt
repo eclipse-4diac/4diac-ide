@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_D_FF_ANY" Comment="Data latch (d) flip flop">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH, HR Agrartechnik GmbH&#10;&#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2026-04-17" Remarks="E_D_FF copied and replace BOOL by ANY">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CLK" Type="Event" Comment="Clock">
+				<With Var="D"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Triggered if clock results in a change of Q">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="D" Type="ANY" Comment="Value to latch"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="ANY" Comment="Latched value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="400" y="700">
+			</ECState>
+			<ECState Name="SET" Comment="Initialization" x="1235" y="665">
+				<ECAction Algorithm="LATCH" Output="EO"/>
+			</ECState>
+			<ECTransition Source="SET" Destination="START" Condition="1" Comment="" x="946.67" y="1186.67"/>
+			<ECTransition Source="START" Destination="SET" Condition="CLK[NE(Q, D)]" Comment="" x="980" y="320"/>
+		</ECC>
+		<Algorithm Name="LATCH" Comment="new algorithm">
+			<ST><![CDATA[Q := D;]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

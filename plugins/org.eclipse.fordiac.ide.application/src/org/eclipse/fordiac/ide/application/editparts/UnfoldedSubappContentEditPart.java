@@ -95,7 +95,7 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 					insertFBCommandChain = insertFBCommandChain.chain(
 							new InsertFBIntoExecutionChainCommand(getContainerElement(), fbcreateCommand.getFB()));
 				}
-				return new ResizeGroupOrSubappCommand(getHost(), insertFBCommandChain);
+				return insertFBCommandChain.chain(new ResizeGroupOrSubappCommand(getHost()));
 			}
 		});
 	}

@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
@@ -23,6 +24,7 @@ import org.eclipse.fordiac.ide.typemanagement.util.TypeListPatternFilter;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,7 +36,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.eclipse.ui.navigator.CommonViewerSorter;
+import org.eclipse.ui.navigator.CommonViewerComparator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.INavigatorFilterService;
 import org.eclipse.ui.navigator.NavigatorContentServiceFactory;
@@ -44,6 +46,7 @@ public class FBPaletteViewer extends PaletteViewer {
 	private PatternFilter patternFilter = null;
 	private final String navigatorId;
 	private Object[] expandedElements;
+	private IResourceChangeListener resourceChangeListener;
 
 	public FBPaletteViewer(final String navigatorId) {
 		this.navigatorId = navigatorId;
@@ -99,7 +102,7 @@ public class FBPaletteViewer extends PaletteViewer {
 			commonViewer.addFilter(visibleFilter);
 		}
 
-		commonViewer.setSorter(new CommonViewerSorter());
+		commonViewer.setComparator(new CommonViewerComparator());
 		commonViewer.addFilter(new TypeListPatternFilter());
 
 		commonViewer.getControl().addMouseListener(new MouseListener() {
@@ -153,11 +156,19 @@ public class FBPaletteViewer extends PaletteViewer {
 
 	@Override
 	protected void hookControl() {
-		// do nothing here! Especially do not call super.hookControl!
+		// Do not call super.hookControl(); PaletteViewer expects a FigureCanvas here.
+		// Register the disposal path that the skipped base hook would install.
+		getControl().addDisposeListener(this::handleDispose);
+	}
+
+	@Override
+	protected void handleDispose(final DisposeEvent event) {
+		disposeResourceChangeListener();
 	}
 
 	private void setupResourceChangeListener(final IProject project) {
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(event -> {
+		disposeResourceChangeListener();
+		resourceChangeListener = event -> {
 			if (event.getType() != IResourceChangeEvent.POST_CHANGE) {
 				return;
 			}
@@ -171,7 +182,15 @@ public class FBPaletteViewer extends PaletteViewer {
 					commonViewer.refresh();
 				}
 			});
-		});
+		};
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
+	}
+
+	private void disposeResourceChangeListener() {
+		if (resourceChangeListener != null) {
+			ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
+			resourceChangeListener = null;
+		}
 	}
 
 }

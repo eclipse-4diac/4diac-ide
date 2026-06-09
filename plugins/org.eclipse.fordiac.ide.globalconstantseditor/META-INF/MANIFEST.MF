@@ -3,13 +3,13 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.globalconstantseditor
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.2.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
  org.eclipse.xtext.xbase,
  org.eclipse.emf.ecore,
- org.eclipse.xtext.xbase.lib;bundle-version="2.40.0",
+ org.eclipse.xtext.xbase.lib;bundle-version="2.42.0",
  org.eclipse.xtext.util,
  org.eclipse.emf.common,
  org.eclipse.core.resources,
@@ -34,5 +34,5 @@ Export-Package: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.globalconstantseditor.util,
  org.eclipse.fordiac.ide.globalconstantseditor.validation
 Import-Package: org.apache.log4j,
- org.eclipse.core.runtime;version="3.7.0",
+ org.eclipse.core.runtime,
  org.eclipse.osgi.util

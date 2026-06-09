@@ -22,6 +22,15 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.AbstractContainerElement;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.EventInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.EventOutputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.PlugContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.SocketContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VarInOutInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VarInOutOutputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VariableInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VariableOutputContainer;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.InterfaceElementSelectionLayoutPolicy;
@@ -125,6 +134,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			getContentPane().setPreferredSize(null);
 		}
 		super.addChildVisual(childEditPart, index);
+		refreshTypeRootVisuals(childEditPart.getModel());
 	}
 
 	@Override
@@ -140,5 +150,21 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	public boolean isInterfaceEditable() {
 		return !(getModel().getFbType() instanceof FunctionFBType);
+	}
+
+	private void refreshTypeRootVisuals(final Object model) {
+		final FBTypeRootEditPart fbTypeRootEP = getFBTypeRootEP();
+		if (fbTypeRootEP != null) {
+			fbTypeRootEP.refreshPinPropertyVisuals(model);
+		}
+	}
+
+	private FBTypeRootEditPart getFBTypeRootEP() {
+		for (final Object part : getRoot().getChildren()) {
+			if (part instanceof final FBTypeRootEditPart fbtRootEP) {
+				return fbtRootEP;
+			}
+		}
+		return null;
 	}
 }

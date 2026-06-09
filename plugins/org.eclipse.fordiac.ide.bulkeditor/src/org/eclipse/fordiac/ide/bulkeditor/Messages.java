@@ -59,10 +59,20 @@ public final class Messages extends NLS {
 	public static String Search;
 
 	public static String Search_Changes;
+	public static String NoUsage;
 	public static String Unsaved_Changes;
 	public static String Save;
 	public static String Discard;
 	public static String Cancel;
+
+	public static String AddElementDialog_InvalidType;
+	public static String AddElementDialog_InvalidSelection;
+	public static String AddElementDialog_EmptyName;
+	public static String AddElementDialog_DuplicateName;
+
+	public static String ContextMenu_Find;
+
+	public static String UnexpectedValue;
 
 	static {
 		// initialize resource bundle

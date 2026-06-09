@@ -109,13 +109,16 @@ public class OppositeSelectionDialog extends PopupDialog {
 		if (iElem == null) {
 			return sb.toString();
 		}
-		if (isInSameNetwork(originPin, iElem)) {
-			sb.append(iElem.getBlockFBNetworkElement().getName());
-		} else {
-			sb.append(iElem.getBlockFBNetworkElement().getQualifiedName());
-			sb.delete(0, sb.indexOf(".") + 1); //$NON-NLS-1$
+		if (iElem.getBlockFBNetworkElement() != null) {
+			// only when we are not at the type interface check for block names
+			if (isInSameNetwork(originPin, iElem)) {
+				sb.append(iElem.getBlockFBNetworkElement().getName());
+			} else {
+				sb.append(iElem.getBlockFBNetworkElement().getQualifiedName());
+				sb.delete(0, sb.indexOf(".") + 1); //$NON-NLS-1$
+			}
+			sb.append('.');
 		}
-		sb.append('.');
 		sb.append(iElem.getName());
 		return sb.toString();
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH, Johannes Kepler University,
- * 							Primetals Technologies Germany GmbH
+ * Copyright (c) 2008 Profactor GmbH, fortiss GmbH, Johannes Kepler University,
+ *                    Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -56,52 +57,28 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	 */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof GroupContentNetwork) {
-			return new GroupContentEditPart();
-		}
-		if (modelElement instanceof final FBNetwork network) {
+		return switch (modelElement) {
+		case final GroupContentNetwork gcn -> new GroupContentEditPart();
+		case final FBNetwork network -> {
 			if (context instanceof SubAppForFBNetworkEditPart) {
-				return new UnfoldedSubappContentEditPart();
+				yield new UnfoldedSubappContentEditPart();
 			}
-			return getPartForFBNetwork(network);
+			yield getPartForFBNetwork(network);
 		}
-		if (modelElement instanceof final FBNetworkElement fbnel) {
-			return getPartForFBNetworkElement(context, fbnel);
-		}
-		if (modelElement instanceof StructuredType) {
-			return new StructuredTypeEditPart();
-		}
-		if (modelElement instanceof ErrorDataType) {
-			return new ErrorDataTypeEditPart();
-		}
-		if (modelElement instanceof InstanceName) {
-			return new InstanceNameEditPart();
-		}
-		if (modelElement instanceof InstanceComment) {
-			return new InstanceCommentEditPart();
-		}
-		if (modelElement instanceof InstanceContract) {
-			return new InstanceContractEditPart();
-		}
-		if (modelElement instanceof Connection) {
-			return new ConnectionEditPart();
-		}
-		if (modelElement instanceof IInterfaceElement) {
-			return createInterfaceEditPart(modelElement);
-		}
-		if (modelElement instanceof Value) {
-			return new FBNValueEditPart();
-		}
-		if (modelElement instanceof HiddenPinIndicator) {
-			return new HiddenPinIndicatorEditPart();
-		}
-
-		if (modelElement instanceof TargetInterfaceElement) {
-			return new TargetInterfaceElementEditPart();
-		}
-
-		throw createEditpartCreationException(context, modelElement);
-
+		case final FBNetworkElement fbnel -> getPartForFBNetworkElement(context, fbnel);
+		case final StructuredType structType -> new StructuredTypeEditPart();
+		case final ErrorDataType errorDT -> new ErrorDataTypeEditPart();
+		case final InstanceName in -> new InstanceNameEditPart();
+		case final InstanceComment ic -> new InstanceCommentEditPart();
+		case final InstanceContract instContract -> new InstanceContractEditPart();
+		case final Connection conn -> new ConnectionEditPart();
+		case final IInterfaceElement ie -> createInterfaceEditPart(modelElement);
+		case final Value value -> new FBNValueEditPart();
+		case final HiddenPinIndicator hpi -> new HiddenPinIndicatorEditPart();
+		case final TargetInterfaceElement tie -> new TargetInterfaceElementEditPart();
+		case final Mapping mapping -> new MappingEditPart();
+		default -> throw createEditpartCreationException(context, modelElement);
+		};
 	}
 
 	private static EditPart getPartForFBNetworkElement(final EditPart context, final FBNetworkElement element) {

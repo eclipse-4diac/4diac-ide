@@ -186,5 +186,33 @@
      	 </propertySection>
       </propertySections>
    </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.WithLineColor"
+            label="With Line color"
+            value="155,170,155"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.WithBoxColor"
+            label="With Box Color"
+            value="140,165,140"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
+      </colorDefinition>
+   </extension>
+   <extension
+         point="org.eclipse.e4.ui.css.swt.theme">
+      <stylesheet
+            uri="css/dark_if_colors.css">
+         <themeid
+               refid="org.eclipse.e4.ui.css.theme.e4_dark">
+         </themeid>
+      </stylesheet>
+   </extension>
    
 </plugin>

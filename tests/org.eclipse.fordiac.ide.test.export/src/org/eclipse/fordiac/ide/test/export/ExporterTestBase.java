@@ -102,7 +102,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	protected static final int SIZE_BYTE = 8;
 	protected static final int SIZE_BOOL = 1;
 
-	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
+	private static DataTypeLibrary dataTypeLib;
 	protected T functionBlock;
 	protected Event inputEvent;
 	protected Event outputEvent;
@@ -113,7 +113,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	@SuppressWarnings("unused")
 	@BeforeAll
 	public static void setup() {
-		new DataTypeLibrary();
+		dataTypeLib = new DataTypeLibrary(null);
 		GlobalConstantsStandaloneSetup.doSetup();
 		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();
@@ -452,11 +452,11 @@ public abstract class ExporterTestBase<T extends FBType> {
 		outputEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		functionBlock.getInterfaceList().getEventOutputs().add(outputEvent);
 		inputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		inputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
+		inputData.setType(dataTypeLib.getType(FordiacKeywords.INT));
 		inputData.setName(DATA_INPUT_NAME);
 		functionBlock.getInterfaceList().getInputVars().add(inputData);
 		outputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		outputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
+		outputData.setType(dataTypeLib.getType(FordiacKeywords.INT));
 		outputData.setName(DATA_OUTPUT_NAME);
 		functionBlock.getInterfaceList().getOutputVars().add(outputData);
 

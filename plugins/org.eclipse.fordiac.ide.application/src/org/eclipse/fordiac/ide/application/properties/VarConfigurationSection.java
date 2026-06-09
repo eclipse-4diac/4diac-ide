@@ -110,15 +110,15 @@ public class VarConfigurationSection extends AbstractSection {
 		inputDataProvider = new ChangeableListDataProvider<>(new VarConfigDeclarationColumnAccessor(this));
 
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputDataProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputDataProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
 				new NatTableColumnEditableRule<>(new VarConfigEditableRule(),
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
+						VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG,
 						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -220,7 +220,9 @@ public class VarConfigurationSection extends AbstractSection {
 			if (info != null) {
 				if (needCopy) {
 					final VDInfo newInfo = new VDInfo(info.displayName(), varConfigParameter, info.typedSubApp());
-					varConfigInfoMap.put(EcoreUtil.copy(varConfigParameter), newInfo);
+					final var newVarConfig = EcoreUtil.copy(varConfigParameter);
+					newVarConfig.setName(toReplaceVarConfig.getName());
+					varConfigInfoMap.put(newVarConfig, newInfo);
 				} else {
 					varConfigInfoMap.put(varConfigParameter, info);
 				}
@@ -290,7 +292,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 	private class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
 		private VarConfigDeclarationColumnAccessor(final VarConfigurationSection section) {
-			super(section, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+			super(section, VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		}
 
 		@Override
@@ -315,7 +317,7 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 
 		private boolean checkEditable(final int columnIndex, final VarDeclaration rowObject) {
-			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG
+			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG
 					.get(columnIndex);
 			if (column == VarDeclarationTableColumn.VISIBLE || column == VarDeclarationTableColumn.VAR_CONFIG) {
 				return !(rowObject instanceof VarConfigInstance);

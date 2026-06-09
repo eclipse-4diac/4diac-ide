@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - added gitlab endpoint token
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.preferences;
 
@@ -23,18 +24,38 @@ public final class PreferenceConstants {
 		// Shall not be instantiated
 	}
 
+	@Deprecated
 	public static final String P_GITLAB_TOKEN = "gitLabToken"; //$NON-NLS-1$
 
+	@Deprecated
 	public static final String P_GITLAB_URL = "gitLabURL"; //$NON-NLS-1$
+
+	public static final String GITLAB_ENDPOINTS_PREF_PAGE_ID = "org.eclipse.fordiac.ide.gitlab.preferences.gitlabEndpoints"; //$NON-NLS-1$
+
+	/**
+	 * Encoded list of endpoints (name|url|token), one per line. Tokens are stored
+	 * here for backwards compatibility with the existing preference system.
+	 *
+	 * New code should use {@link GitLabEndpointsStore}.
+	 */
+	public static final String P_GITLAB_ENDPOINTS = "gitLabEndpoints"; //$NON-NLS-1$
 
 	public static final String P_GITLAB_PREFERENCE_ID = "org.eclipse.fordiac.ide.gitlab"; //$NON-NLS-1$
 
 	public static String getURL() {
+		final var endpoints = GitLabEndpointsStore.loadEndpoints();
+		if (!endpoints.isEmpty()) {
+			return endpoints.get(0).url();
+		}
 		return Platform.getPreferencesService().getString(P_GITLAB_PREFERENCE_ID, P_GITLAB_URL, "", //$NON-NLS-1$
 				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
 	}
 
 	public static String getToken() {
+		final var endpoints = GitLabEndpointsStore.loadEndpoints();
+		if (!endpoints.isEmpty()) {
+			return endpoints.get(0).token();
+		}
 		return Platform.getPreferencesService().getString(P_GITLAB_PREFERENCE_ID, P_GITLAB_TOKEN, "", //$NON-NLS-1$
 				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
 	}

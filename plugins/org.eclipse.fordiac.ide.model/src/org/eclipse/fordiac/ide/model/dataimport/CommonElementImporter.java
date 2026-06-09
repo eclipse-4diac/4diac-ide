@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -41,7 +42,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -69,7 +70,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -81,14 +81,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -384,20 +382,10 @@ public abstract class CommonElementImporter {
 	 * @throws TypeImportException the FBT import exception
 	 */
 	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
-		try {
-			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
-			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-			if (x != null && !x.isBlank()) {
-				pos.setX(Double.parseDouble(x));
-			}
-			final String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
-			if (null != y && !y.isBlank()) {
-				pos.setY(Double.parseDouble(y));
-			}
-			positionableElement.setPosition(pos);
-		} catch (final NumberFormatException nfe) {
-			throw new TypeImportException(Messages.FBTImporter_POSITION_EXCEPTION, nfe);
-		}
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(parseCoordinateValue(LibraryElementTags.X_ATTRIBUTE));
+		pos.setY(parseCoordinateValue(LibraryElementTags.Y_ATTRIBUTE));
+		positionableElement.setPosition(pos);
 	}
 
 	protected void readNameCommentAttributes(final INamedElement namedElement) throws TypeImportException {
@@ -414,10 +402,12 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void readCommentAttribute(final INamedElement namedElement) {
+		readCommentAttribute().ifPresent(namedElement::setComment);
+	}
+
+	protected Optional<String> readCommentAttribute() {
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			namedElement.setComment(fullyUnEscapeValue(comment));
-		}
+		return Optional.ofNullable(comment).map(CommonElementImporter::fullyUnEscapeValue);
 	}
 
 	protected void parseGenericAttributeNode(final ConfigurableObject confObject)
@@ -447,13 +437,9 @@ public abstract class CommonElementImporter {
 			// use element for resolving import since confObject may not have been added to
 			// enclosing type yet
 			final AttributeTypeEntry attributeTypeEntry = getTypeEntry(attribute.getName(),
-					getTypeLibrary()::getAttributeTypeEntry);
-			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
-				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
-				attribute.setType(attributeTypeEntry.getType().getType());
-			} else {
-				FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
-			}
+					getTypeLibrary()::getAttributeTypeEntry, LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION);
+			attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+			attribute.setType(attributeTypeEntry.getType().getType());
 		}
 
 		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
@@ -477,6 +463,7 @@ public abstract class CommonElementImporter {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
 		}
 		variable.setName(name);
+		variable.setType(GenericTypes.ANY);
 
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (null == value) {
@@ -700,9 +687,7 @@ public abstract class CommonElementImporter {
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue(value);
 
-		final IInterfaceElement ie = (name.contains(".") && block instanceof final TypedSubApp tsa) //$NON-NLS-1$
-				? parsedVarConfig(tsa, name)
-				: getInterfaceElement(block, name, val);
+		final IInterfaceElement ie = getInterfaceElement(block, name, val);
 
 		if (ie instanceof final VarDeclaration varDecl) {
 			varDecl.setValue(val);
@@ -720,134 +705,33 @@ public abstract class CommonElementImporter {
 		});
 	}
 
-	private static VarDeclaration parsedVarConfig(final TypedSubApp typedSubApp, final String name) {
-		final var elements = new ArrayList<>(List.of(name.split("\\."))); //$NON-NLS-1$
-		elements.add(0, typedSubApp.getName());
-
-		final var pathSegmenents = elements.subList(0, elements.size() - 1);
-		final var lastPathSegment = elements.get(elements.size() - 1);
-
-		final var vd = getVarConfigVD(typedSubApp, pathSegmenents, lastPathSegment);
-		if (vd != null) {
-			return copyVarDeclFromType(vd, name, typedSubApp, pathSegmenents);
-		}
-		return vd;
-	}
-
-	private static VarDeclaration copyVarDeclFromType(final VarDeclaration vd, final String path,
-			FBNetworkElement typedSubApp, final List<String> pathSegmenents) {
-		VarDeclaration result = null;
-		var fbn = typedSubApp.getFbNetwork();
-		final var parts = new ArrayList<>(List.of(path.split("\\."))); //$NON-NLS-1$
-
-		for (final var blockName : pathSegmenents) {
-			typedSubApp = fbn.getNetworkElements().stream().filter(elem -> elem.getName().equals(blockName)).findFirst()
-					.orElse(null);
-			if (typedSubApp == null) {
-				return result;
-			}
-
-			if (typedSubApp instanceof final TypedSubApp tsa) {
-				fbn = tsa.getFbNetwork();
-				if (!parts.isEmpty()) {
-					parts.remove(0);
-				}
-
-				final var relativeName = computeRelativeName(path, tsa.getName());
-
-				final VarConfigInstance existing = tsa.getVarConfigParams().stream()
-						.filter(v -> relativeName.equals(v.getName())).findFirst().orElse(null);
-
-				if (existing != null) {
-					result = existing;
-				} else {
-					final VarConfigInstance copy = InterfaceListCopier.copyVarConfigInstance(vd, relativeName);
-					tsa.getVarConfigParams().add(copy);
-					result = copy;
-				}
-
-			}
-		}
-		return result;
-	}
-
-	private static String computeRelativeName(final String fullName, final String rootName) {
-		if (fullName.startsWith(rootName + ".")) { //$NON-NLS-1$
-			return fullName.substring(rootName.length() + 1);
-		}
-		return fullName;
-	}
-
-	private static VarDeclaration getVarConfigVD(final FBNetworkElement context, final List<String> remainingPath,
-			final String lastSegment) {
-		if (remainingPath.isEmpty()) {
-			return null;
-		}
-
-		final String currentName = remainingPath.get(0);
-		final List<String> nextPath = remainingPath.subList(1, remainingPath.size());
-
-		if (context.getName().equals(currentName)) {
-			return getVarConfigVD(context, nextPath, lastSegment);
-		}
-
-		final Iterable<FBNetworkElement> children = getNetworkElements(context);
-		if (children == null) {
-			return null;
-		}
-
-		for (final FBNetworkElement elem : children) {
-			if (elem instanceof final UntypedSubApp usa) {
-				final VarDeclaration result = getVarConfigVD(usa, remainingPath, lastSegment);
-				if (result != null) {
-					return result;
-				}
-				continue;
-			}
-
-			if (!elem.getName().equals(currentName)) {
-				continue;
-			}
-
-			if (!nextPath.isEmpty()) {
-				return getVarConfigVD(elem, nextPath, lastSegment);
-			}
-
-			if (elem instanceof final FB fb) {
-				return findAndMarkVarConfig(fb.getInterface(), lastSegment);
-			}
-			if (elem instanceof final TypedSubApp tsa) {
-				return findAndMarkVarConfig(tsa.getInterface(), lastSegment);
-			}
-		}
-
-		return null;
-	}
-
-	private static VarDeclaration findAndMarkVarConfig(final InterfaceList iface, final String name) {
-		return iface.getAllInterfaceElements() //
-				.filter(i -> i instanceof VarDeclaration && i.getName().equals(name)).map(VarDeclaration.class::cast)
-				.peek(vd -> vd.setVarConfig(true)).findFirst().orElse(null);
-	}
-
-	private static Iterable<FBNetworkElement> getNetworkElements(final EObject element) {
-		if (element instanceof final UntypedSubApp usa) {
-			return usa.getSubAppNetwork().getNetworkElements();
-		}
-		if (element instanceof final TypedSubApp tsa) {
-			return tsa.getType().getFBNetwork().getNetworkElements();
-		}
-		return null;
-	}
-
-	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
+	private static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
 			final Value val) {
-		IInterfaceElement ie = block.getInterface().getInterfaceElement(List.of(name.split("\\.")), true); //$NON-NLS-1$
-
-		if (null == ie) {
-			ie = createParameterErrorMarker(block, name, val);
+		final var ie = block.getInterface().getInterfaceElement(List.of(name.split("\\.")), true); //$NON-NLS-1$
+		if (ie != null) {
+			return ie;
 		}
-		return ie;
+
+		if (block instanceof final TypedSubApp tsa) {
+			final var param = parsedVarConfig(tsa, name);
+			if (param != null) {
+				return param;
+			}
+		}
+
+		return createParameterErrorMarker(block, name, val);
+	}
+
+	private static IInterfaceElement parsedVarConfig(final TypedSubApp typedSubApp, final String name) {
+		final var varDeclaration = typedSubApp.findByQualifiedName(name).filter(VarDeclaration.class::isInstance)
+				.map(VarDeclaration.class::cast).findFirst();
+		if (varDeclaration.isEmpty()) {
+			return null;
+		}
+
+		final VarConfigInstance copy = InterfaceListCopier.copyVarConfigInstance(varDeclaration.get(), name);
+		typedSubApp.getVarConfigParams().add(copy);
+		return copy;
 	}
 
 	protected static ErrorMarkerInterface createParameterErrorMarker(final BlockFBNetworkElement block,
@@ -917,13 +801,10 @@ public abstract class CommonElementImporter {
 
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeName != null) {
-			final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry);
-			if (null != entry) {
-				resource.setTypeEntry(entry);
-				createParameters(resource);
-			}
-		}
+		final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry,
+				LibraryElementPackage.Literals.RESOURCE_TYPE);
+		resource.setTypeEntry(entry);
+		createParameters(resource, entry);
 	}
 
 	protected String readCDataSection() throws XMLStreamException {
@@ -936,46 +817,14 @@ public abstract class CommonElementImporter {
 	}
 
 	/** Creates the values. */
-	public static void createParameters(final IVarElement element) {
-		if (element instanceof Device) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		if (element instanceof Resource) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		if (element instanceof Segment) {
-			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
-		}
-		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
-			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			varDecl.setValue(value);
-			final VarDeclaration typeVar = getTypeVariable(varDecl);
-			if (null != typeVar && null != typeVar.getValue()) {
-				value.setValue(typeVar.getValue().getValue());
-			}
-		}
-	}
-
-	private static VarDeclaration getTypeVariable(final VarDeclaration variable) {
-		EList<VarDeclaration> varList = null;
-		if (variable.eContainer() instanceof final Device dev) {
-			if (null != dev.getType()) {
-				varList = dev.getType().getVarDeclaration();
-			}
-		} else if ((variable.eContainer() instanceof final Resource res) && (null != res.getType())) {
-			varList = res.getType().getVarDeclaration();
-		}
-
-		if (null != varList) {
-			return getParamter(varList, variable.getName());
-		}
-		return null;
+	public static void createParameters(final IVarElement element, final TypeEntry entry) {
+		final List<VarDeclaration> typeVariables = switch (entry) {
+		case final DeviceTypeEntry deviceEntry -> deviceEntry.getType().getVarDeclaration();
+		case final ResourceTypeEntry resourceEntry -> resourceEntry.getType().getVarDeclaration();
+		case final SegmentTypeEntry segmentEntry -> segmentEntry.getType().getVarDeclaration();
+		case null, default -> List.of();
+		};
+		element.getVarDeclarations().addAll(EcoreUtil.copyAll(typeVariables));
 	}
 
 	protected static VarDeclaration getParamter(final EList<VarDeclaration> paramList, final String name) {
@@ -1035,18 +884,37 @@ public abstract class CommonElementImporter {
 		return libraryElement;
 	}
 
-	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver) {
-		if (name == null) {
+	@SuppressWarnings("unchecked")
+	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver,
+			final EClass typeClass) {
+		if (name == null || name.isEmpty()) {
 			return null;
 		}
-		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
+		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver,
+				typeName -> (T) getTypeLibrary().createErrorTypeEntry(typeName, typeClass)));
 	}
 
 	protected DataType getDataType(final String name) {
-		if (name == null) {
+		if (name == null || name.isEmpty()) {
 			return GenericTypes.ANY;
 		}
 		return addDependency(ImportHelper.resolveImport(name, getElement(), getDataTypeLibrary()::getTypeIfExists,
 				getDataTypeLibrary()::getType));
+	}
+
+	double parseCoordinateValue(final String attributeName) {
+		final String val = getAttributeValue(attributeName);
+		if (val == null || val.isBlank()) {
+			return 0.0;
+		}
+
+		try {
+			return Double.parseDouble(val);
+		} catch (final NumberFormatException nfe) {
+			warnings.add(new TypeImportDiagnostic(
+					MessageFormat.format(Messages.CommonElementImporter_WARNING_CannotParseCoordinateValue, val),
+					attributeName, getLineNumber()));
+			return 0.0;
+		}
 	}
 }

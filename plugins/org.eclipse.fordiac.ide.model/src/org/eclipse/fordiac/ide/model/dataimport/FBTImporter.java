@@ -575,10 +575,7 @@ public class FBTImporter extends BlockTypeImporter {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANASITION_CONDITION_EXCEPTION);
 		}
 		validateTransitionCondition(ecTransition, condition);
-		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			ecTransition.setComment(comment);
-		}
+		readCommentAttribute().ifPresent(ecTransition::setComment);
 		getXandY(ecTransition);
 		proceedToEndElementNamed(LibraryElementTags.ECTRANSITION_ELEMENT);
 		ecc.getECTransition().add(ecTransition);
@@ -760,15 +757,10 @@ public class FBTImporter extends BlockTypeImporter {
 		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		readNameCommentAttributes(fb);
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FBTypeEntry entry = getTypeEntry(typeFbElement, getTypeLibrary()::getFBTypeEntry);
-		if (entry == null) {
-			fb.setTypeEntry(addDependency(
-					getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType())));
-			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		} else {
-			fb.setTypeEntry(entry);
-			fb.setInterface(entry.getInterface().instanceCopy());
-		}
+		final FBTypeEntry entry = getTypeEntry(typeFbElement, getTypeLibrary()::getFBTypeEntry,
+				LibraryElementPackage.Literals.FB_TYPE);
+		fb.setTypeEntry(entry);
+		fb.setInterface(entry.getInterface().instanceCopy());
 		type.getInternalFbs().add(fb);
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 	}

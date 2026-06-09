@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -69,9 +69,27 @@ class STAlgorithmPartitionerTest {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String text = """
 				ALGORITHM REQ
+				// content
 				END_ALGORITHM
 				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", text));
+		fbType.getCallables().add(createSTAlgorithm("REQ", "// content"));
+		assertEquals(text, partitioner.combine(fbType));
+	}
+
+	@Test
+	void testCombineCommentsAndStrings() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String algorithm = """
+				// ALGORITHM
+				OUT := "ALGORITHM";
+				""";
+		final String text = """
+				ALGORITHM REQ
+				// ALGORITHM
+				OUT := "ALGORITHM";
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", algorithm));
 		assertEquals(text, partitioner.combine(fbType));
 	}
 
@@ -80,16 +98,30 @@ class STAlgorithmPartitionerTest {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String text = """
 				ALGORITHM REQ
-				// content
 				END_ALGORITHM
-
 				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", "// content"));
+		fbType.getCallables().add(createSTAlgorithm("REQ", text));
 		assertEquals(text, partitioner.combine(fbType));
 	}
 
 	@Test
 	void testCombineMethod() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String algorithm = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", ""));
+		final String method = """
+				METHOD TEST
+				END_METHOD
+				""";
+		fbType.getCallables().add(createSTMethod("TEST", ""));
+		assertEquals(algorithm + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
+	}
+
+	@Test
+	void testCombineMethodLegacy() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String algorithm = """
 				ALGORITHM REQ
@@ -101,7 +133,7 @@ class STAlgorithmPartitionerTest {
 				END_METHOD
 				""";
 		fbType.getCallables().add(createSTMethod("TEST", method));
-		assertEquals(algorithm + method, partitioner.combine(fbType));
+		assertEquals(algorithm + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
 	}
 
 	@Test
@@ -112,12 +144,34 @@ class STAlgorithmPartitionerTest {
 				ALGORITHM REQ
 				END_ALGORITHM
 				""";
-		assertCallablesEquals(List.of(algorithm), partition(algorithm));
+		assertCallablesEquals(List.of(""), partition(algorithm));
 		final String method = """
 				METHOD TEST
 				END_METHOD
 				""";
-		assertCallablesEquals(List.of(algorithm.trim(), '\n' + method), partition(algorithm + method));
+		assertCallablesEquals(List.of("", ""), partition(algorithm + method));
+	}
+
+	@Test
+	void testPartitionComment() throws Exception {
+		final String text = """
+				/*
+				 * test comment 1
+				 */
+				ALGORITHM REQ
+				// inner comment 1
+				END_ALGORITHM
+
+				// outer comment
+
+				/*
+				 * test comment 2
+				 */
+				METHOD TEST
+				// inner comment 2
+				END_METHOD
+				""";
+		assertCallablesEquals(List.of("// inner comment 1", "// outer comment", "// inner comment 2"), partition(text));
 	}
 
 	private static SimpleFBType createSimpleFBType() {
@@ -148,14 +202,12 @@ class STAlgorithmPartitionerTest {
 		assertTrue(partition.isPresent());
 		assertTrue(partition.get() instanceof STAlgorithmPartition);
 		assertEquals(text, partition.get().getOriginalSource());
-		assertEquals(text, ((STAlgorithmPartition) partition.get()).getCallables().stream()
-				.map(STAlgorithmPartitionerTest::getText).collect(Collectors.joining()));
 		return (STAlgorithmPartition) partition.get();
 	}
 
 	private static void assertCallablesEquals(final List<String> expected, final STAlgorithmPartition actual) {
-		assertIterableEquals(expected,
-				actual.getCallables().stream().map(STAlgorithmPartitionerTest::getText).toList());
+		assertIterableEquals(expected.stream().map(String::trim).toList(),
+				actual.getCallables().stream().map(STAlgorithmPartitionerTest::getText).map(String::trim).toList());
 	}
 
 	protected static String getText(final ICallable callable) {

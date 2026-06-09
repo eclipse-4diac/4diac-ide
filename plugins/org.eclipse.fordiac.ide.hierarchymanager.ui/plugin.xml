@@ -19,35 +19,33 @@
 
 
 <plugin>
-	<extension
- 			point="org.eclipse.ui.views">
+	<extension point="org.eclipse.ui.views">
   		<view
-			    category="org.eclipse.fordiac.ide.view.category"
-			    class="org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView"
-			    icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
-			    id="org.eclipse.fordiac.ide.hierarchymanager.view"
-			    name="Plant Hierarchy">
+			category="org.eclipse.fordiac.ide.view.category"
+			class="org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView"
+			icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
+			id="org.eclipse.fordiac.ide.hierarchymanager.view"
+			name="Plant Hierarchy">
   		</view>
 	</extension>
-   	<extension
- 			point="org.eclipse.ui.navigator.viewer">
-	    <viewer
-            viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
-         <options> 
-            <property
-                  name="org.eclipse.ui.navigator.hideAvailableExtensionsTab"
-                  value="true"/>
-            <property
-                  name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
-                  value="true"/> 
-            <property
-                  name="org.eclipse.ui.navigator.hideLinkWithEditorAction"
-                  value="true"/>
-            <property
-        		  name="org.eclipse.ui.navigator.enableTooltipSupport"
-        		  value="true" /> 
-         </options>
-      </viewer>
+	
+   	<extension point="org.eclipse.ui.navigator.viewer">
+	    <viewer viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
+         	<options> 
+            	<property
+                  	name="org.eclipse.ui.navigator.hideAvailableExtensionsTab"
+                  	value="true"/>
+            	<property
+                  	name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
+                  	value="true"/> 
+            	<property
+                  	name="org.eclipse.ui.navigator.hideLinkWithEditorAction"
+                  	value="true"/>
+            	<property
+        			name="org.eclipse.ui.navigator.enableTooltipSupport"
+        			value="true" /> 
+         	</options>
+      	</viewer>
   		<viewerActionBinding
     			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
 			<includes>
@@ -55,26 +53,25 @@
           		<actionExtension pattern="org.eclipse.ui.navigator.resources.UndoRedoActionProvider"/>
        		</includes>
   		</viewerActionBinding>
-  		<viewerContentBinding
-    			viewerId="org.eclipse.fordiac.ide.hierarchymanager.view"> 
+  		<viewerContentBinding viewerId="org.eclipse.fordiac.ide.hierarchymanager.view"> 
 			<includes>
-				<contentExtension isRoot="true"
-	            		pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent" />
-        		<contentExtension
-                     pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter" >
-               </contentExtension>      
-           	</includes>
+				<contentExtension 
+					isRoot="true"
+	            	pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent" />
+        		<contentExtension 
+        			pattern="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter" />
+        	</includes>
   		</viewerContentBinding>
    	</extension>
-   	<extension
-			point="org.eclipse.ui.navigator.navigatorContent">
+   	
+   	<extension point="org.eclipse.ui.navigator.navigatorContent">
 		<navigatorContent
-	            activeByDefault="true"
-	            id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent"
-	            contentProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyContentProvider"
-	            labelProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyLabelProvider"
-	            name="Plant Hierachy Content"
-	            priority="highest">
+		    	activeByDefault="true"
+		        id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent"
+		        contentProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyContentProvider"
+		        labelProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyLabelProvider"
+		        name="Plant Hierachy Content"
+		        priority="highest">
             <possibleChildren>
             	<or>
 	              <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
@@ -89,26 +86,22 @@
             </triggerPoints>
 			<commonSorter
 					class="org.eclipse.fordiac.ide.typemanagement.navigator.KeepOrderContentSorter"
-                	id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter">
+	                id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchySorter">
 				<parentExpression>
                 	<or>
                     	<instanceof value="org.eclipse.emf.ecore.EObject"/>
                     	<instanceof value="org.eclipse.core.resources.IProject" />
 					</or>
 				</parentExpression>
-			</commonSorter>    
-			  <dragAssistant
-		            class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDragAssistant"
-		            viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
-		      </dragAssistant>
+			</commonSorter>
 			<dropAssistant
-	          class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant"
-	          id="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant">
-		       <possibleDropTargets>
-		          <or>
-		             <adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node"/>
-		          </or>
-		       </possibleDropTargets>
+		        	class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant"
+		    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant">
+		       	<possibleDropTargets>
+		        	<or>
+		            	<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node"/>
+		          	</or>
+		       	</possibleDropTargets>
 		    </dropAssistant>        
 		</navigatorContent>
 		<actionProvider
@@ -116,23 +109,24 @@
             	id="org.eclipse.fordiac.ide.hierarchymanager.ui.openLeafActionProvider">
             <enablement>
 	            <or>
-	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf"> </instanceof>               
+	               <instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf" />             
 	            </or>
         	</enablement>
   		</actionProvider>  
    	</extension>
+   	
    	<extension point="org.eclipse.ui.perspectiveExtensions">  
 		<perspectiveExtension 
 				targetID="org.eclipse.fordiac.ide.SystemPerspective">
 			<showInPart id ="org.eclipse.fordiac.ide.hierarchymanager.view"/>
 		</perspectiveExtension>
    	</extension>
-	<extension
-    		point="org.eclipse.ui.handlers">
+   	
+	<extension point="org.eclipse.ui.handlers">
       	<handler 
-            	class="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.RenameLevel"
-            	commandId="org.eclipse.ui.edit.rename">
-         	<activeWhen>
+				class="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.RenameLevel"
+				commandId="org.eclipse.ui.edit.rename">
+        	<activeWhen>
          		<with variable="selection">
 			    	<count value="1" />
 			    	<iterate operator="and">
@@ -151,90 +145,76 @@
 	         			<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
 	      			</iterate>
 		   		</with>            
-         	</activeWhen>
+        	</activeWhen>
 		</handler>
     </extension>  
-    <extension
-          point="org.eclipse.ui.commands">
-       <category
-             id="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
-             name="4diac IDE Plant Hierarchy Commands">
-       </category>
-       <command
-             categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
-             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.ExpandAll"
-             id="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
-             name="Expand All">
-       </command>
-       <command
-             categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
-             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.CreateLevel"
-             id="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
-             name="Create Level">
-       </command>
+    
+    <extension point="org.eclipse.ui.commands">
+    	<category
+        	id="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+            name="4diac IDE Plant Hierarchy Commands" />
+       	<command
+        	categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+            defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.ExpandAll"
+            id="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
+            name="Expand All" />
+       	<command
+        	categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
+            defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.CreateLevel"
+            id="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
+            name="Create Level" />
     </extension>
-    <extension
-        	point="org.eclipse.ui.menus">
-       	<menuContribution
-             allPopups="false"
-             locationURI="toolbar:org.eclipse.fordiac.ide.hierarchymanager.view">
-          <command
+    
+	<extension point="org.eclipse.ui.menus">
+    	<menuContribution locationURI="toolbar:org.eclipse.fordiac.ide.hierarchymanager.view"
+        		allPopups="false">
+        	<command
                 commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
                 icon="platform:/plugin/org.eclipse.ui/icons/full/elcl16/expandall.png"
-                style="push">
-          </command>
+                style="push" />
 		</menuContribution>
-		<menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
-               tooltip="Create a new level">
-			<visibleWhen
-            		checkEnabled="false">
-				<with variable="activePartId">
-					<equals value="org.eclipse.fordiac.ide.hierarchymanager.view" />
-				</with>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="org.eclipse.ui.edit.rename"
-               tooltip="Rename selected level">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected node">  
-               <visibleWhen
-                  checkEnabled="false">
-               <with variable="selection">
-            		<count value="1" />
-			    	<iterate operator="and" ifEmpty="false">
-	         			<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
-	      			</iterate>
-		   		</with>
-            </visibleWhen>           
-         </command>
+		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
+         	<command
+               	commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
+         		tooltip="Create a new level">
+				<visibleWhen checkEnabled="false">
+					<with variable="activePartId">
+						<equals value="org.eclipse.fordiac.ide.hierarchymanager.view" />
+					</with>
+	            </visibleWhen>
+			</command>
+         	<command
+            	commandId="org.eclipse.ui.edit.rename"
+               	tooltip="Rename selected level">
+            	<visibleWhen checkEnabled="false">
+               		<iterate operator="or">
+                  		<instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level" />
+               		</iterate>
+            	</visibleWhen>
+         	</command>
+         	<command
+            	commandId="org.eclipse.ui.edit.delete"
+               	tooltip="Delete selected node">  
+               	<visibleWhen checkEnabled="false">
+	               	<with variable="selection">
+	            		<count value="1" />
+				    	<iterate operator="and" ifEmpty="false">
+		         			<adapt type="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
+		      			</iterate>
+			   		</with>
+            	</visibleWhen>           
+         	</command>
       </menuContribution>
+	</extension>
+	
+    <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+		<propertyContributor
+				contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
+			<propertyCategory category="level" />
+       	</propertyContributor>
     </extension>
-    <extension
-          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
-       <propertyContributor
-             contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
-          <propertyCategory
-                category="level">
-          </propertyCategory>
-       </propertyContributor>
-    </extension>
-    <extension
-          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+    
+    <extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
        <propertyTabs
              contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
           <propertyTab
@@ -244,26 +224,25 @@
           </propertyTab>
        </propertyTabs>
     </extension>
-    <extension
-          point="org.eclipse.ui.views.properties.tabbed.propertySections">
-       <propertySections
-             contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
-          <propertySection
-                class="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.LevelSection"
+    
+    <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
+		<propertySections
+             	contributorId="org.eclipse.fordiac.ide.hierarchymanager.ui.view">
+          	<propertySection
+            	class="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.LevelSection"
                 filter="org.eclipse.fordiac.ide.hierarchymanager.ui.properties.LevelSectionFilter"
                 id="org.eclipse.fordiac.ide.hierarchymanager.ui.commentPropertySection"
-                tab="org.eclipse.fordiac.ide.hierarchymanager.ui.levelPropertyTab">
-          </propertySection>
-       </propertySections>
+                tab="org.eclipse.fordiac.ide.hierarchymanager.ui.levelPropertyTab" />
+       	</propertySections>
     </extension>
-    <extension
-         point="org.eclipse.ui.decorators">
-      <decorator
-            class="org.eclipse.fordiac.ide.hierarchymanager.ui.decorator.NodeCommentDecorator"
-            id="org.eclipse.fordiac.ide.hierarchymanager.ui.NodeCommentDecorator"
-            label="Node comment decoration"
-            lightweight="true"
-            state="true">
+    
+    <extension point="org.eclipse.ui.decorators">
+		<decorator
+	            class="org.eclipse.fordiac.ide.hierarchymanager.ui.decorator.NodeCommentDecorator"
+	            id="org.eclipse.fordiac.ide.hierarchymanager.ui.NodeCommentDecorator"
+	            label="Node comment decoration"
+	            lightweight="true"
+	            state="true">
             <enablement>
             	<or>
                 	<objectClass name="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node" />
@@ -271,15 +250,15 @@
             </enablement>
             <description>
                Show comments beside nodes.
-            </description>
-      </decorator>
-   </extension>
-    <extension
-          point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
-          <listener class = "org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerUpdateListener"/>
+        	</description>
+      	</decorator>
+	</extension>
+	
+    <extension point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
+		<listener class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerUpdateListener"/>
     </extension>
-	<extension
-			point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+    
+	<extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
 		<deleteParticipant
 				class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.DeleteLibraryElementParticipant"
 				id="org.eclipse.fordiac.ide.hierarchymanager.ui.deleteLibraryElementParticipant"
@@ -290,70 +269,70 @@
 					<and>
 						<instanceof value="org.eclipse.core.resources.IFile"/>
 						<or>
+							<test 
+								forcePluginActivation="true" 
+								property="org.eclipse.core.resources.extension"
+								value="sys"/>
 							<test
-									forcePluginActivation="true"
-									property="org.eclipse.core.resources.extension"
-									value="sys"/>
-							<test
-									forcePluginActivation="true"
-									property="org.eclipse.core.resources.extension"
-									value="sub"/>
+								forcePluginActivation="true"
+								property="org.eclipse.core.resources.extension"
+								value="sub"/>
 						</or>
 					</and>
 				</or>
 			</enablement>
 		</deleteParticipant>
-    </extension>
+	</extension>
+	
     <extension point="org.eclipse.ltk.core.refactoring.moveParticipants">
-    	<moveParticipant
-    		class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.MoveFileParticipant"
-    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.moveFileParticipant"
-    		name="moveFileRefactor"
-    		>
-		<enablement>
-			<or>
-				<instanceof value="org.eclipse.core.resources.IFolder"/>
-				<and>
-					<instanceof value="org.eclipse.core.resources.IFile"/>
-					<or>
-						<test
+		<moveParticipant
+	    		class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.MoveFileParticipant"
+	    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.moveFileParticipant"
+	    		name="moveFileRefactor" >
+			<enablement>
+				<or>
+					<instanceof value="org.eclipse.core.resources.IFolder"/>
+					<and>
+						<instanceof value="org.eclipse.core.resources.IFile"/>
+						<or>
+							<test
 								forcePluginActivation="true"
 								property="org.eclipse.core.resources.extension"
 								value="sys"/>
-						<test
+							<test
 								forcePluginActivation="true"
 								property="org.eclipse.core.resources.extension"
 								value="sub"/>
-					</or>
-				</and>
-			</or>
-          </enablement>
-    	</moveParticipant>
+						</or>
+					</and>
+				</or>
+          	</enablement>
+		</moveParticipant>
     </extension>
+    
     <extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
-    	<renameParticipant
-    		class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.RenameFileParticipant"
-    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.renameFileParticipant"
-    		name="renameFileRefactor"
-    		>
-		<enablement>
-			<or>
-				<instanceof value="org.eclipse.core.resources.IFolder"/>
-				<and>
-					<instanceof value="org.eclipse.core.resources.IFile"/>
-					<or>
-						<test
+ 		<renameParticipant
+				class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.RenameFileParticipant"
+    			id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.renameFileParticipant"
+    			name="renameFileRefactor" >
+			<enablement>
+				<or>
+					<instanceof value="org.eclipse.core.resources.IFolder"/>
+					<and>
+						<instanceof value="org.eclipse.core.resources.IFile"/>
+						<or>
+							<test
 								forcePluginActivation="true"
 								property="org.eclipse.core.resources.extension"
 								value="sys"/>
-						<test
+							<test
 								forcePluginActivation="true"
 								property="org.eclipse.core.resources.extension"
 								value="sub"/>
-					</or>
-				</and>
-			</or>
-          </enablement>
-    	</renameParticipant>
+						</or>
+					</and>
+				</or>
+          	</enablement>
+		</renameParticipant>
     </extension>
 </plugin>

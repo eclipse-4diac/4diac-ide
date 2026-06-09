@@ -21,10 +21,13 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEdi
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProxy;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
@@ -104,15 +107,25 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 			handleMove();
 		}
 
-		public void performCreation() {
+		public void performCreation(final EditPartViewer viewer) {
 			final ECState destState = (ECState) getFactory().getNewObject();
-			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, getECC());
+			final Point relativePoint = point.getCopy();
+
+			final Object eccEditPart = viewer.getEditPartRegistry().get(getECC());
+			if (eccEditPart instanceof final GraphicalEditPart gep) {
+				gep.getFigure().translateToRelative(relativePoint);
+			}
+
+			final Position pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(relativePoint.x,
+					relativePoint.y);
+			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, pos, getECC());
 			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
 					null);
-			createTransitionCommand.setDestinationLocation(point);
+
 			final CompoundCommand compCom = new CompoundCommand();
 			compCom.add(createStateCommand);
 			compCom.add(createTransitionCommand);
+
 			setCurrentCommand(compCom);
 			performCreation(1);
 		}
@@ -179,7 +192,7 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 				transitionStateCreationTool
 						.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
 				setActiveTool(transitionStateCreationTool);
-				transitionStateCreationTool.performCreation();
+				transitionStateCreationTool.performCreation(viewer);
 				setActiveTool(getDefaultTool());
 				createTransitionAndState = false;
 			}

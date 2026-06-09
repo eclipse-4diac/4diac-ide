@@ -52,7 +52,7 @@ class ValueValidatorTest {
 	@BeforeAll
 	@SuppressWarnings("unused")
 	static void setupXtext() {
-		new DataTypeLibrary();
+		new DataTypeLibrary(null);
 		GlobalConstantsStandaloneSetup.doSetup();
 		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();

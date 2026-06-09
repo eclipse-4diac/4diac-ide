@@ -309,6 +309,6 @@
            id="org.eclipse.fordiac.ide.ui.ConnectionSourceMarkerColor"
            label="%FordiacPreferencePage_LABEL_ConnectionSourceMarkerColor"
            value="99, 179, 31">
-     </colorDefinition>      
+     </colorDefinition>
   </extension>
 </plugin>

@@ -77,6 +77,7 @@ public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I ex
 			sharedState = DeploymentEvaluatorSharedState.fromContext(getType().getTypeLibrary());
 			sharedState.getResource().getFBNetwork().getNetworkElements().add(instance);
 			sharedState.prepare();
+			sharedState.writeDeviceParameter(FAKE_TIME_DEV_PARAM_NAME, StandardFunctions.NOW_MONOTONIC().toString());
 			deployInstance();
 			writeVariables();
 			addWatches();
@@ -110,8 +111,13 @@ public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I ex
 		prepare();
 		try {
 			writeVariables();
+			// write fake time to device *before* triggering event, so the triggered event
+			// executes with the current time of the evaluator
 			sharedState.writeDeviceParameter(FAKE_TIME_DEV_PARAM_NAME, StandardFunctions.NOW_MONOTONIC().toString());
 			if (triggerEvent(instanceEvent)) {
+				// ~~~~~
+				// event is executing asynchronously on device until pollWatches() returns
+				// ~~~~~
 				pollWatches();
 			}
 			update(getVariables().values());

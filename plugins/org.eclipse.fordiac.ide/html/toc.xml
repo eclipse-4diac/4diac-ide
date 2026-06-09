@@ -21,7 +21,7 @@
 
 <!--********************************************************************************************-->
 
-   <topic label="Getting Started" href="html/doc_overview.html">
+   <topic label="Getting Started" >
 <!--********************-->	
       <topic href="html/intro/iec61499.html" label="IEC 61499 101">
       	<topic href="html/intro/iec61499.html#PLC" label="PLC Programming according to IEC 61131-3">
@@ -52,16 +52,16 @@
    
 <!--********************************************************************************************-->   
 
-   <topic label="Installation" href="html/installation/installation.html"> 
-        <topic href="html/installation/installation.html#IDE" label="4diac IDE">
-        	<topic href="html/installation/installation.html#ownIDE" label="Building Your own 4diac IDE From Source">
+   <topic label="Installation" href="html/installation/overview.html"> 
+        <topic href="html/installation/overview.html#IDE" label="4diac IDE">
+        	<topic href="html/installation/overview.html#ownIDE" label="Building Your own 4diac IDE From Source">
         	</topic>
         </topic>
-        <topic href="html/installation/installation.html#FORTE" label="4diac FORTE">
-        	<topic href="html/installation/installation.html#ownFORTE" label="Building 4diac FORTE From Source">
+        <topic href="html/installation/overview.html#FORTE" label="4diac FORTE">
+        	<topic href="html/installation/overview.html#ownFORTE" label="Building 4diac FORTE From Source">
         	</topic>
         </topic>
-        <topic href="html/installation/installation.html#forteOtherPlatforms" label="Building 4diac FORTE for Other Platforms">
+        <topic href="html/installation/overview.html#forteOtherPlatforms" label="Building 4diac FORTE for Other Platforms">
 	        <topic href="html/installation/legomindstormsev3.html" label="4diac FORTE for Lego Mindstorms EV3"/>
         	<topic href="html/installation/raspi.html" label="4diac FORTE for RaspberryPi"/>
         	<topic href="html/installation/wago.html" label="4diac FORTE for WagoPFCs"/>
@@ -82,7 +82,7 @@
 
 <!--********************************************************************************************-->	
 
-   	<topic label="Tutorials - A Step by Step Guide" href="html/tutorials/tutorials.html" >
+   	<topic label="Tutorials - A Step by Step Guide">
 <!--********************-->	
        <topic href="html/tutorials/overview.html" label="Step 0 - 4diac IDE Overview">
           <topic href="html/tutorials/overview.html#startingUp" label="Starting up 4diac IDE">
@@ -92,8 +92,6 @@
           <topic href="html/tutorials/overview.html#perspectives" label="4diac IDE Perspectives"> 
           	<topic href="html/tutorials/overview.html#systemPerspective" label="System Perspective">
           	</topic>
-            <topic href="html/tutorials/overview.html#deploymentPerspective" label="Deployment Perspective">
-            </topic>
             <topic href="html/tutorials/overview.html#debugPerspective" label="Debug Perspective">
             </topic>
           </topic>
@@ -210,12 +208,12 @@
 
 <!--********************************************************************************************-->    
 
-    <topic href="html/examples/examples.html" label="4diac Examples">
-      <topic href="html/examples/examples.html#noHardwareRequired" label="General Examples">
+    <topic href="html/examples/overview.html" label="4diac Examples">
+      <topic href="html/examples/overview.html#noHardwareRequired" label="General Examples">
          <topic href="html/examples/xplus3.html" label="X+3">
          </topic>
       </topic>
-      <topic href="html/examples/examples.html#hardwareRequired" label="Specific hardware required examples">
+      <topic href="html/examples/overview.html#hardwareRequired" label="Specific hardware required examples">
         <topic href="html/examples/pidmotor.html" label="PID control on Lego Mindstorm&apos;s Motor">
         </topic>
         <topic href="html/examples/bbbtrafficcontrol.html" label="Traffic control example running on a BBB">
@@ -225,8 +223,8 @@
 
 <!--********************************************************************************************-->
  
-    <topic label="Use I/O From Different Platforms">
-      <topic href="html/io_config/io_config.html#ParameterBased" label="Parameter Based I/Os">
+    <topic label="Use I/O From Different Platforms" href="html/io_config/overview.html">
+      <topic href="html/io_config/overview.html#ParameterBased" label="Parameter Based I/Os">
       <topic href="html/io_config/sysfs.html" label="SysFs">
       </topic>
       <topic href="html/io_config/odroid.html" label="Odroid">
@@ -246,18 +244,20 @@
         </topic>
       </topic>
       </topic>
-      <topic href="html/io_config/io_config.html#IO_CONFIGBased" label="IO_CONFIG Based I/Os">
+      <topic href="html/io_config/overview.html#IO_CONFIGBased" label="IO_CONFIG Based I/Os">
          <topic href="html/io_config/plc01a1.html" label="PLC01A1">
          </topic>
          <topic href="html/io_config/revolutionpi.html" label="Revolution Pi">
          </topic>
          <topic href="html/io_config/wago_pfc200.html" label="Wago PFC200">
          </topic>
+         <topic href="html/io_config/gpiochip.html" label="GPIOChip (Raspberry Pi, Beagle Bone Black and Similar Boards)">
+         </topic>
       </topic>
     </topic>
    
 <!--********************************************************************************************-->
-  <topic href="html/communication/communication.html" label="Supported Communication Protocols">
+  <topic href="html/communication/overview.html" label="Supported Communication Protocols">
     <topic label="OPC UA"  href="html/communication/opcua.html">
       <topic label="Build 4diac FORTE with OPC UA" href="html/communication/opcua.html#build" />
       <topic label="General Overview" href="html/communication/opcua.html#general" />
@@ -284,7 +284,7 @@
        </topic>
     </topic>
     <topic label="Modbus" href="html/communication/modbus.html"/>
-    <topic label="OPC DA" href="html/communication/opcDA.html"/>
+    <topic label="OPC DA" href="html/communication/opcda.html"/>
     <topic href="html/communication/openpowerlink.html" label="openPOWERLINK">
     </topic>
     <topic href="html/communication/xqueries.html" label="Access BaseX Database with XQuery">
@@ -305,7 +305,7 @@
   </topic>  
 <!--********************************************************************************************-->
 	
-	 <topic href="html/development/development.html" label="Development Documentation"> 
+	 <topic href="html/development/overview.html" label="Development Documentation"> 
     <topic label="4diac IDE">
       <topic label="Building and Running 4diac IDE from Source" href="html/development/building4diac.html#buildFromSource"> 
       </topic>

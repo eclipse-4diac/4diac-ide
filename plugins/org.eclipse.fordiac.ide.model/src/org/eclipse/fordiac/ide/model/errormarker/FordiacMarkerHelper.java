@@ -38,16 +38,11 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class FordiacMarkerHelper {
@@ -263,6 +258,11 @@ public final class FordiacMarkerHelper {
 	}
 
 	public static void updateMarkers(final IResource resource, final String type,
+			final List<ErrorMarkerBuilder> builders) {
+		updateMarkers(resource, type, builders, false);
+	}
+
+	public static void updateMarkers(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders, final boolean force) {
 		if (resource != null && resource.isAccessible()
 				&& (force || errorMarkersNeedsUpdate(resource, type, builders))) {
@@ -294,7 +294,7 @@ public final class FordiacMarkerHelper {
 	private static void updateMarkersInWorkspace(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders) {
 		try {
-			resource.deleteMarkers(type, true, IResource.DEPTH_INFINITE);
+			resource.deleteMarkers(type, true, IResource.DEPTH_ZERO);
 			for (final var builder : builders) {
 				builder.createMarker(resource);
 			}
@@ -316,19 +316,10 @@ public final class FordiacMarkerHelper {
 		return createErrorMarkerFBNElement;
 	}
 
-	public static void createAttributeErrorMarker(final Attribute attribute, final TypeLibrary typeLib) {
-		final TypeEntry typeEntry = typeLib.createErrorTypeEntry(attribute.getName(),
-				LibraryElementPackage.eINSTANCE.getAttributeDeclaration());
-		final AttributeDeclaration aDecl = (AttributeDeclaration) typeEntry.getType();
-
-		attribute.setAttributeDeclaration(aDecl);
-		attribute.setType(aDecl.getType());
-	}
-
 	private static boolean errorMarkersNeedsUpdate(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders) {
 		try {
-			return !builders.isEmpty() || resource.findMarkers(type, true, IResource.DEPTH_INFINITE).length != 0;
+			return !builders.isEmpty() || resource.findMarkers(type, true, IResource.DEPTH_ZERO).length != 0;
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning("Couldn't determine marker state of resoruce: " + resource.getName(), e); //$NON-NLS-1$
 

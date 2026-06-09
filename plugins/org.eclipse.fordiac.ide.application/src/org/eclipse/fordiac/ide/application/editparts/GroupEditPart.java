@@ -71,7 +71,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 			if (getHost() instanceof final GroupEditPart gEP) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand(getHost(), new ChangeCommentCommand(gEP.getModel(), str));
+					return new ChangeCommentCommand(gEP.getModel(), str)
+							.chain(new ResizeGroupOrSubappCommand(getHost()));
 				}
 			}
 			return null;
@@ -170,7 +171,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final GroupFigure groupFigure = new GroupFigure();
 		groupFigure.getCommentFigure().setText(getModel().getComment());
 

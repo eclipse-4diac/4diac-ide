@@ -17,7 +17,9 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
+import java.util.Map;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
@@ -81,6 +83,16 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 			simpleECStates = new EObjectContainmentWithInverseEList.Resolving<SimpleECState>(SimpleECState.class, this, LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES, LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE);
 		}
 		return simpleECStates;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateEventUsage(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeAnnotations.validateEventUsage(this, diagnostics, context);
 	}
 
 	/**

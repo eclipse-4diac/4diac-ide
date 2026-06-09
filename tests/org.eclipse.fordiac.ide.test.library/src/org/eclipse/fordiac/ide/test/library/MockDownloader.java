@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -117,5 +118,15 @@ public class MockDownloader implements IArchiveDownloader {
 	@Override
 	public void setActive(final boolean active) {
 		this.active = active;
+	}
+
+	@Override
+	public boolean hasMultipleEndpoints() {
+		return false;
+	}
+
+	@Override
+	public List<IArchiveDownloader> convertEndpointsToDownloader() {
+		return new ArrayList<>();
 	}
 }

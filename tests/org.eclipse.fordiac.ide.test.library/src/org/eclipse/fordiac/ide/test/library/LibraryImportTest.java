@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.net.URI;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -77,8 +76,7 @@ class LibraryImportTest {
 	@BeforeAll
 	static void setupBeforeClass() throws Exception {
 		final IProject proj = SystemManager.INSTANCE.createNew4diacProject(PROJECT,
-				ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT), Collections.emptyMap(),
-				new NullProgressMonitor());
+				ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT), new NullProgressMonitor());
 		proj.refreshLocal(IResource.DEPTH_INFINITE, null);
 
 		// extract test libraries
@@ -108,9 +106,10 @@ class LibraryImportTest {
 			manifest.getDependencies().getRequired().clear();
 			ManifestHelper.saveManifest(manifest);
 		}
-		FordiacMarkerHelper.updateMarkers(project.getFile(LibraryManager.MANIFEST), FordiacErrorMarker.LIBRARY_MARKER,
-				Collections.emptyList(), true);
-		Job.getJobManager().join(FordiacMarkerHelper.FAMILY_FORDIAC_MARKER, null);
+		final IFile manifestFile = project.getFile(LibraryManager.MANIFEST);
+		if (manifestFile.exists()) {
+			manifestFile.deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, false, IResource.DEPTH_ZERO);
+		}
 		project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).accept(resource -> {
 			if (resource instanceof final IFolder folder) {
 				if (folder.getName().equals(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME)) {

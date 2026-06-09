@@ -91,6 +91,46 @@ public class SystemRepairBrokenConnectionModelEdit extends ModelEdit<AutomationS
 
 	@Override
 	protected Command createCommand(final AutomationSystem element) {
+		return new Command() {
+			private CompoundCommand commands;
+
+			@Override
+			public boolean canExecute() {
+				return true;
+			}
+
+			@Override
+			public void execute() {
+				commands = createRepairCommands(element);
+			}
+
+			@Override
+			public boolean canUndo() {
+				return commands != null && commands.canUndo();
+			}
+
+			@Override
+			public void undo() {
+				if (commands != null) {
+					commands.undo();
+				}
+			}
+
+			@Override
+			public boolean canRedo() {
+				return commands != null && commands.canRedo();
+			}
+
+			@Override
+			public void redo() {
+				if (commands != null) {
+					commands.redo();
+				}
+			}
+		};
+	}
+
+	private CompoundCommand createRepairCommands(final AutomationSystem element) {
 		final CompoundCommand cmd = new CompoundCommand();
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI)
 				.getType() instanceof final StructuredType structType) {
@@ -112,13 +152,18 @@ public class SystemRepairBrokenConnectionModelEdit extends ModelEdit<AutomationS
 								.getKey();
 
 					}
-					connections.forEach(con -> cmd.add(
+					connections.toList().forEach(con -> execute(cmd,
 							new RepairBrokenConnectionCommand(con, isSource, structType, connectToVar.apply(con))));
 				}
 			});
 		}
 
 		return cmd;
+	}
+
+	private static void execute(final CompoundCommand commands, final Command command) {
+		command.execute();
+		commands.add(command);
 	}
 
 }

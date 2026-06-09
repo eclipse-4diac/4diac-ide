@@ -47,24 +47,13 @@
             id="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
             name="Library Importer">
       </category>
-      <wizard
-            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
-            class="org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard"
-            id="org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard"
-            name="Archived Package Import">
-         <description>
-            Import a zipped package into the workspace.
-         </description>
-      </wizard>
-      <wizard
-            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
-            class="org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard"
-            id="org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard"
-            name="Existing Package Import">
-         <description>
-            Import an existing file into the workspace.
-         </description>
-      </wizard>
+  <wizard
+      category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+      class="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      id="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      name="Library Import">
+    <description>Browse and import libraries from GitLab, archives, or existing workspace libraries.</description>
+  </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
@@ -99,14 +88,6 @@
     		</and>
    		</enabledWhen>
   	</activity>
-  	<activityPatternBinding 
-  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
-  		pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard">
-	</activityPatternBinding>
-	<activityPatternBinding 
-  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
-  		pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard">
-	</activityPatternBinding>
    </extension>
    <extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
@@ -134,4 +115,48 @@
          </enablement>
       </changePreviewViewer>
    </extension>
+   
+	<extension point="org.eclipse.ui.commands">
+  		<command
+      		id="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"
+      		name="Open My Wizard"/>
+	</extension>
+
+<extension point="org.eclipse.ui.handlers">
+  <handler
+      commandId="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"
+      class="org.eclipse.fordiac.ide.library.ui.handlers.OpenManageLibraryWizardHandler"/>
+</extension>
+
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+
+         <command
+               commandId="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"
+               label="%ManageLibraryWizard_Label"
+               tooltip="%ManageLibraryWizard_Description"
+               style="push">
+
+            <visibleWhen checkEnabled="false">
+               <with variable="selection">
+                  <count value="1"/>
+                  <iterate>
+                  	<or>
+	             		<and>
+		                     <instanceof value="org.eclipse.core.resources.IFolder"/>
+		                     <or>
+		                     	<test property="org.eclipse.core.resources.name" value="External Libraries"></test>
+		                     	<test property="org.eclipse.core.resources.name" value="Standard Libraries"></test>
+		                     </or>
+	                    </and>
+                    	<instanceof value="org.eclipse.core.resources.IProject"/>
+                    </or>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
 </plugin>

@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, AIT, fortiss GmbH,
- *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Germany GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, AIT, fortiss GmbH,
+ *                    Johannes Kepler University Linz,
+ *                    Primetals Technologies Germany GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -119,7 +120,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 			}
 			refreshToolTip();
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
-				updateDeviceListener();
+				refreshChildren();
 			}
 		}
 
@@ -197,7 +198,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 			if (getHost().getModel() instanceof final INamedElement namedEl) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand(getHost(), new ChangeCommentCommand(namedEl, str));
+					return new ChangeCommentCommand(namedEl, str).chain(new ResizeGroupOrSubappCommand(getHost()));
 				}
 			}
 			return null;
@@ -244,7 +245,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final var prefCache = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache();
 		return new SubAppForFbNetworkFigure(getModel(), this, prefCache.getMinInterfaceBarSize(),
 				prefCache.getMaxTypeLabelSize());
@@ -335,6 +336,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 		final SubAppForFbNetworkFigure figure = getFigure();
 		figure.updateTypeLabel(getModel());
 		figure.updateExpandedFigure();
+		layoutExpandedInterface();
 	}
 
 	private void updateEditPolicies() {
@@ -372,6 +374,19 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 	}
 
 	@Override
+	protected void addMappingFigure(final IFigure child) {
+		if (getModel().isUnfolded()) {
+			final GridData gridData = new GridData();
+			gridData.horizontalSpan = 3;
+			gridData.grabExcessHorizontalSpace = true;
+			gridData.horizontalAlignment = SWT.FILL;
+			getFigure().getExpandedMainFigure().add(child, gridData, -1);
+		} else {
+			super.addMappingFigure(child);
+		}
+	}
+
+	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		switch (childEditPart) {
 		case final UnfoldedSubappContentEditPart unfoldedSubappContentEP when getFigure()
@@ -384,6 +399,8 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 				getFigure().getExpandedOutputFigure().remove(interfaceEditPart.getFigure());
 			}
 		}
+		case final MappingEditPart mapping when getModel().isUnfolded() ->
+			getFigure().getExpandedMainFigure().remove(mapping.getFigure());
 		default -> super.removeChildVisual(childEditPart);
 		}
 	}
@@ -445,7 +462,13 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 
 	public void layoutExpandedInterface() {
 		if (getModel().isUnfolded()) {
-			Display.getDefault().asyncExec(() -> getFigure().layoutExpandedInterface());
+			Display.getDefault().execute(() -> {
+				final EditPartViewer viewer = getViewer();
+				// if we have no viewer or the viewer's control is disposed we can not layout
+				if (viewer != null && viewer.getControl() != null && !viewer.getControl().isDisposed()) {
+					getFigure().layoutExpandedInterface();
+				}
+			});
 		}
 	}
 

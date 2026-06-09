@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
 import org.eclipse.xtext.ui.refactoring.ui.SyncUtil;
 
 @SuppressWarnings("restriction")
@@ -28,7 +29,7 @@ public class STCoreSyncUtil extends SyncUtil {
 	@Override
 	public void totalSync(final boolean saveAll, final boolean useProgressDialog, final boolean fork)
 			throws InvocationTargetException, InterruptedException {
-		// always save all before refactoring
+		RefactoringUtil.checkDirtyEditors();
 		super.totalSync(true, useProgressDialog, fork);
 	}
 

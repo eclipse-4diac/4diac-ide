@@ -53,7 +53,7 @@ public class ExporterTestAdapterFBType extends ExporterTestBase<AdapterType> {
 		functionBlock.getInterfaceList().getEventOutputs().add(adpOutputEvent);
 
 		final VarDeclaration adapterInputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		adapterInputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
+		adapterInputData.setType(new DataTypeLibrary(null).getType(FordiacKeywords.INT));
 		adapterInputData.setName(ADAPTER_DATA_INPUT_NAME);
 		adapterInputData.setIsInput(true);
 		final With withInput = LibraryElementFactory.eINSTANCE.createWith();
@@ -67,7 +67,7 @@ public class ExporterTestAdapterFBType extends ExporterTestBase<AdapterType> {
 		adpOutputEvent.getWith().add(withOutput);
 		withOutput.setVariables(adapterOutputData);
 		adapterOutputData.getWiths().add(withOutput);
-		adapterOutputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
+		adapterOutputData.setType(new DataTypeLibrary(null).getType(FordiacKeywords.INT));
 		adapterOutputData.setName(ADAPTER_DATA_OUTPUT_NAME);
 		functionBlock.getInterfaceList().getOutputVars().add(adapterOutputData);
 

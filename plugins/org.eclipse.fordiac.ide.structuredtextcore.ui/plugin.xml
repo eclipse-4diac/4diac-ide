@@ -663,4 +663,23 @@
        </enablement>
     </moveParticipant>
  </extension>
+ <extension
+       point="org.eclipse.ltk.core.refactoring.copyParticipants">
+    <copyParticipant
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreCopyResourceParticipant"
+          id="org.eclipse.fordiac.ide.structuredtextcore.ui.copyParticipant1"
+          name="%copyParticipant.name">
+       <enablement>
+          <adapt
+                type="org.eclipse.core.resources.IFile">
+          </adapt>
+       </enablement>
+    </copyParticipant>
+ </extension>
+ <extension
+       point="org.eclipse.xtext.ui.resourceRelocationStrategy">
+    <strategy
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.LibraryElementResourceRelocationStrategy">
+    </strategy>
+ </extension>
 </plugin>

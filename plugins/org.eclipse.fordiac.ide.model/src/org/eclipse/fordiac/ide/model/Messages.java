@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2010, 2025 Profactor GmbH, TU Wien ACIN
- * 								   Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,6 +33,8 @@ public final class Messages extends NLS {
 	public static String CommonElementImporter_ERROR_MissingAuthorInfo;
 	public static String CommonElementImporter_ERROR_MissingVersionInfo;
 	public static String CommonElementImporter_ReservedAttributesValidation;
+	public static String CommonElementImporter_WARNING_CannotParseCoordinateValue;
+
 	public static String CompilableElementImporter_ERROR_ProductNotSet;
 	public static String CompilableElementImporter_ERROR_UnsupportedLanguage;
 	public static String CompilableElementImporter_ERROR_VendorNotSet;
@@ -41,11 +43,14 @@ public final class Messages extends NLS {
 	public static String ConnectionAnnotations_DestinationEndpointMissing;
 	public static String ConnectionAnnotations_DuplicateConnection;
 
+	public static String BaseFBTypeAnnotations_UnusedSimpleFBOutputEvent;
+
 	public static String ConnectionAnnotations_GenericEndpoints;
 	public static String ConnectionAnnotations_SourceElementMissing;
 	public static String ConnectionAnnotations_SourceEndpointMissing;
 	public static String ConnectionAnnotations_TypeMismatch;
-
+	public static String ConnectionAnnotations_TypeMismatchIn2If;
+	public static String ConnectionAnnotations_TypeMismatchIf2In;
 	public static String ConnectionAnnotations_TypeMismatchInOut;
 
 	public static String ConnectionAnnotations_TypeMismatchInOutIntermediate;
@@ -82,6 +87,8 @@ public final class Messages extends NLS {
 	public static String AttributeAnnotations_MissingAttributeDeclaration;
 
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
+
+	public static String EventAnnotations_MultipleOutputConnections;
 	public static String FBNetworkAnnotations_CollisionMessage;
 	public static String FBNetworkAnnotations_InterfaceBarCollisionMessage;
 
@@ -96,7 +103,9 @@ public final class Messages extends NLS {
 	public static String FBTImporter_POSITION_EXCEPTION;
 	public static String FBTImporter_SERVICE_INTERFACE_LEFTINTERFACE_EXCEPTION;
 	public static String FBTImporter_SERVICE_INTERFACE_RIGHTINTERFACE_EXCEPTION;
+	public static String FordiacTypeResFactory_URINoTypeFile;
 	public static String FordiacTypeResource_LoadFromUnsupportedURI;
+	public static String FordiacTypeResource_NoContentToSave;
 	public static String FordiacTypeResource_NotInWorkspace;
 	public static String FordiacTypeResource_SaveToUnsupportedURI;
 	public static String FordiacTypeResource_TypeImportError;
@@ -116,7 +125,6 @@ public final class Messages extends NLS {
 	public static String ImportUtils_ERROR_ParameterNotSet;
 	public static String ImportUtils_ERROR_ParameterValueNotSet;
 	public static String InterfaceElementAnnotations_DuplicateName;
-	public static String InterfaceElementAnnotations_MemberNameCollidesWithDataType;
 	public static String LinkConstraints_ClassLinkconstraintsShouldNotBeCreated;
 	public static String LinkConstraints_ConnectingIncompatibleInterfaceTypes;
 	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
@@ -151,6 +159,14 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_TypeNotSupported;
 	public static String VALIDATOR_UnevenlyQuotedStringLiteral;
 	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
+	public static String VarDeclarationAnnotations_DestinationTypeMismatchDestination;
+
+	public static String VarDeclarationAnnotations_DestinationTypeMismatchDestinationType;
+
+	public static String VarDeclarationAnnotations_DestinationTypeMismatch;
+
+	public static String VarDeclarationAnnotations_DestinationTypeMismatchSeparator;
+
 	public static String VarDeclarationAnnotations_IllegalVariableLengthArray;
 
 	public static String VarDeclarationAnnotations_MultipleInputConnections;
@@ -168,6 +184,8 @@ public final class Messages extends NLS {
 	public static String VarDeclarationAnnotations_VarInOutRightNotConnected;
 
 	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
+
+	public static String VarDeclarationAnnotations_HiddenPinConnected;
 
 	// === AttributeTarget Groups ===
 	public static String AttributeTarget_General_group;
@@ -231,7 +249,9 @@ public final class Messages extends NLS {
 	public static String AttributeTarget_Links_tooltip;
 	public static String AttributeTarget_ServiceSequences_tooltip;
 
-	public static String HidePinCommand_PinCannotBeHidden_ConnectedInside;
+	public static String BaseFBTypeAnnotations_UnsupportedInternalFBType;
+
+	public static String BlockFBNetworkElementAnnotations_Unused;
 
 	public static String SystemImporter_Mapping_WrongString;
 	public static String SystemImporter_Mapping_MissingDevice;

@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging;
 
+import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,20 +22,23 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IDeviceReplayer;
+import org.eclipse.fordiac.ide.debug.replaydebugging.response.DeviceResponse;
 import org.eclipse.fordiac.ide.debug.replaydebugging.watch.WatchFactoryReplay;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugTarget;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
+import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
+import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
-import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
-import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -49,16 +52,12 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 
 	private final String tracesPath;
 
-	private final List<ReplayDebuggingResource> replayDebuggingResources = new ArrayList<>();
+	private final Map<String, ReplayDebuggingResource> replayDebuggingResources = new HashMap<>();
 
 	// to know which datapoints to mark with a different color
 	private final Map<String, String> allCurentChanges = new HashMap<>();
 
-	// to simulate the response from the device, we gather all
-	// deployment.devResponse.Resource from the ReplayDebuggingResource
-	// the information in the response is used to update the watches and to show the
-	// current changes in the UI
-	private final Response response = DevResponseFactory.eINSTANCE.createResponse();
+	private DeviceResponse response = new DeviceResponse(List.of());
 
 	// this is needed mainly to be able to set the error on the current changes so
 	// they are shown with a different color
@@ -68,9 +67,37 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 
 	public ReplayDebuggingDevice(final Device device, final DeploymentDebugTarget debugTarget, final String tracesPath,
 			final boolean remote) {
-		super(device, debugTarget, true, Duration.ZERO, List.of());
+		super(device, debugTarget, true, Duration.ZERO, List.of(), "Interpreter"); //$NON-NLS-1$
 		this.tracesPath = tracesPath;
 		this.remote = remote;
+	}
+
+	public DeviceResponse getDeviceResponse() {
+		return response;
+	}
+
+	public void triggerEvent(final Resource resource, final String name) {
+		final var replayResource = replayDebuggingResources.get(resource.getName());
+		if (replayResource == null) {
+			return;
+		}
+		replayResource.triggerEvent(name);
+	}
+
+	public void forceValue(final Resource resource, final String name, final String value) {
+		final var replayResource = replayDebuggingResources.get(resource.getName());
+		if (replayResource == null) {
+			return;
+		}
+		replayResource.forceValue(name, value);
+	}
+
+	public void clearForce(final Resource resource, final String name) {
+		final var replayResource = replayDebuggingResources.get(resource.getName());
+		if (replayResource == null) {
+			return;
+		}
+		replayResource.clearForce(name);
 	}
 
 	/**
@@ -84,29 +111,42 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	@Override
 	public void connect() throws DebugException {
 
-		final IDeviceSimulator simulator = createSimulator();
-		simulator.start();
-		response.setWatches(DevResponseFactory.eINSTANCE.createWatches());
+		final IDeviceReplayer replayer = createReplayer();
+		final var resourceReplayers = replayer.start();
 
 		final Device device = getDevice();
-		for (final Resource resource : device.getResource()) {
-			final ReplayDebuggingResource replayDebuggingResource = new ReplayDebuggingResource(resource,
+		for (final var entry : resourceReplayers.entrySet()) {
+			final var resource = entry.getKey();
+			final var resourceReplayer = entry.getValue();
+			final ReplayDebuggingResource replayDebuggingResource = new ReplayDebuggingResource(
 					new ReplayNavigator.Identifier(device.getAutomationSystem().getName(), device.getName(),
 							resource.getName()),
-					simulator, this);
+					resourceReplayer, this);
 			replayDebuggingResource.load();
-			replayDebuggingResources.add(replayDebuggingResource);
-			response.getWatches().getResources().add(replayDebuggingResource.getResourceResponse());
+			replayDebuggingResources.put(resource.getName(), replayDebuggingResource);
+
 		}
-		simulator.stop();
+
+		response = new DeviceResponse(
+				replayDebuggingResources.values().stream().map(ReplayDebuggingResource::getResourceResponse).toList());
+		replayer.stop();
+
+		// we don't need all the boilerplate from connect in the parent class, just to
+		// make sure the device management executor obtains this instance
+		try {
+			getDeviceManagementExecutorService().connect();
+		} catch (final DeploymentException e) {
+			throw new DebugException(Status
+					.error(MessageFormat.format(Messages.DeploymentDebugDevice_ConnectError, device.getName()), e));
+		}
 	}
 
-	private IDeviceSimulator createSimulator() {
+	private IDeviceReplayer createReplayer() {
 		if (remote) {
-			return new org.eclipse.fordiac.ide.debug.replaydebugging.simulator.forte.DeviceSimulator(
+			return new org.eclipse.fordiac.ide.debug.replaydebugging.replayer.forte.DeviceReplayer(
 					getDeviceManagementExecutorService(), getDevice(), tracesPath);
 		}
-		return new org.eclipse.fordiac.ide.debug.replaydebugging.simulator.interpreter.DeviceSimulator(getDevice(),
+		return new org.eclipse.fordiac.ide.debug.replaydebugging.replayer.interpreter.DeviceReplayer(getDevice(),
 				tracesPath);
 	}
 
@@ -140,7 +180,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	}
 
 	private void unloadAllReplayDebuggingResources() {
-		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources) {
+		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources.values()) {
 			replayDebuggingResource.unload();
 		}
 		replayDebuggingResources.clear();
@@ -151,7 +191,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	@Override
 	public void onUpdate(final ReplayDebuggingResource notUsed) {
 		allCurentChanges.clear();
-		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources) {
+		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources.values()) {
 			final EventChange eventChange = replayDebuggingResource.getCurrentEventChange();
 			if (eventChange == null) {
 				continue;
@@ -170,7 +210,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	// and we need to act on the local watches and not from the parent class.
 	protected void updateWatches() {
 		incrementVariableUpdateCount();
-		final DeploymentDebugWatchData watchData = new DeploymentDebugWatchData(response);
+		final DeploymentDebugWatchData watchData = new DeploymentDebugWatchData(response.getResponse());
 		watches.values().forEach(watch -> {
 			watch.updateValue(watchData);
 			setError(watch);
@@ -213,6 +253,23 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	}
 
 	@Override
+	protected void updateForce(final DeploymentWatchpoint watchpoint) {
+		final IWatch watch = watches.get(watchpoint.getLocation());
+		if (watch instanceof final IVarDeclarationWatch variableWatch) {
+			try {
+				getPrimaryDebugTarget().updateWatches(false);
+				if (watchpoint.isForceEnabled()) {
+					variableWatch.forceValue(watchpoint.getForceValue());
+				} else {
+					variableWatch.clearForce();
+				}
+			} catch (final DebugException e) {
+				FordiacLogHelper.logWarning("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+			}
+		}
+	}
+
+	@Override
 	protected void addWatch(final DeploymentLaunchWatchpoint watchpoint) {
 		final Optional<INamedElement> element = watchpoint.getTarget(getDevice());
 		if (element.isPresent()) {
@@ -222,6 +279,9 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 				watch.setSource(IWatch.Source.LAUNCH);
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();
+				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
+					variableWatch.forceValue(watchpoint.forceValue());
+				}
 				updateWatches();
 			} catch (final CoreException e) {
 				FordiacLogHelper.logWarning("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
@@ -242,6 +302,9 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();
 				watchpoint.setInstalled(true);
+				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
+					variableWatch.forceValue(watchpoint.getForceValue());
+				}
 				updateWatches();
 			} catch (final CoreException e) {
 				FordiacLogHelper.logWarning("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$

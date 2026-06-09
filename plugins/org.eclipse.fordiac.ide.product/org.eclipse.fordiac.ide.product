@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="3.1.0.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="3.2.0.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -51,7 +51,6 @@
    <vm>
    </vm>
 
-
    <plugins>
    </plugins>
 
@@ -96,7 +95,6 @@
       <feature id="org.eclipse.emf.compare.rcp.ui"/>
       <feature id="org.eclipse.nebula.widgets.nattable.core.feature"/>
       <feature id="org.eclipse.emf.compare.egit" installMode="root"/>
-      <feature id="org.eclipse.fordiac.ide.milo" installMode="root"/>
    </features>
 
    <configurations>

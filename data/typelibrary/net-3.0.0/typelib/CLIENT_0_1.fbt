@@ -2,7 +2,7 @@
 <FBType Name="CLIENT_0_1" Comment="Connect to a SERVER_1 Block">
 	<Identification Standard="61499-2" Description="Copyright (c) 2017, 2025 fortiss GmbH , Johannes Kepler University Linz  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  ">
 	</Identification>
-	<VersionInfo Version="3.0" Author="Alois Zoitl" Date="2025-19-26" Remarks="Created from CLIENT_1">
+	<VersionInfo Version="3.0" Author="Alois Zoitl" Date="2025-10-26" Remarks="Created from CLIENT_1">
 	</VersionInfo>
 	<CompilerInfo packageName="iec61499::net">
 	</CompilerInfo>

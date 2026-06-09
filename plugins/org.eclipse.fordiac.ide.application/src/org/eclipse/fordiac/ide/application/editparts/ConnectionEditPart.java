@@ -520,7 +520,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 
 	private void updateTargetPinAnnotations(final EditPart interfaceEditPart,
 			final Stream<IInterfaceElement> targetLabelReferences, final GraphicalAnnotationModelEvent event) {
-		if (interfaceEditPart.getChildren() != null) {
+		if (interfaceEditPart != null && interfaceEditPart.getChildren() != null) {
 			final Map<IInterfaceElement, TargetInterfaceElementEditPart> refInterfaceMap = interfaceEditPart
 					.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
 					.map(TargetInterfaceElementEditPart.class::cast)

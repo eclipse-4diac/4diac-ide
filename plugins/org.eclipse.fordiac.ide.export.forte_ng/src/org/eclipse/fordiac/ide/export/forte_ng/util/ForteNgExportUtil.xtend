@@ -167,7 +167,7 @@ final class ForteNgExportUtil {
 		switch (element) {
 			VarDeclaration case element.FBType instanceof CompositeFBType:
 				element.inOutVar || (!element.isInput && !element.inputConnections.empty &&
-					element.inputConnections.first.sourceElement.type.genericType)
+					element.inputConnections.first.sourceElement.genericType)
 			default:
 				false
 		}
@@ -190,10 +190,12 @@ final class ForteNgExportUtil {
 	}
 
 	def static CharSequence generateConnectionValue(Connection conn) {
-		if (conn.sourceElement.type.genericType)
+		if (conn.sourceElement.genericType)
 			'''«conn.sourceElement.generateName»->getDOConnection(«conn.source.name.FORTEStringId»)->getValue()'''
-		else
+		else if (conn.sourceElement !== null)
 			'''«conn.sourceElement.generateName»->«CONNECTION_EXPORT_PREFIX»«conn.source.name».getValue()'''
+		else
+			'''«CONNECTION_EXPORT_PREFIX»if2in_«conn.source.name».getValue()'''
 	}
 
 	def static CharSequence generateName(BlockFBNetworkElement element) {
@@ -321,7 +323,7 @@ final class ForteNgExportUtil {
 			WstringType:
 				"forte_wstring"
 			ArrayType case type.typeEntry === null:
-				if(type.subranges.exists[!setLowerLimit || !setUpperLimit])
+				if (type.subranges.exists[!setLowerLimit || !setUpperLimit])
 					"forte_array_variable"
 				else
 					"forte_array_fixed"
@@ -452,6 +454,10 @@ final class ForteNgExportUtil {
 
 	static final String GENERIC_CLASS_NAME_ATTRIBUTE_NAME = "GenericClassName"
 	static final String GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::GenericClassName"
+
+	def static boolean isGenericType(BlockFBNetworkElement element) {
+		element !== null && element.type !== null && element.type.genericType
+	}
 
 	def static boolean isGenericType(LibraryElement type) {
 		getGenericClassNameAttributeValue(type) !== null

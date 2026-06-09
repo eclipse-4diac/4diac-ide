@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN
+ * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Ingo Hegny, Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - modernized and reworked ECC look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences;
 
@@ -24,25 +26,30 @@ public final class FBTypeEditorPreferenceConstants {
 	public static final String FBTYPEEDITOR_ECC_PREFERENCES_ID = "org.eclipse.fordiac.ide.fbtypeeditor.ecc"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_STATE_COLOR. */
-	public static final String P_ECC_STATE_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor"; //$NON-NLS-1$
+	private static final String P_ECC_STATE_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_STATE_BORDER_COLOR. */
-	public static final String P_ECC_STATE_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateTextColor"; //$NON-NLS-1$
+	private static final String P_ECC_STATE_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateTextColor"; //$NON-NLS-1$
+
+	private static final String P_ECC_STATE_SPINE_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCStateSpineColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_TRANSITION_COLOR. */
-	public static final String P_ECC_TRANSITION_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionColor"; //$NON-NLS-1$
+	private static final String P_ECC_TRANSITION_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionColor"; //$NON-NLS-1$
+
+	/** The Constant P_ECC_TRANSITION_COLOR. */
+	private static final String P_ECC_TRANSITION_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionTextColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_ALGORITHM_COLOR. */
-	public static final String P_ECC_ALGORITHM_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmColor"; //$NON-NLS-1$
+	private static final String P_ECC_ALGORITHM_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_ALGORITHM_BORDER_COLOR. */
-	public static final String P_ECC_ALGORITHM_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmTextColor"; //$NON-NLS-1$
+	private static final String P_ECC_ALGORITHM_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmTextColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_EVENT_COLOR. */
-	public static final String P_ECC_EVENT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventColor"; //$NON-NLS-1$
+	private static final String P_ECC_EVENT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventColor"; //$NON-NLS-1$
 
 	/** The Constant P_ECC_EVENT_BORDER_COLOR. */
-	public static final String P_ECC_EVENT_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventTextColor"; //$NON-NLS-1$
+	private static final String P_ECC_EVENT_TEXT_COLOR = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventTextColor"; //$NON-NLS-1$
 
 	/** The margin of state/action labels to create rectangles */
 	public static final int MARGIN_VERTICAL = 3;
@@ -60,8 +67,16 @@ public final class FBTypeEditorPreferenceConstants {
 		return JFaceResources.getColorRegistry().get(P_ECC_STATE_TEXT_COLOR);
 	}
 
+	public static Color getEccStateSpineColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_STATE_SPINE_COLOR);
+	}
+
 	public static Color getEccTransitionColor() {
 		return JFaceResources.getColorRegistry().get(P_ECC_TRANSITION_COLOR);
+	}
+
+	public static Color getEccTransitionTextColor() {
+		return JFaceResources.getColorRegistry().get(P_ECC_TRANSITION_TEXT_COLOR);
 	}
 
 	public static Color getEccAlgorithmColor() {

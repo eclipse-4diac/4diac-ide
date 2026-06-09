@@ -12,14 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
-import java.util.List;
+import java.util.SequencedCollection;
 
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
-public class BlockFBNetworkElementWatch extends AbstractContainerWatch {
+public class BlockFBNetworkElementWatch extends AbstractContainerWatch implements ISubContainerWatch {
 
 	final BlockFBNetworkElementValue value;
 
@@ -41,7 +41,7 @@ public class BlockFBNetworkElementWatch extends AbstractContainerWatch {
 	}
 
 	@Override
-	public List<IWatch> getSubWatches() {
+	public SequencedCollection<IWatch> getSubWatches() {
 		return value.getWatches();
 	}
 
@@ -66,5 +66,15 @@ public class BlockFBNetworkElementWatch extends AbstractContainerWatch {
 			return adapter.cast(getWatchedElement());
 		}
 		return super.getAdapter(adapter);
+	}
+
+	@Override
+	public boolean isWatchSubElements() {
+		return value.isWatchSubElements();
+	}
+
+	@Override
+	public void setWatchSubElements(final boolean watchSubElements) {
+		value.setWatchSubElements(watchSubElements);
 	}
 }

@@ -17,33 +17,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartViewer;
 
 /**
  * The Class CreateTransitionCommand.
  */
 public class CreateTransitionCommand extends CreationCommand {
-	static final Point SELF_TRANS_OFFSET = new Point(10, 50);
 
 	/** The source. */
 	private ECState source;
 
 	/** The destination. */
 	private ECState destination;
-
-	/** The source location. */
-	private Point sourceLocation;
-
-	/** The dest location. */
-	private Point destLocation;
 
 	/** The parent. */
 	private ECC parent;
@@ -57,8 +48,11 @@ public class CreateTransitionCommand extends CreationCommand {
 	/** Transition condition event */
 	private Event conditionEvent;
 
-	/** the viewer which executed this command */
-	private EditPartViewer viewer;
+	/** Offset used for the X-coordinate of the bend point in a self-transition. */
+	private static final int SELF_TRANSITION_X_OFFSET = 10;
+
+	/** Offset used for the Y-coordinate of the bend point in a self-transition. */
+	private static final int SELF_TRANSITION_Y_OFFSET = 50;
 
 	public CreateTransitionCommand() {
 	}
@@ -76,11 +70,7 @@ public class CreateTransitionCommand extends CreationCommand {
 	 */
 	public CreateTransitionCommand(final ECState source, final ECState destination, final Event conditionEvent) {
 		this.source = source;
-		this.sourceLocation = source.getPosition().toScreenPoint();
 		this.destination = destination;
-		if (destination.getPosition() != null) {
-			this.destLocation = destination.getPosition().toScreenPoint();
-		}
 		this.conditionEvent = conditionEvent;
 	}
 
@@ -138,7 +128,7 @@ public class CreateTransitionCommand extends CreationCommand {
 
 	@Override
 	public boolean canExecute() {
-		return ((null != source) && (null != destination) && (null != source.getECC()) && (null != destLocation));
+		return ((null != source) && (null != destination) && (null != source.getECC()));
 	}
 
 	/*
@@ -157,7 +147,7 @@ public class CreateTransitionCommand extends CreationCommand {
 		// it is necessary to invoke the following code after adding the
 		// transition to the parent, otherwise ECTransitionEditPart will
 		// throw a NPE in the activate method!
-		transition.updatePositionFromScreenCoordinates(calcTransitionBendPoint());
+		transition.setPosition(calcTransitionBendPoint());
 		transition.setSource(source);
 		transition.setDestination(destination);
 		transition.setConditionEvent(conditionEvent);
@@ -167,21 +157,18 @@ public class CreateTransitionCommand extends CreationCommand {
 		} else if (conditionEvent == null) {
 			transition.setConditionExpression("1"); //$NON-NLS-1$
 		}
-		if (null != viewer) {
-			final EditPart ep = viewer.getEditPartForModel(transition);
-			if (ep != null) {
-				viewer.select(ep);
-			}
-		}
 	}
 
-	private Point calcTransitionBendPoint() {
-		final Point bendPoint = sourceLocation.getCopy();
-		bendPoint.translate(destLocation.getDifference(sourceLocation).scale(0.5)); // middle between source and dest
+	private Position calcTransitionBendPoint() {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 		if (source.equals(destination)) { // self transition
-			bendPoint.translate(SELF_TRANS_OFFSET);
+			pos.setX(source.getPosition().getX() + SELF_TRANSITION_X_OFFSET);
+			pos.setY(source.getPosition().getY() + SELF_TRANSITION_Y_OFFSET);
+		} else {
+			pos.setX((source.getPosition().getX() + destination.getPosition().getX()) / 2.0);
+			pos.setY((source.getPosition().getY() + destination.getPosition().getY()) / 2.0);
 		}
-		return bendPoint;
+		return pos;
 	}
 
 	@Override
@@ -204,29 +191,6 @@ public class CreateTransitionCommand extends CreationCommand {
 		parent.getECTransition().add(transition);
 		transition.setSource(source);
 		transition.setDestination(destination);
-	}
-
-	/**
-	 * Sets the source location.
-	 *
-	 * @param location the new source location
-	 */
-	public void setSourceLocation(final Point location) {
-		this.sourceLocation = location;
-	}
-
-	/**
-	 * Sets the destination location.
-	 *
-	 * @param location the new destination location
-	 */
-	public void setDestinationLocation(final Point location) {
-		this.destLocation = location;
-
-	}
-
-	public void setViewer(final EditPartViewer viewer) {
-		this.viewer = viewer;
 	}
 
 	@Override

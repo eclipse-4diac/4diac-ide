@@ -81,17 +81,15 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 
 	@Override
 	public void createNatTable(final Composite composite) {
-		provider = new ChangeableListDataProvider<>(
-				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN));
-		final DataLayer dataLayer = new VarDeclarationDataLayer(provider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+		final var columns = VarDeclarationTableColumn.defaultColumnsWithPrepended(VarDeclarationTableColumn.RETAIN);
+		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns));
+		final DataLayer dataLayer = new VarDeclarationDataLayer(provider, columns);
 		final VarDeclarationConfigLabelAccumulator acc = new VarDeclarationConfigLabelAccumulator(provider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+				this::getAnnotationModel, columns);
 
 		dataLayer.setConfigLabelAccumulator(acc);
 
-		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, columnProvider,
 				IEditableRule.ALWAYS_EDITABLE, null, this, false);
 

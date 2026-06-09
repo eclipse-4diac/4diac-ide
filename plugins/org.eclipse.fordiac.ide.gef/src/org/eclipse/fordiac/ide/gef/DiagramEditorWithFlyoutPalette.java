@@ -80,10 +80,12 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IReusableEditor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.contexts.IContextService;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -501,8 +503,31 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		super.selectionChanged(part, selection);
-		updateActions(getSelectionActions());
+		if (!(getSite() instanceof final MultiPageEditorSite multiPageEditorSite)) {
+			// for none multipage editors parent should handle
+			super.selectionChanged(part, selection);
+			return;
+		}
+		final IWorkbenchPage page = multiPageEditorSite.getPage();
+		if (page == null) {
+			return;
+		}
+
+		final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
+		if (multiPageEditor.equals(page.getActiveEditor()) && isSelectedEditorPage(multiPageEditor)) {
+			// only if the parent is the current active editor and we are the selected page
+			updateActions(getSelectionActions());
+		}
+	}
+
+	private boolean isSelectedEditorPage(final MultiPageEditorPart multiEditorPart) {
+		if (multiEditorPart.getSelectedPage() == this) {
+			return true;
+		}
+		if (multiEditorPart.getSelectedPage() instanceof final MultiPageEditorPart nestedPart) {
+			return isSelectedEditorPage(nestedPart);
+		}
+		return false;
 	}
 
 	/**

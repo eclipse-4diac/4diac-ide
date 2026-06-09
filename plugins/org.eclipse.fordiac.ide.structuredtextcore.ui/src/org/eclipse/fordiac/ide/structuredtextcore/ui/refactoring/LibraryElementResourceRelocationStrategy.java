@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.xtext.ide.refactoring.IResourceRelocationStrategy;
 import org.eclipse.xtext.ide.refactoring.ResourceRelocationChange;
@@ -45,8 +45,9 @@ public class LibraryElementResourceRelocationStrategy implements IResourceReloca
 
 	protected void modifyResource(final Resource resource, final ResourceRelocationChange change,
 			final ChangeType changeType) {
-		if (resource instanceof final FordiacTypeResource typeResource && !typeResource.getContents().isEmpty()
-				&& typeResource.getContents().getFirst() instanceof final LibraryElement libraryElement) {
+		if (resource instanceof final LibraryElementResource libElResource
+				&& libElResource.getLibraryElement() != null) {
+			final LibraryElement libraryElement = libElResource.getLibraryElement();
 			updateTypeName(libraryElement, change);
 			if (changeType != ChangeType.RENAME) {
 				updatePackageName(libraryElement, change);

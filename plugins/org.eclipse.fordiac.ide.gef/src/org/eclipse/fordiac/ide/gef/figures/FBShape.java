@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Germany GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz,
+ *                    Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -113,6 +113,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		createFBFigureShape(typeEntry);
 		setTypeLabelFont();
 		setBorder(new FBShapeShadowBorder());
+		setBackgroundColor(UIPreferenceConstants.getFBColor());
 	}
 
 	/**
@@ -195,7 +196,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return middle;
 	}
 
-	protected RoundedRectangle getBottom() {
+	public RoundedRectangle getBottom() {
 		return bottom;
 	}
 
@@ -256,7 +257,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		bottom = new RoundedRectangle();
 		bottom.setOutline(false);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		bottom.setLayoutManager(createTopBottomLayout());
+		final GridLayout bottomLayout = createTopBottomLayout();
+		bottomLayout.marginHeight = 0;
+		bottom.setLayoutManager(bottomLayout);
+		bottom.setBorder(new MarginBorder(1, 0, 0, 0));
 		addBottom();
 		setBottomIOs();
 		setPinIndicators();
@@ -428,9 +432,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		typeLabel = new OverlayAlphaLabel();
 		changeTypeLabelText((null != typeEntry) ? typeEntry.getTypeName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
-		typeLabel.setOpaque(true);
 		typeLabel.setIcon((null != typeEntry) ? TypeImageProvider.getImageForTypeEntry(typeEntry) : null);
 		typeLabel.setIconTextGap(2);
+		typeLabel.setForegroundColor(UIPreferenceConstants.getFBTypeNameColor());
+
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}

@@ -38,7 +38,7 @@ public class FBEditPart extends AbstractBlockFBNElementEditPart {
 	 * @return IFigure The figure for the model
 	 */
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		// extend this if FunctionBlock gets extended!
 		FBNetworkElementFigure f = null;
 		if (getModel() == null) {

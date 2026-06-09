@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 - 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,9 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added diagram font preference
- *     - changed section border to a simple line removing issues on Linux and
- *       modernizing the look
+ *               - changed section border to a simple line removing issues on
+ *                 Linux and modernizing the look
+ *               - reworked background color handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -32,15 +33,16 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.backgrounds.shadows.RectangleDropShadowBorder;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
@@ -56,7 +58,6 @@ import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteDeviceEditPoli
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeviceViewLayoutEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.SegmentNodeEditPolicy;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
-import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -104,8 +105,9 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			@Override
 			public void notifyChanged(final Notification notification) {
 				final Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
-					backgroundColorChanged(getFigure());
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature) && notification
+						.getNewValue() instanceof final org.eclipse.fordiac.ide.model.libraryElement.Color col) {
+					AbstractViewEditPart.setColor(getFigure(), col);
 				} else {
 					super.notifyChanged(notification);
 					refreshChildren();
@@ -189,19 +191,10 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
-		return new DeviceFigure();
-	}
-
-	@Override
-	protected void backgroundColorChanged(final IFigure figure) {
-		// TODO model refactoring - default value for colors if not persisted
-		org.eclipse.fordiac.ide.model.libraryElement.Color fordiacColor = getModel().getColor();
-		if (fordiacColor == null) {
-			fordiacColor = ColorHelper.createRandomColor();
-			getModel().setColor(fordiacColor);
-		}
-		setColor(figure, fordiacColor);
+	protected IFigure createFigure() {
+		final DeviceFigure deviceFigure = new DeviceFigure();
+		setColor(deviceFigure, getModel().getColor());
+		return deviceFigure;
 	}
 
 	@Override

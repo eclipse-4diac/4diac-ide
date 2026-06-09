@@ -17,7 +17,9 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import java.util.Collections;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
@@ -28,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertFBCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.nat.FBTreeNodeLabelProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
@@ -53,6 +56,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil, ISelectionProviderSection {
+	private static final Set<EClass> ALLOWED_INTERNAL_FB_TYPE_CLASSES = Set.of(
+			LibraryElementPackage.Literals.BASIC_FB_TYPE, //
+			LibraryElementPackage.Literals.SIMPLE_FB_TYPE, //
+			LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE //
+	);
+
 	protected IChangeableRowDataProvider<FB> provider;
 	protected NatTable table;
 	private RowPostSelectionProvider<FB> selectionProvider;
@@ -83,8 +92,10 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 				new TypedElementConfigLabelAccumulator<>(provider, this::getAnnotationModel));
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
 				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
-				new TypeSelectionButton(this::getTypeLibrary, FBTypeSelectionContentProvider.INSTANCE,
-						FBTypeSelectionTreeContentProvider.INSTANCE, FBTreeNodeLabelProvider.INSTANCE),
+				new TypeSelectionButton(this::getTypeLibrary,
+						new FBTypeSelectionContentProvider(InternalFbsSection::isAllowedInternalFB),
+						new FBTypeSelectionTreeContentProvider(InternalFbsSection::isAllowedInternalFB),
+						FBTreeNodeLabelProvider.INSTANCE),
 				this, false);
 		table.configure();
 
@@ -96,6 +107,10 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 
 		selectionProvider = new RowPostSelectionProvider<>(table, NatTableWidgetFactory.getSelectionLayer(table),
 				provider, false);
+	}
+
+	protected static boolean isAllowedInternalFB(final FBTypeEntry entry) {
+		return ALLOWED_INTERNAL_FB_TYPE_CLASSES.contains(entry.getTypeEClass());
 	}
 
 	private FBTypeEntry getFBTypeEntry() {

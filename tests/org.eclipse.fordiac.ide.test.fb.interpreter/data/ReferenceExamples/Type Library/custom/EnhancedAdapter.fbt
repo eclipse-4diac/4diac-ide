@@ -7,10 +7,18 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="DO1"/>
+				<With Var="DO2"/>
+				<With Var="DI1"/>
+				<With Var="DI2"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="DO1"/>
+				<With Var="DO2"/>
+				<With Var="DI1"/>
+				<With Var="DI2"/>
 			</Event>
 		</EventOutputs>
 		<OutputVars>

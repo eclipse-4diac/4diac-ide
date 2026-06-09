@@ -58,6 +58,7 @@ public final class New4diacExampleProjectPage extends WizardNewProjectCreationPa
 		if (validatePage && getExample() == null) {
 			setErrorMessage(null);
 			setMessage(Messages.New4diacExampleWizard_NoExampleSelected);
+			return false;
 		}
 		return validatePage;
 	}
@@ -100,7 +101,8 @@ public final class New4diacExampleProjectPage extends WizardNewProjectCreationPa
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(label);
 
 		exampleListViewer = new ListViewer(listComposite, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(exampleListViewer.getControl());
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true)
+				.applyTo(exampleListViewer.getControl());
 		exampleListViewer.setContentProvider(new ArrayContentProvider());
 		exampleListViewer.setLabelProvider(new ExamplesLabelProvider());
 		exampleListViewer.setInput(getExamples());

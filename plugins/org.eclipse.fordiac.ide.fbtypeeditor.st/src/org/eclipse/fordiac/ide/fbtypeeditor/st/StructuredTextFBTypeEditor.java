@@ -14,8 +14,10 @@ package org.eclipse.fordiac.ide.fbtypeeditor.st;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
@@ -23,6 +25,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtex
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreNestedEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.ui.IEditorInput;
@@ -135,5 +138,11 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor
 		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			multiPageEditorSite.getMultiPageEditor().doSave(monitor);
 		}
+	}
+
+	@Override
+	protected boolean isLanguageTargetType(final EClass targetType) {
+		return targetType != null && (targetType.getEPackage() == STAlgorithmPackage.eINSTANCE
+				|| targetType.getEPackage() == STFunctionPackage.eINSTANCE);
 	}
 }

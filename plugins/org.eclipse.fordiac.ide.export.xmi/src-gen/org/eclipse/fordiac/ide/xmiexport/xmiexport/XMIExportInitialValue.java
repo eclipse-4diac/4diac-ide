@@ -15,9 +15,9 @@
  */
 package org.eclipse.fordiac.ide.xmiexport.xmiexport;
 
-import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 
 /**
@@ -38,7 +38,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
  * @model
  * @generated
  */
-public interface XMIExportInitialValue extends EObject {
+public interface XMIExportInitialValue extends STExpectedTypeProvider {
 	/**
 	 * Returns the value of the '<em><b>Variable</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -104,5 +104,13 @@ public interface XMIExportInitialValue extends EObject {
 	 * @generated
 	 */
 	void setValue(String value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	LibraryElement getExpectedType();
 
 } // XMIExportInitialValue

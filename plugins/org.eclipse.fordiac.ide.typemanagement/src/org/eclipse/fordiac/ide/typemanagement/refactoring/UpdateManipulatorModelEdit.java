@@ -55,6 +55,6 @@ public class UpdateManipulatorModelEdit extends ModelEdit<StructManipulator> {
 
 	@Override
 	protected Command createCommand(final StructManipulator manipulator) {
-		return new ChangeStructCommand(manipulator, IecTypes.GenericTypes.ANY, true);
+		return new ChangeStructCommand(manipulator, IecTypes.GenericTypes.ANY);
 	}
 }

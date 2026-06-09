@@ -355,6 +355,11 @@
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatchSubElements"
+			name="%toggleWatchSubElements.name">
+		</command>
+		<command
+			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.force"
 			name="%force.name">
 		</command>
@@ -486,6 +491,22 @@
 						operator="and">
 						<instanceof
 							value="org.eclipse.fordiac.ide.deployment.debug.watch.IWatch">
+						</instanceof>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.ToggleWatchSubElementsHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatchSubElements">
+			<activeWhen>
+				<with
+					variable="selection">
+					<iterate
+						ifEmpty="false"
+						operator="and">
+						<instanceof
+							value="org.eclipse.fordiac.ide.deployment.debug.watch.ISubContainerWatch">
 						</instanceof>
 					</iterate>
 				</with>
@@ -643,6 +664,12 @@
 			sequence="M1+M2+P">
 		</key>
 		<key
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatchSubElements"
+			contextId="org.eclipse.debug.ui.debugging"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+M2+S">
+		</key>
+		<key
 			commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
 			contextId="org.eclipse.debug.ui.debugging"
 			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
@@ -772,6 +799,16 @@
 				label="%togglePinned.label"
 				style="push"
 				tooltip="%togglePinned.tooltip">
+				<visibleWhen
+					checkEnabled="true">
+				</visibleWhen>
+			</command>
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatchSubElements"
+				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/elcl16/hierarchicalLayout.svg"
+				label="%toggleWatchSubElements.label"
+				style="push"
+				tooltip="%toggleWatchSubElements.tooltip">
 				<visibleWhen
 					checkEnabled="true">
 				</visibleWhen>

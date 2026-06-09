@@ -14,17 +14,11 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
-import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -34,10 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public final class InterfaceElementAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = InterfaceElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
@@ -111,48 +101,24 @@ public final class InterfaceElementAnnotations {
 			return false;
 		}
 		if (!isOutMappedInOutVar(element)
-				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context, NAMED_ELEMENTS_KEY)) {
-			return false;
-		}
-		if (!FordiacKeywords.DT.equals(element.getName()) // allow "DT" for IEC 61499 standard blocks
-				&& existsDataType(getDataTypeLibrary(element), element.getName())) {
-			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_NAME,
-						MessageFormat.format(Messages.InterfaceElementAnnotations_MemberNameCollidesWithDataType,
-								element.getQualifiedName()),
-						FordiacMarkerHelper.getDiagnosticData(element,
-								LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, element.getQualifiedName())));
-			}
+				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context)) {
 			return false;
 		}
 		return true;
 	}
 
-	static boolean isErrorMarker(final IInterfaceElement element) {
+	private static boolean isErrorMarker(final IInterfaceElement element) {
 		return element instanceof ErrorMarkerInterface;
 	}
 
-	static boolean isInTypedInstance(final IInterfaceElement element) {
+	private static boolean isInTypedInstance(final IInterfaceElement element) {
 		final FBNetworkElement fbNetworkElement = element.getBlockFBNetworkElement();
 		return fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null;
 	}
 
-	static boolean isOutMappedInOutVar(final IInterfaceElement element) {
+	private static boolean isOutMappedInOutVar(final IInterfaceElement element) {
 		return element instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 				&& !varDeclaration.isIsInput();
-	}
-
-	static boolean existsDataType(final DataTypeLibrary dataTypeLibrary, final String name) {
-		return dataTypeLibrary != null && dataTypeLibrary.getTypeIfExists(name) != null;
-	}
-
-	static DataTypeLibrary getDataTypeLibrary(final IInterfaceElement element) {
-		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(element);
-		if (typeLibrary != null) {
-			return typeLibrary.getDataTypeLibrary();
-		}
-		return null;
 	}
 
 	static IInterfaceElement findInTypeInterface(final IInterfaceElement element) {

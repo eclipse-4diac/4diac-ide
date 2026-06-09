@@ -50,7 +50,7 @@ public class UtilityMarkerHelper {
 	}
 
 	public static void deleteElementMarker(final String markerId, final IResource resource) {
-		FordiacMarkerHelper.updateMarkers(resource, markerId, List.of(), true);
+		FordiacMarkerHelper.updateMarkers(resource, markerId, List.of());
 	}
 
 	public static void setMarkedElement(final String markerId, final EObject target) {
@@ -62,7 +62,7 @@ public class UtilityMarkerHelper {
 
 		final ErrorMarkerBuilder markerBuilder = ErrorMarkerBuilder.createErrorMarkerBuilder(markerId).setType(markerId)
 				.setTarget(target).setSeverity(IMarker.SEVERITY_INFO);
-		FordiacMarkerHelper.updateMarkers(resource, markerId, List.of(markerBuilder), true);
+		FordiacMarkerHelper.updateMarkers(resource, markerId, List.of(markerBuilder));
 	}
 
 	private UtilityMarkerHelper() {

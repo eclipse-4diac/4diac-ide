@@ -85,9 +85,6 @@ public class ReconnectTransitionCommand extends Command {
 	protected void doReconnectSource(final ECTransition transition) {
 		dccc.setSource((ECState) request.getTarget().getModel());
 		dccc.setDestination(transition.getDestination());
-
-		dccc.setDestinationLocation(dccc.getDestination().getPosition().toScreenPoint());
-		dccc.setSourceLocation(request.getLocation());
 	}
 
 	/**
@@ -97,9 +94,6 @@ public class ReconnectTransitionCommand extends Command {
 	protected void doReconnectTarget(final ECTransition transition) {
 		dccc.setSource(transition.getSource());
 		dccc.setDestination((ECState) request.getTarget().getModel());
-
-		dccc.setDestinationLocation(request.getLocation());
-		dccc.setSourceLocation(dccc.getSource().getPosition().toScreenPoint());
 	}
 
 	@Override

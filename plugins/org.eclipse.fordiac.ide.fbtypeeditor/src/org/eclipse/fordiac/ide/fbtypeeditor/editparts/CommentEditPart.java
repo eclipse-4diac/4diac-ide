@@ -17,6 +17,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.CommentPinProperty;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
@@ -32,19 +34,42 @@ import org.eclipse.gef.requests.DirectEditRequest;
 
 public class CommentEditPart extends AbstractInterfaceElementEditPart {
 
+	private FigureFollower figFollower;
+
 	@Override
-	public IInterfaceElement getCastedModel() {
-		return getModel().getReferencedElement();
+	public void activate() {
+		super.activate();
+		figFollower = new FigureFollower(this, getModel().getPin());
 	}
 
 	@Override
-	public CommentField getModel() {
-		return (CommentField) super.getModel();
+	public void deactivate() {
+		super.deactivate();
+		if (figFollower != null) {
+			figFollower.unhookFromRefFigure();
+			figFollower = null;
+		}
+	}
+
+	@Override
+	public IInterfaceElement getCastedModel() {
+		return getModel().getPin();
+	}
+
+	@Override
+	public CommentPinProperty getModel() {
+		return (CommentPinProperty) super.getModel();
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		return new Label(getModel().getLabel());
+		final Label label = new Label(getModel().getComment());
+		if (getModel().isInput()) {
+			label.setTextAlignment(PositionConstants.RIGHT);
+		} else {
+			label.setTextAlignment(PositionConstants.LEFT);
+		}
+		return label;
 	}
 
 	@Override
@@ -55,7 +80,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		getFigure().setText(getModel().getLabel());
+		getFigure().setText(getModel().getComment());
 	}
 
 	@Override

@@ -37,6 +37,7 @@ public class DeploymentWatchpointEditor {
 	public static final int PROP_FORCE_VALUE = 1;
 	public static final int PROP_FORCE_ENABLED = 2;
 	public static final int PROP_PINNED = 3;
+	public static final int PROP_SUB_ELEMENTS = 4;
 
 	private final ListenerList<IPropertyListener> listeners = new ListenerList<>();
 
@@ -45,6 +46,7 @@ public class DeploymentWatchpointEditor {
 
 	private Control control;
 	private Button pinnedCheckbox;
+	private Button subElementsCheckbox;
 	private Button forceCheckbox;
 	private Text forceText;
 	private Button dialogButton;
@@ -58,13 +60,22 @@ public class DeploymentWatchpointEditor {
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
 
 		pinnedCheckbox = new Button(comp, SWT.CHECK);
-		pinnedCheckbox.setText("Pinned");
+		pinnedCheckbox.setText(Messages.DeploymentWatchpointEditor_Pinned);
 		pinnedCheckbox.setEnabled(false);
 		pinnedCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
-			firePropertyChange(PROP_FORCE_ENABLED);
+			firePropertyChange(PROP_PINNED);
 			setDirty(true);
 		}));
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(pinnedCheckbox);
+
+		subElementsCheckbox = new Button(comp, SWT.CHECK);
+		subElementsCheckbox.setText(Messages.DeploymentWatchpointEditor_SubElements);
+		subElementsCheckbox.setEnabled(false);
+		subElementsCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			firePropertyChange(PROP_SUB_ELEMENTS);
+			setDirty(true);
+		}));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(subElementsCheckbox);
 
 		forceCheckbox = new Button(comp, SWT.CHECK);
 		forceCheckbox.setText(Messages.DeploymentWatchpointForceEditor_ForceLabel);
@@ -73,7 +84,7 @@ public class DeploymentWatchpointEditor {
 			if (forceText != null) {
 				forceText.setEditable(input != null && forceCheckbox.getSelection());
 			}
-			firePropertyChange(PROP_PINNED);
+			firePropertyChange(PROP_FORCE_ENABLED);
 			setDirty(true);
 		}));
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(forceCheckbox);
@@ -125,6 +136,8 @@ public class DeploymentWatchpointEditor {
 					.map(VarDeclaration.class::cast).orElse(null);
 			pinnedCheckbox.setEnabled(input != null);
 			pinnedCheckbox.setSelection(input != null && input.isPinned());
+			subElementsCheckbox.setEnabled(input != null && input.isWatchSubElementsSupported());
+			subElementsCheckbox.setSelection(input != null && input.isWatchSubElements());
 			forceCheckbox.setEnabled(input != null && input.isForceSupported());
 			forceCheckbox.setSelection(input != null && input.isForceEnabled());
 			forceText.setEditable(input != null && input.isForceEnabled());
@@ -140,6 +153,7 @@ public class DeploymentWatchpointEditor {
 		try {
 			if (input != null && input.getMarker() != null && input.getMarker().exists()) {
 				input.setPinned(pinnedCheckbox.getSelection());
+				input.setWatchSubElements(subElementsCheckbox.getSelection());
 				input.setForceEnabled(forceCheckbox.getSelection());
 				input.setForceValue(forceText.getText());
 			}

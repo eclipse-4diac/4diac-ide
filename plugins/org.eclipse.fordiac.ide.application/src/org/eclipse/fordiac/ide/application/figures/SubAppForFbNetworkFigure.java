@@ -38,10 +38,10 @@ import org.eclipse.draw2d.ScrollPaneSolver.Result;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.Viewport;
+import org.eclipse.draw2d.backgrounds.shadows.RectangleDropShadowBorder;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 /** The Class SubAppForFbNetworkFigure. */
@@ -79,6 +78,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		interfacePositions = editPart.getInterfacePositionMap();
 		updateTypeLabel(model);
 		updateExpandedFigure();
+		if (!model.isTyped()) {
+			setBackgroundColor(UIPreferenceConstants.getUntypedSubAppColor());
+		}
 	}
 
 	public InstanceCommentFigure getCommentFigure() {
@@ -148,9 +150,10 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 			if (expandedMainFigure == null) {
 				transformToExpandedSubapp();
 			}
-			Display.getDefault().asyncExec(this::layoutExpandedInterface); // initial interface layout
+			setBackgroundColor(null);
 		} else if (expandedMainFigure != null) {
 			transformToCollapsedSubapp();
+			setBackgroundColor(UIPreferenceConstants.getUntypedSubAppColor());
 		}
 	}
 

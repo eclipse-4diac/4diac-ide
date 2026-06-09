@@ -8,8 +8,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl     - initial API and implementation and/or initial documentation
  *   Prankur Agarwal - update the figure to look like a sticky note
+ *   Alois Zoitl     - improved and modernized comment figure drawing
+ *                   - reworked background color handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -200,7 +202,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final StickyNoteCommentFigure mainFigure = new StickyNoteCommentFigure();
 		mainFigure.setCommentText(getModel().getComment());
 		return mainFigure;
@@ -279,11 +281,6 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 				}
 			}
 		};
-	}
-
-	@Override
-	protected void backgroundColorChanged(final IFigure figure) {
-		// we have a static background color don't change it.
 	}
 
 }

@@ -14,11 +14,14 @@
 package org.eclipse.fordiac.ide.library.model.util;
 
 import java.util.Comparator;
+import java.util.regex.Pattern;
 
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
 public class VersionComparator implements Comparator<String> {
+
+	private static final Pattern VERSION_ALLOWED_CHARS_PATTERN = Pattern.compile("^[0-9.\\-\\[\\]\\(\\)\\s]+$"); //$NON-NLS-1$
 
 	@Override
 	public int compare(final String o1, final String o2) {
@@ -78,4 +81,37 @@ public class VersionComparator implements Comparator<String> {
 		}
 		return range.toString().replace(',', '-');
 	}
+
+	/**
+	 * Checks if the input is a valid OSGi version range with the applied
+	 * restrictions.
+	 * <p>
+	 * The input must be non-empty, contain only numeric values and valid
+	 * separators, represent a non-empty range, and (if not exact) have a left bound
+	 * lower than the right bound.
+	 *
+	 * @param input the version or version range to validate
+	 * @return {@code true} if valid; {@code false} otherwise
+	 */
+	public static boolean isValidRange(final String input) {
+		if (input == null) {
+			return false;
+		}
+
+		final String versionString = input.trim();
+		if (versionString.isEmpty() || !VERSION_ALLOWED_CHARS_PATTERN.matcher(versionString).matches()) {
+			return false;
+		}
+
+		try {
+			final VersionRange range = parseVersionRange(versionString);
+			if (range.isEmpty()) {
+				return false;
+			}
+			return range.isExact() || range.getLeft().compareTo(range.getRight()) < 0;
+		} catch (final IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 }

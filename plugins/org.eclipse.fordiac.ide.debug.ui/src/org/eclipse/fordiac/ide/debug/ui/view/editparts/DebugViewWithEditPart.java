@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -90,14 +91,16 @@ public class DebugViewWithEditPart extends WithEditPart {
 	}
 
 	private ConnectionAnchor createInputAnchor(final WithAnchor anchor) {
-		return new WithAnchor(anchor.getOwner(), anchor.getPos(), this) {
+		return new WithAnchor(anchor.getOwner(), anchor.getPos()) {
 			@Override
 			public Point getLocation(final Point reference) {
 				final Rectangle r = Rectangle.SINGLETON;
 				r.setBounds(getBox());
 				r.translate(0, -1);
 				r.resize(1, 1);
-				final int leftX = getFigure().getParent().getBounds().getRight().x - (int) (WITH_DISTANCE * getPos());
+				r.x = getFigure().getParent().getBounds().right();
+				getOwner().translateToAbsolute(r);
+				final int leftX = r.x - (int) getAbsoluteWithPos();
 				final int centerY = r.y + r.height / 2;
 				return new Point(leftX, centerY);
 			}
@@ -105,15 +108,16 @@ public class DebugViewWithEditPart extends WithEditPart {
 	}
 
 	private ConnectionAnchor createOutputAnchor(final WithAnchor anchor) {
-		return new WithAnchor(anchor.getOwner(), anchor.getPos(), this) {
+		return new WithAnchor(anchor.getOwner(), anchor.getPos()) {
 			@Override
 			public Point getLocation(final Point reference) {
 				final Rectangle r = Rectangle.SINGLETON;
 				r.setBounds(getBox());
 				r.translate(-1, -1);
 				r.resize(1, 1);
+				r.x = getFigure().getParent().getBounds().x;
 				getOwner().translateToAbsolute(r);
-				final int leftX = getFigure().getParent().getBounds().x + (int) (WITH_DISTANCE * getPos());
+				final int leftX = r.x + (int) getAbsoluteWithPos();
 				final int centerY = r.y + r.height / 2;
 				return new Point(leftX, centerY);
 			}

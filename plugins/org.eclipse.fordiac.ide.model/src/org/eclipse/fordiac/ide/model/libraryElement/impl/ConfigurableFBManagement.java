@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -59,10 +60,9 @@ public final class ConfigurableFBManagement {
 	private static void updateMoveFbConfiguration(final ConfigurableFB fb) {
 		// if data type exists, set it as the data type of the input/output data pin
 		if (fb.getDataType() != null && fb.getInterface() != null) {
-			if ((fb.getDataType() instanceof StructuredType
-					&& !(fb.getInterface().getInputVars().get(0) instanceof ContainerVarDeclaration))
-					|| (!(fb.getDataType() instanceof StructuredType)
-							&& fb.getInterface().getInputVars().get(0) instanceof ContainerVarDeclaration)) {
+			final boolean requiresContainerPin = isContainerPinType(fb.getDataType());
+			final boolean hasContainerPin = fb.getInterface().getInputVars().get(0) instanceof ContainerVarDeclaration;
+			if (requiresContainerPin != hasContainerPin) {
 				// the pin type is not matching convert it
 				convertMoveFBPinTypes(fb);
 			} else {
@@ -74,6 +74,10 @@ public final class ConfigurableFBManagement {
 		}
 	}
 
+	private static boolean isContainerPinType(final DataType dataType) {
+		return dataType instanceof StructuredType || dataType instanceof ErrorDataType;
+	}
+
 	private static void convertMoveFBPinTypes(final ConfigurableFB fb) {
 		final DataType newDataType = fb.getDataType();
 		fb.getInterface().getInputVars().replaceAll(pin -> createNewMovePin(newDataType, pin));
@@ -82,6 +86,7 @@ public final class ConfigurableFBManagement {
 
 	private static VarDeclaration createNewMovePin(final DataType dataType, final VarDeclaration srcPin) {
 		final VarDeclaration newPin = VarDeclarationFactory.createVarDecl(dataType);
+		copyPinProperties(srcPin, newPin);
 		newPin.setName(srcPin.getName());
 		newPin.setType(dataType);
 		newPin.setIsInput(srcPin.isIsInput());
@@ -95,6 +100,29 @@ public final class ConfigurableFBManagement {
 			}
 		}
 		return newPin;
+	}
+
+	private static void copyPinProperties(final VarDeclaration srcPin, final VarDeclaration newPin) {
+		newPin.setComment(srcPin.getComment());
+		newPin.setArraySize(EcoreUtil.copy(srcPin.getArraySize()));
+		if (srcPin.getValue() != null) {
+			newPin.setValue(EcoreUtil.copy(srcPin.getValue()));
+		}
+		newPin.getAttributes().addAll(EcoreUtil.copyAll(srcPin.getAttributes()));
+		if (srcPin instanceof final ContainerVarDeclaration srcContainerPin
+				&& newPin instanceof final ContainerVarDeclaration newContainerPin) {
+			srcContainerPin.getCachedMembers()
+					.forEach(cachedMember -> newContainerPin.getCachedMembers().add(copyCachedMember(cachedMember)));
+		}
+	}
+
+	private static VarDeclaration copyCachedMember(final VarDeclaration cachedMember) {
+		final VarDeclaration copy = VarDeclarationFactory.createVarDecl(cachedMember.getType());
+		copy.setName(cachedMember.getName());
+		copy.setType(cachedMember.getType());
+		copy.setIsInput(cachedMember.isIsInput());
+		copyPinProperties(cachedMember, copy);
+		return copy;
 	}
 
 	static void loadFbConfiguration(final ConfigurableFB fb, final String attributeName, final String typeName) {

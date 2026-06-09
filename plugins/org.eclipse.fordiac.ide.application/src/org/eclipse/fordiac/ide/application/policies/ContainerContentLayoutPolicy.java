@@ -60,7 +60,7 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 			final Object constraint) {
 		final Command cmd = super.createChangeConstraintCommand(request, child, constraint);
 		if (cmd != null) {
-			return new ResizeGroupOrSubappCommand(getHost(), cmd);
+			return cmd.chain(new ResizeGroupOrSubappCommand(getHost()));
 		}
 		return cmd;
 	}

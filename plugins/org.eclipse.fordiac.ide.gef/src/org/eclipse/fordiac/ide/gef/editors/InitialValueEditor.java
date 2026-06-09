@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editors;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
@@ -61,7 +62,11 @@ public class InitialValueEditor extends XtextEmbeddedFieldEditor {
 	@Override
 	public void commit() {
 		if (interfaceElement instanceof final VarDeclaration varDeclaration) {
-			executeCommand(new ChangeValueCommand(varDeclaration, getModelAccess().getEditablePart()));
+			final String value = getModelAccess().getEditablePart();
+			if (!FordiacMessages.ValueTooLarge.equals(value)
+					&& !FordiacMessages.ComputingPlaceholderValue.equals(value)) {
+				executeCommand(new ChangeValueCommand(varDeclaration, value));
+			}
 		}
 		refresh();
 	}
@@ -79,21 +84,21 @@ public class InitialValueEditor extends XtextEmbeddedFieldEditor {
 	}
 
 	protected void updateInitialValue(final String value) {
-		if (!getControl().isDisposed()
-				&& FordiacMessages.ComputingPlaceholderValue.equals(getModelAccess().getEditablePart())) {
-			final var commandExecutorCache = getCommandExecutor();
-			setCommandExecutor(null);
-			if (value.length() <= PreferenceStoreProvider
-					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID,
-							ModelHelper.getProjectFromContextChecked(getInterfaceElement()))
-					.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
-				getModelAccess().updateModel(value);
-			} else {
-				getModelAccess().updateModel(FordiacMessages.ValueTooLarge);
-			}
-			getControl().setSelection(0);
-			setCommandExecutor(commandExecutorCache);
+		final IProject project = ModelHelper.getProjectFromContext(getInterfaceElement());
+		if (project == null || getControl().isDisposed()
+				|| !FordiacMessages.ComputingPlaceholderValue.equals(getModelAccess().getEditablePart())) {
+			return;
 		}
+		final var commandExecutorCache = getCommandExecutor();
+		setCommandExecutor(null);
+		if (value.length() <= PreferenceStoreProvider.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, project)
+				.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
+			getModelAccess().updateModel(value);
+		} else {
+			getModelAccess().updateModel(FordiacMessages.ValueTooLarge);
+		}
+		getControl().setSelection(0);
+		setCommandExecutor(commandExecutorCache);
 	}
 
 	public IInterfaceElement getInterfaceElement() {

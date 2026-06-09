@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,11 +44,11 @@ public class CopyTypeParticipant extends CopyParticipant {
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IResource res
+		if ((element instanceof IFile || element instanceof IFolder)
 				&& getArguments().getDestination() instanceof final IContainer dest) {
-			resource = res;
+			resource = (IResource) element;
 			destination = dest;
-			return RefactoringUtil.containsTypeEntryFile(res);
+			return RefactoringUtil.containsTypeEntryFile(resource);
 		}
 		return false;
 	}
@@ -61,10 +62,23 @@ public class CopyTypeParticipant extends CopyParticipant {
 	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
+
+		String newName = getArguments().getExecutionLog().getNewName(resource);
+		if (newName != null) {
+			final int lastIdx = newName.lastIndexOf('.');
+			if (lastIdx != -1) {
+				newName = newName.substring(0, lastIdx); // remove file extension
+			}
+			final Optional<String> identErrorMsg = IdentifierVerifier.verifyIdentifier(newName);
+			if (identErrorMsg.isPresent()) {
+				status.addFatalError(identErrorMsg.get());
+			}
+		}
+
 		final String packageNameContainer = PackageNameHelper.getPackageNameFromContainer(destination);
-		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(packageNameContainer);
-		if (errorMessage.isPresent()) {
-			status.addFatalError(errorMessage.get());
+		final Optional<String> packageErrorMsg = IdentifierVerifier.verifyPackageName(packageNameContainer);
+		if (packageErrorMsg.isPresent()) {
+			status.addFatalError(packageErrorMsg.get());
 		}
 		return status;
 	}
@@ -85,12 +99,17 @@ public class CopyTypeParticipant extends CopyParticipant {
 			throws CoreException {
 		if (resource instanceof final IFile file) {
 			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null) {
-				change.add(new CopyTypeChange(destination.appendSegment(file.getName())));
+				change.add(new CopyTypeChange(destination.appendSegment(getNewName(file))));
 			}
 		} else if (resource instanceof final IContainer container) {
 			for (final IResource member : container.members()) {
-				addElement(change, member, destination.appendSegment(container.getName()));
+				addElement(change, member, destination.appendSegment(getNewName(container)));
 			}
 		}
+	}
+
+	private String getNewName(final IResource res) {
+		final String name = getArguments().getExecutionLog().getNewName(res);
+		return name == null ? res.getName() : name;
 	}
 }

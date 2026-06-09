@@ -47,6 +47,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/product"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/exports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Manifest/scope"/>
+      <genOperations ecoreOperation="library.ecore#//Manifest/validateManifestVersions"
+          body="return org.eclipse.fordiac.ide.library.model.impl.ManifestAnnotations.validateManifestVersions(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//Manifest/validateManifestVersions/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//Manifest/validateManifestVersions/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Product">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Product/versionInfo"/>

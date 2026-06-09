@@ -14,11 +14,9 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -37,9 +35,7 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 /**
@@ -57,7 +53,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	private final Class<T> elementClass;
 	private final TypeEntry typeEntry;
 
-	private IEditorPart editor;
+	private boolean isOpenInEditor;
 
 	/**
 	 * Create an abstract command change with the last segment of the element URI as
@@ -89,6 +85,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	@Override
 	public final void initializeValidationData(final IProgressMonitor pm) {
+		if (pm.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 		initializeEditor();
 		final LibraryElement libraryElement = acquireLibraryElement(false);
 		final T element = getElement(libraryElement);
@@ -110,6 +109,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	@Override
 	public final RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+		if (pm.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 		final RefactoringStatus status = new RefactoringStatus();
 		final LibraryElement libraryElement = acquireLibraryElement(false);
 		final T element = getElement(libraryElement);
@@ -136,20 +138,19 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	@Override
 	public final Change perform(final IProgressMonitor pm) throws CoreException {
-		if (performInUIThread() && Display.getCurrent() == null) {
-			final Change[] change = new Change[1];
-			final CoreException[] coreException = new CoreException[1];
-			Display.getDefault().syncExec(() -> {
-				try {
-					change[0] = doPerform(pm);
-				} catch (final CoreException e) {
-					coreException[0] = e;
-				}
-			});
-			if (coreException[0] != null) {
-				throw coreException[0];
+		if (pm.isCanceled()) {
+			throw new OperationCanceledException();
+		}
+
+		if (performInUIThread()) {
+			if (Display.getCurrent() == null) {
+				return Display.getDefault().syncCall(() -> doPerform(pm));
 			}
-			return change[0];
+
+			// process outstanding UI/dependency updates if in UI thread
+			while (Display.getCurrent().readAndDispatch()) {
+				// read and dispatch events
+			}
 		}
 		return doPerform(pm);
 	}
@@ -204,8 +205,8 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 *           {@link CommandRedoChange}.
 	 */
 	protected LibraryElement acquireLibraryElement(final boolean editable) {
-		if (editor != null) {
-			return Adapters.adapt(editor, LibraryElement.class);
+		if (isOpenInEditor) {
+			return LibraryElementProvider.INSTANCE.getLibraryElement(getFileEditorInput());
 		}
 		if (typeEntry != null) {
 			return editable ? typeEntry.copyType() : typeEntry.getType();
@@ -222,8 +223,8 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	private void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
 		// save type entry
-		if (editor != null) {
-			LibraryElementProvider.INSTANCE.saveLibraryElement(editor.getEditorInput(), pm);
+		if (isOpenInEditor) {
+			LibraryElementProvider.INSTANCE.saveLibraryElement(getFileEditorInput(), pm);
 		} else if (typeEntry != null) {
 			typeEntry.save(libraryElement, pm);
 		}
@@ -292,15 +293,6 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 		return elementClass;
 	}
 
-	/**
-	 * Get the editor if open for the element URI
-	 *
-	 * @return The editor (may be null)
-	 */
-	public final IEditorPart getEditor() {
-		return editor;
-	}
-
 	private T getElement(final LibraryElement libraryElement) {
 		if (libraryElement != null && libraryElement.eResource() != null) {
 			final EObject element;
@@ -325,17 +317,14 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 *           corresponding file.
 	 */
 	protected boolean performInUIThread() {
-		return editor != null;
+		return isOpenInEditor;
 	}
 
 	private void initializeEditor() {
-		final IEditorInput editorInput = new FileEditorInput(getModifiedElement());
-		// need sync exec because IWorkbenchPage.findEditor(IEditorInput) may
-		// instantiate the editor if it is not loaded (e.g., open editor after a
-		// restart), which requires to be in the UI thread
-		Display.getDefault()
-				.syncExec(() -> editor = Stream.of(PlatformUI.getWorkbench().getWorkbenchWindows())
-						.flatMap(window -> Stream.of(window.getPages())).map(page -> page.findEditor(editorInput))
-						.filter(Objects::nonNull).findAny().orElse(null));
+		isOpenInEditor = LibraryElementProvider.INSTANCE.getLibraryElement(getFileEditorInput()) != null;
+	}
+
+	private IFileEditorInput getFileEditorInput() {
+		return new FileEditorInput(getModifiedElement());
 	}
 }

@@ -136,14 +136,9 @@ class FBNetworkImporter extends CommonElementImporter {
 		readNameCommentAttributes(group);
 		getXandY(group);
 
-		final String width = getAttributeValue(LibraryElementTags.WIDTH_ATTRIBUTE);
-		if (width != null) {
-			group.setWidth(Double.parseDouble(width));
-		}
-		final String height = getAttributeValue(LibraryElementTags.HEIGHT_ATTRIBUTE);
-		if (height != null) {
-			group.setHeight(Double.parseDouble(height));
-		}
+		group.setWidth(parseCoordinateValue(LibraryElementTags.WIDTH_ATTRIBUTE));
+		group.setHeight(parseCoordinateValue(LibraryElementTags.HEIGHT_ATTRIBUTE));
+
 		final String locked = getAttributeValue(LibraryElementTags.LOCKED_ATTRIBUTE);
 		if (locked != null) {
 			group.setLocked(Boolean.parseBoolean(locked));
@@ -168,14 +163,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		readCommentAttribute(comment);
 		getXandY(comment);
 
-		final String width = getAttributeValue(LibraryElementTags.WIDTH_ATTRIBUTE);
-		if (width != null) {
-			comment.setWidth(Double.parseDouble(width));
-		}
-		final String height = getAttributeValue(LibraryElementTags.HEIGHT_ATTRIBUTE);
-		if (height != null) {
-			comment.setHeight(Double.parseDouble(height));
-		}
+		comment.setWidth(parseCoordinateValue(LibraryElementTags.WIDTH_ATTRIBUTE));
+		comment.setHeight(parseCoordinateValue(LibraryElementTags.HEIGHT_ATTRIBUTE));
 
 		fbNetwork.getNetworkElements().add(comment);
 
@@ -211,11 +200,8 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	private FB createFBInstance(final String typeName) {
-		FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry);
-		if (null == entry) {
-			entry = (FBTypeEntry) addDependency(
-					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.eINSTANCE.getFBType()));
-		}
+		final FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry,
+				LibraryElementPackage.Literals.FB_TYPE);
 		final FB fb = BlockInstanceFactory.createFBInstanceForTypeEntry(entry);
 		fb.setInterface(entry.getInterface().instanceCopy());
 		fb.setTypeEntry(entry);

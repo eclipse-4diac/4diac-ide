@@ -28,8 +28,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class DeleteMemberVariableCommandTestBase
-extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
-	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary();
+		extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
+	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary(null);
 	protected static List<VarDeclaration> varList = new ArrayList<>();
 
 	// create a state description that holds the struct and the command
@@ -89,8 +89,9 @@ extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
-			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description,
+			final StateInitializer<?> initializer, final StateVerifier<?> initialVerifier,
+			final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
@@ -102,14 +103,15 @@ extends CommandTestBase<DeleteMemberVariableCommandTestBase.State> {
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> deletionExecutionDescriptions) {
+	protected static Collection<Arguments> createCommands(
+			final List<ExecutionDescription<?>> deletionExecutionDescriptions) {
 		final Collection<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
 				(StateVerifier<State>) DeleteMemberVariableCommandTestBase::verifyDefaultInitialValues, //
 				deletionExecutionDescriptions //
-				));
+		));
 		return commands;
 	}
 

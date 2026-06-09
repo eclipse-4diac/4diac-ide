@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -114,6 +115,8 @@ public class DeleteConnectionCommand extends Command implements ScopedCommand {
 	@Override
 	public void undo() {
 		deleteInterfaceErrorMarkers.undo();
+		source = restoreDetachedEndpoint(source);
+		destination = restoreDetachedEndpoint(destination);
 		connection.setSource(source);
 		connection.setDestination(destination);
 		if (connectionParent != null) {
@@ -122,6 +125,28 @@ public class DeleteConnectionCommand extends Command implements ScopedCommand {
 		if (null != deleteMapped) {
 			deleteMapped.undo();
 		}
+	}
+
+	private IInterfaceElement restoreDetachedEndpoint(final IInterfaceElement endpoint) {
+		if (endpoint == null || connectionParent == null) {
+			return endpoint;
+		}
+
+		// Refactoring undo may restore connections after a replacement block was removed.
+		final BlockFBNetworkElement endpointElement = endpoint.getBlockFBNetworkElement();
+		if (endpointElement == null || endpointElement.eContainer() != null) {
+			return endpoint;
+		}
+
+		final FBNetworkElement currentElement = connectionParent.getElementNamed(endpointElement.getName());
+		if (currentElement instanceof final BlockFBNetworkElement currentBlock && currentBlock != endpointElement
+				&& currentBlock.getInterface() != null) {
+			final IInterfaceElement currentEndpoint = currentBlock.getInterface().getInterfaceElement(endpoint);
+			if (currentEndpoint != null) {
+				return currentEndpoint;
+			}
+		}
+		return endpoint;
 	}
 
 	private DeleteConnectionCommand checkAndDeleteMirroredConnection() {

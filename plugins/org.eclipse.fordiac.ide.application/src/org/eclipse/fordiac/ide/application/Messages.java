@@ -59,10 +59,6 @@ public final class Messages extends NLS {
 
 	public static String ConfigurableMoveFBSection_DataType;
 
-	public static String ConfigurableMoveFBSection_Inputs;
-
-	public static String ConfigurableMoveFBSection_Outputs;
-
 	public static String CopyEditPartsAction_Text;
 
 	public static String CreateConnectionSection_CreateConnection;

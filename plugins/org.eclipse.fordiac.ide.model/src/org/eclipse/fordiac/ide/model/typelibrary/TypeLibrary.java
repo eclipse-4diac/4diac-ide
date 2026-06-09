@@ -80,7 +80,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private IProject project;
 	private Buildpath buildpath;
-	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
+	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary(this);
 	private final Map<String, AdapterTypeEntry> adapterTypes = new ConcurrentHashMap<>();
 	private final Map<String, AttributeTypeEntry> attributeTypes = new ConcurrentHashMap<>();
 	private final Map<String, DeviceTypeEntry> deviceTypes = new ConcurrentHashMap<>();
@@ -218,10 +218,10 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	}
 
 	/** Instantiates a new fB type library. */
-	TypeLibrary(final IProject project) {
-		this.project = project;
-		buildpath = BuildpathUtil.loadBuildpath(project);
-		if (project != null && project.isAccessible()) {
+	TypeLibrary(final IProject typeLibraryProject) {
+		project = typeLibraryProject;
+		buildpath = BuildpathUtil.loadBuildpath(typeLibraryProject);
+		if (typeLibraryProject != null && typeLibraryProject.isAccessible()) {
 			checkAdditions();
 		}
 	}
@@ -283,15 +283,18 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	}
 
 	public void addTypeEntryNameReference(final TypeEntry entry) {
+		boolean typeEntryAdded;
 		if (entry instanceof final DataTypeEntry dtEntry) {
-			if (!dataTypeLib.addTypeEntry(dtEntry)) {
+			typeEntryAdded = dataTypeLib.addTypeEntry(dtEntry);
+			if (!typeEntryAdded) {
 				handleDuplicateTypeName(entry);
 			}
 		} else {
 			// remove stale error marker data type
 			final TypeEntry oldEntry = removeErrorTypeEntry(entry);
 			// add new type entry
-			if (!addBlockTypeEntry(entry)) {
+			typeEntryAdded = addBlockTypeEntry(entry);
+			if (!typeEntryAdded) {
 				handleDuplicateTypeName(entry);
 			}
 			// trigger transitive refresh after new entry has been added
@@ -299,13 +302,19 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 				oldEntry.setTypeLibrary(null);
 			}
 		}
-		if (isProgramTypeEntry(entry) && !addProgramTypeEntry(entry)) {
-			handleDuplicateTypeName(entry);
+		boolean programTypeEntryAdded = true;
+		if (isProgramTypeEntry(entry)) {
+			programTypeEntryAdded = addProgramTypeEntry(entry);
+			if (!programTypeEntryAdded) {
+				handleDuplicateTypeName(entry);
+			}
+		}
+		if (typeEntryAdded && programTypeEntryAdded) {
+			deleteTypeLibraryMarkers(entry.getFile());
 		}
 		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
-		if (eNotificationRequired() && isPublicNameReference(entry)) {
-			eNotify(new TypeLibraryNotificationImpl(this, Notification.ADD, TYPE_ENTRY_NAME_REFERENCES_FEATURE,
-					TYPE_ENTRY_NAME_REFERENCES_FEATURE_ID, null, entry));
+		if (isPublicNameReference(entry)) {
+			notifyTypeEntryNameReferenceAdded(entry);
 		}
 	}
 
@@ -338,9 +347,8 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		}
 		removePackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		deleteTypeLibraryMarkers(entry.getFile());
-		if (eNotificationRequired() && isPublicNameReference(entry)) {
-			eNotify(new TypeLibraryNotificationImpl(this, Notification.REMOVE, TYPE_ENTRY_NAME_REFERENCES_FEATURE,
-					TYPE_ENTRY_NAME_REFERENCES_FEATURE_ID, entry, null));
+		if (isPublicNameReference(entry)) {
+			notifyTypeEntryNameReferenceRemoved(entry);
 		}
 		retryDuplicates();
 	}
@@ -356,19 +364,52 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	}
 
 	private boolean retryDuplicate(final TypeEntry entry) {
-		if (!exists(entry)) {
+		if (!isDuplicateRetryCandidate(entry)) {
 			return true;
 		}
 		if (entry instanceof final DataTypeEntry dtEntry) {
 			if (dataTypeLib.addTypeEntry(dtEntry)) {
 				deleteTypeLibraryMarkers(entry.getFile());
+				if (isPublicTypeEntryNameReference(entry)) {
+					notifyTypeEntryNameReferenceAdded(entry);
+				}
 				return true;
 			}
 		} else if (addBlockTypeEntry(entry)) {
 			deleteTypeLibraryMarkers(entry.getFile());
+			if (isPublicTypeEntryNameReference(entry)) {
+				notifyTypeEntryNameReferenceAdded(entry);
+			}
 			return true;
 		}
 		return false;
+	}
+
+	private boolean isDuplicateRetryCandidate(final TypeEntry entry) {
+		final TypeLibrary entryTypeLibrary = entry.getTypeLibrary();
+		if (entryTypeLibrary == this) {
+			return exists(entry);
+		}
+		return isReferencedPublicTypeEntryNameReference(entry, entryTypeLibrary);
+	}
+
+	private boolean isPublicTypeEntryNameReference(final TypeEntry entry) {
+		final TypeLibrary entryTypeLibrary = entry.getTypeLibrary();
+		return entryTypeLibrary == this ? isPublicNameReference(entry)
+				: isReferencedPublicTypeEntryNameReference(entry, entryTypeLibrary);
+	}
+
+	private boolean isReferencedPublicTypeEntryNameReference(final TypeEntry entry,
+			final TypeLibrary referencedTypeLibrary) {
+		return referencedTypeLibrary != null && referencedTypeLibrary != this
+				&& referencedTypeLibrary.getProject() != null
+				&& referencedProjects.contains(referencedTypeLibrary.getProject())
+				&& referencedTypeLibrary.exists(entry) && referencedTypeLibrary.containsTypeEntry(entry)
+				&& referencedTypeLibrary.isPublicNameReference(entry);
+	}
+
+	private boolean containsTypeEntry(final TypeEntry entry) {
+		return entry.getFile() != null && getTypeEntry(entry.getFile()) == entry;
 	}
 
 	protected void addPackageNameReference(final String packageName) {
@@ -546,28 +587,113 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		};
 	}
 
-	private boolean addReferencedProject(final IProject project) {
-		if (!referencedProjects.add(project)) {
+	private boolean addReferencedProject(final IProject referencedProject) {
+		if (!referencedProjects.add(referencedProject)) {
 			return false;
 		}
-		final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+		final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(referencedProject);
 		referencedTypeLibrary.eAdapters().add(typeLibraryAdapter);
 		referencedTypeLibrary.getAllPublicTypes().forEachOrdered(this::addTypeEntryNameReference);
 		return true;
 	}
 
-	private boolean removeReferencedProject(final IProject project) {
-		if (!referencedProjects.remove(project)) {
+	private boolean removeReferencedProject(final IProject referencedProject) {
+		if (!referencedProjects.remove(referencedProject)) {
 			return false;
 		}
-		final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+		final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(referencedProject);
 		referencedTypeLibrary.eAdapters().remove(typeLibraryAdapter);
-		referencedTypeLibrary.getAllPublicTypes().forEachOrdered(this::removeTypeEntryNameReference);
+		removeDuplicateTypeEntriesFromProject(referencedProject);
+		removeReferencedTypeEntryNameReferences(referencedTypeLibrary);
 		return true;
+	}
+
+	void dispose() {
+		if (!referencedProjects.isEmpty()) {
+			disposeReferencedProjects();
+		}
+		adapterTypes.clear();
+		attributeTypes.clear();
+		deviceTypes.clear();
+		fbTypes.clear();
+		resourceTypes.clear();
+		segmentTypes.clear();
+		subAppTypes.clear();
+		systems.clear();
+		globalConstants.clear();
+		programTypes.clear();
+		dataTypeLib.clear();
+		fileMap.clear();
+		packages.clear();
+		duplicates.clear();
+		referencedProjects.clear();
+		eAdapters().clear();
+	}
+
+	private void disposeReferencedProjects() {
+		for (final IProject referencedProject : referencedProjects) {
+			final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE
+					.getTypeLibraryIfPresent(referencedProject);
+			if (referencedTypeLibrary != null) {
+				referencedTypeLibrary.eAdapters().remove(typeLibraryAdapter);
+			}
+		}
 	}
 
 	private Stream<TypeEntry> getAllPublicTypes() {
 		return fileMap.values().stream().filter(this::isPublicNameReference);
+	}
+
+	private void removeReferencedTypeEntryNameReferences(final TypeLibrary referencedTypeLibrary) {
+		final var referencedTypes = referencedTypeLibrary.getAllTypes().iterator();
+		while (referencedTypes.hasNext()) {
+			removeReferencedProjectTypeEntryNameReference(referencedTypes.next());
+		}
+	}
+
+	private void removeDuplicateTypeEntriesFromProject(final IProject referencedProject) {
+		duplicates.removeIf(entry -> isTypeEntryFromProject(entry, referencedProject));
+	}
+
+	private void removeReferencedProjectTypeEntryNameReference(final TypeEntry entry) {
+		if (hasTypeEntryNameReference(entry)) {
+			removeTypeEntryNameReference(entry);
+			notifyTypeEntryNameReferenceRemoved(entry);
+		}
+	}
+
+	private boolean hasTypeEntryNameReference(final TypeEntry entry) {
+		return switch (entry) {
+		case final DataTypeEntry dtEntry ->
+			hasDataTypeEntryNameReference(dtEntry) || hasProgramTypeEntryNameReference(entry);
+		default -> getBlockTypeEntry(entry) == entry || hasProgramTypeEntryNameReference(entry);
+		};
+	}
+
+	private boolean hasDataTypeEntryNameReference(final DataTypeEntry entry) {
+		return dataTypeLib.getDerivedTypeEntry(entry.getFullTypeName()) == entry;
+	}
+
+	private boolean hasProgramTypeEntryNameReference(final TypeEntry entry) {
+		return isProgramTypeEntry(entry) && programTypes.get(entry.getFullTypeName().toLowerCase()) == entry;
+	}
+
+	private void notifyTypeEntryNameReferenceAdded(final TypeEntry entry) {
+		if (eNotificationRequired()) {
+			eNotify(new TypeLibraryNotificationImpl(this, Notification.ADD, TYPE_ENTRY_NAME_REFERENCES_FEATURE,
+					TYPE_ENTRY_NAME_REFERENCES_FEATURE_ID, null, entry));
+		}
+	}
+
+	private void notifyTypeEntryNameReferenceRemoved(final TypeEntry entry) {
+		if (eNotificationRequired()) {
+			eNotify(new TypeLibraryNotificationImpl(this, Notification.REMOVE, TYPE_ENTRY_NAME_REFERENCES_FEATURE,
+					TYPE_ENTRY_NAME_REFERENCES_FEATURE_ID, entry, null));
+		}
+	}
+
+	private static boolean isTypeEntryFromProject(final TypeEntry entry, final IProject project) {
+		return entry.getFile() != null && project.equals(entry.getFile().getProject());
 	}
 
 	private static boolean isProgramTypeEntry(final TypeEntry entry) {
@@ -576,15 +702,16 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private void createTypeLibraryMarker(final IResource resource, final String message) {
 		if (resource != null && project.equals(resource.getProject())) {
-			FordiacMarkerHelper.createMarkers(resource, List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message)
-					.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
+			FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER,
+					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message)
+							.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
 		}
 	}
 
 	private void deleteTypeLibraryMarkers(final IResource resource) {
 		if (resource != null && project.equals(resource.getProject())) {
-			FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList(),
-					true);
+			FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER,
+					Collections.emptyList());
 		}
 	}
 

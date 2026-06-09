@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Germany GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz,
+ *                    Primetals Technologies Germany GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,8 @@
  *                 direct editing of instance names
  *               - added separate colors for different data types
  *   Bianca Wiesmayr, Alois Zoitl - forward direct editing request to instance name
+ *   Alois Zoitl - reworked mapping representation
+ *               - reworked background color handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -46,18 +48,14 @@ import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Color;
-import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -75,6 +73,7 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
@@ -102,8 +101,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 			return (AbstractBlockFBNElementEditPart) super.getHost();
 		}
 	}
-
-	private ColorizableElement referencedDevice;
 
 	private DiagramFontChangeListener fontChangeListener;
 
@@ -145,15 +142,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		return (FBNetworkElementFigure) super.getFigure();
 	}
 
-	private final Adapter colorChangeListener = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
-				backgroundColorChanged(getFigure());
-			}
-		}
-	};
-
 	@Override
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
@@ -162,31 +150,16 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 				super.notifyChanged(notification);
 				refreshToolTip(); // TODO add here checks that better define when the tooltip should be refreshed
 				if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
-					updateDeviceListener();
+					refreshChildren();
 				}
 			}
 
 		};
 	}
 
-	protected void updateDeviceListener() {
-		final ColorizableElement device = findDevice();
-		if (device != referencedDevice) {
-			if (referencedDevice != null) {
-				referencedDevice.eAdapters().remove(colorChangeListener);
-			}
-			referencedDevice = device;
-			if (referencedDevice != null) {
-				referencedDevice.eAdapters().add(colorChangeListener);
-			}
-			backgroundColorChanged(getFigure());
-		}
-	}
-
 	@Override
 	public void activate() {
 		super.activate();
-		updateDeviceListener();
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
 		if (getColorChangeListener() != null) {
 			JFaceResources.getColorRegistry().addListener(getColorChangeListener());
@@ -199,9 +172,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		if (referencedDevice != null) {
-			referencedDevice.eAdapters().remove(colorChangeListener);
-		}
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
 		if (getColorChangeListener() != null) {
 			JFaceResources.getColorRegistry().removeListener(getColorChangeListener());
@@ -287,38 +257,33 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	}
 
 	@Override
-	protected void backgroundColorChanged(final IFigure figure) {
-		Color color = null;
-		if (getModel() != null) {
-			final ColorizableElement dev = findDevice();
-			if (dev != null) {
-				color = LibraryElementFactory.eINSTANCE.createColor();
-				color.setRed(dev.getColor().getRed());
-				color.setGreen(dev.getColor().getGreen());
-				color.setBlue(dev.getColor().getBlue());
-			}
-		}
-		setColor(figure, color);
-	}
-
-	protected ColorizableElement findDevice() {
-		Resource res = null;
-		if ((null != getModel()) && getModel().isMapped()) {
-			res = getModel().getResource();
-		}
-		return (null != res) ? res.getDevice() : null;
-	}
-
-	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		switch (childEditPart) {
-		case final InterfaceEditPart interfaceEditPart ->
-			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
+		case final InterfaceEditPart interfaceEditPart -> addInterfaceElementFigure(child, interfaceEditPart);
 		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			addPinIndicatorFigure(hiddenPinIndicatorEditPart, child);
+		case final MappingEditPart mapping -> addMappingFigure(child);
 		default -> getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		}
+	}
+
+	private void addInterfaceElementFigure(final IFigure child, final InterfaceEditPart interfaceEditPart) {
+		final int targetIndex = getInterfaceElementIndex(interfaceEditPart);
+		final IFigure targetFigure = getTargetFigure(interfaceEditPart);
+		if (targetIndex < targetFigure.getChildren().size()) {
+			targetFigure.add(child, targetIndex);
+		} else {
+			targetFigure.add(child);
+		}
+	}
+
+	protected void addMappingFigure(final IFigure child) {
+		final GridData gridData = new GridData();
+		gridData.horizontalSpan = 2;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalAlignment = SWT.FILL;
+		getFigure().getBottom().add(child, gridData, -1);
 	}
 
 	private void addPinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart,
@@ -450,6 +415,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		}
 		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			removePinIndicatorFigure(hiddenPinIndicatorEditPart, child);
+		case final MappingEditPart mapping -> getFigure().getBottom().remove(child);
 		default -> super.removeChildVisual(childEditPart);
 		}
 	}
@@ -467,8 +433,12 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
-		elements.addAll(getModel().getInterface().getAllInterfaceElements().filter(IInterfaceElement::isVisible).toList());
+		elements.addAll(
+				getModel().getInterface().getAllInterfaceElements().filter(IInterfaceElement::isVisible).toList());
 		addPinIndicators(elements);
+		if (getModel().isMapped()) {
+			elements.add(getModel().getMapping());
+		}
 		return elements;
 	}
 

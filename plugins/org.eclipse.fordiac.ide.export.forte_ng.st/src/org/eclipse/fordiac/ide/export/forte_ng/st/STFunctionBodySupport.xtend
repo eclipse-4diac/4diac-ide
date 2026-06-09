@@ -51,6 +51,6 @@ class STFunctionBodySupport implements ILanguageSupport {
 
 	override getDependencies(Map<?, ?> options) {
 		prepare()
-		support?.getDependencies(options)
+		support?.getDependencies(options) ?: emptySet
 	}
 }

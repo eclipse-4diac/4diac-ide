@@ -19,16 +19,18 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.fordiac.ide.library.ui.wizards.LibrarySelectionPage;
+import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizardPage;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.SystemCreator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -39,9 +41,12 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
  */
 public class New4diacProjectWizard extends Wizard implements INewWizard {
 
+	private static final String[] LIBRARY_STANDARD_SELECTION = { "convert", "core", "events", "iec61131-3", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			"net", "system", "utils" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
 	/** The pages. */
 	private New4diacProjectPage page;
-	private LibrarySelectionPage libPage;
+	private UnifiedLibraryImportWizardPage libPage;
 
 	/**
 	 * Instantiates a new new system wizard.
@@ -61,14 +66,20 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		page.setTitle(Messages.New4diacProjectWizard_WizardTitle);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
-		libPage = new LibrarySelectionPage(Messages.New4diacProjectWizard_LibPageName, true, true, true);
+		libPage = new UnifiedLibraryImportWizardPage(null, LIBRARY_STANDARD_SELECTION, true);
 		libPage.setTitle(Messages.New4diacProjectWizard_LibPageName);
 		libPage.setDescription(Messages.New4diacProjectWizard_LibPageDesc);
 
-		page.setLibraryPage(libPage);
-
 		addPage(page);
 		addPage(libPage);
+	}
+
+	@Override
+	public IWizardPage getNextPage(final IWizardPage currentPage) {
+		if (currentPage == page) {
+			libPage.setTargetProject(ResourcesPlugin.getWorkspace().getRoot().getProject(page.getProjectName()));
+		}
+		return super.getNextPage(currentPage);
 	}
 
 	/*
@@ -86,6 +97,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 				}
 			};
 			getContainer().run(false, true, op);
+
 		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			return false;
@@ -93,6 +105,11 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			Thread.currentThread().interrupt(); // mark interruption
 			return false;
 		}
+
+		if (libPage.getControl() != null) {
+			libPage.performImport(getContainer());
+		}
+
 		// everything worked fine
 		return true;
 	}
@@ -106,7 +123,8 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		try {
 
 			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
-					page.getLocationPath(), libPage.getChosenLibraries(), monitor);
+					page.getLocationPath(), monitor);
+			libPage.setTargetProject(newProject);
 			final SystemCreator systemCreator = new SystemCreator(newProject, page.getInitialSystemName(),
 					page.getInitialApplicationName());
 			systemCreator.createSystem(monitor);

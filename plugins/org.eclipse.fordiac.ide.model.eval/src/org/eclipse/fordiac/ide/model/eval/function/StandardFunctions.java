@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.model.eval.function;
 
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.nio.ByteOrder;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -837,25 +838,39 @@ public interface StandardFunctions extends Functions {
 		return USIntValue.toUSIntValue((byte) (value.toLocalDate().getDayOfWeek().getValue() % 7));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Comment("Converts a value into the big-endian format.")
 	static <T extends AnyValue> T TO_BIG_ENDIAN(final T value) {
-		return value;
+		if (ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN) {
+			return value;
+		}
+		return (T) ValueOperations.reverseBytes(value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Comment("Converts a value into the little-endian format.")
 	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T value) {
+		if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+			return value;
+		}
 		return (T) ValueOperations.reverseBytes(value);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Comment("Converts an entered value in big-endian format into the appropriate endian format of the target system.")
 	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T value) {
-		return value;
+		if (ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN) {
+			return value;
+		}
+		return (T) ValueOperations.reverseBytes(value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Comment("Converts an entered value in little-endian format into the appropriate endian format of the target system.")
 	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T value) {
+		if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+			return value;
+		}
 		return (T) ValueOperations.reverseBytes(value);
 	}
 

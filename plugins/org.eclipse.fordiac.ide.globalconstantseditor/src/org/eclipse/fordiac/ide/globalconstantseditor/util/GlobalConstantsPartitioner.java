@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
+import org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.lexer.InternalGlobalConstantsLexer;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
@@ -46,10 +47,10 @@ public class GlobalConstantsPartitioner extends STAbstractCorePartitioner<VarDec
 		return ""; //$NON-NLS-1$
 	}
 
-	public static String combine(final GlobalConstants globalConstants) {
+	public String combine(final GlobalConstants globalConstants) {
 		if (globalConstants.getSource() != null) {
 			final String text = globalConstants.getSource().getText();
-			if (text != null && text.contains("GLOBALCONSTANTS")) { //$NON-NLS-1$
+			if (text != null && containsToken(text, InternalGlobalConstantsLexer.GLOBALCONSTANTS)) {
 				return text;
 			}
 		}

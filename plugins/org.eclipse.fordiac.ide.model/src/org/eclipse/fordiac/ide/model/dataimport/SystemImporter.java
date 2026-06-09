@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -61,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -148,17 +150,15 @@ public class SystemImporter extends CommonElementImporter {
 		readNameCommentAttributes(segment);
 
 		getXandY(segment);
-		final String dx1 = getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
-		if (null != dx1) {
-			segment.setWidth(Double.parseDouble(dx1));
-		}
 
-		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != type) {
-			segment.setTypeEntry(getTypeEntry(type, getTypeLibrary()::getSegmentTypeEntry));
-			parseCommunication(segment);
-		}
+		segment.setWidth(parseCoordinateValue(LibraryElementTags.DX1_ATTRIBUTE));
 
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		final SegmentTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getSegmentTypeEntry,
+				LibraryElementPackage.Literals.SEGMENT_TYPE);
+		segment.setTypeEntry(entry);
+		createParameters(segment, entry);
+		parseCommunication(segment);
 		parseSegmentNodeChildren(segment);
 		return segment;
 	}
@@ -236,13 +236,10 @@ public class SystemImporter extends CommonElementImporter {
 
 	private void parseDeviceType(final Device device) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (typeName != null) {
-			final DeviceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getDeviceTypeEntry);
-			if (null != entry) {
-				device.setTypeEntry(entry);
-				createParameters(device);
-			}
-		}
+		final DeviceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getDeviceTypeEntry,
+				LibraryElementPackage.Literals.DEVICE_TYPE);
+		device.setTypeEntry(entry);
+		createParameters(device, entry);
 	}
 
 	private void parseMapping() throws XMLStreamException {

@@ -57,8 +57,12 @@ public class AttributeTypeExporter extends AbstractTypeExporter {
 		addEmptyStartElement(LibraryElementTags.DIRECTLY_DERIVED_TYPE);
 		getWriter().writeAttribute(LibraryElementTags.BASE_TYPE_ATTRIBUTE,
 				PackageNameHelper.getFullTypeName(type.getBaseType()));
-		getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, type.getInitialValue());
-		getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, type.getComment());
+
+		if (type.getInitialValue() != null && !type.getInitialValue().isBlank()) {
+			getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, type.getInitialValue());
+		}
+
+		addCommentAttribute(type.getComment());
 	}
 
 	private void createStructContent(final StructuredType type) throws XMLStreamException {

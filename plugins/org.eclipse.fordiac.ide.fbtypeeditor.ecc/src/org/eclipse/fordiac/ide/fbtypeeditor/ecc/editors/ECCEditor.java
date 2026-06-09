@@ -39,11 +39,13 @@ import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
+import org.eclipse.fordiac.ide.gef.tools.FordiacViewportAutoexposeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ECCItemProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.DragTracker;
@@ -103,6 +105,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 			};
 		}
+
+		@Override
+		public <T> T getAdapter(final Class<T> key) {
+			if (key == AutoexposeHelper.class) {
+				return key.cast(new FordiacViewportAutoexposeHelper(this));
+			}
+			return super.getAdapter(key);
+		}
 	}
 
 	@Override
@@ -126,7 +136,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		// position for state creation
 		final IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
 		((NewStateAction) action).setViewerControl((FigureCanvas) viewer.getControl());
-		((NewStateAction) action).setZoomManager(getZoomManger());
 	}
 
 	@Override

@@ -34,13 +34,14 @@ import org.eclipse.ltk.core.refactoring.resource.ResourceChange;
 public class CopyResourceChange extends ResourceChange {
 
 	private final IResource origin;
+	private final ReorgExecutionLog log;
 	private final IContainer destination;
 
-	public CopyResourceChange(final IResource origin, final IContainer destination) {
-		Assert.isTrue(origin instanceof IFile || origin instanceof IFolder);
-		Assert.isTrue(destination instanceof IProject || destination instanceof IFolder);
+	public CopyResourceChange(final IResource origin, final ReorgExecutionLog log, final IContainer destination) {
+		Assert.isTrue(origin instanceof IFile || origin instanceof IFolder || origin instanceof IProject);
 
 		this.origin = origin;
+		this.log = log;
 		this.destination = destination;
 	}
 
@@ -54,12 +55,17 @@ public class CopyResourceChange extends ResourceChange {
 		try {
 			pm.beginTask(getName(), 2);
 
-			final boolean performReorg = deleteIfAlreadyExists(SubMonitor.convert(pm, 1), origin.getName());
+			String newName = log.getNewName(origin);
+			if (newName == null) {
+				newName = origin.getName();
+			}
+
+			final boolean performReorg = deleteIfAlreadyExists(SubMonitor.convert(pm, 1), newName);
 			if (!performReorg) {
 				return null;
 			}
 
-			final IPath copyPath = destination.getFullPath().append(origin.getName());
+			final IPath copyPath = destination.getFullPath().append(newName);
 			origin.copy(copyPath, getReorgFlags(), SubMonitor.convert(pm, 1));
 
 			markAsExecuted(origin);

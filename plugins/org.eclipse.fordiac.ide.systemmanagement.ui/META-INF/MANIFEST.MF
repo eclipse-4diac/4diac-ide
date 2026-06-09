@@ -37,9 +37,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.library.model,
  org.eclipse.fordiac.ide.library.ui,
  org.eclipse.fordiac.ide.typeeditor,
- org.eclipse.fordiac.ide.bulkeditor
+ org.eclipse.fordiac.ide.bulkeditor,
+ org.eclipse.ltk.ui.refactoring
 Bundle-Vendor: %Bundle-Vendor
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.2.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.systemmanagement.ui

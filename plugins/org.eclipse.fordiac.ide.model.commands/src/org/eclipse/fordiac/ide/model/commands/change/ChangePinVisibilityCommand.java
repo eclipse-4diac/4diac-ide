@@ -12,19 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
@@ -32,10 +28,6 @@ public class ChangePinVisibilityCommand extends Command implements ScopedCommand
 
 	private final IInterfaceElement interfaceElement; // The pin
 	private final boolean visible;
-
-	public ChangePinVisibilityCommand(final BlockFBNetworkElement fb, final List<String> path, final boolean visible) {
-		this(fb.getInterface().getInterfaceElement(path, visible), visible);
-	}
 
 	public ChangePinVisibilityCommand(final IInterfaceElement interfaceElement, final boolean visible) {
 		this.interfaceElement = Objects.requireNonNull(interfaceElement);
@@ -59,31 +51,17 @@ public class ChangePinVisibilityCommand extends Command implements ScopedCommand
 
 	@Override
 	public boolean canExecute() {
-		if (!visible && isConnectedInsideSubApp(interfaceElement)) {
-			ErrorMessenger.popUpErrorMessage(Messages.HidePinCommand_PinCannotBeHidden_ConnectedInside);
+		if (interfaceElement instanceof Event || interfaceElement instanceof ErrorMarkerInterface) {
 			return false;
 		}
-		return (interfaceElement instanceof VarDeclaration || interfaceElement instanceof AdapterDeclaration)
-				&& (interfaceElement.isIsInput() && interfaceElement.getInputConnections().isEmpty()
-						|| !interfaceElement.isIsInput() && interfaceElement.getOutputConnections().isEmpty())
-				&& !isExpandedSubAppPinAndConnected(interfaceElement);
-	}
 
-	protected static boolean isExpandedSubAppPinAndConnected(final IInterfaceElement interfaceElement) {
-		return interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
-				&& !interfaceElement.getInputConnections().isEmpty()
-				&& !interfaceElement.getOutputConnections().isEmpty();
-	}
-
-	private static boolean isConnectedInsideSubApp(final IInterfaceElement element) {
-		if (element instanceof final VarDeclaration varDecl && element.isIsInput()
-				&& element.eContainer().eContainer() instanceof final SubAppType sat) {
-			return sat.getFBNetwork().getBlockFBNetworkElements().anyMatch(fb -> {
-				final IInterfaceElement internal = fb.getInterface().getInterfaceElement(varDecl);
-				return (internal != null && !internal.getInputConnections().isEmpty());
-			});
+		if (!visible && !InterfaceHelper.canHidePin(interfaceElement)) {
+			ErrorMessenger
+					.popUpErrorMessage(org.eclipse.fordiac.ide.model.commands.Messages.HidePinCommand_ConnectedPin);
+			return false;
 		}
-		return false;
+
+		return true;
 	}
 
 	protected IInterfaceElement getInterfaceElement() {

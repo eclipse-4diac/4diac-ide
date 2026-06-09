@@ -112,6 +112,7 @@ public final class Messages extends NLS {
 	public static String ReplaceVarsWithStructChange_NotContained;
 
 	public static String DataTypeChange_TypeDeclarationChanged;
+	public static String DataTypeChange_DataTypeChanged;
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
@@ -125,8 +126,6 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_Change_UpdateInternalFB;
 	public static String DeleteFBTypeParticipant_Change_UpdateManipulator;
 	public static String DeleteFBTypeParticipant_Change_UpdateSubappPins;
-	public static String RenameUpdateFBTypeInterfaceModelEdit_NotPartOfInterface;
-	public static String RenameUpdateFBTypeInterfaceModelEdit_TypelibraryNull;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String IFordiacPreviewChange_Reconnect0;
 
@@ -147,6 +146,10 @@ public final class Messages extends NLS {
 	public static String CopyTypeChange_CannotLoadResource;
 	public static String CopyTypeChange_CannotSaveResource;
 	public static String CopyTypeChange_RenamePackage;
+	public static String Copy_RenameDialog_Message;
+	public static String Copy_RenameDialog_MustBeNewName;
+	public static String Copy_RenameDialog_NameAlreadyExists;
+	public static String Copy_RenameDialog_Title;
 
 	public static String Copy_OverwriteDialog_Title;
 	public static String Copy_OverwriteDialog_Message;
@@ -173,6 +176,7 @@ public final class Messages extends NLS {
 	public static String RenameElementRefactoringProcessor_Name;
 
 	public static String RenameElementRefactoringProcessor_RenamePinInType;
+	public static String RenameElementRefactoringProcessor_RenamePinInInstance;
 	public static String RenameElementRefactoringWizardPage_Name;
 	public static String RenameType_Name;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
@@ -190,6 +194,12 @@ public final class Messages extends NLS {
 	public static String Refactoring_StructUsers;
 	public static String Refactoring_RenameChangeName;
 	public static String Refactoring_UpdateTypeEntryChange;
+
+	public static String RefactoringUtil_SaveAllButton;
+
+	public static String RefactoringUtil_SaveAllMessage;
+
+	public static String RefactoringUtil_SaveAllTitle;
 
 	public static String RepairBrokenConnectionWizardPage_Description;
 	public static String RepairBrokenConnectionWizardPage_Dots;

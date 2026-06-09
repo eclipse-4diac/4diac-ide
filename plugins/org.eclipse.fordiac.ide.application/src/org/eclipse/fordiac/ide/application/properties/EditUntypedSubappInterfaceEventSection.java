@@ -80,9 +80,8 @@ public class EditUntypedSubappInterfaceEventSection extends AbstractEditInterfac
 	public Command onNameChange(final IInterfaceElement ie, final String newValue) {
 		final ChangeNameCommand nameChangeCmd = ChangeNameCommand.forName(ie, newValue);
 		if (getType().isUnfolded()) {
-			return new ResizeGroupOrSubappCommand(
-					GetEditPartFromGraficalViewerHelper.findAbstractContainerContentEditFromInterfaceElement(ie),
-					nameChangeCmd);
+			return nameChangeCmd.chain(new ResizeGroupOrSubappCommand(
+					GetEditPartFromGraficalViewerHelper.findAbstractContainerContentEditFromInterfaceElement(ie)));
 		}
 		return nameChangeCmd;
 	}

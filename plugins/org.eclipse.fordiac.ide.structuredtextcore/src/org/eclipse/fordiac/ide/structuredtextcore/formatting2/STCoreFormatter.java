@@ -181,6 +181,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 	protected void formatVarDeclarationBlock(final STVarDeclarationBlock varDeclarationBlock,
 			final IFormattableDocument document, final String begin) {
 		final ISemanticRegion varKeyword = textRegionExtensions.regionFor(varDeclarationBlock).keyword(begin);
+		document.prepend(varKeyword, it -> it.setNewLines(1, 1, 2));
 		if (varDeclarationBlock.isConstant()) {
 			final ISemanticRegion constantKeyword = textRegionExtensions.regionFor(varDeclarationBlock)
 					.keyword("CONSTANT"); //$NON-NLS-1$

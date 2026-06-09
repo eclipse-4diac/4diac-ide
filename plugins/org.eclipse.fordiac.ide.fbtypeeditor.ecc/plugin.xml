@@ -94,44 +94,83 @@
       <colorDefinition
             categoryId="org.eclipse.fordiac.ide.themeCategory"
             id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor"
-            label="%FordiacECCPreferencePage_LABEL_ECCStateColor"
-            value="184, 182, 206">
+            label="State Background Color"
+            value="70, 120, 190"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
       </colorDefinition>
       <colorDefinition
             categoryId="org.eclipse.fordiac.ide.themeCategory"
             id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateTextColor"
-            label="%FordiacECCPreferencePage_LABEL_ECCStateTextColor"
-            value="21, 17, 72">
+            label="State Text Color"
+            value="255, 255, 255"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCStateSpineColor"
+            label="State Spine Color"
+            value="95, 145, 210"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
       </colorDefinition>
       <colorDefinition
             categoryId="org.eclipse.fordiac.ide.themeCategory"
             id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmColor"
-            label="%FordiacECCPreferencePage_LABEL_ECCAlgorithmColor"
-            value="235, 242, 179">
+            label="Algorithm Background Color"
+            value="215, 225, 235"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
       </colorDefinition>
       <colorDefinition
             categoryId="org.eclipse.fordiac.ide.themeCategory"
             id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmTextColor"
-            label="%FordiacECCPreferencePage_LABEL_ECCAlgorithmTextColor"
-            value="91, 101, 11">
+            label="Algorithm Text Color"
+            value="50, 50, 60"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
       </colorDefinition>
       <colorDefinition
             categoryId="org.eclipse.fordiac.ide.themeCategory"
             id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventColor"
-            label="%FordiacECCPreferencePage_LABEL_ECCEventColor"
-            value="245, 181, 183">
+            label="Event Background Color"
+            value="215, 235, 195"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
       </colorDefinition>
       <colorDefinition
             categoryId="org.eclipse.fordiac.ide.themeCategory"
             id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventTextColor"
-            label="%FordiacECCPreferencePage_LABEL_ECCEventTextColor"
-            value="141, 45, 47">
+            label="Event Text Color"
+            value="45, 60, 35"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
       </colorDefinition>
       <colorDefinition
             categoryId="org.eclipse.fordiac.ide.themeCategory"
             id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionColor"
-            label="%FordiacECCPreferencePage_LABEL_ECCTransitionColor"
-            value="68, 64, 121">
+            label="Transition Color"
+            value="175, 185, 200"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
       </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionTextColor"
+            label="Transition Text Color"
+            value="70, 80, 100"
+            isEditable="false">
+            <!-- the label does not need to be translatable -->
+      </colorDefinition>
+   </extension>
+   <extension
+         point="org.eclipse.e4.ui.css.swt.theme">
+      <stylesheet
+            uri="css/dark_ecc_colors.css">
+         <themeid
+               refid="org.eclipse.e4.ui.css.theme.e4_dark">
+         </themeid>
+      </stylesheet>
    </extension>
 </plugin>

@@ -73,17 +73,17 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  */
 public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
-	private static final String TRACE_PATH_SECTION_TEXT = "Trace Path"; //$NON-NLS-1$
-	private static final String SELECT_PATH_DIALOG_TEXT = "Select trace directory"; //$NON-NLS-1$
-	private static final String BROWSE_BUTTON_TEXT = "Browse Trace Path"; //$NON-NLS-1$
+	private static final String TRACE_PATH_SECTION_TEXT = Messages.LaunchConfigurationTab_TracePathSelectionText;
+	private static final String SELECT_PATH_DIALOG_TEXT = Messages.LaunchConfigurationTab_SelectPathDialogText;
+	private static final String BROWSE_BUTTON_TEXT = Messages.LaunchConfigurationTab_BrowseButtonText;
 
-	private static final String SIMULATOR_SECTION_TEXT = "Simulator Options"; //$NON-NLS-1$
-	private static final String REMOTE_TEXT = "Remote"; //$NON-NLS-1$
+	private static final String REPLAYER_SECTION_TEXT = Messages.LaunchConfigurationTab_ReplayerSectionText;
+	private static final String REMOTE_TEXT = Messages.LaunchConfigurationTab_RemoteText;
 
-	private static final String COMPONENTS_SELECTION_SECTION_TEXT = "Select Components"; //$NON-NLS-1$
-	private static final String SYSTEM_SELECTION_BUTTON_TEXT = "Browse System"; //$NON-NLS-1$
+	private static final String COMPONENTS_SELECTION_SECTION_TEXT = Messages.LaunchConfigurationTab_ComponentsSelectionText;
+	private static final String SYSTEM_SELECTION_BUTTON_TEXT = Messages.LaunchConfigurationTab_SystemSelectionButtonText;
 
-	private static final String LAUNCH_CONFIGURATION_TAB_NAME = "Replay Debugging"; //$NON-NLS-1$
+	private static final String LAUNCH_CONFIGURATION_TAB_NAME = Messages.LaunchConfigurationTab_LaunchConfigurationTabName;
 
 	private Text systemText;
 	private static final String SYSTEM_TEXT_DEFAULT = ""; //$NON-NLS-1$
@@ -101,18 +101,18 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 		component = new Composite(parent, SWT.FILL);
 		component.setLayout(new GridLayout(1, false));
 
-		createSimulatorSection();
+		createReplayerSection();
 		createPathSelectionComponent();
 		createSelectionComponent();
 	}
 
-	private void createSimulatorSection() {
+	private void createReplayerSection() {
 		final Group group = new Group(component, SWT.BORDER);
 		group.setLayout(new GridLayout(1, false));
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(group);
-		group.setText(SIMULATOR_SECTION_TEXT);
+		group.setText(REPLAYER_SECTION_TEXT);
 
-		// Checkbox to indicate if the replay should use the remote simulator (forte)
+		// Checkbox to indicate if the replay should use the remote replayer (forte)
 		remoteCheckbox = new Button(group, SWT.CHECK);
 		remoteCheckbox.setText(REMOTE_TEXT);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(remoteCheckbox);
