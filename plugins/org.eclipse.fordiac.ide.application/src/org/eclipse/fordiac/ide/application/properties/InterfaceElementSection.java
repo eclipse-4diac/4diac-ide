@@ -50,33 +50,30 @@ import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InterfaceElementSection extends AbstractDoubleColumnSection {
-	private TableViewer connectionsViewer;
-
 	private Text typeText;
 	private Text typeCommentText;
 	private Text instanceCommentText;
 	private Text parameterText;
 	private InitialValueEditor currentParameterEditor;
-	private CLabel parameterTextCLabel;
-	private CLabel currentParameterTextCLabel;
-	private CLabel currentVarConfigTextCLabel;
+	private Label parameterLabel;
+	private Label currentParameterLabel;
+	private Label currentVarConfigLabel;
 	private Button currentVarConfigCheckBox;
 	private Button openEditorButton;
+	private Listener openEditorListener;
 	private Section infoSection;
 	private ConnectionDisplayWidget connectionDisplayWidget;
 	private InitialValueRefreshJob refreshJob;
@@ -95,9 +92,6 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	private void createTypeInfoSection(final Composite parent) {
-		// textfields in this section without a button need to span 2 cols so that all
-		// textfields are aligned
-
 		final Section typeInfoSection = getWidgetFactory().createSection(parent,
 				ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
 		typeInfoSection.setText(FordiacMessages.TypeInfo + ":"); //$NON-NLS-1$
@@ -105,22 +99,20 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		typeInfoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final Composite composite = getWidgetFactory().createComposite(typeInfoSection);
-
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 
-		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
+		getWidgetFactory().createLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		typeCommentText = createGroupText(composite, false);
 		typeCommentText.setLayoutData(new GridData(SWT.FILL, 0, true, false, 2, 1));
 
-		getWidgetFactory().createCLabel(composite, FordiacMessages.Type + ":"); //$NON-NLS-1$
-
+		getWidgetFactory().createLabel(composite, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeText = createGroupText(composite, false);
 
 		openEditorButton = new Button(typeText.getParent(), SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 
-		parameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.DefaultValue + ":"); //$NON-NLS-1$
+		parameterLabel = getWidgetFactory().createLabel(composite, FordiacMessages.DefaultValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, false);
 		parameterText.setLayoutData(new GridData(SWT.FILL, 0, true, false, 2, 1));
 		refreshJob = new InitialValueRefreshJob(null, this::updateTypeInitialValue, false);
@@ -135,27 +127,27 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		infoSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final Composite composite = getWidgetFactory().createComposite(infoSection);
-
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 
-		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
-		instanceCommentText = createGroupText(composite, false);
+		getWidgetFactory().createLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
+		instanceCommentText = createGroupText(composite, true);
 		instanceCommentText.setLayoutData(new GridData(SWT.FILL, SWT.None, true, false));
 		instanceCommentText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), instanceCommentText.getText()));
-			instanceCommentText.setForeground(getForegroundColor());
 			addContentAdapter();
 		});
 
-		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
+		currentParameterLabel = getWidgetFactory().createLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		currentParameterEditor = new InitialValueEditor(composite, SWT.SINGLE | SWT.BORDER);
 		currentParameterEditor.setCommandExecutor(this::executeCommand);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false)
 				.applyTo(currentParameterEditor.getControl());
+		currentParameterEditor.getControl()
+				.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 
-		currentVarConfigTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
+		currentVarConfigLabel = getWidgetFactory().createLabel(composite, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
 		currentVarConfigCheckBox = getWidgetFactory().createButton(composite, null, SWT.CHECK);
 		currentVarConfigCheckBox.addListener(SWT.Selection,
 				event -> executeCommand(new ChangeVarConfigurationCommand((VarDeclaration) getType(),
@@ -171,7 +163,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		if (fb != null) {
 			infoSection.setText(
 					MessageFormat.format(Messages.InterfaceElementSection_Instance, fb.getName(), getPinName()));
-		} else { // e.g., IP address of device
+		} else {
 			infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
 		}
 		typeCommentText.setText(CommentHelper.getTypeComment(getType()));
@@ -179,7 +171,6 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		configureOpenEditorButton();
 
 		instanceCommentText.setText(CommentHelper.getInstanceComment(getType()));
-		instanceCommentText.setForeground(getForegroundColor());
 
 		refreshTypeInitialValue();
 		currentParameterEditor.setInterfaceElement(getType());
@@ -189,8 +180,8 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 		connectionDisplayWidget.refreshConnectionsViewer(getType());
 
-		if (getType() instanceof final VarDeclaration verDeclaration) {
-			currentVarConfigCheckBox.setSelection(verDeclaration.isVarConfig());
+		if (getType() instanceof final VarDeclaration varDeclaration) {
+			currentVarConfigCheckBox.setSelection(varDeclaration.isVarConfig());
 		}
 
 		if (fb != null) {
@@ -198,31 +189,30 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		}
 	}
 
-	static boolean containsCFB(EObject container) {
-		if (container == null) {
-			return false;
-		}
-		if (container instanceof CFBInstance) {
-			return true;
-		}
-
+	private static boolean containsCFB(EObject container) {
 		while (container != null) {
 			if (container instanceof CFBInstance || container instanceof CompositeFBType) {
 				return true;
 			}
 			container = container.eContainer();
 		}
-
 		return false;
 	}
 
 	private void configureOpenEditorButton() {
-		final DataType dtp = getDataType();
-		if (dtp != null) {
-			openEditorButton.addListener(SWT.Selection,
-					ev -> OpenStructMenu.openStructEditor(dtp.getTypeEntry().getFile()));
-			openEditorButton.setEnabled(((dtp instanceof StructuredType) || (dtp instanceof AdapterType))
-					&& !IecTypes.GenericTypes.isAnyType(dtp));
+		if (openEditorListener != null) {
+			openEditorButton.removeListener(SWT.Selection, openEditorListener);
+			openEditorListener = null;
+		}
+
+		final DataType dataType = getDataType();
+		if (dataType != null) {
+			openEditorListener = ev -> OpenStructMenu.openStructEditor(dataType.getTypeEntry().getFile());
+			openEditorButton.addListener(SWT.Selection, openEditorListener);
+			openEditorButton.setEnabled((dataType instanceof StructuredType || dataType instanceof AdapterType)
+					&& !IecTypes.GenericTypes.isAnyType(dataType));
+		} else {
+			openEditorButton.setEnabled(false);
 		}
 	}
 
@@ -252,7 +242,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 				refreshJob.refresh();
 			}
 		} else {
-			parameterText.setText("");//$NON-NLS-1$
+			parameterText.setText(""); //$NON-NLS-1$
 		}
 	}
 
@@ -268,13 +258,6 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		}
 	}
 
-	private Color getForegroundColor() {
-		if (!CommentHelper.hasComment(getType())) {
-			return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
-		}
-		return null;
-	}
-
 	private String getPinName() {
 		final String pinName = (getType() instanceof final MemberVarDeclaration memVar) ? memVar.getDisplayName()
 				: getType().getName();
@@ -283,12 +266,16 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 	private void refreshParameterVisibility() {
 		final boolean isDataIO = isDataIO();
-		parameterTextCLabel.setVisible(isDataIO);
+		parameterLabel.setVisible(isDataIO);
 		parameterText.setVisible(isDataIO);
-		currentParameterTextCLabel.setVisible(isDataIO && getType().isIsInput());
-		currentParameterEditor.getControl().setVisible(isDataIO && getType().isIsInput());
-		currentVarConfigTextCLabel.setVisible(isDataIO && getType().isIsInput() && getType() instanceof VarDeclaration);
-		currentVarConfigCheckBox.setVisible(isDataIO && getType().isIsInput() && getType() instanceof VarDeclaration);
+
+		final boolean isDataInput = isDataIO && getType().isIsInput();
+		currentParameterLabel.setVisible(isDataInput);
+		currentParameterEditor.getControl().setVisible(isDataInput);
+
+		final boolean isVarDeclInput = isDataInput && getType() instanceof VarDeclaration;
+		currentVarConfigLabel.setVisible(isVarDeclInput);
+		currentVarConfigCheckBox.setVisible(isVarDeclInput);
 	}
 
 	private boolean isDataIO() {
@@ -306,30 +293,22 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		currentVarConfigCheckBox.setEnabled(editable);
 	}
 
-	// this method will be removed as soon as there is a toString for StructType in
-	// the model
-	private static String appendStructTypes(final StringBuilder sb, final StructuredType st) {
+	private static void appendStructTypes(final StringBuilder sb, final StructuredType st) {
 		final EList<VarDeclaration> list = st.getMemberVariables();
 		sb.append(": ("); //$NON-NLS-1$
-		boolean printString = false;
-		for (final VarDeclaration v : list) {
-			if ((v.getType() != null)) {
-				sb.append(v.getType().getName());
-				printString = true;
-			} else {
-				sb.append("not set"); //$NON-NLS-1$
+		for (int i = 0; i < list.size(); i++) {
+			if (i > 0) {
+				sb.append(", "); //$NON-NLS-1$
 			}
-			sb.append(", "); //$NON-NLS-1$
+			final String typeName = list.get(i).getFullTypeName();
+			sb.append(typeName != null ? typeName : "not set"); //$NON-NLS-1$
 		}
-		sb.delete(sb.length() - 2, sb.length());
 		sb.append(')');
-
-		return printString ? sb.toString() : ""; //$NON-NLS-1$
 	}
 
 	@Override
 	protected void setInputCode() {
-		connectionsViewer.setInput(null);
+		// nothing to do here
 	}
 
 	@Override

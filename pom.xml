@@ -33,16 +33,16 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>5.0.2</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
+		<tycho.version>5.0.3</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
 		<tycho-repo.url>https://download.eclipse.org/releases/2026-06</tycho-repo.url>
-		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+		<sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>21</sonar.java.source>
 		<sonar.java.binaries>${project.build.outputDirectory}</sonar.java.binaries>
 		<sonar.organization>eclipse</sonar.organization>
-		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.2</org.eclipse.justj.jre.repository>
-        <xtend-version>2.43.0.M2</xtend-version>
+		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.3</org.eclipse.justj.jre.repository>
+        <xtend-version>2.43.0</xtend-version>
         <xtend-java-version>21</xtend-java-version>
         <eclipse.cbi.version>1.5.4</eclipse.cbi.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>

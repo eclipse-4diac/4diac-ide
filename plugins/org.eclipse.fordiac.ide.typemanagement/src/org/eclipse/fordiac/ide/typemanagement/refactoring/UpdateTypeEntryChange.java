@@ -99,28 +99,30 @@ public class UpdateTypeEntryChange extends Change {
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-		final IFile newFile = findNewResource(newName);
-		if (newFile != null && typeEntry != null) {
-			updateTypeEntryByRename(newFile, typeEntry);
-			return new UpdateTypeEntryChange(newFile, typeEntry, oldName, newName);
+		// On the composite undo, the file rename undo has not run yet, so the file is
+		// still at its renamed location; prefer the captured reference when it still
+		// resolves and fall back to the name lookup for the forward path only.
+		final IFile currentFile = file.exists() ? file : findNewResource(newName);
+		if (currentFile != null && typeEntry != null) {
+			updateTypeEntryToName(currentFile, typeEntry, newName);
+			return new UpdateTypeEntryChange(currentFile, typeEntry, oldName, newName);
 		}
 		return null;
 	}
 
-	private static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
-		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
-
-		if (!Objects.equals(newFile, entry.getFile())) {
+	private static void updateTypeEntryToName(final IFile currentFile, final TypeEntry entry,
+			final String targetTypeName) {
+		if (!Objects.equals(currentFile, entry.getFile()) || !Objects.equals(targetTypeName, entry.getTypeName())) {
 			final TypeLibrary typeLibrary = entry.getTypeLibrary();
 			if (typeLibrary != null) {
 				typeLibrary.removeTypeEntry(entry);
 			}
-			entry.setFile(newFile);
+			entry.setFile(currentFile);
 
 			// update type and typeEditable names
 			final LibraryElement type = entry.copyType();
 			if ((null != type)) {
-				type.setName(newTypeName);
+				type.setName(targetTypeName);
 			}
 
 			if (typeLibrary != null) {

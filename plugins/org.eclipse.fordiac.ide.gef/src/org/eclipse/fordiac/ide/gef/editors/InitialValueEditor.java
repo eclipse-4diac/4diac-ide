@@ -62,7 +62,11 @@ public class InitialValueEditor extends XtextEmbeddedFieldEditor {
 	@Override
 	public void commit() {
 		if (interfaceElement instanceof final VarDeclaration varDeclaration) {
-			executeCommand(new ChangeValueCommand(varDeclaration, getModelAccess().getEditablePart()));
+			final String value = getModelAccess().getEditablePart();
+			if (!FordiacMessages.ValueTooLarge.equals(value)
+					&& !FordiacMessages.ComputingPlaceholderValue.equals(value)) {
+				executeCommand(new ChangeValueCommand(varDeclaration, value));
+			}
 		}
 		refresh();
 	}

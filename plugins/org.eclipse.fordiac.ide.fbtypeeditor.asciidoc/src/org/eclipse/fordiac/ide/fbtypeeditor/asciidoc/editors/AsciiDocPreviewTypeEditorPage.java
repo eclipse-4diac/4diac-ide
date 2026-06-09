@@ -23,12 +23,15 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.wikitext.asciidoc.AsciiDocLanguage;
 import org.eclipse.mylyn.wikitext.parser.MarkupParser;
 import org.eclipse.mylyn.wikitext.parser.builder.HtmlDocumentBuilder;
+import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
@@ -42,10 +45,16 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEditorPage {
 
+	// The editor input of the type file given to us.
+	IEditorInput originEditorInput;
+
 	private Browser browser;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		// needs to be done first so that we can get always the type for which we are
+		// shown
+		originEditorInput = input;
 		setSite(site);
 		setInput(getDocumentationEditorInput(input));
 		setPartName("AsciiDoc Description");
@@ -55,6 +64,7 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 	@Override
 	public void createPartControl(final Composite parent) {
 		browser = new Browser(parent, SWT.NONE);
+		browser.addLocationListener(new ModelLocationListener());
 		refreshHtml();
 	}
 
@@ -91,6 +101,11 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 	@Override
 	public Object getSelectableObject() {
 		return null; // nothing can be selected
+	}
+
+	@Override
+	public LibraryElement getType() {
+		return LibraryElementProvider.INSTANCE.getLibraryElement(originEditorInput);
 	}
 
 	@Override
@@ -150,20 +165,29 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 				BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
 
 			final StringWriter writer = new StringWriter();
-			final HtmlDocumentBuilder builder = new HtmlDocumentBuilder(writer);
 
-			final AsciiDocLanguage markupLanguage = new AsciiDocLanguage();
-			markupLanguage.setEnableMacros(true);
-			markupLanguage.setFilterGenerativeContents(false);
-			markupLanguage.setBlocksOnly(false);
-			final MarkupParser parser = new MarkupParser(markupLanguage);
-			parser.setBuilder(builder);
+			final MarkupParser parser = createParser(writer);
 			parser.parse(reader);
 
 			browser.setText(writer.toString());
 		} catch (final Exception e) {
 			browser.setText("<html><body><p>Error rendering preview: " + e.getMessage() + "</p></body></html>");
 		}
+	}
+
+	private MarkupParser createParser(final StringWriter writer) {
+		final MarkupParser parser = new MarkupParser(createLanguage());
+		parser.setBuilder(new HtmlDocumentBuilder(writer));
+		return parser;
+	}
+
+	private MarkupLanguage createLanguage() {
+		final AsciiDocLanguage markupLanguage = new AsciiDocLanguage();
+		markupLanguage.setEnableMacros(true);
+		markupLanguage.setFilterGenerativeContents(false);
+		markupLanguage.setBlocksOnly(false);
+		markupLanguage.configure(new FordiacAsciiDocLanguageConfiguration(getType()));
+		return markupLanguage;
 	}
 
 }
