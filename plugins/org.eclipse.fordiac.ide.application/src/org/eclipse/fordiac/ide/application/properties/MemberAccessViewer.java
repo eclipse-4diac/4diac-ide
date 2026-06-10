@@ -76,8 +76,11 @@ class MemberAccessViewer {
 	}
 
 	public void updateVisibility() {
-		updateVisibility(block.getInterface().getAllInterfaceElements().filter(
-				ie -> ie instanceof final VarDeclaration vardecl && ie.isIsInput() == input && !vardecl.isInOutVar()));
+		if (block != null) {
+			updateVisibility(block.getInterface().getAllInterfaceElements()
+					.filter(ie -> ie instanceof final VarDeclaration vardecl && ie.isIsInput() == input
+							&& !vardecl.isInOutVar()));
+		}
 	}
 
 	private void updateVisibility(final Stream<IInterfaceElement> vars) {
