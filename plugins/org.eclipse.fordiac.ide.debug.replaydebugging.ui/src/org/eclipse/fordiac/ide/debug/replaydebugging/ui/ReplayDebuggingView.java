@@ -23,12 +23,17 @@ import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
+import org.eclipse.gef.ui.actions.RedoAction;
+import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.ViewPart;
 
@@ -67,6 +72,20 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 
 		getSite().getService(IContextService.class)
 				.activateContext("org.eclipse.fordiac.ide.debug.replaydebugging.context"); //$NON-NLS-1$
+
+		// Wire undo/redo to the workbench
+		final UndoAction undoAction = new UndoAction(this);
+		final RedoAction redoAction = new RedoAction(this);
+
+		final IActionBars bars = getViewSite().getActionBars();
+		bars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+		bars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
+
+		viewer.getEditDomain().getCommandStack().addCommandStackListener(e -> {
+			undoAction.update();
+			redoAction.update();
+			bars.updateActionBars();
+		});
 
 		ReplayNavigatorManager.getDefault().addListener(this);
 		SelectionService.getDefault().install(getSite().getPage());
@@ -114,6 +133,9 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == GraphicalViewer.class) {
 			return adapter.cast(viewer);
+		}
+		if (adapter == CommandStack.class) {
+			return adapter.cast(viewer.getEditDomain().getCommandStack());
 		}
 		return super.getAdapter(adapter);
 	}
