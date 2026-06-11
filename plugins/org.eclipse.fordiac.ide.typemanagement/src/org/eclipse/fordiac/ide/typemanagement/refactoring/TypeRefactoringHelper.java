@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
@@ -20,9 +21,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEditBuilder;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeModelEdit;
 
 public final class TypeRefactoringHelper {
+
+	public static void addPackageNameModelEdit(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
+			final String newPackageName) {
+		modelEdits.add(new MoveTypeModelEdit(newPackageName,
+				MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName), typeEntry.getURI()));
+	}
 
 	public static void addModelEditsForMovedType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
 			final IPath newPath) {
@@ -39,6 +48,17 @@ public final class TypeRefactoringHelper {
 		if (typeEntry instanceof final DataTypeEntry dtEntry) {
 			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
 					DataTypeEditBuilder.getFullTypeName(typeEntry, newPath));
+		} else {
+			addInstanceChanges(modelEdits, typeEntry);
+		}
+	}
+
+	public static void addModelEditsForPackageChangedType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
+			final String newPackageName) {
+		if (typeEntry instanceof final DataTypeEntry dtEntry) {
+			final String targetTypeName = DataTypeEditBuilder.getFullTypeName(newPackageName, typeEntry.getTypeName());
+			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits, targetTypeName);
+			DataTypeEditBuilder.createStructuredDataTypeImportChanges(dtEntry, modelEdits, targetTypeName);
 		} else {
 			addInstanceChanges(modelEdits, typeEntry);
 		}

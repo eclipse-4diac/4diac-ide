@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.gef.editparts.ImportCellEditor;
 import org.eclipse.fordiac.ide.gef.provider.PackageContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.PackageLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeImportNamespaceCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangePackageNameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteImportCommand;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -33,20 +32,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.commands.OrganizeImportsCommand;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ChangePackageNameRefactoring;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.StyledTextContentAdapter;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -57,6 +57,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -68,17 +69,20 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class PackageInfoWidget extends TypeInfoWidget {
+
+	private static final String RENAME_ELEMENT_ICON = "icons/full/etool16/tricks.png"; //$NON-NLS-1$
 
 	private final Supplier<GraphicalAnnotationModel> annotationModelSupplier;
 	private TableViewer packageViewer;
 	private StyledText nameText;
-	private ContentProposalAdapter nameTextProposalAdapter;
 	private AddDeleteWidget buttons;
+	private Button changePackageNameButton;
 	private Button organizeImportsButton;
+	private Image changePackageNameImage;
 	Composite composite;
 
 	public PackageInfoWidget(final FormToolkit widgetFactory,
@@ -99,18 +103,17 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		packageGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		composite = getWidgetFactory().createComposite(packageGroup, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).margins(0, 0).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(3).equalWidth(false).margins(0, 0).applyTo(composite);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		changePackageNameButton = getWidgetFactory().createButton(composite, null, SWT.PUSH);
+		changePackageNameButton.setToolTipText(Messages.ChangePackageNameRefactoring_Tooltip);
+		changePackageNameButton.setImage(getChangePackageNameImage());
+		changePackageNameButton.addDisposeListener(e -> disposeChangePackageNameImage());
+		changePackageNameButton
+				.addSelectionListener(SelectionListener.widgetSelectedAdapter(ev -> openPackageNameRefactoring()));
+		GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(changePackageNameButton);
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
-		nameText = createGroupStyledText(composite, true);
-		nameText.addModifyListener(e -> {
-			if (!blockListeners) {
-				executeCommand(new ChangePackageNameCommand(getType(), nameText.getText()));
-			}
-		});
-		nameTextProposalAdapter = new ContentAssistCommandAdapter(nameText, new StyledTextContentAdapter(),
-				new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
-		nameTextProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		nameText = createGroupStyledText(composite);
 
 		final Label importsLabel = new Label(packageGroup, SWT.NONE);
 		importsLabel.setText(FordiacMessages.Imports + ":"); //$NON-NLS-1$
@@ -143,6 +146,35 @@ public class PackageInfoWidget extends TypeInfoWidget {
 				ref -> new DeleteImportCommand(getType().getCompilerInfo(), (Import) ref));
 	}
 
+	private Image getChangePackageNameImage() {
+		if (changePackageNameImage == null) {
+			final ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(PlatformUI.PLUGIN_ID,
+					RENAME_ELEMENT_ICON);
+			if (imageDescriptor != null) {
+				changePackageNameImage = imageDescriptor.createImage();
+			}
+		}
+		return changePackageNameImage;
+	}
+
+	private void disposeChangePackageNameImage() {
+		if (changePackageNameImage != null && !changePackageNameImage.isDisposed()) {
+			changePackageNameImage.dispose();
+		}
+		changePackageNameImage = null;
+	}
+
+	private void openPackageNameRefactoring() {
+		if (blockListeners || getType() == null) {
+			return;
+		}
+
+		final TypeEntry typeEntry = getType().getTypeEntry();
+		if (typeEntry != null && typeEntry.getFile() != null) {
+			ChangePackageNameRefactoring.openWizard(typeEntry, nameText.getShell());
+		}
+	}
+
 	private void configureImportsTableLayout(final TableViewer viewer, final Composite parentComposite) {
 		final TableViewerColumn nameColumn = new TableViewerColumn(viewer, SWT.FILL);
 		nameColumn.setLabelProvider(
@@ -163,9 +195,8 @@ public class PackageInfoWidget extends TypeInfoWidget {
 			final Consumer<Command> commandExecutorBuffer = getCommandExecutor();
 			setCommandExecutor(null);
 			if ((getType() != null)) {
-				nameText.setEditable(!isReadonly());
-				nameText.setEnabled(!isReadonly());
-				nameTextProposalAdapter.refresh();
+				updatePackageNameTextState();
+				changePackageNameButton.setEnabled(!isReadonly() && canChangePackageName());
 				buttons.setEnabled(!isReadonly());
 				organizeImportsButton.setEnabled(!isReadonly());
 				packageViewer.getTable().setEnabled(!isReadonly());
@@ -203,11 +234,22 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	@Override
 	public void setEnabled(final boolean enablement) {
 		super.setEnabled(enablement);
-		nameText.setEnabled(enablement);
-		nameTextProposalAdapter.setEnabled(enablement);
+		updatePackageNameTextState();
+		changePackageNameButton.setEnabled(enablement && canChangePackageName());
 		buttons.setVisible(enablement);
 		packageViewer.getTable().setEnabled(enablement);
 		packageViewer.setCellModifier(null);
+	}
+
+	private void updatePackageNameTextState() {
+		nameText.setEditable(false);
+		nameText.setEnabled(true);
+		nameText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+	}
+
+	private boolean canChangePackageName() {
+		final LibraryElement type = getType();
+		return type != null && type.getTypeEntry() != null && type.getTypeEntry().getFile() != null && !isReadonly();
 	}
 
 	private boolean isReadonly() {
@@ -222,12 +264,12 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		return null;
 	}
 
-	private StyledText createGroupStyledText(final Composite group, final boolean editable) {
+	private StyledText createGroupStyledText(final Composite group) {
 		final StyledText text = new StyledText(group, SWT.BORDER | SWT.SINGLE | getWidgetFactory().getOrientation());
 		getWidgetFactory().adapt(text, true, false);
 		text.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		text.setEditable(editable);
-		text.setEnabled(editable);
+		text.setEditable(false);
+		text.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		return text;
 	}
 
