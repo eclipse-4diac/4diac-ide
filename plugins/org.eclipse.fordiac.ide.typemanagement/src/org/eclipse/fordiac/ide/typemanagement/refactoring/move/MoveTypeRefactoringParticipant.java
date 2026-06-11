@@ -16,7 +16,6 @@
 
 package org.eclipse.fordiac.ide.typemanagement.refactoring.move;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -85,9 +84,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		processTypeFiles(resource, destination.getFullPath(), (typeEntry, path) -> {
 			final IFile destinationFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			final String newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
-			modelEdits.add(new MoveTypeModelEdit(newPackageName,
-					MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName),
-					typeEntry.getURI()));
+			TypeRefactoringHelper.addPackageNameModelEdit(modelEdits, typeEntry, newPackageName);
 			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, destinationFile));
 		});
 		// add model edits before(!) UpdateTypeEntryFileChange
