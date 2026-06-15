@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -148,5 +149,9 @@ public class ChangePackageNameRefactoring extends Refactoring {
 
 	public void setNewPackageName(final String newPackageName) {
 		this.newPackageName = newPackageName;
+	}
+
+	TypeLibrary getTypeLibrary() {
+		return typeEntry != null ? typeEntry.getTypeLibrary() : null;
 	}
 }
