@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.library;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -273,18 +274,19 @@ public enum LibraryManager {
 	public java.net.URI extractLibrary(final Path path, final IProject project, final boolean autoImport,
 			final boolean resolve) throws IOException {
 		if (path == null) {
-			// FIXME: AF: FileNotFoundException would be much more clear
-			return null;
+			throw new FileNotFoundException("Archive path not provided"); //$NON-NLS-1$
 		}
-		final Path real = path.toRealPath();
-		if (!Files.isRegularFile(real)) {
-			// FIXME: AF: FileNotFoundException would be much more clear
-			return null;
+
+		final Path archive = path.toRealPath();
+
+		if (!Files.isRegularFile(archive)) {
+			throw new FileNotFoundException("Archive file does not exist: " + archive); //$NON-NLS-1$
 		}
-		FordiacLogHelper.logInfo("Extracting library at " + real); //$NON-NLS-1$
+
+		FordiacLogHelper.logInfo("Extracting library at " + archive); //$NON-NLS-1$
 		final byte[] buffer = new byte[1024];
 		String folderName;
-		try (InputStream inputStream = Files.newInputStream(real);
+		try (InputStream inputStream = Files.newInputStream(archive);
 				ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
 			ZipEntry entry = zipInputStream.getNextEntry();
 			folderName = ""; //$NON-NLS-1$
