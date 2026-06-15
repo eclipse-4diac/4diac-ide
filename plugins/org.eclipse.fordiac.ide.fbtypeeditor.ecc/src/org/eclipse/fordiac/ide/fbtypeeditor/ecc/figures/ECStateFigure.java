@@ -21,7 +21,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_HORIZONTAL;
 import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_VERTICAL;
 
-import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -31,6 +30,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.backgrounds.AbstractBackgroundBorder;
 import org.eclipse.draw2d.backgrounds.shadows.RectangleDropShadowBorder;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
@@ -172,7 +172,7 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 		@Override
 		protected void paintFigure(final Graphics graphics) {
 			// draw only background border
-			if (getBorder() instanceof final AbstractBackground abstractBackground) {
+			if (getBorder() instanceof final AbstractBackgroundBorder abstractBackground) {
 				abstractBackground.paintBackground(this, graphics, NO_INSETS);
 			}
 			if (getBorder() instanceof CompoundBackground) {

@@ -12,12 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.backgrounds.AbstractBackgroundBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 
-public abstract class AbstractShadowBorder extends AbstractBackground {
+public abstract class AbstractShadowBorder extends AbstractBackgroundBorder {
 
 	protected static final int SHADOW_ALPHA = 30;
 	protected static final int SHADOW_SIZE = 4;
