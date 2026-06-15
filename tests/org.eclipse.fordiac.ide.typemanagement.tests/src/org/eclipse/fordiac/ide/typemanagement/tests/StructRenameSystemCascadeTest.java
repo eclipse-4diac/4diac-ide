@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -20,9 +21,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -41,6 +45,7 @@ class StructRenameSystemCascadeTest {
 
 	private static final String CORE_LIBRARY = "core-3.0.0"; //$NON-NLS-1$
 	private static final String CONVERT_LIBRARY = "convert-3.0.0"; //$NON-NLS-1$
+	private static final String IEC_LIBRARY = "iec61131-3-3.0.0"; //$NON-NLS-1$
 
 	private static final String INNER_FILE = "Type Library/mypackage/InnerStruct.dtp"; //$NON-NLS-1$
 	private static final String SYSTEM_FILE = "StructRenameTest.sys"; //$NON-NLS-1$
@@ -52,6 +57,8 @@ class StructRenameSystemCascadeTest {
 
 	private static final String APPLICATION_NAME = "App"; //$NON-NLS-1$
 	private static final String DEMUX_INSTANCE = "Demux"; //$NON-NLS-1$
+	private static final String MUX_INSTANCE = "Mux"; //$NON-NLS-1$
+	private static final String FMOVE_INSTANCE = "Move"; //$NON-NLS-1$
 	private static final String PRODUCER_OUT_PIN = "OUT"; //$NON-NLS-1$
 
 	private IProject project;
@@ -66,7 +73,7 @@ class StructRenameSystemCascadeTest {
 	void loadFixture() throws Exception {
 		final Bundle bundle = Platform.getBundle(BUNDLE_NAME);
 		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, bundle, new Path(PROJECT_PATH));
-		RefactoringTestSupport.linkStandardLibraries(project, CORE_LIBRARY, CONVERT_LIBRARY);
+		RefactoringTestSupport.linkStandardLibraries(project, CORE_LIBRARY, CONVERT_LIBRARY, IEC_LIBRARY);
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 	}
 
@@ -86,11 +93,29 @@ class StructRenameSystemCascadeTest {
 
 	@Test
 	void renameInnerStruct_updatesConfiguredStructDemuxInstance() throws Exception {
-		assertDemuxConfiguredFor(INNER_STRUCT);
+		assertConfigurableFBDataType(DEMUX_INSTANCE, Demultiplexer.class, INNER_STRUCT);
 
 		renameInnerStruct();
 
-		assertDemuxConfiguredFor(INNER_STRUCT_RENAMED);
+		assertConfigurableFBDataType(DEMUX_INSTANCE, Demultiplexer.class, INNER_STRUCT_RENAMED);
+	}
+
+	@Test
+	void renameInnerStruct_updatesConfiguredStructMuxInstance() throws Exception {
+		assertConfigurableFBDataType(MUX_INSTANCE, Multiplexer.class, INNER_STRUCT);
+
+		renameInnerStruct();
+
+		assertConfigurableFBDataType(MUX_INSTANCE, Multiplexer.class, INNER_STRUCT_RENAMED);
+	}
+
+	@Test
+	void renameInnerStruct_updatesConfiguredFMoveInstance() throws Exception {
+		assertConfigurableFBDataType(FMOVE_INSTANCE, ConfigurableMoveFB.class, INNER_STRUCT);
+
+		renameInnerStruct();
+
+		assertConfigurableFBDataType(FMOVE_INSTANCE, ConfigurableMoveFB.class, INNER_STRUCT_RENAMED);
 	}
 
 	private void renameInnerStruct() throws Exception {
@@ -104,12 +129,13 @@ class StructRenameSystemCascadeTest {
 		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(outPin.getType()));
 	}
 
-	private void assertDemuxConfiguredFor(final String expectedQualifiedType) {
+	private <T extends ConfigurableFB> void assertConfigurableFBDataType(final String instanceName,
+			final Class<T> instanceClass, final String expectedQualifiedType) {
 		final FBNetworkElement element = system().getApplicationNamed(APPLICATION_NAME).getFBNetwork()
-				.getNetworkElements().stream().filter(e -> DEMUX_INSTANCE.equals(e.getName())).findFirst()
+				.getNetworkElements().stream().filter(e -> instanceName.equals(e.getName())).findFirst()
 				.orElseThrow();
-		final Demultiplexer demux = (Demultiplexer) element;
-		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(demux.getDataType()));
+		final T configurable = assertInstanceOf(instanceClass, element);
+		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(configurable.getDataType()));
 	}
 
 	private AutomationSystem system() {

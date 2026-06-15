@@ -9,6 +9,12 @@
 			<FB Name="Demux" Type="STRUCT_DEMUX" Comment="" x="1500.0" y="500.0">
 				<Attribute Name="StructuredType" Type="STRING" Value="mypackage::InnerStruct"/>
 			</FB>
+			<FB Name="Mux" Type="STRUCT_MUX" Comment="" x="1500.0" y="1500.0">
+				<Attribute Name="StructuredType" Type="STRING" Value="mypackage::InnerStruct"/>
+			</FB>
+			<FB Name="Move" Type="F_MOVE" Comment="" x="2500.0" y="500.0">
+				<Attribute Name="DataType" Type="STRING" Value="mypackage::InnerStruct"/>
+			</FB>
 		</SubAppNetwork>
 	</Application>
 </System>
