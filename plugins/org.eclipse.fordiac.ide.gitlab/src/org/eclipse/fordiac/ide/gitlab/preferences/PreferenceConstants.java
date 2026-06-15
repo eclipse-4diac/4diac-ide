@@ -13,22 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.preferences;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
 public final class PreferenceConstants {
 
 	private PreferenceConstants() {
 		// Shall not be instantiated
 	}
-
-	@Deprecated
-	public static final String P_GITLAB_TOKEN = "gitLabToken"; //$NON-NLS-1$
-
-	@Deprecated
-	public static final String P_GITLAB_URL = "gitLabURL"; //$NON-NLS-1$
 
 	public static final String GITLAB_ENDPOINTS_PREF_PAGE_ID = "org.eclipse.fordiac.ide.gitlab.preferences.gitlabEndpoints"; //$NON-NLS-1$
 
@@ -47,8 +36,7 @@ public final class PreferenceConstants {
 		if (!endpoints.isEmpty()) {
 			return endpoints.get(0).url();
 		}
-		return Platform.getPreferencesService().getString(P_GITLAB_PREFERENCE_ID, P_GITLAB_URL, "", //$NON-NLS-1$
-				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
+		return ""; //$NON-NLS-1$
 	}
 
 	public static String getToken() {
@@ -56,7 +44,6 @@ public final class PreferenceConstants {
 		if (!endpoints.isEmpty()) {
 			return endpoints.get(0).token();
 		}
-		return Platform.getPreferencesService().getString(P_GITLAB_PREFERENCE_ID, P_GITLAB_TOKEN, "", //$NON-NLS-1$
-				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
+		return ""; //$NON-NLS-1$
 	}
 }

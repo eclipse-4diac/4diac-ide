@@ -46,7 +46,6 @@ public final class GitLabEndpointsStore {
 	private static final String ENDPOINTS_NODE = "endpoints"; //$NON-NLS-1$
 	private static final String URL_KEY = "url"; //$NON-NLS-1$
 	private static final String TOKEN_KEY = "token"; //$NON-NLS-1$
-	private static final String DEFAULT_ENDPOINT_NAME = "Default"; //$NON-NLS-1$
 
 	private GitLabEndpointsStore() {
 	}
@@ -57,7 +56,7 @@ public final class GitLabEndpointsStore {
 		if (!storedEndpoints.isEmpty()) {
 			return storedEndpoints;
 		}
-		return migrateOldEndpoints(prefs);
+		return Collections.emptyList();
 	}
 
 	private static List<GitLabEndpoint> loadStoredEndpoints(final IEclipsePreferences prefs) {
@@ -151,28 +150,6 @@ public final class GitLabEndpointsStore {
 		} catch (final IOException e) {
 			FordiacLogHelper.logWarning("Removing secure token failed", e); //$NON-NLS-1$
 		}
-	}
-
-	/**
-	 * LEGACY migration: migrate old single URL/token preferences into a single
-	 * endpoint entry named "Default".
-	 */
-	protected static List<GitLabEndpoint> migrateOldEndpoints(final IEclipsePreferences prefs) {
-		final String legacyUrl = prefs.get(PreferenceConstants.P_GITLAB_URL, ""); //$NON-NLS-1$
-		final String legacyToken = prefs.get(PreferenceConstants.P_GITLAB_TOKEN, ""); //$NON-NLS-1$
-		if (legacyUrl != null && !legacyUrl.isBlank() && legacyToken != null && !legacyToken.isBlank()) {
-			final GitLabEndpoint migrated = new GitLabEndpoint(DEFAULT_ENDPOINT_NAME, legacyUrl, legacyToken);
-			saveEndpoints(List.of(migrated));
-			prefs.remove(PreferenceConstants.P_GITLAB_URL);
-			prefs.remove(PreferenceConstants.P_GITLAB_TOKEN);
-			try {
-				prefs.flush();
-			} catch (final BackingStoreException e) {
-				FordiacLogHelper.logWarning("Saving migrated GitLab endpoint failed", e); //$NON-NLS-1$
-			}
-			return List.of(new GitLabEndpoint(DEFAULT_ENDPOINT_NAME, legacyUrl, getTokenSecure(DEFAULT_ENDPOINT_NAME)));
-		}
-		return Collections.emptyList();
 	}
 
 	private static void putTokenSecure(final String endpointName, final String token) {
