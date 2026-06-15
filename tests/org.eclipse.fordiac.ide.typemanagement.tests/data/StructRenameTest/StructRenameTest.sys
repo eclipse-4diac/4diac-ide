@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="StructRenameTest" Comment="">
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-05-31">
+	</VersionInfo>
+	<Application Name="App" Comment="">
+		<SubAppNetwork>
+			<FB Name="Producer" Type="StructProducer" Comment="" x="500.0" y="500.0">
+			</FB>
+			<FB Name="Demux" Type="STRUCT_DEMUX" Comment="" x="1500.0" y="500.0">
+				<Attribute Name="StructuredType" Type="STRING" Value="mypackage::InnerStruct"/>
+			</FB>
+		</SubAppNetwork>
+	</Application>
+</System>
