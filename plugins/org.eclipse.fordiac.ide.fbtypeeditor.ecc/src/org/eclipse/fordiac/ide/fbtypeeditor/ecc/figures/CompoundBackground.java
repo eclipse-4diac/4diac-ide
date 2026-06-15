@@ -14,10 +14,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
-import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.backgrounds.AbstractBackgroundBorder;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 
@@ -28,7 +28,7 @@ import org.eclipse.draw2d.geometry.Insets;
  * This will be upstreamed to GEF Classic for the upcoming GEF Classic 2026-06
  * release.
  */
-public class CompoundBackground extends AbstractBackground {
+public class CompoundBackground extends AbstractBackgroundBorder {
 
 	/** The inner Border. */
 	protected Border inner;
@@ -138,7 +138,7 @@ public class CompoundBackground extends AbstractBackground {
 
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics g, Insets insets) {
-		if (outer instanceof final AbstractBackground outerBg) {
+		if (outer instanceof final AbstractBackgroundBorder outerBg) {
 			g.pushState();
 			outerBg.paintBackground(figure, g, insets);
 			g.popState();
@@ -146,7 +146,7 @@ public class CompoundBackground extends AbstractBackground {
 		if (outer != null) {
 			insets = insets.getAdded(outer.getInsets(figure));
 		}
-		if (inner instanceof final AbstractBackground innerBg) {
+		if (inner instanceof final AbstractBackgroundBorder innerBg) {
 			innerBg.paintBackground(figure, g, insets);
 		}
 	}
