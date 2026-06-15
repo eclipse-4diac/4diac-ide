@@ -81,7 +81,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		return null;
 	}
 
-	private IEditorInput getDocumentationEditorInput(final IEditorInput input) {
+	private static IEditorInput getDocumentationEditorInput(final IEditorInput input) {
 		if (input instanceof final IFileEditorInput fileEI) {
 			IFolder assetsFolder;
 			try {

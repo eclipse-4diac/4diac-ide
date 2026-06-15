@@ -31,11 +31,6 @@ public class GlobalConstantsTypeEditor extends AbstractTypeEditor {
 	}
 
 	@Override
-	protected boolean dependencyAffectingTypeChange() {
-		return true;
-	}
-
-	@Override
 	protected GlobalConstantsEntry getTypeEntry() {
 		return (GlobalConstantsEntry) super.getTypeEntry();
 	}

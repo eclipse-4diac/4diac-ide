@@ -27,12 +27,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeInterfaceElementCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
-import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
@@ -40,36 +34,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typeeditor.AbstractTypeEditor;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.contentoutline.MultiPageEditorContentOutlinePage;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
-import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocationProvider, CommandStackEventListener {
+public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocationProvider {
 
 	private IContentOutlinePage contentOutline = null;
-
-	private int interfaceChanges = 0; // number of interface changes happend since the last save
-
-	@Override
-	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
-		super.init(site, editorInput);
-		getCommandStack().addCommandStackEventListener(this);
-	}
-
-	@Override
-	public void dispose() {
-		getCommandStack().removeCommandStackEventListener(this);
-		super.dispose();
-	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
@@ -77,11 +49,6 @@ public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocat
 			performPresaveHooks();
 			super.doSave(monitor);
 		}
-	}
-
-	@Override
-	protected boolean dependencyAffectingTypeChange() {
-		return interfaceChanges != 0;
 	}
 
 	@Override
@@ -128,24 +95,6 @@ public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocat
 	}
 
 	@Override
-	public void stackChanged(final CommandStackEvent event) {
-		if (isInterfaceChangeCommand(event.getCommand())) {
-			switch (event.getDetail()) {
-			case CommandStack.POST_EXECUTE, CommandStack.POST_REDO:
-				interfaceChanges++;
-				break;
-			case CommandStack.POST_UNDO:
-				interfaceChanges--;
-				break;
-			default:
-				break;
-			}
-		} else if (event.getDetail() == CommandStack.POST_MARK_SAVE) {
-			interfaceChanges = 0;
-		}
-	}
-
-	@Override
 	public String getContributorId() {
 		return "property.contributor.fb"; //$NON-NLS-1$
 	}
@@ -158,33 +107,6 @@ public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocat
 	@Override
 	public INavigationLocation createNavigationLocation() {
 		return (getType() != null) ? new FBTypeNavigationLocation(this) : null;
-	}
-
-	private boolean isInterfaceChangeCommand(final Command cmd) {
-		if (cmd instanceof final CompoundCommand compoundCmd) {
-			for (final Command childCmd : compoundCmd.getCommands()) {
-				if (isInterfaceChangeCommand(childCmd)) {
-					// for compound commands it is sufficient to know that at least one of the
-					// children is an interface command of our type
-					return true;
-				}
-			}
-			return false;
-		}
-
-		// we need to check not only for the four commands but also if the element is
-		// an interface element of the FBtype and not of any child (e.g., pin of a
-		// subapp in a typed subapp)
-		final FBType fbType = getType();
-		return ((cmd instanceof final CreateInterfaceElementCommand createIFCmd
-				&& fbType.getInterfaceList().equals(createIFCmd.getTargetInterfaceList()))
-				|| (cmd instanceof final DeleteInterfaceCommand delIFCmd
-						&& fbType.getInterfaceList().equals(delIFCmd.getParent()))
-				|| (cmd instanceof final AbstractChangeInterfaceElementCommand changeIFCmd
-						&& fbType.getInterfaceList().equals(changeIFCmd.getInterfaceElement().eContainer()))
-				|| (cmd instanceof final ChangeNameCommand chgNameCmd
-						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer()))
-				|| cmd instanceof WithCreateCommand || cmd instanceof DeleteWithCommand);
 	}
 
 	@Override

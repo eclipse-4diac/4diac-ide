@@ -81,7 +81,7 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 		bars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
 		bars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 
-		viewer.getEditDomain().getCommandStack().addCommandStackListener(e -> {
+		viewer.getEditDomain().getCommandStack().addCommandStackEventListener(e -> {
 			undoAction.update();
 			redoAction.update();
 			bars.updateActionBars();

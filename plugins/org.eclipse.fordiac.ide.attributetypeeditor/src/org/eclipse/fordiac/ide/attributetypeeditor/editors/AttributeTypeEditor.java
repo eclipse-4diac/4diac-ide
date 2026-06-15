@@ -26,12 +26,6 @@ public class AttributeTypeEditor extends AbstractTypeEditor {
 	}
 
 	@Override
-	protected boolean dependencyAffectingTypeChange() {
-		// For data types all changes are dependency affecting changes
-		return true;
-	}
-
-	@Override
 	public String getContributorId() {
 		return "org.eclipse.fordiac.ide.attributetypeeditor.editors.AttributeTypeEditor"; //$NON-NLS-1$
 	}
