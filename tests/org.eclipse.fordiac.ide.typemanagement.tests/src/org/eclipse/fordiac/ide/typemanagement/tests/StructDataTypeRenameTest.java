@@ -32,7 +32,6 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.osgi.framework.Bundle;
 
@@ -44,6 +43,7 @@ class StructDataTypeRenameTest {
 
 	private static final String CORE_LIBRARY = "core-3.0.0"; //$NON-NLS-1$
 	private static final String CONVERT_LIBRARY = "convert-3.0.0"; //$NON-NLS-1$
+	private static final String IEC_LIBRARY = "iec61131-3-3.0.0"; //$NON-NLS-1$
 
 	private static final String INNER_FILE = "Type Library/mypackage/InnerStruct.dtp"; //$NON-NLS-1$
 	private static final String RENAMED_FILE = "Type Library/mypackage/InnerStructRenamed.dtp"; //$NON-NLS-1$
@@ -69,7 +69,7 @@ class StructDataTypeRenameTest {
 	void loadFixture() throws Exception {
 		final Bundle bundle = Platform.getBundle(BUNDLE_NAME);
 		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, bundle, new Path(PROJECT_PATH));
-		RefactoringTestSupport.linkStandardLibraries(project, CORE_LIBRARY, CONVERT_LIBRARY);
+		RefactoringTestSupport.linkStandardLibraries(project, CORE_LIBRARY, CONVERT_LIBRARY, IEC_LIBRARY);
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 	}
 
@@ -111,10 +111,6 @@ class StructDataTypeRenameTest {
 		assertTypeEntryFullTypeNameEqual(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
 	}
 
-	// Undo renames the .dtp file back but leaves its internal DataType name as
-	// "InnerStructRenamed", so mypackage::InnerStruct stays unresolvable. Re-enable
-	// once UpdateTypeEntryChange's undo reverts the file content.
-	@Disabled("Undo does not revert the renamed type's file content; tracked with maintainers") //$NON-NLS-1$
 	@Test
 	void renameInnerStruct_undoRestoresOriginalState() throws Exception {
 		final Change undo = renameInnerStruct();
@@ -126,7 +122,6 @@ class StructDataTypeRenameTest {
 		assertOuterMember(OLD_NAME, INNER_STRUCT);
 	}
 
-	@Disabled("Depends on undo fully restoring the original state; see renameInnerStruct_undoRestoresOriginalState") //$NON-NLS-1$
 	@Test
 	void renameInnerStruct_redoReappliesRename() throws Exception {
 		final Change undo = renameInnerStruct();
