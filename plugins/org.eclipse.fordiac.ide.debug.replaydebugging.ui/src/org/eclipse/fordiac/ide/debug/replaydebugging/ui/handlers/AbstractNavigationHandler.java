@@ -22,6 +22,7 @@ public abstract class AbstractNavigationHandler extends AbstractHandler {
 
 	protected abstract NavigationRequest.Direction getDirection();
 
+	@SuppressWarnings("static-method") // allow subclasses to override
 	protected boolean isJump() {
 		return false;
 	}

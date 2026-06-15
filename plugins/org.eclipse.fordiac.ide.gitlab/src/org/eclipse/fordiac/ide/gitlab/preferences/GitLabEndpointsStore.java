@@ -105,7 +105,7 @@ public final class GitLabEndpointsStore {
 
 			prefs.flush();
 			SecurePreferencesFactory.getDefault().flush();
-		} catch (final BackingStoreException | IOException | StorageException e) {
+		} catch (final BackingStoreException | IOException e) {
 			FordiacLogHelper.logWarning("Saving GitLab endpoints failed", e); //$NON-NLS-1$
 		}
 	}
@@ -133,7 +133,7 @@ public final class GitLabEndpointsStore {
 	}
 
 	private static void removeMissingSecureNodes(final ISecurePreferences secureEndpointsRoot,
-			final Collection<String> names) throws StorageException, IOException {
+			final Collection<String> names) {
 		for (final String existingChild : secureEndpointsRoot.childrenNames()) {
 			if (!names.contains(existingChild)) {
 				secureEndpointsRoot.node(existingChild).removeNode();

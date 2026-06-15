@@ -57,7 +57,6 @@ public class TypeSelectionWidget {
 
 	private ConfigurableObject configurableObject;
 	private ITypeSelectionContentProvider contentProvider;
-	private ITreeContentProvider treeContentProvider;
 
 	private Composite composite;
 	private TableViewer tableViewer;
@@ -142,7 +141,6 @@ public class TypeSelectionWidget {
 			final ITreeContentProvider treeContentProvider) {
 		this.configurableObject = type;
 		this.contentProvider = contentProvider;
-		this.treeContentProvider = treeContentProvider;
 		tableViewer.setCellEditors(new CellEditor[] {
 				new DataTypeDropdown(this::getTypeLibrary, contentProvider, treeContentProvider, tableViewer) });
 	}

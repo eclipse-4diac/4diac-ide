@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementActivationListener;
@@ -57,7 +56,6 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.JFaceResources;
@@ -90,9 +88,6 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 		implements IGotoMarker, ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
-
-	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
-	private static final int CANCEL_BUTTON_INDEX = 1;
 
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();
 
@@ -160,14 +155,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 
 	protected abstract AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler();
 
-	private MessageDialog createTypeUpdateDialog() {
-		final String[] labels = { Messages.TypeEditor_TypeUpdateDialog_SaveAndUpdate, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
-
-		return new FBTypeUpdateDialog<>(getSite().getShell(), Messages.TypeEditor_TypeUpdateDialog_Headline,
-				Messages.TypeEditor_TypeUpdateDialog_Description, labels, DEFAULT_BUTTON_INDEX,
-				createTypeEntryDataHandler());
-	}
-
 	@Override
 	public void dispose() {
 		if (null != getSite()) {
@@ -194,26 +181,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 				doSaveAs();
 				return;
 			}
-//			int result = DEFAULT_BUTTON_INDEX;
-//			try {
-//				if (dependencyAffectingTypeChange()) {
-//					result = createTypeUpdateDialog().open();
-//				}
-//			} catch (final Exception e) {
-//				FordiacLogHelper.logError(e.getMessage(), e);
-//			}
-//
-//			switch (result) {
-//			case DEFAULT_BUTTON_INDEX:
 			doSaveInternal(monitor);
-//				break;
-//			case CANCEL_BUTTON_INDEX:
-//				MessageDialog.openInformation(null, Messages.TypeEditor_WarningDialog_Headline,
-//						Messages.TypeEditor_WarningDialog_NotSaved);
-//				break;
-//			default:
-//				break;
-//			}
 		}
 	}
 
@@ -245,14 +213,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			Thread.currentThread().interrupt();
 		}
 	}
-
-	/**
-	 * Check if the current changes have an impact on any dependent types.
-	 *
-	 * @return true if the user shall be presented with a dialog with all affected
-	 *         dependent types
-	 */
-	protected abstract boolean dependencyAffectingTypeChange();
 
 	public CommandStack getCommandStack() {
 		return commandStack;

@@ -16,7 +16,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
@@ -37,9 +36,9 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.AttributeValueEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.ConditionExpressionEdit;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.TypeDeclarationEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.ImportEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.InitialValueEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.TypeDeclarationEdit;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -92,8 +91,6 @@ public class STCoreChangeConverter extends ChangeConverter {
 					globalServiceProvider);
 		}
 	}
-
-	private static final Logger LOG = Logger.getLogger(ChangeConverter.class);
 
 	private final RefactoringIssueAcceptor issues;
 
@@ -164,9 +161,9 @@ public class STCoreChangeConverter extends ChangeConverter {
 					new AttributeValueEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(attribute),
 							getEditedText(attribute.getValue(), textEdit)));
 			case final ArraySize arraySize when arraySize.eContainer() instanceof final VarDeclaration varDeclaration ->
-				addModelEdit(
-						new TypeDeclarationEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(varDeclaration),
-								getEditedText(varDeclaration.getFullTypeName(), textEdit)));
+				addModelEdit(new TypeDeclarationEdit(sourceElementName,
+						LibraryElementXtextResource.getExternalURI(varDeclaration),
+						getEditedText(varDeclaration.getFullTypeName(), textEdit)));
 			case final Value value when value.eContainer() instanceof final VarDeclaration varDeclaration ->
 				addModelEdit(new InitialValueEdit(sourceElementName,
 						LibraryElementXtextResource.getExternalURI(varDeclaration),
