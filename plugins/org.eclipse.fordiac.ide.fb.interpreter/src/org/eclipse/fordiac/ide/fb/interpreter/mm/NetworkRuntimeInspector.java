@@ -30,8 +30,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl;
 
 /**
  * @brief This class intends to serves as a bridge between the network of a
@@ -140,7 +140,7 @@ public class NetworkRuntimeInspector {
 
 			// omit non interface elements, or interface from subApps
 			if (!(obj instanceof final IInterfaceElement interfaceElement)
-					|| (interfaceElement.getBlockFBNetworkElement() instanceof SubAppImpl)) {
+					|| (interfaceElement.getBlockFBNetworkElement() instanceof SubApp)) {
 				continue;
 			}
 

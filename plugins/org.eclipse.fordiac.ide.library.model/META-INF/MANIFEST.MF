@@ -9,7 +9,7 @@ Bundle-Version: 3.2.0.qualifier
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.library.model.library,
- org.eclipse.fordiac.ide.library.model.library.impl,
+ org.eclipse.fordiac.ide.library.model.library.impl;x-internal:=true,
  org.eclipse.fordiac.ide.library.model.library.util,
  org.eclipse.fordiac.ide.library.model.util
 Require-Bundle: org.eclipse.core.runtime,

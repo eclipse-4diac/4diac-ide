@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor.model;singlet
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.1.100.qualifier
 Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.globalConstants,
- org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl,
+ org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl;x-internal:=true,
  org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util
 Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor.model
 Bundle-RequiredExecutionEnvironment: JavaSE-21
