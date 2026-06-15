@@ -18,13 +18,12 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl;
 
 public class Utils {
 
@@ -95,17 +94,17 @@ public class Utils {
 		while (it.hasNext()) {
 			final EObject obj = it.next();
 			if (obj instanceof final IInterfaceElement varDecl
-					&& !(varDecl.getBlockFBNetworkElement() instanceof SubAppImpl)) {
+					&& !(varDecl.getBlockFBNetworkElement() instanceof SubApp)) {
 				result.add(varDecl);
 			}
 		}
 
 		// go deeper into network elements
 		for (final FBNetworkElement networkElement : network.getNetworkElements()) {
-			if (networkElement instanceof final CFBInstanceImpl composite) {
+			if (networkElement instanceof final CFBInstance composite) {
 				collectAllValueHolderElements(composite.loadCFBNetwork(), result); // recursive call to collect ports
 																					// from nested networks
-			} else if (networkElement instanceof final SubAppImpl subApp) {
+			} else if (networkElement instanceof final SubApp subApp) {
 				var internalNetwork = subApp.loadSubAppNetwork();
 				if (internalNetwork == null) {
 					internalNetwork = ((SubApp) subApp.getOpposite()).loadSubAppNetwork();

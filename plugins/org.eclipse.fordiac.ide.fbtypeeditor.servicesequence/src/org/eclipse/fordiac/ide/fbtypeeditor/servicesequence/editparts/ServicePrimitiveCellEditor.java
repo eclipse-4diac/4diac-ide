@@ -18,9 +18,9 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.editparts.AbstractCombinedCellEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.InputPrimitiveImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -61,14 +61,12 @@ public class ServicePrimitiveCellEditor extends AbstractCombinedCellEditor<Primi
 			return;
 		}
 		final List<String> eventNames = new ArrayList<>();
-		if (this.getElement() instanceof OutputPrimitiveImpl) {
+		if (this.getElement() instanceof OutputPrimitive) {
 			for (final Event event : getPrimitive().getService().getFBType().getInterfaceList().getEventOutputs()) {
 				eventNames.add(event.getName());
 			}
-		} else if (this.getElement() instanceof InputPrimitiveImpl) {
-
-			for (final Event event : getPrimitive().getService().getFBType().getInterfaceList().getEventInputs())
-			{
+		} else if (this.getElement() instanceof InputPrimitive) {
+			for (final Event event : getPrimitive().getService().getFBType().getInterfaceList().getEventInputs()) {
 				eventNames.add(event.getName());
 			}
 		}

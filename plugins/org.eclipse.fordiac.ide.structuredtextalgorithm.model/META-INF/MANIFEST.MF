@@ -16,5 +16,5 @@ Require-Bundle: org.eclipse.xtext.xbase.lib,
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: 
  org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm,
- org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl;x-internal:=true,
  org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.util

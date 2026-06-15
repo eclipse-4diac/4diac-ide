@@ -22,8 +22,8 @@ Export-Package: org.eclipse.fordiac.ide.services,
  org.eclipse.fordiac.ide.validation,
  org.eclipse.fordiac.ide,
  org.eclipse.fordiac.ide.contractSpec,
- org.eclipse.fordiac.ide.parser.antlr.internal,
+ org.eclipse.fordiac.ide.parser.antlr.internal;x-internal:=true,
  org.eclipse.fordiac.ide.generator,
- org.eclipse.fordiac.ide.contractSpec.impl,
+ org.eclipse.fordiac.ide.contractSpec.impl;x-internal:=true,
  org.eclipse.fordiac.ide.serializer
 Import-Package: org.apache.log4j

@@ -29,11 +29,11 @@ import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
 import org.eclipse.fordiac.ide.contractSpec.CausalReaction;
 import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contractSpec.ClockDefinition;
+import org.eclipse.fordiac.ide.contractSpec.Model;
 import org.eclipse.fordiac.ide.contractSpec.Reaction;
 import org.eclipse.fordiac.ide.contractSpec.Repetition;
 import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
 import org.eclipse.fordiac.ide.contractSpec.TimeSpec;
-import org.eclipse.fordiac.ide.contractSpec.impl.ModelImpl;
 import org.eclipse.fordiac.ide.contracts.ContractRule.Type;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeContractCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -204,7 +204,7 @@ public class ContractSystem {
 		if (resource.getContents().isEmpty()) {
 			return; // empty contract
 		}
-		if (!(resource.getContents().get(0) instanceof final ModelImpl model)) {
+		if (!(resource.getContents().get(0) instanceof final Model model)) {
 			error(Messages.ContractModelLoadError.formatted(component.getName()), ContractIssue.Code.MODEL_LOADING);
 			return;
 		}

@@ -39,8 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -63,7 +62,8 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 		}
 		if (SERVICE_TRANSACTION.equals(type)) {
 			return createServiceTransaction(refEP);
-		} else if (SERVICE_SEQUENCE.equals(type)) {
+		}
+		if (SERVICE_SEQUENCE.equals(type)) {
 			return createServiceSequence(refEP);
 		}
 		return null;
@@ -79,14 +79,12 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			final ServiceTransaction transaction = ((InputPrimitive) refEP.getModel()).getServiceTransaction();
 			return new CreateOutputPrimitiveCommand(transaction, 0, true);
 		}
-
-		else if (refEP instanceof TransactionEditPart) {
+		if (refEP instanceof TransactionEditPart) {
 			final ServiceTransaction transaction = (ServiceTransaction) refEP.getModel();
 			final int index = transaction.getOutputPrimitive().size();
 			return new CreateOutputPrimitiveCommand(transaction, index, true);
 		}
-
-		else if (refEP instanceof ServiceSequenceEditPart) {
+		if (refEP instanceof ServiceSequenceEditPart) {
 			int sequenceBefore = ((ServiceSequence) refEP.getModel()).getService().getServiceSequence()
 					.indexOf(refEP.getModel()) - 1;
 			if (sequenceBefore < 0) {
@@ -99,8 +97,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			final int index = transaction.getOutputPrimitive().size();
 			return new CreateOutputPrimitiveCommand(transaction, index, true);
 		}
-
-		else if (refEP == null) { // insert at the end of the list
+		if (refEP == null) { // insert at the end of the list
 			final ServiceTransaction transaction = (ServiceTransaction) getHost().getModel();
 			return new CreateOutputPrimitiveCommand(transaction, true);
 		}
@@ -119,8 +116,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			final int indexLastTransaction = sequence.getServiceTransaction().size() - 1;
 			return new CreateTransactionCommand(sequence, sequence.getServiceTransaction().get(indexLastTransaction));
 		}
-
-		else if (refEP instanceof ServiceSequenceEditPart) {
+		if (refEP instanceof ServiceSequenceEditPart) {
 			int indexSequenceBefore = ((ServiceSequence) refEP.getModel()).getService().getServiceSequence()
 					.indexOf(refEP.getModel()) - 1;
 			if (indexSequenceBefore < 0) {
@@ -134,7 +130,8 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			}
 			final ServiceTransaction transaction = sequenceBefore.getServiceTransaction().get(indexLastTransaction);
 			return new CreateTransactionCommand(sequenceBefore, transaction);
-		} else if (refEP == null) { // insert at the end of the list
+		}
+		if (refEP == null) { // insert at the end of the list
 			final ServiceTransaction transaction = (ServiceTransaction) getHost().getModel();
 			return new CreateTransactionCommand(transaction.getServiceSequence(), transaction);
 		}
@@ -153,8 +150,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			return new CreateServiceSequenceCommand(service,
 					((ServiceTransaction) refEP.getModel()).getServiceSequence());
 		}
-
-		else if (refEP instanceof ServiceSequenceEditPart) {
+		if (refEP instanceof ServiceSequenceEditPart) {
 			final ServiceSequence sequence = (ServiceSequence) refEP.getModel();
 			int indexSequenceBefore = sequence.getService().getServiceSequence().indexOf(sequence) - 1;
 			if (indexSequenceBefore < 0) {
@@ -163,19 +159,17 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			return new CreateServiceSequenceCommand(sequence.getService(),
 					sequence.getService().getServiceSequence().get(indexSequenceBefore));
 		}
-
-		else if (refEP == null) { // insert at the end of the list
+		if (refEP == null) { // insert at the end of the list
 			Service service;
-			if (getHost().getModel() instanceof SimpleFBTypeImpl) {
-				final SimpleFBTypeImpl fb = (SimpleFBTypeImpl) getHost().getModel();
+			if (getHost().getModel() instanceof final SimpleFBType fb) {
 				service = fb.getService();
 				final int indexLastSequence = service.getServiceSequence().size() - 1;
 				return new CreateServiceSequenceCommand(service, service.getServiceSequence().get(indexLastSequence));
-			} else if (getHost().getModel() instanceof ServiceTransactionImpl) {
-				final ServiceTransactionImpl serviceTransactionImpl = (ServiceTransactionImpl) getHost().getModel();
-				service = serviceTransactionImpl.getServiceSequence().getService();
+			}
+			if (getHost().getModel() instanceof final ServiceTransaction serviceTransaction) {
+				service = serviceTransaction.getServiceSequence().getService();
 				final int indexSequenceBefore = service.getServiceSequence()
-						.indexOf(serviceTransactionImpl.getServiceSequence());
+						.indexOf(serviceTransaction.getServiceSequence());
 				return new CreateServiceSequenceCommand(service, service.getServiceSequence().get(indexSequenceBefore));
 			}
 			return null;
@@ -200,7 +194,8 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 		}
 		if (child instanceof TransactionEditPart) {
 			return moveTransaction(child, after);
-		} else if (child instanceof ServiceSequenceEditPart) {
+		}
+		if (child instanceof ServiceSequenceEditPart) {
 			return moveServiceSequence(child, after);
 		}
 		// input primitives can not be reordered
@@ -254,8 +249,7 @@ public class TransactionLayoutEditPolicy extends FlowLayoutEditPolicy {
 			final Primitive afterP = (Primitive) after;
 			return new ChangeServiceSequenceOrderCommand(sequence, afterP.getServiceTransaction().getServiceSequence(),
 					false);
-		} else if ((after == null) && (getHost().getModel() instanceof SimpleFBTypeImpl)) {
-			final SimpleFBTypeImpl fb = (SimpleFBTypeImpl) getHost().getModel();
+		} else if ((after == null) && (getHost().getModel() instanceof final SimpleFBType fb)) {
 			final int indexLastS = fb.getService().getServiceSequence().size() - 1;
 			return new ChangeServiceSequenceOrderCommand(sequence, fb.getService().getServiceSequence().get(indexLastS),
 					false);

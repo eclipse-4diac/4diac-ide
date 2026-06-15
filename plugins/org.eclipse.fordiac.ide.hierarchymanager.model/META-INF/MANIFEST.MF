@@ -9,7 +9,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy,
- org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl,
+ org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl;x-internal:=true,
  org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
