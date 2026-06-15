@@ -20,6 +20,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -30,7 +31,9 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
 import org.eclipse.ltk.core.refactoring.CreateChangeOperation;
@@ -70,6 +73,36 @@ public final class RefactoringTestSupport {
 		project.open(new NullProgressMonitor());
 		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		return project;
+	}
+
+	/**
+	 * Link the given standard libraries from the source tree so types they declare
+	 * resolve at test runtime instead of being copied into the fixture.
+	 */
+	public static void linkStandardLibraries(final IProject project, final String... libraryNames) throws CoreException {
+		ensureLibraryFolders(project);
+		final java.nio.file.Path standardLibraries = java.nio.file.Path
+				.of(System.getProperty("user.dir"), "..", "..", "data", "typelibrary") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				.toAbsolutePath().normalize();
+		for (final String libraryName : libraryNames) {
+			LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve(libraryName).toUri(), true, false);
+		}
+		// refresh() only reconciles added or deleted files; drop the cached
+		// TypeLibrary so .sys entries re-parse with the linked libraries in scope.
+		TypeLibraryManager.INSTANCE.removeProject(project);
+		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
+	}
+
+	private static void ensureLibraryFolders(final IProject project) throws CoreException {
+		final NullProgressMonitor monitor = new NullProgressMonitor();
+		final IFolder standardLibs = project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
+		if (!standardLibs.exists()) {
+			standardLibs.create(IResource.VIRTUAL | IResource.FORCE, true, monitor);
+		}
+		final IFolder externalLibs = project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		if (!externalLibs.exists()) {
+			externalLibs.create(IResource.VIRTUAL | IResource.FORCE, true, monitor);
+		}
 	}
 
 	/** Remove a project from the workspace and drop its cached type library. */
