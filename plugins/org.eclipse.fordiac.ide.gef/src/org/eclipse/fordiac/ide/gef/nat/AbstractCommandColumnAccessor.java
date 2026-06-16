@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.nattable.AbstractColumnAccessor;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumn;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.internal.C;
 
 public abstract class AbstractCommandColumnAccessor<T, C extends NatTableColumn> extends AbstractColumnAccessor<T, C> {
 	private final CommandExecutor commandExecutor;
