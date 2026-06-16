@@ -43,6 +43,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.resource.RenameResourceDescriptor;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 public final class RefactoringTestSupport {
 
@@ -79,11 +80,10 @@ public final class RefactoringTestSupport {
 	 * Link the given standard libraries from the source tree so types they declare
 	 * resolve at test runtime instead of being copied into the fixture.
 	 */
-	public static void linkStandardLibraries(final IProject project, final String... libraryNames) throws CoreException {
+	public static void linkStandardLibraries(final IProject project, final String... libraryNames)
+			throws CoreException, IOException {
 		ensureLibraryFolders(project);
-		final java.nio.file.Path standardLibraries = java.nio.file.Path
-				.of(System.getProperty("user.dir"), "..", "..", "data", "typelibrary") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				.toAbsolutePath().normalize();
+		final java.nio.file.Path standardLibraries = resolveStandardLibrariesPath();
 		for (final String libraryName : libraryNames) {
 			LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve(libraryName).toUri(), true, false);
 		}
@@ -91,6 +91,16 @@ public final class RefactoringTestSupport {
 		// TypeLibrary so .sys entries re-parse with the linked libraries in scope.
 		TypeLibraryManager.INSTANCE.removeProject(project);
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
+	}
+
+	private static java.nio.file.Path resolveStandardLibrariesPath() throws IOException {
+		// Resolve the test bundle's source location through OSGi and walk up to
+		// the repository root, where the standard libraries live under
+		// data/typelibrary.
+		final Bundle bundle = FrameworkUtil.getBundle(RefactoringTestSupport.class);
+		final java.net.URL bundleRootUrl = FileLocator.toFileURL(bundle.getEntry("/")); //$NON-NLS-1$
+		return Paths.get(bundleRootUrl.getPath()).getParent().getParent().resolve("data").resolve("typelibrary") //$NON-NLS-1$ //$NON-NLS-2$
+				.toAbsolutePath().normalize();
 	}
 
 	private static void ensureLibraryFolders(final IProject project) throws CoreException {
