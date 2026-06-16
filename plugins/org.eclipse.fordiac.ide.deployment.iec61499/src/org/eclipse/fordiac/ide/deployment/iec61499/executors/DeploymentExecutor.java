@@ -13,6 +13,7 @@
  *  		- initial API and implementation and/or initial documentation
  *  Alois Zoitl - Harmonized deployment and monitoring communication
  *  Martin Jobst - add connection source suffix for delegate connections
+ *  Sichuan Qunyuan Technology Co., Ltd. - support EtherCAT FB deployment type names
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.executors;
 
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManage
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
 import org.eclipse.fordiac.ide.deployment.interactors.TypeNameCreator;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -333,7 +335,13 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
-		final String fbType = getTypeNameCreator().getTypeName(fbData.getFb());
+		String fbType = getTypeNameCreator().getTypeName(fbData.getFb());
+
+		// For EtherCAT device/module FBs, the generic runtime type name is stored in
+		// Identification.type as a workaround; a dedicated FB attribute may be
+		// preferable in the future.
+		final String identType = fbData.getFb().getType().getIdentification().getType();
+		fbType = identType.isEmpty() ? fbType : identType;
 		final String fullFbInstanceName = fbData.getPrefix() + fbData.getFb().getName();
 		if (fbType.isEmpty()) {
 			throw new DeploymentException((MessageFormat
@@ -389,7 +397,17 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
 		try {
-			final String request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getTypeNameWithHash(entry));
+			String request = "";
+			if (!entry.getType().getIdentification().getType().isEmpty()) {
+				final Attribute attr = entry.getType().getAttribute("eclipse4diac::core::GenericClassName"); //$NON-NLS-1$
+				if (attr != null) {
+					request = MessageFormat.format(QUERY_FB_TYPE, getNextId(),
+							"eclipse4diac::io::ethercat::" + attr.getValue().replace("'", ""));//$NON-NLS-1$
+				}
+			} else {
+				request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getTypeNameWithHash(entry));
+			}
+
 			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
 		} catch (final IOException | LibraryElementHashException e) {
 			throw new DeploymentException(

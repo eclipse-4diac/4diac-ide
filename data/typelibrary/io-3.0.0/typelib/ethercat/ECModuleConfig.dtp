@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataType Name="ECModuleConfig" Comment="A Template for a Data Type">
+	<Identification>
+	</Identification>
+	<VersionInfo Version="1.0" Author="hyperion" Date="2026-04-14">
+	</VersionInfo>
+	<CompilerInfo packageName="forte::eclipse4diac::io::ethercat">
+	</CompilerInfo>
+	<StructuredType>
+		<VarDeclaration Name="ModuleIdent" Type="UDINT"/>
+		<VarDeclaration Name="Slot" Type="UINT"/>
+	</StructuredType>
+</DataType>

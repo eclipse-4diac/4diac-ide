@@ -13,6 +13,7 @@
  *   Martin Jobst - adopt new ST editor for values
  *                - rework initial value handling
  *                - add connection source suffix for delegate connections
+ *   Sichuan Qunyuan Technology Co., Ltd. - deploy declared initial values
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.util;
 
@@ -66,11 +67,16 @@ public final class DeploymentHelper {
 				// deploy only if
 				// - destination is generic
 				// - designated value is not equal with initial value of destination type
-				if (!GenericTypes.isAnyType(destination.getType()) && equalsTypeValue(value, destination)) {
+				// Keep explicitly declared initial values, even if equal to type defaults.
+				// Some runtimes require explicit WRITE for instance initialization.
+				final boolean sourceHasDeclaredInitial = VariableOperations.hasDeclaredInitialValue(source);
+				if (!sourceHasDeclaredInitial && !GenericTypes.isAnyType(destination.getType())
+						&& equalsTypeValue(value, destination)) {
 					return null;
 				}
 				// convert to destination string
-				return VariableOperations.newVariable(destination, value).toString(false);
+				final String result = VariableOperations.newVariable(destination, value).toString(false);
+				return result;
 			} catch (final Exception e) {
 				if (forceDeployement()) {
 					return source.getValue().getValue();
