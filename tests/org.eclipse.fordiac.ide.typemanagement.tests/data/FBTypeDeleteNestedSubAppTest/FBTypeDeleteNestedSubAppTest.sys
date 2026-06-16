@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="FBTypeDeleteNestedSubAppTest" Comment="">
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-06-15">
+	</VersionInfo>
+	<Application Name="App" Comment="">
+		<SubAppNetwork>
+			<FB Name="TopInstance" Type="mypackage::MyBlock" Comment="" x="500.0" y="500.0">
+			</FB>
+			<FB Name="TopInstanceSink" Type="mypackage::MyBlock" Comment="" x="500.0" y="1500.0">
+			</FB>
+			<SubApp Name="Container" Comment="" x="1500.0" y="500.0">
+				<SubAppInterfaceList>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="NestedInstance" Type="mypackage::MyBlock" Comment="" x="500.0" y="500.0">
+					</FB>
+					<FB Name="NestedInstanceSink" Type="mypackage::MyBlock" Comment="" x="500.0" y="1500.0">
+					</FB>
+					<SubApp Name="DeepContainer" Comment="" x="1500.0" y="500.0">
+						<SubAppInterfaceList>
+						</SubAppInterfaceList>
+						<SubAppNetwork>
+							<FB Name="DeeplyNestedInstance" Type="mypackage::MyBlock" Comment="" x="500.0" y="500.0">
+							</FB>
+							<FB Name="DeeplyNestedInstanceSink" Type="mypackage::MyBlock" Comment="" x="500.0" y="1500.0">
+							</FB>
+							<EventConnections>
+								<Connection Comment="" Source="DeeplyNestedInstance.CNF" Destination="DeeplyNestedInstanceSink.REQ" dx1="250.0" dx2="0.0" dy="0.0"/>
+							</EventConnections>
+							<DataConnections>
+								<Connection Comment="" Source="DeeplyNestedInstance.DO" Destination="DeeplyNestedInstanceSink.DI" dx1="250.0" dx2="0.0" dy="0.0"/>
+							</DataConnections>
+						</SubAppNetwork>
+					</SubApp>
+					<EventConnections>
+						<Connection Comment="" Source="NestedInstance.CNF" Destination="NestedInstanceSink.REQ" dx1="250.0" dx2="0.0" dy="0.0"/>
+					</EventConnections>
+					<DataConnections>
+						<Connection Comment="" Source="NestedInstance.DO" Destination="NestedInstanceSink.DI" dx1="250.0" dx2="0.0" dy="0.0"/>
+					</DataConnections>
+				</SubAppNetwork>
+			</SubApp>
+			<EventConnections>
+				<Connection Comment="" Source="TopInstance.CNF" Destination="TopInstanceSink.REQ" dx1="250.0" dx2="0.0" dy="0.0"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Comment="" Source="TopInstance.DO" Destination="TopInstanceSink.DI" dx1="250.0" dx2="0.0" dy="0.0"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+</System>
