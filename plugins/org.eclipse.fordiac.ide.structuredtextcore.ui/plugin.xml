@@ -649,6 +649,24 @@
           </adapt>
        </enablement>
     </renameParticipant>
+    <renameParticipant
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCorePackageNameChangeParticipant"
+          id="org.eclipse.fordiac.ide.structuredtextcore.ui.packageNameChangeParticipant"
+          name="%packageNameChangeParticipant.name">
+       <enablement>
+          <and>
+             <instanceof
+                   value="org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry">
+             </instanceof>
+             <with
+                   variable="processorIdentifier">
+                <equals
+                      value="org.eclipse.fordiac.ide.typemanagement.changePackageName">
+                </equals>
+             </with>
+          </and>
+       </enablement>
+    </renameParticipant>
  </extension>
  <extension
        point="org.eclipse.ltk.core.refactoring.moveParticipants">

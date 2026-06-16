@@ -12,19 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.edit;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.Import;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -45,38 +39,6 @@ public class DataTypeEditBuilder {
 				modelEdits.add(new UpdateConfigurableFBModelEdit(configurableFB, dataTypeEntry));
 			}
 		});
-	}
-
-	public static void createStructuredDataTypeImportChanges(final DataTypeEntry dataTypeEntry,
-			final List<ModelEdit<?>> modelEdits, final String targetTypeName) {
-		final Set<URI> handledImports = new HashSet<>();
-		DataTypeInstanceSearch.createNonDerivedDataTypeSearch(dataTypeEntry).performSearch()
-				.forEach(obj -> addImportChanges(obj, modelEdits, dataTypeEntry.getFullTypeName(), targetTypeName,
-						handledImports));
-	}
-
-	private static void addImportChanges(final EObject object, final List<ModelEdit<?>> modelEdits,
-			final String sourceTypeName, final String targetTypeName, final Set<URI> handledImports) {
-		if (!(EcoreUtil.getRootContainer(object) instanceof final LibraryElement libraryElement)
-				|| libraryElement.getCompilerInfo() == null) {
-			return;
-		}
-
-		for (final Import imp : libraryElement.getCompilerInfo().getImports()) {
-			if (sourceTypeName.equals(imp.getImportedNamespace())) {
-				final URI uri = EcoreUtil.getURI(imp);
-				if (handledImports.add(uri)) {
-					final String newValue = hasImport(libraryElement, targetTypeName, imp) ? null : targetTypeName;
-					modelEdits.add(new ImportEdit(Messages.ImportChange_ImportedNamespaceChanged, uri, newValue));
-				}
-			}
-		}
-	}
-
-	private static boolean hasImport(final LibraryElement libraryElement, final String targetTypeName,
-			final Import currentImport) {
-		return libraryElement.getCompilerInfo().getImports().stream()
-				.anyMatch(imp -> imp != currentImport && Objects.equals(imp.getImportedNamespace(), targetTypeName));
 	}
 
 	public static String getFullTypeName(final TypeEntry typeEntry, final IPath newPath) {

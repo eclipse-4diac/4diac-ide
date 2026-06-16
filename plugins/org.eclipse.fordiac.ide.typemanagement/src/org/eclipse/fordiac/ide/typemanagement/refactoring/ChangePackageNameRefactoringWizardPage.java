@@ -24,6 +24,7 @@ import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.ui.refactoring.UserInputWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -33,13 +34,13 @@ import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
 
 public class ChangePackageNameRefactoringWizardPage extends UserInputWizardPage {
 
-	private final ChangePackageNameRefactoring refactoring;
+	private final ChangePackageNameRefactoringProcessor processor;
 
 	private Text packageNameText;
 
-	public ChangePackageNameRefactoringWizardPage(final ChangePackageNameRefactoring refactoring) {
-		super(refactoring.getName());
-		this.refactoring = refactoring;
+	public ChangePackageNameRefactoringWizardPage(final ChangePackageNameRefactoringProcessor processor) {
+		super(processor.getProcessorName());
+		this.processor = processor;
 	}
 
 	@Override
@@ -59,15 +60,15 @@ public class ChangePackageNameRefactoringWizardPage extends UserInputWizardPage 
 		final Label packageNameLabel = new Label(parent, SWT.NONE);
 		packageNameLabel.setText(Messages.ChangePackageNameRefactoringWizardPage_Name);
 		packageNameText = new Text(parent, SWT.BORDER);
-		packageNameText.setText(Objects.requireNonNullElse(refactoring.getNewPackageName(), "")); //$NON-NLS-1$
+		packageNameText.setText(Objects.requireNonNullElse(processor.getNewPackageName(), "")); //$NON-NLS-1$
 		packageNameText.addModifyListener(e -> {
-			refactoring.setNewPackageName(packageNameText.getText());
+			processor.setNewPackageName(packageNameText.getText());
 			validatePage();
 		});
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(packageNameText);
 
 		final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(packageNameText,
-				new TextContentAdapter(), new PackageSelectionProposalProvider(refactoring::getTypeLibrary), null, null,
+				new TextContentAdapter(), new PackageSelectionProposalProvider(processor::getTypeLibrary), null, null,
 				true);
 		packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 	}
@@ -83,8 +84,8 @@ public class ChangePackageNameRefactoringWizardPage extends UserInputWizardPage 
 	private void validatePage() {
 		try {
 			final NullProgressMonitor monitor = new NullProgressMonitor();
-			final RefactoringStatus status = refactoring.checkInitialConditions(monitor);
-			status.merge(refactoring.checkFinalConditions(monitor));
+			final RefactoringStatus status = processor.checkInitialConditions(monitor);
+			status.merge(processor.checkFinalConditions(monitor, new CheckConditionsContext()));
 			setPageComplete(status);
 		} catch (OperationCanceledException | CoreException e) {
 			setPageComplete(RefactoringStatus.createFatalErrorStatus(e.getMessage()));
