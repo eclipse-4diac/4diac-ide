@@ -324,7 +324,7 @@ public class FBNetworkConnection extends HideableConnection {
 
 	int getMaxFanOutLabelWidth() {
 		final InterfaceEditPart source = (InterfaceEditPart) connEP.getSource();
-		return ((List<ConnectionEditPart>) source.getSourceConnections()).stream()
+		return source.getSourceConnections().stream().map(ConnectionEditPart.class::cast)
 				.filter(conn -> !conn.getModel().isVisible())
 				.mapToInt(ep -> ep.getFigure().getSourceDecoration().getLabel().getBounds().width).max().orElse(0);
 	}
