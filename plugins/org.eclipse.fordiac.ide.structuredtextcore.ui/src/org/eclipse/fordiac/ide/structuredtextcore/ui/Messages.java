@@ -121,6 +121,7 @@ public final class Messages extends NLS {
 	public static String STCoreLabelProvider_VarTempDeclarationBlockConstantText;
 	public static String STCoreLabelProvider_VarTempDeclarationBlockText;
 	public static String STCoreOutlineTreeProvider_MissingHeadingText;
+	public static String STCorePackageNameChangeParticipant_Name;
 	public static String STCoreRenameElementRefactoringParticpant_Name;
 	public static String STCoreResourceRelocationProcessor_CancelationMessage;
 	public static String STCoreResourceRelocationProcessor_TaskName;

@@ -58,7 +58,6 @@ public final class TypeRefactoringHelper {
 		if (typeEntry instanceof final DataTypeEntry dtEntry) {
 			final String targetTypeName = DataTypeEditBuilder.getFullTypeName(newPackageName, typeEntry.getTypeName());
 			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits, targetTypeName);
-			DataTypeEditBuilder.createStructuredDataTypeImportChanges(dtEntry, modelEdits, targetTypeName);
 		} else {
 			addInstanceChanges(modelEdits, typeEntry);
 		}

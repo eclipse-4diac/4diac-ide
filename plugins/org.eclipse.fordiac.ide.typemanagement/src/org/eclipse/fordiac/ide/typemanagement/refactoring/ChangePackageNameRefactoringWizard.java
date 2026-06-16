@@ -22,10 +22,10 @@ public class ChangePackageNameRefactoringWizard extends RefactoringWizard {
 
 	@Override
 	protected void addUserInputPages() {
-		addPage(new ChangePackageNameRefactoringWizardPage(getChangePackageNameRefactoring()));
+		addPage(new ChangePackageNameRefactoringWizardPage(getChangePackageNameProcessor()));
 	}
 
-	private ChangePackageNameRefactoring getChangePackageNameRefactoring() {
-		return (ChangePackageNameRefactoring) getRefactoring();
+	private ChangePackageNameRefactoringProcessor getChangePackageNameProcessor() {
+		return ((ChangePackageNameRefactoring) getRefactoring()).getProcessor();
 	}
 }
