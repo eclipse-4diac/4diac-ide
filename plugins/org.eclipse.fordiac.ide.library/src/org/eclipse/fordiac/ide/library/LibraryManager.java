@@ -38,6 +38,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,11 +53,9 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -106,9 +105,6 @@ public enum LibraryManager {
 	private final java.net.URI standardLibraryUri = java.net.URI.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
 	private final Path standardLibraryPath = getStandardLibPath();
 
-	public static final Set<String> LIBRARY_FOLDERS = Set.of(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME,
-			TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
-
 	public static final String ZIP_SUFFIX = ".zip"; //$NON-NLS-1$
 	public static final Set<String> TYPE_ENDINGS = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
 			TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING, TypeLibraryTags.DATA_TYPE_FILE_ENDING,
@@ -131,11 +127,10 @@ public enum LibraryManager {
 	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
 
 	private record LibraryManagerData(Map<String, DependencyNode> dependencyNodes,
-			Map<String, ResolveNode> resolveNodes, Map<String, Version> preferred, Map<String, IFolder> linked,
+			Map<String, ResolveNode> resolveNodes, Map<String, LinkedLibrary> linked,
 			Map<String, List<Version>> referenced) {
 		public static LibraryManagerData init() {
-			return new LibraryManagerData(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-					new HashMap<>());
+			return new LibraryManagerData(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
 		}
 	}
 
@@ -731,34 +726,6 @@ public enum LibraryManager {
 				getAvailableVersions(getStandardLibraries(), symbolicName));
 	}
 
-	public static List<LibraryRecord> getLinkedLibraries(final IFolder root) {
-		final List<LibraryRecord> libs = new ArrayList<>();
-		try {
-			root.accept(resource -> {
-				if (resource.equals(root)) {
-					return true;
-				}
-				if (resource instanceof final IFolder libFolder) {
-					if (!libFolder.exists() || !libFolder.isLinked()) {
-						return false;
-					}
-					final Manifest manifest = ManifestHelper.getContainerManifest(libFolder);
-					if (manifest != null && manifest.getProduct() != null) {
-						libs.add(new LibraryRecord(ManifestHelper.getSymbolicName(manifest, ""), //$NON-NLS-1$
-								manifest.getProduct().getName(),
-								ManifestHelper.getVersion(manifest, Version.emptyVersion),
-								manifest.getProduct().getComment(), libFolder.getLocation().toPath(),
-								libFolder.getLocationURI()));
-					}
-				}
-				return false;
-			});
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Could not get all libraries!", e); //$NON-NLS-1$
-		}
-		return libs;
-	}
-
 	/**
 	 * Checks if a given link inside the library folders is broken.
 	 *
@@ -767,30 +734,15 @@ public enum LibraryManager {
 	 * and will eventually abort the build.
 	 *
 	 * @param project selected project
+	 * @throws CoreException
 	 */
-	private static void checkLinkedLibraries(final IProject project, final SubMonitor progress) {
+	private static void checkLinkedLibraries(final IProject project, final SubMonitor progress) throws CoreException {
 		progress.setTaskName(Messages.LibraryManager_CheckLinks);
 		progress.setWorkRemaining(10);
-
-		LIBRARY_FOLDERS.stream().map(project::getFolder).forEach(folder -> {
-			try {
-				folder.accept(resource -> {
-					if (resource.equals(folder)) {
-						return true;
-					}
-					if (resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked()) {
-						if (libFolder.getModificationStamp() == IResource.NULL_STAMP) {
-							FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.LIBRARY_MARKER,
-									List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)), true);
-							throw new OperationCanceledException();
-						}
-						progress.worked(1);
-					}
-					return false;
-				});
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
+		LinkedLibrary.getAll(project, progress).filter(LinkedLibrary::hasBrokenLink).forEach(f -> {
+			FordiacMarkerHelper.updateMarkers(f.getFolder(), FordiacErrorMarker.LIBRARY_MARKER,
+					List.of(LibraryMarkerFactory.createBrokenLinkMarker(f)), true);
+			throw new OperationCanceledException();
 		});
 	}
 
@@ -824,9 +776,11 @@ public enum LibraryManager {
 				continue;
 			}
 
+			final Version prefVersion = Optional.ofNullable(data.linked().get(symbolicName))
+					.map(LinkedLibrary::getVersion).orElse(null);
 			// resolve dependency
-			final var rnode = resolveDependency(project, symbolicName, dnode.getRange(),
-					data.preferred().get(symbolicName), progress.split(1), data.referenced());
+			final var rnode = resolveDependency(project, symbolicName, dnode.getRange(), prefVersion, progress.split(1),
+					data.referenced());
 
 			if (data.resolveNodes().containsKey(symbolicName)) {
 				final var oldRNode = data.resolveNodes().get(symbolicName);
@@ -861,7 +815,7 @@ public enum LibraryManager {
 				final var rnode = data.resolveNodes().get(dnode.getSymbolicName());
 
 				if (rnode.isValid()) {
-					if (rnode.requireImport(data.linked(), data.preferred())) {
+					if (rnode.requireImport(data.linked())) {
 						importLibrary(project, rnode.getUri(), false, false);
 					}
 					if (!rnode.isReferenced()) {
@@ -876,12 +830,14 @@ public enum LibraryManager {
 		}
 	}
 
-	private static void cleanupLinks(final Map<String, IFolder> linked, final SubMonitor progress)
+	private static void cleanupLinks(final Map<String, LinkedLibrary> linked, final SubMonitor progress)
 			throws CoreException {
 		progress.setTaskName(Messages.LibraryManager_RemovingUnnecessaryLinks);
 		progress.setWorkRemaining(linked.size());
-		for (final IFolder folder : linked.values()) {
-			folder.delete(true, progress.split(1));
+		final List<IFolder> links = linked.values().stream().filter(LinkedLibrary::isValid)
+				.map(LinkedLibrary::getFolder).toList();
+		for (final IFolder link : links) {
+			link.delete(true, progress.split(1));
 		}
 	}
 
@@ -893,59 +849,10 @@ public enum LibraryManager {
 	 * @param linked    set to fill with symbolic names of linked libraries
 	 * @param progress  SubMonitor for progress reporting
 	 */
-	private static void findPreferred(final IProject project, final LibraryManagerData data,
-			final SubMonitor progress) {
-		final IFolder standardLibFolder = project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
-		final IFolder externalLibFolder = project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
-		if (!standardLibFolder.exists() || !externalLibFolder.exists()) {
-			return;
-		}
+	private static void findPreferred(final IProject project, final LibraryManagerData data, final SubMonitor progress)
+			throws CoreException {
 		progress.beginTask(Messages.LibraryManager_FindingPreferredLibraryVersion, 100);
-		final IResourceVisitor visitor = res -> {
-			if (res instanceof final IFolder libFolder) {
-				progress.setWorkRemaining(100).worked(1);
-				if (standardLibFolder.equals(libFolder) || externalLibFolder.equals(libFolder)) {
-					return true;
-				}
-				if (!libFolder.exists() || !libFolder.isLinked()) {
-					return false;
-				}
-				final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
-				if (libManifest != null) {
-					data.linked().put(libFolder.getName(), libFolder);
-					data.preferred().put(libFolder.getName(),
-							new Version(libManifest.getProduct().getVersionInfo().getVersion()));
-				} else {
-					final Version version = parseLibraryVersion(libFolder);
-					if (!version.equals(Version.emptyVersion)) {
-						data.preferred().put(libFolder.getName(), version);
-					}
-				}
-			}
-			return false;
-		};
-		try {
-			standardLibFolder.accept(visitor);
-			externalLibFolder.accept(visitor);
-		} catch (final CoreException e) {
-			// empty
-		}
-	}
-
-	/**
-	 * Parses the Library Version of the folders raw location if possible
-	 *
-	 * @param the folder
-	 * @return
-	 */
-	static Version parseLibraryVersion(final IFolder libraryFolder) {
-		final IPath path = libraryFolder.getRawLocation();
-		final String segment = (path != null && path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
-		final int index = segment.lastIndexOf('-');
-		if (index > 0) {
-			return new Version(segment.substring(index + 1));
-		}
-		return Version.emptyVersion;
+		LinkedLibrary.getAll(project, progress).forEach(folder -> data.linked().put(folder.getSymbolicName(), folder));
 	}
 
 	/**

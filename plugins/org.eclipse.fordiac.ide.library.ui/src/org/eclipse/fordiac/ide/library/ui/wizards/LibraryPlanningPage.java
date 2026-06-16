@@ -21,18 +21,23 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.LinkedLibrary;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.LibraryChangeAction.ActionType;
 import org.eclipse.fordiac.ide.library.ui.wizards.LibraryDescriptorNode.LibraryDescriptorLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
@@ -144,14 +149,21 @@ public class LibraryPlanningPage extends WizardPage {
 
 	private List<LibraryDescriptorNode> getViewerInput() {
 		final LibraryDescriptorNode stdLib = new LibraryDescriptorNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
-		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME)).forEach(
-				lib -> stdLib.addChild(new LibraryDescriptorNode(lib.symbolicName(), lib.version().toString())));
 		stdLib.setAction(null);
-
 		final LibraryDescriptorNode extLib = new LibraryDescriptorNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
-		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)).forEach(
-				lib -> extLib.addChild(new LibraryDescriptorNode(lib.symbolicName(), lib.version().toString())));
 		extLib.setAction(null);
+
+		try {
+			LinkedLibrary.getStandard(project, new NullProgressMonitor()).forEach(lib -> {
+				stdLib.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString()));
+			});
+
+			LinkedLibrary.getExternal(project, new NullProgressMonitor()).forEach(lib -> {
+				extLib.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString()));
+			});
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Error fetching linked Libraries", e); //$NON-NLS-1$
+		}
 		return List.of(extLib, stdLib);
 	}
 
@@ -231,17 +243,14 @@ public class LibraryPlanningPage extends WizardPage {
 	}
 
 	private void initLocalVersionLookup() {
-		// Get available standard libs
-		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME))
-				.forEach(i -> localVersionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
-						.addAll(LibraryManager.INSTANCE.getAllAvailableVersions(i.symbolicName()).map(Version::toString)
-								.toList()));
-
-		// Get available external libs
-		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME))
-				.forEach(i -> localVersionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
-						.addAll(LibraryManager.INSTANCE.getAllAvailableVersions(i.symbolicName()).map(Version::toString)
-								.toList()));
+		try {
+			LinkedLibrary.getAll(project, SubMonitor.convert(null))
+					.forEach(f -> localVersionLookup.computeIfAbsent(f.getSymbolicName(), s -> new ArrayList<>())
+							.addAll(LibraryManager.INSTANCE.getAllAvailableVersions(f.getSymbolicName())
+									.map(Version::toString).toList()));
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Error while fetching local library versions", e); //$NON-NLS-1$
+		}
 	}
 
 	private void checkPageComplete() {

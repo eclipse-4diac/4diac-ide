@@ -17,7 +17,6 @@ import java.text.MessageFormat;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -70,10 +69,10 @@ public class LibraryMarkerFactory {
 	 * @param libFolder the folder
 	 * @return {@link ErrorMarkerBuilder} for error
 	 */
-	public static ErrorMarkerBuilder createBrokenLinkMarker(final IFolder libFolder) {
+	public static ErrorMarkerBuilder createBrokenLinkMarker(final LinkedLibrary libFolder) {
 		return createLibraryMarker(Messages.LibraryManager_BrokenLink)
-				.setLocation(MessageFormat.format("Library: {0} - Version: {1}", libFolder.getName(), //$NON-NLS-1$
-						LibraryManager.parseLibraryVersion(libFolder)));
+				.setLocation(MessageFormat.format("Library: {0} - Version: {1}", libFolder.getSymbolicName(), //$NON-NLS-1$
+						libFolder.getVersion().toString()));
 	}
 
 	/**
