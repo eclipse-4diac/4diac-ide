@@ -8,5 +8,7 @@
 	</CompilerInfo>
 	<StructuredType>
 		<VarDeclaration Name="A" Type="BOOL" Comment=""/>
+		<VarDeclaration Name="B" Type="BOOL" Comment=""/>
+		<VarDeclaration Name="C" Type="BOOL" Comment=""/>
 	</StructuredType>
 </DataType>

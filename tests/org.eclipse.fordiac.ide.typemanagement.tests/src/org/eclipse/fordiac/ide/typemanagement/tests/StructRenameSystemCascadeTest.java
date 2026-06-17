@@ -25,6 +25,8 @@ import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixtu
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -49,6 +51,9 @@ class StructRenameSystemCascadeTest {
 	private static final String NEW_INNER_FILE_NAME = "InnerStructRenamed.dtp"; //$NON-NLS-1$
 	private static final String PRODUCER_TYPE = "StructProducer"; //$NON-NLS-1$
 	private static final String PRODUCER_OUT_PIN = "OUT"; //$NON-NLS-1$
+	private static final String CONSUMER_TYPE = "StructConsumer"; //$NON-NLS-1$
+	private static final String CONSUMER_INPUT_PIN = "DI"; //$NON-NLS-1$
+	private static final String CONSUMER_OUTPUT_PIN = "DO1"; //$NON-NLS-1$
 	private static final String DEMUX_INSTANCE = "Demux"; //$NON-NLS-1$
 	private static final String MUX_INSTANCE = "Mux"; //$NON-NLS-1$
 	private static final String FMOVE_INSTANCE = "Move"; //$NON-NLS-1$
@@ -75,11 +80,22 @@ class StructRenameSystemCascadeTest {
 
 	@Test
 	void renameInnerStruct_updatesStructProducerInterfacePinType() throws Exception {
-		assertProducerOutputType(INNER_STRUCT);
+		assertFBInterfacePinType(PRODUCER_TYPE, PRODUCER_OUT_PIN, INNER_STRUCT);
 
 		renameInnerStruct();
 
-		assertProducerOutputType(INNER_STRUCT_RENAMED);
+		assertFBInterfacePinType(PRODUCER_TYPE, PRODUCER_OUT_PIN, INNER_STRUCT_RENAMED);
+	}
+
+	@Test
+	void renameInnerStruct_updatesStructConsumerInterfacePinTypes() throws Exception {
+		assertFBInterfacePinType(CONSUMER_TYPE, CONSUMER_INPUT_PIN, INNER_STRUCT);
+		assertFBInterfacePinType(CONSUMER_TYPE, CONSUMER_OUTPUT_PIN, INNER_STRUCT);
+
+		renameInnerStruct();
+
+		assertFBInterfacePinType(CONSUMER_TYPE, CONSUMER_INPUT_PIN, INNER_STRUCT_RENAMED);
+		assertFBInterfacePinType(CONSUMER_TYPE, CONSUMER_OUTPUT_PIN, INNER_STRUCT_RENAMED);
 	}
 
 	@Test
@@ -113,11 +129,13 @@ class StructRenameSystemCascadeTest {
 		RefactoringTestSupport.performRename(file(INNER_STRUCT_FILE), NEW_INNER_FILE_NAME);
 	}
 
-	private void assertProducerOutputType(final String expectedQualifiedType) {
-		final FBType producer = (FBType) typeLibrary.getFBTypeEntry(PRODUCER_TYPE).getType();
-		final VarDeclaration outPin = producer.getInterfaceList().getOutputVars().stream()
-				.filter(v -> PRODUCER_OUT_PIN.equals(v.getName())).findFirst().orElseThrow();
-		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(outPin.getType()));
+	private void assertFBInterfacePinType(final String fbTypeName, final String pinName,
+			final String expectedQualifiedType) {
+		final FBType fbType = (FBType) typeLibrary.getFBTypeEntry(fbTypeName).getType();
+		final VarDeclaration pin = Stream.concat(fbType.getInterfaceList().getInputVars().stream(),
+				fbType.getInterfaceList().getOutputVars().stream()).filter(v -> pinName.equals(v.getName())).findFirst()
+				.orElseThrow();
+		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(pin.getType()));
 	}
 
 	private <T extends ConfigurableFB> void assertConfigurableFBDataType(final String instanceName,
