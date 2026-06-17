@@ -12,13 +12,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.tests;
 
+import static org.eclipse.fordiac.ide.typemanagement.tests.StandardLibrary.CONVERT;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StandardLibrary.CORE;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StandardLibrary.IEC_61131_3;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.APPLICATION_NAME;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.INNER_STRUCT;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.INNER_STRUCT_FILE;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.INNER_STRUCT_RENAMED;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.PROJECT_NAME;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.PROJECT_PATH;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.SYSTEM_FILE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
@@ -35,31 +43,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.osgi.framework.Bundle;
 
 class StructRenameSystemCascadeTest {
 
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.typemanagement.tests"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "StructRenameTest"; //$NON-NLS-1$
-	private static final String PROJECT_PATH = "data/StructRenameTest"; //$NON-NLS-1$
-
-	private static final String CORE_LIBRARY = "core-3.0.0"; //$NON-NLS-1$
-	private static final String CONVERT_LIBRARY = "convert-3.0.0"; //$NON-NLS-1$
-	private static final String IEC_LIBRARY = "iec61131-3-3.0.0"; //$NON-NLS-1$
-
-	private static final String INNER_FILE = "Type Library/mypackage/InnerStruct.dtp"; //$NON-NLS-1$
-	private static final String SYSTEM_FILE = "StructRenameTest.sys"; //$NON-NLS-1$
 	private static final String NEW_INNER_FILE_NAME = "InnerStructRenamed.dtp"; //$NON-NLS-1$
-
-	private static final String INNER_STRUCT = "mypackage::InnerStruct"; //$NON-NLS-1$
-	private static final String INNER_STRUCT_RENAMED = "mypackage::InnerStructRenamed"; //$NON-NLS-1$
 	private static final String PRODUCER_TYPE = "StructProducer"; //$NON-NLS-1$
-
-	private static final String APPLICATION_NAME = "App"; //$NON-NLS-1$
+	private static final String PRODUCER_OUT_PIN = "OUT"; //$NON-NLS-1$
 	private static final String DEMUX_INSTANCE = "Demux"; //$NON-NLS-1$
 	private static final String MUX_INSTANCE = "Mux"; //$NON-NLS-1$
 	private static final String FMOVE_INSTANCE = "Move"; //$NON-NLS-1$
-	private static final String PRODUCER_OUT_PIN = "OUT"; //$NON-NLS-1$
 
 	private IProject project;
 	private TypeLibrary typeLibrary;
@@ -71,9 +63,8 @@ class StructRenameSystemCascadeTest {
 
 	@BeforeEach
 	void loadFixture() throws Exception {
-		final Bundle bundle = Platform.getBundle(BUNDLE_NAME);
-		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, bundle, new Path(PROJECT_PATH));
-		RefactoringTestSupport.linkStandardLibraries(project, CORE_LIBRARY, CONVERT_LIBRARY, IEC_LIBRARY);
+		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, PROJECT_PATH);
+		RefactoringTestSupport.linkStandardLibraries(project, CORE, CONVERT, IEC_61131_3);
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 	}
 
@@ -119,7 +110,7 @@ class StructRenameSystemCascadeTest {
 	}
 
 	private void renameInnerStruct() throws Exception {
-		RefactoringTestSupport.performRename(file(INNER_FILE), NEW_INNER_FILE_NAME);
+		RefactoringTestSupport.performRename(file(INNER_STRUCT_FILE), NEW_INNER_FILE_NAME);
 	}
 
 	private void assertProducerOutputType(final String expectedQualifiedType) {
