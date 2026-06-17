@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Interpreter Deployment
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.interpreter;singleton:=true
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.2.100.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.interpreter
 Bundle-RequiredExecutionEnvironment: JavaSE-21
