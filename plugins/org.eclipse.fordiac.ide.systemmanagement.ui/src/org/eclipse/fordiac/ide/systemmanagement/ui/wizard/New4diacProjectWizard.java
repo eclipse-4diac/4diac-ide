@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizardPage;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ProjectCreator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.SystemCreator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -121,13 +121,16 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	 */
 	private void createProject(final IProgressMonitor monitor) {
 		try {
+			final ProjectCreator projectCreator = new ProjectCreator(page.getProjectName(), page.getLocationPath());
 
-			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
-					page.getLocationPath(), monitor);
+			final IProject newProject = projectCreator
+					.createProject(monitor != null ? monitor : new NullProgressMonitor());
 			libPage.setTargetProject(newProject);
 			final SystemCreator systemCreator = new SystemCreator(newProject, page.getInitialSystemName(),
 					page.getInitialApplicationName());
+
 			systemCreator.createSystem(monitor);
+
 			if (page.getOpenApplication() && systemCreator.getApplication() != null) {
 				OpenListenerManager.openEditor(systemCreator.getApplication());
 			}
