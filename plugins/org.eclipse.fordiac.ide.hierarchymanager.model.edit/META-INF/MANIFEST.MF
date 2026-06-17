@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.hierarchymanager.model.edit;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.hierarchymanager.model.edit
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.1.200.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.provider.HierarchyEditPlugin$Implementation
 Bundle-Vendor: %providerName

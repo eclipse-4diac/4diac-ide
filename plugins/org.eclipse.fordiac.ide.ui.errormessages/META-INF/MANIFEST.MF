@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Error Messages
 Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ui.errormessages
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.2.100.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ui.errormessages
