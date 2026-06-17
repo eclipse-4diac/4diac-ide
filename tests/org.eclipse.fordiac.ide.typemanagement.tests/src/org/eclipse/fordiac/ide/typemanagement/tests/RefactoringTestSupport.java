@@ -55,13 +55,13 @@ public final class RefactoringTestSupport {
 	 * refactorings rename and rewrite type files, so each test must operate on its
 	 * own writable copy instead of mutating the committed fixture in place.
 	 */
-	public static IProject importProjectIntoWorkspace(final String projectName, final Bundle bundle,
-			final IPath bundleRelativePath) throws CoreException, IOException {
+	public static IProject importProjectIntoWorkspace(final String projectName, final String bundleRelativePath)
+			throws CoreException, IOException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		final IProject project = root.getProject(projectName);
 		deleteProject(project);
 
-		final java.nio.file.Path source = resolveBundleDirectory(bundle, bundleRelativePath);
+		final java.nio.file.Path source = resolveBundleDirectory(bundleRelativePath);
 		final java.nio.file.Path destination = root.getLocation().append(projectName).toFile().toPath();
 		deleteRecursively(destination);
 		copyRecursively(source, destination);
@@ -83,7 +83,7 @@ public final class RefactoringTestSupport {
 	public static void linkStandardLibraries(final IProject project, final String... libraryNames)
 			throws CoreException, IOException {
 		ensureLibraryFolders(project);
-		final java.nio.file.Path standardLibraries = resolveStandardLibrariesPath();
+		final java.nio.file.Path standardLibraries = TestRepositoryPaths.resolve().standardLibraries();
 		for (final String libraryName : libraryNames) {
 			LibraryManager.INSTANCE.importLibrary(project, standardLibraries.resolve(libraryName).toUri(), true, false);
 		}
@@ -91,16 +91,6 @@ public final class RefactoringTestSupport {
 		// TypeLibrary so .sys entries re-parse with the linked libraries in scope.
 		TypeLibraryManager.INSTANCE.removeProject(project);
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
-	}
-
-	private static java.nio.file.Path resolveStandardLibrariesPath() throws IOException {
-		// Resolve the test bundle's source location through OSGi and walk up to
-		// the repository root, where the standard libraries live under
-		// data/typelibrary.
-		final Bundle bundle = FrameworkUtil.getBundle(RefactoringTestSupport.class);
-		final java.net.URL bundleRootUrl = FileLocator.toFileURL(bundle.getEntry("/")); //$NON-NLS-1$
-		return Paths.get(bundleRootUrl.getPath()).getParent().getParent().resolve("data").resolve("typelibrary") //$NON-NLS-1$ //$NON-NLS-2$
-				.toAbsolutePath().normalize();
 	}
 
 	private static void ensureLibraryFolders(final IProject project) throws CoreException {
@@ -146,9 +136,9 @@ public final class RefactoringTestSupport {
 		return perform.getUndoChange();
 	}
 
-	private static java.nio.file.Path resolveBundleDirectory(final Bundle bundle, final IPath bundleRelativePath)
-			throws IOException {
-		final var url = FileLocator.toFileURL(FileLocator.find(bundle, bundleRelativePath));
+	private static java.nio.file.Path resolveBundleDirectory(final String bundleRelativePath) throws IOException {
+		final Bundle bundle = FrameworkUtil.getBundle(RefactoringTestSupport.class);
+		final var url = FileLocator.toFileURL(FileLocator.find(bundle, new Path(bundleRelativePath)));
 		return Paths.get(url.getPath());
 	}
 
