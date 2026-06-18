@@ -24,7 +24,6 @@ package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -152,8 +151,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			}
 			if (context instanceof final STFeatureExpression expression && expression.isCall()) {
 				final List<DataType> argumentTypes = expression.getParameters().stream()
-						.map(STCallArgument::getDeclaredResultType).map(DataType.class::cast)
-						.map(type -> Objects.requireNonNullElse(type, GenericTypes.ANY)).toList();
+						.map(STCallArgument::getDeclaredResultType)
+						.map(type -> type instanceof final DataType dt ? dt : GenericTypes.ANY).toList();
 				return new STStandardFunctionScope(
 						filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference),
 						standardFunctionProvider, argumentTypes, true);
