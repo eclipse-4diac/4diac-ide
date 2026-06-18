@@ -15,28 +15,21 @@ package org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint;
 import java.util.Optional;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.AdapterTypes;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
-import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 
-@AdapterTypes(adaptableClass = { INamedElement.class, EditPart.class, IEditorPart.class,
-		IWatch.class }, adapterNames = { IToggleBreakpointsTarget.class })
-public class DeploymentToggleBreakpointsTargetExtension implements IToggleBreakpointsTarget, IAdapterFactory {
+public class DeploymentToggleBreakpointsTargetExtension implements IToggleBreakpointsTarget {
 
 	@Override
 	public void toggleLineBreakpoints(final IWorkbenchPart part, final ISelection selection) throws CoreException {
@@ -90,19 +83,6 @@ public class DeploymentToggleBreakpointsTargetExtension implements IToggleBreakp
 	@Override
 	public boolean canToggleWatchpoints(final IWorkbenchPart part, final ISelection selection) {
 		return isApplicable(selection);
-	}
-
-	@Override
-	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
-		if (adaptableObject instanceof final IEditorPart editorPart
-				&& editorPart.getAdapter(AutomationSystem.class) != null
-				&& adapterType == IToggleBreakpointsTarget.class) {
-			return adapterType.cast(this);
-		}
-		if (getElementFromSelection(adaptableObject).isPresent() && adapterType == IToggleBreakpointsTarget.class) {
-			return adapterType.cast(this);
-		}
-		return null;
 	}
 
 	private static boolean isApplicable(final ISelection selection) {

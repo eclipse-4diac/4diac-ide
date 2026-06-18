@@ -34,4 +34,20 @@
             class="org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferenceInitializer">
       </initializer>
    </extension> 
+    <extension
+         id="evaluatorModelBreakpointMarker"
+         name="%modelBreakpoint.name"
+         point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.debug.core.breakpointMarker"/>
+      <persistent value="true"/>
+   </extension>
+
+   <extension point="org.eclipse.debug.core.breakpoints">
+      <breakpoint
+            class="org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorModelBreakpoint"
+            id="org.eclipse.fordiac.ide.debug.evaluatorModelBreakpoint"
+            markerType="org.eclipse.fordiac.ide.debug.evaluatorModelBreakpointMarker"
+            name="%modelBreakpoint.name">
+      </breakpoint>
+   </extension>
 </plugin>
