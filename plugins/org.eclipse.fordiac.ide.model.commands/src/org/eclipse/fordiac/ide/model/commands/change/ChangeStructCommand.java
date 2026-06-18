@@ -66,8 +66,15 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 	}
 
 	private static String getOldVisibleChildren(final StructManipulator mux) {
-		if (mux instanceof final Demultiplexer demux && demux.isIsConfigured()) {
-			return ConfigurableFBManagement.buildVisibleChildrenString(demux.getMemberVars());
+		if (mux instanceof final Demultiplexer demux) {
+			final String persistedVisibleChildren = demux
+					.getAttributeValue(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
+			if (persistedVisibleChildren != null) {
+				return persistedVisibleChildren;
+			}
+			if (demux.isIsConfigured() || !demux.getMemberVars().isEmpty()) {
+				return ConfigurableFBManagement.buildVisibleChildrenString(demux.getMemberVars());
+			}
 		}
 		return null;
 	}
@@ -107,10 +114,7 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 	}
 
 	private boolean isDemuxConfiguration() {
-		if (newElement instanceof final Demultiplexer demux) {
-			return demux.isIsConfigured() || newVisibleChildren != null;
-		}
-		return false;
+		return newElement instanceof Demultiplexer && newVisibleChildren != null;
 	}
 
 	public StructManipulator getNewMux() {
