@@ -477,7 +477,7 @@ final class STCoreUtil {
 	def static List<? extends ITypedElement> computeInputParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		if (callable instanceof STStandardFunction)
-			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, true)
+			callable.javaMethod.inferParameterVariables(arguments.map[switch (type:resultType) { DataType: type }].toList, true)
 		else
 			callable.inputParameters
 	}
@@ -485,7 +485,7 @@ final class STCoreUtil {
 	def static List<? extends ITypedElement> computeOutputParameters(ICallable callable,
 		Iterable<STCallArgument> arguments) {
 		if (callable instanceof STStandardFunction)
-			callable.javaMethod.inferParameterVariables(arguments.map[resultType].filter(DataType).toList, false)
+			callable.javaMethod.inferParameterVariables(arguments.map[switch (type:resultType) { DataType: type }].toList, false)
 		else
 			callable.outputParameters
 	}

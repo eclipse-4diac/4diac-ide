@@ -154,7 +154,7 @@ final package class ExpressionAnnotations {
 		switch (feature : expr.feature) {
 			STStandardFunction:
 				feature.javaMethod.inferReturnTypeFromDataTypes([switch (type: expr.expectedType) { DataType: type }], [
-					expr.parameters.map[resultType].filter(DataType).toList
+					expr.parameters.map[switch (type:resultType) { DataType: type }].toList
 				])
 			default:
 				getDeclaredResultType(expr)
