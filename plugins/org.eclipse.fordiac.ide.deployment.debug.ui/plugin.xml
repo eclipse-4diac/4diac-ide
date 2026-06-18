@@ -179,7 +179,8 @@
 						<iterate>
 							<adapt
 								type="org.eclipse.core.resources.IResource">
-								<test property="org.eclipse.core.resources.extension"
+								<test
+									property="org.eclipse.core.resources.extension"
 									value="sub">
 								</test>
 							</adapt>
@@ -256,34 +257,6 @@
 			adaptableType="org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart">
 			<adapter
 				type="org.eclipse.debug.ui.actions.ILaunchable">
-			</adapter>
-		</factory>
-		<factory
-			adaptableType="org.eclipse.fordiac.ide.model.libraryElement.INamedElement"
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
-			<adapter
-				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
-			</adapter>
-		</factory>
-		<factory
-			adaptableType="org.eclipse.gef.EditPart"
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
-			<adapter
-				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
-			</adapter>
-		</factory>
-		<factory
-			adaptableType="org.eclipse.ui.IEditorPart"
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
-			<adapter
-				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
-			</adapter>
-		</factory>
-		<factory
-			adaptableType="org.eclipse.fordiac.ide.deployment.debug.watch.IWatch"
-			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetExtension">
-			<adapter
-				type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
 			</adapter>
 		</factory>
 		<factory
@@ -576,9 +549,9 @@
 						<iterate
 							ifEmpty="false"
 							operator="or">
-								<instanceof
-									value="org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch">
-								</instanceof>
+							<instanceof
+								value="org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch">
+							</instanceof>
 						</iterate>
 					</with>
 				</or>
@@ -790,7 +763,17 @@
 				style="push"
 				tooltip="%toggleWatch.tooltip">
 				<visibleWhen
-					checkEnabled="true">
+					checkEnabled="false">
+					<with variable="selection">
+						<iterate ifEmpty="false" operator="or">
+							<or>
+								<adapt
+									type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+								<adapt
+									type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+							</or>
+						</iterate>
+					</with>
 				</visibleWhen>
 			</command>
 			<command
@@ -1256,5 +1239,23 @@
 			properties="inOutVar"
 			type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
 		</propertyTester>
+	</extension>
+	<extension point="org.eclipse.debug.ui.toggleBreakpointsTargetFactories">
+		<toggleTargetFactory
+			id="org.eclipse.fordiac.ide.debug.ui.toggleDeploymentBreakpointTarget"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentToggleBreakpointsTargetFactory">
+			<enablement>
+				<with variable="selection">
+					<iterate ifEmpty="false" operator="or">
+						<or>
+							<adapt
+								type="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement" />
+							<adapt
+								type="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+						</or>
+					</iterate>
+				</with>
+			</enablement>
+		</toggleTargetFactory>
 	</extension>
 </plugin>

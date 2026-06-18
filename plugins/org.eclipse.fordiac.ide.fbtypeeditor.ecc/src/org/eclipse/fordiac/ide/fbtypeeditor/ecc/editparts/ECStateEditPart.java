@@ -234,4 +234,12 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		return true;
 	}
 
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == ECState.class) {
+			return adapter.cast(getModel());
+		}
+		return super.getAdapter(adapter);
+	}
+
 }
