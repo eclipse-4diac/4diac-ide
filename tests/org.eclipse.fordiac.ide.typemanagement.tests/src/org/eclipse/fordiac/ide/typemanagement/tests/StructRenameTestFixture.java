@@ -28,6 +28,9 @@ public final class StructRenameTestFixture {
 	public static final String INNER_STRUCT_RENAMED = "mypackage::InnerStructRenamed"; //$NON-NLS-1$
 	public static final String OUTER_STRUCT = "mypackage::OuterStruct"; //$NON-NLS-1$
 
+	public static final String PRODUCER_TYPE = "StructProducer"; //$NON-NLS-1$
+	public static final String PRODUCER_OUT_PIN = "OUT"; //$NON-NLS-1$
+
 	private StructRenameTestFixture() {
 		throw new UnsupportedOperationException();
 	}

@@ -19,6 +19,8 @@ import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixtu
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.INNER_STRUCT;
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.INNER_STRUCT_FILE;
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.INNER_STRUCT_RENAMED;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.PRODUCER_OUT_PIN;
+import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.PRODUCER_TYPE;
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.PROJECT_NAME;
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.PROJECT_PATH;
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.SYSTEM_FILE;
@@ -49,8 +51,6 @@ import org.junit.jupiter.api.Test;
 class StructRenameSystemCascadeTest {
 
 	private static final String NEW_INNER_FILE_NAME = "InnerStructRenamed.dtp"; //$NON-NLS-1$
-	private static final String PRODUCER_TYPE = "StructProducer"; //$NON-NLS-1$
-	private static final String PRODUCER_OUT_PIN = "OUT"; //$NON-NLS-1$
 	private static final String CONSUMER_TYPE = "StructConsumer"; //$NON-NLS-1$
 	private static final String CONSUMER_INPUT_PIN = "DI"; //$NON-NLS-1$
 	private static final String CONSUMER_OUTPUT_PIN = "DO1"; //$NON-NLS-1$

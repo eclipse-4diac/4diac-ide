@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -37,11 +38,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
 import org.eclipse.ltk.core.refactoring.CreateChangeOperation;
+import org.eclipse.ltk.core.refactoring.IValidationCheckResultQuery;
 import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.resource.DeleteResourcesDescriptor;
+import org.eclipse.ltk.core.refactoring.resource.MoveResourcesDescriptor;
 import org.eclipse.ltk.core.refactoring.resource.RenameResourceDescriptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -118,40 +121,66 @@ public final class RefactoringTestSupport {
 		final RenameResourceDescriptor descriptor = new RenameResourceDescriptor();
 		descriptor.setResourcePath(file.getFullPath());
 		descriptor.setNewName(newName);
-
-		final RefactoringStatus status = new RefactoringStatus();
-		final Refactoring refactoring = descriptor.createRefactoring(status);
-
-		final CreateChangeOperation create = new CreateChangeOperation(
-				new CheckConditionsOperation(refactoring, CheckConditionsOperation.ALL_CONDITIONS),
-				RefactoringStatus.FATAL);
-		final PerformChangeOperation perform = new PerformChangeOperation(create);
-		perform.setUndoManager(RefactoringCore.getUndoManager(), refactoring.getName());
-		ResourcesPlugin.getWorkspace().run(perform, new NullProgressMonitor());
-		return perform.getUndoChange();
+		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
 	}
 
 	public static Change performDelete(final IFile file) throws CoreException {
 		final DeleteResourcesDescriptor descriptor = new DeleteResourcesDescriptor();
 		descriptor.setResourcePaths(new IPath[] { file.getFullPath() });
+		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
+	}
 
-		final RefactoringStatus status = new RefactoringStatus();
-		final Refactoring refactoring = descriptor.createRefactoring(status);
+	public static Change performMove(final IFile file, final IContainer destination) throws CoreException {
+		final MoveResourcesDescriptor descriptor = new MoveResourcesDescriptor();
+		descriptor.setResourcesToMove(new IResource[] { file });
+		descriptor.setDestination(destination);
+		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
+	}
 
+	private static Change performRefactoring(final Refactoring refactoring) throws CoreException {
 		final CreateChangeOperation create = new CreateChangeOperation(
 				new CheckConditionsOperation(refactoring, CheckConditionsOperation.ALL_CONDITIONS),
 				RefactoringStatus.FATAL);
 		final PerformChangeOperation perform = new PerformChangeOperation(create);
+		// Register with the shared undo manager so undoLastRefactoring and
+		// redoLastRefactoring can drive this change.
 		perform.setUndoManager(RefactoringCore.getUndoManager(), refactoring.getName());
 		ResourcesPlugin.getWorkspace().run(perform, new NullProgressMonitor());
 		return perform.getUndoChange();
 	}
 
-	public static Change performChange(final Change change) throws CoreException {
-		final PerformChangeOperation perform = new PerformChangeOperation(change);
-		ResourcesPlugin.getWorkspace().run(perform, new NullProgressMonitor());
-		return perform.getUndoChange();
+	/** Undo the last refactoring through the shared LTK undo manager. */
+	public static void undoLastRefactoring() throws CoreException {
+		RefactoringCore.getUndoManager().performUndo(PROCEED_QUERY, new NullProgressMonitor());
 	}
+
+	/** Redo the last undone refactoring through the shared LTK undo manager. */
+	public static void redoLastRefactoring() throws CoreException {
+		RefactoringCore.getUndoManager().performRedo(PROCEED_QUERY, new NullProgressMonitor());
+	}
+
+	/**
+	 * Clear the shared undo history so undo and redo do not leak between tests.
+	 * The undo manager is a process-wide singleton, so this assumes the suite runs
+	 * sequentially.
+	 */
+	public static void flushUndoHistory() {
+		RefactoringCore.getUndoManager().flush();
+	}
+
+	// The undo manager is the global RefactoringCore singleton; a permissive query
+	// keeps undo and redo non-interactive during headless tests.
+	private static final IValidationCheckResultQuery PROCEED_QUERY = new IValidationCheckResultQuery() {
+		@Override
+		public boolean proceed(final RefactoringStatus status) {
+			return true;
+		}
+
+		@Override
+		public void stopped(final RefactoringStatus status) {
+			// nothing to do in a headless test
+		}
+	};
 
 	private static java.nio.file.Path resolveBundleDirectory(final String bundleRelativePath) throws IOException {
 		final Bundle bundle = FrameworkUtil.getBundle(RefactoringTestSupport.class);

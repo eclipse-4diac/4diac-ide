@@ -51,6 +51,7 @@ class StructDataTypeDeleteTest {
 
 	@BeforeEach
 	void loadFixture() throws Exception {
+		RefactoringTestSupport.flushUndoHistory();
 		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, PROJECT_PATH);
 		RefactoringTestSupport.linkStandardLibraries(project, CORE, CONVERT, IEC_61131_3);
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
@@ -91,6 +92,19 @@ class StructDataTypeDeleteTest {
 		assertEquals(1, structuredType(OUTER_STRUCT).getMemberVariables().size());
 		assertInstanceOf(ErrorDataType.class,
 				structuredType(OUTER_STRUCT).getMemberVariables().get(0).getType());
+	}
+
+	@Test
+	void deleteInnerStruct_undoRedoRoundTrip() throws Exception {
+		deleteInnerStruct();
+		assertFalse(file(INNER_STRUCT_FILE).exists());
+
+		RefactoringTestSupport.undoLastRefactoring();
+		assertTrue(file(INNER_STRUCT_FILE).exists());
+		assertEquals(INNER_STRUCT, structuredType(INNER_STRUCT).getTypeEntry().getFullTypeName());
+
+		RefactoringTestSupport.redoLastRefactoring();
+		assertFalse(file(INNER_STRUCT_FILE).exists());
 	}
 
 	private void deleteInnerStruct() throws Exception {
