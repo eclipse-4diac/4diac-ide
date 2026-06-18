@@ -52,6 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -60,6 +61,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -459,12 +461,13 @@ public class CommonElementExporter {
 
 	protected void addParam(final IInterfaceElement ie) throws XMLStreamException {
 		final boolean hasAttributes = hasNonTrivialAttributes(ie);
-		final boolean hasInitalValue = hasInitialValue(ie);
+		final String initialValue = getInitialValue(ie);
+		final boolean hasInitialValue = initialValue != null && !initialValue.isBlank();
 		final boolean hasComment = ie.getComment() != null && !ie.getComment().isBlank();
 
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-		} else if (hasInitalValue || hasComment || ie instanceof VarConfigInstance) {
+		} else if (hasInitialValue || hasComment || ie instanceof VarConfigInstance) {
 			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 		} else {
 			if (ie instanceof final ContainerVarDeclaration structVar) {
@@ -476,8 +479,8 @@ public class CommonElementExporter {
 		final BlockFBNetworkElement block = ie.getBlockFBNetworkElement();
 		addNameAttribute(block != null ? ie.getRelativeName(block) : ie.getName());
 		String value = ""; //$NON-NLS-1$
-		if (hasInitalValue) {
-			value = ((VarDeclaration) ie).getValue().getValue();
+		if (hasInitialValue) {
+			value = initialValue;
 		}
 		writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		addCommentAttribute(ie.getComment());
@@ -492,9 +495,13 @@ public class CommonElementExporter {
 		}
 	}
 
-	private static boolean hasInitialValue(final IInterfaceElement ie) {
-		return (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
-				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
+	private static String getInitialValue(final IInterfaceElement ie) {
+		final Value value = switch (ie) {
+		case final VarDeclaration varDecl -> varDecl.getValue();
+		case final ErrorMarkerInterface errorMarker -> errorMarker.getValue();
+		default -> null;
+		};
+		return value != null ? value.getValue() : null;
 	}
 
 	private void addVisibleChildrenOfStructVar(final ContainerVarDeclaration structVar) throws XMLStreamException {
