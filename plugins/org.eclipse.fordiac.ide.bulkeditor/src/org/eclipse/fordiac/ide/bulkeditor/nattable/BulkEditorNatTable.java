@@ -58,7 +58,6 @@ public class BulkEditorNatTable {
 
 	private final CommandExecutor commandExecutor;
 	private final Composite parent;
-	private final IWorkbenchPartSite site;
 
 	private BulkEditorMode currentMode;
 	private NatTable natTable;
@@ -67,6 +66,9 @@ public class BulkEditorNatTable {
 
 	private ChangeableListDataProvider<? extends EObject> provider;
 	private SorterModel<? extends EObject> sorterModel;
+
+	private final DelegatingSelectionProvider selectionProviderDelegate = new DelegatingSelectionProvider();
+	private final MenuManager contextMenuManager = new MenuManager();
 
 	private List<Attribute> currentAttributeList = Collections.emptyList();
 
@@ -84,8 +86,12 @@ public class BulkEditorNatTable {
 			final BulkEditorMode initialMode, final IWorkbenchPartSite site) {
 		this.parent = parent;
 		this.commandExecutor = commandExecutor;
-		this.site = site;
 		createSearchButtonRow(parent);
+
+		this.contextMenuManager.setRemoveAllWhenShown(true);
+		site.registerContextMenu(CONTEXT_MENU_ID, contextMenuManager, selectionProviderDelegate);
+		site.setSelectionProvider(selectionProviderDelegate);
+
 		changeNatTable(initialMode, null);
 	}
 
@@ -156,12 +162,9 @@ public class BulkEditorNatTable {
 	}
 
 	private void addContextMenu() {
-		final MenuManager manager = new MenuManager();
-		manager.setRemoveAllWhenShown(true);
 		final var selectionProvider = getSelectionProvider(this.provider);
-		site.registerContextMenu(CONTEXT_MENU_ID, manager, selectionProvider);
-		site.setSelectionProvider(selectionProvider);
-		natTable.addConfiguration(new ContextMenuConfiguration(natTable, manager));
+		selectionProviderDelegate.setActiveProvider(selectionProvider);
+		natTable.addConfiguration(new ContextMenuConfiguration(natTable, contextMenuManager));
 	}
 
 	private <T> RowSelectionProvider<T> getSelectionProvider(final ChangeableListDataProvider<T> prov) {

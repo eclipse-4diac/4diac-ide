@@ -5686,6 +5686,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(errorMarkerInterfaceEClass, ecorePackage.getEBoolean(), "validateComment", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(errorResourceTypeEClass, ErrorResourceType.class, "ErrorResourceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(errorSegmentTypeEClass, ErrorSegmentType.class, "ErrorSegmentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -7286,6 +7295,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   });
 		addAnnotation
 		  (errorMarkerInterfaceEClass.getEOperations().get(1),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (errorMarkerInterfaceEClass.getEOperations().get(2),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$

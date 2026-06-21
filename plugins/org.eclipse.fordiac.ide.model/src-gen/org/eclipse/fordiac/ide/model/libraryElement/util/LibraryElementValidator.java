@@ -361,12 +361,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int ERROR_MARKER_INTERFACE__VALIDATE_ATTRIBUTES = 22;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Comment' of 'Error Marker Interface'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int ERROR_MARKER_INTERFACE__VALIDATE_COMMENT = 23;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Multiple Output Connections' of 'Event'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int EVENT__VALIDATE_MULTIPLE_OUTPUT_CONNECTIONS = 23;
+	public static final int EVENT__VALIDATE_MULTIPLE_OUTPUT_CONNECTIONS = 24;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Collisions' of 'FB Network'.
@@ -374,7 +382,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int FB_NETWORK__VALIDATE_COLLISIONS = 24;
+	public static final int FB_NETWORK__VALIDATE_COLLISIONS = 25;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'FB Network Element'.
@@ -382,7 +390,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int FB_NETWORK_ELEMENT__VALIDATE_NAME = 25;
+	public static final int FB_NETWORK_ELEMENT__VALIDATE_NAME = 26;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'FB Network Element'.
@@ -390,7 +398,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int FB_NETWORK_ELEMENT__VALIDATE_TYPE = 26;
+	public static final int FB_NETWORK_ELEMENT__VALIDATE_TYPE = 27;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Collisions' of 'Group'.
@@ -398,7 +406,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int GROUP__VALIDATE_COLLISIONS = 27;
+	public static final int GROUP__VALIDATE_COLLISIONS = 28;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'IInterface Element'.
@@ -406,7 +414,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 28;
+	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 29;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Unused' of 'IInterface Element'.
@@ -1973,6 +1981,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateIInterfaceElement_validateUnused(errorMarkerInterface, diagnostics, context);
 		if (result || diagnostics != null) result &= validateErrorMarkerInterface_validateValue(errorMarkerInterface, diagnostics, context);
 		if (result || diagnostics != null) result &= validateErrorMarkerInterface_validateAttributes(errorMarkerInterface, diagnostics, context);
+		if (result || diagnostics != null) result &= validateErrorMarkerInterface_validateComment(errorMarkerInterface, diagnostics, context);
 		return result;
 	}
 
@@ -1994,6 +2003,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateErrorMarkerInterface_validateAttributes(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return errorMarkerInterface.validateAttributes(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateComment constraint of '<em>Error Marker Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorMarkerInterface_validateComment(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return errorMarkerInterface.validateComment(diagnostics, context);
 	}
 
 	/**

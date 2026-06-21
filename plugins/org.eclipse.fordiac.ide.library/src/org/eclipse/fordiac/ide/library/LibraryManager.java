@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -62,7 +64,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.equinox.p2.operations.IProfileChangeJob;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -83,6 +88,8 @@ import org.osgi.framework.VersionRange;
 public enum LibraryManager {
 
 	INSTANCE;
+
+	private static final String UPDATE_JOB_NAME = "Updating Software"; //$NON-NLS-1$
 
 	public static final String LIB_TYPELIB_FOLDER_NAME = "typelib"; //$NON-NLS-1$
 	public static final String PACKAGE_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
@@ -117,7 +124,8 @@ public enum LibraryManager {
 			VersionRange.RIGHT_CLOSED);
 
 	private WatchService watchService;
-	private final HashMap<String, List<LibraryRecord>> stdlibraries = new HashMap<>();
+	private final AtomicBoolean standardLibraryResolutionEnabled = new AtomicBoolean(true);
+	private final Map<String, List<LibraryRecord>> stdlibraries = new ConcurrentHashMap<>();
 	private final HashMap<String, List<LibraryRecord>> libraries = new HashMap<>();
 
 	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
@@ -150,6 +158,26 @@ public enum LibraryManager {
 		}
 
 		LibraryPermission.setLibReadOnly(standardLibraryPath);
+		initP2UpdateListener();
+	}
+
+	private void initP2UpdateListener() {
+		Job.getJobManager().addJobChangeListener(new JobChangeAdapter() {
+			@Override
+			public void aboutToRun(final IJobChangeEvent event) {
+				if (isUpdateProvisioningJob(event.getJob())) {
+					standardLibraryResolutionEnabled.set(false);
+				}
+			}
+
+			@Override
+			public void done(final IJobChangeEvent event) {
+				if (isUpdateProvisioningJob(event.getJob())) {
+					standardLibraryResolutionEnabled.set(true);
+				}
+			}
+
+		});
 	}
 
 	/**
@@ -604,6 +632,10 @@ public enum LibraryManager {
 	 */
 	public void resolveDependencies(final IProject project, final Manifest projectManifest,
 			final IProgressMonitor monitor) throws OperationCanceledException, CoreException {
+
+		if (!standardLibraryResolutionEnabled.get()) {
+			return;
+		}
 
 		final LibraryManagerData libManagerData = LibraryManagerData.init();
 
@@ -1065,6 +1097,10 @@ public enum LibraryManager {
 	private static Stream<Version> getAvailableVersions(final Map<String, List<LibraryRecord>> lib,
 			final String symbolicName) {
 		return lib.getOrDefault(symbolicName, Collections.emptyList()).stream().map(LibraryRecord::version);
+	}
+
+	private static boolean isUpdateProvisioningJob(final Job job) {
+		return job instanceof IProfileChangeJob && UPDATE_JOB_NAME.equals(job.getName());
 	}
 
 }
