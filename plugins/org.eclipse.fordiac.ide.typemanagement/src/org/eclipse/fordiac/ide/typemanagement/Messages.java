@@ -68,6 +68,7 @@ public final class Messages extends NLS {
 	public static String ChangePackageNameRefactoring_Name;
 	public static String ChangePackageNameRefactoring_NoTypeEntry;
 	public static String ChangePackageNameRefactoring_ProblemOccurred;
+	public static String ChangePackageNameRefactoring_QuickFixTooltip;
 	public static String ChangePackageNameRefactoring_Tooltip;
 	public static String ChangePackageNameRefactoringProcessor_Name;
 	public static String ChangePackageNameRefactoringWizardPage_Name;
