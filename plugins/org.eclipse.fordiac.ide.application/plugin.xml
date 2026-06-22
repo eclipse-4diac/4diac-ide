@@ -583,6 +583,11 @@
     </command>
 	<command
           categoryId="org.eclipse.fordiac.ide.commands.category"
+          id="org.eclipse.fordiac.ide.application.commands.moreAggressiveConDelete"
+          name="%commands_moreAggressiveConDelete_name">
+    </command>
+	<command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
           id="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy"
           name="%commands_moveThroughHierarchy_name">
     </command>
@@ -855,6 +860,17 @@
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.AggressiveDeleteConnection"
              commandId="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete">
+      <activeWhen>
+        <with variable="selection">
+          <count value="1" />
+          <iterate operator="and" ifEmpty="false">
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+          </iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.MoreAggressiveDeleteConnection"
+             commandId="org.eclipse.fordiac.ide.application.commands.moreAggressiveConDelete">
       <activeWhen>
         <with variable="selection">
           <count value="1" />
@@ -1540,6 +1556,18 @@
      	   </with>
 		</visibleWhen>		
       </command>
+      
+      <command commandId="org.eclipse.fordiac.ide.application.commands.moreAggressiveConDelete">
+        <visibleWhen>
+	        <with variable="selection">
+	        	<count value="1" />
+	          	<iterate operator="and" ifEmpty="false">
+	              	<instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+	          	</iterate>
+	        </with>
+        </visibleWhen>
+      </command>
+      
     </menuContribution>
 	<menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
     	<command commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
