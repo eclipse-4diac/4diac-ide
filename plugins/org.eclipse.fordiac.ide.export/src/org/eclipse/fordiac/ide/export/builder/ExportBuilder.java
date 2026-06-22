@@ -176,38 +176,51 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor, final BuildContext context)
 			throws CoreException {
-		final AtomicBoolean fullBuildRequired = new AtomicBoolean(false);
+
+		/*
+		 * check if relevant files have been removed first, 2 x delta tree traversal is
+		 * cheaper than unnecessary exports of files
+		 */
+		if (containsDeltaRequiringFullBuild(rootDelta, monitor)) {
+			clean(monitor);
+			fullBuild(monitor, context);
+			return;
+		}
 
 		rootDelta.accept((IResourceDeltaVisitor) delta -> {
 			if (isExportCanceled(monitor)) {
 				throw new OperationCanceledException();
 			}
 
-			if (fullBuildRequired.get()) {
-				return false;
-			}
-
-			if (requiresFullBuild(delta)) {
-				fullBuildRequired.set(true);
-				return false;
-			}
-
-			if ((delta.getResource() instanceof final IFile file) && file.exists() && includeInIncrementalBuild(file)) {
+			if (delta.getResource() instanceof final IFile file && file.exists() && includeInIncrementalBuild(file)) {
 				exportElement(monitor, file, context);
 			}
 			return true;
-		}, IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED | IResourceDelta.REMOVED);
-
-		if (fullBuildRequired.get()) {
-			clean(monitor);
-			fullBuild(monitor, context);
-		}
+		}, IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED);
 	}
 
-	private boolean requiresFullBuild(final IResourceDelta delta) {
-		// be careful with operations on the file handle, as it is invalid
-		return delta.getKind() == IResourceDelta.REMOVED && (delta.getResource() instanceof final IFile file
-				&& isExportableFileType(file) && isOnExportBuildpath(file));
+	/**
+	 * Checks whether the resource delta contains a removed exportable file that
+	 * requires a full build.
+	 */
+	private boolean containsDeltaRequiringFullBuild(final IResourceDelta rootDelta, final SubMonitor monitor)
+			throws CoreException {
+		final AtomicBoolean result = new AtomicBoolean(false);
+
+		rootDelta.accept((IResourceDeltaVisitor) delta -> {
+			if (isExportCanceled(monitor)) {
+				throw new OperationCanceledException();
+			}
+
+			if (delta.getResource() instanceof final IFile file && isExportableFileType(file)
+					&& isOnExportBuildpath(file)) {
+				result.set(true);
+				return false;
+			}
+			return true;
+		}, IResourceDelta.REMOVED);
+
+		return result.get();
 	}
 
 	private static boolean includeInFullBuild(final IFile file) throws CoreException {
