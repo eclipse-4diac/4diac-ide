@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -175,16 +176,38 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor, final BuildContext context)
 			throws CoreException {
+		final AtomicBoolean fullBuildRequired = new AtomicBoolean(false);
+
 		rootDelta.accept((IResourceDeltaVisitor) delta -> {
 			if (isExportCanceled(monitor)) {
 				throw new OperationCanceledException();
+			}
+
+			if (fullBuildRequired.get()) {
+				return false;
+			}
+
+			if (requiresFullBuild(delta)) {
+				fullBuildRequired.set(true);
+				return false;
 			}
 
 			if ((delta.getResource() instanceof final IFile file) && file.exists() && includeInIncrementalBuild(file)) {
 				exportElement(monitor, file, context);
 			}
 			return true;
-		}, IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED);
+		}, IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED | IResourceDelta.REMOVED);
+
+		if (fullBuildRequired.get()) {
+			clean(monitor);
+			fullBuild(monitor, context);
+		}
+	}
+
+	private boolean requiresFullBuild(final IResourceDelta delta) {
+		// be careful with operations on the file handle, as it is invalid
+		return delta.getKind() == IResourceDelta.REMOVED && (delta.getResource() instanceof final IFile file
+				&& isExportableFileType(file) && isOnExportBuildpath(file));
 	}
 
 	private static boolean includeInFullBuild(final IFile file) throws CoreException {
