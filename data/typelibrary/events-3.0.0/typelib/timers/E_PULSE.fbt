@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="E_PULSE" Comment="standard timer function block (pulse)">
-	<Identification Standard="61499-2" Description="Copyright (c) 2023, 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  &#10;   &#10;   &#10;E_TP -- Impulse forming FB  &#10;&#10;Generate a Impulse with a given Time.  &#10;This FB makes a Impulse of Duration TM on the Output QO.">
+	<Identification Standard="61499-2" Classification="standard timer function block" Description="Copyright (c) 2023, 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  &#10;   &#10;   &#10;E_PULSE -- Impulse forming FB  &#10;&#10;Generate a Impulse with a given Time.  &#10;This FB makes a Impulse of Duration PT on the Output Q.">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-06-22" Remarks="validate all timers">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Hoepfinger" Date="2024-04-23" Remarks="Add a Reset to Timer FBs">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-04-23" Remarks="Add a Reset to Timer FBs">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0.1" Author="Franz Hoepfinger" Date="2024-03-05" Remarks="renamed to E_PULSE">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0.1" Author="Franz Höpfinger" Date="2024-03-05" Remarks="renamed to E_PULSE">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2023-08-21" Remarks="initial implementation as E_IMPULSE">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2023-08-21" Remarks="initial implementation as E_IMPULSE">
 	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events::timers">
 	</CompilerInfo>
