@@ -26,12 +26,15 @@ import org.eclipse.fordiac.ide.gef.provider.PackageLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeImportNamespaceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteImportCommand;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
@@ -75,14 +78,17 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 public class PackageInfoWidget extends TypeInfoWidget {
 
 	private static final String RENAME_ELEMENT_ICON = "icons/full/etool16/tricks.png"; //$NON-NLS-1$
+	private static final String QUICK_FIX_ICON = "icons/full/obj16/quickfix_error_obj.png"; //$NON-NLS-1$
 
 	private final Supplier<GraphicalAnnotationModel> annotationModelSupplier;
 	private TableViewer packageViewer;
 	private StyledText nameText;
 	private AddDeleteWidget buttons;
 	private Button changePackageNameButton;
+	private Button quickFixButton;
 	private Button organizeImportsButton;
 	private Image changePackageNameImage;
+	private Image quickFixImage;
 	Composite composite;
 
 	public PackageInfoWidget(final FormToolkit widgetFactory,
@@ -103,7 +109,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		packageGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		composite = getWidgetFactory().createComposite(packageGroup, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(3).equalWidth(false).margins(0, 0).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(4).equalWidth(false).margins(0, 0).applyTo(composite);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		changePackageNameButton = getWidgetFactory().createButton(composite, null, SWT.PUSH);
 		changePackageNameButton.setToolTipText(Messages.ChangePackageNameRefactoring_Tooltip);
@@ -112,6 +118,15 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		changePackageNameButton
 				.addSelectionListener(SelectionListener.widgetSelectedAdapter(ev -> openPackageNameRefactoring()));
 		GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(changePackageNameButton);
+		quickFixButton = getWidgetFactory().createButton(composite, null, SWT.PUSH);
+		quickFixButton.setToolTipText(Messages.ChangePackageNameRefactoring_QuickFixTooltip);
+		quickFixButton.setImage(getQuickFixImage());
+		quickFixButton.addDisposeListener(e -> disposeQuickFixImage());
+		quickFixButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(ev -> openPackageNameQuickFix()));
+		final GridData quickFixLayoutData = GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).create();
+		quickFixLayoutData.exclude = true;
+		quickFixButton.setLayoutData(quickFixLayoutData);
+		quickFixButton.setVisible(false);
 		getWidgetFactory().createLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupStyledText(composite);
 
@@ -164,6 +179,24 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		changePackageNameImage = null;
 	}
 
+	private Image getQuickFixImage() {
+		if (quickFixImage == null) {
+			final ImageDescriptor imageDescriptor = AbstractUIPlugin
+					.imageDescriptorFromPlugin("org.eclipse.ui.ide", QUICK_FIX_ICON); //$NON-NLS-1$
+			if (imageDescriptor != null) {
+				quickFixImage = imageDescriptor.createImage();
+			}
+		}
+		return quickFixImage;
+	}
+
+	private void disposeQuickFixImage() {
+		if (quickFixImage != null && !quickFixImage.isDisposed()) {
+			quickFixImage.dispose();
+		}
+		quickFixImage = null;
+	}
+
 	private void openPackageNameRefactoring() {
 		if (blockListeners || getType() == null) {
 			return;
@@ -172,6 +205,18 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		final TypeEntry typeEntry = getType().getTypeEntry();
 		if (typeEntry != null && typeEntry.getFile() != null) {
 			ChangePackageNameRefactoring.openWizard(typeEntry, nameText.getShell());
+		}
+	}
+
+	private void openPackageNameQuickFix() {
+		if (blockListeners || getType() == null) {
+			return;
+		}
+
+		final TypeEntry typeEntry = getType().getTypeEntry();
+		if (typeEntry != null && typeEntry.getFile() != null) {
+			ChangePackageNameRefactoring.openWizard(typeEntry,
+					PackageNameHelper.getPackageNameFromFile(typeEntry.getFile()), nameText.getShell());
 		}
 	}
 
@@ -197,6 +242,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 			if ((getType() != null)) {
 				updatePackageNameTextState();
 				changePackageNameButton.setEnabled(!isReadonly() && canChangePackageName());
+				updateQuickFixButtonState(!isReadonly());
 				buttons.setEnabled(!isReadonly());
 				organizeImportsButton.setEnabled(!isReadonly());
 				packageViewer.getTable().setEnabled(!isReadonly());
@@ -228,6 +274,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		if (packageViewer != null && !packageViewer.getControl().isDisposed()) {
 			packageViewer.refresh();
 		}
+		updateQuickFixButtonState(!isReadonly());
 		setCommandExecutor(commandExecutorBuffer);
 	}
 
@@ -236,6 +283,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		super.setEnabled(enablement);
 		updatePackageNameTextState();
 		changePackageNameButton.setEnabled(enablement && canChangePackageName());
+		updateQuickFixButtonState(enablement);
 		buttons.setVisible(enablement);
 		packageViewer.getTable().setEnabled(enablement);
 		packageViewer.setCellModifier(null);
@@ -250,6 +298,36 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	private boolean canChangePackageName() {
 		final LibraryElement type = getType();
 		return type != null && type.getTypeEntry() != null && type.getTypeEntry().getFile() != null && !isReadonly();
+	}
+
+	private void updateQuickFixButtonState(final boolean enablement) {
+		final boolean visible = hasPackageNameMismatchAnnotation();
+		quickFixButton.setVisible(visible);
+		((GridData) quickFixButton.getLayoutData()).exclude = !visible;
+		quickFixButton.setEnabled(enablement && canChangePackageName());
+		composite.layout();
+	}
+
+	private boolean hasPackageNameMismatchAnnotation() {
+		final LibraryElement type = getType();
+		final GraphicalAnnotationModel annotationModel = annotationModelSupplier.get();
+		if (type != null && type.getCompilerInfo() != null && annotationModel != null) {
+			return annotationModel.hasAnnotation(type.getCompilerInfo(),
+					PackageInfoWidget::isPackageNameMismatchAnnotation);
+		}
+		return false;
+	}
+
+	private static boolean isPackageNameMismatchAnnotation(final GraphicalAnnotation annotation) {
+		return isProblemAnnotation(annotation)
+				&& LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(annotation.getAttribute(FordiacErrorMarker.SOURCE))
+				&& Integer.valueOf(LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE)
+						.equals(annotation.getAttribute(FordiacErrorMarker.CODE));
+	}
+
+	private static boolean isProblemAnnotation(final GraphicalAnnotation annotation) {
+		return GraphicalAnnotation.TYPE_ERROR.equals(annotation.getType())
+				|| GraphicalAnnotation.TYPE_WARNING.equals(annotation.getType());
 	}
 
 	private boolean isReadonly() {

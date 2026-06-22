@@ -17,9 +17,10 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ChangePackageNameRefactoring;
+import org.eclipse.swt.widgets.Display;
 
 public class ChangePackageNameMarkerResolution extends ChangeNameMarkerResolution {
 
@@ -46,11 +47,8 @@ public class ChangePackageNameMarkerResolution extends ChangeNameMarkerResolutio
 		if (typeEntry == null) {
 			throw createExceptionForMarker(Messages.ChangeName_NoTypeEntryError, marker);
 		}
-		final LibraryElement type = typeEntry.getType();
-		if (type == null) {
-			throw createExceptionForMarker(Messages.ChangeName_NoTypeError, marker);
-		}
-		PackageNameHelper.setPackageName(type, PackageNameHelper.getPackageNameFromFile(typeEntry.getFile()));
-		typeEntry.save(type);
+		Display.getDefault()
+				.asyncExec(() -> ChangePackageNameRefactoring.openWizard(typeEntry,
+						PackageNameHelper.getPackageNameFromFile(typeEntry.getFile()), Display.getDefault().getActiveShell()));
 	}
 }

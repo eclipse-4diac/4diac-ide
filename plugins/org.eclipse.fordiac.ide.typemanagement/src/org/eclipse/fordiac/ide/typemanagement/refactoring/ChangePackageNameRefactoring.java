@@ -27,10 +27,13 @@ public class ChangePackageNameRefactoring extends RenameRefactoring {
 	}
 
 	public static void openWizard(final TypeEntry typeEntry, final Shell shell) {
+		openWizard(typeEntry, typeEntry.getPackageName(), shell);
+	}
+
+	public static void openWizard(final TypeEntry typeEntry, final String packageName, final Shell shell) {
 		try {
 			RefactoringUtil.saveAllAndBuild();
-			final ChangePackageNameRefactoring refactoring = new ChangePackageNameRefactoring(typeEntry,
-					typeEntry.getPackageName());
+			final ChangePackageNameRefactoring refactoring = new ChangePackageNameRefactoring(typeEntry, packageName);
 			final ChangePackageNameRefactoringWizard wizard = new ChangePackageNameRefactoringWizard(refactoring);
 			final RefactoringWizardOpenOperation openOperation = new RefactoringWizardOpenOperation(wizard);
 			openOperation.run(shell, Messages.ChangePackageNameRefactoring_Name);
