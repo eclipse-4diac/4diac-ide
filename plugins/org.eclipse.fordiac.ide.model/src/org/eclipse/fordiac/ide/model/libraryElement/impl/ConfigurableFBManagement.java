@@ -217,7 +217,10 @@ public final class ConfigurableFBManagement {
 
 	private static boolean isInDefaultConfiguration(final Demultiplexer demux, final String visibleChildrenString,
 			final DataType dataType) {
-		if (!(dataType instanceof StructuredType)) { // could be error marker
+		if (dataType instanceof ErrorDataType) {
+			return false;
+		}
+		if (!(dataType instanceof StructuredType)) {
 			return true;
 		}
 		final EList<VarDeclaration> possibleChildren = ((StructuredType) dataType).getMemberVariables();
@@ -308,35 +311,57 @@ public final class ConfigurableFBManagement {
 	}
 
 	private static void updateConfiguredDemuxConfiguration(final Demultiplexer demux, final String visibleChildren) {
-		if (visibleChildren == null || !(demux.getDataType() instanceof StructuredType) || !demux.isIsConfigured()) {
+		if (visibleChildren == null || !demux.isIsConfigured()) {
 			updateStructManipulatorConfiguration(demux);
-		} else {
-			// delete previous visible children, if any
-			demux.getMemberVars().clear();
-			getEventWithPins(demux).getWith().clear();
-
-			if (!visibleChildren.isBlank()) {
-				final StructuredType structType = (StructuredType) demux.getDataType();
-				final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
-				for (final String memberVarName : memberVarNames) {
-					final String[] subnames = splitMemberVarName(memberVarName);
-					final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, subnames);
-					if (varInStruct != null) {
-						final MemberVarDeclaration pin = copyVarAsMember(varInStruct, false);
-						pin.getParentNames().addAll(Arrays.asList(subnames).subList(0, subnames.length - 1));
-						demux.getMemberVars().add(pin);
-					}
-				}
-				// create with constructs
-				demux.getMemberVars().forEach(varDecl -> {
-					final With with = LibraryElementFactory.eINSTANCE.createWith();
-					with.setVariables(varDecl);
-					getEventWithPins(demux).getWith().add(with);
-				});
-			}
-			// configure pin
-			getStructuredTypePin(demux).setType(demux.getDataType());
+			return;
 		}
+		if (!(demux.getDataType() instanceof StructuredType)
+				&& !(demux.getDataType() instanceof ErrorDataType)) {
+			updateStructManipulatorConfiguration(demux);
+			return;
+		}
+
+		// delete previous visible children, if any
+		demux.getMemberVars().clear();
+		getEventWithPins(demux).getWith().clear();
+
+		if (!visibleChildren.isBlank()) {
+			final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
+			for (final String memberVarName : memberVarNames) {
+				final String[] subnames = splitMemberVarName(memberVarName);
+				final MemberVarDeclaration pin = createConfiguredDemuxPin(demux.getDataType(), subnames);
+				if (pin != null) {
+					pin.getParentNames().addAll(Arrays.asList(subnames).subList(0, subnames.length - 1));
+					demux.getMemberVars().add(pin);
+				}
+			}
+			// create with constructs
+			demux.getMemberVars().forEach(varDecl -> {
+				final With with = LibraryElementFactory.eINSTANCE.createWith();
+				with.setVariables(varDecl);
+				getEventWithPins(demux).getWith().add(with);
+			});
+		}
+		// configure pin
+		getStructuredTypePin(demux).setType(demux.getDataType());
+	}
+
+	private static MemberVarDeclaration createConfiguredDemuxPin(final DataType dataType, final String[] subnames) {
+		if (dataType instanceof final StructuredType structType) {
+			final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, subnames);
+			return varInStruct != null ? copyVarAsMember(varInStruct, false) : null;
+		}
+		if (dataType instanceof ErrorDataType) {
+			// Preserve the configured paths while a rename temporarily resolves the
+			// structured type to an error type.
+			final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+			pin.setName(subnames[subnames.length - 1]);
+			pin.setType(dataType);
+			pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			pin.setIsInput(false);
+			return pin;
+		}
+		return null;
 	}
 
 	static String[] splitMemberVarName(final String memberVarName) {
