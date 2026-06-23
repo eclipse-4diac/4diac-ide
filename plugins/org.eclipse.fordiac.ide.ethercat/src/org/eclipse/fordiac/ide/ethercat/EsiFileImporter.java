@@ -59,7 +59,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 	private ArrayList<Device> devices;
 	private EsiFileParser esiFileParser;
 	private EsiFileImporterWizardPage page;
-	private static final String SLAVE_CONFIG_TYPE = "forte::eclipse4diac::io::ethercat::ECSlaveConfig"; //$NON-NLS-1$
+	private static final String DEVICE_CONFIG_TYPE = "forte::eclipse4diac::io::ethercat::ECDeviceConfig"; //$NON-NLS-1$
 	private static final String MODULE_CONFIG_TYPE = "forte::eclipse4diac::io::ethercat::ECModuleConfig"; //$NON-NLS-1$
 
 	@Override
@@ -103,12 +103,12 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			vendorId = EsiFileParser.toUnsignedDecimal(esiFileParser.getVendorId());
 			devices = esiFileParser.parseDevices();
 
-			final String slaveFBSaveFolder = String.format("%s/%s", fbtSaveFolder, vendorName); //$NON-NLS-1$
+			final String deviceFBSaveFolder = String.format("%s/%s", fbtSaveFolder, vendorName); //$NON-NLS-1$
 			for(final Device device : devices) {
 				device.vendorId = vendorId;
 				device.productCode = EsiFileParser.toUnsignedDecimal(device.productCode);
-				final Document slaveFB = createFB(device);
-				final String fbSaveFolder = slaveFBSaveFolder + "/" + device.deviceType; //$NON-NLS-1$
+				final Document deviceFB = createFB(device);
+				final String fbSaveFolder = deviceFBSaveFolder + "/" + device.deviceType; //$NON-NLS-1$
 				final String moduleFBSaveFolder = fbSaveFolder + "/modules"; //$NON-NLS-1$
 				for(final Module module : device.modules) {
 					module.moduleIdent = EsiFileParser.toUnsignedDecimal(module.moduleIdent);
@@ -116,8 +116,8 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 					final String moduleFBFilePath = moduleFBSaveFolder + "/" + module.moduleType + ".fbt"; //$NON-NLS-1$ //$NON-NLS-2$
 					writeDocumentToFile(moduleFB, moduleFBFilePath);
 				}
-				final String slaveFBFilePath = fbSaveFolder + "/" + device.deviceType + ".fbt"; //$NON-NLS-1$ //$NON-NLS-2$
-				writeDocumentToFile(slaveFB, slaveFBFilePath);
+				final String deviceFBFilePath = fbSaveFolder + "/" + device.deviceType + ".fbt"; //$NON-NLS-1$ //$NON-NLS-2$
+				writeDocumentToFile(deviceFB, deviceFBFilePath);
 			}
 			if(project != null) {
 				project.refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -153,7 +153,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 				device.vendorId, device.productCode);
 		addElement(doc, inputVarsElement, "VarDeclaration", mapOf( //$NON-NLS-1$
 				"Name", "Config", //$NON-NLS-1$ //$NON-NLS-2$
-				"Type", SLAVE_CONFIG_TYPE, //$NON-NLS-1$
+				"Type", DEVICE_CONFIG_TYPE, //$NON-NLS-1$
 				"InitialValue", configInit)); //$NON-NLS-1$
 		createFBDI(doc, inputVarsElement, device.txPdoes, "IN_"); //$NON-NLS-1$
 		createFBDI(doc, inputVarsElement, device.rxPdoes, "OUT_"); //$NON-NLS-1$
@@ -163,7 +163,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 		addElement(doc, plugsElement, "AdapterDeclaration", mapOf("Name", "BusAdapterOut", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		addElement(doc, socketsElement, "AdapterDeclaration", mapOf("Name", "BusAdapterIn", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
-		if(device.slaveType == Device.SlaveType.GEN_Coupler) {
+		if(device.deviceCategory == Device.DeviceCategory.GEN_Coupler) {
 			addElement(doc, plugsElement, "AdapterDeclaration", mapOf("Name", "ModuleAdapterOut", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		}
 		
@@ -203,8 +203,8 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 		String genericTypeName = "";
 		if(fbType.contains("ECCoupler")) {
 			genericTypeName = "'GEN_ECCoupler'";			
-		} else if(fbType.contains("ECSlave")) {
-			genericTypeName = "'GEN_ECSlave'";
+		} else if(fbType.contains("ECDevice")) {
+			genericTypeName = "'GEN_ECDevice'";
 		} else {
 			genericTypeName = "'GEN_ECModule'";
 		}

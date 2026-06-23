@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="ECMaster" Comment="Service Interface Function Block Type">
+<FBType Name="ECController" Comment="Service Interface Function Block Type">
 	<Identification Standard="61499-2">
 	</Identification>
 	<VersionInfo Version="1.0" Author="hyperion" Date="2026-04-09">
@@ -9,7 +9,7 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="INIT" Type="Event" Comment="Service Initialization">
-				<With Var="MasterIndex"/>
+				<With Var="ControllerIndex"/>
 				<With Var="UpdateInterval"/>
 				<With Var="QI"/>
 			</Event>
@@ -34,7 +34,7 @@
 		<InputVars>
 			<VarDeclaration Name="QI" Type="BOOL"/>
 			<VarDeclaration Name="Enable" Type="BOOL"/>
-			<VarDeclaration Name="MasterIndex" Type="UINT"/>
+			<VarDeclaration Name="ControllerIndex" Type="UINT"/>
 			<VarDeclaration Name="UpdateInterval" Type="TIME" InitialValue="T#30us"/>
 		</InputVars>
 		<OutputVars>

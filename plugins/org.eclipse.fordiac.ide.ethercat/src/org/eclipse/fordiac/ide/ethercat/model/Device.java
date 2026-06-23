@@ -28,12 +28,12 @@ public class Device {
 	public String vendorId;
 	public String productCode;
 
-	public enum SlaveType {
-		GEN_Slave,
+	public enum DeviceCategory {
+		GEN_Device,
 		GEN_Coupler
 	}
 
-	public SlaveType slaveType;
+	public DeviceCategory deviceCategory;
 
 	public Device(final String deviceType) {
 		this.deviceType = deviceType;
@@ -56,8 +56,8 @@ public class Device {
 		}
 	}
 
-	public void setSlaveType(final SlaveType slaveType) {
-		this.slaveType = slaveType;
+	public void setDeviceCategory(final DeviceCategory deviceCategory) {
+		this.deviceCategory = deviceCategory;
 	}
 
 	public void setOriDeviceType(final String oriDeviceType) {
@@ -65,8 +65,8 @@ public class Device {
 	}
 
 	public String getFBType() {
-		return this.slaveType == SlaveType.GEN_Coupler
+		return this.deviceCategory == DeviceCategory.GEN_Coupler
 				? "ECCoupler_" + inputNums + "_" + outputNums //$NON-NLS-1$ //$NON-NLS-2$
-				: "ECSlave_" + inputNums + "_" + outputNums; //$NON-NLS-1$ //$NON-NLS-2$
+				: "ECDevice_" + inputNums + "_" + outputNums; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

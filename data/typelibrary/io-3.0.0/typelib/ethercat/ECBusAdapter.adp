@@ -20,7 +20,7 @@
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="QI" Type="BOOL"/>
-			<VarDeclaration Name="MasterId" Type="UINT"/>
+			<VarDeclaration Name="ControllerId" Type="UINT"/>
 			<VarDeclaration Name="Index" Type="UINT"/>
 		</OutputVars>
 	</InterfaceList>

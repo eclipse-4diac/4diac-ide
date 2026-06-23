@@ -145,7 +145,7 @@ public class EsiFileParser {
 				device.setComment(commentElement.getTextContent());
 			}
 			device.productCode = typeElement.getAttribute("ProductCode"); //$NON-NLS-1$
-			device.setSlaveType(device.modules.isEmpty() ? Device.SlaveType.GEN_Slave : Device.SlaveType.GEN_Coupler);
+			device.setDeviceCategory(device.modules.isEmpty() ? Device.DeviceCategory.GEN_Device : Device.DeviceCategory.GEN_Coupler);
 			return device;
 		} catch(final Exception e) {
 			return null;
