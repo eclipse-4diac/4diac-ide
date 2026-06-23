@@ -46,6 +46,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicFB" eType="#//BasicFB"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceInterfaceFB" eType="#//ServiceInterfaceFB"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="typedSubapp" eType="#//TypedSubapp"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="untypedSubapp" eType="#//UntypedSubapp"
@@ -53,6 +55,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleType" eType="#//SimpleType"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicType" eType="#//BasicType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceInterfaceType" eType="#//ServiceInterfaceType"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subappType" eType="#//SubappType"
         containment="true"/>
@@ -74,6 +78,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="BasicType" eSuperTypes="#//Type">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubappType" eSuperTypes="#//Type">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
@@ -93,6 +100,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="BasicFB" eSuperTypes="#//Instance">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFB" eSuperTypes="#//Instance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypedSubapp" eSuperTypes="#//Instance">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
@@ -101,7 +111,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PIN" eSuperTypes="#//TargetOption #//SearchTarget"/>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//TargetOption">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contraint" eType="#//Constraint"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeDeclaration" eSuperTypes="#//TargetOption">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

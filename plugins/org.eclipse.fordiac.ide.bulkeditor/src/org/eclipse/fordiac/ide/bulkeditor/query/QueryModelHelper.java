@@ -40,7 +40,9 @@ public final class QueryModelHelper {
 	public static final String INSTANCE = "Instance"; //$NON-NLS-1$
 	public static final String TARGET_OPTION = "TargetOption"; //$NON-NLS-1$
 	public static final String PLACEHOLDER = "Placeholder"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_DECLARATION = "AttributeDeclaration"; //$NON-NLS-1$
 
+	public static final String FEATURE_NAME = "name"; //$NON-NLS-1$
 	public static final String FEATURE_VALUE = "value"; //$NON-NLS-1$
 	public static final String FEATURE_CASE_SENSITIVE = "caseSensitive"; //$NON-NLS-1$
 	public static final String FEATURE_WHOLE_WORD = "wholeWord"; //$NON-NLS-1$
@@ -76,6 +78,17 @@ public final class QueryModelHelper {
 
 	public static boolean isInstance(final EObject eObj) {
 		return eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
+	}
+
+	public static boolean isAttributeDeclaration(final EObject eObj) {
+		return isOfType(eObj, ATTRIBUTE_DECLARATION);
+	}
+
+	public static void setAttributeDeclarationName(final EObject attrDecl, final String name) {
+		final EStructuralFeature feature = attrDecl.eClass().getEStructuralFeature(FEATURE_NAME);
+		if (feature != null) {
+			attrDecl.eSet(feature, name);
+		}
 	}
 
 	public static Object getFeatureValue(final EObject eObj, final String featureName) {

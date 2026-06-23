@@ -57,6 +57,7 @@ public class QueryViewer {
 
 	private void createQueryViewer(final Composite parent) {
 		graphViewer = new QueryZestGraphViewer(parent, getOrCreateQueryEditingDomain());
+		graphViewer.setProject(project);
 		loadQueryModel();
 		graphViewer.addContextMenu(queryPackage);
 		graphViewer.setSaveLoadCallbacks(this::saveQueryToXmi, this::loadQueryFromXmi);
