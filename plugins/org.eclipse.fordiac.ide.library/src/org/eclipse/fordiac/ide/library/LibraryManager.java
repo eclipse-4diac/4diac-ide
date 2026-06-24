@@ -754,7 +754,7 @@ public enum LibraryManager {
 				return false;
 			});
 		} catch (final CoreException e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError("Could not get all libraries!", e); //$NON-NLS-1$
 		}
 		return libs;
 	}
