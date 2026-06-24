@@ -10,17 +10,13 @@
  * Contributors:
  *   Alois Zoitl - Extracted from ConfigureableMoveFBSection
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.application.properties.memberaccess;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessContentProvider;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessLabelProvider;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessTree;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -41,7 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-class MemberAccessViewer {
+public class MemberAccessViewer {
 
 	private final boolean input;
 	private final CommandExecutor cmdExecutor;
