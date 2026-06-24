@@ -83,18 +83,20 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		GridLayoutFactory.fillDefaults().numColumns(3).equalWidth(false).applyTo(composite);
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		final Label typeNameLabel = getWidgetFactory().createLabel(composite, FordiacMessages.TypeName + ":"); //$NON-NLS-1$
+		GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(typeNameLabel);
+		fbTypeNameText = createGroupText(composite, false);
+		fbTypeNameText.setEnabled(true);
 		renameTypeButton = getWidgetFactory().createButton(composite, null, SWT.PUSH);
 		renameTypeButton.setToolTipText(Messages.RenameType_Name);
 		renameTypeButton.setImage(getRenameTypeImage());
 		renameTypeButton.addDisposeListener(e -> disposeRenameTypeImage());
 		renameTypeButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(ev -> openTypeRefactoring()));
 		GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(renameTypeButton);
-		getWidgetFactory().createLabel(composite, FordiacMessages.TypeName + ":"); //$NON-NLS-1$
-		fbTypeNameText = createGroupText(composite, false);
-		fbTypeNameText.setEnabled(true);
 		final Label commentLabel = getWidgetFactory().createLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
-		GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).span(2, 1).applyTo(commentLabel);
+		GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(commentLabel);
 		commentText = createGroupText(composite, true);
+		GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(commentText);
 		commentText.addModifyListener(e -> executeCommand(new ChangeCommentCommand(getType(), commentText.getText())));
 	}
 
