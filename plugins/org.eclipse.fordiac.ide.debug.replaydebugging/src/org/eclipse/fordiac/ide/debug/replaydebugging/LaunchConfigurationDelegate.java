@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAtt
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * Launch delegate for the Replay Debugging configuration.
@@ -69,7 +70,7 @@ public class LaunchConfigurationDelegate extends DeploymentLaunchConfigurationDe
 			debugTarget.start();
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError("Couldn't launch replay debugging target!", e); //$NON-NLS-1$
 		}
 	}
 }

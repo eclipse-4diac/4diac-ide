@@ -37,7 +37,6 @@ public class ManifestEditor extends FormEditor {
 
 		} catch (final PartInitException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 

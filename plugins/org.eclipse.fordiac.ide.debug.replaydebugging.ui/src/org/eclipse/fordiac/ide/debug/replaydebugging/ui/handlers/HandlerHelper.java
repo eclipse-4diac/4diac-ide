@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -62,7 +63,7 @@ public class HandlerHelper {
 		try {
 			part = HandlerUtil.getActivePartChecked(event);
 		} catch (final ExecutionException e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError("Can not get active part!", e); //$NON-NLS-1$
 			return null;
 		}
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);

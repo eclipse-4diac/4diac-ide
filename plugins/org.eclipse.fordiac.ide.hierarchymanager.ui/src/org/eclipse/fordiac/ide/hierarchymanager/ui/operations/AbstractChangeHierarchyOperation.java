@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractChangeHierarchyOperation extends AbstractOperation {
 
@@ -38,23 +39,28 @@ public abstract class AbstractChangeHierarchyOperation extends AbstractOperation
 	protected static void saveHierarchy(final EObject node, final IProgressMonitor monitor) {
 		final Resource eResource = node.eResource();
 		if (eResource != null) {
-			final WorkspaceJob job = new WorkspaceJob("Save plant hierarchy: " + eResource.getURI().toFileString()) {
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-					try {
-						eResource.save(null);
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.setUser(false);
-			job.setSystem(true);
-			job.setPriority(Job.SHORT);
+			final WorkspaceJob job = createPlantHierarchySaveJob(eResource);
 			job.setRule(getRuleScope(eResource.getURI()));
 			job.schedule();
 		}
+	}
+
+	public static WorkspaceJob createPlantHierarchySaveJob(final Resource eResource) {
+		final WorkspaceJob job = new WorkspaceJob("Save plant hierarchy: " + eResource.getURI().toFileString()) {
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+				try {
+					eResource.save(null);
+				} catch (final IOException e) {
+					FordiacLogHelper.logError("Could not save plant hierarchy!", e); //$NON-NLS-1$
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
+		return job;
 	}
 
 	private static ISchedulingRule getRuleScope(final URI uri) {

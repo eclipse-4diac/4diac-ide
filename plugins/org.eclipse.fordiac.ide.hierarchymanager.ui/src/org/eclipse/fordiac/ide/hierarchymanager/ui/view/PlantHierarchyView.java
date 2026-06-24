@@ -21,11 +21,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -39,6 +34,7 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceImpl;
+import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AbstractChangeHierarchyOperation;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
@@ -211,20 +207,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 	}
 
 	private static void saveNewResource(final IFile file, final Resource resource) {
-		final WorkspaceJob job = new WorkspaceJob("Save plant hierarchy: " + resource.getURI().toFileString()) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				try {
-					resource.save(null);
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setUser(false);
-		job.setSystem(true);
-		job.setPriority(Job.SHORT);
+		final WorkspaceJob job = AbstractChangeHierarchyOperation.createPlantHierarchySaveJob(resource);
 		job.setRule(file.getParent());
 		job.schedule();
 		try {

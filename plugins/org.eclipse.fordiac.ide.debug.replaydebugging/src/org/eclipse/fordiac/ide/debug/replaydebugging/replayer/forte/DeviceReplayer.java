@@ -50,7 +50,7 @@ public class DeviceReplayer implements IDeviceReplayer {
 				result.put(resource, new ResourceReplayer(executorService, resource));
 			}
 		} catch (final DeploymentException e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError("Error in reading traces!", e); //$NON-NLS-1$
 		}
 		return result;
 	}
