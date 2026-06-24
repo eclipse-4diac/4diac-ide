@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
@@ -457,12 +456,6 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 						final Value value = LibraryElementFactory.eINSTANCE.createValue();
 						value.setValue(errorMarker.getValue().getValue());
 						varDeclaration.setValue(value);
-					}
-					if (errorMarker.isIsInput() && errorMarker.getInputConnections().isEmpty()
-							&& hasValue(errorMarker.getValue())) {
-						// remove errormarker because value was set to pin and no connection needs to be
-						// copied
-						reconnCmds.add(new DeleteErrorMarkerCommand(errorMarker, oldElement));
 					}
 				} else if ((errorMarker.isIsInput() && errorMarker.getInputConnections().isEmpty())
 						|| (!errorMarker.isIsInput() && errorMarker.getOutputConnections().isEmpty())) {
