@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.operations;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -28,9 +29,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractChangeHierarchyOperation extends AbstractOperation {
+
+	private static final Map<String, Object> SAVE_OPTIONS = Map.of( //
+			XMLResource.OPTION_ENCODING, "UTF-8", //$NON-NLS-1$
+			XMLResource.OPTION_FORMATTED, Boolean.TRUE);
 
 	protected AbstractChangeHierarchyOperation(final String label) {
 		super(label);
@@ -50,7 +56,7 @@ public abstract class AbstractChangeHierarchyOperation extends AbstractOperation
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				try {
-					eResource.save(null);
+					eResource.save(SAVE_OPTIONS);
 				} catch (final IOException e) {
 					FordiacLogHelper.logError("Could not save plant hierarchy!", e); //$NON-NLS-1$
 				}
