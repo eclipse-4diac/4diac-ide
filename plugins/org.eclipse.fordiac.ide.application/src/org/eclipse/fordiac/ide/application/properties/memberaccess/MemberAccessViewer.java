@@ -10,17 +10,13 @@
  * Contributors:
  *   Alois Zoitl - Extracted from ConfigureableMoveFBSection
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.properties;
+package org.eclipse.fordiac.ide.application.properties.memberaccess;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessContentProvider;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessLabelProvider;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessTree;
-import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessTreeNode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -29,6 +25,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -37,11 +34,16 @@ import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.ScrollBar;
+import org.eclipse.swt.widgets.Scrollable;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-class MemberAccessViewer {
+public class MemberAccessViewer {
 
 	private final boolean input;
 	private final CommandExecutor cmdExecutor;
@@ -57,8 +59,16 @@ class MemberAccessViewer {
 	public void createControls(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		final Group group = widgetFactory.createGroup(parent,
 				(input) ? FordiacMessages.Inputs : FordiacMessages.Outputs);
+		GridLayoutFactory.fillDefaults().applyTo(group);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(group);
-		viewer = createMemberAccessViewer(group);
+
+		// Wrapper composite to hold the table. This is needed especially for windows
+		// that the table is not drawn on top of the group's headline
+		final Composite wrapper = widgetFactory.createComposite(group);
+		GridLayoutFactory.fillDefaults().applyTo(wrapper);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(wrapper);
+
+		viewer = createMemberAccessViewer(wrapper);
 	}
 
 	public void setInput(final BlockFBNetworkElement block) {
@@ -116,6 +126,7 @@ class MemberAccessViewer {
 			}
 		});
 		newViewer.addCheckStateListener(getCheckStateListener());
+		hookScrollForwarding(newViewer);
 		return newViewer;
 	}
 
@@ -159,6 +170,47 @@ class MemberAccessViewer {
 			return null;
 		}
 		return new ChangePinVisibilityCommand(ie, visible);
+	}
+
+	private static void hookScrollForwarding(final CheckboxTreeViewer viewer) {
+		if (!(viewer.getControl() instanceof final Scrollable scrollable)) {
+			return;
+		}
+
+		final ScrollBar vBar = scrollable.getVerticalBar();
+		if (vBar == null) {
+			return;
+		}
+
+		scrollable.addMouseWheelListener(event -> {
+			final boolean atTop = vBar.getSelection() <= 0;
+			final boolean atBottom = vBar.getSelection() >= (vBar.getMaximum() - vBar.getThumb());
+			final boolean scrollingUp = event.count > 0;
+			final boolean scrollingDown = event.count < 0;
+
+			if ((scrollingUp && atTop) || (scrollingDown && atBottom)) {
+				forwardScrollEvent(scrollable, event);
+			}
+		});
+	}
+
+	private static void forwardScrollEvent(Scrollable scrollable, MouseEvent event) {
+		Composite p = scrollable.getParent();
+		while (p != null) {
+			if (p instanceof final ScrolledComposite sc) {
+				final ScrollBar parentVBar = sc.getVerticalBar();
+				if (parentVBar != null && parentVBar.isVisible()) {
+					parentVBar
+							.setSelection(parentVBar.getSelection() + parentVBar.getIncrement() * -event.count);
+					final Event fwd = new Event();
+					fwd.widget = parentVBar;
+					fwd.detail = SWT.NONE;
+					parentVBar.notifyListeners(SWT.Selection, fwd);
+				}
+				break;
+			}
+			p = p.getParent();
+		}
 	}
 
 }
