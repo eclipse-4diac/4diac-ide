@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -53,8 +54,16 @@ public class MemberAccessViewer {
 	public void createControls(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		final Group group = widgetFactory.createGroup(parent,
 				(input) ? FordiacMessages.Inputs : FordiacMessages.Outputs);
+		GridLayoutFactory.fillDefaults().applyTo(group);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(group);
-		viewer = createMemberAccessViewer(group);
+
+		// Wrapper composite to hold the table. This is needed especially for windows
+		// that the table is not drawn on top of the group's headline
+		final Composite wrapper = widgetFactory.createComposite(group);
+		GridLayoutFactory.fillDefaults().applyTo(wrapper);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(wrapper);
+
+		viewer = createMemberAccessViewer(wrapper);
 	}
 
 	public void setInput(final BlockFBNetworkElement block) {
