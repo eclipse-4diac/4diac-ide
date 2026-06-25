@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.view;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -23,14 +22,13 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ContentHandler;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceImpl;
@@ -63,8 +61,11 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.hierarchymanager.ui.view"; //$NON-NLS-1$
 
-	final Map<String, Object> loadOptions = new HashMap<>();
-	private final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
+	private static final Map<String, Object> LOAD_OPTIONS = Map.of( //
+			XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE, //
+			XMLResource.OPTION_XML_MAP, AbstractChangeHierarchyOperation.XML_MAP //
+	);
+	private final ResourceSet hierarchyResourceSet = new ResourceSetImpl();
 
 	private IProject currentProject;
 
@@ -115,7 +116,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 					// we can not use setInput here as getInitialInput is interacting with the
 					// viewer in the base class
 					currentProject = project;
-					return loadHierachyForProject(currentProject, hierarchyResouceSet, loadOptions);
+					return loadHierachyForProject(currentProject, hierarchyResourceSet);
 				}
 			}
 		}
@@ -143,7 +144,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 		if (currentProject != proj) {
 			// the new project is different set
 			currentProject = proj;
-			getCommonViewer().setInput(loadHierachyForProject(proj, hierarchyResouceSet, loadOptions));
+			getCommonViewer().setInput(loadHierachyForProject(proj, hierarchyResourceSet));
 			setPartName(getConfigurationElement().getAttribute("name")); //$NON-NLS-1$
 		}
 	}
@@ -169,8 +170,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 		return null;
 	}
 
-	public static EObject loadHierachyForProject(final IProject proj, final ResourceSet hierarchyResouceSet,
-			final Map<String, Object> loadOptions) {
+	public static EObject loadHierachyForProject(final IProject proj, final ResourceSet hierarchyResouceSet) {
 		final IFile file = proj.getFile(PLANT_HIERARCHY_FILE_NAME);
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		if (!file.exists()) {
@@ -184,7 +184,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 			if (resource == null) {
 				resource = new HierarchyResourceImpl(uri);
 				hierarchyResouceSet.getResources().add(resource);
-				resource.load(loadOptions);
+				resource.load(LOAD_OPTIONS);
 			}
 			return resource.getContents().get(0);
 		} catch (final IOException e) {
@@ -195,7 +195,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 
 	private static EObject createNewHierarchyFile(final IFile file, final URI uri,
 			final ResourceSet hierarchyResouceSet) {
-		Resource resource = hierarchyResouceSet.getResource(uri, false);
+		Resource resource = hierarchyResouceSet.createResource(uri, ContentHandler.UNSPECIFIED_CONTENT_TYPE);
 		if (resource == null) {
 			resource = new HierarchyResourceImpl(uri);
 			hierarchyResouceSet.getResources().add(resource);
@@ -220,21 +220,13 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 
 	private void setupEMFInfra() {
 		// add file extension to registry
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+		hierarchyResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
 				PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
 				new HierarchyResourceFactoryImpl());
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+		hierarchyResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
 				PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
 				new HierarchyResourceFactoryImpl());
-		setupLoadOptions();
-	}
-
-	private void setupLoadOptions() {
-		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
-		final XMLMapImpl map = new XMLMapImpl();
-		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
-		loadOptions.put(XMLResource.OPTION_XML_MAP, map);
-		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, map);
+		hierarchyResourceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, AbstractChangeHierarchyOperation.XML_MAP);
 	}
 
 	@Override

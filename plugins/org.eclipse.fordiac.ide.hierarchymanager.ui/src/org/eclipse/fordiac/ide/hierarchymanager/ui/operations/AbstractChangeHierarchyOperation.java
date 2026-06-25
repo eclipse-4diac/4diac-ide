@@ -30,13 +30,22 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
+import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractChangeHierarchyOperation extends AbstractOperation {
 
+	public static final XMLMapImpl XML_MAP = new XMLMapImpl();
+	static {
+		XML_MAP.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
+	}
+
 	private static final Map<String, Object> SAVE_OPTIONS = Map.of( //
 			XMLResource.OPTION_ENCODING, "UTF-8", //$NON-NLS-1$
-			XMLResource.OPTION_FORMATTED, Boolean.TRUE);
+			XMLResource.OPTION_FORMATTED, Boolean.TRUE, //
+			XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE, //
+			XMLResource.OPTION_XML_MAP, XML_MAP);
 
 	protected AbstractChangeHierarchyOperation(final String label) {
 		super(label);
