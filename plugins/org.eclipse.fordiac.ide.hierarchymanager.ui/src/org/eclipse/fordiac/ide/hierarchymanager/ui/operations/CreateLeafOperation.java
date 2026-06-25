@@ -13,19 +13,21 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.operations;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.hierarchymanager.model.HierarchyManagerPersistenceHelper;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-public class CreateLeafOperation extends AbstractChangeHierarchyOperation {
+public class CreateLeafOperation extends AbstractOperation {
 
 	private final Level parent;
 	private final SubApp subapp;
@@ -43,21 +45,21 @@ public class CreateLeafOperation extends AbstractChangeHierarchyOperation {
 		newLeaf.setRef(subapp.getQualifiedName());
 		newLeaf.setContainerFileName(getFileName());
 		parent.getChildren().add(newLeaf);
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		parent.getChildren().add(newLeaf);
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		parent.getChildren().remove(newLeaf);
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 
