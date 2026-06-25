@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.URIHandlerImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
@@ -63,7 +64,14 @@ public final class HierarchyManagerPersistenceHelper {
 			XMLResource.OPTION_ENCODING, "UTF-8", //$NON-NLS-1$
 			XMLResource.OPTION_FORMATTED, Boolean.TRUE, //
 			XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE, //
-			XMLResource.OPTION_XML_MAP, XML_MAP);
+			XMLResource.OPTION_XML_MAP, XML_MAP, //
+			XMLResource.OPTION_URI_HANDLER, new URIHandlerImpl() {
+				@Override
+				public URI deresolve(final URI uri) {
+					return uri; // for now we would like to keep the platform uri
+				}
+			} //
+	);
 
 	public static RootLevel loadPlantHierarchy(final IProject project) {
 		final ResourceSet hierarchyResouceSet = createPlantHierarchyResourceSet();
