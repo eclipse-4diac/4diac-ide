@@ -20,14 +20,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage;
+import org.eclipse.fordiac.ide.hierarchymanager.model.HierarchyManagerPersistenceHelper;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
-import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AbstractChangeHierarchyOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
@@ -68,11 +62,11 @@ public final class HierarchyManagerRefactoringUtil {
 			return rootLevel;
 		}
 
-		return loadPlantHierarchy(project);
+		return HierarchyManagerPersistenceHelper.loadPlantHierarchy(project);
 	}
 
 	public static boolean plantHierachyExists(final IProject project) {
-		return project.getFile(PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME).exists();
+		return project.getFile(HierarchyManagerPersistenceHelper.PLANT_HIERARCHY_FILE_NAME).exists();
 	}
 
 	public static String getOldPath(final IResource element) {
@@ -86,25 +80,6 @@ public final class HierarchyManagerRefactoringUtil {
 	public static String getDestinationPath(final IResource element, final IFolder destination) {
 
 		return destination.getProjectRelativePath().append(element.getName()).toPortableString();
-	}
-
-	public static RootLevel loadPlantHierarchy(final IProject project) {
-
-		final ResourceSet hierarchyResouceSet = new ResourceSetImpl();
-
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
-				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
-				new HierarchyResourceFactoryImpl());
-
-		hierarchyResouceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
-				PlantHierarchyView.PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
-				new HierarchyResourceFactoryImpl());
-
-		final XMLMapImpl map = new XMLMapImpl();
-		map.setNoNamespacePackage(HierarchyPackage.eINSTANCE);
-		hierarchyResouceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, AbstractChangeHierarchyOperation.XML_MAP);
-
-		return (RootLevel) PlantHierarchyView.loadHierachyForProject(project, hierarchyResouceSet);
 	}
 
 	private HierarchyManagerRefactoringUtil() {

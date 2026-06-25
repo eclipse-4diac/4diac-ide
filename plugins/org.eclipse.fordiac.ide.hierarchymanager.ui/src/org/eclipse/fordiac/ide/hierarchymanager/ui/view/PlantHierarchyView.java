@@ -12,29 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.view;
 
-import java.io.IOException;
-import java.util.Map;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ContentHandler;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
-import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceImpl;
-import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AbstractChangeHierarchyOperation;
+import org.eclipse.fordiac.ide.hierarchymanager.model.HierarchyManagerPersistenceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -53,25 +37,11 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class PlantHierarchyView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
 	private static final String PLANT_HIERARCHY_PROJECT = "PlantHierarchy.Project"; //$NON-NLS-1$
-	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION = "HIER"; //$NON-NLS-1$
-	public static final String PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT = "." + PLANT_HIERARCHY_FILE_NAME_EXTENSION; //$NON-NLS-1$
-	public static final String PLANT_HIERARCHY_FILE_NAME = ".plant" //$NON-NLS-1$
-			+ PLANT_HIERARCHY_FILE_NAME_EXTENSION_WITH_DOT.toLowerCase();
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.hierarchymanager.ui.view"; //$NON-NLS-1$
 
-	private static final Map<String, Object> LOAD_OPTIONS = Map.of( //
-			XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE, //
-			XMLResource.OPTION_XML_MAP, AbstractChangeHierarchyOperation.XML_MAP //
-	);
-	private final ResourceSet hierarchyResourceSet = new ResourceSetImpl();
-
 	private IProject currentProject;
-
-	public PlantHierarchyView() {
-		setupEMFInfra();
-	}
 
 	@Override
 	protected void setPartName(final String partName) {
@@ -116,7 +86,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 					// we can not use setInput here as getInitialInput is interacting with the
 					// viewer in the base class
 					currentProject = project;
-					return loadHierachyForProject(currentProject, hierarchyResourceSet);
+					return HierarchyManagerPersistenceHelper.loadPlantHierarchy(currentProject);
 				}
 			}
 		}
@@ -144,7 +114,7 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 		if (currentProject != proj) {
 			// the new project is different set
 			currentProject = proj;
-			getCommonViewer().setInput(loadHierachyForProject(proj, hierarchyResourceSet));
+			getCommonViewer().setInput(HierarchyManagerPersistenceHelper.loadPlantHierarchy(proj));
 			setPartName(getConfigurationElement().getAttribute("name")); //$NON-NLS-1$
 		}
 	}
@@ -168,65 +138,6 @@ public class PlantHierarchyView extends CommonNavigator implements ITabbedProper
 			return le.getTypeEntry().getFile().getProject();
 		}
 		return null;
-	}
-
-	public static EObject loadHierachyForProject(final IProject proj, final ResourceSet hierarchyResouceSet) {
-		final IFile file = proj.getFile(PLANT_HIERARCHY_FILE_NAME);
-		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-		if (!file.exists()) {
-			// try to create a new file
-			return createNewHierarchyFile(file, uri, hierarchyResouceSet);
-		}
-		// we don't want to load the resource content as we can not give the mapping
-		// options
-		Resource resource = hierarchyResouceSet.getResource(uri, true);
-		try {
-			if (resource == null) {
-				resource = new HierarchyResourceImpl(uri);
-				hierarchyResouceSet.getResources().add(resource);
-				resource.load(LOAD_OPTIONS);
-			}
-			return resource.getContents().get(0);
-		} catch (final IOException e) {
-			FordiacLogHelper.logWarning("Could not load plant hierarchy", e); //$NON-NLS-1$
-		}
-		return null;
-	}
-
-	private static EObject createNewHierarchyFile(final IFile file, final URI uri,
-			final ResourceSet hierarchyResouceSet) {
-		Resource resource = hierarchyResouceSet.createResource(uri, ContentHandler.UNSPECIFIED_CONTENT_TYPE);
-		if (resource == null) {
-			resource = new HierarchyResourceImpl(uri);
-			hierarchyResouceSet.getResources().add(resource);
-		}
-		final RootLevel root = HierarchyFactory.eINSTANCE.createRootLevel();
-		resource.getContents().add(root);
-		saveNewResource(file, resource);
-		return root;
-	}
-
-	private static void saveNewResource(final IFile file, final Resource resource) {
-		final WorkspaceJob job = AbstractChangeHierarchyOperation.createPlantHierarchySaveJob(resource);
-		job.setRule(file.getParent());
-		job.schedule();
-		try {
-			job.join();
-		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError("Could not wait for plant hierarchy creation", e); //$NON-NLS-1$
-			Thread.currentThread().interrupt();
-		}
-	}
-
-	private void setupEMFInfra() {
-		// add file extension to registry
-		hierarchyResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
-				PLANT_HIERARCHY_FILE_NAME_EXTENSION, //
-				new HierarchyResourceFactoryImpl());
-		hierarchyResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
-				PLANT_HIERARCHY_FILE_NAME_EXTENSION.toLowerCase(), //
-				new HierarchyResourceFactoryImpl());
-		hierarchyResourceSet.getLoadOptions().put(XMLResource.OPTION_XML_MAP, AbstractChangeHierarchyOperation.XML_MAP);
 	}
 
 	@Override
