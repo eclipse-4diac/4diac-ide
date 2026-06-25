@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.fordiac.ide.library,
  org.eclipse.fordiac.ide.library.model,
  org.eclipse.fordiac.ide.hierarchymanager.model,
- org.eclipse.fordiac.ide.hierarchymanager.ui
+ org.eclipse.fordiac.ide.hierarchymanager.ui,
+ org.eclipse.fordiac.ide.gitlab
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.xtext.resource;version="[2.35.0,3.0.0)"

@@ -38,6 +38,8 @@
                <include name="org.eclipse.fordiac.ide.export/bin"/>
                <include name="org.eclipse.fordiac.ide.export.forte_ng/bin"/>
                <include name="org.eclipse.fordiac.ide.export.xmi/bin"/>
+               <include name="org.eclipse.fordiac.ide.gitlab/bin"/>
+               <include name="org.eclipse.fordiac.ide.ui/bin"/>
             </dirset>
             <fileset dir="${target.home}">
                 <include name="plugins/org.eclipse.emf.common*.jar"/>
@@ -48,6 +50,7 @@
                 <include name="plugins/org.eclipse.equinox.common*.jar"/>
                 <include name="plugins/org.eclipse.core.jobs*.jar"/>
                 <include name="plugins/org.eclipse.osgi*.jar"/>
+                <include name="plugins/org.eclipse.equinox.security*.jar"/>
                 <include name="plugins/org.eclipse.ant.core*.jar"/>
                 <include name="plugins/org.apache.ant*/lib/*.jar"/>
                 <include name="plugins/org.eclipse.xtext*.jar"/>
