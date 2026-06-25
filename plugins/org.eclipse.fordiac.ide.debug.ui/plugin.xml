@@ -94,6 +94,23 @@
 				type="org.eclipse.debug.internal.ui.viewers.model.provisional.IViewActionProvider">
 			</adapter>
 		</factory>
+		<factory
+			adaptableType="org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable"
+			class="org.eclipse.fordiac.ide.debug.ui.EvaluatorWatchExpressionFactory">
+			<adapter
+				type="org.eclipse.debug.ui.actions.IWatchExpressionFactoryAdapter">
+			</adapter>
+		</factory>
+		<factory
+           class="org.eclipse.fordiac.ide.debug.ui.breakpoint.ToggleModelBreakpointsTargetExtension"
+           adaptableType="org.eclipse.fordiac.ide.model.libraryElement.ECState">
+           <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
+        </factory>
+        <factory
+          class="org.eclipse.fordiac.ide.debug.ui.breakpoint.ToggleModelBreakpointsTargetExtension"
+          adaptableType="org.eclipse.fordiac.ide.debug.ui.breakpoint.ECStateEditPart">
+         <adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
+        </factory>
 	</extension>
 	<extension
 		point="org.eclipse.ui.views">
@@ -134,16 +151,6 @@
 			id="org.eclipse.fordiac.ide.debug.ui.preferences.FordiacDebugPreferencePage"
 			name="%FordiacDebugPreferencePage.name">
 		</page>
-	</extension>
-	<extension
-		point="org.eclipse.core.runtime.adapters">
-		<factory
-			adaptableType="org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable"
-			class="org.eclipse.fordiac.ide.debug.ui.EvaluatorWatchExpressionFactory">
-			<adapter
-				type="org.eclipse.debug.ui.actions.IWatchExpressionFactoryAdapter">
-			</adapter>
-		</factory>
 	</extension>
 	<extension
 		point="org.eclipse.ui.commands">
@@ -217,6 +224,17 @@
 				</with>
 			</activeWhen>
 		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.debug.ui.handler.ToggleModelBreakpointHandler"
+			commandId="org.eclipse.debug.ui.commands.ToggleBreakpoint">
+			<activeWhen>
+				<with variable="selection">
+					<iterate ifEmpty="false" operator="or">
+						<adapt type="org.eclipse.fordiac.ide.model.libraryElement.ECState"/>
+					</iterate>
+				</with>
+			</activeWhen>
+		</handler>
 	</extension>
 	<extension
 		point="org.eclipse.ui.bindings">
@@ -255,6 +273,16 @@
 				</visibleWhen>
 			</command>
 		</menuContribution>
+		<menuContribution
+			locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+			<command
+				commandId="org.eclipse.debug.ui.commands.ToggleBreakpoint"
+				style="push">
+				<visibleWhen
+					checkEnabled="true">
+				</visibleWhen>
+			</command>
+		</menuContribution>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.variableValueEditors">
@@ -262,5 +290,18 @@
 			class="org.eclipse.fordiac.ide.debug.ui.editor.EvaluatorVariableValueEditor"
 			modelId="org.eclipse.fordiac.ide.debug.model">
 		</variableValueEditor>
+	</extension>
+	<extension point="org.eclipse.debug.ui.toggleBreakpointsTargetFactories">
+		<toggleTargetFactory
+			id="org.eclipse.fordiac.ide.debug.ui.toggleModelBreakpointTarget"
+			class="org.eclipse.fordiac.ide.debug.ui.breakpoint.EvaluatorToggleBreakpointsTargetFactory">
+			<enablement>
+				<with variable="selection">
+					<iterate ifEmpty="false" operator="or">
+						<adapt type="org.eclipse.fordiac.ide.model.libraryElement.ECState"/>
+					</iterate>
+				</with>
+			</enablement>
+		</toggleTargetFactory>
 	</extension>
 </plugin>
