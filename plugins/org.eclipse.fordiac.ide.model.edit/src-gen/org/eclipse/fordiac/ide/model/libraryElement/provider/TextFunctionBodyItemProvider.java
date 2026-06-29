@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -75,9 +75,9 @@ public class TextFunctionBodyItemProvider extends FunctionBodyItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_TextFunctionBody_text_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_TextFunctionBody_text_feature", "_UI_TextFunctionBody_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.TEXT_FUNCTION_BODY__TEXT,
+				 getString("_UI_TextSourceElement_text_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_TextSourceElement_text_feature", "_UI_TextSourceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.TEXT_SOURCE_ELEMENT__TEXT,
 				 true,
 				 false,
 				 false,

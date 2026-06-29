@@ -110,7 +110,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherComment;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -121,9 +123,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STComment;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -134,14 +138,18 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceComment;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextComment;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
@@ -814,8 +822,12 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateOriginalSource((OriginalSource)value, diagnostics, context);
 			case LibraryElementPackage.OTHER_ALGORITHM:
 				return validateOtherAlgorithm((OtherAlgorithm)value, diagnostics, context);
+			case LibraryElementPackage.OTHER_COMMENT:
+				return validateOtherComment((OtherComment)value, diagnostics, context);
 			case LibraryElementPackage.OTHER_METHOD:
 				return validateOtherMethod((OtherMethod)value, diagnostics, context);
+			case LibraryElementPackage.OTHER_SOURCE_ELEMENT:
+				return validateOtherSourceElement((OtherSourceElement)value, diagnostics, context);
 			case LibraryElementPackage.OUTPUT_PRIMITIVE:
 				return validateOutputPrimitive((OutputPrimitive)value, diagnostics, context);
 			case LibraryElementPackage.POSITION:
@@ -852,14 +864,22 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateSimpleECState((SimpleECState)value, diagnostics, context);
 			case LibraryElementPackage.SIMPLE_FB_TYPE:
 				return validateSimpleFBType((SimpleFBType)value, diagnostics, context);
+			case LibraryElementPackage.SOURCE_COMMENT:
+				return validateSourceComment((SourceComment)value, diagnostics, context);
+			case LibraryElementPackage.SOURCE_ELEMENT:
+				return validateSourceElement((SourceElement)value, diagnostics, context);
 			case LibraryElementPackage.ST_ALGORITHM:
 				return validateSTAlgorithm((STAlgorithm)value, diagnostics, context);
+			case LibraryElementPackage.ST_COMMENT:
+				return validateSTComment((STComment)value, diagnostics, context);
 			case LibraryElementPackage.ST_FUNCTION:
 				return validateSTFunction((STFunction)value, diagnostics, context);
 			case LibraryElementPackage.ST_FUNCTION_BODY:
 				return validateSTFunctionBody((STFunctionBody)value, diagnostics, context);
 			case LibraryElementPackage.ST_METHOD:
 				return validateSTMethod((STMethod)value, diagnostics, context);
+			case LibraryElementPackage.ST_SOURCE_ELEMENT:
+				return validateSTSourceElement((STSourceElement)value, diagnostics, context);
 			case LibraryElementPackage.STRUCT_MANIPULATOR:
 				return validateStructManipulator((StructManipulator)value, diagnostics, context);
 			case LibraryElementPackage.SUB_APP:
@@ -870,12 +890,16 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateSystemConfiguration((SystemConfiguration)value, diagnostics, context);
 			case LibraryElementPackage.TEXT_ALGORITHM:
 				return validateTextAlgorithm((TextAlgorithm)value, diagnostics, context);
+			case LibraryElementPackage.TEXT_COMMENT:
+				return validateTextComment((TextComment)value, diagnostics, context);
 			case LibraryElementPackage.TEXT_FUNCTION:
 				return validateTextFunction((TextFunction)value, diagnostics, context);
 			case LibraryElementPackage.TEXT_FUNCTION_BODY:
 				return validateTextFunctionBody((TextFunctionBody)value, diagnostics, context);
 			case LibraryElementPackage.TEXT_METHOD:
 				return validateTextMethod((TextMethod)value, diagnostics, context);
+			case LibraryElementPackage.TEXT_SOURCE_ELEMENT:
+				return validateTextSourceElement((TextSourceElement)value, diagnostics, context);
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT:
 				return validateTypedConfigureableObject((TypedConfigureableObject)value, diagnostics, context);
 			case LibraryElementPackage.TYPED_SUB_APP:
@@ -2747,6 +2771,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateOtherComment(OtherComment otherComment, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(otherComment, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateOtherMethod(OtherMethod otherMethod, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(otherMethod, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(otherMethod, diagnostics, context);
@@ -2759,6 +2792,15 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(otherMethod, diagnostics, context);
 		if (result || diagnostics != null) result &= validateINamedElement_validateName(otherMethod, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateOtherSourceElement(OtherSourceElement otherSourceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(otherSourceElement, diagnostics, context);
 	}
 
 	/**
@@ -3059,6 +3101,24 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateSourceComment(SourceComment sourceComment, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(sourceComment, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateSourceElement(SourceElement sourceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(sourceElement, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateSTAlgorithm(STAlgorithm stAlgorithm, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(stAlgorithm, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(stAlgorithm, diagnostics, context);
@@ -3071,6 +3131,15 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(stAlgorithm, diagnostics, context);
 		if (result || diagnostics != null) result &= validateINamedElement_validateName(stAlgorithm, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateSTComment(STComment stComment, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(stComment, diagnostics, context);
 	}
 
 	/**
@@ -3118,6 +3187,15 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(stMethod, diagnostics, context);
 		if (result || diagnostics != null) result &= validateINamedElement_validateName(stMethod, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateSTSourceElement(STSourceElement stSourceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(stSourceElement, diagnostics, context);
 	}
 
 	/**
@@ -3216,6 +3294,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateTextComment(TextComment textComment, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(textComment, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateTextFunction(TextFunction textFunction, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(textFunction, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(textFunction, diagnostics, context);
@@ -3256,6 +3343,15 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(textMethod, diagnostics, context);
 		if (result || diagnostics != null) result &= validateINamedElement_validateName(textMethod, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateTextSourceElement(TextSourceElement textSourceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(textSourceElement, diagnostics, context);
 	}
 
 	/**

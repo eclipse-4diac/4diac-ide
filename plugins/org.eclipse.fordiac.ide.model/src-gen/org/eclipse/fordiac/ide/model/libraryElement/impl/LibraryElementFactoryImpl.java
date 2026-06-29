@@ -98,6 +98,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherComment;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute;
@@ -109,6 +110,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STComment;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
@@ -246,6 +248,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
 			case LibraryElementPackage.ORIGINAL_SOURCE: return createOriginalSource();
 			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
+			case LibraryElementPackage.OTHER_COMMENT: return createOtherComment();
 			case LibraryElementPackage.OTHER_METHOD: return createOtherMethod();
 			case LibraryElementPackage.OUTPUT_PRIMITIVE: return createOutputPrimitive();
 			case LibraryElementPackage.POSITION: return createPosition();
@@ -266,6 +269,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.SIMPLE_EC_STATE: return createSimpleECState();
 			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
 			case LibraryElementPackage.ST_ALGORITHM: return createSTAlgorithm();
+			case LibraryElementPackage.ST_COMMENT: return createSTComment();
 			case LibraryElementPackage.ST_FUNCTION: return createSTFunction();
 			case LibraryElementPackage.ST_FUNCTION_BODY: return createSTFunctionBody();
 			case LibraryElementPackage.ST_METHOD: return createSTMethod();
@@ -1066,6 +1070,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public OtherComment createOtherComment() {
+		OtherCommentImpl otherComment = new OtherCommentImpl();
+		return otherComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public OtherMethod createOtherMethod() {
 		OtherMethodImpl otherMethod = new OtherMethodImpl();
 		return otherMethod;
@@ -1278,6 +1293,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public STAlgorithm createSTAlgorithm() {
 		STAlgorithmImpl stAlgorithm = new STAlgorithmImpl();
 		return stAlgorithm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STComment createSTComment() {
+		STCommentImpl stComment = new STCommentImpl();
+		return stComment;
 	}
 
 	/**

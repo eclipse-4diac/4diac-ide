@@ -34,7 +34,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,17 +46,37 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getText <em>Text</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getOutputParameters <em>Output Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getInOutParameters <em>In Out Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#isVarargs <em>Varargs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl#getText <em>Text</em>}</li>
  * </ul>
  *
  * @generated
  */
 public abstract class TextFunctionImpl extends FunctionImpl implements TextFunction {
+	/**
+	 * The default value of the '{@link #getText() <em>Text</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getText()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TEXT_EDEFAULT = "";
+
+	/**
+	 * The cached value of the '{@link #getText() <em>Text</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getText()
+	 * @generated
+	 * @ordered
+	 */
+	protected String text = TEXT_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getInputParameters() <em>Input Parameters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -114,26 +136,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 * @ordered
 	 */
 	protected boolean varargs = VARARGS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getText() <em>Text</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getText()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TEXT_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getText() <em>Text</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getText()
-	 * @generated
-	 * @ordered
-	 */
-	protected String text = TEXT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -306,6 +308,8 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
+				return getText();
 			case LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS:
 				return getInputParameters();
 			case LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS:
@@ -317,8 +321,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 				return basicGetReturnType();
 			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
 				return isVarargs();
-			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
-				return getText();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -333,6 +335,9 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
+				setText((String)newValue);
+				return;
 			case LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS:
 				getInputParameters().clear();
 				getInputParameters().addAll((Collection<? extends ITypedElement>)newValue);
@@ -351,9 +356,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
 				setVarargs((Boolean)newValue);
 				return;
-			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
-				setText((String)newValue);
-				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -368,6 +370,9 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
+				setText(TEXT_EDEFAULT);
+				return;
 			case LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS:
 				getInputParameters().clear();
 				return;
@@ -383,9 +388,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
 				setVarargs(VARARGS_EDEFAULT);
 				return;
-			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
-				setText(TEXT_EDEFAULT);
-				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -400,6 +402,8 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
+				return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
 			case LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS:
 				return inputParameters != null && !inputParameters.isEmpty();
 			case LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS:
@@ -410,11 +414,51 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 				return returnType != null;
 			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
 				return varargs != VARARGS_EDEFAULT;
-			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
-				return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == SourceElement.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == TextSourceElement.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.TEXT_FUNCTION__TEXT: return LibraryElementPackage.TEXT_SOURCE_ELEMENT__TEXT;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == SourceElement.class) {
+			switch (baseFeatureID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == TextSourceElement.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.TEXT_SOURCE_ELEMENT__TEXT: return LibraryElementPackage.TEXT_FUNCTION__TEXT;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
@@ -427,10 +471,10 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (varargs: "); //$NON-NLS-1$
-		result.append(varargs);
-		result.append(", text: "); //$NON-NLS-1$
+		result.append(" (text: "); //$NON-NLS-1$
 		result.append(text);
+		result.append(", varargs: "); //$NON-NLS-1$
+		result.append(varargs);
 		result.append(')');
 		return result.toString();
 	}
