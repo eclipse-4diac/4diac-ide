@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -31,6 +32,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceComment;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType} object.
@@ -307,4 +309,8 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
+	@Override
+	public Collection<?> getChildren(final Object object) {
+		return super.getChildren(object).stream().filter(Predicate.not(SourceComment.class::isInstance)).toList();
+	}
 }
