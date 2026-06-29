@@ -62,11 +62,6 @@
             contributorId="property.contributor.fb">
          <propertyTab
                category="Config"
-               id="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-               label="Struct Handling">
-         </propertyTab>
-         <propertyTab
-               category="Config"
                id="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
                label="Struct Handling">
          </propertyTab>
@@ -190,12 +185,6 @@
          	id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
          	tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
          	filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter">
-         </propertySection>
-         <propertySection
-         	class="org.eclipse.fordiac.ide.application.properties.MultiplexerSection"
-         	id="org.eclipse.fordiac.ide.application.properties.MultiplexerSection"
-         	tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-         	filter="org.eclipse.fordiac.ide.application.properties.MultiplexerFilter">
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
