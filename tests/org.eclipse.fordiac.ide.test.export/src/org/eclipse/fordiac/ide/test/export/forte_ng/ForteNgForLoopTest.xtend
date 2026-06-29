@@ -23,7 +23,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void validForLoop() {
-		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getSourceElements().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR_TEMP
 			«VARIABLE_NAME»: INT;
 			«VARIABLE2_NAME»: INT;
@@ -49,7 +49,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void validForLoopWithBy() {
-		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.getSourceElements().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR_TEMP
 			«VARIABLE_NAME»: INT;
 			«VARIABLE2_NAME»: INT;
@@ -75,7 +75,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void multipleForLoopsOnSameLevel() {
-		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.sourceElements.add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR_TEMP
 			«VARIABLE_NAME»: INT;
 			«VARIABLE2_NAME»: INT;
@@ -107,7 +107,7 @@ class ForteNgForLoopTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def void multipleForLoopsContained() {
-		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
+		functionBlock.sourceElements.add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR_TEMP
 			«VARIABLE_NAME»: INT;
 			«VARIABLE2_NAME»: INT;

@@ -25,12 +25,12 @@ class STAlgorithmSearchSupportTest extends StructuredTextSearchSupportTest {
 	@Test
 	void testNameSearch() {
 		final SimpleFBType type = createSimpleFBType("Test");
-		type.getCallables().add(createAlgorithm("REQ", """
+		type.getSourceElements().add(createAlgorithm("REQ", """
 				ALGORITHM REQ
 				END_ALGORITHM
 				"""));
-		assertNoMatch(type.getCallables().getFirst(), new NameMatcher("ABC"));
-		assertMatch(type.getCallables().getFirst(), new NameMatcher("REQ"), 0, 10, 3);
+		assertNoMatch(type.getSourceElements().getFirst(), new NameMatcher("ABC"));
+		assertMatch(type.getSourceElements().getFirst(), new NameMatcher("REQ"), 0, 10, 3);
 	}
 
 	@Test
@@ -40,30 +40,30 @@ class STAlgorithmSearchSupportTest extends StructuredTextSearchSupportTest {
 		final VarDeclaration varDeclaration2 = createVarDeclaration("DO2", ElementaryTypes.DINT);
 		type.getInterfaceList().getOutputVars().add(varDeclaration);
 		type.getInterfaceList().getOutputVars().add(varDeclaration2);
-		type.getCallables().add(createAlgorithm("REQ", """
+		type.getSourceElements().add(createAlgorithm("REQ", """
 				ALGORITHM REQ
 				DO2 := 17;
 				END_ALGORITHM
 				"""));
-		assertNoMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration));
-		assertMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 14, 3);
+		assertNoMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration));
+		assertMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 14, 3);
 	}
 
 	@Test
 	void testMultiSearch() {
 		final SimpleFBType type = createSimpleFBType("Test");
-		type.getCallables().add(createAlgorithm("REQ", """
+		type.getSourceElements().add(createAlgorithm("REQ", """
 				ALGORITHM REQ
 				DO2 := 17;
 				END_ALGORITHM
 				"""));
-		type.getCallables().add(createAlgorithm("INIT", """
+		type.getSourceElements().add(createAlgorithm("INIT", """
 				ALGORITHM INIT
 				DO2 := 4;
 				END_ALGORITHM
 				"""));
-		assertNoMatch(type.getCallables().getLast(), new NameMatcher("REQ"));
-		assertMatch(type.getCallables().getLast(), new NameMatcher("INIT"), 4, 50, 4);
+		assertNoMatch(type.getSourceElements().getLast(), new NameMatcher("REQ"));
+		assertMatch(type.getSourceElements().getLast(), new NameMatcher("INIT"), 4, 50, 4);
 	}
 
 }
