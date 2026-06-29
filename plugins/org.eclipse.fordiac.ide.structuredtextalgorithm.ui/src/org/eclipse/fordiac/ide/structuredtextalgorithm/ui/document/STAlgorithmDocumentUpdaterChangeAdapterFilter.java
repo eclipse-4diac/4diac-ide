@@ -30,6 +30,6 @@ public class STAlgorithmDocumentUpdaterChangeAdapterFilter extends DefaultLibrar
 	@Override
 	public boolean shouldNotify(final Notification notification) {
 		return super.shouldNotify(notification)
-				&& notification.getFeatureID(BaseFBType.class) != LibraryElementPackage.BASE_FB_TYPE__CALLABLES;
+				&& notification.getFeatureID(BaseFBType.class) != LibraryElementPackage.BASE_FB_TYPE__SOURCE_ELEMENTS;
 	}
 }
