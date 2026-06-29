@@ -16,8 +16,12 @@ package org.eclipse.fordiac.ide.application.properties;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -137,7 +141,23 @@ public class ConfigFBInstancePropertySection extends InstancePropertySection imp
 		if (null != getType() && newDataTypeSelected(newTypeName)) {
 			final DataType newDtp = getDataTypeLib().getTypeIfExists(newTypeName);
 			final ConfigureFBCommand cmd = new ConfigureFBCommand(getType(), newDtp);
-			executeCommand(cmd);
+			AddNewImportCommand importCommand = null;
+
+			if (newDtp instanceof StructuredType && newDtp != GenericTypes.ANY_STRUCT) {
+				// if we have a struct we need to check for a potential import
+				final StructuredType packageStruct = ImportHelper
+						.resolveImport(PackageNameHelper.extractPlainTypeName(newTypeName), getType(), name -> {
+							final StructuredType temp = getDataTypeLib().getStructuredType(name);
+							return GenericTypes.isAnyType(temp) ? null : temp;
+						}, name -> null);
+
+				if (packageStruct == null) {
+					importCommand = new AddNewImportCommand(ModelHelper.getLibraryElementFromContextChecked(getType()),
+							newTypeName);
+				}
+			}
+
+			executeCommand(cmd.chain(importCommand));
 			updateFB(cmd.getNewElement());
 		}
 	}
