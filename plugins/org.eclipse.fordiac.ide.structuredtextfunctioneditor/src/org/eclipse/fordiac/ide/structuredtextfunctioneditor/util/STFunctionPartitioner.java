@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
@@ -36,8 +37,7 @@ import org.eclipse.xtext.resource.XtextResource;
 
 import com.google.inject.Inject;
 
-public class STFunctionPartitioner
-		extends STRecoveringPartitioner<STFunction, org.eclipse.fordiac.ide.model.libraryElement.STFunction> {
+public class STFunctionPartitioner extends STRecoveringPartitioner<STFunction> {
 
 	@Inject
 	private STFunctionGrammarAccess grammarAccess;
@@ -113,15 +113,15 @@ public class STFunctionPartitioner
 			final var node = NodeModelUtils.getNode(source);
 			final var imports = source.getImports().stream().map(STFunctionPartitioner::convertImport)
 					.filter(Objects::nonNull).toList();
-			final var callables = convertSourceElements(node.getRootNode(), source.getFunctions());
-			return Optional.of(new STFunctionPartition(source.getName(), imports, node.getText(), callables));
+			final var result = convertSourceElements(node.getRootNode(), source.getFunctions());
+			return Optional.of(new STFunctionPartition(source.getName(), imports, node.getText(), result));
 		} catch (final Exception e) {
 			return emergencyPartition(source); // try to salvage what we can
 		}
 	}
 
 	@Override
-	protected org.eclipse.fordiac.ide.model.libraryElement.STFunction convertSourceElement(final STFunction function) {
+	protected STSourceElement convertSourceElement(final STFunction function) {
 		final var node = NodeModelUtils.getNode(function);
 		if (node == null || function.getName() == null) {
 			return null;
@@ -149,22 +149,6 @@ public class STFunctionPartitioner
 	@Override
 	protected STCorePartition createEmergencyPartition(final String originalSource) {
 		return new STFunctionPartition(null, Collections.emptyList(), originalSource,
-				List.of(createLostAndFound(originalSource, 0)));
-	}
-
-	@Override
-	protected org.eclipse.fordiac.ide.model.libraryElement.STFunction createLostAndFound(final String text,
-			final int index) {
-		final var function = LibraryElementFactory.eINSTANCE.createSTFunction();
-		function.setName(generateLostAndFoundName(index));
-		function.setComment(generateLostAndFoundComment(index));
-		function.setText(text);
-		return function;
-	}
-
-	@Override
-	protected void appendText(final org.eclipse.fordiac.ide.model.libraryElement.STFunction function,
-			final String text) {
-		function.setText(function.getText() + text);
+				List.of(createLostAndFound(originalSource)));
 	}
 }

@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGra
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STAbstractCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
@@ -34,7 +33,7 @@ import org.eclipse.xtext.resource.XtextResource;
 
 import com.google.inject.Inject;
 
-public class GlobalConstantsPartitioner extends STAbstractCorePartitioner<VarDeclaration> {
+public class GlobalConstantsPartitioner extends STAbstractCorePartitioner {
 
 	@Inject
 	private GlobalConstantsGrammarAccess grammarAccess;

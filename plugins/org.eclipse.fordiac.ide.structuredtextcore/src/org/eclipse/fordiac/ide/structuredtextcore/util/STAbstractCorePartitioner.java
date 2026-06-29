@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -51,7 +51,7 @@ import org.eclipse.xtext.util.Triple;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-public abstract class STAbstractCorePartitioner<E extends INamedElement> implements STCorePartitioner {
+public abstract class STAbstractCorePartitioner implements STCorePartitioner {
 
 	@Inject
 	private IEObjectDocumentationProvider documentationProvider;
@@ -215,9 +215,11 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 		}
 	}
 
-	protected static void handleDuplicates(final List<? extends INamedElement> result) {
-		result.stream().collect(Collectors.groupingBy(INamedElement::getName)).forEach((name, duplicates) -> IntStream
-				.range(1, duplicates.size()).forEach(index -> duplicates.get(index).setName(name + "_" + index))); //$NON-NLS-1$
+	protected static void handleDuplicates(final List<? extends EObject> result) {
+		result.stream().filter(INamedElement.class::isInstance).map(INamedElement.class::cast)
+				.collect(Collectors.groupingBy(INamedElement::getName))
+				.forEach((name, duplicates) -> IntStream.range(1, duplicates.size())
+						.forEach(index -> duplicates.get(index).setName(name + "_" + index))); //$NON-NLS-1$
 	}
 
 	public boolean containsToken(final String input, final int token) {
