@@ -27,5 +27,5 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface STMethod extends TextMethod {
+public interface STMethod extends TextMethod, STSourceElement {
 } // STMethod

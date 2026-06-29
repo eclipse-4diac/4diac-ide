@@ -27,5 +27,5 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface STFunctionBody extends TextFunctionBody {
+public interface STFunctionBody extends TextFunctionBody, STSourceElement {
 } // STFunctionBody

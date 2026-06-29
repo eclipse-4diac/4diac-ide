@@ -102,6 +102,7 @@ public class TypedSubAppItemProvider extends SubAppItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.TYPED_SUB_APP__VAR_CONFIG_PARAMS);
+			childrenFeatures.add(LibraryElementPackage.Literals.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES);
 		}
 		return childrenFeatures;
 	}
@@ -156,6 +157,7 @@ public class TypedSubAppItemProvider extends SubAppItemProvider {
 
 		switch (notification.getFeatureID(TypedSubApp.class)) {
 			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
+			case LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -179,6 +181,11 @@ public class TypedSubAppItemProvider extends SubAppItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.TYPED_SUB_APP__VAR_CONFIG_PARAMS,
 				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES,
+				 LibraryElementFactory.eINSTANCE.createOverrideAttribute()));
 	}
 
 }

@@ -75,9 +75,9 @@ public class OtherMethodItemProvider extends TextMethodItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_OtherMethod_language_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_OtherMethod_language_feature", "_UI_OtherMethod_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.OTHER_METHOD__LANGUAGE,
+				 getString("_UI_OtherSourceElement_language_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_OtherSourceElement_language_feature", "_UI_OtherSourceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.OTHER_SOURCE_ELEMENT__LANGUAGE,
 				 true,
 				 false,
 				 false,

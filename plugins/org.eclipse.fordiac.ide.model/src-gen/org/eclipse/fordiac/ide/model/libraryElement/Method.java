@@ -27,5 +27,5 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model abstract="true"
  * @generated
  */
-public interface Method extends ICallable {
+public interface Method extends ICallable, SourceElement {
 } // Method
