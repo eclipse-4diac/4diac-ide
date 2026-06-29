@@ -57,8 +57,6 @@ public final class Messages extends NLS {
 
 	public static String ConvertToStructHandler_Title;
 
-	public static String ConfigurableMoveFBSection_DataType;
-
 	public static String ConfigFBInstancePropertySection_DataType;
 	public static String ConfigFBInstancePropertySection_StructType;
 

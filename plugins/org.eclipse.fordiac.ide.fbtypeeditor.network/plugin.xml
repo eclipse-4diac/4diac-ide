@@ -71,11 +71,6 @@
                label="Struct Handling">
          </propertyTab>
          <propertyTab
-            category="Config"
-            id="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab"
-            label="Config">
-     	 </propertyTab>
-         <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
                label="Instance">
@@ -145,12 +140,6 @@
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections
             contributorId="property.contributor.fb">
-        <propertySection
-              class="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBSection"
-              filter="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBFilter"
-              id="org.eclipse.fordiac.ide.application.properties.ConfigurableFBSection"
-              tab="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab">
-        </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InstancePropertySection"
                filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
