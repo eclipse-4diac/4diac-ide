@@ -175,6 +175,7 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
 
 		if (qualify) {
