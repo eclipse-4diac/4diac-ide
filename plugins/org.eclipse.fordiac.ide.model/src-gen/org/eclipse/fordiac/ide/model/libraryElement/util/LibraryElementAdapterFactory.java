@@ -24,6 +24,135 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.Color;
+import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Function;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
+import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherComment;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STComment;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceComment;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextComment;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.libraryElement.*;
 
 /**
@@ -411,8 +540,16 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createOtherAlgorithmAdapter();
 			}
 			@Override
+			public Adapter caseOtherComment(OtherComment object) {
+				return createOtherCommentAdapter();
+			}
+			@Override
 			public Adapter caseOtherMethod(OtherMethod object) {
 				return createOtherMethodAdapter();
+			}
+			@Override
+			public Adapter caseOtherSourceElement(OtherSourceElement object) {
+				return createOtherSourceElementAdapter();
 			}
 			@Override
 			public Adapter caseOutputPrimitive(OutputPrimitive object) {
@@ -487,8 +624,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createSimpleFBTypeAdapter();
 			}
 			@Override
+			public Adapter caseSourceComment(SourceComment object) {
+				return createSourceCommentAdapter();
+			}
+			@Override
+			public Adapter caseSourceElement(SourceElement object) {
+				return createSourceElementAdapter();
+			}
+			@Override
 			public Adapter caseSTAlgorithm(STAlgorithm object) {
 				return createSTAlgorithmAdapter();
+			}
+			@Override
+			public Adapter caseSTComment(STComment object) {
+				return createSTCommentAdapter();
 			}
 			@Override
 			public Adapter caseSTFunction(STFunction object) {
@@ -501,6 +650,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSTMethod(STMethod object) {
 				return createSTMethodAdapter();
+			}
+			@Override
+			public Adapter caseSTSourceElement(STSourceElement object) {
+				return createSTSourceElementAdapter();
 			}
 			@Override
 			public Adapter caseStructManipulator(StructManipulator object) {
@@ -523,6 +676,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createTextAlgorithmAdapter();
 			}
 			@Override
+			public Adapter caseTextComment(TextComment object) {
+				return createTextCommentAdapter();
+			}
+			@Override
 			public Adapter caseTextFunction(TextFunction object) {
 				return createTextFunctionAdapter();
 			}
@@ -533,6 +690,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseTextMethod(TextMethod object) {
 				return createTextMethodAdapter();
+			}
+			@Override
+			public Adapter caseTextSourceElement(TextSourceElement object) {
+				return createTextSourceElementAdapter();
 			}
 			@Override
 			public Adapter caseTypedConfigureableObject(TypedConfigureableObject object) {
@@ -1739,6 +1900,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherComment <em>Other Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherComment
+	 * @generated
+	 */
+	public Adapter createOtherCommentAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod <em>Other Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -1749,6 +1924,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOtherMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement <em>Other Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement
+	 * @generated
+	 */
+	public Adapter createOtherSourceElementAdapter() {
 		return null;
 	}
 
@@ -2005,6 +2194,34 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceComment <em>Source Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceComment
+	 * @generated
+	 */
+	public Adapter createSourceCommentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceElement <em>Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceElement
+	 * @generated
+	 */
+	public Adapter createSourceElementAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm <em>ST Algorithm</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -2015,6 +2232,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTAlgorithmAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.STComment <em>ST Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.STComment
+	 * @generated
+	 */
+	public Adapter createSTCommentAdapter() {
 		return null;
 	}
 
@@ -2057,6 +2288,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.STSourceElement <em>ST Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.STSourceElement
+	 * @generated
+	 */
+	public Adapter createSTSourceElementAdapter() {
 		return null;
 	}
 
@@ -2131,6 +2376,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextComment <em>Text Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextComment
+	 * @generated
+	 */
+	public Adapter createTextCommentAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction <em>Text Function</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -2169,6 +2428,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTextMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement <em>Text Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement
+	 * @generated
+	 */
+	public Adapter createTextSourceElementAdapter() {
 		return null;
 	}
 

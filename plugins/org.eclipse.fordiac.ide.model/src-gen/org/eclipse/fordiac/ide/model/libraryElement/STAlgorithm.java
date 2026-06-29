@@ -27,5 +27,5 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface STAlgorithm extends TextAlgorithm {
+public interface STAlgorithm extends TextAlgorithm, STSourceElement {
 } // STAlgorithm

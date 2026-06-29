@@ -22,39 +22,11 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * A representation of the model object '<em><b>Other Method</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod#getLanguage <em>Language</em>}</li>
- * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getOtherMethod()
  * @model
  * @generated
  */
-public interface OtherMethod extends TextMethod {
-	/**
-	 * Returns the value of the '<em><b>Language</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Language</em>' attribute.
-	 * @see #setLanguage(String)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getOtherMethod_Language()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
-	 *        extendedMetaData="kind='attribute' name='Language'"
-	 * @generated
-	 */
-	String getLanguage();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod#getLanguage <em>Language</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Language</em>' attribute.
-	 * @see #getLanguage()
-	 * @generated
-	 */
-	void setLanguage(String value);
+public interface OtherMethod extends TextMethod, OtherSourceElement {
 
 } // OtherMethod

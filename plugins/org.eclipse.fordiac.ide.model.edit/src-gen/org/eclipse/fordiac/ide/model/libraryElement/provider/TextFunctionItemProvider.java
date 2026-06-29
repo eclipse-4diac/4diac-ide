@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,10 +22,12 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
 
@@ -57,11 +59,33 @@ public class TextFunctionItemProvider extends FunctionItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addTextPropertyDescriptor(object);
 			addReturnTypePropertyDescriptor(object);
 			addVarargsPropertyDescriptor(object);
-			addTextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Text feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTextPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TextSourceElement_text_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_TextSourceElement_text_feature", "_UI_TextSourceElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.TEXT_SOURCE_ELEMENT__TEXT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -109,28 +133,6 @@ public class TextFunctionItemProvider extends FunctionItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Text feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addTextPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_TextFunction_text_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_TextFunction_text_feature", "_UI_TextFunction_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.TEXT_FUNCTION__TEXT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -157,11 +159,11 @@ public class TextFunctionItemProvider extends FunctionItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(TextFunction.class)) {
+			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
 			case LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS:
 			case LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS:
 			case LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS:
 			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
-			case LibraryElementPackage.TEXT_FUNCTION__TEXT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:

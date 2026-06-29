@@ -22,6 +22,135 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.Color;
+import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Function;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Identification;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Link;
+import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
+import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherComment;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STComment;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceComment;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextComment;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
+import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.libraryElement.*;
 
 /**
@@ -132,6 +261,7 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				Algorithm algorithm = (Algorithm)theEObject;
 				T1 result = caseAlgorithm(algorithm);
 				if (result == null) result = caseICallable(algorithm);
+				if (result == null) result = caseSourceElement(algorithm);
 				if (result == null) result = caseINamedElement(algorithm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -832,6 +962,7 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				Method method = (Method)theEObject;
 				T1 result = caseMethod(method);
 				if (result == null) result = caseICallable(method);
+				if (result == null) result = caseSourceElement(method);
 				if (result == null) result = caseINamedElement(method);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -863,9 +994,23 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				OtherAlgorithm otherAlgorithm = (OtherAlgorithm)theEObject;
 				T1 result = caseOtherAlgorithm(otherAlgorithm);
 				if (result == null) result = caseTextAlgorithm(otherAlgorithm);
+				if (result == null) result = caseOtherSourceElement(otherAlgorithm);
 				if (result == null) result = caseAlgorithm(otherAlgorithm);
+				if (result == null) result = caseTextSourceElement(otherAlgorithm);
 				if (result == null) result = caseICallable(otherAlgorithm);
+				if (result == null) result = caseSourceElement(otherAlgorithm);
 				if (result == null) result = caseINamedElement(otherAlgorithm);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.OTHER_COMMENT: {
+				OtherComment otherComment = (OtherComment)theEObject;
+				T1 result = caseOtherComment(otherComment);
+				if (result == null) result = caseTextComment(otherComment);
+				if (result == null) result = caseOtherSourceElement(otherComment);
+				if (result == null) result = caseSourceComment(otherComment);
+				if (result == null) result = caseTextSourceElement(otherComment);
+				if (result == null) result = caseSourceElement(otherComment);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -873,9 +1018,20 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				OtherMethod otherMethod = (OtherMethod)theEObject;
 				T1 result = caseOtherMethod(otherMethod);
 				if (result == null) result = caseTextMethod(otherMethod);
+				if (result == null) result = caseOtherSourceElement(otherMethod);
 				if (result == null) result = caseMethod(otherMethod);
+				if (result == null) result = caseTextSourceElement(otherMethod);
 				if (result == null) result = caseICallable(otherMethod);
+				if (result == null) result = caseSourceElement(otherMethod);
 				if (result == null) result = caseINamedElement(otherMethod);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.OTHER_SOURCE_ELEMENT: {
+				OtherSourceElement otherSourceElement = (OtherSourceElement)theEObject;
+				T1 result = caseOtherSourceElement(otherSourceElement);
+				if (result == null) result = caseTextSourceElement(otherSourceElement);
+				if (result == null) result = caseSourceElement(otherSourceElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1033,13 +1189,40 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.SOURCE_COMMENT: {
+				SourceComment sourceComment = (SourceComment)theEObject;
+				T1 result = caseSourceComment(sourceComment);
+				if (result == null) result = caseSourceElement(sourceComment);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SOURCE_ELEMENT: {
+				SourceElement sourceElement = (SourceElement)theEObject;
+				T1 result = caseSourceElement(sourceElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.ST_ALGORITHM: {
 				STAlgorithm stAlgorithm = (STAlgorithm)theEObject;
 				T1 result = caseSTAlgorithm(stAlgorithm);
 				if (result == null) result = caseTextAlgorithm(stAlgorithm);
+				if (result == null) result = caseSTSourceElement(stAlgorithm);
 				if (result == null) result = caseAlgorithm(stAlgorithm);
+				if (result == null) result = caseTextSourceElement(stAlgorithm);
 				if (result == null) result = caseICallable(stAlgorithm);
+				if (result == null) result = caseSourceElement(stAlgorithm);
 				if (result == null) result = caseINamedElement(stAlgorithm);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ST_COMMENT: {
+				STComment stComment = (STComment)theEObject;
+				T1 result = caseSTComment(stComment);
+				if (result == null) result = caseTextComment(stComment);
+				if (result == null) result = caseSTSourceElement(stComment);
+				if (result == null) result = caseSourceComment(stComment);
+				if (result == null) result = caseTextSourceElement(stComment);
+				if (result == null) result = caseSourceElement(stComment);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1047,8 +1230,11 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				STFunction stFunction = (STFunction)theEObject;
 				T1 result = caseSTFunction(stFunction);
 				if (result == null) result = caseTextFunction(stFunction);
+				if (result == null) result = caseSTSourceElement(stFunction);
 				if (result == null) result = caseFunction(stFunction);
+				if (result == null) result = caseTextSourceElement(stFunction);
 				if (result == null) result = caseICallable(stFunction);
+				if (result == null) result = caseSourceElement(stFunction);
 				if (result == null) result = caseINamedElement(stFunction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -1057,7 +1243,10 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				STFunctionBody stFunctionBody = (STFunctionBody)theEObject;
 				T1 result = caseSTFunctionBody(stFunctionBody);
 				if (result == null) result = caseTextFunctionBody(stFunctionBody);
+				if (result == null) result = caseSTSourceElement(stFunctionBody);
 				if (result == null) result = caseFunctionBody(stFunctionBody);
+				if (result == null) result = caseTextSourceElement(stFunctionBody);
+				if (result == null) result = caseSourceElement(stFunctionBody);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1065,9 +1254,20 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				STMethod stMethod = (STMethod)theEObject;
 				T1 result = caseSTMethod(stMethod);
 				if (result == null) result = caseTextMethod(stMethod);
+				if (result == null) result = caseSTSourceElement(stMethod);
 				if (result == null) result = caseMethod(stMethod);
+				if (result == null) result = caseTextSourceElement(stMethod);
 				if (result == null) result = caseICallable(stMethod);
+				if (result == null) result = caseSourceElement(stMethod);
 				if (result == null) result = caseINamedElement(stMethod);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ST_SOURCE_ELEMENT: {
+				STSourceElement stSourceElement = (STSourceElement)theEObject;
+				T1 result = caseSTSourceElement(stSourceElement);
+				if (result == null) result = caseTextSourceElement(stSourceElement);
+				if (result == null) result = caseSourceElement(stSourceElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1122,8 +1322,19 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				TextAlgorithm textAlgorithm = (TextAlgorithm)theEObject;
 				T1 result = caseTextAlgorithm(textAlgorithm);
 				if (result == null) result = caseAlgorithm(textAlgorithm);
+				if (result == null) result = caseTextSourceElement(textAlgorithm);
 				if (result == null) result = caseICallable(textAlgorithm);
+				if (result == null) result = caseSourceElement(textAlgorithm);
 				if (result == null) result = caseINamedElement(textAlgorithm);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TEXT_COMMENT: {
+				TextComment textComment = (TextComment)theEObject;
+				T1 result = caseTextComment(textComment);
+				if (result == null) result = caseSourceComment(textComment);
+				if (result == null) result = caseTextSourceElement(textComment);
+				if (result == null) result = caseSourceElement(textComment);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1131,7 +1342,9 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				TextFunction textFunction = (TextFunction)theEObject;
 				T1 result = caseTextFunction(textFunction);
 				if (result == null) result = caseFunction(textFunction);
+				if (result == null) result = caseTextSourceElement(textFunction);
 				if (result == null) result = caseICallable(textFunction);
+				if (result == null) result = caseSourceElement(textFunction);
 				if (result == null) result = caseINamedElement(textFunction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -1140,6 +1353,8 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				TextFunctionBody textFunctionBody = (TextFunctionBody)theEObject;
 				T1 result = caseTextFunctionBody(textFunctionBody);
 				if (result == null) result = caseFunctionBody(textFunctionBody);
+				if (result == null) result = caseTextSourceElement(textFunctionBody);
+				if (result == null) result = caseSourceElement(textFunctionBody);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1147,8 +1362,17 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				TextMethod textMethod = (TextMethod)theEObject;
 				T1 result = caseTextMethod(textMethod);
 				if (result == null) result = caseMethod(textMethod);
+				if (result == null) result = caseTextSourceElement(textMethod);
 				if (result == null) result = caseICallable(textMethod);
+				if (result == null) result = caseSourceElement(textMethod);
 				if (result == null) result = caseINamedElement(textMethod);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TEXT_SOURCE_ELEMENT: {
+				TextSourceElement textSourceElement = (TextSourceElement)theEObject;
+				T1 result = caseTextSourceElement(textSourceElement);
+				if (result == null) result = caseSourceElement(textSourceElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -2465,6 +2689,21 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Other Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Other Comment</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseOtherComment(OtherComment object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Other Method</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2476,6 +2715,21 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseOtherMethod(OtherMethod object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Other Source Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Other Source Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseOtherSourceElement(OtherSourceElement object) {
 		return null;
 	}
 
@@ -2750,6 +3004,36 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Source Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Source Comment</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSourceComment(SourceComment object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Source Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Source Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSourceElement(SourceElement object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>ST Algorithm</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2761,6 +3045,21 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseSTAlgorithm(STAlgorithm object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Comment</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSTComment(STComment object) {
 		return null;
 	}
 
@@ -2806,6 +3105,21 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseSTMethod(STMethod object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Source Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Source Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSTSourceElement(STSourceElement object) {
 		return null;
 	}
 
@@ -2885,6 +3199,21 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Text Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Text Comment</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTextComment(TextComment object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Text Function</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2926,6 +3255,21 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseTextMethod(TextMethod object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Text Source Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Text Source Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTextSourceElement(TextSourceElement object) {
 		return null;
 	}
 

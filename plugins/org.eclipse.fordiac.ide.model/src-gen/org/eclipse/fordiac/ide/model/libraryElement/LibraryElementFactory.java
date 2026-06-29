@@ -621,6 +621,15 @@ public interface LibraryElementFactory extends EFactory {
 	OtherAlgorithm createOtherAlgorithm();
 
 	/**
+	 * Returns a new object of class '<em>Other Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Other Comment</em>'.
+	 * @generated
+	 */
+	OtherComment createOtherComment();
+
+	/**
 	 * Returns a new object of class '<em>Other Method</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -799,6 +808,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	STAlgorithm createSTAlgorithm();
+
+	/**
+	 * Returns a new object of class '<em>ST Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Comment</em>'.
+	 * @generated
+	 */
+	STComment createSTComment();
 
 	/**
 	 * Returns a new object of class '<em>ST Function</em>'.

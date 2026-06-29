@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -47,7 +48,7 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TEXT_EDEFAULT = null;
+	protected static final String TEXT_EDEFAULT = "";
 
 	/**
 	 * The cached value of the '{@link #getText() <em>Text</em>}' attribute.
@@ -163,6 +164,38 @@ public abstract class TextAlgorithmImpl extends AlgorithmImpl implements TextAlg
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == TextSourceElement.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.TEXT_ALGORITHM__TEXT: return LibraryElementPackage.TEXT_SOURCE_ELEMENT__TEXT;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == TextSourceElement.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.TEXT_SOURCE_ELEMENT__TEXT: return LibraryElementPackage.TEXT_ALGORITHM__TEXT;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
