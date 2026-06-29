@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2025 Sandor Bacsi, Johannes Kepler University,
- * 							Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Sandor Bacsi, Johannes Kepler University
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,10 +11,12 @@
  * Contributors:
  *   Sandor Bacsi - initial API and implementation and/or initial documentation
  *   Ernst Blecha - run as a Job, add progress indication
+ *   Michael Oberlehner - extract synchronous validation for OCL builder
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation.handlers;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
@@ -25,24 +27,20 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.Activator;
 import org.eclipse.fordiac.ide.validation.Messages;
@@ -59,8 +57,68 @@ public final class ValidationHelper {
 		job.schedule();
 	}
 
+	public static void validateSync(final INamedElement namedElement, final IProgressMonitor monitor) {
+		final List<Constraint> constraints = OCLParser.loadOCLConstraints(namedElement);
+		validateSync(namedElement, constraints, monitor);
+	}
+
+	public static void validateSync(final INamedElement namedElement, final List<Constraint> constraints,
+			final IProgressMonitor monitor) {
+		if (namedElement == null) {
+			return;
+		}
+		final IResource resource = getFile(namedElement);
+		clearOclMarkers(resource);
+		final List<ErrorMarkerBuilder> markerBuilders = createValidationMarkers(resource, namedElement, constraints,
+				monitor);
+		FordiacMarkerHelper.updateMarkers(resource, IValidationMarker.TYPE, markerBuilders, true);
+	}
+
+	public static List<ErrorMarkerBuilder> createValidationMarkers(final IResource resource,
+			final INamedElement namedElement, final List<Constraint> constraints, final IProgressMonitor monitor) {
+		final List<EObject> objects = collectObjects(namedElement);
+		final SubMonitor progress = SubMonitor.convert(monitor, Math.max(1, objects.size() * constraints.size()));
+		final List<ErrorMarkerBuilder> markerBuilders = new ArrayList<>();
+		for (final EObject object : objects) {
+			for (final Constraint constraint : constraints) {
+				progress.split(1);
+				if (progress.isCanceled()) {
+					return markerBuilders;
+				}
+				if (matchesContext(object, constraint)) {
+					progress.setTaskName(MessageFormat.format(Messages.ValidationHelper_SubtaskFormat,
+							createHierarchicalName(object), constraint.getName()));
+					if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
+						final ConstraintHelper properties = new ConstraintHelper(constraint.getName());
+						markerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(properties.getMessage())
+								.setType(IValidationMarker.TYPE).setSeverity(properties.getSeverity())
+								.setLocation(createHierarchicalName(object)).setTarget(object));
+					}
+				}
+			}
+		}
+		return markerBuilders;
+	}
+
+	private static List<EObject> collectObjects(final INamedElement namedElement) {
+		final List<EObject> objects = new ArrayList<>();
+		objects.add(namedElement);
+		for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext();) {
+			final Object next = iterator.next();
+			if (next instanceof final EObject object) {
+				objects.add(object);
+			}
+		}
+		return objects;
+	}
+
+	private static boolean matchesContext(final EObject object, final Constraint constraint) {
+		final Variable<EClassifier, EParameter> context = constraint.getSpecification().getContextVariable();
+		return context != null && context.getType() instanceof final EClass contextClass
+				&& contextClass.isSuperTypeOf(object.eClass());
+	}
+
 	private static class OCLJob extends Job {
-		private static final String ECC = "ECC"; //$NON-NLS-1$
 		private final INamedElement namedElement;
 
 		public OCLJob(final String JobName, final INamedElement namedElement) {
@@ -70,161 +128,48 @@ public final class ValidationHelper {
 
 		@Override
 		protected IStatus run(final IProgressMonitor monitor) {
-			final SubMonitor subMonitor = SubMonitor.convert(monitor);
-
-			final int count = countObjects(subMonitor);
-
-			final List<Constraint> constraints = OCLParser.loadOCLConstraints(namedElement);
-			subMonitor.setWorkRemaining(count * constraints.size());
-
-			if (subMonitor.isCanceled()) {
-				return Status.CANCEL_STATUS;
-			}
-
-			final IResource iresource = getFile(namedElement);
-			clearErrorMarkers(iresource);
-
-			for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext();) {
-				final EObject object = (EObject) iterator.next();
-				for (final Constraint constraint : constraints) {
-					subMonitor.split(1);
-					if (subMonitor.isCanceled()) {
-						return Status.CANCEL_STATUS;
-					}
-					final String objectName = object.eClass().getName();
-
-					final Variable<EClassifier, EParameter> context = constraint.getSpecification()
-							.getContextVariable();
-					final String contextName = (context.getType().getName());
-					if (contextName.equals(objectName)) {
-						subMonitor.setTaskName(MessageFormat.format(Messages.ValidationHelper_SubtaskFormat,
-								createHierarchicalName(object), constraint.getName()));
-						if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
-							final ConstraintHelper properties = new ConstraintHelper(constraint.getName());
-							addValidationMarker(iresource, properties.getMessage(), properties.getSeverity(),
-									createHierarchicalName(object), object.hashCode(), object);
-						}
-					}
-				}
-			}
+			validateSync(namedElement, monitor);
 			return Status.OK_STATUS;
 		}
-
-		private static void clearErrorMarkers(final IResource iresource) {
-			try {
-				if (iresource != null) {
-					iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
-				}
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-		}
-
-		private int countObjects(final SubMonitor subMonitor) {
-			int count = 0;
-			for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext(); iterator.next()) {
-				if (subMonitor.isCanceled()) {
-					return -1;
-				}
-				count++;
-			}
-			return count;
-		}
-
-		private static void addValidationMarker(final IResource iresource, final String message, final int severity,
-				final String location, final int lineNumber, final EObject context) {
-			if (iresource == null) {
-				return;
-			}
-			FordiacMarkerHelper.createMarkers(iresource,
-					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE)
-							.setSeverity(severity).setLocation(location).setLineNumber(lineNumber).setTarget(context)));
-		}
-
-		private static String createHierarchicalName(final EObject object) {
-			// We have to cover all possible context of the constraints
-			if (object instanceof final VarDeclaration varDeclaration) {
-				final FBNetworkElement element = varDeclaration.getBlockFBNetworkElement();
-				final EObject runner = element.getFbNetwork().eContainer();
-				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
-				builder.append('.');
-				builder.append(element.getName());
-				builder.append('.');
-				builder.append(varDeclaration.getName());
-				return builder.toString();
-			}
-			if (object instanceof final Connection conn) {
-				final StringBuilder builder = new StringBuilder(createHierarchicalName(conn.getSource()));
-				builder.append(" -> "); //$NON-NLS-1$
-				builder.append(createHierarchicalName(conn.getDestination()));
-				return builder.toString();
-			}
-			if (object instanceof final FBNetwork element) {
-				final EObject runner = element.eContainer();
-				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
-				return builder.toString();
-			}
-			if (object instanceof final FBNetworkElement element) {
-				final EObject runner = element.getFbNetwork().eContainer();
-				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
-				builder.append('.');
-				builder.append(element.getName());
-				return builder.toString();
-			}
-			if (object instanceof final Event event) {
-				final FBNetworkElement element = event.getBlockFBNetworkElement();
-				final EObject runner = element.getFbNetwork().eContainer();
-				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
-				builder.append('.');
-				builder.append(element.getName());
-				builder.append('.');
-				builder.append(event.getName());
-				return builder.toString();
-			}
-			if (object instanceof final ECState state) {
-				final StringBuilder builder = new StringBuilder(ECC);
-				builder.append('.');
-				builder.append(state.getName());
-				return builder.toString();
-			}
-			if (object instanceof ECC) {
-				return ECC;
-			}
-			if (object instanceof final ECTransition transition) {
-				final StringBuilder builder = new StringBuilder(ECC);
-				builder.append('.');
-				builder.append(
-						"Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY()); //$NON-NLS-1$ //$NON-NLS-2$
-				return builder.toString();
-			}
-			if (object == null) {
-				return "NULL"; //$NON-NLS-1$
-			}
-			return object.toString();
-		}
-
-		private static String getApplicationHierarchy(EObject runner) {
-			final StringBuilder builder = new StringBuilder();
-			while (runner instanceof final SubApp parent) {
-				builder.insert(0, '.');
-				builder.insert(0, parent.getName());
-				runner = parent.getFbNetwork().eContainer();
-			}
-			if (runner instanceof final Application app) {
-				builder.insert(0, '.');
-				builder.insert(0, app.getName());
-			}
-			int lastIndex = builder.length();
-			lastIndex = lastIndex == 0 ? 0 : lastIndex - 1;
-			if (!builder.isEmpty() && builder.charAt(lastIndex) == '.') {
-				builder.deleteCharAt(lastIndex);
-			}
-			return builder.toString();
-		}
-
 	}
 
-	private static IResource getFile(final INamedElement element) {
+	public static void clearOclMarkers(final IResource resource) {
+		try {
+			if (resource != null) {
+				resource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+	}
+
+	public static String createHierarchicalName(final EObject object) {
+		if (object == null) {
+			return "NULL"; //$NON-NLS-1$
+		}
+		if (object instanceof final Connection connection) {
+			return createHierarchicalName(connection.getSource()) + " -> " //$NON-NLS-1$
+					+ createHierarchicalName(connection.getDestination());
+		}
+		if (object instanceof final FBNetwork network) {
+			return createHierarchicalName(network.eContainer());
+		}
+		if (object instanceof ECC) {
+			return "ECC"; //$NON-NLS-1$
+		}
+		if (object instanceof final ECState state) {
+			return "ECC." + state.getName(); //$NON-NLS-1$
+		}
+		if (object instanceof final ECTransition transition) {
+			return "ECC.Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY(); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		if (object instanceof final INamedElement namedElement) {
+			return namedElement.getQualifiedName();
+		}
+		return object.toString();
+	}
+
+	public static IResource getFile(final INamedElement element) {
 		if (element instanceof final FBType fbtype) {
 			return fbtype.getTypeEntry().getFile();
 		}

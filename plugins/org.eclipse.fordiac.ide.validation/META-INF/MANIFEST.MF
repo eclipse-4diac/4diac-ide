@@ -7,6 +7,7 @@ Bundle-Activator: org.eclipse.fordiac.ide.validation.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
+ org.eclipse.jface,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.typemanagement,

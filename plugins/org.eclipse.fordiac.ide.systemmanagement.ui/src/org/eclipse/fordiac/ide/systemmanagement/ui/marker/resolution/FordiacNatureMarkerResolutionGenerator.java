@@ -27,6 +27,8 @@ public class FordiacNatureMarkerResolutionGenerator implements IMarkerResolution
 			new IMarkerResolution[] { new MissingExportBuilderMarkerResolution() };
 		case FordiacNature.MISSING_LIBRARY_BUILDER -> //
 			new IMarkerResolution[] { new MissingLibraryBuilderMarkerResolution() };
+		case FordiacNature.MISSING_OCL_VALIDATION_BUILDER -> //
+			new IMarkerResolution[] { new MissingOCLValidationBuilderMarkerResolution() };
 		case FordiacNature.WRONG_BUILDER_ORDER -> //
 			new IMarkerResolution[] { new WrongBuilderOrderMarkerResolution() };
 		default -> new IMarkerResolution[0];
@@ -38,6 +40,7 @@ public class FordiacNatureMarkerResolutionGenerator implements IMarkerResolution
 		final int code = FordiacErrorMarker.getCode(marker);
 		return FordiacNature.class.getName().equals(FordiacErrorMarker.getSource(marker))
 				&& (FordiacNature.MISSING_EXPORT_BUILDER == code || FordiacNature.MISSING_LIBRARY_BUILDER == code
+						|| FordiacNature.MISSING_OCL_VALIDATION_BUILDER == code
 						|| FordiacNature.WRONG_BUILDER_ORDER == code);
 	}
 }
