@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Sandor Bacsi
- * Copyright (c) 2026 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,11 +29,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.Activator;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
@@ -42,38 +37,35 @@ import org.eclipse.ocl.ParserException;
 import org.eclipse.ocl.ecore.Constraint;
 import org.osgi.framework.Bundle;
 
-public class OCLParser {
+public final class OCLParser {
 	private static final String CONSTRAINT_DIRECTORY = "constraints"; //$NON-NLS-1$
 	private static final String CONSTRAINT_FILE_FBTYPE = "ECC.ocl"; //$NON-NLS-1$
 	private static final String CONSTRAINT_FILE_APP = "FB.ocl"; //$NON-NLS-1$
 
 	private OCLParser() {
+		throw new UnsupportedOperationException();
 	}
 
-	public static List<Constraint> loadOCLConstraints(final INamedElement element) {
+	public static List<Constraint> loadOCLConstraints(final IProject project) {
 		final List<Constraint> constraints = new ArrayList<>();
-		constraints.addAll(loadBundledOCLConstraints(element));
-		constraints.addAll(loadBuildpathOCLConstraints(getProject(element)));
+		constraints.addAll(loadBundledOCLConstraints(CONSTRAINT_FILE_FBTYPE));
+		constraints.addAll(loadBundledOCLConstraints(CONSTRAINT_FILE_APP));
+		constraints.addAll(loadBuildpathOCLConstraints(project));
 		return constraints;
 	}
 
-	private static List<Constraint> loadBundledOCLConstraints(final INamedElement element) {
-		final List<Constraint> constraints = new ArrayList<>();
-		final String constraintFile = getOCLFile(element);
-		if (constraintFile == null) {
-			return constraints;
-		}
+	private static List<Constraint> loadBundledOCLConstraints(final String constraintFile) {
 		final Bundle bundle = Activator.getDefault().getBundle();
 		final URL url = FileLocator.find(bundle, new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile));
 		if (url == null) {
-			return constraints;
+			return List.of();
 		}
 		try (InputStream in = FileLocator.toFileURL(url).openStream()) {
-			constraints.addAll(parse(in));
+			return parse(in);
 		} catch (ParserException | IOException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
-		return constraints;
+		return List.of();
 	}
 
 	private static List<Constraint> loadBuildpathOCLConstraints(final IProject project) {
@@ -110,32 +102,8 @@ public class OCLParser {
 	private static void addParseMarker(final IFile file, final ParserException exception) {
 		FordiacLogHelper.logError(exception.getMessage(), exception);
 		FordiacMarkerHelper.updateMarkers(file, IValidationMarker.TYPE,
-				List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(exception.getMessage())
-						.setType(IValidationMarker.TYPE).setSeverity(IMarker.SEVERITY_ERROR)
-						.setLocation(file.getProjectRelativePath().toString())),
+				List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(exception.getMessage()).setType(IValidationMarker.TYPE)
+						.setSeverity(IMarker.SEVERITY_ERROR).setLocation(file.getProjectRelativePath().toString())),
 				true);
-	}
-
-	private static String getOCLFile(final INamedElement element) {
-		if (element instanceof FBType) {
-			return CONSTRAINT_FILE_FBTYPE;
-		}
-
-		if (element instanceof Application || element instanceof SubApp) {
-			return CONSTRAINT_FILE_APP;
-		}
-		return null;
-	}
-
-	private static IProject getProject(final INamedElement element) {
-		return switch (element) {
-		case final Application application when application.getAutomationSystem() != null
-				&& application.getAutomationSystem().getTypeLibrary() != null ->
-			application.getAutomationSystem().getTypeLibrary().getProject();
-		case final SubApp subApp when subApp.getTypeLibrary() != null -> subApp.getTypeLibrary().getProject();
-		case final LibraryElement libraryElement when libraryElement.getTypeLibrary() != null ->
-			libraryElement.getTypeLibrary().getProject();
-		default -> null;
-		};
 	}
 }

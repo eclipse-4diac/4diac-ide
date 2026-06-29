@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation.builder;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -32,9 +33,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
+import org.eclipse.fordiac.ide.validation.handlers.OCLParser;
 import org.eclipse.fordiac.ide.validation.handlers.ValidationHelper;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
 import org.eclipse.fordiac.ide.validation.preferences.PreferenceConstants;
+import org.eclipse.ocl.ecore.Constraint;
 
 public class OCLValidationBuilder extends IncrementalProjectBuilder {
 
@@ -60,11 +63,12 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 	}
 
 	private void fullBuild(final SubMonitor monitor) {
+		final List<Constraint> constraints = OCLParser.loadOCLConstraints(getProject());
 		for (final IFile file : OCLSourceScanner.findValidationTargets(getProject())) {
 			if (isBuildCanceled(monitor)) {
 				throw new OperationCanceledException();
 			}
-			validateFile(file, monitor.split(1));
+			validateFile(file, constraints, monitor.split(1));
 		}
 	}
 
@@ -74,13 +78,14 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 			fullBuild(monitor);
 			return;
 		}
+		final List<Constraint> constraints = OCLParser.loadOCLConstraints(getProject());
 		delta.accept((IResourceDeltaVisitor) resourceDelta -> {
 			if (isBuildCanceled(monitor)) {
 				throw new OperationCanceledException();
 			}
 			if (resourceDelta.getResource() instanceof final IFile file
-					&& OCLSourceScanner.isValidationTargetFile(file)) {
-				validateFile(file, monitor.split(1));
+					&& resourceDelta.getKind() != IResourceDelta.REMOVED && OCLSourceScanner.isValidationTargetFile(file)) {
+				validateFile(file, constraints, monitor.split(1));
 			}
 			return true;
 		}, IResourceDelta.ADDED | IResourceDelta.CHANGED | IResourceDelta.CONTENT | IResourceDelta.REMOVED);
@@ -99,14 +104,15 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 		return result[0];
 	}
 
-	private static void validateFile(final IFile file, final IProgressMonitor monitor) {
+	private static void validateFile(final IFile file, final List<Constraint> constraints,
+			final IProgressMonitor monitor) {
 		try {
 			TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (entry == null) {
 				entry = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).createTypeEntry(file);
 			}
 			if (entry != null && entry.getType() instanceof final INamedElement namedElement) {
-				ValidationHelper.validateSync(namedElement, monitor);
+				ValidationHelper.validateSync(namedElement, constraints, monitor);
 			}
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);

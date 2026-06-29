@@ -22,10 +22,7 @@ import java.util.List;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -48,19 +45,6 @@ import org.eclipse.ocl.ecore.Constraint;
 import org.eclipse.ocl.expressions.Variable;
 
 public final class ValidationHelper {
-
-	public static void validate(final INamedElement namedElement) {
-		final Job job = new OCLJob(Messages.ValidationHelper_OCLJobName, namedElement);
-		job.setUser(true);
-		job.setPriority(Job.BUILD);
-		job.setRule(getFile(namedElement));
-		job.schedule();
-	}
-
-	public static void validateSync(final INamedElement namedElement, final IProgressMonitor monitor) {
-		final List<Constraint> constraints = OCLParser.loadOCLConstraints(namedElement);
-		validateSync(namedElement, constraints, monitor);
-	}
 
 	public static void validateSync(final INamedElement namedElement, final List<Constraint> constraints,
 			final IProgressMonitor monitor) {
@@ -118,21 +102,6 @@ public final class ValidationHelper {
 				&& contextClass.isSuperTypeOf(object.eClass());
 	}
 
-	private static class OCLJob extends Job {
-		private final INamedElement namedElement;
-
-		public OCLJob(final String JobName, final INamedElement namedElement) {
-			super(JobName);
-			this.namedElement = namedElement;
-		}
-
-		@Override
-		protected IStatus run(final IProgressMonitor monitor) {
-			validateSync(namedElement, monitor);
-			return Status.OK_STATUS;
-		}
-	}
-
 	public static void clearOclMarkers(final IResource resource) {
 		try {
 			if (resource != null) {
@@ -161,7 +130,8 @@ public final class ValidationHelper {
 			return "ECC." + state.getName(); //$NON-NLS-1$
 		}
 		if (object instanceof final ECTransition transition) {
-			return "ECC.Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY(); //$NON-NLS-1$ //$NON-NLS-2$
+			return "ECC.Transition X:" + transition.getPosition().getX() + " Y:" //$NON-NLS-1$ //$NON-NLS-2$
+					+ transition.getPosition().getY();
 		}
 		if (object instanceof final INamedElement namedElement) {
 			return namedElement.getQualifiedName();
