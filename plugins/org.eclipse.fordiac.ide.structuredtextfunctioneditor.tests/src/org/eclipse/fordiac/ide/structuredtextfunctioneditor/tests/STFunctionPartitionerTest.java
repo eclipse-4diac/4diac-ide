@@ -25,8 +25,8 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -255,6 +255,6 @@ class STFunctionPartitionerTest {
 
 	private static void assertFunctionsEquals(final List<String> expected, final STFunctionPartition actual) {
 		assertIterableEquals(expected.stream().map(String::trim).toList(),
-				actual.getFunctions().stream().map(STFunction::getText).map(String::trim).toList());
+				actual.getSourceElements().stream().map(STSourceElement::getText).map(String::trim).toList());
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,6 +23,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProviderExtension;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
@@ -32,8 +34,7 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.util.ITextRegion;
 
-public abstract class STRecoveringPartitioner<S extends EObject, E extends INamedElement>
-		extends STAbstractCorePartitioner<E> {
+public abstract class STRecoveringPartitioner<S extends EObject> extends STAbstractCorePartitioner {
 	public static final String LOST_AND_FOUND_NAME = "LOST_AND_FOUND"; //$NON-NLS-1$
 	protected static final String LOST_AND_FOUND_NAME_PATTERN = LOST_AND_FOUND_NAME + "_%s"; //$NON-NLS-1$
 	public static final String LOST_AND_FOUND_COMMENT = "lost+found"; //$NON-NLS-1$
@@ -55,23 +56,24 @@ public abstract class STRecoveringPartitioner<S extends EObject, E extends IName
 		return Optional.empty();
 	}
 
-	protected List<E> convertSourceElements(final ICompositeNode rootNode, final EList<S> elements) {
-		final SequencedMap<S, E> mapping = new LinkedHashMap<>();
+	protected List<STSourceElement> convertSourceElements(final ICompositeNode rootNode, final EList<S> elements) {
+		final SequencedMap<S, STSourceElement> mapping = new LinkedHashMap<>();
 		for (final S element : elements) {
-			final E converted = convertSourceElement(element);
+			final STSourceElement converted = convertSourceElement(element);
 			if (converted != null) {
 				mapping.put(element, converted);
 			}
 		}
-		final List<E> result = handleLostAndFound(rootNode, mapping);
+		final List<STSourceElement> result = handleLostAndFound(rootNode, mapping);
 		handleDuplicates(result);
 		return result;
 	}
 
-	protected List<E> handleLostAndFound(final ICompositeNode rootNode, final SequencedMap<S, E> elements) {
+	protected List<STSourceElement> handleLostAndFound(final ICompositeNode rootNode,
+			final SequencedMap<S, STSourceElement> elements) {
 		int lastOffset = 0;
-		final List<E> result = new ArrayList<>(elements.size());
-		for (final Map.Entry<S, E> entry : elements.entrySet()) {
+		final List<STSourceElement> result = new ArrayList<>(elements.size());
+		for (final Map.Entry<S, STSourceElement> entry : elements.entrySet()) {
 			final ITextRegion region = getTextRegionWithComment(entry.getKey());
 			if (region.getOffset() > lastOffset) {
 				handleLostAndFound(rootNode, lastOffset, region.getOffset(), result);
@@ -95,20 +97,18 @@ public abstract class STRecoveringPartitioner<S extends EObject, E extends IName
 		return node.getTotalTextRegion();
 	}
 
-	protected void handleLostAndFound(final ICompositeNode rootNode, final int start, final int end,
-			final List<E> result) {
+	protected static void handleLostAndFound(final ICompositeNode rootNode, final int start, final int end,
+			final List<STSourceElement> result) {
 		final String text = rootNode.getText().substring(start, end);
 		if (!text.isBlank()) {
-			result.add(createLostAndFound(text.trim(), result.size()));
+			result.add(createLostAndFound(text.trim()));
 		}
 	}
 
-	protected static String generateLostAndFoundName(final int index) {
-		return LOST_AND_FOUND_NAME_PATTERN.formatted(Integer.valueOf(index));
-	}
-
-	protected static String generateLostAndFoundComment(final int index) {
-		return LOST_AND_FOUND_COMMENT_PATTERN.formatted(Integer.valueOf(index));
+	protected static STSourceElement createLostAndFound(final String text) {
+		final var result = LibraryElementFactory.eINSTANCE.createSTComment();
+		result.setText(text);
+		return result;
 	}
 
 	protected static void appendBlockComment(final INamedElement element, final StringBuilder builder) {
@@ -124,6 +124,10 @@ public abstract class STRecoveringPartitioner<S extends EObject, E extends IName
 			builder.append(" *)"); //$NON-NLS-1$
 			builder.append(CommonElementExporter.LINE_END);
 		}
+	}
+
+	protected static void appendText(final STSourceElement element, final String text) {
+		element.setText(element.getText() + text);
 	}
 
 	protected static void appendText(final String text, final StringBuilder builder) {
@@ -156,9 +160,5 @@ public abstract class STRecoveringPartitioner<S extends EObject, E extends IName
 
 	protected abstract STCorePartition createEmergencyPartition(final String originalSource);
 
-	protected abstract E convertSourceElement(final S function);
-
-	protected abstract E createLostAndFound(final String text, final int index);
-
-	protected abstract void appendText(final E element, final String text);
+	protected abstract STSourceElement convertSourceElement(final S function);
 }
