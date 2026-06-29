@@ -1845,7 +1845,7 @@ public interface LibraryElementPackage extends EPackage {
 	int BASE_FB_TYPE__METHODS = FB_TYPE_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Callables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Callables</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1854,13 +1854,22 @@ public interface LibraryElementPackage extends EPackage {
 	int BASE_FB_TYPE__CALLABLES = FB_TYPE_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Source Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FB_TYPE__SOURCE_ELEMENTS = FB_TYPE_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Base FB Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 6;
+	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
@@ -1999,13 +2008,22 @@ public interface LibraryElementPackage extends EPackage {
 	int BASIC_FB_TYPE__METHODS = BASE_FB_TYPE__METHODS;
 
 	/**
-	 * The feature id for the '<em><b>Callables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Callables</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__CALLABLES = BASE_FB_TYPE__CALLABLES;
+
+	/**
+	 * The feature id for the '<em><b>Source Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__SOURCE_ELEMENTS = BASE_FB_TYPE__SOURCE_ELEMENTS;
 
 	/**
 	 * The feature id for the '<em><b>ECC</b></em>' containment reference.
@@ -8476,13 +8494,22 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE__METHODS = BASE_FB_TYPE__METHODS;
 
 	/**
-	 * The feature id for the '<em><b>Callables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Callables</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int SIMPLE_FB_TYPE__CALLABLES = BASE_FB_TYPE__CALLABLES;
+
+	/**
+	 * The feature id for the '<em><b>Source Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_FB_TYPE__SOURCE_ELEMENTS = BASE_FB_TYPE__SOURCE_ELEMENTS;
 
 	/**
 	 * The feature id for the '<em><b>Simple EC States</b></em>' containment reference list.
@@ -10072,15 +10099,26 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBaseFBType_Methods();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getCallables <em>Callables</em>}'.
+	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getCallables <em>Callables</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Callables</em>'.
+	 * @return the meta object for the reference list '<em>Callables</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getCallables()
 	 * @see #getBaseFBType()
 	 * @generated
 	 */
 	EReference getBaseFBType_Callables();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getSourceElements <em>Source Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Source Elements</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getSourceElements()
+	 * @see #getBaseFBType()
+	 * @generated
+	 */
+	EReference getBaseFBType_SourceElements();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType <em>Basic FB Type</em>}'.
@@ -13648,12 +13686,20 @@ public interface LibraryElementPackage extends EPackage {
 		EReference BASE_FB_TYPE__METHODS = eINSTANCE.getBaseFBType_Methods();
 
 		/**
-		 * The meta object literal for the '<em><b>Callables</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Callables</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference BASE_FB_TYPE__CALLABLES = eINSTANCE.getBaseFBType_Callables();
+
+		/**
+		 * The meta object literal for the '<em><b>Source Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_FB_TYPE__SOURCE_ELEMENTS = eINSTANCE.getBaseFBType_SourceElements();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.

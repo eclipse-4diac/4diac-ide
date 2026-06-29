@@ -135,6 +135,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
 			case LibraryElementPackage.BASE_FB_TYPE__METHODS:
 			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
+			case LibraryElementPackage.BASE_FB_TYPE__SOURCE_ELEMENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -393,6 +394,46 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createSTMethod()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createOtherComment()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createOtherMethod()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createSTComment()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createSTFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createSTFunctionBody()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS,
+				 LibraryElementFactory.eINSTANCE.createSTMethod()));
 	}
 
 	/**
@@ -412,6 +453,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
 
 		if (qualify) {

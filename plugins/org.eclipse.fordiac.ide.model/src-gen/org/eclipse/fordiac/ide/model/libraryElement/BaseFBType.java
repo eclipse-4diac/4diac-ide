@@ -35,6 +35,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getAlgorithm <em>Algorithm</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getMethods <em>Methods</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getCallables <em>Callables</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getSourceElements <em>Source Elements</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBaseFBType()
@@ -108,17 +109,30 @@ public interface BaseFBType extends FBType {
 	EList<Method> getMethods();
 
 	/**
-	 * Returns the value of the '<em><b>Callables</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Callables</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ICallable}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Callables</em>' containment reference list.
+	 * @return the value of the '<em>Callables</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBaseFBType_Callables()
-	 * @model containment="true"
+	 * @model resolveProxies="false" transient="true" changeable="false" volatile="true" derived="true"
 	 *        extendedMetaData="kind='element' name='Callable' namespace='##targetNamespace'"
 	 * @generated
 	 */
 	EList<ICallable> getCallables();
+
+	/**
+	 * Returns the value of the '<em><b>Source Elements</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.SourceElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Source Elements</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBaseFBType_SourceElements()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='SourceElement' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	EList<SourceElement> getSourceElements();
 
 	/**
 	 * <!-- begin-user-doc -->

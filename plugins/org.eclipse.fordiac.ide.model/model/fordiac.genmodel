@@ -129,7 +129,9 @@
           get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getAlgorithm(this);"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/methods"
           get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getMethods(this);"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/callables"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/callables"
+          get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getCallables(this);"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/sourceElements"/>
       <genOperations ecoreOperation="lib.ecore#//BaseFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
         <genParameters ecoreParameter="lib.ecore#//BaseFBType/getAlgorithmNamed/name"/>
       </genOperations>
