@@ -181,6 +181,12 @@
               tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
         </propertySection>
         <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.ConfigFBInstancePropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.ConfigFBInstanceSectionFilter"
+              id="org.eclipse.fordiac.ide.application.properties.ConfigFbInterfaceSection"
+              tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+        </propertySection>
+        <propertySection
               class="org.eclipse.fordiac.ide.application.properties.SubAppPropertySection"
               filter="org.eclipse.fordiac.ide.application.properties.SubappPropertySectionFilter"
               id="org.eclipse.fordiac.ide.application.properties.SubappInstanceSection"

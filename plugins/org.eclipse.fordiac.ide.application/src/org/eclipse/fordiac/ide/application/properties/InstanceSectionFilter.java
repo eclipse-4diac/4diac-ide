@@ -16,7 +16,7 @@ import org.eclipse.fordiac.ide.application.editparts.InstanceComment;
 import org.eclipse.fordiac.ide.application.editparts.InstanceName;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -37,15 +37,15 @@ public class InstanceSectionFilter implements IFilter {
 			candidate = editPart.getModel();
 		}
 
-		if (element instanceof final FBNetwork fbNetwork) {
+		if (candidate instanceof final FBNetwork fbNetwork) {
 			candidate = fbNetwork.eContainer();
 		}
 
-		if (element instanceof final InstanceComment instanceComment) {
+		if (candidate instanceof final InstanceComment instanceComment) {
 			candidate = instanceComment.getRefElement();
 		}
 
-		if (element instanceof final InstanceName instanceName) {
+		if (candidate instanceof final InstanceName instanceName) {
 			candidate = instanceName.getRefElement();
 		}
 
@@ -63,8 +63,8 @@ public class InstanceSectionFilter implements IFilter {
 
 	private static boolean isEditableFBNetworkElement(final FBNetworkElement fbNetworkElement) {
 		if (fbNetworkElement instanceof Group || fbNetworkElement instanceof Comment
-				|| fbNetworkElement instanceof Demultiplexer) {
-			// these three do not have instance information to show
+				|| fbNetworkElement instanceof ConfigurableFB) {
+			// these three do not have instance information to show or show it differently
 			return false;
 		}
 		return !fbNetworkElement.isContainedInTypedInstance();
