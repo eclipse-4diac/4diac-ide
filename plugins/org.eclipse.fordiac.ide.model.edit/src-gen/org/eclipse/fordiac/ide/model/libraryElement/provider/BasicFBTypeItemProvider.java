@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -171,12 +171,7 @@ public class BasicFBTypeItemProvider extends BaseFBTypeItemProvider {
 
 		boolean qualify =
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__SOURCE_ELEMENTS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS;
 
 		if (qualify) {
 			return getString

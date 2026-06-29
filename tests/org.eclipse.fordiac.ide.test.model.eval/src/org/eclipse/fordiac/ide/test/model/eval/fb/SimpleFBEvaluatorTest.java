@@ -39,9 +39,9 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.junit.jupiter.api.Test;
@@ -81,8 +81,8 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final SimpleECState initState = newSimpleECState(initInputEvent);
 		initState.getSimpleECActions().add(newSimpleECAction("INIT", initOutputEvent));
 		fbType.getSimpleECStates().add(initState);
-		fbType.getCallables().add(newSTAlgorithm("DO1 := DI1 - DI2;", "REQ"));
-		fbType.getCallables().add(newSTAlgorithm("DO1 := DI1 + DI2;", "INIT"));
+		fbType.getSourceElements().add(newSTAlgorithm("DO1 := DI1 - DI2;", "REQ"));
+		fbType.getSourceElements().add(newSTAlgorithm("DO1 := DI1 + DI2;", "INIT"));
 		final TracingFBEvaluatorEventQueue queue = new TracingFBEvaluatorEventQueue(List.of(initInputEvent));
 		final SimpleFBEvaluator eval = new SimpleFBEvaluator(fbType, null, List.of(), null);
 		eval.setEventQueue(queue);
@@ -907,17 +907,17 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final SimpleFBType simpleType = newSimpleFBType("TestSimple",
 				List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
-		simpleType.getCallables().add(newSTAlgorithm("DO1 := DO1 + DI1;", "REQ"));
+		simpleType.getSourceElements().add(newSTAlgorithm("DO1 := DO1 + DI1;", "REQ"));
 		return simpleType;
 	}
 
-	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables,
+	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends SourceElement> callables,
 			final List<Variable<?>> variables, final VarDeclaration output)
 			throws EvaluatorException, InterruptedException {
 		return evaluateSimpleFB(callables, variables, output, List.of(), List.of(), List.of());
 	}
 
-	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables,
+	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends SourceElement> callables,
 			final List<Variable<?>> variables, final VarDeclaration output, final List<VarDeclaration> internalVars,
 			final List<VarDeclaration> internalConstVars, final List<FB> internalFBs)
 			throws EvaluatorException, InterruptedException {
@@ -926,7 +926,7 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						variables.stream().map(
 								variable -> newVarDeclaration(variable.getName(), (DataType) variable.getType(), true)),
 						Stream.of(output)).toList());
-		ECollections.setEList(fbType.getCallables(), callables);
+		ECollections.setEList(fbType.getSourceElements(), callables);
 		ECollections.setEList(fbType.getInternalVars(), internalVars);
 		ECollections.setEList(fbType.getInternalConstVars(), internalConstVars);
 		ECollections.setEList(fbType.getInternalFbs(), internalFBs);
@@ -939,12 +939,12 @@ class SimpleFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		return eval;
 	}
 
-	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends ICallable> callables,
+	static SimpleFBEvaluator evaluateSimpleFB(final List<? extends SourceElement> callables,
 			final List<VarDeclaration> variables, final List<VarDeclaration> internalVars,
 			final List<VarDeclaration> internalConstVars, final List<FB> internalFBs)
 			throws EvaluatorException, InterruptedException {
 		final SimpleFBType fbType = newSimpleFBType("Test", variables);
-		ECollections.setEList(fbType.getCallables(), callables);
+		ECollections.setEList(fbType.getSourceElements(), callables);
 		ECollections.setEList(fbType.getInternalVars(), internalVars);
 		ECollections.setEList(fbType.getInternalConstVars(), internalConstVars);
 		ECollections.setEList(fbType.getInternalFbs(), internalFBs);

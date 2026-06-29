@@ -154,7 +154,7 @@ class SamplingFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		// no with for REQ and DI2
 		createWith(simpleType, "CNF", "DO1");
 		// no with for CNF and DO2
-		simpleType.getCallables().add(newSTAlgorithm("""
+		simpleType.getSourceElements().add(newSTAlgorithm("""
 				DO1 := DI1 + DI2;
 				DO2 := DO1 * 2;
 				""", "REQ"));
