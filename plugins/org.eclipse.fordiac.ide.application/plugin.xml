@@ -162,11 +162,6 @@
                    indented="false"
                    label="%propertyStructInterfaceElementTab_label">
       </propertyTab>
-      <propertyTab
-            category="FB"
-            id="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab"
-            label="%propertyConfigurableFBTab_label">
-      </propertyTab>
     </propertyTabs>
   </extension>
   
@@ -344,12 +339,6 @@
               filter="org.eclipse.fordiac.ide.gef.filters.PinAdapterInfoFilter"
               id="org.eclipse.fordiac.ide.application.pins.PinAdapterSection"
               tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
-        </propertySection>
-        <propertySection
-              class="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBSection"
-              filter="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBFilter"
-              id="org.eclipse.fordiac.ide.application.properties.ConfigurableFBSection"
-              tab="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab">
         </propertySection>
         <propertySection
               class="org.eclipse.fordiac.ide.application.properties.InfoPropertySection"
