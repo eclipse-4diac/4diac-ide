@@ -1,7 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 							Johannes Keppler University, Linz,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Keppler University, Linz,
+ *                    Primetals Technologies Austria GmbH,
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,7 @@
  *               - changed exporting the Saxx cursor api
  *   Martin Melik Merkumians - adds export of internal FBs
  *   Alois Zoitl - updated for new adapter FB handling
+ *   Martin Erich Jobst - rework source element export
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -35,16 +37,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceComment;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
@@ -88,45 +90,10 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addVarList(type.getInternalConstVars(), LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT);
 		addECC(type.getECC());
-		for (final ICallable callable : type.getCallables()) {
-			addICallable(callable);
+		for (final SourceElement element : type.getSourceElements()) {
+			addSourceElement(element);
 		}
 		addEndElement();
-	}
-
-	/**
-	 * Adds the other algorithm.
-	 *
-	 * @param algorithm the algorithm
-	 * @throws XMLStreamException
-	 */
-	private void addOtherAlgorithm(final OtherAlgorithm algorithm) throws XMLStreamException {
-		addStartElement(LibraryElementTags.OTHER_ELEMENT);
-		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
-				(null != algorithm.getLanguage()) ? algorithm.getLanguage() : ""); //$NON-NLS-1$
-
-		writeAlgorithmText(algorithm.getText());
-		addInlineEndElement();
-	}
-
-	private void writeAlgorithmText(final String text) throws XMLStreamException {
-		if (null != text) {
-			writeCDataSection(text);
-		} else {
-			getWriter().writeCharacters(""); //$NON-NLS-1$
-		}
-	}
-
-	/**
-	 * Adds the st algorithm.
-	 *
-	 * @param algorithm the algorithm
-	 * @throws XMLStreamException
-	 */
-	private void addSTAlgorithm(final STAlgorithm algorithm) throws XMLStreamException {
-		addStartElement(LibraryElementTags.ST_ELEMENT);
-		writeAlgorithmText(algorithm.getText());
-		addInlineEndElement();
 	}
 
 	/**
@@ -230,8 +197,8 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
 		addVarList(type.getInternalConstVars(), LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT);
 		addSimpleECStates(type.getSimpleECStates());
-		for (final ICallable callable : type.getCallables()) {
-			addICallable(callable);
+		for (final SourceElement element : type.getSourceElements()) {
+			addSourceElement(element);
 		}
 		addEndElement();
 	}
@@ -282,45 +249,22 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		}
 	}
 
-	/**
-	 * Adds the algorithm.
-	 *
-	 * @param algorithms the algorithms
-	 * @throws XMLStreamException
-	 */
+	private void addSourceElement(final SourceElement element) throws XMLStreamException {
+		switch (element) {
+		case final Algorithm alg -> addAlgorithm(alg);
+		case final Method method -> addMethod(method);
+		case final SourceComment comment -> addComment(comment);
+		default -> throw new IllegalArgumentException("Unexpected value: " + element); //$NON-NLS-1$
+		}
+	}
+
 	private void addAlgorithm(final Algorithm algorithm) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ALGORITHM_ELEMENT);
-
 		addNameAndCommentAttribute(algorithm);
-
-		if (algorithm instanceof final STAlgorithm stAlg) {
-			addSTAlgorithm(stAlg);
-		} else if (algorithm instanceof final OtherAlgorithm oAlg) {
-			addOtherAlgorithm(oAlg);
-		}
+		writeSourceElement(algorithm);
 		addEndElement();
 	}
 
-	/**
-	 * Adds the method.
-	 *
-	 * @param method the method
-	 * @throws XMLStreamException
-	 */
-	private void addICallable(final ICallable callable) throws XMLStreamException {
-		if (callable instanceof final Algorithm alg) {
-			addAlgorithm(alg);
-		} else if (callable instanceof final Method method) {
-			addMethod(method);
-		}
-	}
-
-	/**
-	 * Adds the method.
-	 *
-	 * @param method the method
-	 * @throws XMLStreamException
-	 */
 	private void addMethod(final Method method) throws XMLStreamException {
 		addStartElement(LibraryElementTags.METHOD_ELEMENT);
 
@@ -328,41 +272,11 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 		addTypeAttribute(method.getReturnType());
 		addCommentAttribute(method.getComment());
 
-		if (method instanceof final STMethod stMethod) {
-			addSTMethod(stMethod);
-		} else if (method instanceof final OtherMethod oMethod) {
-			addOtherMethod(oMethod);
+		writeSourceElement(method);
+		if (method instanceof final TextMethod textMethod) {
+			writeTextMethodParameters(textMethod);
 		}
 		addEndElement();
-	}
-
-	/**
-	 * Adds the st method.
-	 *
-	 * @param method the method
-	 * @throws XMLStreamException
-	 */
-	private void addSTMethod(final STMethod method) throws XMLStreamException {
-		addStartElement(LibraryElementTags.ST_ELEMENT);
-		writeAlgorithmText(method.getText());
-		addInlineEndElement();
-		writeTextMethodParameters(method);
-	}
-
-	/**
-	 * Adds the other method.
-	 *
-	 * @param method the method
-	 * @throws XMLStreamException
-	 */
-	private void addOtherMethod(final OtherMethod method) throws XMLStreamException {
-		addStartElement(LibraryElementTags.OTHER_ELEMENT);
-		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
-				(null != method.getLanguage()) ? method.getLanguage() : ""); //$NON-NLS-1$
-
-		writeAlgorithmText(method.getText());
-		addInlineEndElement();
-		writeTextMethodParameters(method);
 	}
 
 	private void writeTextMethodParameters(final TextMethod method) throws XMLStreamException {
@@ -372,5 +286,41 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 				LibraryElementTags.OUTPUT_VARS_ELEMENT);
 		addVarList(method.getInOutParameters().stream().map(VarDeclaration.class::cast).toList(),
 				LibraryElementTags.INOUT_VARS_ELEMENT);
+	}
+
+	private void addComment(final SourceComment comment) throws XMLStreamException {
+		addStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		writeSourceElement(comment);
+		addEndElement();
+	}
+
+	private void writeSourceElement(final SourceElement element) throws XMLStreamException {
+		switch (element) {
+		case final STSourceElement st -> writeSTSourceElement(st);
+		case final OtherSourceElement other -> writeOtherSourceElement(other);
+		default -> throw new IllegalArgumentException("Unexpected value: " + element); //$NON-NLS-1$
+		}
+	}
+
+	private void writeSTSourceElement(final STSourceElement element) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ST_ELEMENT);
+		writeText(element);
+		addInlineEndElement();
+	}
+
+	private void writeOtherSourceElement(final OtherSourceElement element) throws XMLStreamException {
+		addStartElement(LibraryElementTags.OTHER_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
+				(null != element.getLanguage()) ? element.getLanguage() : ""); //$NON-NLS-1$
+		writeText(element);
+		addInlineEndElement();
+	}
+
+	private void writeText(final TextSourceElement element) throws XMLStreamException {
+		if (element.getText() != null) {
+			writeCDataSection(element.getText());
+		} else {
+			getWriter().writeCharacters(""); //$NON-NLS-1$
+		}
 	}
 }
