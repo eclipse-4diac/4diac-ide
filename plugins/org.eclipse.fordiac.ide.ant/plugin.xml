@@ -170,6 +170,14 @@
       </antTask>
    </extension>
    <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.SetGitLabEndpoints"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.setGitLabEndpoints">
+      </antTask>
+   </extension>
+   <extension
          point="org.eclipse.ant.core.extraClasspathEntries">
       <extraClasspathEntry
             library="ant_tasks/ant-ant.jar">
