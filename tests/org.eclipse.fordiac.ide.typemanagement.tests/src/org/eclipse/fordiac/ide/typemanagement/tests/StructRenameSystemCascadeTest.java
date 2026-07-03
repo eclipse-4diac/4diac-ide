@@ -27,6 +27,7 @@ import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixtu
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
@@ -108,6 +109,18 @@ class StructRenameSystemCascadeTest {
 	}
 
 	@Test
+	void renameInnerStruct_preservesConfiguredDemuxMemberVisibility() throws Exception {
+		// The Demux hides member B, so only A and C are visible; the rename must keep
+		// that configured visibility instead of resetting it to all members.
+		assertEquals(List.of("A", "C"), demuxVisibleMembers()); //$NON-NLS-1$ //$NON-NLS-2$
+
+		renameInnerStruct();
+
+		assertEquals(List.of("A", "C"), demuxVisibleMembers()); //$NON-NLS-1$ //$NON-NLS-2$
+		assertConfigurableFBDataType(DEMUX_INSTANCE, Demultiplexer.class, INNER_STRUCT_RENAMED);
+	}
+
+	@Test
 	void renameInnerStruct_updatesConfiguredStructMuxInstance() throws Exception {
 		assertConfigurableFBDataType(MUX_INSTANCE, Multiplexer.class, INNER_STRUCT);
 
@@ -145,6 +158,13 @@ class StructRenameSystemCascadeTest {
 				.orElseThrow();
 		final T configurable = assertInstanceOf(instanceClass, element);
 		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(configurable.getDataType()));
+	}
+
+	private List<String> demuxVisibleMembers() {
+		final FBNetworkElement element = system().getApplicationNamed(APPLICATION_NAME).getFBNetwork()
+				.getNetworkElements().stream().filter(e -> DEMUX_INSTANCE.equals(e.getName())).findFirst().orElseThrow();
+		final Demultiplexer demux = assertInstanceOf(Demultiplexer.class, element);
+		return demux.getMemberVars().stream().map(VarDeclaration::getName).toList();
 	}
 
 	private AutomationSystem system() {
