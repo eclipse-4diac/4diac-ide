@@ -18,7 +18,6 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -29,19 +28,11 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.actions.DeleteResourceAction;
-import org.eclipse.ui.ide.ResourceSelectionUtil;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
@@ -53,14 +44,6 @@ public class SystemExplorerEditActionProvider extends CommonActionProvider {
 	private IAction copyPackageAction;
 
 	private Clipboard clipboard;
-
-	private SystemExplorerCopyAction copyAction;
-
-	private DeleteResourceAction deleteAction;
-
-	private SystemExplorerPasteAction pasteAction;
-
-	private Shell shell;
 
 	@Override
 	public void dispose() {
@@ -74,9 +57,7 @@ public class SystemExplorerEditActionProvider extends CommonActionProvider {
 	@Override
 	public void init(final ICommonActionExtensionSite aSite) {
 		final ICommonViewerSite viewSite = aSite.getViewSite();
-		shell = viewSite.getShell();
-
-		makeEditActions();
+		clipboard = new Clipboard(viewSite.getShell().getDisplay());
 
 		if (viewSite instanceof final ICommonViewerWorkbenchSite workbenchSite) {
 			copyPackageAction = new CopyPackageNameAction(workbenchSite.getSelectionProvider());
@@ -85,71 +66,9 @@ public class SystemExplorerEditActionProvider extends CommonActionProvider {
 
 	@Override
 	public void fillContextMenu(final IMenuManager menu) {
-		final IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
-
-		final boolean anyResourceSelected = !selection.isEmpty() && ResourceSelectionUtil
-				.allResourcesAreOfType(selection, IResource.PROJECT | IResource.FOLDER | IResource.FILE);
-
-		copyAction.selectionChanged(selection);
-		menu.appendToGroup(ICommonMenuConstants.GROUP_EDIT, copyAction);
 		if (copyPackageAction.isEnabled()) {
 			menu.appendToGroup(ICommonMenuConstants.GROUP_EDIT, copyPackageAction);
 		}
-		pasteAction.selectionChanged(selection);
-		menu.appendToGroup(ICommonMenuConstants.GROUP_EDIT, pasteAction);
-
-		if (anyResourceSelected) {
-			deleteAction.selectionChanged(selection);
-			menu.appendToGroup(ICommonMenuConstants.GROUP_EDIT, deleteAction);
-		}
-	}
-
-	@Override
-	public void fillActionBars(final IActionBars actionBars) {
-		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
-		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), pasteAction);
-		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
-		updateActionBars();
-	}
-
-	public void handleKeyPressed(final KeyEvent event) {
-		if (event.character == SWT.DEL && event.stateMask == 0) {
-			if (deleteAction.isEnabled()) {
-				deleteAction.run();
-			}
-
-			// Swallow the event.
-			event.doit = false;
-		}
-	}
-
-	protected void makeEditActions() {
-		clipboard = new Clipboard(shell.getDisplay());
-
-		pasteAction = new SystemExplorerPasteAction(shell, clipboard);
-		final ISharedImages images = PlatformUI.getWorkbench().getSharedImages();
-		pasteAction.setDisabledImageDescriptor(images.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
-		pasteAction.setImageDescriptor(images.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
-		pasteAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_PASTE);
-
-		copyAction = new SystemExplorerCopyAction(shell, clipboard, pasteAction);
-		copyAction.setDisabledImageDescriptor(images.getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
-		copyAction.setImageDescriptor(images.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
-		copyAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_COPY);
-
-		deleteAction = new DeleteResourceAction(() -> shell);
-		deleteAction.setDisabledImageDescriptor(images.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
-		deleteAction.setImageDescriptor(images.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-		deleteAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_DELETE);
-	}
-
-	@Override
-	public void updateActionBars() {
-		final IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
-
-		copyAction.selectionChanged(selection);
-		pasteAction.selectionChanged(selection);
-		deleteAction.selectionChanged(selection);
 	}
 
 	// ------------------------------------------
