@@ -79,8 +79,8 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addEventList(interfaceList.getEventOutputs(), getEventOutputsElementName());
 		addVarList(interfaceList.getInputVars(), LibraryElementTags.INPUT_VARS_ELEMENT);
 		addVarList(interfaceList.getOutputVars(), LibraryElementTags.OUTPUT_VARS_ELEMENT);
-		createAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
 		createAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT);
+		createAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
 		addVarList(interfaceList.getInOutVars(), LibraryElementTags.INOUT_VARS_ELEMENT);
 		addEndElement();
 	}
