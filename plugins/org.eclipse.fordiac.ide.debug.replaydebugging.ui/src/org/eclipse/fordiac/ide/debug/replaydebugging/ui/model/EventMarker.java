@@ -15,14 +15,12 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.function.Consumer;
 
 import org.eclipse.swt.graphics.Color;
 
 public class EventMarker {
 	private final int index;
 	private final TimelineModel parentTimeline;
-	private final Consumer<Integer> eventSelected;
 	private boolean isCurrentEvent = false;
 	private boolean isValid = false;
 	private boolean isReadOnly = false;
@@ -36,10 +34,9 @@ public class EventMarker {
 
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public EventMarker(final int index, final TimelineModel parentTimeline, final Consumer<Integer> eventSelected) {
+	public EventMarker(final int index, final TimelineModel parentTimeline) {
 		this.index = index;
 		this.parentTimeline = parentTimeline;
-		this.eventSelected = eventSelected;
 	}
 
 	public int getIndex() {
@@ -84,10 +81,6 @@ public class EventMarker {
 	public void setIsValid(final boolean isValid) {
 		this.isValid = isValid;
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_CHANGED, null, null);
-	}
-
-	public void eventSelected() {
-		eventSelected.accept(Integer.valueOf(index));
 	}
 
 	public void setComment(final String comment) {
