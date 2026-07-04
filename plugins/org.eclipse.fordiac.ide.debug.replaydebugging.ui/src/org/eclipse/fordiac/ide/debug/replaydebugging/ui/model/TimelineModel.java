@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,7 +41,6 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	private final List<TimelineConnection> spawnedConnections = new ArrayList<>();
 	private final List<EventMarker> eventMarkers = new ArrayList<>();
-	private final BiConsumer<Timeline, Integer> eventSelected;
 	private String comment = null;
 	private Set<Integer> highlightedEvents = new HashSet<>();
 
@@ -56,12 +54,11 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public TimelineModel(final Timeline timeline, final BiConsumer<Timeline, Integer> eventSelected) {
+	public TimelineModel(final Timeline timeline) {
 		this.timeline = timeline;
-		this.eventSelected = eventSelected;
 
 		for (var i = 0; i <= timeline.getMaxEventNumber(); i++) {
-			eventMarkers.add(new EventMarker(i, this, this::eventSelected));
+			eventMarkers.add(new EventMarker(i, this));
 		}
 
 		for (final var spawnedTimeline : timeline.getSpawnedTimelines()) {
@@ -119,7 +116,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	}
 
 	private void addNewSpawnedTimeline(final Timeline spawnedTimeline) {
-		final var spawnedModel = new TimelineModel(spawnedTimeline, eventSelected);
+		final var spawnedModel = new TimelineModel(spawnedTimeline);
 		final var connectionToChild = new TimelineConnection(this, spawnedModel,
 				timeline.getSpawnedTimelineEventNumber(spawnedTimeline));
 		spawnedModel.connectionToParentTimelineModel = connectionToChild;
@@ -159,10 +156,6 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 		}
 	}
 
-	private void eventSelected(final Integer index) {
-		eventSelected.accept(timeline, index);
-	}
-
 	public List<TimelineConnection> getSources() {
 		return spawnedConnections;
 	}
@@ -179,7 +172,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	@Override
 	public void eventAdded(final Timeline timeline) {
-		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this, this::eventSelected));
+		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this));
 		setHighlighted(SelectionService.getDefault().getSelectedElements());
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_ADDED, null, null);
 	}
