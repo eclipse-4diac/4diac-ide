@@ -40,7 +40,7 @@ class FBTypeDeleteNestedSubAppTest {
 	private static final String FB_FILE = "Type Library/mypackage/MyBlock.fbt"; //$NON-NLS-1$
 	private static final String SYSTEM_FILE = "FBTypeDeleteNestedSubAppTest.sys"; //$NON-NLS-1$
 
-	private static final String MY_BLOCK_TYPE_NAME = "MyBlock"; //$NON-NLS-1$
+	private static final String MY_BLOCK_TYPE_NAME = "mypackage::MyBlock"; //$NON-NLS-1$
 
 	private static final String APPLICATION_NAME = "App"; //$NON-NLS-1$
 	private static final String TOP_INSTANCE = "TopInstance"; //$NON-NLS-1$
