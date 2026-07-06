@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Map;
+
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -123,7 +124,7 @@ public abstract class ConfigurableFBImpl extends FBImpl implements ConfigurableF
 	 */
 	@Override
 	public void updateConfiguration() {
-		ConfigurableFBManagement.updateFbConfiguration(this);
+		
 	}
 
 	/**

@@ -48,4 +48,14 @@ public class ConfigurableMoveFBImpl extends ConfigurableFBImpl implements Config
 		return LibraryElementPackage.Literals.CONFIGURABLE_MOVE_FB;
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void updateConfiguration() {
+		ConfigurableFBManagement.updateConfiguration(this);
+	}
+
 } //ConfigurableMoveFBImpl

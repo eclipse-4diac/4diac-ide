@@ -38,4 +38,12 @@ public interface Multiplexer extends StructManipulator {
 	 * @generated
 	 */
 	EList<VarDeclaration> getMemberVars();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void updateConfiguration();
 } // Multiplexer
