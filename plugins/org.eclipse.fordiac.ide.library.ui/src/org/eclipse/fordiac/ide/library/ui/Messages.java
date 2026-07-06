@@ -117,19 +117,17 @@ public class Messages extends NLS {
 
 	public static String UnifiedLibraryImportWizardPage_work_with;
 
-	public static String LibraryChangeAction_Downgrade;
-	public static String LibraryChangeAction_Empty;
-	public static String LibraryChangeAction_Remove;
-	public static String LibraryChangeAction_Update;
-
-	public static String LibraryPlanningPage_ActiveVersion;
-	public static String LibraryPlanningPage_Action;
-	public static String LibraryPlanningPage_LoadRemoteVersions;
-	public static String LibraryPlanningPage_SymbolicName;
-	public static String LibraryPlanningPage_Titel;
-
+	// Manage Library Wizard
 	public static String ManageLibraryWizard_Label;
 	public static String ManageLibraryWizard_Description;
+
+	public static String ManageLibraryWizard_CurrentVersion;
+	public static String ManageLibraryWizard_Change;
+	public static String ManageLibraryWizard_LoadRemoteVersions;
+	public static String ManageLibraryWizard_SymbolicName;
+	public static String ManageLibraryWizard_PlannigPage_Titel;
+	public static String ManageLibraryWizard_PreviewPage_Titel;
+	public static String ManageLibraryWizard_PreviewPage_Description;
 
 	static {
 		// initialize resource bundle

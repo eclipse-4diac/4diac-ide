@@ -14,7 +14,9 @@ package org.eclipse.fordiac.ide.library;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.VersionRange;
 
 class DependencyNode {
@@ -68,6 +70,12 @@ class DependencyNode {
 
 	public boolean isRangeEmpty() {
 		return range.isEmpty();
+	}
+
+	public String getCauseMessage() {
+		return getCauses().entrySet().stream().map(entry -> "- " + entry.getKey() + " requires " //$NON-NLS-1$ //$NON-NLS-2$
+				+ VersionComparator.formatVersionRange(entry.getValue()))
+				.collect(Collectors.joining(System.lineSeparator()));
 	}
 
 	public boolean recalculate() {

@@ -855,6 +855,16 @@ public enum LibraryManager {
 		LinkedLibrary.getAll(project, progress).forEach(folder -> data.linked().put(folder.getSymbolicName(), folder));
 	}
 
+	public java.net.URI getLibraryURI(final IProject project, final String symbolicName, final Version version,
+			final IProgressMonitor progress) {
+		final ResolveNode node = resolveDependency(project, symbolicName, ALL_RANGE, version,
+				SubMonitor.convert(progress), Collections.emptyMap());
+		if (node.isValid()) {
+			return node.getUri();
+		}
+		return null;
+	}
+
 	/**
 	 * Resolves the given dependency. Will download libraries as needed.
 	 *

@@ -93,7 +93,7 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 				.map(LinkedLibrary::getFolder).forEach(f -> FordiacMarkerHelper.updateMarkers(f,
 						FordiacErrorMarker.LIBRARY_MARKER, Collections.emptyList(), true));
 
-		progress.worked(1);
+		progress.worked(2);
 
 		SubMonitor.done(monitor);
 	}
