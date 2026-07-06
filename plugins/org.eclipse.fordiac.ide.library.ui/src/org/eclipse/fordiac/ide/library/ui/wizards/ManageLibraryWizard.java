@@ -12,11 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.fordiac.ide.library.LibraryChange;
 import org.eclipse.fordiac.ide.library.LibraryResolver;
@@ -24,6 +26,7 @@ import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class ManageLibraryWizard extends Wizard {
 	private final IProject project;
@@ -45,10 +48,20 @@ public class ManageLibraryWizard extends Wizard {
 			return false;
 		}
 
+		final WorkspaceModifyOperation libraryChangeOperation = new WorkspaceModifyOperation() {
+			@Override
+			protected void execute(final IProgressMonitor monitor) throws CoreException {
+				LibraryChange.performChanges(changesIncludingTransitive, project, monitor);
+			}
+		};
+
 		try {
-			LibraryChange.performChanges(changesIncludingTransitive, project);
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Major error while performing applying Library changes", e); //$NON-NLS-1$
+			getContainer().run(false, true, libraryChangeOperation);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError("Major error while applying library changes", e); //$NON-NLS-1$
+			return false;
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
 			return false;
 		}
 

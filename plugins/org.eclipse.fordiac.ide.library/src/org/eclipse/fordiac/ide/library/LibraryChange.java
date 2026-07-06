@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Version;
 
@@ -126,38 +128,44 @@ public class LibraryChange {
 		return ""; //$NON-NLS-1$
 	}
 
-	public static void performChanges(final List<LibraryChange> changes, final IProject project) throws CoreException {
-		final Map<String, LinkedLibrary> linkedLibraries = LinkedLibrary.getAll(project, null)
+	public static void performChanges(final List<LibraryChange> changes, final IProject project,
+			final IProgressMonitor monitor) throws CoreException {
+		final SubMonitor progress = SubMonitor.convert(monitor, changes.size() + 1);
+
+		final Map<String, LinkedLibrary> linkedLibraries = LinkedLibrary.getAll(project, progress.split(1))
 				.collect(Collectors.toMap(LinkedLibrary::getSymbolicName, f -> f));
 
-		for (final var change : changes) {
+		for (final LibraryChange change : changes) {
+			if (progress.isCanceled()) {
+				throw new OperationCanceledException();
+			}
+
+			progress.subTask(change.getDescription());
+
 			switch (change.getType()) {
-			case ChangeType.REMOVE:
-				removeLibrary(linkedLibraries.get(change.getSymbolicName()));
-				break;
-			case ChangeType.ADD:
-				addLibrary(change.getSymbolicName(), change.getTargetVersion(), project);
-				break;
-			case ChangeType.UPDATE, ChangeType.DOWNGRADE:
-				removeLibrary(linkedLibraries.get(change.getSymbolicName()));
-				addLibrary(change.getSymbolicName(), change.getTargetVersion(), project);
-				break;
-			default:
-				break;
+			case REMOVE -> removeLibrary(linkedLibraries.get(change.getSymbolicName()), progress.split(1));
+			case ADD -> addLibrary(change.getSymbolicName(), change.getTargetVersion(), project, progress.split(1));
+			case UPDATE, DOWNGRADE -> {
+				final SubMonitor changeProgress = progress.split(1).setWorkRemaining(2);
+				removeLibrary(linkedLibraries.get(change.getSymbolicName()), changeProgress.split(1));
+				addLibrary(change.getSymbolicName(), change.getTargetVersion(), project, changeProgress.split(1));
+			}
+			default -> progress.worked(1);
 			}
 		}
 	}
 
-	private static void removeLibrary(final LinkedLibrary linkedLibrary) throws CoreException {
+	private static void removeLibrary(final LinkedLibrary linkedLibrary, final IProgressMonitor monitor)
+			throws CoreException {
 		if (linkedLibrary != null && linkedLibrary.isValid()) {
-			linkedLibrary.getFolder().delete(true, new NullProgressMonitor());
+			linkedLibrary.getFolder().delete(true, monitor);
 		}
 	}
 
-	private static void addLibrary(final String symbolicName, final String version, final IProject project)
-			throws CoreException {
+	private static void addLibrary(final String symbolicName, final String version, final IProject project,
+			final IProgressMonitor monitor) throws CoreException {
 		final java.net.URI libUri = LibraryManager.INSTANCE.getLibraryURI(project, symbolicName, new Version(version),
-				new NullProgressMonitor());
+				monitor);
 
 		if ((libUri != null) && !LibraryManager.INSTANCE.importLibrary(project, libUri, false, false)) {
 			throw new CoreException(Status
