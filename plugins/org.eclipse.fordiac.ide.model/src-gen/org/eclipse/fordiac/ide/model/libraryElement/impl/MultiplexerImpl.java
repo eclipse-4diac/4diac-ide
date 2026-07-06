@@ -61,4 +61,14 @@ public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexe
 		return getInterface().getInputVars();
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void updateConfiguration() {
+		ConfigurableFBManagement.updateConfiguration(this);
+	}
+
 } //MultiplexerImpl

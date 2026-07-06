@@ -248,7 +248,7 @@
     <genClasses image="false" ecoreClass="lib.ecore#//ConfigurableFB">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableFB/dataType"/>
       <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/updateConfiguration"
-          body="ConfigurableFBManagement.updateFbConfiguration(this);"/>
+          body=""/>
       <genOperations ecoreOperation="lib.ecore#//ConfigurableFB/loadConfiguration"
           body="ConfigurableFBManagement.loadFbConfiguration(this, attributeName, typeName);">
         <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/loadConfiguration/attributeName"/>
@@ -262,7 +262,10 @@
         <genParameters ecoreParameter="lib.ecore#//ConfigurableFB/validateDataType/context"/>
       </genOperations>
     </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//ConfigurableMoveFB"/>
+    <genClasses image="false" ecoreClass="lib.ecore#//ConfigurableMoveFB">
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableMoveFB/updateConfiguration"
+          body="ConfigurableFBManagement.updateConfiguration(this);"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Connection">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/brokenConnection"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/source"/>
@@ -387,6 +390,8 @@
     <genClasses image="false" ecoreClass="lib.ecore#//Demultiplexer">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Demultiplexer/isConfigured"/>
       <genOperations ecoreOperation="lib.ecore#//Demultiplexer/getMemberVars" body="return getInterface().getOutputVars();"/>
+      <genOperations ecoreOperation="lib.ecore#//Demultiplexer/updateConfiguration"
+          body="ConfigurableFBManagement.updateConfiguration(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Device">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Device/resource"/>
@@ -781,6 +786,8 @@
     <genClasses ecoreClass="lib.ecore#//Method"/>
     <genClasses image="false" ecoreClass="lib.ecore#//Multiplexer">
       <genOperations ecoreOperation="lib.ecore#//Multiplexer/getMemberVars" body="return getInterface().getInputVars();"/>
+      <genOperations ecoreOperation="lib.ecore#//Multiplexer/updateConfiguration"
+          body="ConfigurableFBManagement.updateConfiguration(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//OriginalSource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OriginalSource/text"/>
@@ -895,7 +902,6 @@
     <genClasses ecoreClass="lib.ecore#//STFunctionBody"/>
     <genClasses ecoreClass="lib.ecore#//STMethod"/>
     <genClasses image="false" ecoreClass="lib.ecore#//StructManipulator">
-      <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration"/>
       <genOperations ecoreOperation="lib.ecore#//StructManipulator/getMemberVars"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//SubApp">

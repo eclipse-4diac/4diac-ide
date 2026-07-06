@@ -65,4 +65,12 @@ public interface Demultiplexer extends StructManipulator {
 	 */
 	EList<VarDeclaration> getMemberVars();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void updateConfiguration();
+
 } // Demultiplexer

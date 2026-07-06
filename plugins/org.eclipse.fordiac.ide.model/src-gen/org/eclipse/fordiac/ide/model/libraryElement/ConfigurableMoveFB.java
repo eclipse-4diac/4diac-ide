@@ -28,4 +28,12 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface ConfigurableMoveFB extends ConfigurableFB {
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void updateConfiguration();
+
 } // ConfigurableMoveFB

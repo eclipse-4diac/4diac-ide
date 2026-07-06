@@ -120,6 +120,16 @@ public class DemultiplexerImpl extends StructManipulatorImpl implements Demultip
 	 * @generated
 	 */
 	@Override
+	public void updateConfiguration() {
+		ConfigurableFBManagement.updateConfiguration(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.DEMULTIPLEXER__IS_CONFIGURED:

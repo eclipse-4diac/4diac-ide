@@ -49,15 +49,25 @@ public final class ConfigurableFBManagement {
 
 	public static final String MEMBER_VAR_SEPARATOR = "%"; //$NON-NLS-1$
 
-	static void updateFbConfiguration(final ConfigurableFB fb) {
-		if (fb instanceof ConfigurableMoveFB) {
-			updateMoveFbConfiguration(fb);
-		} else if (fb instanceof final StructManipulator sm) {
-			updateStructManipulatorConfiguration(sm);
+	static void updateConfiguration(final StructManipulator muxer) {
+		if (!(muxer.getDataType() instanceof StructuredType)) {
+			// e.g., error data type
+			muxer.getMemberVars().clear();
+			getEventWithPins(muxer).getWith().clear();
+		} else if (muxer instanceof final Demultiplexer demux && demux.isIsConfigured()) {
+			// updating requires finding all elements again - struct may have changed!
+			updateConfiguredDemuxConfiguration(demux, buildVisibleChildrenString(muxer.getMemberVars()));
+		} else {
+			// create member variables of struct as data input ports
+			final boolean createAsInputs = muxer instanceof Multiplexer;
+			createMemberVars(muxer, createAsInputs);
+			// configure struct pin
+			final VarDeclaration structPin = getStructuredTypePin(muxer);
+			structPin.setType(muxer.getDataType());
 		}
 	}
 
-	private static void updateMoveFbConfiguration(final ConfigurableFB fb) {
+	static void updateConfiguration(final ConfigurableMoveFB fb) {
 		// if data type exists, set it as the data type of the input/output data pin
 		if (fb.getDataType() != null && fb.getInterface() != null) {
 			final boolean requiresContainerPin = isContainerPinType(fb.getDataType());
@@ -156,7 +166,7 @@ public final class ConfigurableFBManagement {
 	private static void setDataType(final ConfigurableFB fb, final String typeName) {
 		final DataType dataType = fb.getTypeLibrary().getDataTypeLibrary().getType(typeName);
 		fb.setDataType(dataType);
-		updateFbConfiguration(fb);
+		fb.updateConfiguration();
 	}
 
 	private static void loadVisibleChildrenDemuxConfiguration(final Demultiplexer fb, final String attributeName,
@@ -253,24 +263,6 @@ public final class ConfigurableFBManagement {
 		varDecl.setName(subNames[subNames.length - 1]);
 	}
 
-	static void updateStructManipulatorConfiguration(final StructManipulator muxer) {
-		if (!(muxer.getDataType() instanceof StructuredType)) {
-			// e.g., error data type
-			muxer.getMemberVars().clear();
-			getEventWithPins(muxer).getWith().clear();
-		} else if (muxer instanceof final Demultiplexer demux && demux.isIsConfigured()) {
-			// updating requires finding all elements again - struct may have changed!
-			updateConfiguredDemuxConfiguration(demux, buildVisibleChildrenString(muxer.getMemberVars()));
-		} else {
-			// create member variables of struct as data input ports
-			final boolean createAsInputs = muxer instanceof Multiplexer;
-			createMemberVars(muxer, createAsInputs);
-			// configure struct pin
-			final VarDeclaration structPin = getStructuredTypePin(muxer);
-			structPin.setType(muxer.getDataType());
-		}
-	}
-
 	private static Event getEventWithPins(final StructManipulator muxer) {
 		if (muxer instanceof Multiplexer) {
 			return muxer.getInterface().getEventInputs().get(0);
@@ -312,12 +304,11 @@ public final class ConfigurableFBManagement {
 
 	private static void updateConfiguredDemuxConfiguration(final Demultiplexer demux, final String visibleChildren) {
 		if (visibleChildren == null || !demux.isIsConfigured()) {
-			updateStructManipulatorConfiguration(demux);
+			demux.updateConfiguration();
 			return;
 		}
-		if (!(demux.getDataType() instanceof StructuredType)
-				&& !(demux.getDataType() instanceof ErrorDataType)) {
-			updateStructManipulatorConfiguration(demux);
+		if (!(demux.getDataType() instanceof StructuredType) && !(demux.getDataType() instanceof ErrorDataType)) {
+			demux.updateConfiguration();
 			return;
 		}
 
