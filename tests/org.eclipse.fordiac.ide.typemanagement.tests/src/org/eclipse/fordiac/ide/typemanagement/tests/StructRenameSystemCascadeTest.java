@@ -25,6 +25,7 @@ import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixtu
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.PROJECT_PATH;
 import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixture.SYSTEM_FILE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.util.List;
@@ -39,11 +40,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -63,8 +67,13 @@ class StructRenameSystemCascadeTest {
 	private static final String MUX_INSTANCE = "Mux"; //$NON-NLS-1$
 	private static final String FMOVE_INSTANCE = "Move"; //$NON-NLS-1$
 
-	private static final Set<String> MEMBER_CONNECTIONS = Set.of("Producer.OUT.A -> Consumer.DI.A", //$NON-NLS-1$
-			"Producer.OUT.C -> Consumer.DI.C"); //$NON-NLS-1$
+	private static final String CONTAINER_SUBAPP = "Container"; //$NON-NLS-1$
+	private static final String CONTAINER_INPUT_PIN = "DI"; //$NON-NLS-1$
+	private static final String HIDDEN_CONNECTION = "Producer.OUT.C -> Consumer.DI.C"; //$NON-NLS-1$
+
+	private static final Set<String> APP_DATA_CONNECTIONS = Set.of("Producer.OUT.A -> Consumer.DI.A", //$NON-NLS-1$
+			"Producer.OUT.C -> Consumer.DI.C", "Producer.OUT -> Container.DI"); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final Set<String> CONTAINER_DATA_CONNECTIONS = Set.of("Container.DI -> NestedConsumer.DI"); //$NON-NLS-1$
 
 	private IProject project;
 	private TypeLibrary typeLibrary;
@@ -129,11 +138,31 @@ class StructRenameSystemCascadeTest {
 
 	@Test
 	void renameInnerStruct_keepsExpandedMemberConnections() throws Exception {
-		assertEquals(MEMBER_CONNECTIONS, applicationDataConnections());
+		assertEquals(APP_DATA_CONNECTIONS, applicationDataConnections());
+		assertEquals(CONTAINER_DATA_CONNECTIONS, containerDataConnections());
 
 		renameInnerStruct();
 
-		assertEquals(MEMBER_CONNECTIONS, applicationDataConnections());
+		assertEquals(APP_DATA_CONNECTIONS, applicationDataConnections());
+		assertEquals(CONTAINER_DATA_CONNECTIONS, containerDataConnections());
+	}
+
+	@Test
+	void renameInnerStruct_updatesContainerSubAppInterfacePinType() throws Exception {
+		assertEquals(INNER_STRUCT, containerInputPinType());
+
+		renameInnerStruct();
+
+		assertEquals(INNER_STRUCT_RENAMED, containerInputPinType());
+	}
+
+	@Test
+	void renameInnerStruct_keepsHiddenConnectionHidden() throws Exception {
+		assertFalse(hiddenConnection().isVisible());
+
+		renameInnerStruct();
+
+		assertFalse(hiddenConnection().isVisible());
 	}
 
 	@Test
@@ -184,14 +213,43 @@ class StructRenameSystemCascadeTest {
 	}
 
 	private Set<String> applicationDataConnections() {
-		return system().getApplicationNamed(APPLICATION_NAME).getFBNetwork().getDataConnections().stream()
-				.map(connection -> endpointName(connection.getSource()) + " -> " + endpointName(connection.getDestination())) //$NON-NLS-1$
+		return dataConnectionNames(system().getApplicationNamed(APPLICATION_NAME).getFBNetwork());
+	}
+
+	private Set<String> containerDataConnections() {
+		return dataConnectionNames(container().getSubAppNetwork());
+	}
+
+	private static Set<String> dataConnectionNames(final FBNetwork network) {
+		return network.getDataConnections().stream().map(StructRenameSystemCascadeTest::connectionName)
 				.collect(Collectors.toSet());
+	}
+
+	private static String connectionName(final Connection connection) {
+		return endpointName(connection.getSource()) + " -> " + endpointName(connection.getDestination()); //$NON-NLS-1$
 	}
 
 	private static String endpointName(final IInterfaceElement pin) {
 		final BlockFBNetworkElement block = pin.getBlockFBNetworkElement();
 		return block.getName() + "." + pin.getRelativeName(block); //$NON-NLS-1$
+	}
+
+	private String containerInputPinType() {
+		final VarDeclaration pin = container().getInterface().getInputVars().stream()
+				.filter(v -> CONTAINER_INPUT_PIN.equals(v.getName())).findFirst().orElseThrow();
+		return PackageNameHelper.getFullTypeName(pin.getType());
+	}
+
+	private Connection hiddenConnection() {
+		return system().getApplicationNamed(APPLICATION_NAME).getFBNetwork().getDataConnections().stream()
+				.filter(connection -> HIDDEN_CONNECTION.equals(connectionName(connection))).findFirst().orElseThrow();
+	}
+
+	private UntypedSubApp container() {
+		final FBNetworkElement element = system().getApplicationNamed(APPLICATION_NAME).getFBNetwork()
+				.getNetworkElements().stream().filter(e -> CONTAINER_SUBAPP.equals(e.getName())).findFirst()
+				.orElseThrow();
+		return assertInstanceOf(UntypedSubApp.class, element);
 	}
 
 	private AutomationSystem system() {

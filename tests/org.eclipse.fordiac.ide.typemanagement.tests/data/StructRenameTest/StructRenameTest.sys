@@ -30,9 +30,36 @@
 					<Attribute Name="Visible" Value="true"/>
 				</Parameter>
 			</FB>
+			<SubApp Name="Container" Comment="" x="2500.0" y="2500.0">
+				<SubAppInterfaceList>
+					<SubAppEventInputs>
+						<SubAppEvent Name="REQ" Type="Event">
+						</SubAppEvent>
+					</SubAppEventInputs>
+					<InputVars>
+						<VarDeclaration Name="DI" Type="mypackage::InnerStruct"/>
+					</InputVars>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="NestedConsumer" Type="StructConsumer" Comment="" x="500.0" y="500.0">
+					</FB>
+					<EventConnections>
+						<Connection Source="REQ" Destination="NestedConsumer.REQ"/>
+					</EventConnections>
+					<DataConnections>
+						<Connection Source="DI" Destination="NestedConsumer.DI"/>
+					</DataConnections>
+				</SubAppNetwork>
+			</SubApp>
+			<EventConnections>
+				<Connection Source="Producer.CNF" Destination="Container.REQ" Comment=""/>
+			</EventConnections>
 			<DataConnections>
 				<Connection Source="Producer.OUT.A" Destination="Consumer.DI.A" Comment="" dx1="1435.71"/>
-				<Connection Source="Producer.OUT.C" Destination="Consumer.DI.C" Comment="" dx1="1435.71"/>
+				<Connection Source="Producer.OUT.C" Destination="Consumer.DI.C" Comment="" dx1="1435.71">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="Producer.OUT" Destination="Container.DI" Comment=""/>
 			</DataConnections>
 		</SubAppNetwork>
 	</Application>
