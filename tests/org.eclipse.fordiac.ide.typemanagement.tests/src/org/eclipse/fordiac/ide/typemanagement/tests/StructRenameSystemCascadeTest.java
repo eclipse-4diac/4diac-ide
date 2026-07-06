@@ -28,17 +28,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -58,6 +62,9 @@ class StructRenameSystemCascadeTest {
 	private static final String DEMUX_INSTANCE = "Demux"; //$NON-NLS-1$
 	private static final String MUX_INSTANCE = "Mux"; //$NON-NLS-1$
 	private static final String FMOVE_INSTANCE = "Move"; //$NON-NLS-1$
+
+	private static final Set<String> MEMBER_CONNECTIONS = Set.of("Producer.OUT.A -> Consumer.DI.A", //$NON-NLS-1$
+			"Producer.OUT.C -> Consumer.DI.C"); //$NON-NLS-1$
 
 	private IProject project;
 	private TypeLibrary typeLibrary;
@@ -121,6 +128,15 @@ class StructRenameSystemCascadeTest {
 	}
 
 	@Test
+	void renameInnerStruct_keepsExpandedMemberConnections() throws Exception {
+		assertEquals(MEMBER_CONNECTIONS, applicationDataConnections());
+
+		renameInnerStruct();
+
+		assertEquals(MEMBER_CONNECTIONS, applicationDataConnections());
+	}
+
+	@Test
 	void renameInnerStruct_updatesConfiguredStructMuxInstance() throws Exception {
 		assertConfigurableFBDataType(MUX_INSTANCE, Multiplexer.class, INNER_STRUCT);
 
@@ -165,6 +181,17 @@ class StructRenameSystemCascadeTest {
 				.getNetworkElements().stream().filter(e -> DEMUX_INSTANCE.equals(e.getName())).findFirst().orElseThrow();
 		final Demultiplexer demux = assertInstanceOf(Demultiplexer.class, element);
 		return demux.getMemberVars().stream().map(VarDeclaration::getName).toList();
+	}
+
+	private Set<String> applicationDataConnections() {
+		return system().getApplicationNamed(APPLICATION_NAME).getFBNetwork().getDataConnections().stream()
+				.map(connection -> endpointName(connection.getSource()) + " -> " + endpointName(connection.getDestination())) //$NON-NLS-1$
+				.collect(Collectors.toSet());
+	}
+
+	private static String endpointName(final IInterfaceElement pin) {
+		final BlockFBNetworkElement block = pin.getBlockFBNetworkElement();
+		return block.getName() + "." + pin.getRelativeName(block); //$NON-NLS-1$
 	}
 
 	private AutomationSystem system() {
