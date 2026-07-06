@@ -43,7 +43,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -543,7 +542,7 @@ public enum LibraryManager {
 			final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(MessageFormat.format(Messages.LibraryManager_LibraryDownload, symbolicName));
 		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
-				+ " preferring " + preferred + " Project: " + project != null ? project.getName() : ""); //$NON-NLS-1$
+				+ " preferring " + preferred + " Project: " + project.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
 				IArchiveDownloader.class);
@@ -719,11 +718,6 @@ public enum LibraryManager {
 		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
 			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
 		}
-	}
-
-	public Stream<Version> getAllAvailableVersions(final String symbolicName) {
-		return Stream.concat(getAvailableVersions(getExtractedLibraries(), symbolicName),
-				getAvailableVersions(getStandardLibraries(), symbolicName));
 	}
 
 	/**
@@ -1009,11 +1003,6 @@ public enum LibraryManager {
 		final File installLocationFile = new File(Platform.getInstallLocation().getURL().getPath());
 		final Path fordiacInstallPath = installLocationFile.toPath();
 		return fordiacInstallPath.resolve(TypeLibraryTags.TYPE_LIBRARY);
-	}
-
-	private static Stream<Version> getAvailableVersions(final Map<String, List<LibraryRecord>> lib,
-			final String symbolicName) {
-		return lib.getOrDefault(symbolicName, Collections.emptyList()).stream().map(LibraryRecord::version);
 	}
 
 	private static boolean isUpdateProvisioningJob(final Job job) {
