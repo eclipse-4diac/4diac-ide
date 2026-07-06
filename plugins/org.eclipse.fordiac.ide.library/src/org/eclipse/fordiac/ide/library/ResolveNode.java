@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
-class ResolveNode {
+public class ResolveNode {
 	private final String symbolicName;
 	private final Version version;
 	private final java.net.URI uri;

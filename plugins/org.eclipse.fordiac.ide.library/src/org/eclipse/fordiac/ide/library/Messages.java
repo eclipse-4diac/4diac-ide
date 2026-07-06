@@ -37,6 +37,18 @@ public class Messages extends NLS {
 
 	public static String LibraryBuilder_ResolveProjectDependencies;
 
+	// Library Change
+	public static String LibraryChange_Downgrade;
+	public static String LibraryChange_Select;
+	public static String LibraryChange_Remove;
+	public static String LibraryChange_Update;
+
+	public static String LibraryChange_Downgrade_fullText;
+	public static String LibraryChange_Select_fullText;
+	public static String LibraryChange_Remove_fullText;
+	public static String LibraryChange_Update_fullText;
+	public static String LibraryChange_Add_fullText;
+
 	public static String LibraryManager_BuildingDependencyGraph;
 
 	public static String LibraryManager_ChekForLibraryChanges;
