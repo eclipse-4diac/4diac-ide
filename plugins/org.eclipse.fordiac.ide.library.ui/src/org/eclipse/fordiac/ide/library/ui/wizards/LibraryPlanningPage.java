@@ -154,13 +154,11 @@ public class LibraryPlanningPage extends WizardPage {
 		extLib.setAction(null);
 
 		try {
-			LinkedLibrary.getStandard(project, new NullProgressMonitor()).forEach(lib -> {
-				stdLib.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString()));
-			});
+			LinkedLibrary.getStandard(project, new NullProgressMonitor()).forEach(lib -> stdLib
+					.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString())));
 
-			LinkedLibrary.getExternal(project, new NullProgressMonitor()).forEach(lib -> {
-				extLib.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString()));
-			});
+			LinkedLibrary.getExternal(project, new NullProgressMonitor()).forEach(lib -> extLib
+					.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString())));
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("Error fetching linked Libraries", e); //$NON-NLS-1$
 		}
