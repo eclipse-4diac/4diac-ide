@@ -34,9 +34,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.commands.OrganizeImportsCommand;
@@ -301,11 +301,13 @@ public class PackageInfoWidget extends TypeInfoWidget {
 	}
 
 	private void updateQuickFixButtonState(final boolean enablement) {
-		final boolean visible = hasPackageNameMismatchAnnotation();
-		quickFixButton.setVisible(visible);
-		((GridData) quickFixButton.getLayoutData()).exclude = !visible;
-		quickFixButton.setEnabled(enablement && canChangePackageName());
-		composite.layout();
+		if (!quickFixButton.isDisposed()) {
+			final boolean visible = hasPackageNameMismatchAnnotation();
+			quickFixButton.setVisible(visible);
+			((GridData) quickFixButton.getLayoutData()).exclude = !visible;
+			quickFixButton.setEnabled(enablement && canChangePackageName());
+			composite.layout();
+		}
 	}
 
 	private boolean hasPackageNameMismatchAnnotation() {
