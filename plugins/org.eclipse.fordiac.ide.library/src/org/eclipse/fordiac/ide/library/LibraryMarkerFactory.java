@@ -72,7 +72,7 @@ public class LibraryMarkerFactory {
 	public static ErrorMarkerBuilder createBrokenLinkMarker(final LinkedLibrary libFolder) {
 		return createLibraryMarker(Messages.LibraryManager_BrokenLink)
 				.setLocation(MessageFormat.format("Library: {0} - Version: {1}", libFolder.getSymbolicName(), //$NON-NLS-1$
-						libFolder.getVersion().toString()));
+						libFolder.getVersion()));
 	}
 
 	/**
