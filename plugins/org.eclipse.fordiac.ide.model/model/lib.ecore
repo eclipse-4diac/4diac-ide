@@ -2079,7 +2079,11 @@
         defaultValueLiteral="&quot;&quot;"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OtherAlgorithm" eSuperTypes="#//TextAlgorithm #//OtherSourceElement"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OtherComment" eSuperTypes="#//TextComment #//OtherSourceElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OtherComment" eSuperTypes="#//TextComment #//OtherSourceElement">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OtherMethod" eSuperTypes="#//TextMethod #//OtherSourceElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="OtherSourceElement" abstract="true"
       eSuperTypes="#//TextSourceElement">
@@ -2395,7 +2399,11 @@
       eSuperTypes="#//SourceElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="SourceElement" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAlgorithm" eSuperTypes="#//TextAlgorithm #//STSourceElement"/>
-  <eClassifiers xsi:type="ecore:EClass" name="STComment" eSuperTypes="#//TextComment #//STSourceElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STComment" eSuperTypes="#//TextComment #//STSourceElement">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STFunction" eSuperTypes="#//TextFunction #//STSourceElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STFunctionBody" eSuperTypes="#//TextFunctionBody #//STSourceElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STMethod" eSuperTypes="#//TextMethod #//STSourceElement"/>

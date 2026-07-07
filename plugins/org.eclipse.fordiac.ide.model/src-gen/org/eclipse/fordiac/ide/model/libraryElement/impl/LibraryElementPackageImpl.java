@@ -7611,6 +7611,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (otherCommentEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (positionEClass,
 		   source,
 		   new String[] {
@@ -7624,6 +7630,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   });
 		addAnnotation
 		  (getService_Comment(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (stCommentEClass,
 		   source,
 		   new String[] {
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
