@@ -24,7 +24,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSTComment()
- * @model
+ * @model annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
  * @generated
  */
 public interface STComment extends TextComment, STSourceElement {
