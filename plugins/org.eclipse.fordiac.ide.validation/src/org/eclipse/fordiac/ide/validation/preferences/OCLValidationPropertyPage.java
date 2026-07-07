@@ -17,6 +17,7 @@ import java.io.IOException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -62,6 +63,7 @@ public class OCLValidationPropertyPage extends PropertyPage {
 				return false;
 			}
 		}
+		SystemManager.validateProjectNature(getProject());
 		return super.performOk();
 	}
 

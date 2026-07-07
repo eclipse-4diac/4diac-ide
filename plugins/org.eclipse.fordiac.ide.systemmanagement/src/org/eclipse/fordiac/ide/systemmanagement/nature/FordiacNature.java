@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2014 Profactor GmbH, fortiss GmbH
  *                          Martin Erich Jobst
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +19,7 @@
  *     - add validation for builder order
  *   Michael Oberlehner
  *     - added OCL validation builder
+ *     - add OCL validation builder preference handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.nature;
 
@@ -34,7 +36,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -50,6 +54,10 @@ public class FordiacNature implements IProjectNature {
 	public static final int MISSING_LIBRARY_BUILDER = 3;
 	public static final int WRONG_BUILDER_ORDER = 4;
 	public static final int MISSING_OCL_VALIDATION_BUILDER = 5;
+
+	private static final String VALIDATION_PREFERENCES_ID = "org.eclipse.fordiac.ide.validation"; //$NON-NLS-1$
+	private static final String ENABLE_OCL_VALIDATION_BUILDER = "ENABLE_OCL_VALIDATION_BUILDER"; //$NON-NLS-1$
+	private static final boolean DEFAULT_ENABLE_OCL_VALIDATION_BUILDER = false;
 
 	private static final Map<String, Integer> builderPriorities = Map.of( //
 			SystemManager.FORDIAC_LIBRARY_BUILDER_ID, Integer.valueOf(30), //
@@ -194,7 +202,7 @@ public class FordiacNature implements IProjectNature {
 					.setCode(MISSING_LIBRARY_BUILDER));
 		}
 
-		if (!hasOCLValidationBuilderCommand()) {
+		if (isOCLValidationBuilderEnabled(project) && !hasOCLValidationBuilderCommand()) {
 			builders.add(ErrorMarkerBuilder
 					.createErrorMarkerBuilder(
 							MessageFormat.format(Messages.FordiacNature_MissingOCLValidationBuilder, project.getName()))
@@ -222,6 +230,11 @@ public class FordiacNature implements IProjectNature {
 		}
 
 		FordiacMarkerHelper.updateMarkers(project, FordiacErrorMarker.PROJECT_CONFIGURATION_MARKER, builders);
+	}
+
+	public static boolean isOCLValidationBuilderEnabled(final IProject project) {
+		final IEclipsePreferences preferences = new ProjectScope(project).getNode(VALIDATION_PREFERENCES_ID);
+		return preferences.getBoolean(ENABLE_OCL_VALIDATION_BUILDER, DEFAULT_ENABLE_OCL_VALIDATION_BUILDER);
 	}
 
 	public boolean hasExportBuilderCommand() throws CoreException {
