@@ -7,6 +7,7 @@
 			<FB Name="Producer" Type="StructProducer" Comment="" x="500.0" y="500.0">
 				<Parameter Name="OUT.A" Value="">
 					<Attribute Name="Visible" Value="true"/>
+					<Attribute Name="TestAttribute" Type="STRING" Value="42"/>
 				</Parameter>
 				<Parameter Name="OUT.C" Value="">
 					<Attribute Name="Visible" Value="true"/>

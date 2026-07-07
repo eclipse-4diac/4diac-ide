@@ -32,9 +32,11 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameElementRefactoringProcessor;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
 import org.eclipse.ltk.core.refactoring.CreateChangeOperation;
@@ -43,6 +45,7 @@ import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
 import org.eclipse.ltk.core.refactoring.resource.DeleteResourcesDescriptor;
 import org.eclipse.ltk.core.refactoring.resource.MoveResourcesDescriptor;
 import org.eclipse.ltk.core.refactoring.resource.RenameResourceDescriptor;
@@ -135,6 +138,15 @@ public final class RefactoringTestSupport {
 		descriptor.setResourcesToMove(new IResource[] { file });
 		descriptor.setDestination(destination);
 		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
+	}
+
+	/**
+	 * Rename a model element identified by its URI, e.g. a struct member, and let
+	 * the rename cascade to every instance pin the same way the Rename Element
+	 * command does in the editor.
+	 */
+	public static Change performElementRename(final URI elementURI, final String newName) throws CoreException {
+		return performRefactoring(new RenameRefactoring(new RenameElementRefactoringProcessor(elementURI, newName)));
 	}
 
 	private static Change performRefactoring(final Refactoring refactoring) throws CoreException {

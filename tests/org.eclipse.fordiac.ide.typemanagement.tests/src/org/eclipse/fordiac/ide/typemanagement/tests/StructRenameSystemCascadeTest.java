@@ -35,6 +35,8 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -55,6 +57,7 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class StructRenameSystemCascadeTest {
@@ -70,6 +73,12 @@ class StructRenameSystemCascadeTest {
 	private static final String CONTAINER_SUBAPP = "Container"; //$NON-NLS-1$
 	private static final String CONTAINER_INPUT_PIN = "DI"; //$NON-NLS-1$
 	private static final String HIDDEN_CONNECTION = "Producer.OUT.C -> Consumer.DI.C"; //$NON-NLS-1$
+
+	private static final String PRODUCER_INSTANCE = "Producer"; //$NON-NLS-1$
+	private static final String MEMBER = "A"; //$NON-NLS-1$
+	private static final String MEMBER_RENAMED = "ARenamed"; //$NON-NLS-1$
+	private static final String CUSTOM_ATTRIBUTE = "TestAttribute"; //$NON-NLS-1$
+	private static final String CUSTOM_ATTRIBUTE_VALUE = "42"; //$NON-NLS-1$
 
 	private static final Set<String> APP_DATA_CONNECTIONS = Set.of("Producer.OUT.A -> Consumer.DI.A", //$NON-NLS-1$
 			"Producer.OUT.C -> Consumer.DI.C", "Producer.OUT -> Container.DI"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -166,6 +175,17 @@ class StructRenameSystemCascadeTest {
 	}
 
 	@Test
+	@Disabled("Custom attributes on expanded struct member pins are lost when the member is renamed, see " //$NON-NLS-1$
+			+ "https://github.com/eclipse-4diac/4diac-ide/issues/2646") //$NON-NLS-1$
+	void renameStructMember_preservesCustomPinAttribute() throws Exception {
+		assertEquals(CUSTOM_ATTRIBUTE_VALUE, producerOutMemberAttribute(MEMBER));
+
+		RefactoringTestSupport.performElementRename(innerStructMemberURI(MEMBER), MEMBER_RENAMED);
+
+		assertEquals(CUSTOM_ATTRIBUTE_VALUE, producerOutMemberAttribute(MEMBER_RENAMED));
+	}
+
+	@Test
 	void renameInnerStruct_updatesConfiguredStructMuxInstance() throws Exception {
 		assertConfigurableFBDataType(MUX_INSTANCE, Multiplexer.class, INNER_STRUCT);
 
@@ -238,6 +258,21 @@ class StructRenameSystemCascadeTest {
 		final VarDeclaration pin = container().getInterface().getInputVars().stream()
 				.filter(v -> CONTAINER_INPUT_PIN.equals(v.getName())).findFirst().orElseThrow();
 		return PackageNameHelper.getFullTypeName(pin.getType());
+	}
+
+	private URI innerStructMemberURI(final String memberName) {
+		final VarDeclaration member = typeLibrary.getDataTypeLibrary().getStructuredType(INNER_STRUCT)
+				.getMemberVariables().stream().filter(m -> memberName.equals(m.getName())).findFirst().orElseThrow();
+		return EcoreUtil.getURI(member);
+	}
+
+	private String producerOutMemberAttribute(final String memberName) {
+		final FBNetworkElement producer = system().getApplicationNamed(APPLICATION_NAME).getFBNetwork()
+				.getNetworkElements().stream().filter(e -> PRODUCER_INSTANCE.equals(e.getName())).findFirst()
+				.orElseThrow();
+		final IInterfaceElement pin = assertInstanceOf(BlockFBNetworkElement.class, producer).getInterface()
+				.getInterfaceElement(List.of(PRODUCER_OUT_PIN, memberName));
+		return pin == null ? null : pin.getAttributeValue(CUSTOM_ATTRIBUTE);
 	}
 
 	private Connection hiddenConnection() {
