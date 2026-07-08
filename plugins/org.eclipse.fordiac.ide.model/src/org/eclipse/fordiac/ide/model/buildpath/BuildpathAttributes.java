@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - added OCL attributes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.buildpath;
 
@@ -39,6 +40,14 @@ public final class BuildpathAttributes {
 	@AttributeType(Boolean.class)
 	@AttributeDefault("true")
 	public static final String EXPORT = "export"; //$NON-NLS-1$
+
+	@AttributeType(Boolean.class)
+	@AttributeDefault("true")
+	public static final String OCL_SOURCE = "ocl_source"; //$NON-NLS-1$
+
+	@AttributeType(Boolean.class)
+	@AttributeDefault("true")
+	public static final String OCL_TARGET = "ocl_target"; //$NON-NLS-1$
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)

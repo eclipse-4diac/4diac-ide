@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteEventsComm
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.EventMarkerFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
 import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
@@ -172,7 +173,21 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 
 	@Override
 	public void eventSelected() {
-		getModel().eventSelected();
+		// Create the select event request
+		final var eventPosition = new EventPosition(getModel().getParentTimeline().getTimeline(),
+				getModel().getIndex());
+		final var request = new SelectEventRequest(eventPosition);
+
+		EditPart current = this;
+		while (current != null) {
+			final Command command = current.getCommand(request);
+			if (command != null && command.canExecute()) {
+				getViewer().getEditDomain().getCommandStack().execute(command);
+				return;
+			}
+			current = current.getParent();
+		}
+
 	}
 
 	// call from model

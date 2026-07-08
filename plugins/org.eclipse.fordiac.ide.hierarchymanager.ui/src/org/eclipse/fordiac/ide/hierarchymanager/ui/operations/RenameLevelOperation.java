@@ -13,13 +13,15 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.operations;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.hierarchymanager.model.HierarchyManagerPersistenceHelper;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 
-public class RenameLevelOperation extends AbstractChangeHierarchyOperation {
+public class RenameLevelOperation extends AbstractOperation {
 
 	private final Level level;
 	private final String newName;
@@ -35,21 +37,21 @@ public class RenameLevelOperation extends AbstractChangeHierarchyOperation {
 	@Override
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		level.setName(newName);
-		saveHierarchy(level, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(level);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		level.setName(newName);
-		saveHierarchy(level, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(level);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		level.setName(oldName);
-		saveHierarchy(level, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(level);
 		return Status.OK_STATUS;
 	}
 

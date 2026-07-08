@@ -41,6 +41,7 @@ import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.resource.DeleteResourcesDescriptor;
 import org.eclipse.ltk.core.refactoring.resource.RenameResourceDescriptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -117,6 +118,22 @@ public final class RefactoringTestSupport {
 		final RenameResourceDescriptor descriptor = new RenameResourceDescriptor();
 		descriptor.setResourcePath(file.getFullPath());
 		descriptor.setNewName(newName);
+
+		final RefactoringStatus status = new RefactoringStatus();
+		final Refactoring refactoring = descriptor.createRefactoring(status);
+
+		final CreateChangeOperation create = new CreateChangeOperation(
+				new CheckConditionsOperation(refactoring, CheckConditionsOperation.ALL_CONDITIONS),
+				RefactoringStatus.FATAL);
+		final PerformChangeOperation perform = new PerformChangeOperation(create);
+		perform.setUndoManager(RefactoringCore.getUndoManager(), refactoring.getName());
+		ResourcesPlugin.getWorkspace().run(perform, new NullProgressMonitor());
+		return perform.getUndoChange();
+	}
+
+	public static Change performDelete(final IFile file) throws CoreException {
+		final DeleteResourcesDescriptor descriptor = new DeleteResourcesDescriptor();
+		descriptor.setResourcePaths(new IPath[] { file.getFullPath() });
 
 		final RefactoringStatus status = new RefactoringStatus();
 		final Refactoring refactoring = descriptor.createRefactoring(status);

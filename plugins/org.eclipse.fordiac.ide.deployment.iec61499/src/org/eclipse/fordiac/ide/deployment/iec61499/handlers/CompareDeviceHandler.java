@@ -55,7 +55,7 @@ public class CompareDeviceHandler extends AbstractHandler {
 						compareDevices(selectedDevice, onlineDevice);
 						printDiffInConsole();
 					} catch (final DeploymentException e) {
-						e.printStackTrace();
+						FordiacLogHelper.logError("Cannot compare devices!", e); //$NON-NLS-1$
 					}
 				}
 

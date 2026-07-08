@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -61,7 +62,7 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 					window.getActivePage().openEditor(new BulkEditorInput(project, subAppList),
 							"org.eclipse.fordiac.ide.bulkeditor.BulkEditor"); //$NON-NLS-1$
 				} catch (final Exception e) {
-					e.printStackTrace();
+					FordiacLogHelper.logWarning("Couldn't open Bulk Editor", e); //$NON-NLS-1$
 				}
 			});
 		}

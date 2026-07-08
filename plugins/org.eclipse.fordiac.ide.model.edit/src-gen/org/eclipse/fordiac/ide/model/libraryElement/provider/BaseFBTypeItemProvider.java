@@ -75,6 +75,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS);
+			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS);
 			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS);
 			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES);
 		}

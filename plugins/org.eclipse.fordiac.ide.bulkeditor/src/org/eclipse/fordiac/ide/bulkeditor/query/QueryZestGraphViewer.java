@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
@@ -58,10 +59,15 @@ public class QueryZestGraphViewer {
 	private EObject rootElement;
 	private Runnable onSave;
 	private Runnable onLoad;
+	private IProject project;
 
 	public QueryZestGraphViewer(final Composite parent, final AdapterFactoryEditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 		graphViewer = createGraphViewer(parent);
+	}
+
+	public void setProject(final IProject project) {
+		this.project = project;
 	}
 
 	public void setInput(final Object input) {
@@ -291,6 +297,9 @@ public class QueryZestGraphViewer {
 			}
 			if (QueryModelHelper.isPlaceholder(eObj)) {
 				return new QueryPlaceholderNodeFigure(eObj, graphViewer.getGraphControl());
+			}
+			if (QueryModelHelper.isAttributeDeclaration(eObj)) {
+				return new QueryAttributeDeclarationNodeFigure(eObj, graphViewer.getGraphControl(), project);
 			}
 			return new QueryNodeFigure(eObj);
 		}

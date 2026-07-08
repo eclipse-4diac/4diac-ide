@@ -14,8 +14,10 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -42,6 +44,13 @@ public final class RefactoringUtil {
 		checkDirtyEditors();
 		PlatformUI.getWorkbench().saveAllEditors(false);
 		PlatformUI.getWorkbench().getProgressService().busyCursorWhile(RefactoringUtil::waitForBuild);
+	}
+
+	public static void saveAllAndBuild(final IProject project) throws InvocationTargetException, InterruptedException {
+		checkDirtyEditors();
+		PlatformUI.getWorkbench().saveAllEditors(false);
+		PlatformUI.getWorkbench().getProgressService()
+				.busyCursorWhile(monitor -> waitForProjectBuild(project, monitor));
 	}
 
 	public static void checkDirtyEditors() throws OperationCanceledException {
@@ -76,6 +85,18 @@ public final class RefactoringUtil {
 		try {
 			final SubMonitor progress = SubMonitor.convert(monitor, 10);
 			ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, progress.split(8));
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, progress.split(2));
+		} catch (final OperationCanceledException | CoreException e) {
+			throw new InvocationTargetException(e);
+		}
+	}
+
+	private static void waitForProjectBuild(final IProject project, final IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException {
+		try {
+			final SubMonitor progress = SubMonitor.convert(monitor, 10);
+			ResourcesPlugin.getWorkspace().build(new IBuildConfiguration[] { project.getActiveBuildConfig() },
+					IncrementalProjectBuilder.INCREMENTAL_BUILD, true, progress.split(8));
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, progress.split(2));
 		} catch (final OperationCanceledException | CoreException e) {
 			throw new InvocationTargetException(e);

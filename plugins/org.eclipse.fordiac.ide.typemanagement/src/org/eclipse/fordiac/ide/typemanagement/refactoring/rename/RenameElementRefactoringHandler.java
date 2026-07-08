@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -22,6 +24,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
@@ -42,10 +45,11 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 			final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 			if (selection.size() == 1) {
 				final Object firstElement = selection.getFirstElement();
+				final IProject selectedProject = getProject(firstElement);
 				final URI elementURI = getElementURI(firstElement);
 				final String elementName = getElementName(firstElement);
 				if (elementURI != null && !elementName.isEmpty()) {
-					RefactoringUtil.saveAllAndBuild();
+					RefactoringUtil.saveAllAndBuild(selectedProject);
 					final RenameRefactoring refactoring = new RenameRefactoring(
 							new RenameElementRefactoringProcessor(elementURI, elementName));
 					final RenameElementRefactoringWizard wizard = new RenameElementRefactoringWizard(refactoring);
@@ -59,6 +63,28 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 			Thread.currentThread().interrupt();
 		} catch (final Exception e) {
 			FordiacLogHelper.logError("Error during refactoring", e); //$NON-NLS-1$
+		}
+		return null;
+	}
+
+	private static IProject getProject(final Object element) {
+		if (element instanceof final EditPart editPart) {
+			return getProject(editPart.getModel());
+		}
+		if (element instanceof final IResource resource) {
+			return resource.getProject();
+		}
+		if (element instanceof final EObject eObject) {
+			return getProject(eObject);
+		}
+		return null;
+	}
+
+	private static IProject getProject(final EObject eObject) {
+		final EObject root = EcoreUtil.getRootContainer(eObject);
+		if (root instanceof final LibraryElement libraryElement && libraryElement.getTypeEntry() != null
+				&& libraryElement.getTypeEntry().getFile() != null) {
+			return libraryElement.getTypeEntry().getFile().getProject();
 		}
 		return null;
 	}

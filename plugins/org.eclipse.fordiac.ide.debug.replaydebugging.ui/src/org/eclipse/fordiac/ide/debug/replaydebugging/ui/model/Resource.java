@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DatapointsState;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 
 /**
@@ -33,7 +32,7 @@ public class Resource implements ReplayNavigator.StateListener {
 
 	public Resource(final ReplayNavigator replayNavigator) {
 		this.replayNavigator = replayNavigator;
-		this.rootTimelineModel = new TimelineModel(replayNavigator.getRootTimeline(), this::eventSelected);
+		this.rootTimelineModel = new TimelineModel(replayNavigator.getRootTimeline());
 		replayNavigator.addStateChangeListener(this);
 		updateCurrentPosition();
 	}
@@ -65,10 +64,6 @@ public class Resource implements ReplayNavigator.StateListener {
 		}
 
 		rootTimelineModel.updateCurrentPosition(currentEventPosition, presentTimelines.reversed());
-	}
-
-	private void eventSelected(final Timeline timeline, final Integer index) {
-		replayNavigator.moveToEvent(new EventPosition(timeline, index.intValue()));
 	}
 
 	// callback from the replay navigator

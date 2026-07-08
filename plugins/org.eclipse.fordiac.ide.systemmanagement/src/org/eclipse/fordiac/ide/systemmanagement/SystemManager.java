@@ -57,6 +57,7 @@ public enum SystemManager {
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	public static final String FORDIAC_EXPORT_BUILDER_ID = "org.eclipse.fordiac.ide.export.builder"; //$NON-NLS-1$
 	public static final String FORDIAC_LIBRARY_BUILDER_ID = "org.eclipse.fordiac.ide.library.builder"; //$NON-NLS-1$
+	public static final String FORDIAC_OCL_VALIDATION_BUILDER_ID = "org.eclipse.fordiac.ide.validation.oclbuilder"; //$NON-NLS-1$
 	public static final String ROBOT_PROJECT_NATURE_ID = "org.robotframework.ide.eclipse.main.plugin.robotNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
 
@@ -120,7 +121,8 @@ public enum SystemManager {
 	}
 
 	private static String[] getBuilderIDs() {
-		return new String[] { FORDIAC_LIBRARY_BUILDER_ID, XtextProjectHelper.BUILDER_ID, FORDIAC_EXPORT_BUILDER_ID };
+		return new String[] { FORDIAC_LIBRARY_BUILDER_ID, XtextProjectHelper.BUILDER_ID,
+				FORDIAC_OCL_VALIDATION_BUILDER_ID, FORDIAC_EXPORT_BUILDER_ID };
 	}
 
 	public void removeFordiacChangeListener() {

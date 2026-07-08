@@ -46,6 +46,9 @@ public final class Messages extends NLS {
 	public static String MissingLibraryBuilderMarkerResolution_Description;
 	public static String MissingLibraryBuilderMarkerResolution_Label;
 
+	public static String MissingOCLValidationBuilderMarkerResolution_Description;
+	public static String MissingOCLValidationBuilderMarkerResolution_Label;
+
 	public static String NewSystemWizard_ShowAdvanced;
 
 	public static String NewSystemWizard_HideAdvanced;

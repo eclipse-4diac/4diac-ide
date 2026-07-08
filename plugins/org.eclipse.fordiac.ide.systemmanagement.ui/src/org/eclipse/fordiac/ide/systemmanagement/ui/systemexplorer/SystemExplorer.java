@@ -14,7 +14,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.views.helpers.EmptyWorkspaceHelper;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
@@ -38,7 +45,41 @@ public class SystemExplorer extends CommonNavigator implements ITabbedPropertySh
 		if (adapter == IPropertySheetPage.class) {
 			return adapter.cast(new TabbedPropertySheetPage(this));
 		}
+		if (adapter == CommandStack.class) {
+			final IEditorPart editor = getEditorForSelection();
+			if (editor != null) {
+				return adapter.cast(editor.getAdapter(CommandStack.class));
+			}
+		}
 		return super.getAdapter(adapter);
+	}
+
+	private IEditorPart getEditorForSelection() {
+		final LibraryElement selectedRoot = getSelectedRootElement();
+		if (selectedRoot == null) {
+			return null;
+		}
+
+		final IEditorPart activeEditor = getMatchingEditor(EditorUtils.getCurrentActiveEditor(), selectedRoot);
+		if (activeEditor != null) {
+			return activeEditor;
+		}
+
+		final IEditorPart[] editors = EditorUtils
+				.findEditor(editor -> editor.getAdapter(LibraryElement.class) == selectedRoot);
+		return editors.length > 0 ? editors[0] : null;
+	}
+
+	private LibraryElement getSelectedRootElement() {
+		if (getCommonViewer().getSelection() instanceof final IStructuredSelection selection && !selection.isEmpty()
+				&& selection.getFirstElement() instanceof final EObject selectedElement) {
+			return ModelHelper.getLibraryElementFromContext(selectedElement);
+		}
+		return null;
+	}
+
+	private static IEditorPart getMatchingEditor(final IEditorPart editor, final LibraryElement selectedRoot) {
+		return editor != null && editor.getAdapter(LibraryElement.class) == selectedRoot ? editor : null;
 	}
 
 	@Override
