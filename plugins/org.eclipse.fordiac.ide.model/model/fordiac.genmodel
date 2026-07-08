@@ -268,8 +268,6 @@
       <genOperations ecoreOperation="lib.ecore#//Connection/getFBNetwork" body="throw new UnsupportedOperationException(&quot;subclasses will need to provide it&quot;);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/checkIfConnectionBroken"
           body="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//Connection/isInterfaceConnection"
-          body="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/validateMissingSource"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionAnnotations.validateMissingSource(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//Connection/validateMissingSource/diagnostics"/>
