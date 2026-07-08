@@ -81,7 +81,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 
 	@Override
 	public void createNatTable(final Composite composite) {
-		final var columns = VarDeclarationTableColumn.defaultColumnsWithPrepended(VarDeclarationTableColumn.RETAIN);
+		final var columns = VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.RETAIN);
 		provider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns));
 		final DataLayer dataLayer = new VarDeclarationDataLayer(provider, columns);
 		final VarDeclarationConfigLabelAccumulator acc = new VarDeclarationConfigLabelAccumulator(provider,

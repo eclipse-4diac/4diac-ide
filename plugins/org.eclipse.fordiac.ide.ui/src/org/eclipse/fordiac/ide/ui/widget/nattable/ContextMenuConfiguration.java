@@ -38,12 +38,12 @@ public class ContextMenuConfiguration extends AbstractUiBindingConfiguration {
 				new MouseEventMatcher(SWT.NONE, GridRegion.ROW_HEADER, MouseEventMatcher.RIGHT_BUTTON),
 				(natTable, event) -> {
 					new ViewportSelectRowAction(false, false).run(natTable, event);
-					new PopupMenuAction(this.contextMenu).run(natTable, event);
+					natTable.getDisplay().asyncExec(() -> new PopupMenuAction(this.contextMenu).run(natTable, event));
 				});
 		uiBindingRegistry.registerMouseDownBinding(
 				new MouseEventMatcher(SWT.NONE, GridRegion.BODY, MouseEventMatcher.RIGHT_BUTTON), (natTable, event) -> {
 					new ViewportSelectRowAction(false, false).run(natTable, event);
-					new PopupMenuAction(this.contextMenu).run(natTable, event);
+					natTable.getDisplay().asyncExec(() -> new PopupMenuAction(this.contextMenu).run(natTable, event));
 				});
 	}
 }

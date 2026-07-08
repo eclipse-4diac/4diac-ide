@@ -35,17 +35,16 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -447,25 +446,46 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	}
 
 	private void checkErrorMarkerPinParameters() {
-		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
-			if (hasValue(erroMarker.getValue())) {
-				if (newElement.getInterface()
-						.getInterfaceElement(erroMarker) instanceof final VarDeclaration varDeclaration) {
-					final Value value = LibraryElementFactory.eINSTANCE.createValue();
-					value.setValue(erroMarker.getValue().getValue());
-					varDeclaration.setValue(value);
-					if (erroMarker.isIsInput() && erroMarker.getInputConnections().isEmpty()) {
-						// remove errormarker because value was set to pin and no connection needs to be
-						// copied
-						reconnCmds.add(new DeleteErrorMarkerCommand(erroMarker, oldElement));
+		for (final ErrorMarkerInterface errorMarker : oldElement.getInterface().getErrorMarker()) {
+			if (hasData(errorMarker)) {
+				final IInterfaceElement newInterfaceElement = newElement.getInterface().getInterfaceElement(errorMarker);
+				if (newInterfaceElement != null) {
+					copyErrorMarkerData(errorMarker, newInterfaceElement);
+					if (newInterfaceElement instanceof final VarDeclaration varDeclaration
+							&& hasValue(errorMarker.getValue())) {
+						final Value value = LibraryElementFactory.eINSTANCE.createValue();
+						value.setValue(errorMarker.getValue().getValue());
+						varDeclaration.setValue(value);
 					}
-				} else if ((erroMarker.isIsInput() && erroMarker.getInputConnections().isEmpty())
-						|| (!erroMarker.isIsInput() && erroMarker.getOutputConnections().isEmpty())) {
+				} else if ((errorMarker.isIsInput() && errorMarker.getInputConnections().isEmpty())
+						|| (!errorMarker.isIsInput() && errorMarker.getOutputConnections().isEmpty())) {
 					// unconnected error pin create a new error pin
-					updateSelectedInterface(erroMarker, newElement);
+					updateSelectedInterface(errorMarker, newElement);
 				}
 			}
 		}
+	}
+
+	private static boolean hasData(final ErrorMarkerInterface errorMarker) {
+		return hasValue(errorMarker.getValue()) || !errorMarker.getAttributes().isEmpty()
+				|| !errorMarker.getComment().isBlank();
+	}
+
+	private static void copyErrorMarkerData(final ErrorMarkerInterface source, final IInterfaceElement destination) {
+		copyAttributes(source, destination);
+		if (!source.getComment().isBlank()) {
+			destination.setComment(source.getComment());
+		}
+	}
+
+	private static void copyAttributes(final ConfigurableObject source, final ConfigurableObject destination) {
+		destination.getAttributes().addAll(EcoreUtil.copyAll(source.getAttributes()));
+	}
+
+	private static void copyNonInternalAttributes(final ConfigurableObject source,
+			final ConfigurableObject destination) {
+		destination.getAttributes().addAll(EcoreUtil.copyAll(source.getAttributes().stream()
+				.filter(attribute -> !InternalAttributeDeclarations.isInternalAttribute(attribute)).toList()));
 	}
 
 	private static boolean hasValue(final Value value) {
@@ -491,12 +511,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 			interfaceElement.setValue(value);
 		}
 
-		for (final Attribute attribute : oldInterface.getAttributes()) {
-			if (!InternalAttributeDeclarations.isInternalAttribute(attribute)) {
-				interfaceElement.setAttribute(attribute.getName(), attribute.getType(), attribute.getValue(),
-						attribute.getComment());
-			}
-		}
+		copyNonInternalAttributes(oldInterface, interfaceElement);
 
 		interfaceElement.setComment(oldInterface.getComment());
 

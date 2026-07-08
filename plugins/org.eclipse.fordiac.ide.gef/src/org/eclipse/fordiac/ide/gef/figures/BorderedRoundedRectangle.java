@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.backgrounds.AbstractBackgroundBorder;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
@@ -54,7 +54,7 @@ public class BorderedRoundedRectangle extends RoundedRectangle {
 	public void paintFigure(final Graphics graphics) {
 		// paint figure of shape does not check for background borders, needed for drop
 		// shadow
-		if (getBorder() instanceof final AbstractBackground background) {
+		if (getBorder() instanceof final AbstractBackgroundBorder background) {
 			background.paintBackground(this, graphics, NO_INSETS);
 		}
 		super.paintFigure(graphics);

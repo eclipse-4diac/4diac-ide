@@ -17,6 +17,9 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
@@ -101,9 +104,12 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
 				new VarDeclarationVisibleEditableRule(getSectionEditableRule(), inputProvider, columns,
-						VarDeclarationTableColumn.DEFAULT_EDITABLE),
+						VarDeclarationTableColumn.ALL_EDITABLE),
 				null, this, true);
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
+		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		inputTable.configure();
 	}
 

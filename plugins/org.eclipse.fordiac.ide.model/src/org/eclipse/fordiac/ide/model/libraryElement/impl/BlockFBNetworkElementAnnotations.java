@@ -33,6 +33,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -72,7 +73,8 @@ public final class BlockFBNetworkElementAnnotations {
 	}
 
 	private static boolean isUnused(final BlockFBNetworkElement fbne) {
-		return isUnused(fbne.getInterface().getEventInputs());
+		return isUnused(fbne.getInterface().getEventInputs()) && !hasConnections(fbne.getInterface().getPlugs())
+				&& !hasConnections(fbne.getInterface().getSockets());
 	}
 
 	private static boolean isUnused(final Collection<? extends Event> events) {
@@ -81,6 +83,14 @@ public final class BlockFBNetworkElementAnnotations {
 
 	private static boolean isUnused(final Event event) {
 		return event.getInputConnections().isEmpty() && !EventTypeLibrary.EINIT.equalsIgnoreCase(event.getTypeName());
+	}
+
+	private static boolean hasConnections(final Collection<? extends AdapterDeclaration> adapters) {
+		return adapters.stream().anyMatch(BlockFBNetworkElementAnnotations::hasConnections);
+	}
+
+	private static boolean hasConnections(final AdapterDeclaration adapter) {
+		return !(adapter.isIsInput() ? adapter.getInputConnections() : adapter.getOutputConnections()).isEmpty();
 	}
 
 	private BlockFBNetworkElementAnnotations() {

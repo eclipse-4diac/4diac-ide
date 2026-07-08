@@ -42,6 +42,22 @@ public final class ErrorMarkerInterfaceAnnotations {
 		return true;
 	}
 
+	public static boolean validateComment(final ErrorMarkerInterface element, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (hasComment(element) && !isContainedInErrorMarkerFBNElement(element)) {
+			if (diagnostics != null) {
+				diagnostics
+						.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+								LibraryElementValidator.ERROR_MARKER_INTERFACE__VALIDATE_COMMENT,
+								MessageFormat.format(Messages.ErrorMarkerInterfaceAnnotations_MissingVariableForComment,
+										element.getComment()),
+								FordiacMarkerHelper.getDiagnosticData(element)));
+			}
+			return false;
+		}
+		return true;
+	}
+
 	public static boolean validateAttributes(final ErrorMarkerInterface element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		if (!element.getAttributes().isEmpty() && !isContainedInErrorMarkerFBNElement(element)) {
@@ -63,6 +79,10 @@ public final class ErrorMarkerInterfaceAnnotations {
 	private static boolean hasValue(final ErrorMarkerInterface element) {
 		return element.getValue() != null && element.getValue().getValue() != null
 				&& !element.getValue().getValue().isBlank();
+	}
+
+	private static boolean hasComment(final ErrorMarkerInterface element) {
+		return element.getComment() != null && !element.getComment().isBlank();
 	}
 
 	private static boolean isContainedInErrorMarkerFBNElement(final ErrorMarkerInterface element) {

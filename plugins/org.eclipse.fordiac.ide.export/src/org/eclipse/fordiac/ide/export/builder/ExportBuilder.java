@@ -180,7 +180,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 				throw new OperationCanceledException();
 			}
 
-			if ((delta.getResource() instanceof final IFile file) && includeInIncrementalBuild(file)) {
+			if ((delta.getResource() instanceof final IFile file) && file.exists() && includeInIncrementalBuild(file)) {
 				exportElement(monitor, file, context);
 			}
 			return true;

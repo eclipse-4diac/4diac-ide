@@ -454,6 +454,11 @@
         <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateAttributes/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateAttributes/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerInterface/validateComment"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceAnnotations.validateComment(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateComment/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//ErrorMarkerInterface/validateComment/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ErrorResourceType"/>
     <genClasses ecoreClass="lib.ecore#//ErrorSegmentType"/>
