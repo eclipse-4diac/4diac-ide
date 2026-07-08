@@ -588,11 +588,6 @@
         <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="isInterfaceConnection" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="validateMissingSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
         <details key="invariant" value="true"/>

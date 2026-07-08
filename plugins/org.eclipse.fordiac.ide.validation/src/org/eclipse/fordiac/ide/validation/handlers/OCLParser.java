@@ -40,7 +40,6 @@ import org.osgi.framework.Bundle;
 public final class OCLParser {
 	private static final String CONSTRAINT_DIRECTORY = "constraints"; //$NON-NLS-1$
 	private static final String CONSTRAINT_FILE_FBTYPE = "ECC.ocl"; //$NON-NLS-1$
-	private static final String CONSTRAINT_FILE_APP = "FB.ocl"; //$NON-NLS-1$
 
 	private OCLParser() {
 		throw new UnsupportedOperationException();
@@ -49,7 +48,6 @@ public final class OCLParser {
 	public static List<Constraint> loadOCLConstraints(final IProject project) {
 		final List<Constraint> constraints = new ArrayList<>();
 		constraints.addAll(loadBundledOCLConstraints(CONSTRAINT_FILE_FBTYPE));
-		constraints.addAll(loadBundledOCLConstraints(CONSTRAINT_FILE_APP));
 		constraints.addAll(loadBuildpathOCLConstraints(project));
 		return constraints;
 	}
@@ -102,8 +100,9 @@ public final class OCLParser {
 	private static void addParseMarker(final IFile file, final ParserException exception) {
 		FordiacLogHelper.logError(exception.getMessage(), exception);
 		FordiacMarkerHelper.updateMarkers(file, IValidationMarker.TYPE,
-				List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(exception.getMessage()).setType(IValidationMarker.TYPE)
-						.setSeverity(IMarker.SEVERITY_ERROR).setLocation(file.getProjectRelativePath().toString())),
+				List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(exception.getMessage())
+						.setType(IValidationMarker.TYPE).setSeverity(IMarker.SEVERITY_ERROR)
+						.setLocation(file.getProjectRelativePath().toString())),
 				true);
 	}
 }

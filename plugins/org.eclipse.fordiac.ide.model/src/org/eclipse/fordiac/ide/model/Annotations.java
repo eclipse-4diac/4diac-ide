@@ -40,13 +40,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -66,7 +64,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -101,60 +98,6 @@ public final class Annotations {
 		// if source element is null it is a connection from a CFB interface element
 		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork())
 				&& (c.getSourceElement().getFbNetwork().eContainer() instanceof Resource));
-	}
-
-	public static boolean isInterfaceConnection(final Connection c) {
-		return isInterfaceConnection(c, null);
-	}
-
-	public static boolean isInterfaceConnection(final Connection c, final FBNetworkElement path) {
-
-		if (c == null) {
-			return false;
-		}
-
-		if (c instanceof EventConnection || c instanceof AdapterConnection) {
-			// TODO Implement
-			return false;
-		}
-
-		// TODO: verify interface detection for CFB
-		final BlockFBNetworkElement s = c.getSourceElement();
-		final BlockFBNetworkElement d = c.getDestinationElement();
-		final EObject container = c.eContainer().eContainer();
-
-		boolean sourceIsInterface = (s == container);
-		boolean destinationIsInterface = (d == container);
-
-		if (sourceIsInterface || destinationIsInterface) {
-			return true;
-		}
-
-		if (s == path) {
-			sourceIsInterface = false;
-		} else if (s instanceof Demultiplexer) {
-			final var connections = s.getInterface().getInputVars().get(0).getInputConnections();
-			sourceIsInterface = !connections.isEmpty() && isInterfaceConnection(connections.get(0), s);
-		} else if (s instanceof Multiplexer) {
-			sourceIsInterface = s.getInterface().getInputVars().stream()
-					.anyMatch(v -> !v.getInputConnections().isEmpty())
-					&& s.getInterface().getInputVars().stream().allMatch(
-							v -> v.getInputConnections().stream().allMatch(co -> isInterfaceConnection(co, s)));
-		}
-
-		if (d == path) {
-			destinationIsInterface = false;
-		} else if (d instanceof Demultiplexer) {
-			destinationIsInterface = d.getInterface().getOutputVars().stream()
-					.anyMatch(v -> !v.getOutputConnections().isEmpty())
-					&& d.getInterface().getOutputVars().stream().allMatch(
-							v -> v.getOutputConnections().stream().allMatch(co -> isInterfaceConnection(co, d)));
-		} else if (d instanceof Multiplexer) {
-			final var connections = d.getInterface().getOutputVars().get(0).getOutputConnections();
-			destinationIsInterface = !connections.isEmpty() && isInterfaceConnection(connections.get(0), d);
-		}
-
-		return (sourceIsInterface || destinationIsInterface);
 	}
 
 	public static void checkifConnectionBroken(final Connection c) {
