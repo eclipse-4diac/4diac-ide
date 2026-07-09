@@ -20,10 +20,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
@@ -39,6 +41,7 @@ import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -135,6 +138,10 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 		// make sure the device management executor obtains this instance
 		try {
 			getDeviceManagementExecutorService().connect();
+			try (EvaluatorCache cache = EvaluatorCache.open()) {
+				Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
+						.forEachOrdered(this::breakpointAdded);
+			}
 		} catch (final DeploymentException e) {
 			throw new DebugException(Status
 					.error(MessageFormat.format(Messages.DeploymentDebugDevice_ConnectError, device.getName()), e));
