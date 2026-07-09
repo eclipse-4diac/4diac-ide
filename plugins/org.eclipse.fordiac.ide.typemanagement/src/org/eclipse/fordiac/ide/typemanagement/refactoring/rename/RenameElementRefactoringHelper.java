@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
@@ -62,10 +63,35 @@ public final class RenameElementRefactoringHelper {
 				? DataTypeInstanceSearch.createSearchIncludingDerivedDataTypes(dtEntry).performSearch()
 				: new BlockTypeInstanceSearch(typeEntry).performSearch();
 		final var eChild = getChildByURI(typeEntry.getType(), elementURI);
-
 		if (eChild instanceof final IInterfaceElement interfaceElement) {
-			result.stream().filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
-					.forEach(element -> createRenameInterfaceChanges(modelEdits, element, interfaceElement, newName));
+			createRenameChanges(modelEdits, newName, result, interfaceElement);
+		}
+	}
+
+	protected static void createRenameChanges(final List<ModelEdit<?>> modelEdits, final String newName,
+			final List<? extends EObject> result, final IInterfaceElement interfaceElement) {
+		for (final EObject element : result) {
+			if (element instanceof final ContainerVarDeclaration container) {
+				createRenameInterfaceChanges(modelEdits, container, interfaceElement, newName);
+			} else if (element instanceof final BlockFBNetworkElement block) {
+				createRenameInterfaceChanges(modelEdits, block, interfaceElement, newName);
+			}
+		}
+	}
+
+	private static void createRenameInterfaceChanges(final List<ModelEdit<?>> modelEdits,
+			final ContainerVarDeclaration element, final IInterfaceElement interfaceElement, final String newName) {
+		final BlockFBNetworkElement blockElement = element.getBlockFBNetworkElement();
+		if (blockElement != null) {
+			final List<String> path = new ArrayList<>(element.getBlockRelativePath());
+			path.addAll(interfaceElement.getBlockRelativePath());
+			final IInterfaceElement instancePin = blockElement.getInterface().getInterfaceElement(path);
+			if (instancePin != null) {
+				modelEdits.add(new RenameElementModelEdit(
+						MessageFormat.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance,
+								interfaceElement.getName()),
+						EcoreUtil.getURI(instancePin), newName));
+			}
 		}
 	}
 
@@ -75,8 +101,7 @@ public final class RenameElementRefactoringHelper {
 				.getInterfaceElement(List.of(interfaceElement.getName()));
 		if (instancePin != null) {
 			modelEdits.add(new RenameElementModelEdit(MessageFormat
-					.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance,
-							interfaceElement.getName()),
+					.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance, interfaceElement.getName()),
 					EcoreUtil.getURI(instancePin), newName));
 		}
 	}
