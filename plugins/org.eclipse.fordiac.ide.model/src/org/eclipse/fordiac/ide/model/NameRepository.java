@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -191,6 +192,8 @@ public final class NameRepository {
 		} else if (refElement instanceof final IInterfaceElement ie) {
 			if (ie.eContainer() instanceof final StructuredType structType) {
 				elementsList = structType.getMemberVariables();
+			} else if (ie.eContainer() instanceof final ContainerVarDeclaration containerVarDeclaration) {
+				elementsList = containerVarDeclaration.getCachedMembers();
 			} else {
 				final EList<INamedElement> elements = new BasicEList<>();
 				InterfaceList interfaceList = null;

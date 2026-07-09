@@ -63,47 +63,33 @@ public final class RenameElementRefactoringHelper {
 				? DataTypeInstanceSearch.createSearchIncludingDerivedDataTypes(dtEntry).performSearch()
 				: new BlockTypeInstanceSearch(typeEntry).performSearch();
 		final var eChild = getChildByURI(typeEntry.getType(), elementURI);
-		if (eChild instanceof final IInterfaceElement interfaceElement) {
-			createRenameChanges(modelEdits, newName, result, interfaceElement);
+		if (eChild instanceof final IInterfaceElement renamedElement) {
+			createRenameChanges(modelEdits, newName, result, renamedElement);
 		}
 	}
 
 	protected static void createRenameChanges(final List<ModelEdit<?>> modelEdits, final String newName,
-			final List<? extends EObject> result, final IInterfaceElement interfaceElement) {
+			final List<? extends EObject> result, final IInterfaceElement renamedElement) {
 		for (final EObject element : result) {
-			if (element instanceof final ContainerVarDeclaration container) {
-				createRenameInterfaceChanges(modelEdits, container, interfaceElement, newName);
-			} else if (element instanceof final BlockFBNetworkElement block) {
-				createRenameInterfaceChanges(modelEdits, block, interfaceElement, newName);
-			}
-		}
-	}
-
-	private static void createRenameInterfaceChanges(final List<ModelEdit<?>> modelEdits,
-			final ContainerVarDeclaration element, final IInterfaceElement interfaceElement, final String newName) {
-		final BlockFBNetworkElement blockElement = element.getBlockFBNetworkElement();
-		if (blockElement != null) {
-			final List<String> path = new ArrayList<>(element.getBlockRelativePath());
-			path.addAll(interfaceElement.getBlockRelativePath());
-			final IInterfaceElement instancePin = blockElement.getInterface().getInterfaceElement(path);
+			final IInterfaceElement instancePin = getInstancePin(element, renamedElement);
 			if (instancePin != null) {
 				modelEdits.add(new RenameElementModelEdit(
 						MessageFormat.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance,
-								interfaceElement.getName()),
+								renamedElement.getName()),
 						EcoreUtil.getURI(instancePin), newName));
 			}
 		}
 	}
 
-	private static void createRenameInterfaceChanges(final List<ModelEdit<?>> modelEdits,
-			final BlockFBNetworkElement element, final IInterfaceElement interfaceElement, final String newName) {
-		final IInterfaceElement instancePin = element.getInterface()
-				.getInterfaceElement(List.of(interfaceElement.getName()));
-		if (instancePin != null) {
-			modelEdits.add(new RenameElementModelEdit(MessageFormat
-					.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance, interfaceElement.getName()),
-					EcoreUtil.getURI(instancePin), newName));
+	private static IInterfaceElement getInstancePin(final EObject element, final IInterfaceElement renamedElement) {
+		if (element instanceof final ContainerVarDeclaration container
+				&& container.getBlockFBNetworkElement() != null) {
+			return container.getCachedMember(renamedElement.getBlockRelativePath(), false);
 		}
+		if (element instanceof final BlockFBNetworkElement block) {
+			return block.getInterface().getInterfaceElement(renamedElement);
+		}
+		return null;
 	}
 
 	private static EObject getChildByURI(final EObject parent, final URI uri) {
