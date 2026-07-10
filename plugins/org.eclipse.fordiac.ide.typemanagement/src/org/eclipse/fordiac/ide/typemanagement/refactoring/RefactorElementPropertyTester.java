@@ -46,10 +46,7 @@ public class RefactorElementPropertyTester extends PropertyTester {
 			if (ie.getFBType() instanceof FunctionFBType) {
 				return false;
 			}
-			if (ie.getBlockFBNetworkElement() != null) {
-				return isEditableTypeEntry(ie.getBlockFBNetworkElement().getTypeEntry());
-			}
-			return true;
+			return ie.getBlockFBNetworkElement() == null;
 		}
 
 		return element instanceof final FB fbb && fbb.eContainer() instanceof BaseFBType;
