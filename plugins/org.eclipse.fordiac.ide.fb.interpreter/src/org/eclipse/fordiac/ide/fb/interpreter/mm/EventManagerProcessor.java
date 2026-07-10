@@ -25,6 +25,7 @@ import java.util.Set;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.DefaultRunFBType;
+import org.eclipse.fordiac.ide.fb.interpreter.ServiceInterfaceFBTypeDefaultInterpreter;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
@@ -69,6 +70,7 @@ public class EventManagerProcessor {
 		this.eventManager = eventManager;
 		this.networkRuntime = networkRuntime;
 		DefaultRunFBType.clearCaches();
+		ServiceInterfaceFBTypeDefaultInterpreter.setOutputInitO(false);
 	}
 
 	public int getEventCounter() {
