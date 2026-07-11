@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
@@ -37,35 +38,84 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  */
 public class ReplayDebuggingTarget extends DeploymentDebugTarget {
 
-	private final Map<String, String> deviceNameToPath = new HashMap<>();
-	private final Set<String> selectedResources = new HashSet<>();
-	private final boolean remote;
+	/**
+	 * All the information needed to run replay debugging on a single device: the
+	 * device itself, the resources selected within it, whether it should run
+	 * remotely (via Forte), and the trace path to use for it.
+	 */
+	public static final class DeviceReplaySettings {
 
-	public ReplayDebuggingTarget(final AutomationSystem system, final Set<INamedElement> selection,
-			final ILaunch launch, final boolean allowTerminate, final String tracesPath, final boolean remote)
-			throws DeploymentException {
-		// pass empty list to deploy if not remote, as we do not want to deploy
-		super(system, remote ? selection : Set.of(), launch, allowTerminate, Duration.ofSeconds(30), List.of());
-		this.remote = remote;
-		for (final INamedElement element : selection) {
-			if (element instanceof final Device device) {
-				this.deviceNameToPath.put(device.getName(), tracesPath);
-			} else if (element instanceof final Resource resource) {
-				this.deviceNameToPath.put(resource.getDevice().getName(), tracesPath);
-				selectedResources.add(resource.getName());
+		private final Device device;
+		private final Set<Resource> resources;
+		private final boolean remote;
+		private final String tracePath;
+
+		public DeviceReplaySettings(final Device device, final Set<Resource> resources, final boolean remote,
+				final String tracePath) {
+			this.device = device;
+			this.resources = resources;
+			this.remote = remote;
+			this.tracePath = tracePath;
+		}
+
+		public Device getDevice() {
+			return device;
+		}
+
+		public Set<Resource> getResources() {
+			return resources;
+		}
+
+		public boolean isRemote() {
+			return remote;
+		}
+
+		public String getTracePath() {
+			return tracePath;
+		}
+	}
+
+	private final Map<String, String> deviceNameToPath = new HashMap<>();
+	private final Map<String, Boolean> deviceNameToRemote = new HashMap<>();
+	private final Map<String, Set<String>> deviceNameToResources = new HashMap<>();
+
+	public ReplayDebuggingTarget(final AutomationSystem system, final List<DeviceReplaySettings> deviceSettings,
+			final ILaunch launch, final boolean allowTerminate) throws DeploymentException {
+		super(system, computeDeploySelection(deviceSettings), launch, allowTerminate, Duration.ofSeconds(30),
+				List.of());
+
+		for (final DeviceReplaySettings settings : deviceSettings) {
+			final String deviceName = settings.getDevice().getName();
+			deviceNameToPath.put(deviceName, settings.getTracePath());
+			deviceNameToRemote.put(deviceName, settings.isRemote());
+			deviceNameToResources.put(deviceName,
+					settings.getResources().stream().map(Resource::getName).collect(Collectors.toSet()));
+		}
+	}
+
+	private static Set<INamedElement> computeDeploySelection(final List<DeviceReplaySettings> deviceSettings) {
+		final Set<INamedElement> result = new HashSet<>();
+		for (final DeviceReplaySettings settings : deviceSettings) {
+			if (settings.isRemote()) {
+				result.add(settings.getDevice());
+				result.addAll(settings.getResources());
 			}
 		}
+		return result;
 	}
 
 	@Override
 	protected void doConnect(final Device device) throws DebugException {
 		final var path = deviceNameToPath.get(device.getName());
 		if (path == null) {
-			// trying to connect to a device that has no been selected
+			// trying to connect to a device that has not been selected
 			return;
 		}
-		final ReplayDebuggingDevice replayDebuggingDevice = new ReplayDebuggingDevice(device, selectedResources, this,
-				deviceNameToPath.get(device.getName()), remote);
+		final boolean deviceRemote = deviceNameToRemote.getOrDefault(device.getName(), false);
+		final Set<String> deviceResources = deviceNameToResources.getOrDefault(device.getName(), Set.of());
+
+		final ReplayDebuggingDevice replayDebuggingDevice = new ReplayDebuggingDevice(device, deviceResources, this,
+				path, deviceRemote);
 
 		replayDebuggingDevice.connect();
 	}
