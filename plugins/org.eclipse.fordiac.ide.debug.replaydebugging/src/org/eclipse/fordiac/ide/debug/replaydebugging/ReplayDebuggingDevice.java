@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
 
@@ -54,6 +55,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class ReplayDebuggingDevice extends DeploymentDebugDevice implements ReplayDebuggingResource.UpdateListener {
 
 	private final String tracesPath;
+	private final Set<String> resources;
 
 	private final Map<String, ReplayDebuggingResource> replayDebuggingResources = new HashMap<>();
 
@@ -68,11 +70,12 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 
 	private final boolean remote;
 
-	public ReplayDebuggingDevice(final Device device, final DeploymentDebugTarget debugTarget, final String tracesPath,
-			final boolean remote) {
+	public ReplayDebuggingDevice(final Device device, final Set<String> resources,
+			final DeploymentDebugTarget debugTarget, final String tracesPath, final boolean remote) {
 		super(device, debugTarget, true, Duration.ZERO, List.of(), "Interpreter"); //$NON-NLS-1$
 		this.tracesPath = tracesPath;
 		this.remote = remote;
+		this.resources = resources;
 	}
 
 	public DeviceResponse getDeviceResponse() {
@@ -151,10 +154,10 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	private IDeviceReplayer createReplayer() {
 		if (remote) {
 			return new org.eclipse.fordiac.ide.debug.replaydebugging.replayer.forte.DeviceReplayer(
-					getDeviceManagementExecutorService(), getDevice(), tracesPath);
+					getDeviceManagementExecutorService(), getDevice(), resources, tracesPath);
 		}
 		return new org.eclipse.fordiac.ide.debug.replaydebugging.replayer.interpreter.DeviceReplayer(getDevice(),
-				tracesPath);
+				resources, tracesPath);
 	}
 
 	// set the watches of the current changes to error so they are marked with a

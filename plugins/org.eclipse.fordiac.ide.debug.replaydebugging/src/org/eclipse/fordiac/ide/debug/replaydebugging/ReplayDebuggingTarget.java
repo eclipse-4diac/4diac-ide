@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 /**
  * @brief Represents a debug target for replay debugging.
@@ -36,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public class ReplayDebuggingTarget extends DeploymentDebugTarget {
 
 	private final Map<String, String> deviceNameToPath = new HashMap<>();
+	private final Set<String> selectedResources = new HashSet<>();
 	private final boolean remote;
 
 	public ReplayDebuggingTarget(final AutomationSystem system, final Set<INamedElement> selection,
@@ -47,6 +50,9 @@ public class ReplayDebuggingTarget extends DeploymentDebugTarget {
 		for (final INamedElement element : selection) {
 			if (element instanceof final Device device) {
 				this.deviceNameToPath.put(device.getName(), tracesPath);
+			} else if (element instanceof final Resource resource) {
+				this.deviceNameToPath.put(resource.getDevice().getName(), tracesPath);
+				selectedResources.add(resource.getName());
 			}
 		}
 	}
@@ -58,7 +64,7 @@ public class ReplayDebuggingTarget extends DeploymentDebugTarget {
 			// trying to connect to a device that has no been selected
 			return;
 		}
-		final ReplayDebuggingDevice replayDebuggingDevice = new ReplayDebuggingDevice(device, this,
+		final ReplayDebuggingDevice replayDebuggingDevice = new ReplayDebuggingDevice(device, selectedResources, this,
 				deviceNameToPath.get(device.getName()), remote);
 
 		replayDebuggingDevice.connect();
