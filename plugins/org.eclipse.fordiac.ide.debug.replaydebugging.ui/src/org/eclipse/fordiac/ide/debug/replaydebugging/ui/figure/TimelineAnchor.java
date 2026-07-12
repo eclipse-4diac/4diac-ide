@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
+import java.util.function.IntSupplier;
+
 import org.eclipse.draw2d.AbstractConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -30,10 +32,11 @@ import org.eclipse.draw2d.geometry.Rectangle;
 public class TimelineAnchor extends AbstractConnectionAnchor {
 
 	private final int eventIndex;
-	private final int numberOfEvents;
 	private final boolean isSource;
+	private final IntSupplier numberOfEvents;
 
-	public TimelineAnchor(final IFigure owner, final int eventIndex, final int numberOfEvents, final boolean isSource) {
+	public TimelineAnchor(final IFigure owner, final int eventIndex, final boolean isSource,
+			final IntSupplier numberOfEvents) {
 		super(owner);
 		this.eventIndex = eventIndex;
 		this.numberOfEvents = numberOfEvents;
@@ -46,8 +49,13 @@ public class TimelineAnchor extends AbstractConnectionAnchor {
 		final Rectangle bounds = getOwner().getBounds().getCopy();
 		getOwner().translateToAbsolute(bounds);
 
+		final var currentNumberOfEvents = numberOfEvents.getAsInt();
+		if (currentNumberOfEvents < 1) {
+			return new Point(bounds.x, bounds.y);
+		}
+
 		final int availableWidth = bounds.width;
-		final int markerSpacing = availableWidth / numberOfEvents;
+		final int markerSpacing = availableWidth / currentNumberOfEvents;
 
 		final int x = bounds.x + (eventIndex * markerSpacing) + (isSource ? markerSpacing / 2 : 0);
 		final int y = bounds.y + (isSource ? bounds.height : bounds.height / 2);
