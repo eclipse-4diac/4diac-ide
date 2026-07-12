@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.Set;
@@ -33,7 +32,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -146,23 +144,8 @@ public class EventManagerProcessor {
 		}
 	}
 
-	public void injectOutputEvent(final BlockFBNetworkElement fb, final Event event,
-			final Map<String, String> outputValues) {
+	public void injectOutputEvent(final Event event) {
 		DefaultRunFBType.clearCaches();
-		for (final var entry : outputValues.entrySet()) {
-			final var name = entry.getKey();
-			final var value = entry.getValue();
-			// copy output values to the model.
-			for (final var output : fb.getInterface().getOutputVars()) {
-				if (!output.getName().equals(name)) {
-					continue;
-				}
-				final var newValue = LibraryElementFactory.eINSTANCE.createValue();
-				newValue.setValue(value);
-				output.setValue(newValue);
-			}
-		}
-
 		final EList<Transaction> generatedT = new BasicEList<>();
 		for (final Connection conn : event.getOutputConnections()) {
 			final var dest = (Event) conn.getDestination();
@@ -174,23 +157,8 @@ public class EventManagerProcessor {
 		addTransactions(generatedT, true);
 	}
 
-	public void injectInputEvent(final BlockFBNetworkElement fb, final Event event,
-			final Map<String, String> inputValues) {
+	public void injectInputEvent(final Event event) {
 		DefaultRunFBType.clearCaches();
-		for (final var entry : inputValues.entrySet()) {
-			final var name = entry.getKey();
-			final var value = entry.getValue();
-			// copy output values to the model.
-			for (final var input : fb.getInterface().getInputVars()) {
-				if (!input.getName().equals(name)) {
-					continue;
-				}
-				final var newValue = LibraryElementFactory.eINSTANCE.createValue();
-				newValue.setValue(value);
-				input.setValue(newValue);
-			}
-		}
-
 		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom(event, null);
 		destinationEventOccurence.setParentFB(event.getBlockFBNetworkElement());
 		final Transaction transaction = TransactionFactory.createFrom(destinationEventOccurence);

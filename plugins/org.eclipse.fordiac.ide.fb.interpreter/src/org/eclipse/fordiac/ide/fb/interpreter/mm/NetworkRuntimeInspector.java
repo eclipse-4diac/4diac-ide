@@ -77,6 +77,24 @@ public class NetworkRuntimeInspector {
 		return realBlockNames.get(name);
 	}
 
+	public void applyOutputData(final String instanceName, final List<String> outputValues) {
+		final var realFB = getRealFB(instanceName);
+		// set output and transfer data in the interpreter network
+		for (int i = 0; i < outputValues.size(); i++) {
+			final var valueToStore = outputValues.get(i);
+			networkRuntimeState.getDataValues().get(realFB.getInterface().getOutputVars().get(i).getQualifiedName()
+					.substring(firstLevelPrefix.length())).setValue(valueToStore);
+
+			final var realOutputPin = InterfacePinUtils.findPinInInterface(realFB,
+					realFB.getInterface().getOutputVars().get(i));
+			realOutputPin.getOutputConnections().forEach(conn -> networkRuntimeState
+					.getConnectionValue(conn.getSource().getQualifiedName().substring(firstLevelPrefix.length()),
+							conn.getDestination().getQualifiedName().substring(firstLevelPrefix.length()))
+					.setValue(valueToStore));
+		}
+
+	}
+
 	public Optional<Event> getRealEvent(final Optional<Event> originalEvent) {
 		if (!originalEvent.isPresent()) {
 			return Optional.empty();
