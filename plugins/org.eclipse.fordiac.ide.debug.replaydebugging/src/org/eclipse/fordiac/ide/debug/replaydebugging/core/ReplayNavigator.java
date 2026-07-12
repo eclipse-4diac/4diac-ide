@@ -404,9 +404,9 @@ public class ReplayNavigator implements Timeline.StructureListener {
 			final var initialEventNumber = getCurrentEventPosition().eventNumber() - removedStartEventIndex;
 
 			final var changedValues = temp.getChangesFromTo(initialEventNumber, 0);
+			changedValues.putAll(temp.getInitialStateAtLeavingTimeline());
 
 			if (removedStartEventIndex == 0) {
-				changedValues.putAll(temp.getInitialStateAtLeavingTimeline());
 				currentEventPosition = new EventPosition(timeline.getParentTimeline(),
 						timeline.getParentTimeline().getSpawnedTimelineEventNumber(timeline));
 			} else {

@@ -108,10 +108,6 @@ public class Timeline {
 			}
 		}
 
-		// create a deep copy of toRemove
-		final var toRemoveCopy = new ArrayList<>(toRemove);
-		toRemove.clear();
-
 		// remove timelines which spawn from removed events
 		for (final var entry : spawnedTimelines.entrySet()) {
 			final var spawnedTimeline = entry.getKey();
@@ -121,6 +117,9 @@ public class Timeline {
 			}
 		}
 
+		// create a deep copy of toRemove
+		final var toRemoveCopy = new ArrayList<>(toRemove);
+		toRemove.clear();
 		notifyRemoveEvents(eventNumber, toRemoveCopy);
 
 	}
