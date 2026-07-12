@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
@@ -46,6 +48,8 @@ public class NetworkRuntimeInspector {
 
 	private final String firstLevelPrefix;
 	private final String nameSeparator;
+
+	private static final Pattern TYPE_PREFIX_PATTERN = Pattern.compile("\\G([_a-zA-Z][a-zA-Z_0-9:]*+)#"); //$NON-NLS-1$
 
 	private final NetworkRuntimeState networkRuntimeState = new NetworkRuntimeState();
 
@@ -81,7 +85,13 @@ public class NetworkRuntimeInspector {
 		final var realFB = getRealFB(instanceName);
 		// set output and transfer data in the interpreter network
 		for (int i = 0; i < outputValues.size(); i++) {
-			final var valueToStore = outputValues.get(i);
+			String valueWithoutType = outputValues.get(i);
+			final Matcher matcher = TYPE_PREFIX_PATTERN.matcher(valueWithoutType);
+			// remove type before #
+			if (matcher.lookingAt()) {
+				valueWithoutType = valueWithoutType.substring(matcher.end());
+			}
+			final var valueToStore = valueWithoutType;
 			networkRuntimeState.getDataValues().get(realFB.getInterface().getOutputVars().get(i).getQualifiedName()
 					.substring(firstLevelPrefix.length())).setValue(valueToStore);
 

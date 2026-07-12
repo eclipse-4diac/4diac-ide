@@ -29,7 +29,7 @@ public class FunctionFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefault
 			return ECollections.emptyEList();
 		}
 		final FunctionFBType functionFBType = fBTypeRuntime.getFunctionFBType();
-		VariableUtils.fBVariableInitialization(functionFBType);
+		VariableUtils.fBVariableInitialization(functionFBType, null);
 
 		// function types always have exactly 1 output event
 		final Event event = functionFBType.getInterfaceList().getEventOutputs().get(0);

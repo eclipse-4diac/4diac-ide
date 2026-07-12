@@ -27,7 +27,7 @@ public class SimpleFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultIn
 		}
 		// Initialization of variables
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
-		VariableUtils.fBVariableInitialization(simpleFBType);
+		VariableUtils.fBVariableInitialization(simpleFBType, null);
 
 		final var actions = getActions(simpleFBType, eventOccurrence.getEvent().getName());
 		final var outputEvents = new BasicEList<EventOccurrence>(actions.size());
