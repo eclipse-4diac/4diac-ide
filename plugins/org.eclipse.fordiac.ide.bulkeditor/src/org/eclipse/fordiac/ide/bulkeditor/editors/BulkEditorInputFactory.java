@@ -22,6 +22,7 @@ public class BulkEditorInputFactory implements IElementFactory {
 	private static final String ID_FACTORY = "org.eclipse.fordiac.ide.bulkeditor.BulkEditorInputFactory"; //$NON-NLS-1$
 
 	private static final String TAG_BULKEDITOR_PROJECT = "BULKEDITOR_PROJECT"; //$NON-NLS-1$
+	private static final String TAG_BULKEDITOR_QUERY = "BULKEDITOR_QUERY"; //$NON-NLS-1$
 
 	@Override
 	public IAdaptable createElement(final IMemento memento) {
@@ -29,14 +30,20 @@ public class BulkEditorInputFactory implements IElementFactory {
 				.getProject(memento.getString(TAG_BULKEDITOR_PROJECT));
 
 		if (project != null) {
-			return new BulkEditorInput(project, BulkEditorSettings.createFromMemento(memento));
+			final IMemento queryMemento = memento.getChild(TAG_BULKEDITOR_QUERY);
+			if (queryMemento != null) {
+				return new BulkEditorInput(project, queryMemento.getTextData());
+			}
 		}
 		return null;
 	}
 
 	public static void saveState(final IMemento memento, final BulkEditorInput input) {
 		memento.putString(TAG_BULKEDITOR_PROJECT, input.getProject().getName());
-		input.getSettings().saveState(memento);
+		final String queryXmi = input.snapshotQueryXmi();
+		if (queryXmi != null) {
+			memento.createChild(TAG_BULKEDITOR_QUERY).putTextData(queryXmi);
+		}
 	}
 
 	public static String getFactoryId() {

@@ -13,10 +13,10 @@
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
@@ -25,39 +25,26 @@ import org.eclipse.ui.IPersistableElement;
 public class BulkEditorInput implements IEditorInput, IPersistableElement {
 
 	private final IProject project;
-	private final BulkEditorSettings settings;
-	private final List<URI> initialSelectedSubApps;
+	private String query;
+	private Supplier<String> querySupplier;
 
 	public BulkEditorInput(final IProject project) {
-		this(project, new BulkEditorSettings());
+		this(project, "");
 	}
 
 	public BulkEditorInput(final IProject project, final List<URI> initialSelectedSubApps) {
 		this.project = project;
-		this.settings = new BulkEditorSettings();
-		if (!initialSelectedSubApps.isEmpty()) {
-			this.settings.scope = ScopeOption.SUBAPP_HIERARCHY;
-			this.settings.subappHierarchies = initialSelectedSubApps;
-		}
-		this.initialSelectedSubApps = initialSelectedSubApps;
+		this.query = null;
+		// TODO: subapp as scope
 	}
 
-	public BulkEditorInput(final IProject project, final BulkEditorSettings settings) {
+	public BulkEditorInput(final IProject project, final String query) {
 		this.project = project;
-		this.settings = settings;
-		this.initialSelectedSubApps = settings.subappHierarchies;
+		this.query = query;
 	}
 
 	public IProject getProject() {
 		return project;
-	}
-
-	public BulkEditorSettings getSettings() {
-		return settings;
-	}
-
-	public List<URI> getInitialSelectedSubApps() {
-		return initialSelectedSubApps;
 	}
 
 	@Override
@@ -114,5 +101,27 @@ public class BulkEditorInput implements IEditorInput, IPersistableElement {
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		return null;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(final String query) {
+		this.query = query;
+	}
+
+	public void setQuerySnapshotSupplier(final Supplier<String> querySupplier) {
+		this.querySupplier = querySupplier;
+	}
+
+	public String snapshotQueryXmi() {
+		if (querySupplier != null) {
+			final String current = querySupplier.get();
+			if (current != null) {
+				query = current;
+			}
+		}
+		return query;
 	}
 }
