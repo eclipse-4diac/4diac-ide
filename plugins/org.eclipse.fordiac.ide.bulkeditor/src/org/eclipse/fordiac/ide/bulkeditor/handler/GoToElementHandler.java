@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
@@ -51,13 +52,13 @@ public class GoToElementHandler extends AbstractHandler {
 			marker.setAttribute(FordiacErrorMarker.TARGET_URI, EcoreUtil.getURI(rowObject).toString());
 			IDE.gotoMarker(editor, marker);
 		} catch (final CoreException es) {
-			// ignore
+			FordiacLogHelper.logWarning(es.getMessage(), es);
 		} finally {
 			if (marker != null) {
 				try {
 					marker.delete();
 				} catch (final CoreException es) {
-					// ignore
+					FordiacLogHelper.logWarning(es.getMessage(), es);
 				}
 			}
 		}
