@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.InitialValueGenericEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueVariableEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueTypedElementAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
@@ -122,7 +122,7 @@ public class VarConfigurationSection extends AbstractSection {
 						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		inputTable.addConfiguration(new InitialValueGenericEditorConfiguration<>(inputDataProvider,
+		inputTable.addConfiguration(new InitialValueVariableEditorConfiguration<>(inputDataProvider,
 				new InitialValueTypedElementAccessor<VarDeclaration>() {
 					@Override
 					public LibraryElement getContext(final VarDeclaration element) {
