@@ -53,4 +53,9 @@ public class DefaultCellUpdateDataCommandHandler extends UpdateDataCommandHandle
 			return false;
 		}
 	}
+
+	public static void register(final DataLayer dataLayer) {
+		dataLayer.unregisterCommandHandler(UpdateDataCommand.class);
+		dataLayer.registerCommandHandler(new DefaultCellUpdateDataCommandHandler(dataLayer));
+	}
 }

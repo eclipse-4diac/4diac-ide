@@ -35,6 +35,7 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
 import org.eclipse.nebula.widgets.nattable.tree.command.TreeCollapseAllCommand;
 import org.eclipse.nebula.widgets.nattable.tree.command.TreeExpandAllCommand;
@@ -63,8 +64,8 @@ public class VariableWidget {
 		GridLayoutFactory.swtDefaults().applyTo(buttonPanel);
 
 		data = new VariableTreeData(new VariableColumnAccessor());
-		final DataLayer dataLayer = new DataLayer(data);
-		dataLayer.setConfigLabelAccumulator(new VariableConfigLabelAccumulator());
+		final DataLayer dataLayer = createDataLayer(data);
+		dataLayer.setConfigLabelAccumulator(createConfigLabelAccumulator(data));
 		dataLayer.addLayerListener(this::handleDataLayerEvent);
 		table = NatTableWidgetFactory.createTreeNatTable(composite, dataLayer, data,
 				new NatTableColumnProvider<>(VariableTableColumn.DEFAULT_COLUMNS),
@@ -90,7 +91,15 @@ public class VariableWidget {
 	}
 
 	public void setInput(final List<Variable<?>> variables) {
+		setVariableInput(variables);
+		refreshTable(variables);
+	}
+
+	protected void setVariableInput(final List<Variable<?>> variables) {
 		data.setInput(variables);
+	}
+
+	private void refreshTable(final List<Variable<?>> variables) {
 		table.refresh();
 		table.doCommand(new TreeCollapseAllCommand());
 		if (variables.size() == 1) {
@@ -106,11 +115,29 @@ public class VariableWidget {
 		modificationListeners.remove(listener);
 	}
 
+	protected DataLayer createDataLayer(final VariableTreeData dataProvider) {
+		return new DataLayer(dataProvider);
+	}
+
+	protected IConfigLabelAccumulator createConfigLabelAccumulator(final VariableTreeData dataProvider) {
+		return new VariableConfigLabelAccumulator();
+	}
+
+	@SuppressWarnings("unused")
+	protected void handleVariableModified(final Variable<?> variable, final String oldValue, final String newValue) {
+		// subclasses may react to variable modifications
+	}
+
+	protected NatTable getTable() {
+		return table;
+	}
+
 	private void handleDataLayerEvent(final ILayerEvent event) {
 		if (event instanceof final DataUpdateEvent dataUpdateEvent) {
 			final Variable<?> variable = data.getRowObject(dataUpdateEvent.getRowPosition());
 			final String oldValue = Objects.toString(dataUpdateEvent.getOldValue(), NULL_DEFAULT);
 			final String newValue = Objects.toString(dataUpdateEvent.getNewValue(), NULL_DEFAULT);
+			handleVariableModified(variable, oldValue, newValue);
 			modificationListeners.forEach(listener -> listener.variableModified(variable, oldValue, newValue));
 		}
 	}
