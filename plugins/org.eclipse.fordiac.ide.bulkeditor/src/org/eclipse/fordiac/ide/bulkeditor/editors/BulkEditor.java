@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.bulkeditor.nattable.BulkEditorNatTable;
 import org.eclipse.fordiac.ide.bulkeditor.nattable.DelegatingSelectionProvider;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer;
 import org.eclipse.fordiac.ide.bulkeditor.search.EditorSearchExecutor;
+import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.QuerySearchAdapter;
 import org.eclipse.fordiac.ide.bulkeditor.search.SearchHelper;
 import org.eclipse.fordiac.ide.bulkeditor.ui.AddAttributeTreeSelectionDialog;
@@ -106,7 +107,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	// Latest successful search result (mapped to editable counterparts).
 	private List<EObject> editableSearchResult;
 	private Set<URI> searchScope;
-	private EObject latestQueryRoot;
+	private PlaceConfig latestQueryConfig;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -243,7 +244,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 		changeNatTable(mode, result.attributeTypeEntry() != null ? result.attributeTypeEntry().getType() : null);
 
-		this.latestQueryRoot = queryRoot;
+		this.latestQueryConfig = result.placeConfig();
 		this.searchScope = result.searchScope();
 
 		disconnectEditorInputs();
@@ -283,8 +284,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 				.filter(SearchHelper.linkedElementsFilter).map(TypeEntry::getType).filter(Objects::nonNull).toList();
 
 		final AddAttributeTreeSelectionDialog addAttributeDialog = new AddAttributeTreeSelectionDialog(
-				getSite().getShell(), libraryElements,
-				SearchHelper.createChildrenSearchProvider(QuerySearchAdapter.buildPlaceConfig(latestQueryRoot)),
+				getSite().getShell(), libraryElements, SearchHelper.createChildrenSearchProvider(latestQueryConfig),
 				attributeTypeEntry != null ? attributeTypeEntry.getFullTypeName() : null, project, new HashSet<>());
 		if (addAttributeDialog.open() != Window.OK) {
 			return null;
