@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,21 +8,21 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 
-public class InitialValueEditorConfiguration extends InitialValueGenericEditorConfiguration<ITypedElement> {
+public class InitialValueVariableEditorConfiguration<T> extends InitialValueGenericEditorConfiguration<T> {
 
-	public InitialValueEditorConfiguration(final IRowDataProvider<? extends ITypedElement> dataProvider) {
-		super(dataProvider, InitialValueTypedElementAccessor.INSTANCE);
+	public InitialValueVariableEditorConfiguration(final IRowDataProvider<? extends T> dataProvider,
+			final InitialValueStructuredElementAccessor<T> elementAccessor) {
+		super(dataProvider, elementAccessor);
 	}
 
 	@Override
-	protected InitialValueStructuredCellEditor<ITypedElement> createStructuredCellEditor() {
+	protected InitialValueStructuredCellEditor<T> createStructuredCellEditor() {
 		return new InitialValueVariableStructuredCellEditor<>(getDataProvider(), getElementAccessor());
 	}
 }
