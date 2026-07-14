@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -37,12 +36,12 @@ import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.commands.CreateAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.commands.DeleteAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.nattable.BulkEditorNatTable;
+import org.eclipse.fordiac.ide.bulkeditor.nattable.DelegatingSelectionProvider;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer;
 import org.eclipse.fordiac.ide.bulkeditor.search.EditorSearchExecutor;
+import org.eclipse.fordiac.ide.bulkeditor.search.QuerySearchAdapter;
 import org.eclipse.fordiac.ide.bulkeditor.search.SearchHelper;
-import org.eclipse.fordiac.ide.bulkeditor.search.SearchParameters;
 import org.eclipse.fordiac.ide.bulkeditor.ui.AddAttributeTreeSelectionDialog;
-import org.eclipse.fordiac.ide.bulkeditor.ui.BulkEditorControls;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -72,7 +71,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -92,8 +90,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	private static final int RESULT_PAGE_INDEX = 1;
 
 	private IProject project;
-	private BulkEditorSettings settings;
-	private List<URI> selectedSubApps = Collections.emptyList();
+	private final DelegatingSelectionProvider selectionProviderDelegate = new DelegatingSelectionProvider();
 
 	private final Set<IEditorInput> editorInputs = new HashSet<>();
 	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
@@ -103,14 +100,13 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	private MultiLibraryElementActivationListener activationListener;
 	private ActionRegistry actionRegistry;
 
-	private BulkEditorControls controls;
 	private BulkEditorNatTable natTable;
 	private QueryViewer queryViewer;
 
 	// Latest successful search result (mapped to editable counterparts).
 	private List<EObject> editableSearchResult;
 	private Set<URI> searchScope;
-	private SearchHelper latestSearchHelper;
+	private EObject latestQueryRoot;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -122,10 +118,8 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		activationListener = new MultiLibraryElementActivationListener(this, editorInputs);
 
 		if (input instanceof final BulkEditorInput bulkEditorInput) {
-			this.settings = bulkEditorInput.getSettings();
 			this.project = bulkEditorInput.getProject();
 			commandStack.setUndoContext(new ObjectUndoContext(project));
-			selectedSubApps = bulkEditorInput.getInitialSelectedSubApps();
 			setPartName(getPartName() + ": " + project.getName()); //$NON-NLS-1$
 		}
 	}
@@ -151,36 +145,17 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	@Override
 	protected void createPages() {
-		createControlsPage();
-		createResultPage();
 		createQueryViewerPage();
-	}
-
-	private void createControlsPage() {
-		final ScrolledComposite scrolledComposite = new ScrolledComposite(getContainer(), SWT.V_SCROLL);
-		scrolledComposite.setExpandVertical(true);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setBackgroundMode(SWT.INHERIT_DEFAULT);
-
-		final Composite pageComposite = new Composite(scrolledComposite, SWT.NONE);
-		scrolledComposite.setContent(pageComposite);
-		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
-
-		controls = new BulkEditorControls(settings, this, selectedSubApps);
-		controls.createControls(pageComposite);
-
-		scrolledComposite.setMinSize(pageComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		pageComposite.layout();
-
-		final int index = addPage(scrolledComposite);
-		setPageText(index, Messages.Tab_Controls);
+		createResultPage();
+		getSite().setSelectionProvider(selectionProviderDelegate);
 	}
 
 	private void createResultPage() {
 		final Composite pageComposite = new Composite(getContainer(), SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
 
-		natTable = new BulkEditorNatTable(pageComposite, this, settings.modeSelection, getSite());
+		natTable = new BulkEditorNatTable(pageComposite, this, BulkEditorMode.VARIABLE, getSite(),
+				selectionProviderDelegate);
 		pageComposite.layout();
 
 		final int index = addPage(pageComposite);
@@ -193,8 +168,11 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		pageComposite.setLayoutData(gd);
 
-		queryViewer = new QueryViewer(pageComposite, this.project);
-		getSite().setSelectionProvider(queryViewer.getSelectionProvider());
+		queryViewer = new QueryViewer(pageComposite, this.project, this);
+		if (getEditorInput() instanceof final BulkEditorInput bulkEditorInput) {
+			queryViewer.loadQueryFromString(bulkEditorInput.getQuery());
+			bulkEditorInput.setQuerySnapshotSupplier(queryViewer::saveQueryToString);
+		}
 		pageComposite.layout();
 
 		final int index = addPage(pageComposite);
@@ -232,6 +210,17 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		setActivePage(RESULT_PAGE_INDEX);
 	}
 
+	@Override
+	protected void pageChange(final int newPageIndex) {
+		super.pageChange(newPageIndex);
+
+		switch (newPageIndex) {
+		case 0 -> selectionProviderDelegate.setActiveProvider(queryViewer.getSelectionProvider());
+		case 1 -> selectionProviderDelegate.setActiveProvider(natTable.getCurrentProvider());
+		default -> selectionProviderDelegate.setActiveProvider(null);
+		}
+	}
+
 	public void onModeChanged(final BulkEditorMode newMode) {
 		changeNatTable(newMode, null);
 		commandStack.flush();
@@ -240,17 +229,21 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	}
 
 	private boolean performSearch() {
-		final SearchParameters params = controls.collectParameters();
-		final EditorSearchExecutor.Result result = EditorSearchExecutor.search(params, project);
+		final EObject queryRoot = queryViewer.getQueryRoot();
+		if (queryRoot == null) {
+			return false;
+		}
+
+		final var mode = QuerySearchAdapter.resolveTargetMode(queryRoot);
+
+		final EditorSearchExecutor.Result result = EditorSearchExecutor.search(queryRoot, project);
 		if (result == null) {
 			return false;
 		}
 
-		if (result.simpleAttributeTypeEntry() != null) {
-			changeNatTable(BulkEditorMode.SIMPLE_ATTRIBUTE, result.simpleAttributeTypeEntry().getType());
-		}
+		changeNatTable(mode, result.attributeTypeEntry() != null ? result.attributeTypeEntry().getType() : null);
 
-		this.latestSearchHelper = result.helper();
+		this.latestQueryRoot = queryRoot;
 		this.searchScope = result.searchScope();
 
 		disconnectEditorInputs();
@@ -259,7 +252,6 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		editableSearchResult = BulkEditorHelper.findEditableResults(result.searchResult());
 		natTable.updateList(editableSearchResult);
 
-		controls.resetChangedSearchParameter();
 		final String infoText = result.searchResult().isEmpty() ? Messages.NoUsage : ""; //$NON-NLS-1$
 		natTable.setSearchInformationText(infoText);
 		commandStack.flush();
@@ -272,13 +264,14 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	}
 
 	private void changeNatTable(final BulkEditorMode modeSelection, final AttributeDeclaration simpleAttribute) {
-		final AttributeTypeEntry attributeTypeEntry = controls.isAdvancedMode() ? null
-				: TypeLibraryManager.INSTANCE.getTypeLibrary(project)
-						.getAttributeTypeEntry(controls.getSearchText().getText());
-
-		if (controls.getModeSelection() == 1) {
+		if (modeSelection == BulkEditorMode.SIMPLE_ATTRIBUTE && simpleAttribute != null) {
+			final AttributeTypeEntry attributeTypeEntry = TypeLibraryManager.INSTANCE.getTypeLibrary(project)
+					.getAttributeTypeEntry(simpleAttribute.getQualifiedName());
 			natTable.changeNatTable(modeSelection, simpleAttribute,
-					refElement -> handleAddAttribute(attributeTypeEntry), this::handleDeleteAttribute);
+					refElement -> this.handleAddAttribute(attributeTypeEntry), this::handleDeleteAttribute);
+		} else if (modeSelection == BulkEditorMode.ADVANCED_ATTRIBUTE) {
+			natTable.changeNatTable(modeSelection, simpleAttribute, refElement -> this.handleAddAttribute(null),
+					this::handleDeleteAttribute);
 		} else {
 			natTable.changeNatTable(modeSelection, simpleAttribute);
 		}
@@ -290,7 +283,8 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 				.filter(SearchHelper.linkedElementsFilter).map(TypeEntry::getType).filter(Objects::nonNull).toList();
 
 		final AddAttributeTreeSelectionDialog addAttributeDialog = new AddAttributeTreeSelectionDialog(
-				getSite().getShell(), libraryElements, latestSearchHelper.createChildrenSearchProvider(),
+				getSite().getShell(), libraryElements,
+				SearchHelper.createChildrenSearchProvider(QuerySearchAdapter.buildPlaceConfig(latestQueryRoot)),
 				attributeTypeEntry != null ? attributeTypeEntry.getFullTypeName() : null, project, new HashSet<>());
 		if (addAttributeDialog.open() != Window.OK) {
 			return null;
@@ -399,6 +393,11 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	@Override
 	public void dispose() {
+		if (queryViewer != null && getEditorInput() instanceof final BulkEditorInput bulkEditorInput) {
+			bulkEditorInput.setQuery(queryViewer.saveQueryToString());
+			bulkEditorInput.setQuerySnapshotSupplier(null);
+		}
+
 		disconnectEditorInputs();
 		LibraryElementProvider.INSTANCE.removeLibraryElementStateListener(elementStateListener);
 		OperationHistoryFactory.getOperationHistory().removeOperationHistoryListener(operationContextUpdater);
@@ -440,9 +439,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		public void elementDirtyStateChanged(final IEditorInput input, final boolean isDirty) {
 			if (editorInputs.contains(input)) {
 				firePropertyChange(PROP_DIRTY);
-				if (!controls.hasChangedSearchParameter()) {
-					natTable.setSearchInformationText(Messages.Search_Changes);
-				}
+				natTable.setSearchInformationText(Messages.Search_Changes);
 			}
 		}
 
@@ -451,9 +448,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 			if (editorInputs.contains(input)) {
 				editableSearchResult = BulkEditorHelper.findEditableResults(editableSearchResult);
 				natTable.updateList(editableSearchResult);
-				if (!controls.hasChangedSearchParameter()) {
-					natTable.setSearchInformationText(Messages.Search_Changes);
-				}
+				natTable.setSearchInformationText(Messages.Search_Changes);
 			}
 		}
 
