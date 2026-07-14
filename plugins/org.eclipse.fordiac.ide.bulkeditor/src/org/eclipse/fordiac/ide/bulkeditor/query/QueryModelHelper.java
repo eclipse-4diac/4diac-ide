@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.bulkeditor.query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EClass;
@@ -26,6 +27,8 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.fordiac.ide.bulkeditor.Messages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -42,6 +45,10 @@ public final class QueryModelHelper {
 	public static final String PLACEHOLDER = "Placeholder"; //$NON-NLS-1$
 	public static final String ATTRIBUTE_DECLARATION = "AttributeDeclaration"; //$NON-NLS-1$
 
+	public static final String PIN_TARGET = "PinTarget"; //$NON-NLS-1$
+	public static final String REF_TARGET = "target"; //$NON-NLS-1$
+	public static final String REF_PIN = "pin"; //$NON-NLS-1$
+
 	public static final String FEATURE_NAME = "name"; //$NON-NLS-1$
 	public static final String FEATURE_VALUE = "value"; //$NON-NLS-1$
 	public static final String FEATURE_CASE_SENSITIVE = "caseSensitive"; //$NON-NLS-1$
@@ -53,6 +60,9 @@ public final class QueryModelHelper {
 	public static final String FEATURE_KEY = "key"; //$NON-NLS-1$
 	public static final String FEATURE_VAL = "val"; //$NON-NLS-1$
 
+	public static final String FEATURE_PLACEHOLDER = "placeholder"; //$NON-NLS-1$
+	public static final String FEATURE_IGNORE_LINKED_LIBRARIES = "ignoreLinkedLibraries"; //$NON-NLS-1$
+
 	private QueryModelHelper() {
 		// utility class
 	}
@@ -63,6 +73,10 @@ public final class QueryModelHelper {
 
 	public static boolean isConstraint(final EObject eObj) {
 		return isOfType(eObj, CONSTRAINT) || isOfType(eObj, ATTRIBUTE_CONSTRAINT);
+	}
+
+	public static boolean isPlace(final EObject eObj) {
+		return isOfType(eObj, PLACE);
 	}
 
 	public static boolean isPlaceholder(final EObject eObj) {
@@ -134,6 +148,13 @@ public final class QueryModelHelper {
 	public record FieldConstraintEntry(EReference reference, EObject fieldConstraint) {
 	}
 
+	public static void setIgnoreLinkedLibrary(final EObject instance, final boolean value) {
+		final EStructuralFeature feature = instance.eClass().getEStructuralFeature(FEATURE_IGNORE_LINKED_LIBRARIES);
+		if (feature != null) {
+			instance.eSet(feature, Boolean.valueOf(value));
+		}
+	}
+
 	public static void setOccurrences(final EObject instance, final List<?> occurrences) {
 		final EStructuralFeature feature = instance.eClass().getEStructuralFeature(FEATURE_OCCURRENCE);
 		if (feature != null) {
@@ -149,6 +170,28 @@ public final class QueryModelHelper {
 				: SetCommand.create(editingDomain, parent, reference, child);
 		editingDomain.getCommandStack().execute(cmd);
 		return child;
+	}
+
+	public static boolean isMandatoryChild(final EObject obj) {
+		final EReference containment = obj.eContainmentFeature();
+		return containment != null && !containment.isMany() && containment.getLowerBound() >= 1
+				&& !containment.getEReferenceType().isAbstract();
+	}
+
+	public static void ensureMandatoryChildren(final EPackage queryPackage, final EObject parent) {
+		if (parent == null) {
+			return;
+		}
+		for (final EReference ref : parent.eClass().getEAllContainments()) {
+			final EClass type = ref.getEReferenceType();
+			if (ref.isMany() || ref.getLowerBound() < 1 || type.isAbstract() || type.isInterface()) {
+				continue;
+			}
+			if (!parent.eIsSet(ref)) {
+				parent.eSet(ref, queryPackage.getEFactoryInstance().create(type));
+			}
+			ensureMandatoryChildren(queryPackage, (EObject) parent.eGet(ref));
+		}
 	}
 
 	public static void removeChild(final AdapterFactoryEditingDomain editingDomain, final EObject child) {
@@ -170,10 +213,29 @@ public final class QueryModelHelper {
 		return result;
 	}
 
+	public static boolean isPinTargetQuery(final EObject queryRoot) {
+		final EObject target = getContainedChild(queryRoot, REF_TARGET);
+		final EObject targetOption = getContainedChild(target, REF_TARGET);
+		return targetOption != null && isOfType(targetOption, PIN_TARGET);
+	}
+
+	public static EObject getContainedChild(final EObject parent, final String refName) {
+		if (parent == null) {
+			return null;
+		}
+		final EStructuralFeature feature = parent.eClass().getEStructuralFeature(refName);
+		if (feature == null || !parent.eIsSet(feature)) {
+			return null;
+		}
+		final Object val = parent.eGet(feature);
+		return (val instanceof final EObject eObj) ? eObj : null;
+	}
+
 	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final Runnable afterAdd) {
+			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
+			final Predicate<EReference> referenceFilter, final Runnable afterAdd) {
 		for (final EReference ref : selected.eClass().getEAllContainments()) {
-			if (!ref.isMany() && selected.eIsSet(ref)) {
+			if (!referenceFilter.test(ref) || (!ref.isMany() && selected.eIsSet(ref))) {
 				continue;
 			}
 			final EClass childType = ref.getEReferenceType();
@@ -181,13 +243,13 @@ public final class QueryModelHelper {
 				final boolean isTargetNode = childType.getName().equals(TARGET_OPTION);
 				for (final EClass concrete : getConcreteSubclasses(queryPackage, childType)) {
 					final var name = isTargetNode ? concrete.getName() : ref.getName();
-					addMenuItem(menu, "Add " + name, () -> { //$NON-NLS-1$
+					addMenuItem(menu, NLS.bind(Messages.AddChild, name), () -> {
 						addChild(editingDomain, queryPackage, selected, ref, concrete);
 						afterAdd.run();
 					});
 				}
 			} else {
-				addMenuItem(menu, "Add " + ref.getName(), () -> { //$NON-NLS-1$
+				addMenuItem(menu, NLS.bind(Messages.AddChild, ref.getName()), () -> {
 					addChild(editingDomain, queryPackage, selected, ref, childType);
 					afterAdd.run();
 				});
@@ -197,11 +259,11 @@ public final class QueryModelHelper {
 
 	public static void populateRemoveMenuItem(final Menu menu, final EObject selected,
 			final AdapterFactoryEditingDomain editingDomain, final Runnable afterRemove) {
-		if (selected.eContainer() == null) {
+		if (selected.eContainer() == null || isMandatoryChild(selected)) {
 			return;
 		}
 		addSeparatorIfNeeded(menu);
-		addMenuItem(menu, "Remove " + selected.eClass().getName(), () -> { //$NON-NLS-1$
+		addMenuItem(menu, NLS.bind(Messages.RemoveChild, selected.eClass().getName()), () -> {
 			removeChild(editingDomain, selected);
 			afterRemove.run();
 		});
@@ -218,7 +280,7 @@ public final class QueryModelHelper {
 		}
 		addSeparatorIfNeeded(menu);
 		for (final FieldConstraintEntry entry : entries) {
-			final String label = "Remove " + entry.reference().getName(); //$NON-NLS-1$
+			final String label = NLS.bind(Messages.RemoveChild, entry.reference().getName());
 			addMenuItem(menu, label, () -> {
 				removeChild(editingDomain, entry.fieldConstraint());
 				afterRemove.run();
@@ -226,7 +288,7 @@ public final class QueryModelHelper {
 		}
 	}
 
-	private static void addMenuItem(final Menu menu, final String text, final Runnable action) {
+	public static void addMenuItem(final Menu menu, final String text, final Runnable action) {
 		final MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(text);
 		item.addListener(SWT.Selection, e -> action.run());
@@ -257,5 +319,15 @@ public final class QueryModelHelper {
 			}
 		}
 		return false;
+	}
+
+	public static List<EObject> getChildNodes(final EObject eObj) {
+		if (eObj == null) {
+			return List.of();
+		}
+		if (isConstraint(eObj)) {
+			return eObj.eContents().stream().filter(child -> !isOfType(child, FIELD_CONSTRAINT)).toList();
+		}
+		return eObj.eContents();
 	}
 }

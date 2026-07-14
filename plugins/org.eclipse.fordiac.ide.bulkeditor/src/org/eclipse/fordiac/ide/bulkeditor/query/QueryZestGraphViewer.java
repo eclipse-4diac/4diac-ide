@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -59,6 +60,7 @@ public class QueryZestGraphViewer {
 	private EObject rootElement;
 	private Runnable onSave;
 	private Runnable onLoad;
+	private Runnable onSearch;
 	private IProject project;
 
 	public QueryZestGraphViewer(final Composite parent, final AdapterFactoryEditingDomain editingDomain) {
@@ -87,6 +89,10 @@ public class QueryZestGraphViewer {
 	public void setSaveLoadCallbacks(final Runnable onSave, final Runnable onLoad) {
 		this.onSave = onSave;
 		this.onLoad = onLoad;
+	}
+
+	public void setSearchCallback(final Runnable onSearch) {
+		this.onSearch = onSearch;
 	}
 
 	public void addContextMenu(final EPackage ePackage) {
@@ -177,16 +183,18 @@ public class QueryZestGraphViewer {
 		}
 
 		final Runnable afterChange = this::refresh;
-		QueryModelHelper.populateAddChildMenuItems(menu, selected, editingDomain, queryPackage, afterChange);
+		QueryModelHelper.populateAddChildMenuItems(menu, selected, editingDomain, queryPackage,
+				this::isReferenceAddable, afterChange);
 		QueryModelHelper.populateFieldConstraintRemoval(menu, selected, editingDomain, afterChange);
 		QueryModelHelper.populateRemoveMenuItem(menu, selected, editingDomain, afterChange);
 	}
 
+	private boolean isReferenceAddable(final EReference ref) {
+		return !(QueryModelHelper.REF_PIN.equals(ref.getName()) && QueryModelHelper.isPinTargetQuery(rootElement));
+	}
+
 	@SuppressWarnings("unused")
 	private void populateBackgroundMenu(final Menu menu) {
-		if (rootElement != null && queryPackage != null) {
-			QueryModelHelper.populateAddChildMenuItems(menu, rootElement, editingDomain, queryPackage, this::refresh);
-		}
 		if (onSave == null && onLoad == null) {
 			return;
 		}
@@ -194,17 +202,14 @@ public class QueryZestGraphViewer {
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
 		if (onSave != null) {
-			addSimpleMenuItem(menu, "Save", onSave); //$NON-NLS-1$
+			QueryModelHelper.addMenuItem(menu, Messages.Save, onSave);
 		}
 		if (onLoad != null) {
-			addSimpleMenuItem(menu, "Load", onLoad); //$NON-NLS-1$
+			QueryModelHelper.addMenuItem(menu, Messages.Load, onLoad);
 		}
-	}
-
-	private static void addSimpleMenuItem(final Menu menu, final String text, final Runnable action) {
-		final MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText(text);
-		item.addListener(SWT.Selection, e -> action.run());
+		if (onSearch != null) {
+			QueryModelHelper.addMenuItem(menu, Messages.Search, onSearch);
+		}
 	}
 
 	private class QueryGraphContentProvider implements IGraphEntityRelationshipContentProvider {
@@ -217,6 +222,8 @@ public class QueryZestGraphViewer {
 			case final Resource res when !res.getContents().isEmpty() -> res.getContents().get(0);
 			case null, default -> null;
 			};
+
+			rootElement = root;
 		}
 
 		@Override
@@ -240,26 +247,8 @@ public class QueryZestGraphViewer {
 
 		private void collectAll(final EObject eObj, final List<EObject> result) {
 			result.add(eObj);
-
-			if (collapsedNodes.contains(eObj)) {
-				return;
-			}
-
-			final boolean isConstraint = QueryModelHelper.isConstraint(eObj);
-			for (final EReference ref : eObj.eClass().getEAllContainments()) {
-				final Object val = eObj.eGet(ref);
-				if (val instanceof final EObject child) {
-					if (isConstraint && QueryModelHelper.isOfType(child, QueryModelHelper.FIELD_CONSTRAINT)) {
-						continue; // rendered inline in the constraint figure
-					}
-					collectAll(child, result);
-				} else if (val instanceof final List<?> children) {
-					for (final Object c : children) {
-						if (c instanceof final EObject child) {
-							collectAll(child, result);
-						}
-					}
-				}
+			if (!collapsedNodes.contains(eObj)) {
+				QueryModelHelper.getChildNodes(eObj).forEach(child -> collectAll(child, result));
 			}
 		}
 	}
@@ -287,6 +276,9 @@ public class QueryZestGraphViewer {
 		}
 
 		private IFigure createNodeFigure(final EObject eObj) {
+			if (QueryModelHelper.isPlace(eObj)) {
+				return new QueryPlaceNodeFigure(eObj);
+			}
 			if (QueryModelHelper.isConstraint(eObj)) {
 				return new QueryConstraintNodeFigure(eObj, graphViewer.getGraphControl());
 			}
