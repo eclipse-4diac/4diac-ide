@@ -10,6 +10,8 @@
  * Contributors:
  *   Patrick Aigner
  *   	- initial API and implementation and/or initial documentation
+ *   Mario Kastner
+ *   	- redesign of manifest editor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
@@ -21,20 +23,26 @@ import org.eclipse.ui.forms.editor.FormEditor;
 
 public class ManifestEditor extends FormEditor {
 	private TextEditor textEditor;
+	private ManifestEditorDependencyPage dependencyPage;
+	// TODO add product editor page
+
+	private boolean isDirty;
+
+	private static final String DEPENDENCY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorDependencyPage"; //$NON-NLS-1$
 
 	@Override
 	protected void addPages() {
 		textEditor = new TextEditor();
-		final ManifestUpdateFormPage updatePage = new ManifestUpdateFormPage(this, "updateFormPage", //$NON-NLS-1$
-				"Update Dependencies"); //$NON-NLS-1$
+		dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Update Dependencies"); //$NON-NLS-1$
 
 		try {
 			final int index = addPage(textEditor, getEditorInput());
 			setPageText(index, textEditor.getTitle());
 			setPageImage(index, textEditor.getTitleImage());
 
-			addPage(updatePage);
+			addPage(dependencyPage);
 
+			isDirty = false;
 		} catch (final PartInitException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
@@ -42,7 +50,20 @@ public class ManifestEditor extends FormEditor {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		textEditor.doSave(monitor);
+		dependencyPage.doSave(monitor);
+		setDirty(false);
+	}
+
+	public void setDirty(final boolean dirty) {
+		if (this.isDirty != dirty) {
+			this.isDirty = dirty;
+			firePropertyChange(PROP_DIRTY);
+		}
+	}
+
+	@Override
+	public boolean isDirty() {
+		return isDirty;
 	}
 
 	@Override

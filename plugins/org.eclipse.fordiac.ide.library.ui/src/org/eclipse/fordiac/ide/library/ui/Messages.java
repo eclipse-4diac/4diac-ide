@@ -129,6 +129,13 @@ public class Messages extends NLS {
 	public static String ManageLibraryWizard_PreviewPage_Titel;
 	public static String ManageLibraryWizard_PreviewPage_Description;
 
+	// Manifest Editor
+	public static String ManifestEditor_Column_SymbolicName;
+	public static String ManifestEditor_Column_VersionRange;
+	public static String ManifestEditor_Column_Used;
+	public static String ManifestEditor_Column_LatestInRange;
+	public static String ManifestEditor_Column_Latest;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
