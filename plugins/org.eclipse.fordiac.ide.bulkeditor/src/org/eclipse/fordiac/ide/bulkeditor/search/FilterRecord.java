@@ -14,29 +14,25 @@ package org.eclipse.fordiac.ide.bulkeditor.search;
 
 import java.util.regex.Pattern;
 
-import org.eclipse.fordiac.ide.bulkeditor.ui.FilterComposite.Filter;
-
 public class FilterRecord {
 
 	private final boolean selected;
-
-	private final Filter nameFilter;
-	private final Filter typeFilter;
-	private final Filter commentFilter;
-
+	private final MatcherConfig nameConfig;
+	private final MatcherConfig typeConfig;
+	private final MatcherConfig commentConfig;
 	private final Pattern namePattern;
 	private final Pattern typePattern;
 	private final Pattern commentPattern;
 
-	public FilterRecord(final boolean selected, final Filter nameFilter, final Filter typeFilter,
-			final Filter commentFilter) {
+	public FilterRecord(final boolean selected, final MatcherConfig nameConfig, final MatcherConfig typeConfig,
+			final MatcherConfig commentConfig) {
 		this.selected = selected;
-		this.nameFilter = nameFilter;
-		this.typeFilter = typeFilter;
-		this.commentFilter = commentFilter;
-		this.namePattern = StringMatcher.createPattern(nameFilter);
-		this.typePattern = StringMatcher.createPattern(typeFilter);
-		this.commentPattern = StringMatcher.createPattern(commentFilter);
+		this.nameConfig = nameConfig;
+		this.typeConfig = typeConfig;
+		this.commentConfig = commentConfig;
+		this.namePattern = StringMatcher.createPattern(nameConfig);
+		this.typePattern = StringMatcher.createPattern(typeConfig);
+		this.commentPattern = StringMatcher.createPattern(commentConfig);
 	}
 
 	public boolean isSelected() {
@@ -44,8 +40,8 @@ public class FilterRecord {
 	}
 
 	public boolean matches(final String name, final String type, final String comment) {
-		return StringMatcher.matches(name, nameFilter, namePattern)
-				&& StringMatcher.matches(type, typeFilter, typePattern)
-				&& StringMatcher.matches(comment, commentFilter, commentPattern);
+		return StringMatcher.matches(name, nameConfig, namePattern)
+				&& StringMatcher.matches(type, typeConfig, typePattern)
+				&& StringMatcher.matches(comment, commentConfig, commentPattern);
 	}
 }

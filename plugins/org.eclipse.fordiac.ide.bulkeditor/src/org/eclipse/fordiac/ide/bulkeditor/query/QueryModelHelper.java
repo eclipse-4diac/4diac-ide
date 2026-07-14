@@ -12,13 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -44,12 +42,32 @@ public final class QueryModelHelper {
 	public static final String TARGET_OPTION = "TargetOption"; //$NON-NLS-1$
 	public static final String PLACEHOLDER = "Placeholder"; //$NON-NLS-1$
 	public static final String ATTRIBUTE_DECLARATION = "AttributeDeclaration"; //$NON-NLS-1$
-
+	public static final String ATTRIBUTE = "Attribute"; //$NON-NLS-1$
 	public static final String PIN_TARGET = "PinTarget"; //$NON-NLS-1$
+
 	public static final String REF_TARGET = "target"; //$NON-NLS-1$
+	public static final String REF_PLACE = "place"; //$NON-NLS-1$
 	public static final String REF_PIN = "pin"; //$NON-NLS-1$
+	public static final String REF_CONSTRAINT = "constraint"; //$NON-NLS-1$
+	public static final String REF_ATTRIBUTE_CONSTRAINT = "attributeConstraint"; //$NON-NLS-1$
+
+	public static final String REF_SIMPLE_TYPE = "simpleType"; //$NON-NLS-1$
+	public static final String REF_BASIC_TYPE = "basicType"; //$NON-NLS-1$
+	public static final String REF_COMPOSITE_TYPE = "compositeType"; //$NON-NLS-1$
+	public static final String REF_SERVICE_INTERFACE_TYPE = "serviceInterfaceType"; //$NON-NLS-1$
+	public static final String REF_SUBAPP_TYPE = "subappType"; //$NON-NLS-1$
+	public static final String REF_STRUCT_TYPE = "structType"; //$NON-NLS-1$
+	public static final String REF_ATTRIBUTE_TYPE = "attributeType"; //$NON-NLS-1$
+	public static final String REF_SIMPLE_FB = "simpleFB"; //$NON-NLS-1$
+	public static final String REF_BASIC_FB = "basicFB"; //$NON-NLS-1$
+	public static final String REF_COMPOSITE_FB = "compositeFB"; //$NON-NLS-1$
+	public static final String REF_SERVICE_INTERFACE_FB = "serviceInterfaceFB"; //$NON-NLS-1$
+	public static final String REF_TYPED_SUBAPP = "typedSubapp"; //$NON-NLS-1$
+	public static final String REF_UNTYPED_SUBAPP = "untypedSubapp"; //$NON-NLS-1$
 
 	public static final String FEATURE_NAME = "name"; //$NON-NLS-1$
+	public static final String FEATURE_TYPE = "type"; //$NON-NLS-1$
+	public static final String FEATURE_COMMENT = "comment"; //$NON-NLS-1$
 	public static final String FEATURE_VALUE = "value"; //$NON-NLS-1$
 	public static final String FEATURE_CASE_SENSITIVE = "caseSensitive"; //$NON-NLS-1$
 	public static final String FEATURE_WHOLE_WORD = "wholeWord"; //$NON-NLS-1$
@@ -63,10 +81,22 @@ public final class QueryModelHelper {
 	public static final String FEATURE_PLACEHOLDER = "placeholder"; //$NON-NLS-1$
 	public static final String FEATURE_IGNORE_LINKED_LIBRARIES = "ignoreLinkedLibraries"; //$NON-NLS-1$
 
+	public static final String OCC_APPLICATION = "Application"; //$NON-NLS-1$
+	public static final String OCC_COMPOSITE_FB = "CompositeFB"; //$NON-NLS-1$
+	public static final String OCC_TYPED_SUBAPP = "TypedSubapp"; //$NON-NLS-1$
+
+	public record FieldConstraintData(String value, boolean caseSensitive, boolean wholeWord, boolean entire,
+			boolean regex) {
+	}
+
+	public record FieldConstraintEntry(EReference reference, EObject fieldConstraint) {
+	}
+
 	private QueryModelHelper() {
 		// utility class
 	}
 
+	// type checks
 	public static boolean isOfType(final EObject eObj, final String className) {
 		return eObj != null && eObj.eClass().getName().equals(className);
 	}
@@ -83,85 +113,137 @@ public final class QueryModelHelper {
 		return isOfType(eObj, PLACEHOLDER);
 	}
 
-	public static void setPlaceholderFeature(final EObject placeholder, final String featureName, final String value) {
-		final EStructuralFeature feature = placeholder.eClass().getEStructuralFeature(featureName);
-		if (feature != null) {
-			placeholder.eSet(feature, value);
-		}
-	}
-
-	public static boolean isInstance(final EObject eObj) {
-		return eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
-	}
-
 	public static boolean isAttributeDeclaration(final EObject eObj) {
 		return isOfType(eObj, ATTRIBUTE_DECLARATION);
 	}
 
-	public static void setAttributeDeclarationName(final EObject attrDecl, final String name) {
-		final EStructuralFeature feature = attrDecl.eClass().getEStructuralFeature(FEATURE_NAME);
-		if (feature != null) {
-			attrDecl.eSet(feature, name);
-		}
+	public static boolean isInstance(final EObject eObj) {
+		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
 	}
 
+	public static boolean isPinTargetQuery(final EObject queryRoot) {
+		final EObject target = getContainedChild(queryRoot, REF_TARGET);
+		final EObject targetOption = getContainedChild(target, REF_TARGET);
+		return isOfType(targetOption, PIN_TARGET);
+	}
+
+	// generic feature access
 	public static Object getFeatureValue(final EObject eObj, final String featureName) {
+		if (eObj == null) {
+			return null;
+		}
 		final EStructuralFeature feature = eObj.eClass().getEStructuralFeature(featureName);
 		return (feature != null && eObj.eIsSet(feature)) ? eObj.eGet(feature) : null;
 	}
 
-	public record FieldConstraintData(String value, boolean caseSensitive, boolean wholeWord, boolean entire,
-			boolean regex) {
-	}
-
-	public static FieldConstraintData readFieldConstraint(final EObject fc) {
-		final String value = (String) fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_VALUE));
-		final boolean caseSensitive = Boolean.TRUE
-				.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_CASE_SENSITIVE)));
-		final boolean wholeWord = Boolean.TRUE.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_WHOLE_WORD)));
-		final boolean entire = Boolean.TRUE.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_ENTIRE)));
-		final boolean regex = Boolean.TRUE.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_REGEX)));
-		return new FieldConstraintData(value, caseSensitive, wholeWord, entire, regex);
-	}
-
-	public static void writeFieldConstraint(final EObject fc, final FieldConstraintData data) {
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_VALUE), data.value());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_CASE_SENSITIVE), data.caseSensitive());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_WHOLE_WORD), data.wholeWord());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_ENTIRE), data.entire());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_REGEX), data.regex());
-	}
-
-	public static List<FieldConstraintEntry> getContainedFieldConstraints(final EObject constraint) {
-		final List<FieldConstraintEntry> result = new ArrayList<>();
-		for (final EReference ref : constraint.eClass().getEAllContainments()) {
-			if (constraint.eIsSet(ref)) {
-				final Object val = constraint.eGet(ref);
-				if (val instanceof final EObject child && isOfType(child, FIELD_CONSTRAINT)) {
-					result.add(new FieldConstraintEntry(ref, child));
-				}
-			}
+	public static void setFeatureValue(final EObject eObj, final String featureName, final Object value) {
+		final EStructuralFeature feature = eObj.eClass().getEStructuralFeature(featureName);
+		if (feature != null) {
+			eObj.eSet(feature, value);
 		}
-		return result;
 	}
 
-	public record FieldConstraintEntry(EReference reference, EObject fieldConstraint) {
+	private static boolean getBooleanFeature(final EObject eObj, final String featureName) {
+		return Boolean.TRUE.equals(getFeatureValue(eObj, featureName));
+	}
+
+	public static EObject getContainedChild(final EObject parent, final String refName) {
+		return (getFeatureValue(parent, refName) instanceof final EObject eObj) ? eObj : null;
+	}
+
+	// named setters for readable call sites
+	public static void setPlaceholderFeature(final EObject placeholder, final String featureName, final String value) {
+		setFeatureValue(placeholder, featureName, value);
+	}
+
+	public static void setAttributeDeclarationName(final EObject attrDecl, final String name) {
+		setFeatureValue(attrDecl, FEATURE_NAME, name);
 	}
 
 	public static void setIgnoreLinkedLibrary(final EObject instance, final boolean value) {
-		final EStructuralFeature feature = instance.eClass().getEStructuralFeature(FEATURE_IGNORE_LINKED_LIBRARIES);
-		if (feature != null) {
-			instance.eSet(feature, Boolean.valueOf(value));
-		}
+		setFeatureValue(instance, FEATURE_IGNORE_LINKED_LIBRARIES, Boolean.valueOf(value));
 	}
 
 	public static void setOccurrences(final EObject instance, final List<?> occurrences) {
-		final EStructuralFeature feature = instance.eClass().getEStructuralFeature(FEATURE_OCCURRENCE);
-		if (feature != null) {
-			instance.eSet(feature, occurrences);
+		setFeatureValue(instance, FEATURE_OCCURRENCE, occurrences);
+	}
+
+	// field constraints
+	public static FieldConstraintData readFieldConstraint(final EObject fc) {
+		return new FieldConstraintData((String) getFeatureValue(fc, FEATURE_VALUE),
+				getBooleanFeature(fc, FEATURE_CASE_SENSITIVE), getBooleanFeature(fc, FEATURE_WHOLE_WORD),
+				getBooleanFeature(fc, FEATURE_ENTIRE), getBooleanFeature(fc, FEATURE_REGEX));
+	}
+
+	public static void writeFieldConstraint(final EObject fc, final FieldConstraintData data) {
+		setFeatureValue(fc, FEATURE_VALUE, data.value());
+		setFeatureValue(fc, FEATURE_CASE_SENSITIVE, Boolean.valueOf(data.caseSensitive()));
+		setFeatureValue(fc, FEATURE_WHOLE_WORD, Boolean.valueOf(data.wholeWord()));
+		setFeatureValue(fc, FEATURE_ENTIRE, Boolean.valueOf(data.entire()));
+		setFeatureValue(fc, FEATURE_REGEX, Boolean.valueOf(data.regex()));
+	}
+
+	public static List<FieldConstraintEntry> getContainedFieldConstraints(final EObject constraint) {
+		return constraint.eContents().stream().filter(child -> isOfType(child, FIELD_CONSTRAINT))
+				.map(child -> new FieldConstraintEntry(child.eContainmentFeature(), child)).toList();
+	}
+
+	// structural rules
+	private static boolean isInstantiable(final EClass type) {
+		return !type.isAbstract() && !type.isInterface();
+	}
+	
+	private static boolean isMandatorySlot(final EReference ref) {
+		return !ref.isMany() && ref.getLowerBound() >= 1 && isInstantiable(ref.getEReferenceType());
+	}
+
+	public static boolean isMandatoryChild(final EObject obj) {
+		final EReference containment = obj.eContainmentFeature();
+		return containment != null && isMandatorySlot(containment);
+	}
+
+	public static void ensureMandatoryChildren(final EPackage queryPackage, final EObject parent) {
+		if (parent == null) {
+			return;
+		}
+		for (final EReference ref : parent.eClass().getEAllContainments()) {
+			if (isMandatorySlot(ref)) {
+				if (!parent.eIsSet(ref)) {
+					parent.eSet(ref, queryPackage.getEFactoryInstance().create(ref.getEReferenceType()));
+				}
+				ensureMandatoryChildren(queryPackage, (EObject) parent.eGet(ref));
+			}
 		}
 	}
 
+	private static List<EClass> getInstantiableClasses(final EPackage queryPackage, final EClass type) {
+		return isInstantiable(type) ? List.of(type) : getConcreteSubclasses(queryPackage, type);
+	}
+
+	public static List<EClass> getConcreteSubclasses(final EPackage queryPackage, final EClass abstractType) {
+		return queryPackage.getEClassifiers().stream() //
+				.filter(EClass.class::isInstance).map(EClass.class::cast) //
+				.filter(QueryModelHelper::isInstantiable) //
+				.filter(abstractType::isSuperTypeOf) //
+				.toList();
+	}
+
+	// graph structure
+	public static List<EObject> getChildNodes(final EObject eObj) {
+		if (eObj == null) {
+			return List.of();
+		}
+		if (isConstraint(eObj)) {
+			return eObj.eContents().stream().filter(child -> !isOfType(child, FIELD_CONSTRAINT)).toList();
+		}
+		return eObj.eContents();
+	}
+
+	public static boolean hasCollapsibleChildren(final EObject eObj) {
+		return !getChildNodes(eObj).isEmpty();
+	}
+
+	// model modification
 	public static EObject addChild(final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
 			final EObject parent, final EReference reference, final EClass childType) {
 		final EObject child = queryPackage.getEFactoryInstance().create(childType);
@@ -172,28 +254,6 @@ public final class QueryModelHelper {
 		return child;
 	}
 
-	public static boolean isMandatoryChild(final EObject obj) {
-		final EReference containment = obj.eContainmentFeature();
-		return containment != null && !containment.isMany() && containment.getLowerBound() >= 1
-				&& !containment.getEReferenceType().isAbstract();
-	}
-
-	public static void ensureMandatoryChildren(final EPackage queryPackage, final EObject parent) {
-		if (parent == null) {
-			return;
-		}
-		for (final EReference ref : parent.eClass().getEAllContainments()) {
-			final EClass type = ref.getEReferenceType();
-			if (ref.isMany() || ref.getLowerBound() < 1 || type.isAbstract() || type.isInterface()) {
-				continue;
-			}
-			if (!parent.eIsSet(ref)) {
-				parent.eSet(ref, queryPackage.getEFactoryInstance().create(type));
-			}
-			ensureMandatoryChildren(queryPackage, (EObject) parent.eGet(ref));
-		}
-	}
-
 	public static void removeChild(final AdapterFactoryEditingDomain editingDomain, final EObject child) {
 		final EReference containment = child.eContainmentFeature();
 		final Command cmd = (containment != null && !containment.isMany())
@@ -202,58 +262,30 @@ public final class QueryModelHelper {
 		editingDomain.getCommandStack().execute(cmd);
 	}
 
-	public static List<EClass> getConcreteSubclasses(final EPackage queryPackage, final EClass abstractType) {
-		final List<EClass> result = new ArrayList<>();
-		for (final EClassifier classifier : queryPackage.getEClassifiers()) {
-			if (classifier instanceof final EClass candidate && !candidate.isAbstract() && !candidate.isInterface()
-					&& abstractType.isSuperTypeOf(candidate)) {
-				result.add(candidate);
-			}
-		}
-		return result;
-	}
-
-	public static boolean isPinTargetQuery(final EObject queryRoot) {
-		final EObject target = getContainedChild(queryRoot, REF_TARGET);
-		final EObject targetOption = getContainedChild(target, REF_TARGET);
-		return targetOption != null && isOfType(targetOption, PIN_TARGET);
-	}
-
-	public static EObject getContainedChild(final EObject parent, final String refName) {
-		if (parent == null) {
-			return null;
-		}
-		final EStructuralFeature feature = parent.eClass().getEStructuralFeature(refName);
-		if (feature == null || !parent.eIsSet(feature)) {
-			return null;
-		}
-		final Object val = parent.eGet(feature);
-		return (val instanceof final EObject eObj) ? eObj : null;
-	}
-
+	// context menu
 	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
 			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
 			final Predicate<EReference> referenceFilter, final Runnable afterAdd) {
 		for (final EReference ref : selected.eClass().getEAllContainments()) {
-			if (!referenceFilter.test(ref) || (!ref.isMany() && selected.eIsSet(ref))) {
-				continue;
+			if (referenceFilter.test(ref) && (ref.isMany() || !selected.eIsSet(ref))) {
+				addItemsForReference(menu, selected, editingDomain, queryPackage, ref, afterAdd);
 			}
-			final EClass childType = ref.getEReferenceType();
-			if (childType.isAbstract() || childType.isInterface()) {
-				final boolean isTargetNode = childType.getName().equals(TARGET_OPTION);
-				for (final EClass concrete : getConcreteSubclasses(queryPackage, childType)) {
-					final var name = isTargetNode ? concrete.getName() : ref.getName();
-					addMenuItem(menu, NLS.bind(Messages.AddChild, name), () -> {
-						addChild(editingDomain, queryPackage, selected, ref, concrete);
-						afterAdd.run();
-					});
-				}
-			} else {
-				addMenuItem(menu, NLS.bind(Messages.AddChild, ref.getName()), () -> {
-					addChild(editingDomain, queryPackage, selected, ref, childType);
-					afterAdd.run();
-				});
-			}
+		}
+	}
+
+	private static void addItemsForReference(final Menu menu, final EObject selected,
+			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final EReference ref,
+			final Runnable afterAdd) {
+		final EClass type = ref.getEReferenceType();
+		// TargetOption children are labeled by their concrete class, everything else by
+		// the reference
+		final boolean useClassName = type.getName().equals(TARGET_OPTION);
+		for (final EClass concrete : getInstantiableClasses(queryPackage, type)) {
+			final String name = useClassName ? concrete.getName() : ref.getName();
+			addMenuItem(menu, NLS.bind(Messages.AddChild, name), () -> {
+				addChild(editingDomain, queryPackage, selected, ref, concrete);
+				afterAdd.run();
+			});
 		}
 	}
 
@@ -299,35 +331,5 @@ public final class QueryModelHelper {
 		if (menu.getItemCount() > 0) {
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
-	}
-
-	public static boolean hasCollapsibleChildren(final EObject eObj) {
-		final boolean constraintNode = isConstraint(eObj);
-		for (final EReference ref : eObj.eClass().getEAllContainments()) {
-			if (!eObj.eIsSet(ref)) {
-				continue;
-			}
-			final Object val = eObj.eGet(ref);
-			if (val instanceof final EObject child) {
-				if (constraintNode && isOfType(child, FIELD_CONSTRAINT)) {
-					continue; // inline, not a separate node
-				}
-				return true;
-			}
-			if (val instanceof final List<?> list && !list.isEmpty()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static List<EObject> getChildNodes(final EObject eObj) {
-		if (eObj == null) {
-			return List.of();
-		}
-		if (isConstraint(eObj)) {
-			return eObj.eContents().stream().filter(child -> !isOfType(child, FIELD_CONSTRAINT)).toList();
-		}
-		return eObj.eContents();
 	}
 }
