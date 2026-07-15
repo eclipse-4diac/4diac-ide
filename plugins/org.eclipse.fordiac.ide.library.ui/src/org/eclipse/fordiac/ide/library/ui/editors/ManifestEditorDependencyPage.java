@@ -241,7 +241,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 
 			@Override
 			protected boolean canEdit(final Object element) {
-				return true;
+				return element instanceof Required;
 			}
 		});
 
