@@ -33,6 +33,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.fordiac.ide.model.preferences.PreferenceProvider;
 
+/**
+ * @implNote For debugging, add a tracepoint with the following condition in
+ *           {@link org.eclipse.fordiac.ide.application.policies.FBNetworkElementNonResizeableEP#getInitialFeedbackBounds()}:
+ *
+ *           {@snippet :
+ *           System.out.println("entered: "
+ *           		+ ((org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement) getHost().getModel()).getName()
+ *           		+ " screen bounds "
+ *           		+ org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(bounds.width) + " "
+ *           		+ org.eclipse.fordiac.ide.model.CoordinateConverter.INSTANCE.screenToIEC61499(bounds.height)
+ *           		+ " model bounds "
+ *           		+ ((org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement) getHost().getModel()).getVisibleWidth()
+ *           		+ " "
+ *           		+ ((org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement) getHost().getModel()).getVisibleHeight());
+ *           }
+ */
 public final class FBShapeHelper {
 	public static final double IEC61499_LINE_HEIGHT = 100.0;
 	private static final double AVARAGE_CHAR_WIDTH = CoordinateConverter.INSTANCE
@@ -56,14 +72,6 @@ public final class FBShapeHelper {
 	private static final double HEIGHT_ADJUST_MUX = CoordinateConverter.INSTANCE.screenToIEC61499(8);
 	private static final double HEIGHT_ADJUST_HIDDEN = CoordinateConverter.INSTANCE.screenToIEC61499(15);
 	private static final double HEIGHT_ADJUST_SUBAPP = CoordinateConverter.INSTANCE.screenToIEC61499(19);
-	/*
-	 * Note for debugging: Add a tracepoint with the following condition in
-	 * FBNetworkElementFigure.setupMouseListener(...).new MouseMotionListener(){...}
-	 * .mouseEntered(MouseEvent):
-	 *
-	 * System.out.println("entered: " + getBounds() + " - " +
-	 * model.getVisibleWidth() + ", " + model.getVisibleHeight());
-	 */
 
 	/**
 	 * Get the width of an FB network element
@@ -76,7 +84,7 @@ public final class FBShapeHelper {
 		final int minPinLabelSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
 				ModelPreferenceConstants.MIN_PIN_LABEL_SIZE, 0, project);
 		final int maxPinLabelSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
-				ModelPreferenceConstants.MAX_PIN_LABEL_SIZE, 60, project) + 1;
+				ModelPreferenceConstants.MAX_PIN_LABEL_SIZE, 60, project);
 		final int maxTypeLabelSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
 				ModelPreferenceConstants.MAX_TYPE_LABEL_SIZE, 120, project) + 1;
 
