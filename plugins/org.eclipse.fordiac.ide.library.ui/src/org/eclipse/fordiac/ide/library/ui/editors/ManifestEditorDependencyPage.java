@@ -19,12 +19,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
@@ -33,6 +35,7 @@ import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.library.provider.ILibraryProvider;
 import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
@@ -144,11 +147,21 @@ public class ManifestEditorDependencyPage extends FormPage {
 	}
 
 	private List<LibContainer> createViewerInput() {
-		if (getEditorInput() instanceof final FileEditorInput input) {
-			manifest = ManifestHelper.getManifest(input.getFile());
-			return List.of(new LibContainer("Required", manifest.getDependencies().getRequired())); //$NON-NLS-1$
+		if (!(getEditorInput() instanceof final FileEditorInput input)) {
+			return Collections.emptyList();
 		}
-		return List.of(new LibContainer("Required", Collections.emptyList())); //$NON-NLS-1$
+
+		manifest = ManifestHelper.getManifest(input.getFile());
+
+		final Map<Boolean, List<Required>> libraries = manifest.getDependencies().getRequired().stream()
+				.collect(Collectors.partitioningBy(r -> isStandardLib(r.getSymbolicName())));
+
+		return List.of(new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, libraries.get(Boolean.valueOf(true))),
+				new LibContainer(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, libraries.get(Boolean.valueOf(false))));
+	}
+
+	private static boolean isStandardLib(final String symbolicName) {
+		return LibraryManager.INSTANCE.getStandardLibraries().containsKey(symbolicName);
 	}
 
 	private void collectLinkedLibraryVersions() {
@@ -179,8 +192,9 @@ public class ManifestEditorDependencyPage extends FormPage {
 		symbolicNameColumn.setLabelProvider(new CellLabelProvider() {
 			@Override
 			public void update(final ViewerCell cell) {
-				if (cell.getElement() instanceof final LibContainer container) {
-					cell.setText(container.name());
+				if (cell.getElement() instanceof LibContainer(final String name, final List<Required> children)
+						&& !children.isEmpty()) {
+					cell.setText(name);
 				}
 				if (cell.getElement() instanceof final Required req) {
 					cell.setText(req.getSymbolicName());
