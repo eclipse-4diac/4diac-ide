@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2014 - 2016 Profactor GbmH, fortiss GmbH
  * 				 2020						   Andrea Zoitl
+ * 				 2026						   HR Agrartechnik
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,9 @@
  *     - initial API and implementation and/or initial documentation
  *   Andrea Zoitl
  *     - externalized translatable strings
+ *   Moritz Ortmeier
+ *     - added print preview strings for page limit, paper format and
+ *       orientation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
@@ -74,6 +78,8 @@ public final class Messages extends NLS {
 	public static String PropertyUtil_LABEL_Description_Complianceprofile;
 	public static String PropertyUtil_LABEL_Instancecomment;
 	public static String PropertyUtil_LABEL_Instancename;
+	public static String PrintPreview_QUESTION_ManyPages;
+	public static String PrintPreview_QUESTION_ManyPages_Title;
 	public static String PrintPreviewAction_LABEL_Print;
 	public static String PrintPreviewAction_LABEL_PrintPreview;
 	public static String PrintPreview_ERROR_StartingNewPage;
@@ -87,12 +93,29 @@ public final class Messages extends NLS {
 	public static String PrintPreview_LABEL_NextPage;
 	public static String PrintPreview_LABEL_Of;
 	public static String PrintPreview_LABEL_Page;
+	public static String PrintPreview_LABEL_Pages;
 	public static String PrintPreview_LABEL_Print;
 	public static String PrintPreview_LABEL_PrinterSettings;
 	public static String PrintPreview_LABEL_PrintBorder;
 	public static String PrintPreview_LABEL_PrintPreview;
 	public static String PrintPreview_LABEL_Scale;
+	public static String PrintPreview_LABEL_Set;
+	public static String PrintPreview_LABEL_PageLimit;
+	public static String PrintPreview_LABEL_Percent;
 	public static String PrintPreview_LABEL_Tile;
+	public static String PrintPreview_LABEL_Orientation;
+	public static String PrintPreview_LABEL_Portrait;
+	public static String PrintPreview_LABEL_Landscape;
+	public static String PrintPreview_LABEL_PaperFormat;
+	public static String PrintPreview_LABEL_PaperFormat_A5;
+	public static String PrintPreview_LABEL_PaperFormat_A4;
+	public static String PrintPreview_LABEL_PaperFormat_A3;
+	public static String PrintPreview_LABEL_PaperFormat_A2;
+	public static String PrintPreview_LABEL_PaperFormat_A1;
+	public static String PrintPreview_LABEL_PaperFormat_A0;
+	public static String PrintPreview_LABEL_PaperFormat_Letter;
+	public static String PrintPreview_LABEL_PaperFormat_Legal;
+	public static String PrintPreview_LABEL_PaperFormat_Tabloid;
 	public static String SetProfileCommand_LABEL_SetProfile;
 
 	public static String UtilityMarker_ActiveMarker;
