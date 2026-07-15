@@ -120,7 +120,9 @@ class FBTypeMoveTest {
 		RefactoringTestSupport.performMove(file(PRODUCER_FILE), destination);
 	}
 
-	// Producer is the StructProducer instance in the shared StructRenameTest system.
+	// StructProducer is a test FB type in the fixture with one output OUT typed
+	// mypackage::InnerStruct, so a struct is used in an FB interface. Producer is its
+	// instance in the application, so moving the type has to repoint the instance.
 	private String producerInstanceType() {
 		final AutomationSystem system = (AutomationSystem) typeLibrary.getTypeEntry(file(SYSTEM_FILE)).getType();
 		final FBNetworkElement producer = system.getApplicationNamed(APPLICATION_NAME).getFBNetwork()
