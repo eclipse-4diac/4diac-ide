@@ -141,9 +141,9 @@ public final class RefactoringTestSupport {
 	}
 
 	/**
-	 * Rename a model element identified by its URI, e.g. a struct member, and let
-	 * the rename cascade to every instance pin the same way the Rename Element
-	 * command does in the editor.
+	 * Rename a model element identified by its URI, e.g. a struct member, through
+	 * the same processor the Rename Element command uses, but without the wizard
+	 * and without saving and building the project first.
 	 */
 	public static Change performElementRename(final URI elementURI, final String newName) throws CoreException {
 		return performRefactoring(new RenameRefactoring(new RenameElementRefactoringProcessor(elementURI, newName)));
@@ -161,12 +161,10 @@ public final class RefactoringTestSupport {
 		return perform.getUndoChange();
 	}
 
-	/** Undo the last refactoring through the shared LTK undo manager. */
 	public static void undoLastRefactoring() throws CoreException {
 		RefactoringCore.getUndoManager().performUndo(PROCEED_QUERY, new NullProgressMonitor());
 	}
 
-	/** Redo the last undone refactoring through the shared LTK undo manager. */
 	public static void redoLastRefactoring() throws CoreException {
 		RefactoringCore.getUndoManager().performRedo(PROCEED_QUERY, new NullProgressMonitor());
 	}

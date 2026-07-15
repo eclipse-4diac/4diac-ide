@@ -27,6 +27,7 @@ import static org.eclipse.fordiac.ide.typemanagement.tests.StructRenameTestFixtu
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.Set;
@@ -175,8 +176,8 @@ class StructRenameSystemCascadeTest {
 	}
 
 	@Test
-	@Disabled("Custom attributes on expanded struct member pins are lost when the member is renamed, see " //$NON-NLS-1$
-			+ "https://github.com/eclipse-4diac/4diac-ide/issues/2646") //$NON-NLS-1$
+	@Disabled("Custom attributes on expanded struct member pins are lost when the member is renamed, re-enable " //$NON-NLS-1$
+			+ "when https://github.com/eclipse-4diac/4diac-ide/issues/2646 is fixed") //$NON-NLS-1$
 	void renameStructMember_preservesCustomPinAttribute() throws Exception {
 		assertEquals(CUSTOM_ATTRIBUTE_VALUE, producerOutMemberAttribute(MEMBER));
 
@@ -272,7 +273,10 @@ class StructRenameSystemCascadeTest {
 				.orElseThrow();
 		final IInterfaceElement pin = assertInstanceOf(BlockFBNetworkElement.class, producer).getInterface()
 				.getInterfaceElement(List.of(PRODUCER_OUT_PIN, memberName));
-		return pin == null ? null : pin.getAttributeValue(CUSTOM_ATTRIBUTE);
+		// Fail on the missing pin instead of returning null, so a lost attribute
+		// cannot be confused with a member pin that the rename never created.
+		assertNotNull(pin, () -> PRODUCER_OUT_PIN + "." + memberName + " does not exist"); //$NON-NLS-1$ //$NON-NLS-2$
+		return pin.getAttributeValue(CUSTOM_ATTRIBUTE);
 	}
 
 	private Connection hiddenConnection() {
