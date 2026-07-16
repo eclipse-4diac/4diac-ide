@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -51,6 +53,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -189,37 +192,25 @@ public class ManifestEditorDependencyPage extends FormPage {
 		// symbolic name column
 		final TreeViewerColumn symbolicNameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		symbolicNameColumn.getColumn().setText(Messages.ManifestEditor_Column_SymbolicName);
-		symbolicNameColumn.setLabelProvider(new CellLabelProvider() {
-			@Override
-			public void update(final ViewerCell cell) {
-				if (cell.getElement() instanceof LibContainer(final String name, final List<Required> children)
-						&& !children.isEmpty()) {
-					cell.setText(name);
-				}
-				if (cell.getElement() instanceof final Required req) {
-					cell.setText(req.getSymbolicName());
-				}
+		symbolicNameColumn.setLabelProvider(createLabelProvider(Required::getSymbolicName, cell -> {
+			if (cell.getElement() instanceof LibContainer(final String name, final List<Required> children)
+					&& !children.isEmpty()) {
+				cell.setText(name);
 			}
-		});
+		}));
 
 		// version range column
 		final TreeViewerColumn versionRangeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		versionRangeColumn.getColumn().setText(Messages.ManifestEditor_Column_VersionRange);
-		versionRangeColumn.setLabelProvider(new CellLabelProvider() {
-			@Override
-			public void update(final ViewerCell cell) {
-				if (cell.getElement() instanceof final Required req) {
-					cell.setText(req.getVersion());
-				}
-			}
-		});
-		versionRangeColumn.setEditingSupport(new EditingSupport(treeViewer) {
+		versionRangeColumn.setLabelProvider(createLabelProvider(Required::getVersion, null));
 
+		versionRangeColumn.setEditingSupport(new EditingSupport(treeViewer) {
 			@Override
 			protected void setValue(final Object element, final Object value) {
 				if (element instanceof final Required req) {
 					req.setVersion(value.toString());
-					getViewer().update(element, null);
+					getViewer().refresh(element);
+					getViewer().setSelection(null);
 					if (ManifestEditorDependencyPage.this.getEditor() instanceof final ManifestEditor editor) {
 						editor.setDirty(true);
 					}
@@ -248,41 +239,25 @@ public class ManifestEditorDependencyPage extends FormPage {
 		// active version column
 		final TreeViewerColumn activeVersionColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		activeVersionColumn.getColumn().setText(Messages.ManifestEditor_Column_Used);
-		activeVersionColumn.setLabelProvider(new CellLabelProvider() {
-			@Override
-			public void update(final ViewerCell cell) {
-				if (cell.getElement() instanceof final Required req) {
-					cell.setText(getUsedVersion(req.getSymbolicName()));
-				}
-			}
-		});
+		activeVersionColumn.setLabelProvider(createLabelProvider(req -> getUsedVersion(req.getSymbolicName()), null));
 
 		// latest version in range column
 		final TreeViewerColumn latestInRangeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		latestInRangeColumn.getColumn().setText(Messages.ManifestEditor_Column_LatestInRange);
-		latestInRangeColumn.setLabelProvider(new CellLabelProvider() {
-			@Override
-			public void update(final ViewerCell cell) {
-				if (cell.getElement() instanceof final Required req) {
-					final org.osgi.framework.VersionRange range = VersionComparator.parseVersionRange(req.getVersion());
-					cell.setText(offlineLibraryProvider.getLatest(req.getSymbolicName(), range)
-							.map(library -> library.version().toString()).orElse("")); //$NON-NLS-1$
-				}
+		latestInRangeColumn.setLabelProvider(createLabelProvider(req -> {
+			if (!VersionComparator.isValidRange(req.getVersion())) {
+				return ""; //$NON-NLS-1$
 			}
-		});
+			final org.osgi.framework.VersionRange range = VersionComparator.parseVersionRange(req.getVersion());
+			return offlineLibraryProvider.getLatest(req.getSymbolicName(), range)
+					.map(library -> library.version().toString()).orElse(""); //$NON-NLS-1$
+		}, null));
 
 		// latest overall version column
 		final TreeViewerColumn latestColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		latestColumn.getColumn().setText(Messages.ManifestEditor_Column_Latest);
-		latestColumn.setLabelProvider(new CellLabelProvider() {
-			@Override
-			public void update(final ViewerCell cell) {
-				if (cell.getElement() instanceof final Required req) {
-					cell.setText(offlineLibraryProvider.getLatest(req.getSymbolicName())
-							.map(lib -> lib.version().toString()).orElse("")); //$NON-NLS-1$
-				}
-			}
-		});
+		latestColumn.setLabelProvider(createLabelProvider(req -> offlineLibraryProvider.getLatest(req.getSymbolicName())
+				.map(lib -> lib.version().toString()).orElse(""), null)); //$NON-NLS-1$
 
 		// define column width ratios
 		layout.setColumnData(symbolicNameColumn.getColumn(), new ColumnWeightData(40));
@@ -296,6 +271,49 @@ public class ManifestEditorDependencyPage extends FormPage {
 	public void doSave(final IProgressMonitor monitor) {
 		super.doSave(monitor);
 		ManifestHelper.saveManifest(manifest);
+	}
+
+	private static CellLabelProvider createLabelProvider(final Function<Required, String> requiredTextProvider,
+			final Consumer<ViewerCell> defaultCellUpdater) {
+
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				resetCell(cell);
+
+				if (cell.getElement() instanceof final Required required) {
+					applyValidationStyle(cell, required);
+					cell.setText(getCellText(required));
+				} else if (defaultCellUpdater != null) {
+					defaultCellUpdater.accept(cell);
+				}
+			}
+
+			private String getCellText(final Required required) {
+				try {
+					return requiredTextProvider.apply(required);
+				} catch (final IllegalArgumentException e) {
+					return ""; //$NON-NLS-1$
+				}
+			}
+
+			private static void applyValidationStyle(final ViewerCell cell, final Required required) {
+				if (VersionComparator.isValidRange(required.getVersion())) {
+					return;
+				}
+
+				final Display display = cell.getControl().getDisplay();
+				cell.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+				cell.setForeground(display.getSystemColor(SWT.COLOR_RED));
+			}
+
+			private static void resetCell(final ViewerCell cell) {
+				cell.setText(""); //$NON-NLS-1$
+				cell.setBackground(null);
+				cell.setForeground(null);
+			}
+		};
 	}
 
 	record LibContainer(String name, List<Required> children) {
