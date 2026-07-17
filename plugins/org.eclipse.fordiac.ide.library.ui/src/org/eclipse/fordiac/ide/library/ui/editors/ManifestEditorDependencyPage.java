@@ -14,20 +14,25 @@
 package org.eclipse.fordiac.ide.library.ui.editors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -35,10 +40,14 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.library.provider.ILibraryProvider;
+import org.eclipse.fordiac.ide.library.provider.ILibraryProvider.LibraryDescriptor;
 import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
+import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
+import org.eclipse.fordiac.ide.library.ui.wizards.ManageLibraryWizard;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -52,6 +61,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.IManagedForm;
@@ -63,7 +73,10 @@ import org.eclipse.ui.part.FileEditorInput;
 public class ManifestEditorDependencyPage extends FormPage {
 
 	private final ILibraryProvider offlineLibraryProvider = new OfflineLibraryProvider();
+	private final ILibraryProvider onlineLibraryProvider = new OnlineLibraryProvider();
+	private final List<ILibraryProvider> libraryProviders = List.of(offlineLibraryProvider, onlineLibraryProvider);
 	private Manifest manifest;
+	private static final Comparator<LibraryDescriptor> comparator = (o1, o2) -> o2.version().compareTo(o1.version());
 
 	/**
 	 * Maps symbolic names of linked libraries to Version Strings
@@ -145,8 +158,32 @@ public class ManifestEditorDependencyPage extends FormPage {
 		treeViewer.getTree().setLinesVisible(true);
 		treeViewer.expandAll();
 
-		root.layout();
-		form.getBody().layout();
+		createButtonBar(root, treeViewer, managedForm);
+
+		form.reflow(true);
+
+		refreshLibraries(managedForm, treeViewer);
+	}
+
+	private void createButtonBar(final Composite parent, final TreeViewer viewer, final IManagedForm form) {
+		final Composite buttonBar = new Composite(parent, SWT.NONE);
+		buttonBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
+
+		final GridLayout layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		buttonBar.setLayout(layout);
+
+		final Button refreshButton = new Button(buttonBar, SWT.PUSH);
+		refreshButton.setText(Messages.ManifestEditor_RefreshLibraries);
+		refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		refreshButton.addListener(SWT.Selection, event -> refreshLibraries(form, viewer));
+
+		final Button manageLibrariesButton = new Button(buttonBar, SWT.PUSH);
+		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
+		manageLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		manageLibrariesButton.addListener(SWT.Selection,
+				event -> ManageLibraryWizard.openWizardDialog(getProject(), getEditor().getSite().getShell()));
 	}
 
 	private List<LibContainer> createViewerInput() {
@@ -167,20 +204,25 @@ public class ManifestEditorDependencyPage extends FormPage {
 		return LibraryManager.INSTANCE.getStandardLibraries().containsKey(symbolicName);
 	}
 
-	private void collectLinkedLibraryVersions() {
-		if (getEditorInput() instanceof final FileEditorInput input) {
-			final IFile file = input.getFile();
-			if (file == null) {
-				return;
-			}
-			final IProject project = file.getProject();
-			try {
-				LinkedLibrary.getAll(project, null).forEach(
-						lib -> linkedLibVersions.putIfAbsent(lib.getSymbolicName(), lib.getVersion().toString()));
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
+	private IProject getProject() {
+		if (getEditorInput() instanceof final FileEditorInput input && input.getFile() != null) {
+			return input.getFile().getProject();
 		}
+		return null;
+	}
+
+	private void collectLinkedLibraryVersions() {
+		final IProject project = getProject();
+		if (project == null) {
+			return;
+		}
+		try {
+			LinkedLibrary.getAll(project, null)
+					.forEach(lib -> linkedLibVersions.putIfAbsent(lib.getSymbolicName(), lib.getVersion().toString()));
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+
 	}
 
 	private String getUsedVersion(final String symbolicName) {
@@ -203,7 +245,6 @@ public class ManifestEditorDependencyPage extends FormPage {
 		final TreeViewerColumn versionRangeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		versionRangeColumn.getColumn().setText(Messages.ManifestEditor_Column_VersionRange);
 		versionRangeColumn.setLabelProvider(createLabelProvider(Required::getVersion, null));
-
 		versionRangeColumn.setEditingSupport(new EditingSupport(treeViewer) {
 			@Override
 			protected void setValue(final Object element, final Object value) {
@@ -249,15 +290,17 @@ public class ManifestEditorDependencyPage extends FormPage {
 				return ""; //$NON-NLS-1$
 			}
 			final org.osgi.framework.VersionRange range = VersionComparator.parseVersionRange(req.getVersion());
-			return offlineLibraryProvider.getLatest(req.getSymbolicName(), range)
-					.map(library -> library.version().toString()).orElse(""); //$NON-NLS-1$
+			return libraryProviders.stream().map(provider -> provider.getLatest(req.getSymbolicName(), range))
+					.flatMap(Optional::stream).sorted(comparator).map(lib -> lib.version().toString()).findFirst()
+					.orElse(""); //$NON-NLS-1$
 		}, null));
 
 		// latest overall version column
 		final TreeViewerColumn latestColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		latestColumn.getColumn().setText(Messages.ManifestEditor_Column_Latest);
-		latestColumn.setLabelProvider(createLabelProvider(req -> offlineLibraryProvider.getLatest(req.getSymbolicName())
-				.map(lib -> lib.version().toString()).orElse(""), null)); //$NON-NLS-1$
+		latestColumn.setLabelProvider(createLabelProvider(req -> libraryProviders.stream()
+				.map(provider -> provider.getLatest(req.getSymbolicName())).flatMap(Optional::stream).sorted(comparator)
+				.map(lib -> lib.version().toString()).findFirst().orElse(""), null)); //$NON-NLS-1$
 
 		// define column width ratios
 		layout.setColumnData(symbolicNameColumn.getColumn(), new ColumnWeightData(40));
@@ -267,9 +310,44 @@ public class ManifestEditorDependencyPage extends FormPage {
 		layout.setColumnData(latestColumn.getColumn(), new ColumnWeightData(20));
 	}
 
+	private void refreshLibraries(final IManagedForm form, final TreeViewer viewer) {
+		form.getForm().setMessage(Messages.ManifestEditor_RefreshLibraries + " ...", //$NON-NLS-1$
+				IMessageProvider.INFORMATION);
+		final Job job = new Job(Messages.ManageLibraryWizard_LoadRemoteVersions) {
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				final IStatus status = onlineLibraryProvider.refresh(monitor, false);
+
+				Display.getDefault().asyncExec(() -> {
+					if (viewer == null || viewer.getTree().isDisposed()) {
+						return;
+					}
+
+					if (status.isOK()) {
+						form.getForm().setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
+					} else {
+						final String combinedMessage = Arrays.stream(status.getChildren()).map(IStatus::getMessage)
+								.collect(Collectors.joining(System.lineSeparator()));
+						form.getForm().setMessage(combinedMessage, IMessageProvider.ERROR);
+					}
+
+					viewer.refresh();
+				});
+				return Status.OK_STATUS;
+			}
+		};
+
+		job.setUser(false);
+		job.schedule();
+	}
+
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		super.doSave(monitor);
+		if (manifest.getDependencies().getRequired().stream()
+				.anyMatch(req -> !VersionComparator.isValidRange(req.getVersion()))) {
+			return;
+		}
 		ManifestHelper.saveManifest(manifest);
 	}
 
@@ -321,4 +399,5 @@ public class ManifestEditorDependencyPage extends FormPage {
 			this(name, new ArrayList<>());
 		}
 	}
+
 }

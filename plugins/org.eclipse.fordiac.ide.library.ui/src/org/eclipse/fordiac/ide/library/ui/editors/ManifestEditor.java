@@ -36,11 +36,13 @@ public class ManifestEditor extends FormEditor {
 		dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Update Dependencies"); //$NON-NLS-1$
 
 		try {
-			final int index = addPage(textEditor, getEditorInput());
+			int index = addPage(textEditor, getEditorInput());
 			setPageText(index, textEditor.getTitle());
 			setPageImage(index, textEditor.getTitleImage());
 
-			addPage(dependencyPage);
+			index = addPage(dependencyPage);
+			setPageText(index, dependencyPage.getTitle());
+			setPageImage(index, dependencyPage.getTitleImage());
 
 			isDirty = false;
 		} catch (final PartInitException e) {
