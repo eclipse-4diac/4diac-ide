@@ -123,11 +123,6 @@ public class VariableWidget {
 		return new VariableConfigLabelAccumulator();
 	}
 
-	@SuppressWarnings("unused")
-	protected void handleVariableModified(final Variable<?> variable, final String oldValue, final String newValue) {
-		// subclasses may react to variable modifications
-	}
-
 	protected NatTable getTable() {
 		return table;
 	}
@@ -137,7 +132,6 @@ public class VariableWidget {
 			final Variable<?> variable = data.getRowObject(dataUpdateEvent.getRowPosition());
 			final String oldValue = Objects.toString(dataUpdateEvent.getOldValue(), NULL_DEFAULT);
 			final String newValue = Objects.toString(dataUpdateEvent.getNewValue(), NULL_DEFAULT);
-			handleVariableModified(variable, oldValue, newValue);
 			modificationListeners.forEach(listener -> listener.variableModified(variable, oldValue, newValue));
 		}
 	}
