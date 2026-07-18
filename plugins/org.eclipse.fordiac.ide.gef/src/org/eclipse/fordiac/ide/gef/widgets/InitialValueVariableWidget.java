@@ -40,6 +40,7 @@ public class InitialValueVariableWidget extends VariableWidget {
 		this.baseVariables = List.copyOf(baseVariables);
 		this.explicitInitialValueVariables = Collections.newSetFromMap(new IdentityHashMap<>());
 		this.explicitInitialValueVariables.addAll(explicitInitialValueVariables);
+		addVariableModificationListener(this::handleVariableModified);
 	}
 
 	public boolean isExplicitInitialValue(final Variable<?> variable) {
@@ -62,8 +63,7 @@ public class InitialValueVariableWidget extends VariableWidget {
 		baseVariableMap = mapBaseVariables(variables, baseVariables);
 	}
 
-	@Override
-	protected void handleVariableModified(final Variable<?> variable, final String oldValue, final String newValue) {
+	private void handleVariableModified(final Variable<?> variable, final String oldValue, final String newValue) {
 		updateExplicitInitialValue(variable, oldValue, newValue);
 		getTable().refresh();
 	}
