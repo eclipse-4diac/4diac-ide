@@ -16,35 +16,33 @@
 package org.eclipse.fordiac.ide.library.ui.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.library.model.library.Manifest;
+import org.eclipse.fordiac.ide.library.model.library.Required;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
+import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class ManifestEditor extends FormEditor {
-	private TextEditor textEditor;
-	private ManifestEditorDependencyPage dependencyPage;
-	// TODO add product editor page
-
-	private boolean isDirty;
 
 	private static final String DEPENDENCY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorDependencyPage"; //$NON-NLS-1$
 
+	private Manifest manifest;
+	private boolean isDirty;
+
 	@Override
 	protected void addPages() {
-		textEditor = new TextEditor();
-		dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Update Dependencies"); //$NON-NLS-1$
+		loadManifest();
+		isDirty = false;
+		final ManifestEditorDependencyPage dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID,
+				"Dependencies"); //$NON-NLS-1$
 
 		try {
-			int index = addPage(textEditor, getEditorInput());
-			setPageText(index, textEditor.getTitle());
-			setPageImage(index, textEditor.getTitleImage());
-
-			index = addPage(dependencyPage);
+			final int index = addPage(dependencyPage);
 			setPageText(index, dependencyPage.getTitle());
 			setPageImage(index, dependencyPage.getTitleImage());
-
-			isDirty = false;
 		} catch (final PartInitException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
@@ -52,15 +50,21 @@ public class ManifestEditor extends FormEditor {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		dependencyPage.doSave(monitor);
-		setDirty(false);
+		if (isDirty() && canSave()) {
+			ManifestHelper.saveManifest(manifest);
+			setDirty(false);
+		}
 	}
 
-	public void setDirty(final boolean dirty) {
-		if (this.isDirty != dirty) {
-			this.isDirty = dirty;
-			firePropertyChange(PROP_DIRTY);
+	private void loadManifest() {
+		if (getEditorInput() instanceof final FileEditorInput input) {
+			manifest = ManifestHelper.getManifest(input.getFile());
 		}
+	}
+
+	private boolean canSave() {
+		return manifest != null && manifest.getDependencies() != null && manifest.getDependencies().getRequired()
+				.stream().map(Required::getVersion).allMatch(VersionComparator::isValidRange);
 	}
 
 	@Override
@@ -68,13 +72,24 @@ public class ManifestEditor extends FormEditor {
 		return isDirty;
 	}
 
+	public void setDirty(final boolean dirty) {
+		if (isDirty != dirty) {
+			isDirty = dirty;
+			firePropertyChange(PROP_DIRTY);
+		}
+	}
+
 	@Override
 	public void doSaveAs() {
-		// do nothing
+		// Save As is not supported.
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
+	}
+
+	public Manifest getManifest() {
+		return manifest;
 	}
 }

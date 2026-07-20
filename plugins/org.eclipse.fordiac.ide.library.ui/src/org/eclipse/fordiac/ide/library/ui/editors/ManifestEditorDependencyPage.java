@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
-import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.library.provider.ILibraryProvider;
 import org.eclipse.fordiac.ide.library.provider.ILibraryProvider.LibraryDescriptor;
@@ -54,6 +53,9 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -75,8 +77,9 @@ public class ManifestEditorDependencyPage extends FormPage {
 	private final ILibraryProvider offlineLibraryProvider = new OfflineLibraryProvider();
 	private final ILibraryProvider onlineLibraryProvider = new OnlineLibraryProvider();
 	private final List<ILibraryProvider> libraryProviders = List.of(offlineLibraryProvider, onlineLibraryProvider);
-	private Manifest manifest;
-	private static final Comparator<LibraryDescriptor> comparator = (o1, o2) -> o2.version().compareTo(o1.version());
+	private static final Comparator<LibraryDescriptor> VERSION_DESCENDING = Comparator
+			.comparing(LibraryDescriptor::version).reversed();
+	private TreeViewer treeViewer;
 
 	/**
 	 * Maps symbolic names of linked libraries to Version Strings
@@ -101,11 +104,11 @@ public class ManifestEditorDependencyPage extends FormPage {
 		final TreeColumnLayout columnLayout = new TreeColumnLayout();
 		treeContainer.setLayout(columnLayout);
 
-		final TreeViewer treeViewer = new TreeViewer(treeContainer,
+		treeViewer = new TreeViewer(treeContainer,
 				SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		treeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		configureColumns(columnLayout, treeViewer);
+		configureColumns(columnLayout);
 
 		// do not compute dependencies
 		offlineLibraryProvider.refresh(new NullProgressMonitor(), false);
@@ -158,14 +161,23 @@ public class ManifestEditorDependencyPage extends FormPage {
 		treeViewer.getTree().setLinesVisible(true);
 		treeViewer.expandAll();
 
-		createButtonBar(root, treeViewer, managedForm);
+		createButtonBar(root, managedForm);
 
 		form.reflow(true);
 
-		refreshLibraries(managedForm, treeViewer);
+		refreshLibraries(managedForm);
 	}
 
-	private void createButtonBar(final Composite parent, final TreeViewer viewer, final IManagedForm form) {
+	public void refresh() {
+		if (treeViewer == null || treeViewer.getTree().isDisposed()) {
+			return;
+		}
+		collectLinkedLibraryVersions();
+		treeViewer.setInput(createViewerInput());
+		treeViewer.expandAll();
+	}
+
+	private void createButtonBar(final Composite parent, final IManagedForm form) {
 		final Composite buttonBar = new Composite(parent, SWT.NONE);
 		buttonBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 
@@ -177,7 +189,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 		final Button refreshButton = new Button(buttonBar, SWT.PUSH);
 		refreshButton.setText(Messages.ManifestEditor_RefreshLibraries);
 		refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		refreshButton.addListener(SWT.Selection, event -> refreshLibraries(form, viewer));
+		refreshButton.addListener(SWT.Selection, event -> refreshLibraries(form));
 
 		final Button manageLibrariesButton = new Button(buttonBar, SWT.PUSH);
 		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
@@ -187,21 +199,26 @@ public class ManifestEditorDependencyPage extends FormPage {
 	}
 
 	private List<LibContainer> createViewerInput() {
-		if (!(getEditorInput() instanceof final FileEditorInput input)) {
+		final var manifest = getManifest();
+		if (manifest == null || manifest.getDependencies() == null) {
 			return Collections.emptyList();
 		}
-
-		manifest = ManifestHelper.getManifest(input.getFile());
-
 		final Map<Boolean, List<Required>> libraries = manifest.getDependencies().getRequired().stream()
 				.collect(Collectors.partitioningBy(r -> isStandardLib(r.getSymbolicName())));
 
-		return List.of(new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, libraries.get(Boolean.valueOf(true))),
-				new LibContainer(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, libraries.get(Boolean.valueOf(false))));
+		return List.of(new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, libraries.get(Boolean.TRUE)),
+				new LibContainer(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, libraries.get(Boolean.FALSE)));
 	}
 
 	private static boolean isStandardLib(final String symbolicName) {
 		return LibraryManager.INSTANCE.getStandardLibraries().containsKey(symbolicName);
+	}
+
+	private Manifest getManifest() {
+		if (getEditor() instanceof final ManifestEditor editor) {
+			return editor.getManifest();
+		}
+		return null;
 	}
 
 	private IProject getProject() {
@@ -212,6 +229,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 	}
 
 	private void collectLinkedLibraryVersions() {
+		linkedLibVersions.clear();
 		final IProject project = getProject();
 		if (project == null) {
 			return;
@@ -229,7 +247,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 		return linkedLibVersions.getOrDefault(symbolicName, ""); //$NON-NLS-1$
 	}
 
-	private void configureColumns(final TreeColumnLayout layout, final TreeViewer treeViewer) {
+	private void configureColumns(final TreeColumnLayout layout) {
 
 		// symbolic name column
 		final TreeViewerColumn symbolicNameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
@@ -239,20 +257,24 @@ public class ManifestEditorDependencyPage extends FormPage {
 					&& !children.isEmpty()) {
 				cell.setText(name);
 			}
-		}));
+		}, false));
 
 		// version range column
 		final TreeViewerColumn versionRangeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		versionRangeColumn.getColumn().setText(Messages.ManifestEditor_Column_VersionRange);
-		versionRangeColumn.setLabelProvider(createLabelProvider(Required::getVersion, null));
+		versionRangeColumn.setLabelProvider(createLabelProvider(Required::getVersion, null, true));
 		versionRangeColumn.setEditingSupport(new EditingSupport(treeViewer) {
 			@Override
 			protected void setValue(final Object element, final Object value) {
-				if (element instanceof final Required req) {
-					req.setVersion(value.toString());
-					getViewer().refresh(element);
-					getViewer().setSelection(null);
-					if (ManifestEditorDependencyPage.this.getEditor() instanceof final ManifestEditor editor) {
+				if (element instanceof final Required required) {
+					final String version = value.toString();
+					if (version.equals(required.getVersion())) {
+						return;
+					}
+					required.setVersion(version);
+					getViewer().refresh(required);
+					getViewer().setSelection(StructuredSelection.EMPTY);
+					if (getEditor() instanceof final ManifestEditor editor) {
 						editor.setDirty(true);
 					}
 				}
@@ -280,7 +302,8 @@ public class ManifestEditorDependencyPage extends FormPage {
 		// active version column
 		final TreeViewerColumn activeVersionColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		activeVersionColumn.getColumn().setText(Messages.ManifestEditor_Column_Used);
-		activeVersionColumn.setLabelProvider(createLabelProvider(req -> getUsedVersion(req.getSymbolicName()), null));
+		activeVersionColumn
+				.setLabelProvider(createLabelProvider(req -> getUsedVersion(req.getSymbolicName()), null, false));
 
 		// latest version in range column
 		final TreeViewerColumn latestInRangeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
@@ -291,16 +314,17 @@ public class ManifestEditorDependencyPage extends FormPage {
 			}
 			final org.osgi.framework.VersionRange range = VersionComparator.parseVersionRange(req.getVersion());
 			return libraryProviders.stream().map(provider -> provider.getLatest(req.getSymbolicName(), range))
-					.flatMap(Optional::stream).sorted(comparator).map(lib -> lib.version().toString()).findFirst()
-					.orElse(""); //$NON-NLS-1$
-		}, null));
+					.flatMap(Optional::stream).sorted(VERSION_DESCENDING).map(lib -> lib.version().toString())
+					.findFirst().orElse(""); //$NON-NLS-1$
+		}, null, false));
 
 		// latest overall version column
 		final TreeViewerColumn latestColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		latestColumn.getColumn().setText(Messages.ManifestEditor_Column_Latest);
 		latestColumn.setLabelProvider(createLabelProvider(req -> libraryProviders.stream()
-				.map(provider -> provider.getLatest(req.getSymbolicName())).flatMap(Optional::stream).sorted(comparator)
-				.map(lib -> lib.version().toString()).findFirst().orElse(""), null)); //$NON-NLS-1$
+				.map(provider -> provider.getLatest(req.getSymbolicName())).flatMap(Optional::stream)
+				.sorted(VERSION_DESCENDING).map(lib -> lib.version().toString()).findFirst().orElse(""), null, false) //$NON-NLS-1$
+		);
 
 		// define column width ratios
 		layout.setColumnData(symbolicNameColumn.getColumn(), new ColumnWeightData(40));
@@ -310,7 +334,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 		layout.setColumnData(latestColumn.getColumn(), new ColumnWeightData(20));
 	}
 
-	private void refreshLibraries(final IManagedForm form, final TreeViewer viewer) {
+	private void refreshLibraries(final IManagedForm form) {
 		form.getForm().setMessage(Messages.ManifestEditor_RefreshLibraries + " ...", //$NON-NLS-1$
 				IMessageProvider.INFORMATION);
 		final Job job = new Job(Messages.ManageLibraryWizard_LoadRemoteVersions) {
@@ -319,19 +343,20 @@ public class ManifestEditorDependencyPage extends FormPage {
 				final IStatus status = onlineLibraryProvider.refresh(monitor, false);
 
 				Display.getDefault().asyncExec(() -> {
-					if (viewer == null || viewer.getTree().isDisposed()) {
+					if (treeViewer == null || treeViewer.getTree().isDisposed()) {
 						return;
 					}
 
 					if (status.isOK()) {
 						form.getForm().setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
 					} else {
-						final String combinedMessage = Arrays.stream(status.getChildren()).map(IStatus::getMessage)
-								.collect(Collectors.joining(System.lineSeparator()));
+						final String combinedMessage = status.isMultiStatus() ? Arrays.stream(status.getChildren())
+								.map(IStatus::getMessage).collect(Collectors.joining(System.lineSeparator()))
+								: status.getMessage();
 						form.getForm().setMessage(combinedMessage, IMessageProvider.ERROR);
 					}
 
-					viewer.refresh();
+					treeViewer.refresh();
 				});
 				return Status.OK_STATUS;
 			}
@@ -341,55 +366,51 @@ public class ManifestEditorDependencyPage extends FormPage {
 		job.schedule();
 	}
 
-	@Override
-	public void doSave(final IProgressMonitor monitor) {
-		super.doSave(monitor);
-		if (manifest.getDependencies().getRequired().stream()
-				.anyMatch(req -> !VersionComparator.isValidRange(req.getVersion()))) {
-			return;
-		}
-		ManifestHelper.saveManifest(manifest);
-	}
+	private static CellLabelProvider createLabelProvider(final Function<Required, String> textProvider,
+			final Consumer<ViewerCell> containerUpdater, final boolean editable) {
 
-	private static CellLabelProvider createLabelProvider(final Function<Required, String> requiredTextProvider,
-			final Consumer<ViewerCell> defaultCellUpdater) {
-
-		return new CellLabelProvider() {
+		return new StyledCellLabelProvider() {
 
 			@Override
 			public void update(final ViewerCell cell) {
-				resetCell(cell);
-
 				if (cell.getElement() instanceof final Required required) {
-					applyValidationStyle(cell, required);
-					cell.setText(getCellText(required));
-				} else if (defaultCellUpdater != null) {
-					defaultCellUpdater.accept(cell);
+					updateRequiredCell(cell, required);
+				} else {
+					clearRequiredStyle(cell);
+					cell.setText(""); //$NON-NLS-1$
+
+					if (containerUpdater != null) {
+						containerUpdater.accept(cell);
+					}
+				}
+
+				super.update(cell);
+			}
+
+			private void updateRequiredCell(final ViewerCell cell, final Required required) {
+				clearRequiredStyle(cell);
+
+				final String text = textProvider.apply(required);
+				if (!editable) {
+					final StyledString styledText = new StyledString(text, StyledString.QUALIFIER_STYLER);
+					cell.setText(styledText.getString());
+					cell.setStyleRanges(styledText.getStyleRanges());
+				} else {
+					cell.setText(text);
+				}
+
+				if (!VersionComparator.isValidRange(required.getVersion())) {
+					final Display display = cell.getControl().getDisplay();
+					cell.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+					cell.setForeground(display.getSystemColor(SWT.COLOR_RED));
+					cell.setStyleRanges(null);
 				}
 			}
 
-			private String getCellText(final Required required) {
-				try {
-					return requiredTextProvider.apply(required);
-				} catch (final IllegalArgumentException e) {
-					return ""; //$NON-NLS-1$
-				}
-			}
-
-			private static void applyValidationStyle(final ViewerCell cell, final Required required) {
-				if (VersionComparator.isValidRange(required.getVersion())) {
-					return;
-				}
-
-				final Display display = cell.getControl().getDisplay();
-				cell.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-				cell.setForeground(display.getSystemColor(SWT.COLOR_RED));
-			}
-
-			private static void resetCell(final ViewerCell cell) {
-				cell.setText(""); //$NON-NLS-1$
+			private static void clearRequiredStyle(final ViewerCell cell) {
 				cell.setBackground(null);
 				cell.setForeground(null);
+				cell.setStyleRanges(null);
 			}
 		};
 	}
