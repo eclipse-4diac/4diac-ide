@@ -56,12 +56,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
@@ -74,7 +74,7 @@ public class LibraryPlanningPage extends WizardPage {
 
 	private List<LibContainer> input;
 	private final IProject project;
-	private Text detailsText;
+	private StyledText detailsText;
 	private ResolveResult resolveResult;
 
 	protected LibraryPlanningPage(final String pageName, final IProject project) {
@@ -176,10 +176,10 @@ public class LibraryPlanningPage extends WizardPage {
 		detailsBox.setLayout(new GridLayout(1, false));
 
 		final Label detailsLabel = new Label(detailsBox, SWT.NONE);
-		detailsLabel.setText("Validation details"); //$NON-NLS-1$
+		detailsLabel.setText("Problems"); //$NON-NLS-1$
 
-		detailsText = new Text(detailsBox, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP);
-		final GridData detailsData = new GridData(SWT.FILL, SWT.FILL, true, false);
+		detailsText = new StyledText(detailsBox, SWT.V_SCROLL | SWT.READ_ONLY | SWT.WRAP);
+		final GridData detailsData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		detailsData.heightHint = 90;
 		detailsText.setLayoutData(detailsData);
 	}
@@ -192,6 +192,9 @@ public class LibraryPlanningPage extends WizardPage {
 		resolveResult = LibraryResolver.resolveDependencies(getProjectDependencies(), getAvailableLibraries(), included,
 				excluded);
 		detailsText.setText(resolveResult.getMessage());
+		final GridData gd = (GridData) detailsText.getLayoutData();
+		gd.heightHint = Math.min(90, detailsText.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		detailsText.getParent().layout();
 		return resolveResult.status();
 	}
 

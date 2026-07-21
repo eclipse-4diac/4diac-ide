@@ -36,8 +36,8 @@ import org.osgi.framework.VersionRange;
 public class LibraryResolver {
 
 	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.library"; //$NON-NLS-1$
-	private static final String PROJECT_CAUSE = "project"; //$NON-NLS-1$
-	private static final String INCLUDED_CAUSE = "configuration"; //$NON-NLS-1$
+	private static final String PROJECT_CAUSE = "The project manifest"; //$NON-NLS-1$
+	private static final String INCLUDED_CAUSE = "Your planned change"; //$NON-NLS-1$
 
 	public record ResolveResult(Map<String, ResolveNode> resolveNodes, Map<String, DependencyNode> dependencyNodes,
 			IStatus status) {
@@ -112,15 +112,16 @@ public class LibraryResolver {
 	private static boolean validateNode(final String symbolicName, final DependencyNode dependencyNode,
 			final Set<String> excludedLibs, final MultiStatus status) {
 		if (excludedLibs.contains(symbolicName)) {
-			status.add(
-					Status.error(MessageFormat.format("Library {0} cannot be removed because it is required by:{1}{2}", //$NON-NLS-1$
-							symbolicName, System.lineSeparator(), dependencyNode.getCauseMessage())));
+			status.add(Status.error(MessageFormat.format("Library {0} cannot be removed because:{1}{2}", //$NON-NLS-1$
+					symbolicName, System.lineSeparator(), dependencyNode.getCauseMessage())));
 			return false;
 		}
 
 		if (!dependencyNode.isValid()) {
-			status.add(Status.error(MessageFormat.format(
-					"Library {0} cannot be resolved because the required versions are incompatible:{1}{2}", //$NON-NLS-1$
+			status.add(Status.error(MessageFormat.format("""
+					Library ''{0}'' cannot be selected because its version requirements conflict.{1}\
+					{2}{1}{1}\
+					Select a version that satisfies all requirements, or update the dependent libraries.""", //$NON-NLS-1$
 					dependencyNode.getSymbolicName(), System.lineSeparator(), dependencyNode.getCauseMessage())));
 			return false;
 		}
