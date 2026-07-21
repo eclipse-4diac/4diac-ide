@@ -177,6 +177,15 @@ public class ManifestEditorDependencyPage extends FormPage {
 		treeViewer.expandAll();
 	}
 
+	public void reveal(final Required required) {
+		if (treeViewer == null || treeViewer.getTree().isDisposed()) {
+			return;
+		}
+
+		treeViewer.setSelection(new StructuredSelection(required), true);
+		treeViewer.getTree().setFocus();
+	}
+
 	private void createButtonBar(final Composite parent, final IManagedForm form) {
 		final Composite buttonBar = new Composite(parent, SWT.NONE);
 		buttonBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));

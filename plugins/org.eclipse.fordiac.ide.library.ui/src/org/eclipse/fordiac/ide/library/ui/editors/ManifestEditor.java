@@ -15,19 +15,27 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class ManifestEditor extends FormEditor {
+public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	private static final String DEPENDENCY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorDependencyPage"; //$NON-NLS-1$
+	ManifestEditorDependencyPage dependencyPage;
 
 	private Manifest manifest;
 	private boolean isDirty;
@@ -36,8 +44,7 @@ public class ManifestEditor extends FormEditor {
 	protected void addPages() {
 		loadManifest();
 		isDirty = false;
-		final ManifestEditorDependencyPage dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID,
-				"Dependencies"); //$NON-NLS-1$
+		dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"); //$NON-NLS-1$
 
 		try {
 			final int index = addPage(dependencyPage);
@@ -91,5 +98,32 @@ public class ManifestEditor extends FormEditor {
 
 	public Manifest getManifest() {
 		return manifest;
+	}
+
+	@Override
+	public void gotoMarker(final IMarker marker) {
+		if (!FordiacErrorMarker.isTargetOfType(marker, LibraryPackage.Literals.REQUIRED)) {
+			return;
+		}
+
+		if (resolveModelElement(marker) instanceof final Required required) {
+			setActivePage(DEPENDENCY_PAGE_ID);
+			dependencyPage.reveal(required);
+		}
+	}
+
+	private EObject resolveModelElement(final IMarker marker) {
+		final URI targetUri = FordiacErrorMarker.getTargetUri(marker);
+		final Resource resource = manifest != null ? manifest.eResource() : null;
+
+		if (resource == null || targetUri == null || !targetUri.hasFragment()) {
+			return null;
+		}
+
+		if (!targetUri.trimFragment().equals(resource.getURI())) {
+			return null;
+		}
+
+		return resource.getEObject(targetUri.fragment());
 	}
 }
