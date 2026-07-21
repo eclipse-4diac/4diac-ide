@@ -10,6 +10,10 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//FieldConstraint"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orConstraint" eType="#//Constraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="andConstraint" eType="#//Constraint"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FieldConstraint">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -42,8 +46,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TargetOption" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Place">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignoreLinkedLibraries" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignoreLinkedLibraries"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFB" eType="#//SimpleFB"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicFB" eType="#//BasicFB"
