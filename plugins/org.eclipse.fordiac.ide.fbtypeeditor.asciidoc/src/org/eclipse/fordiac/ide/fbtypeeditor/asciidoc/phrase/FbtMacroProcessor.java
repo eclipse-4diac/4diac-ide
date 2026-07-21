@@ -26,7 +26,6 @@ import org.eclipse.mylyn.wikitext.parser.DocumentBuilder.SpanType;
 import org.eclipse.mylyn.wikitext.parser.LinkAttributes;
 import org.eclipse.mylyn.wikitext.parser.markup.PatternBasedElementProcessor;
 
-@SuppressWarnings("restriction")
 public class FbtMacroProcessor extends PatternBasedElementProcessor {
 
 	public static final String FBT_TYPE_ENTRY_URI = "fbt-entry://"; //$NON-NLS-1$

@@ -38,7 +38,7 @@
       <import plugin="org.eclipse.mylyn.wikitext.asciidoc"/>
       <import plugin="org.eclipse.mylyn.wikitext.asciidoc.ui"/>
       <import plugin="org.eclipse.mylyn.wikitext.ui"/>
-      <import plugin="org.eclipse.mylyn.wikitext.ui.source"/>
+      <import plugin="org.eclipse.mylyn.wikitext.html"/>
    </requires>
 
    <plugin
