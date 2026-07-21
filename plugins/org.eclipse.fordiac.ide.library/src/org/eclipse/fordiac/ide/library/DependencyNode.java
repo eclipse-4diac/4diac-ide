@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -73,9 +74,14 @@ class DependencyNode {
 	}
 
 	public String getCauseMessage() {
-		return getCauses().entrySet().stream().map(entry -> "- " + entry.getKey() + " requires " //$NON-NLS-1$ //$NON-NLS-2$
-				+ VersionComparator.formatVersionRange(entry.getValue()))
-				.collect(Collectors.joining(System.lineSeparator()));
+		return getCauses().entrySet().stream().map(entry -> {
+			if (entry.getValue().isExact()) {
+				return MessageFormat.format(" - {0} requires version {1}", entry.getKey(), //$NON-NLS-1$
+						VersionComparator.formatVersionRange(entry.getValue()));
+			}
+			return MessageFormat.format(" - {0} requires a version in range {1}", entry.getKey(), //$NON-NLS-1$
+					VersionComparator.formatVersionRange(entry.getValue()));
+		}).collect(Collectors.joining(System.lineSeparator()));
 	}
 
 	public boolean recalculate() {
