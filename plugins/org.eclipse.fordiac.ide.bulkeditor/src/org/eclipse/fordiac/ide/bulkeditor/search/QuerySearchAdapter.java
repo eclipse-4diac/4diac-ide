@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.InstanceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.PinConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.TypeConfig;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
@@ -117,28 +116,14 @@ public class QuerySearchAdapter {
 
 	private static IEC61499SearchFilter buildDefaultFilter(final EObject targetOption, final BulkEditorMode mode,
 			final Map<String, String> placeholders) {
-		final EObject constraint = getContainedChild(targetOption, QueryModelHelper.REF_CONSTRAINT);
-
-		final MatcherConfig nameConfig = readConstraintField(constraint, QueryModelHelper.FEATURE_NAME, placeholders);
-		final MatcherConfig typeConfig = readConstraintField(constraint, QueryModelHelper.FEATURE_TYPE, placeholders);
-		final MatcherConfig commentConfig = readConstraintField(constraint, QueryModelHelper.FEATURE_COMMENT,
-				placeholders);
-		final MatcherConfig valueConfig = readConstraintField(constraint, QueryModelHelper.FEATURE_VALUE, placeholders);
-
-		final var namePattern = StringMatcher.createPattern(nameConfig);
-		final var typePattern = StringMatcher.createPattern(typeConfig);
-		final var commentPattern = StringMatcher.createPattern(commentConfig);
-		final var valuePattern = StringMatcher.createPattern(valueConfig);
+		final FilterRecord constraint = readFilterRecord(targetOption, QueryModelHelper.REF_CONSTRAINT, placeholders);
 
 		return searchCandidate -> {
 			if (!isValidCandidate(searchCandidate, mode)) {
 				return false;
 			}
 			final ITypedElement typed = (ITypedElement) searchCandidate;
-			return StringMatcher.matches(typed.getName(), nameConfig, namePattern)
-					&& StringMatcher.matches(typed.getTypeName(), typeConfig, typePattern)
-					&& StringMatcher.matches(typed.getComment(), commentConfig, commentPattern) && StringMatcher
-							.matches(InitialValueHelper.getInitialOrDefaultValue(typed), valueConfig, valuePattern);
+			return constraint.matches(typed.getName(), typed.getTypeName(), typed.getComment());
 		};
 	}
 
@@ -254,11 +239,29 @@ public class QuerySearchAdapter {
 
 	private static FilterRecord readFilterRecord(final EObject parent, final String constraintRefName,
 			final Map<String, String> placeholders) {
-		final EObject constraint = getContainedChild(parent, constraintRefName);
-		return new FilterRecord(constraint != null,
+		final EObject constraint = QueryModelHelper.getContainedChild(parent, constraintRefName);
+		return readConstraintTree(constraint, placeholders);
+	}
+
+	private static FilterRecord readConstraintTree(final EObject constraint, final Map<String, String> placeholders) {
+		if (constraint == null) {
+			return FilterRecord.INACTIVE;
+		}
+		return new FilterRecord(true, //
 				readConstraintField(constraint, QueryModelHelper.FEATURE_NAME, placeholders),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_TYPE, placeholders),
-				readConstraintField(constraint, QueryModelHelper.FEATURE_COMMENT, placeholders));
+				readConstraintField(constraint, QueryModelHelper.FEATURE_COMMENT, placeholders),
+				readSubConstraints(constraint, QueryModelHelper.REF_OR_CONSTRAINTS, placeholders),
+				readSubConstraints(constraint, QueryModelHelper.REF_AND_CONSTRAINTS, placeholders));
+	}
+
+	private static FilterRecord readSubConstraints(final EObject constraint, final String refName,
+			final Map<String, String> placeholders) {
+		final EStructuralFeature feature = constraint.eClass().getEStructuralFeature(refName);
+		if (feature == null || !(constraint.eGet(feature) instanceof final EObject eobj)) {
+			return FilterRecord.INACTIVE;
+		}
+		return readConstraintTree(eobj, placeholders);
 	}
 
 	private static Set<String> readOccurrences(final EObject instance) {

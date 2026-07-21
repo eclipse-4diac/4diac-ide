@@ -73,6 +73,8 @@ public final class QueryModelHelper {
 	public static final String FEATURE_WHOLE_WORD = "wholeWord"; //$NON-NLS-1$
 	public static final String FEATURE_ENTIRE = "entire"; //$NON-NLS-1$
 	public static final String FEATURE_REGEX = "regex"; //$NON-NLS-1$
+	public static final String REF_AND_CONSTRAINTS = "andConstraint"; //$NON-NLS-1$
+	public static final String REF_OR_CONSTRAINTS = "orConstraint"; //$NON-NLS-1$
 
 	public static final String FEATURE_OCCURRENCE = "occurrence"; //$NON-NLS-1$
 	public static final String FEATURE_KEY = "key"; //$NON-NLS-1$
@@ -192,7 +194,7 @@ public final class QueryModelHelper {
 	private static boolean isInstantiable(final EClass type) {
 		return !type.isAbstract() && !type.isInterface();
 	}
-	
+
 	private static boolean isMandatorySlot(final EReference ref) {
 		return !ref.isMany() && ref.getLowerBound() >= 1 && isInstantiable(ref.getEReferenceType());
 	}

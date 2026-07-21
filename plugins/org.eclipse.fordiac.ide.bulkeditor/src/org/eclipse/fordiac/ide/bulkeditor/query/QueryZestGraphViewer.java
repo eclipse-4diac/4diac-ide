@@ -256,8 +256,8 @@ public class QueryZestGraphViewer {
 	private class QueryGraphLabelProvider extends LabelProvider implements IFigureProvider {
 		@Override
 		public String getText(final Object element) {
-			if (element instanceof EntityConnectionData) {
-				return null;
+			if (element instanceof final EntityConnectionData conn) {
+				return getConnectionLabel(conn);
 			}
 			if (element instanceof final EObject eObj) {
 				return eObj.eClass().getName();
@@ -292,6 +292,21 @@ public class QueryZestGraphViewer {
 				return new QueryAttributeDeclarationNodeFigure(eObj, graphViewer.getGraphControl(), project);
 			}
 			return new QueryNodeFigure(eObj);
+		}
+
+		private static String getConnectionLabel(final EntityConnectionData conn) {
+			return switch (getContainmentName(conn.dest)) {
+			case QueryModelHelper.REF_AND_CONSTRAINTS -> "AND"; //$NON-NLS-1$
+			case QueryModelHelper.REF_OR_CONSTRAINTS -> "OR"; //$NON-NLS-1$
+			case null, default -> null;
+			};
+		}
+
+		private static String getContainmentName(final Object dest) {
+			if (dest instanceof final EObject child && child.eContainmentFeature() != null) {
+				return child.eContainmentFeature().getName();
+			}
+			return null;
 		}
 	}
 }
