@@ -13,6 +13,7 @@
 
 package org.eclipse.fordiac.ide.systemmanagement;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -26,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -35,6 +37,7 @@ public class ProjectCreator {
 
 	private final String projectName;
 	private final IPath projectLocation;
+	private Collection<java.net.URI> libraryUris;
 
 	private ProjectCreator(final String projectName, final IPath projectLocation) {
 		this.projectName = projectName;
@@ -45,6 +48,11 @@ public class ProjectCreator {
 		return new ProjectCreator(projectName, projectLocation);
 	}
 
+	public ProjectCreator withLibraries(final Collection<java.net.URI> libraryUris) {
+		this.libraryUris = libraryUris;
+		return this;
+	}
+
 	/**
 	 * Creates a new project in the workspace.
 	 *
@@ -52,13 +60,22 @@ public class ProjectCreator {
 	 */
 	public IProject create(final IProgressMonitor monitor) {
 		try {
-			return createNew4diacProject(monitor);
+			final IProject new4diacProject = createNew4diacProject(monitor);
+			importLibraries(new4diacProject, monitor);
+			return new4diacProject;
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}
 		return null;
+
+	}
+
+	private void importLibraries(final IProject new4diacProject, final IProgressMonitor monitor) {
+		if (libraryUris != null) {
+			LibraryManager.INSTANCE.importLibraries(new4diacProject, libraryUris, true);
+		}
 
 	}
 
