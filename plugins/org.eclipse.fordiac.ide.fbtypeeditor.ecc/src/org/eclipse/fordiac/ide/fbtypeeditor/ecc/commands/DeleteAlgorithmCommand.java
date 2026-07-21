@@ -39,7 +39,7 @@ public class DeleteAlgorithmCommand extends Command {
 	public void execute() {
 		for (final ECState state : fbType.getECC().getECState()) {
 			for (final ECAction ecAction : state.getECAction()) {
-				if (ecAction.getAlgorithm() != null && ecAction.getAlgorithm().equals(algorithm)) {
+				if (ecAction.getAlgorithm() != null && ecAction.getAlgorithm().equals(algorithm.getName())) {
 					actions.add(ecAction);
 				}
 			}
@@ -51,7 +51,7 @@ public class DeleteAlgorithmCommand extends Command {
 	@Override
 	public void undo() {
 		for (final ECAction action : actions) {
-			action.setAlgorithm(algorithm);
+			action.setAlgorithm(algorithm.getName());
 		}
 		fbType.getCallables().add(algorithm);
 	}

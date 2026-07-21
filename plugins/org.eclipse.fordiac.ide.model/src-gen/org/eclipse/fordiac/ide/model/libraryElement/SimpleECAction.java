@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Simple EC Action</b></em>'.
@@ -27,8 +25,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getAlgorithm <em>Algorithm</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getOutput <em>Output</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getSimpleECState <em>Simple EC State</em>}</li>
  * </ul>
  *
@@ -36,51 +32,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface SimpleECAction extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Algorithm</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Algorithm</em>' attribute.
-	 * @see #setAlgorithm(String)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleECAction_Algorithm()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-	 * @generated
-	 */
-	String getAlgorithm();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getAlgorithm <em>Algorithm</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Algorithm</em>' attribute.
-	 * @see #getAlgorithm()
-	 * @generated
-	 */
-	void setAlgorithm(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Output</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Output</em>' reference.
-	 * @see #setOutput(Event)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleECAction_Output()
-	 * @model
-	 * @generated
-	 */
-	Event getOutput();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction#getOutput <em>Output</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Output</em>' reference.
-	 * @see #getOutput()
-	 * @generated
-	 */
-	void setOutput(Event value);
-
+public interface SimpleECAction extends BaseECAction {
 	/**
 	 * Returns the value of the '<em><b>Simple EC State</b></em>' container reference.
 	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECState#getSimpleECActions <em>Simple EC Actions</em>}'.

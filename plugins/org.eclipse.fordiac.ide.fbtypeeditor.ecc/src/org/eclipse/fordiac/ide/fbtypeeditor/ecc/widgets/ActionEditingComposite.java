@@ -73,7 +73,7 @@ public class ActionEditingComposite {
 			if (element instanceof final ECAction ecAction) {
 				switch (columnIndex) {
 				case ACTION_COLUMN_ALGORITHM:
-					return (ecAction.getAlgorithm() != null) ? ecAction.getAlgorithm().getName()
+					return (ecAction.getAlgorithm() != null) ? ecAction.getAlgorithm()
 							: ECCContentAndLabelProvider.EMPTY_FIELD;
 				case ACTION_COLUMN_EVENT:
 					return (ecAction.getOutput() != null)
@@ -99,7 +99,7 @@ public class ActionEditingComposite {
 			return switch (property) {
 			case ACTION_ALGORITHM -> {
 				final List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(getBasicFBType());
-				final Algorithm alg = selectedAction.getAlgorithm();
+				final Algorithm alg = selectedAction.getAlgorithmModel();
 				yield Integer.valueOf((alg != null) ? algorithms.indexOf(alg) : algorithms.size());
 			}
 			case ACTION_EVENT -> {

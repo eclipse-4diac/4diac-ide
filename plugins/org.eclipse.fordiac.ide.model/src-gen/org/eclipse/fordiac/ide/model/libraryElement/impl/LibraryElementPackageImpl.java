@@ -135,6 +135,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass baseECActionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass baseFBTypeEClass = null;
 
 	/**
@@ -1330,6 +1337,36 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getBaseECAction() {
+		return baseECActionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBaseECAction_Output() {
+		return (EReference)baseECActionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseECAction_Algorithm() {
+		return (EAttribute)baseECActionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getBaseFBType() {
 		return baseFBTypeEClass;
 	}
@@ -2060,28 +2097,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getECAction_Algorithm() {
-		return (EReference)ecActionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getECAction_Output() {
-		return (EReference)ecActionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getECAction_ECState() {
-		return (EReference)ecActionEClass.getEStructuralFeatures().get(2);
+		return (EReference)ecActionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -3740,28 +3757,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSimpleECAction_Algorithm() {
-		return (EAttribute)simpleECActionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSimpleECAction_Output() {
-		return (EReference)simpleECActionEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSimpleECAction_SimpleECState() {
-		return (EReference)simpleECActionEClass.getEStructuralFeatures().get(2);
+		return (EReference)simpleECActionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -4558,6 +4555,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(automationSystemEClass, AUTOMATION_SYSTEM__MAPPING);
 		createEReference(automationSystemEClass, AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION);
 
+		baseECActionEClass = createEClass(BASE_EC_ACTION);
+		createEReference(baseECActionEClass, BASE_EC_ACTION__OUTPUT);
+		createEAttribute(baseECActionEClass, BASE_EC_ACTION__ALGORITHM);
+
 		baseFBTypeEClass = createEClass(BASE_FB_TYPE);
 		createEReference(baseFBTypeEClass, BASE_FB_TYPE__INTERNAL_VARS);
 		createEReference(baseFBTypeEClass, BASE_FB_TYPE__INTERNAL_CONST_VARS);
@@ -4654,8 +4655,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(deviceTypeEClass, DEVICE_TYPE__ATTRIBUTE_DECLARATIONS);
 
 		ecActionEClass = createEClass(EC_ACTION);
-		createEReference(ecActionEClass, EC_ACTION__ALGORITHM);
-		createEReference(ecActionEClass, EC_ACTION__OUTPUT);
 		createEReference(ecActionEClass, EC_ACTION__EC_STATE);
 
 		eccEClass = createEClass(ECC);
@@ -4886,8 +4885,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		serviceInterfaceFBTypeEClass = createEClass(SERVICE_INTERFACE_FB_TYPE);
 
 		simpleECActionEClass = createEClass(SIMPLE_EC_ACTION);
-		createEAttribute(simpleECActionEClass, SIMPLE_EC_ACTION__ALGORITHM);
-		createEReference(simpleECActionEClass, SIMPLE_EC_ACTION__OUTPUT);
 		createEReference(simpleECActionEClass, SIMPLE_EC_ACTION__SIMPLE_EC_STATE);
 
 		simpleECStateEClass = createEClass(SIMPLE_EC_STATE);
@@ -5054,6 +5051,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		deviceEClass.getESuperTypes().add(this.getColorizableElement());
 		deviceEClass.getESuperTypes().add(this.getIVarElement());
 		deviceTypeEClass.getESuperTypes().add(this.getLibraryElement());
+		ecActionEClass.getESuperTypes().add(this.getBaseECAction());
 		ecStateEClass.getESuperTypes().add(this.getINamedElement());
 		ecStateEClass.getESuperTypes().add(this.getPositionableElement());
 		ecTransitionEClass.getESuperTypes().add(this.getPositionableElement());
@@ -5126,6 +5124,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		serviceSequenceEClass.getESuperTypes().add(this.getConfigurableObject());
 		serviceInterfaceEClass.getESuperTypes().add(this.getINamedElement());
 		serviceInterfaceFBTypeEClass.getESuperTypes().add(this.getFBType());
+		simpleECActionEClass.getESuperTypes().add(this.getBaseECAction());
 		simpleECStateEClass.getESuperTypes().add(this.getINamedElement());
 		simpleFBTypeEClass.getESuperTypes().add(this.getBaseFBType());
 		stAlgorithmEClass.getESuperTypes().add(this.getTextAlgorithm());
@@ -5242,6 +5241,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		op = addEOperation(automationSystemEClass, this.getApplication(), "getApplicationNamed", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(baseECActionEClass, BaseECAction.class, "BaseECAction", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getBaseECAction_Output(), this.getEvent(), null, "output", null, 0, 1, BaseECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getBaseECAction_Algorithm(), theXMLTypePackage.getString(), "algorithm", null, 0, 1, BaseECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(baseFBTypeEClass, BaseFBType.class, "BaseFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getBaseFBType_InternalVars(), this.getVarDeclaration(), null, "internalVars", null, 0, -1, BaseFBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5610,9 +5613,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getDeviceType_AttributeDeclarations(), this.getAttributeDeclaration(), null, "attributeDeclarations", null, 0, -1, DeviceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(ecActionEClass, ECAction.class, "ECAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getECAction_Algorithm(), this.getAlgorithm(), null, "algorithm", null, 0, 1, ECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getECAction_Output(), this.getEvent(), null, "output", null, 0, 1, ECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getECAction_ECState(), this.getECState(), this.getECState_ECAction(), "eCState", null, 1, 1, ECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(ecActionEClass, this.getAlgorithm(), "getAlgorithmModel", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(eccEClass, org.eclipse.fordiac.ide.model.libraryElement.ECC.class, "ECC", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getECC_ECState(), this.getECState(), this.getECState_ECC(), "eCState", null, 1, -1, org.eclipse.fordiac.ide.model.libraryElement.ECC.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -6216,8 +6219,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(serviceInterfaceFBTypeEClass, ServiceInterfaceFBType.class, "ServiceInterfaceFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(simpleECActionEClass, SimpleECAction.class, "SimpleECAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getSimpleECAction_Algorithm(), theXMLTypePackage.getString(), "algorithm", null, 0, 1, SimpleECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSimpleECAction_Output(), this.getEvent(), null, "output", null, 0, 1, SimpleECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSimpleECAction_SimpleECState(), this.getSimpleECState(), this.getSimpleECState_SimpleECActions(), "simpleECState", null, 1, 1, SimpleECAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(simpleECStateEClass, SimpleECState.class, "SimpleECState", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

@@ -36,7 +36,7 @@ public class ExporterTestBasicFBTypeAdvanced extends ExporterTestBasicFBTypeBase
 		final STAlgorithm algorithm = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		algorithm.setName("ALG1"); //$NON-NLS-1$
 		algorithm.setText("DO1 := 42;"); //$NON-NLS-1$
-		action.setAlgorithm(algorithm);
+		action.setAlgorithm(algorithm.getName());
 		state.getECAction().add(action);
 		functionBlock.getECC().getECState().add(state);
 		functionBlock.getCallables().add(algorithm);

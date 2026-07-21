@@ -123,6 +123,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createAutomationSystemAdapter();
 			}
 			@Override
+			public Adapter caseBaseECAction(BaseECAction object) {
+				return createBaseECActionAdapter();
+			}
+			@Override
 			public Adapter caseBaseFBType(BaseFBType object) {
 				return createBaseFBTypeAdapter();
 			}
@@ -765,6 +769,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAutomationSystemAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseECAction <em>Base EC Action</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseECAction
+	 * @generated
+	 */
+	public Adapter createBaseECActionAdapter() {
 		return null;
 	}
 

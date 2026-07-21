@@ -76,7 +76,7 @@ public class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 		setState(state);
 		trap(state);
 		for (final ECAction action : state.getECAction()) {
-			final Algorithm algorithm = action.getAlgorithm();
+			final Algorithm algorithm = action.getAlgorithmModel();
 			if (algorithm != null) {
 				getAlgorithmEvaluators().get(algorithm).evaluate();
 			}

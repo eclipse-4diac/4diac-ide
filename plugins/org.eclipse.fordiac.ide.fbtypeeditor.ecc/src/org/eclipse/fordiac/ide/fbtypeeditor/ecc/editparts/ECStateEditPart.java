@@ -61,8 +61,8 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 			super.notifyChanged(notification);
 			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
 				final Object feature = notification.getFeature();
-				if ((!(LibraryElementPackage.eINSTANCE.getECAction_Algorithm().equals(feature))
-						&& !(LibraryElementPackage.eINSTANCE.getECAction_Output().equals(feature))
+				if ((!(LibraryElementPackage.eINSTANCE.getBaseECAction_Algorithm().equals(feature))
+						&& !(LibraryElementPackage.eINSTANCE.getBaseECAction_Output().equals(feature))
 						&& !(LibraryElementPackage.eINSTANCE.getECState().equals(feature)))) {
 					refreshStateTooltip();
 					refresh();

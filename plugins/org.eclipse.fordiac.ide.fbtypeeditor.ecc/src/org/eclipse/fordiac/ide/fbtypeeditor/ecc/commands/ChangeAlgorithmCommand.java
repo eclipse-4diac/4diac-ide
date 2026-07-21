@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -26,26 +26,25 @@ public class ChangeAlgorithmCommand extends Command {
 	private final ECAction ecAction;
 
 	/** The algorithm. */
-	private final Algorithm algorithm;
+	private final String algorithm;
 
 	/** The old algorithm. */
-	private Algorithm oldAlgorithm;
+	private String oldAlgorithm;
 
 	/**
 	 * Instantiates a new change algorithm command.
-	 * 
+	 *
 	 * @param action    the action
 	 * @param algorithm the algorithm
 	 */
 	public ChangeAlgorithmCommand(final ECAction action, final Algorithm algorithm) {
-		super();
 		this.ecAction = action;
-		this.algorithm = algorithm;
+		this.algorithm = algorithm == null ? null : algorithm.getName();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -56,7 +55,7 @@ public class ChangeAlgorithmCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -67,7 +66,7 @@ public class ChangeAlgorithmCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
