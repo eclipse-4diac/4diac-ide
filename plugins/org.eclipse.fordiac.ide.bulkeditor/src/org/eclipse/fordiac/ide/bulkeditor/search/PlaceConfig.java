@@ -59,9 +59,7 @@ public record PlaceConfig( //@formatter:off
 
 	public record TypeConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint,
 			PinConfig pin) {
-		public static final TypeConfig INACTIVE = new TypeConfig(false,
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE),
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE),
+		public static final TypeConfig INACTIVE = new TypeConfig(false, FilterRecord.INACTIVE, FilterRecord.INACTIVE,
 				PinConfig.INACTIVE);
 
 		public boolean matches(final String name, final String type, final String comment) {
@@ -76,10 +74,8 @@ public record PlaceConfig( //@formatter:off
 
 	public record InstanceConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint,
 			Set<String> occurrences, PinConfig pin) {
-		public static final InstanceConfig INACTIVE = new InstanceConfig(false,
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE),
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE),
-				Set.of(), PinConfig.INACTIVE);
+		public static final InstanceConfig INACTIVE = new InstanceConfig(false, FilterRecord.INACTIVE,
+				FilterRecord.INACTIVE, Set.of(), PinConfig.INACTIVE);
 
 		public boolean hasOccurrence(final String occurrence) {
 			return selected && occurrences.contains(occurrence);
@@ -96,13 +92,9 @@ public record PlaceConfig( //@formatter:off
 	}
 
 	public record PinConfig(boolean active, FilterRecord constraint, FilterRecord attributeConstraint) {
-		public static final PinConfig INACTIVE = new PinConfig(false,
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE),
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE));
-
-		public static final PinConfig ACTIVE_UNFILTERED = new PinConfig(true,
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE),
-				new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE));
+		public static final PinConfig INACTIVE = new PinConfig(false, FilterRecord.INACTIVE, FilterRecord.INACTIVE);
+		public static final PinConfig ACTIVE_UNFILTERED = new PinConfig(true, FilterRecord.INACTIVE,
+				FilterRecord.INACTIVE);
 
 		public boolean includePin(final String name, final String type, final String comment) {
 			return !constraint.isSelected() || constraint.matches(name, type, comment);
