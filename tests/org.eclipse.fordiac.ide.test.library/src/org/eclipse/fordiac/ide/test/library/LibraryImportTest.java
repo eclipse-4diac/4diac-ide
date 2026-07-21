@@ -43,7 +43,7 @@ import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ProjectCreator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,8 +75,9 @@ class LibraryImportTest {
 
 	@BeforeAll
 	static void setupBeforeClass() throws Exception {
-		final IProject proj = SystemManager.INSTANCE.createNew4diacProject(PROJECT,
-				ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT), new NullProgressMonitor());
+		final IProject proj = ProjectCreator
+				.of(PROJECT, ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT))
+				.create(new NullProgressMonitor());
 		proj.refreshLocal(IResource.DEPTH_INFINITE, null);
 
 		// extract test libraries

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2010 - 2016  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -121,10 +121,8 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	 */
 	private void createProject(final IProgressMonitor monitor) {
 		try {
-			final ProjectCreator projectCreator = new ProjectCreator(page.getProjectName(), page.getLocationPath());
-
-			final IProject newProject = projectCreator
-					.createProject(monitor != null ? monitor : new NullProgressMonitor());
+			final IProject newProject = ProjectCreator.of(page.getProjectName(), page.getLocationPath())
+					.create(monitor);
 			libPage.setTargetProject(newProject);
 			final SystemCreator systemCreator = new SystemCreator(newProject, page.getInitialSystemName(),
 					page.getInitialApplicationName());
