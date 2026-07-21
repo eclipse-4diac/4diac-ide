@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 
 public class FilterRecord {
 
+	public static final FilterRecord INACTIVE = new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE,
+			MatcherConfig.INACTIVE, FilterRecord.INACTIVE, FilterRecord.INACTIVE);
+
 	private final boolean selected;
 	private final MatcherConfig nameConfig;
 	private final MatcherConfig typeConfig;
@@ -23,9 +26,11 @@ public class FilterRecord {
 	private final Pattern namePattern;
 	private final Pattern typePattern;
 	private final Pattern commentPattern;
+	private final FilterRecord orConstraint;
+	private final FilterRecord andConstraint;
 
 	public FilterRecord(final boolean selected, final MatcherConfig nameConfig, final MatcherConfig typeConfig,
-			final MatcherConfig commentConfig) {
+			final MatcherConfig commentConfig, final FilterRecord orConstraint, final FilterRecord andConstraint) {
 		this.selected = selected;
 		this.nameConfig = nameConfig;
 		this.typeConfig = typeConfig;
@@ -33,6 +38,9 @@ public class FilterRecord {
 		this.namePattern = StringMatcher.createPattern(nameConfig);
 		this.typePattern = StringMatcher.createPattern(typeConfig);
 		this.commentPattern = StringMatcher.createPattern(commentConfig);
+
+		this.orConstraint = orConstraint;
+		this.andConstraint = andConstraint;
 	}
 
 	public boolean isSelected() {
@@ -40,6 +48,12 @@ public class FilterRecord {
 	}
 
 	public boolean matches(final String name, final String type, final String comment) {
+		return (matchesFields(name, type, comment) && andConstraint.matches(name, type, comment))
+				|| orConstraint.matches(name, type, comment);
+
+	}
+
+	private boolean matchesFields(final String name, final String type, final String comment) {
 		return StringMatcher.matches(name, nameConfig, namePattern)
 				&& StringMatcher.matches(type, typeConfig, typePattern)
 				&& StringMatcher.matches(comment, commentConfig, commentPattern);
