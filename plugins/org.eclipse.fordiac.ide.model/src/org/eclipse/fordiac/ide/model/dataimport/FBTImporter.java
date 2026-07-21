@@ -270,7 +270,7 @@ public class FBTImporter extends BlockTypeImporter {
 				final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
 				if (null != list) {
 					for (final ECAction action : list) {
-						action.setAlgorithm(alg);
+						action.setAlgorithm(alg.getName());
 					}
 				}
 			}

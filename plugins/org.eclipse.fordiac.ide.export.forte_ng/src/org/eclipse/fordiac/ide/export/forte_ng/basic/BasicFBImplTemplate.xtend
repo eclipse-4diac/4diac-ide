@@ -56,7 +56,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		  mECCState = «state.generateStateName»;
 		  «FOR action : state.ECAction»
 		  	«IF action.algorithm !== null»
-		  		alg_«action.algorithm.name»();
+		  		alg_«action.algorithm»();
 		  	«ENDIF»
 		  	«IF action.output !== null»
 		  		«action.output.generateSendEvent»

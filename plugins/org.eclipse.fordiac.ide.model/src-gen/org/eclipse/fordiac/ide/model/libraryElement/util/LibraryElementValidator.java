@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -643,6 +644,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateAttributeDeclaration((AttributeDeclaration)value, diagnostics, context);
 			case LibraryElementPackage.AUTOMATION_SYSTEM:
 				return validateAutomationSystem((AutomationSystem)value, diagnostics, context);
+			case LibraryElementPackage.BASE_EC_ACTION:
+				return validateBaseECAction((BaseECAction)value, diagnostics, context);
 			case LibraryElementPackage.BASE_FB_TYPE:
 				return validateBaseFBType((BaseFBType)value, diagnostics, context);
 			case LibraryElementPackage.BASIC_FB_TYPE:
@@ -1113,6 +1116,15 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(automationSystem, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(automationSystem, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateBaseECAction(BaseECAction baseECAction, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(baseECAction, diagnostics, context);
 	}
 
 	/**

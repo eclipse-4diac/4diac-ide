@@ -201,6 +201,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="systemConfiguration" lowerBound="1"
         eType="#//SystemConfiguration" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseECAction" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" eSuperTypes="#//FBType">
     <eOperations name="getAlgorithmNamed" lowerBound="1" eType="#//Algorithm">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -988,9 +992,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclarations"
         upperBound="-1" eType="#//AttributeDeclaration" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ECAction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="algorithm" eType="#//Algorithm"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ECAction" eSuperTypes="#//BaseECAction">
+    <eOperations name="getAlgorithmModel" eType="#//Algorithm">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (getECState() == null) {return null;} return getECState().getECC().getBasicFBType().getAlgorithmNamed(getAlgorithm());"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCState" lowerBound="1"
         eType="#//ECState" eOpposite="#//ECState/eCAction"/>
   </eClassifiers>
@@ -2316,9 +2323,7 @@
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBType" eSuperTypes="#//FBType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleECAction">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleECAction" eSuperTypes="#//BaseECAction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleECState" lowerBound="1"
         eType="#//SimpleECState" eOpposite="#//SimpleECState/simpleECActions"/>
   </eClassifiers>

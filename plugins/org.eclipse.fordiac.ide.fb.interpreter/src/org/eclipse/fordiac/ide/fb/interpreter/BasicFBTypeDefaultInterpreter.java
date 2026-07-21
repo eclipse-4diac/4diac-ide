@@ -84,7 +84,7 @@ public class BasicFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInt
 		for (final ECAction action : basicFBTypeRuntime.getActiveState(basicFBTypeRuntime.getActiveState())
 				.getECAction()) {
 			if (action.getAlgorithm() != null) {
-				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithm(),
+				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithmModel(),
 						eventOccurrence);
 			}
 			if (action.getOutput() != null) {

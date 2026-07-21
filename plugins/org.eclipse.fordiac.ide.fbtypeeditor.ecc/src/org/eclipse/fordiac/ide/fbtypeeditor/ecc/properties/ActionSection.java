@@ -63,7 +63,7 @@ public class ActionSection extends AbstractSection {
 	}
 
 	protected Algorithm getAlgorithm() {
-		return getType().getAlgorithm();
+		return getType().getAlgorithmModel();
 	}
 
 	private BasicFBType getFBType() {

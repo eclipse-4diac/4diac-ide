@@ -92,7 +92,7 @@ public class BasicFbExecutionTrace extends ExecutionTrace {
 
 	public List<Algorithm> getAllAlgorithms() {
 		return getECTransitionsStream().map(transi -> ((List<ECAction>) transi.getDestination().getECAction()))
-				.flatMap(List::stream).map(ECAction::getAlgorithm).toList();
+				.flatMap(List::stream).map(ECAction::getAlgorithmModel).toList();
 	}
 
 	private static EccTrace getEccTrace(final FBTransaction transaction) {

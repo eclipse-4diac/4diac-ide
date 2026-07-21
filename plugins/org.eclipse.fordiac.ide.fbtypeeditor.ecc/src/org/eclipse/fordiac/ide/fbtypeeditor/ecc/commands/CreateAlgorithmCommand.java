@@ -29,7 +29,7 @@ public class CreateAlgorithmCommand extends CreationCommand {
 
 	private final BasicFBType fbType;
 	private STAlgorithm newAlgorithm;
-	private Algorithm oldAlgorithm;
+	private String oldAlgorithm;
 	private ECAction action;
 	private final int index;
 	private final String name;
@@ -73,7 +73,7 @@ public class CreateAlgorithmCommand extends CreationCommand {
 	@Override
 	public void redo() {
 		if (null != action) {
-			action.setAlgorithm(newAlgorithm);
+			action.setAlgorithm(newAlgorithm.getName());
 		}
 		fbType.getCallables().add(index, newAlgorithm);
 	}

@@ -83,7 +83,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if ((notification.getEventType() == Notification.SET) && (null != getAction().getAlgorithm())
-					&& getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
+					&& getAction().getAlgorithm().equals(notification.getNewValue())) {
 				refreshAlgLabel();
 			}
 		}
@@ -205,8 +205,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		final List<String> algNames = ECCContentAndLabelProvider
 				.getAlgorithmNames(ECCContentAndLabelProvider.getFBType(getAction()));
 
-		final int selected = (getAction().getAlgorithm() != null)
-				? algNames.indexOf(getAction().getAlgorithm().getName())
+		final int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm())
 				: algNames.size() - 1;
 
 		final ComboDirectEditManager editManager = createDirectEditManager();
@@ -229,7 +228,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	@Override
 	public INamedElement getINamedElement() {
-		return getAction().getAlgorithm();
+		return getAction().getAlgorithmModel();
 	}
 
 	@Override
@@ -243,7 +242,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		algorithmLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
 		algorithmLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
 		algorithmLabel.setOpaque(true);
-		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm().getName() : ""); //$NON-NLS-1$
+		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
 		algorithmLabel.setBorder(new MarginBorder(ALG_INSETS));
 		algorithmLabel.setTextAlignment(PositionConstants.LEFT);
 		algorithmLabel.setLabelAlignment(PositionConstants.LEFT);
@@ -255,13 +254,14 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	}
 
 	private void refreshAlgLabel() {
-		getNameLabel().setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm().getName() : ""); //$NON-NLS-1$
+		getNameLabel().setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
 	}
 
 	private void refreshAlgorithmToolTip(final IFigure iFigure) {
 		if (null != algToolTip) {
-			algToolTip.setAlgorithm(getCastedModel().getAction().getAlgorithm());
-			if (null != getCastedModel().getAction().getAlgorithm()) {
+			final Algorithm alg = getCastedModel().getAction().getAlgorithmModel();
+			algToolTip.setAlgorithm(alg);
+			if (null != alg) {
 				iFigure.setToolTip(algToolTip);
 			} else {
 				iFigure.setToolTip(null);

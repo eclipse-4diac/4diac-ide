@@ -108,8 +108,8 @@ public class MuxFBGenerator extends AbstractBasicFBGenerator {
 				errAction.setOutput(destinationFB.getInterfaceList().getEventOutputs()
 						.get(destinationFB.getInterfaceList().getEventOutputs().size() - 2));
 				final Algorithm alg = createMuxFbAlgorithm(destinationFB, ev.getName());
-				errAction.setAlgorithm(alg);
-				sucAction.setAlgorithm(alg);
+				errAction.setAlgorithm(alg.getName());
+				sucAction.setAlgorithm(alg.getName());
 
 				eccGen.getLastState().getECAction().add(errAction);
 				eccGen.increaseCaseCount();
