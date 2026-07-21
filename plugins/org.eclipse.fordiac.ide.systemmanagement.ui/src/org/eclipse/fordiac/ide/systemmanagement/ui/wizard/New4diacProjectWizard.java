@@ -106,10 +106,6 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
-		if (libPage.getControl() != null) {
-			libPage.performImport(getContainer());
-		}
-
 		// everything worked fine
 		return true;
 	}
@@ -122,8 +118,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	private void createProject(final IProgressMonitor monitor) {
 		try {
 			final IProject newProject = ProjectCreator.of(page.getProjectName(), page.getLocationPath())
-					.create(monitor);
-			libPage.setTargetProject(newProject);
+					.withLibraries(libPage.getChosenLibraries().values()).create(monitor);
 			final SystemCreator systemCreator = new SystemCreator(newProject, page.getInitialSystemName(),
 					page.getInitialApplicationName());
 
