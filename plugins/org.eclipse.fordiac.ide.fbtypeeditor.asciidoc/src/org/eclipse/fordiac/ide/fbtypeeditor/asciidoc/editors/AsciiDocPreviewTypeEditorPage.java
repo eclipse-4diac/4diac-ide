@@ -29,8 +29,8 @@ import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.wikitext.asciidoc.AsciiDocLanguage;
+import org.eclipse.mylyn.wikitext.html.HtmlLanguage;
 import org.eclipse.mylyn.wikitext.parser.MarkupParser;
-import org.eclipse.mylyn.wikitext.parser.builder.HtmlDocumentBuilder;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -177,7 +177,7 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 
 	private MarkupParser createParser(final StringWriter writer) {
 		final MarkupParser parser = new MarkupParser(createLanguage());
-		parser.setBuilder(new HtmlDocumentBuilder(writer));
+		parser.setBuilder(new HtmlLanguage().createDocumentBuilder(writer));
 		return parser;
 	}
 
