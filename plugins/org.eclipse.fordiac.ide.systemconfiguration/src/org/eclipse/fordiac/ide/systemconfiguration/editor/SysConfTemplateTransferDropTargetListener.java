@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2016 Profactor GbmH, fortiss GmbH,
- * 				 2018 Johannes Kepler University
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -71,19 +71,16 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 			getCurrentEvent().detail = DND.DROP_NONE;
 			getCurrentEvent().operations = DND.DROP_NONE;
 
-		} else {
-			if (TemplateTransfer.getInstance().getTemplate() instanceof TypeEntry) {
-				final TypeEntry entry = (TypeEntry) TemplateTransfer.getInstance().getTemplate();
-				final IProject srcProject = entry.getFile().getProject();
+		} else if (TemplateTransfer.getInstance().getTemplate() instanceof final TypeEntry entry) {
+			final IProject srcProject = entry.getFile().getProject();
 
-				// If project is null it is an entry from the tool palette
-				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != targetProject)
-						&& (targetProject.equals(srcProject))) {
-					getCurrentEvent().detail = DND.DROP_COPY;
-				} else {
-					getCurrentEvent().detail = DND.DROP_NONE;
-					getCurrentEvent().operations = DND.DROP_NONE;
-				}
+			// If project is null it is an entry from the tool palette
+			if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != targetProject)
+					&& (targetProject.equals(srcProject))) {
+				getCurrentEvent().detail = DND.DROP_COPY;
+			} else {
+				getCurrentEvent().detail = DND.DROP_NONE;
+				getCurrentEvent().operations = DND.DROP_NONE;
 			}
 		}
 	}
@@ -94,7 +91,6 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 				&& !(getCurrentEvent().data instanceof TemplateCreationFactory)) {
 			return;
 		}
-		//
 		super.handleDrop();
 		TemplateTransfer.getInstance().setTemplate(null);
 	}
@@ -105,11 +101,11 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 
 		if (isSysConfEditorType(template)) {
 			return new SysConfTemplateCreationFactory(template);
-		} else if (template instanceof TemplateCreationFactory) {
-			return super.getFactory(template);
-		} else {
-			FordiacLogHelper.logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
 		}
+		if (template instanceof TemplateCreationFactory) {
+			return super.getFactory(template);
+		}
+		FordiacLogHelper.logError("Type not in list: " + ((template != null) ? template.getClass().getName() : "null")); //$NON-NLS-1$ //$NON-NLS-2$
 		return null;
 	}
 
