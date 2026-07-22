@@ -279,29 +279,6 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected BaseFBTypeItemProvider baseFBTypeItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createBaseFBTypeAdapter() {
-		if (baseFBTypeItemProvider == null) {
-			baseFBTypeItemProvider = new BaseFBTypeItemProvider(this);
-		}
-
-		return baseFBTypeItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
