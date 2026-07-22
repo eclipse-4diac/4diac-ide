@@ -10,7 +10,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.equinox.p2.operations,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.ui,
  org.eclipse.fordiac.ide.library.model,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.ui,
@@ -19,4 +18,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.osgi.service.event
 Export-Package: org.eclipse.fordiac.ide.library,
  org.eclipse.fordiac.ide.library.download,
+ org.eclipse.fordiac.ide.library.preferences,
  org.eclipse.fordiac.ide.library.provider
