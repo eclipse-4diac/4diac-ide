@@ -205,7 +205,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" eSuperTypes="#//FBType">
+  <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" abstract="true" eSuperTypes="#//FBType">
     <eOperations name="getAlgorithmNamed" lowerBound="1" eType="#//Algorithm">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);"/>
