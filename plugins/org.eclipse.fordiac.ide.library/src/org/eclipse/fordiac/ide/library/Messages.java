@@ -19,15 +19,11 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.library.messages"; //$NON-NLS-1$
 
-	public static String Confirm;
-
 	public static String ErrorMarkerLibNotAvailable;
 	public static String ErrorMarkerStandardLibNotAvailable;
 	public static String ErrorMarkerVersionRangeEmpty;
 
-	public static String ImportFailed;
 	public static String ImportFailedOnLinkCreation;
-	public static String InstanceUpdate;
 
 	public static String LibraryManager_BrokenLink;
 
@@ -75,16 +71,6 @@ public class Messages extends NLS {
 
 	public static String PreferenceForceLoad;
 	public static String PreferenceLoadingGroup;
-
-	public static String OldTypeLibVersionCouldNotBeDeleted;
-
-	public static String TypeLibrary_ProjectLoadingProblem;
-	public static String TypeLibrary_LibraryLoadingProblem;
-
-	public static String UpdatedInstances;
-
-	public static String Warning;
-	public static String WillBeImported;
 
 	public static String DownloadNullResult;
 	public static String DownloadUnexpectedError;
