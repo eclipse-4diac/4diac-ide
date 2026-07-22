@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -62,9 +63,9 @@ class LibraryChangeLabelProvider extends StyledCellLabelProvider {
 
 	@Override
 	public void update(final ViewerCell cell) {
-		if (cell.getElement() instanceof final LibContainer container && cell.getColumnIndex() == 0
-				&& !container.children().isEmpty()) {
-			cell.setText(container.name());
+		if (cell.getElement() instanceof LibContainer(final String containerName, final List<LibraryChange> children)
+				&& cell.getColumnIndex() == 0 && !children.isEmpty()) {
+			cell.setText(containerName);
 		}
 		if (cell.getElement() instanceof final LibraryChange change) {
 			final StyledString styled = new StyledString();
