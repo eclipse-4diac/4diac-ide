@@ -71,6 +71,9 @@ public class Messages extends NLS {
 
 	public static String LibrarySourceBuilder_version;
 
+	public static String PreferenceForceLoad;
+	public static String PreferenceLoadingGroup;
+
 	public static String UnifiedLibraryImportWizardPage_Available_Libraries;
 
 	public static String UnifiedLibraryImportWizardPage_brows;

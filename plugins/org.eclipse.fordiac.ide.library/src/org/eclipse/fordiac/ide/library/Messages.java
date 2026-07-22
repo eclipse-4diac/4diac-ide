@@ -69,9 +69,6 @@ public class Messages extends NLS {
 
 	public static String LibraryManager_UpdateLibraryPackage;
 
-	public static String PreferenceForceLoad;
-	public static String PreferenceLoadingGroup;
-
 	public static String DownloadNullResult;
 	public static String DownloadUnexpectedError;
 
