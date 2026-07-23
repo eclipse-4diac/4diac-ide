@@ -229,4 +229,8 @@ public class ActionEditingComposite<T extends BaseECAction> {
 		actionViewer.setCellEditors(createActionViewerCellEditors(actionViewer.getTable()));
 		actionViewer.setCellModifier(new ActionViewerCellModifier());
 	}
+
+	public Group getGroupContainer() {
+		return actionGroup;
+	}
 }

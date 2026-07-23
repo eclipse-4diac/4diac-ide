@@ -49,6 +49,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -189,6 +191,8 @@ public final class NameRepository {
 			elementsList = ((SystemConfiguration) seg.eContainer()).getSegments();
 		} else if (refElement instanceof ECState) {
 			elementsList = ((ECC) refElement.eContainer()).getECState();
+		} else if (refElement instanceof SimpleECState) {
+			elementsList = ((SimpleFBType) refElement.eContainer()).getSimpleECStates();
 		} else if (refElement instanceof final IInterfaceElement ie) {
 			if (ie.eContainer() instanceof final StructuredType structType) {
 				elementsList = structType.getMemberVariables();
