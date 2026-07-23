@@ -129,15 +129,6 @@ public class ECActionImpl extends BaseECActionImpl implements ECAction {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public Algorithm getAlgorithmSrc(BaseFBType base) {
-		return base.getAlgorithmNamed(getAlgorithm());
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
