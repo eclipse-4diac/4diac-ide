@@ -19,6 +19,12 @@
       <propertyTabs
             contributorId="property.contributor.fb">
          <propertyTab
+               afterTab="property.tab.fbtypeinfo"
+               category="interface"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.tab.EventActions"
+               label="%EventActionsSection_TabName">
+         </propertyTab>
+         <propertyTab
                category="ecc"
                id="property.tab.transition"
                label="Transition">
@@ -63,6 +69,12 @@
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections
             contributorId="property.contributor.fb">
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.EventActionsSection"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.SimpleFBTypeFilter"
+               id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.EventActions"
+               tab="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.tab.EventActions">
+         </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.StateSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECStateFilter"
