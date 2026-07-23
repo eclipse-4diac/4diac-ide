@@ -34,6 +34,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameElementRefactoringProcessor;
@@ -149,6 +153,21 @@ public final class RefactoringTestSupport {
 		return performRefactoring(new RenameRefactoring(new RenameElementRefactoringProcessor(elementURI, newName)));
 	}
 
+	/**
+	 * Run only the rename condition check and return its status. performRename
+	 * cannot be used for the negative cases because CreateChangeOperation drops a
+	 * fatal status instead of surfacing it.
+	 */
+	public static RefactoringStatus checkRenameConditions(final IFile file, final String newName) throws CoreException {
+		final RenameResourceDescriptor descriptor = new RenameResourceDescriptor();
+		descriptor.setResourcePath(file.getFullPath());
+		descriptor.setNewName(newName);
+		final CheckConditionsOperation check = new CheckConditionsOperation(
+				descriptor.createRefactoring(new RefactoringStatus()), CheckConditionsOperation.ALL_CONDITIONS);
+		check.run(new NullProgressMonitor());
+		return check.getStatus();
+	}
+
 	private static Change performRefactoring(final Refactoring refactoring) throws CoreException {
 		final CreateChangeOperation create = new CreateChangeOperation(
 				new CheckConditionsOperation(refactoring, CheckConditionsOperation.ALL_CONDITIONS),
@@ -176,6 +195,21 @@ public final class RefactoringTestSupport {
 	 */
 	public static void flushUndoHistory() {
 		RefactoringCore.getUndoManager().flush();
+	}
+
+	/** Walk from the application network through the named subapps to an FB instance. */
+	public static FBNetworkElement findInstance(final AutomationSystem system, final String applicationName,
+			final String... namePath) {
+		FBNetwork network = system.getApplicationNamed(applicationName).getFBNetwork();
+		for (int i = 0; i < namePath.length - 1; i++) {
+			final String subAppName = namePath[i];
+			final UntypedSubApp subApp = (UntypedSubApp) network.getNetworkElements().stream()
+					.filter(element -> subAppName.equals(element.getName())).findFirst().orElseThrow();
+			network = subApp.getSubAppNetwork();
+		}
+		final String instanceName = namePath[namePath.length - 1];
+		return network.getNetworkElements().stream().filter(element -> instanceName.equals(element.getName()))
+				.findFirst().orElseThrow();
 	}
 
 	// The undo manager is the global RefactoringCore singleton; a permissive query
