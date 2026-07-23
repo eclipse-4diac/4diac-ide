@@ -23,10 +23,8 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamConstants;
@@ -72,9 +70,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 /** Managing class for importing *.fbt files */
 
 public class FBTImporter extends BlockTypeImporter {
-
-	/** The algorithm name ec action mapping. */
-	private final Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
 
 	/** The ec states. */
 	private final Map<String, ECState> ecStates = new HashMap<>();
@@ -267,12 +262,6 @@ public class FBTImporter extends BlockTypeImporter {
 			final Algorithm alg = parseAlgorithm();
 			if (null != alg) {
 				type.getCallables().add(alg);
-				final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
-				if (null != list) {
-					for (final ECAction action : list) {
-						action.setAlgorithm(alg.getName());
-					}
-				}
 			}
 			break;
 		case LibraryElementTags.METHOD_ELEMENT:
@@ -647,13 +636,7 @@ public class FBTImporter extends BlockTypeImporter {
 		final ECAction ecAction = LibraryElementFactory.eINSTANCE.createECAction();
 		final String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
 		if (null != algorithm) {
-			if (algorithmNameECActionMapping.containsKey(algorithm)) {
-				algorithmNameECActionMapping.get(algorithm).add(ecAction);
-			} else {
-				final List<ECAction> temp = new ArrayList<>();
-				temp.add(ecAction);
-				algorithmNameECActionMapping.put(algorithm, temp);
-			}
+			ecAction.setAlgorithm(algorithm);
 		}
 		final String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
 		if (null != output) {
