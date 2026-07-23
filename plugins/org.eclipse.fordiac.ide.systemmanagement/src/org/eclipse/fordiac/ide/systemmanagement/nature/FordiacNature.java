@@ -77,7 +77,7 @@ public class FordiacNature implements IProjectNature {
 		boolean changed = false;
 		changed |= configureXtextNature(description);
 		changed |= configureLibraryBuilder(description);
-		changed |= configureOCLValidationBuilder(description);
+		changed |= updateOCLValidationBuilder(description, isOCLValidationBuilderEnabled(project));
 		changed |= configureExportBuilder(description);
 		if (changed) {
 			project.setDescription(description, null);
@@ -180,6 +180,10 @@ public class FordiacNature implements IProjectNature {
 			return true;
 		}
 		return false;
+	}
+
+	public static boolean updateOCLValidationBuilder(final IProjectDescription description, final boolean enabled) {
+		return enabled ? configureOCLValidationBuilder(description) : deconfigureOCLValidationBuilder(description);
 	}
 
 	public void validate() throws CoreException {

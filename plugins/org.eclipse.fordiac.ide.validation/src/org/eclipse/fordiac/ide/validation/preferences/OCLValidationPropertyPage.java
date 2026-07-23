@@ -15,9 +15,12 @@ package org.eclipse.fordiac.ide.validation.preferences;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -54,6 +57,7 @@ public class OCLValidationPropertyPage extends PropertyPage {
 
 	@Override
 	public boolean performOk() {
+		final IProject project = getProject();
 		enableOclBuilderEditor.store();
 		if (getPreferenceStore() instanceof final ScopedPreferenceStore scopedPreferenceStore) {
 			try {
@@ -63,8 +67,24 @@ public class OCLValidationPropertyPage extends PropertyPage {
 				return false;
 			}
 		}
-		SystemManager.validateProjectNature(getProject());
+		if (!updateOclValidationBuilder(project)) {
+			return false;
+		}
+		SystemManager.validateProjectNature(project);
 		return super.performOk();
+	}
+
+	private boolean updateOclValidationBuilder(final IProject project) {
+		try {
+			final IProjectDescription description = project.getDescription();
+			if (FordiacNature.updateOCLValidationBuilder(description, enableOclBuilderEditor.getBooleanValue())) {
+				project.setDescription(description, null);
+			}
+			return true;
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	@Override

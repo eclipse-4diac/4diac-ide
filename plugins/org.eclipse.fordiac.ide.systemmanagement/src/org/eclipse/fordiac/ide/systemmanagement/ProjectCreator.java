@@ -115,6 +115,6 @@ public class ProjectCreator {
 
 	private static String[] getBuilderIDs() {
 		return new String[] { SystemManager.FORDIAC_LIBRARY_BUILDER_ID, XtextProjectHelper.BUILDER_ID,
-				SystemManager.FORDIAC_OCL_VALIDATION_BUILDER_ID, SystemManager.FORDIAC_EXPORT_BUILDER_ID };
+				SystemManager.FORDIAC_EXPORT_BUILDER_ID };
 	}
 }
