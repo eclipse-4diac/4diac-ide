@@ -16,16 +16,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
-public class CreateECActionCommand extends CreationCommand {
-	private final ECAction action;
-	private final ECState parent;
+public class CreateECActionCommand<T extends BaseECAction> extends CreationCommand {
+	private final T action;
+	private final BaseECState<T> parent;
 
-	public CreateECActionCommand(final ECAction action, final ECState parent) {
-		super();
+	public CreateECActionCommand(final T action, final BaseECState<T> parent) {
 		this.action = action;
 		this.parent = parent;
 	}
@@ -37,12 +36,12 @@ public class CreateECActionCommand extends CreationCommand {
 
 	@Override
 	public void undo() {
-		parent.getECAction().remove(action);
+		parent.getECActions().remove(action);
 	}
 
 	@Override
 	public void redo() {
-		parent.getECAction().add(action);
+		parent.getECActions().add(action);
 	}
 
 	@Override

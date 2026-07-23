@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
 import org.eclipse.gef.commands.Command;
 
 /**
@@ -23,7 +23,7 @@ import org.eclipse.gef.commands.Command;
 public class ChangeAlgorithmCommand extends Command {
 
 	/** The ec action. */
-	private final ECAction ecAction;
+	private final BaseECAction ecAction;
 
 	/** The algorithm. */
 	private final String algorithm;
@@ -37,7 +37,7 @@ public class ChangeAlgorithmCommand extends Command {
 	 * @param action    the action
 	 * @param algorithm the algorithm
 	 */
-	public ChangeAlgorithmCommand(final ECAction action, final Algorithm algorithm) {
+	public ChangeAlgorithmCommand(final BaseECAction action, final Algorithm algorithm) {
 		this.ecAction = action;
 		this.algorithm = algorithm == null ? null : algorithm.getName();
 	}
