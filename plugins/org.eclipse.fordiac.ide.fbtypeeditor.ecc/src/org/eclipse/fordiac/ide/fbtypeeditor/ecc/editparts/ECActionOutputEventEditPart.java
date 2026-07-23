@@ -142,7 +142,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteECActionCommand(getAction());
+				return new DeleteECActionCommand<>(getAction(), getAction().getECState());
 			}
 		});
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {

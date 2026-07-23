@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2016 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,35 +13,35 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
 import org.eclipse.gef.commands.Command;
 
-public class DeleteECActionCommand extends Command {
-	private final ECAction ecAction;
-	private ECState parent;
+public class DeleteECActionCommand<T extends BaseECAction> extends Command {
+	private final T action;
+	private final BaseECState<T> parent;
 
-	public DeleteECActionCommand(final ECAction ecAction) {
-		this.ecAction = ecAction;
+	public DeleteECActionCommand(final T action, final BaseECState<T> parent) {
+		this.action = action;
+		this.parent = parent;
 	}
 
 	@Override
 	public void execute() {
-		parent = ecAction.getECState();
 		redo();
 	}
 
 	@Override
 	public void undo() {
 		if (null != parent) {
-			parent.getECAction().add(ecAction);
+			parent.getECActions().add(action);
 		}
 	}
 
 	@Override
 	public void redo() {
 		if (null != parent) {
-			parent.getECAction().remove(ecAction);
+			parent.getECActions().remove(action);
 		}
 	}
 }

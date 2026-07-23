@@ -36,7 +36,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface SimpleECState extends INamedElement {
+public interface SimpleECState extends INamedElement, BaseECState<SimpleECAction> {
 	/**
 	 * Returns the value of the '<em><b>Simple EC Actions</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction}.
@@ -97,5 +97,37 @@ public interface SimpleECState extends INamedElement {
 	 * @generated
 	 */
 	void setSimpleFBType(SimpleFBType value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<SimpleECAction> getECActions();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BaseFBType getBaseFBType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	boolean isStartState();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	SimpleECAction createNewAction();
 
 } // SimpleECState
