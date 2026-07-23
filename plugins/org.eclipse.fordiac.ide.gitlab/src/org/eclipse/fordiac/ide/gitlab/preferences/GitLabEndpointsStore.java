@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
@@ -150,7 +151,7 @@ public final class GitLabEndpointsStore {
 	}
 
 	/**
-	 * LEGACY migration: migrate old single URL/token preferences into a single
+	 * LEGACY migration: migrate the old URL and optional token preferences into an
 	 * endpoint entry named "Legacy".
 	 */
 	protected static List<GitLabEndpoint> migrateOldEndpoints(final IEclipsePreferences prefs) {
@@ -160,24 +161,56 @@ public final class GitLabEndpointsStore {
 	private static List<GitLabEndpoint> migrateOldEndpoints(final IEclipsePreferences prefs,
 			final List<GitLabEndpoint> storedEndpoints) {
 		final List<GitLabEndpoint> result = new ArrayList<>(storedEndpoints);
-		final String legacyUrl = prefs.get(PreferenceConstants.P_GITLAB_URL, ""); //$NON-NLS-1$
+		final String legacyUrl = getLegacyUrl(prefs);
 		final String legacyToken = prefs.get(PreferenceConstants.P_GITLAB_TOKEN, ""); //$NON-NLS-1$
-		if (legacyUrl == null || legacyUrl.isBlank() || legacyToken == null || legacyToken.isBlank()) {
+		if (legacyUrl.isBlank()) {
 			return result;
 		}
 
 		final String endpointName;
-		try {
-			endpointName = findLegacyEndpointName(result, legacyUrl, legacyToken);
-		} catch (final StorageException | RuntimeException e) {
-			FordiacLogHelper.logWarning("Finding a name for the migrated GitLab endpoint failed", e); //$NON-NLS-1$
-			return result;
+		final GitLabEndpoint matchingEndpoint = findMatchingEndpoint(result, legacyUrl, legacyToken);
+		if (matchingEndpoint != null) {
+			if (legacyToken.isBlank() || !matchingEndpoint.token().isBlank()) {
+				removeLegacyPreferences(prefs);
+				return result;
+			}
+			endpointName = matchingEndpoint.name();
+		} else {
+			try {
+				endpointName = findLegacyEndpointName(result, legacyUrl, legacyToken);
+			} catch (final StorageException | RuntimeException e) {
+				FordiacLogHelper.logWarning("Finding a name for the migrated GitLab endpoint failed", e); //$NON-NLS-1$
+				return result;
+			}
 		}
 
 		final GitLabEndpoint migrated = new GitLabEndpoint(endpointName, legacyUrl, legacyToken);
 		addOrReplaceEndpoint(result, migrated);
 		if (!saveMigratedEndpoint(prefs, migrated)) {
 			return result;
+		}
+		removeLegacyPreferences(prefs);
+		return result;
+	}
+
+	private static String getLegacyUrl(final IEclipsePreferences prefs) {
+		final String defaultUrl = DefaultScope.INSTANCE.getNode(PreferenceConstants.P_GITLAB_PREFERENCE_ID)
+				.get(PreferenceConstants.P_GITLAB_URL, ""); //$NON-NLS-1$
+		return prefs.get(PreferenceConstants.P_GITLAB_URL, defaultUrl);
+	}
+
+	private static GitLabEndpoint findMatchingEndpoint(final List<GitLabEndpoint> endpoints, final String legacyUrl,
+			final String legacyToken) {
+		return endpoints.stream().filter(endpoint -> endpoint.url().equals(legacyUrl))
+				.filter(endpoint -> legacyToken.isBlank() || endpoint.token().isBlank()
+						|| endpoint.token().equals(legacyToken))
+				.findFirst().orElse(null);
+	}
+
+	private static void removeLegacyPreferences(final IEclipsePreferences prefs) {
+		if (prefs.get(PreferenceConstants.P_GITLAB_URL, null) == null
+				&& prefs.get(PreferenceConstants.P_GITLAB_TOKEN, null) == null) {
+			return;
 		}
 		prefs.remove(PreferenceConstants.P_GITLAB_URL);
 		prefs.remove(PreferenceConstants.P_GITLAB_TOKEN);
@@ -186,7 +219,6 @@ public final class GitLabEndpointsStore {
 		} catch (final BackingStoreException e) {
 			FordiacLogHelper.logWarning("Saving migrated GitLab endpoint failed", e); //$NON-NLS-1$
 		}
-		return result;
 	}
 
 	private static String findLegacyEndpointName(final List<GitLabEndpoint> endpoints, final String legacyUrl,
@@ -237,7 +269,7 @@ public final class GitLabEndpointsStore {
 	}
 
 	private static boolean saveMigratedEndpoint(final IEclipsePreferences prefs, final GitLabEndpoint endpoint) {
-		if (!putTokenSecure(endpoint.name(), endpoint.token())) {
+		if (!endpoint.token().isBlank() && !putTokenSecure(endpoint.name(), endpoint.token())) {
 			return false;
 		}
 		try {
