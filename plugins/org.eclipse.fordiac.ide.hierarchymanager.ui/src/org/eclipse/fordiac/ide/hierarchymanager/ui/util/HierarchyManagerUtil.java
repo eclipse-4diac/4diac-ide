@@ -99,15 +99,17 @@ public class HierarchyManagerUtil {
 		EObject retVal = null;
 		for (final String element : path) {
 			retVal = network.getElementNamed(element);
-			if (retVal instanceof final SubApp subApp) {
+			switch (retVal) {
+			case final SubApp subApp -> {
 				network = subApp.getSubAppNetwork();
 				if (network == null) {
 					network = subApp.loadSubAppNetwork();
 				}
-			} else if (retVal instanceof final SubAppType subAppType) {
-				network = subAppType.getFBNetwork();
-			} else {
+			}
+			case final SubAppType subAppType -> network = subAppType.getFBNetwork();
+			case null, default -> {
 				return null;
+			}
 			}
 		}
 		return retVal;
