@@ -23,13 +23,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
 public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 
+	private record EdgeSlot(ECTransition transition, boolean source) {
+	}
+
 	private final ECState state;
 	private final ECTransition transition;
+	private final boolean isSource;
 
-	public ECStateConnectionAnchor(final ECStateFigure owner, final ECState state, final ECTransition transition) {
+	public ECStateConnectionAnchor(final ECStateFigure owner, final ECState state, final ECTransition transition,
+			final boolean isSource) {
 		super(owner);
 		this.state = state;
 		this.transition = transition;
+		this.isSource = isSource;
 	}
 
 	@Override
@@ -53,19 +59,15 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 	public Point getLocation(final Point reference) {
 		final Rectangle nameBounds = getOwner().getNameLabel().getBounds().getCopy();
 		getOwner().getNameLabel().translateToAbsolute(nameBounds);
-
 		final Point ref = (reference != null) ? reference : nameBounds.getCenter();
-
 		final EdgeDirection edge = EdgeDirection.of(ref, nameBounds, state);
-
 		return applySpacing(nameBounds, edge, nameBounds);
 	}
 
 	private Point applySpacing(final Rectangle bounds, final EdgeDirection edge, final Rectangle nameBounds) {
-		final List<ECTransition> ordered = getTransitionsOnEdge(edge, nameBounds);
-		final int index = indexOf(ordered, transition);
-		final int count = Math.max(1, ordered.size());
-
+		final List<EdgeSlot> slots = getSlotsOnEdge(edge, nameBounds);
+		final int index = indexOf(slots);
+		final int count = Math.max(1, slots.size());
 		return switch (edge) {
 		case TOP -> {
 			final int slotWidth = bounds.width / (count + 1);
@@ -86,36 +88,38 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 		};
 	}
 
-	private List<ECTransition> getTransitionsOnEdge(final EdgeDirection edge, final Rectangle nameBounds) {
+	private List<EdgeSlot> getSlotsOnEdge(final EdgeDirection edge, final Rectangle nameBounds) {
 		if (state == null) {
 			return List.of();
 		}
-
-		return Stream.concat(state.getOutTransitions().stream(), state.getInTransitions().stream())
-				.filter(t -> t.getPosition() != null).filter(t -> {
-					final Point p = t.getPosition().toScreenPoint();
-
-					getOwner().translateToAbsolute(p);
-
-					return EdgeDirection.of(p, nameBounds, state) == edge;
-				}).sorted((t1, t2) -> {
-					final Point p1 = t1.getPosition().toScreenPoint();
-					getOwner().translateToAbsolute(p1);
-
-					final Point p2 = t2.getPosition().toScreenPoint();
-					getOwner().translateToAbsolute(p2);
-
-					return (edge == EdgeDirection.TOP || edge == EdgeDirection.BOTTOM) ? Integer.compare(p1.x, p2.x)
-							: Integer.compare(p1.y, p2.y);
-				}).toList();
+		final Stream<EdgeSlot> outgoing = state.getOutTransitions().stream().map(t -> new EdgeSlot(t, true));
+		final Stream<EdgeSlot> incoming = state.getInTransitions().stream().map(t -> new EdgeSlot(t, false));
+		return Stream.concat(outgoing, incoming).filter(s -> s.transition().getPosition() != null).filter(s -> {
+			final Point p = s.transition().getPosition().toScreenPoint();
+			getOwner().translateToAbsolute(p);
+			return EdgeDirection.of(p, nameBounds, state) == edge;
+		}).sorted((s1, s2) -> {
+			final Point p1 = s1.transition().getPosition().toScreenPoint();
+			getOwner().translateToAbsolute(p1);
+			final Point p2 = s2.transition().getPosition().toScreenPoint();
+			getOwner().translateToAbsolute(p2);
+			final int positionalOrder = (edge == EdgeDirection.TOP || edge == EdgeDirection.BOTTOM)
+					? Integer.compare(p1.x, p2.x)
+					: Integer.compare(p1.y, p2.y);
+			if (positionalOrder != 0) {
+				return positionalOrder;
+			}
+			return Boolean.compare(!s1.source(), !s2.source());
+		}).toList();
 	}
 
-	private static int indexOf(final List<ECTransition> list, final ECTransition t) {
-		if (t == null) {
+	private int indexOf(final List<EdgeSlot> slots) {
+		if (transition == null) {
 			return 0;
 		}
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i) == t) {
+		for (int i = 0; i < slots.size(); i++) {
+			final EdgeSlot slot = slots.get(i);
+			if (slot.transition() == transition && slot.source() == isSource) {
 				return i;
 			}
 		}
