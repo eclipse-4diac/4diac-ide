@@ -833,9 +833,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		return Optional.empty();
 	}
 
-	/**************************************************************************
+	/*-------------------------------------------------------------------------
 	 * Helper Methods
-	 **************************************************************************/
+	 *-------------------------------------------------------------------------*/
 
 	/**
 	 * Browses Resource Nodes and caches available Resources
