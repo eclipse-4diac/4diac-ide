@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 Profactor GbmH 
- * 
+ * Copyright (c) 2015 Profactor GbmH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,23 +31,23 @@ public class ConnectionMovementHighlightEditPolicy extends org.eclipse.gef.editp
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#eraseTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
-	public void eraseTargetFeedback(Request request) {
+	public void eraseTargetFeedback(final Request request) {
 		getHostFigure().setCursor(null);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#getTargetEditPart(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
-	public EditPart getTargetEditPart(Request request) {
+	public EditPart getTargetEditPart(final Request request) {
 		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost() : null;
 	}
 
@@ -57,23 +57,22 @@ public class ConnectionMovementHighlightEditPolicy extends org.eclipse.gef.editp
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#showTargetFeedback(org
 	 * .eclipse.gef.Request)
 	 */
 	@Override
-	public void showTargetFeedback(Request request) {
-		if (request instanceof SelectionRequest) {
-			Point pos = ((SelectionRequest) request).getLocation();
+	public void showTargetFeedback(final Request request) {
+		if (request instanceof final SelectionRequest selReq) {
+			final Point pos = selReq.getLocation();
 			getHostFigure().translateToRelative(pos);
-			if (getHostFigure() instanceof InteractionStyleFigure) {
-				style = ((InteractionStyleFigure) getHostFigure()).getIntersectionStyle(pos);
-				if (style == InteractionStyleFigure.REGION_CONNECTION) {
+			if (getHostFigure() instanceof final InteractionStyleFigure isFigure) {
+				switch (isFigure.getIntersectionStyle(pos)) {
+				case InteractionStyleFigure.REGION_CONNECTION ->
 					getHostFigure().setCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
-				} else if (style == InteractionStyleFigure.REGION_DRAG) {
+				case InteractionStyleFigure.REGION_DRAG ->
 					getHostFigure().setCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_SIZEALL));
-				} else {
-					getHostFigure().setCursor(null);
+				default -> getHostFigure().setCursor(null);
 				}
 			}
 		}

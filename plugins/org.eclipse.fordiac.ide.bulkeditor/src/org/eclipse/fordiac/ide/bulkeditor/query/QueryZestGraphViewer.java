@@ -212,13 +212,11 @@ public class QueryZestGraphViewer {
 
 		@Override
 		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-			if (newInput instanceof final EObject eObj) {
-				root = eObj;
-			} else if (newInput instanceof final Resource res && !res.getContents().isEmpty()) {
-				root = res.getContents().get(0);
-			} else {
-				root = null;
-			}
+			root = switch (newInput) {
+			case final EObject eObj -> eObj;
+			case final Resource res when !res.getContents().isEmpty() -> res.getContents().get(0);
+			case null, default -> null;
+			};
 		}
 
 		@Override
