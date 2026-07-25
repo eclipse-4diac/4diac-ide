@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpoint;
 import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsStore;
-import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
@@ -101,8 +100,13 @@ public class GitLabDownloader implements IArchiveDownloader {
 	 * constructor to be used for Archive Downloader Extension
 	 */
 	public GitLabDownloader() {
-		this(PreferenceConstants.getToken(), PreferenceConstants.getURL());
-		this.endpoints = GitLabEndpointsStore.loadEndpoints();
+		this(GitLabEndpointsStore.loadEndpoints());
+	}
+
+	private GitLabDownloader(final List<GitLabEndpoint> endpoints) {
+		this(endpoints.isEmpty() ? "" : endpoints.get(0).token(), //$NON-NLS-1$
+				endpoints.isEmpty() ? "" : endpoints.get(0).url()); //$NON-NLS-1$
+		this.endpoints = endpoints;
 	}
 
 	@Override
