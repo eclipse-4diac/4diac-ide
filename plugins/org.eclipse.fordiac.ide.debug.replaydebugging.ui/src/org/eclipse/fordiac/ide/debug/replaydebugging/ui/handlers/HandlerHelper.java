@@ -46,16 +46,19 @@ public class HandlerHelper {
 		}
 	}
 
-	public static void executeOrBubbleUp(final ExecutionEvent event, final Request request) {
+	public static boolean executeOrBubbleUp(final ExecutionEvent event, final Request request) {
 		final GraphicalViewer viewer = getViewer(event);
 		if (viewer == null) {
-			return;
+			return false;
 		}
 		final EditPart editPart = getSelectedEditPart(event);
 		final var command = bubbleForCommand(editPart, request);
 		if (command != null && command.canExecute()) {
 			viewer.getEditDomain().getCommandStack().execute(command);
+			return true;
 		}
+		return false;
+
 	}
 
 	private static GraphicalViewer getViewer(final ExecutionEvent event) {
