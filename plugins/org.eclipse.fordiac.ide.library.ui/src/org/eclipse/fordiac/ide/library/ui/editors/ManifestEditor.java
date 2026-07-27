@@ -16,7 +16,14 @@
 package org.eclipse.fordiac.ide.library.ui.editors;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -26,7 +33,11 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -38,6 +49,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	ManifestEditorDependencyPage dependencyPage;
 
 	private Manifest manifest;
+	private IProject project;
 	private boolean isDirty;
 
 	@Override
@@ -100,6 +112,13 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		return manifest;
 	}
 
+	public IProject getProject() {
+		if (project == null && getEditorInput() instanceof final FileEditorInput input && input.getFile() != null) {
+			project = input.getFile().getProject();
+		}
+		return project;
+	}
+
 	@Override
 	public void gotoMarker(final IMarker marker) {
 		if (!FordiacErrorMarker.isTargetOfType(marker, LibraryPackage.Literals.REQUIRED)) {
@@ -110,6 +129,18 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 			setActivePage(DEPENDENCY_PAGE_ID);
 			dependencyPage.reveal(required);
 		}
+	}
+
+	@Override
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(buildListener, IResourceChangeEvent.POST_BUILD);
+	}
+
+	@Override
+	public void dispose() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(buildListener);
+		super.dispose();
 	}
 
 	private EObject resolveModelElement(final IMarker marker) {
@@ -126,4 +157,36 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 		return resource.getEObject(targetUri.fragment());
 	}
+
+	private final IResourceChangeListener buildListener = new IResourceChangeListener() {
+		private final IPath externalLibPath = new Path(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		private final IPath stdLibPath = new Path(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
+
+		@Override
+		public void resourceChanged(final IResourceChangeEvent event) {
+			final IResourceDelta rootDelta = event.getDelta();
+			if (rootDelta == null || getProject() == null) {
+				return;
+			}
+
+			final IResourceDelta projectDelta = rootDelta.findMember(getProject().getFullPath());
+			if (projectDelta == null || projectDelta.findMember(externalLibPath) == null
+					&& projectDelta.findMember(stdLibPath) == null) {
+				return;
+			}
+
+			final Display display = getSite().getShell().getDisplay();
+
+			if (display.isDisposed()) {
+				return;
+			}
+
+			display.asyncExec(() -> {
+				if (dependencyPage != null) {
+					dependencyPage.refresh();
+				}
+			});
+		}
+	};
+
 }
