@@ -183,6 +183,7 @@ public class QueryZestGraphViewer {
 		}
 
 		final Runnable afterChange = this::refresh;
+		QueryModelHelper.populateNegateToggle(menu, selected, this::refresh);
 		QueryModelHelper.populateAddChildMenuItems(menu, selected, editingDomain, queryPackage,
 				this::isReferenceAddable, afterChange);
 		QueryModelHelper.populateFieldConstraintRemoval(menu, selected, editingDomain, afterChange);

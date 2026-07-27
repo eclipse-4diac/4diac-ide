@@ -51,18 +51,18 @@ public class QueryNodeFigure extends Figure {
 		layout.setStretchMinorAxis(true);
 		layout.setSpacing(0);
 		setLayoutManager(layout);
-		setBorder(new LineBorder(COLOR_HEADER_BG));
+		setBorder(new LineBorder(getBackgroundColor()));
 		setOpaque(true);
 	}
 
-	protected static Figure createHeader(final EObject eObj) {
+	protected Figure createHeader(final EObject eObj) {
 		final Figure header = new Figure();
 		final GridLayout gl = new GridLayout(1, false);
 		gl.marginHeight = 4;
 		gl.marginWidth = 6;
 		header.setLayoutManager(gl);
 		header.setOpaque(true);
-		header.setBackgroundColor(COLOR_HEADER_BG);
+		header.setBackgroundColor(getBackgroundColor());
 
 		final Label nameLabel = new Label(eObj.eClass().getName());
 		nameLabel.setForegroundColor(COLOR_HEADER_FG);
@@ -71,5 +71,10 @@ public class QueryNodeFigure extends Figure {
 		gl.setConstraint(nameLabel, new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		return header;
+	}
+
+	@Override
+	public Color getBackgroundColor() {
+		return COLOR_HEADER_BG;
 	}
 }
