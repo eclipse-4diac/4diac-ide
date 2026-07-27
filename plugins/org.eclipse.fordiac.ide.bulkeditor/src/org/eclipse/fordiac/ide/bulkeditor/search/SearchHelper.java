@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.InstanceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.PinConfig;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
@@ -37,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
@@ -324,11 +324,11 @@ public class SearchHelper {
 			// Instance-level: traverse FBNetwork if occurrence demands it
 			// SubAppType before CompositeFBType (SubAppType extends CompositeFBType)
 			if (fbType instanceof final SubAppType subappType && cfg.needsSubappTypesForInstances()) {
-				children = Stream.concat(children,
-						getFilteredNetworkChildren(subappType.getFBNetwork(), QueryModelHelper.OCC_TYPED_SUBAPP));
+				children = Stream.concat(children, getFilteredNetworkChildren(subappType.getFBNetwork(),
+						PlaceConfig.OCC_TYPED_SUBAPP, subappType));
 			} else if (fbType instanceof final CompositeFBType composite && cfg.needsCompositeFBTypes()) {
 				children = Stream.concat(children,
-						getFilteredNetworkChildren(composite.getFBNetwork(), QueryModelHelper.OCC_COMPOSITE_FB));
+						getFilteredNetworkChildren(composite.getFBNetwork(), PlaceConfig.OCC_COMPOSITE_FB, composite));
 			}
 
 			return children;
@@ -356,7 +356,7 @@ public class SearchHelper {
 
 		private Stream<? extends EObject> getApplicationChildren(final Application application) {
 			Stream<? extends EObject> stream = getFilteredNetworkChildren(application.getFBNetwork(),
-					QueryModelHelper.OCC_APPLICATION);
+					PlaceConfig.OCC_APPLICATION, application);
 
 			// Always include application-level attributes
 			stream = Stream.concat(stream, application.getAttributes().stream());
@@ -443,11 +443,12 @@ public class SearchHelper {
 		}
 
 		private Stream<? extends EObject> getUntypedSubappChildren(final UntypedSubApp untypedSubapp) {
-			final String occurrence = resolveOccurrenceContext(untypedSubapp);
+			final OccurrenceContext ctx = resolveOccurrenceContext(untypedSubapp);
 			Stream<? extends EObject> stream = Stream.empty();
 
-			if (cfg.untypedSubapp().hasOccurrence(occurrence) && cfg.untypedSubapp().matches(untypedSubapp.getName(),
-					untypedSubapp.getTypeName(), untypedSubapp.getComment())
+			if (ctx != null
+					&& cfg.untypedSubapp().matchesOccurrence(ctx.kind(), ctx.context()) && cfg.untypedSubapp()
+							.matches(untypedSubapp.getName(), untypedSubapp.getTypeName(), untypedSubapp.getComment())
 					&& cfg.untypedSubapp().matchesAttribute(untypedSubapp)) {
 				final PinConfig pinCfg = resolveInstancePinConfig(untypedSubapp).pin();
 				if (pinCfg.active()) {
@@ -455,20 +456,21 @@ public class SearchHelper {
 				}
 				stream = Stream.concat(stream, untypedSubapp.getAttributes().stream());
 			}
-			if (occurrence != null) {
+			if (ctx != null) {
 				stream = Stream.concat(stream,
-						getFilteredNetworkChildren(untypedSubapp.getSubAppNetwork(), occurrence));
+						getFilteredNetworkChildren(untypedSubapp.getSubAppNetwork(), ctx.kind(), ctx.context()));
 			}
 
 			return stream;
 		}
 
-		private Stream<? extends EObject> getFilteredNetworkChildren(final FBNetwork network, final String occurrence) {
+		private Stream<? extends EObject> getFilteredNetworkChildren(final FBNetwork network, final String occurrence,
+				final INamedElement context) {
 			Stream<? extends EObject> stream = Stream.empty();
 
 			// Network elements filtered by occurrence-aware instance matching
-			stream = Stream.concat(stream,
-					network.getNetworkElements().stream().filter(fbne -> matchesInstanceConstraint(fbne, occurrence)));
+			stream = Stream.concat(stream, network.getNetworkElements().stream()
+					.filter(fbne -> matchesInstanceConstraint(fbne, occurrence, context)));
 
 			// Connections are always included
 			stream = Stream.concat(stream, network.getAdapterConnections().stream());
@@ -478,21 +480,22 @@ public class SearchHelper {
 			return stream;
 		}
 
-		private boolean matchesInstanceConstraint(final FBNetworkElement fbne, final String occurrence) {
+		private boolean matchesInstanceConstraint(final FBNetworkElement fbne, final String occurrence,
+				final INamedElement context) {
 			if (fbne instanceof UntypedSubApp) {
 				return true;
 			}
 			if (fbne instanceof final TypedSubApp tsa) {
-				return cfg.typedSubapp().hasOccurrence(occurrence)
+				return cfg.typedSubapp().matchesOccurrence(occurrence, context)
 						&& cfg.typedSubapp().matches(tsa.getName(), tsa.getTypeName(), tsa.getComment());
 			}
 			if (fbne instanceof final FB fb) {
-				return matchesFBInstance(fb, occurrence);
+				return matchesFBInstance(fb, occurrence, context);
 			}
 			return false;
 		}
 
-		private boolean matchesFBInstance(final FB fb, final String occurrence) {
+		private boolean matchesFBInstance(final FB fb, final String occurrence, final INamedElement context) {
 			final FBType type = fb.getType();
 			// Specific before general — SubAppType extends CompositeFBType
 			if (type instanceof SubAppType) {
@@ -500,35 +503,38 @@ public class SearchHelper {
 				return false;
 			}
 			if (type instanceof CompositeFBType) {
-				return cfg.compositeFB().hasOccurrence(occurrence)
+				return cfg.compositeFB().matchesOccurrence(occurrence, context)
 						&& cfg.compositeFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
 			}
 			if (type instanceof SimpleFBType) {
-				return cfg.simpleFB().hasOccurrence(occurrence)
+				return cfg.simpleFB().matchesOccurrence(occurrence, context)
 						&& cfg.simpleFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
 			}
 			if (type instanceof BasicFBType) {
-				return cfg.basicFB().hasOccurrence(occurrence)
+				return cfg.basicFB().matchesOccurrence(occurrence, context)
 						&& cfg.basicFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
 			}
 			if (type instanceof ServiceInterfaceFBType) {
-				return cfg.serviceInterfaceFB().hasOccurrence(occurrence)
+				return cfg.serviceInterfaceFB().matchesOccurrence(occurrence, context)
 						&& cfg.serviceInterfaceFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
 			}
 			return false;
 		}
 
-		private static String resolveOccurrenceContext(final EObject obj) {
+		private record OccurrenceContext(String kind, INamedElement context) {
+		}
+
+		private static OccurrenceContext resolveOccurrenceContext(final EObject obj) {
 			EObject current = obj;
 			while (current != null) {
-				if (current instanceof Application) {
-					return QueryModelHelper.OCC_APPLICATION;
+				if (current instanceof final Application app) {
+					return new OccurrenceContext(PlaceConfig.OCC_APPLICATION, app);
 				}
-				if (current instanceof SubAppType) {
-					return QueryModelHelper.OCC_TYPED_SUBAPP;
+				if (current instanceof final SubAppType subAppType) {
+					return new OccurrenceContext(PlaceConfig.OCC_TYPED_SUBAPP, subAppType);
 				}
-				if (current instanceof CompositeFBType) {
-					return QueryModelHelper.OCC_COMPOSITE_FB;
+				if (current instanceof final CompositeFBType compositeFBType) {
+					return new OccurrenceContext(PlaceConfig.OCC_COMPOSITE_FB, compositeFBType);
 				}
 				current = current.eContainer();
 			}

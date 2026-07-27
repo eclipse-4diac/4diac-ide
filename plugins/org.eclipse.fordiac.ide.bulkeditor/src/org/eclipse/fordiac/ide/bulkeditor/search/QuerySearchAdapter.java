@@ -13,19 +13,17 @@
 package org.eclipse.fordiac.ide.bulkeditor.search;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorMode;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.InstanceConfig;
+import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.OccurrenceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.PinConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.TypeConfig;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -217,9 +215,10 @@ public class QuerySearchAdapter {
 		final FilterRecord attributeConstraintRecord = readFilterRecord(child,
 				QueryModelHelper.REF_ATTRIBUTE_CONSTRAINT, placeholders);
 
-		final Set<String> occurrences = readOccurrences(child);
-
-		return new InstanceConfig(true, constraintRecord, attributeConstraintRecord, occurrences,
+		return new InstanceConfig(true, constraintRecord, attributeConstraintRecord,
+				readOccurrenceConfig(child, QueryModelHelper.REF_APPLICATION_OCCURRENCE, placeholders),
+				readOccurrenceConfig(child, QueryModelHelper.REF_COMPOSITE_FB_OCCURRENCE, placeholders),
+				readOccurrenceConfig(child, QueryModelHelper.REF_TYPED_SUBAPP_OCCURRENCE, placeholders),
 				buildPinConfig(child, placeholders, pinsImplicit));
 	}
 
@@ -259,27 +258,19 @@ public class QuerySearchAdapter {
 			final Map<String, String> placeholders) {
 		final EStructuralFeature feature = constraint.eClass().getEStructuralFeature(refName);
 		if (feature == null || !(constraint.eGet(feature) instanceof final EObject eobj)) {
-			return FilterRecord.INACTIVE;
+			return null;
 		}
 		return readConstraintTree(eobj, placeholders);
 	}
 
-	private static Set<String> readOccurrences(final EObject instance) {
-		final EStructuralFeature feature = instance.eClass().getEStructuralFeature(QueryModelHelper.FEATURE_OCCURRENCE);
-		if (feature == null) {
-			return Set.of();
+	private static OccurrenceConfig readOccurrenceConfig(final EObject instance, final String refName,
+			final Map<String, String> placeholders) {
+		final EObject occ = QueryModelHelper.getContainedChild(instance, refName);
+		if (occ == null) {
+			return OccurrenceConfig.INACTIVE;
 		}
-		final Object raw = instance.eGet(feature);
-		if (raw instanceof final List<?> list && !list.isEmpty()) {
-			final Set<String> result = new HashSet<>();
-			for (final Object item : list) {
-				if (item instanceof final Enumerator enumerator) {
-					result.add(enumerator.getName());
-				}
-			}
-			return result;
-		}
-		return Set.of();
+		return new OccurrenceConfig(true, readFilterRecord(occ, QueryModelHelper.REF_CONSTRAINT, placeholders),
+				readFilterRecord(occ, QueryModelHelper.REF_ATTRIBUTE_CONSTRAINT, placeholders));
 	}
 
 	private static MatcherConfig readConstraintField(final EObject constraint, final String fieldName,
