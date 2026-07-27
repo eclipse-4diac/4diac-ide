@@ -54,6 +54,8 @@ public final class Messages extends NLS {
 	public static String Tab_Result;
 	public static String Tab_Query;
 
+	public static String Negate;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

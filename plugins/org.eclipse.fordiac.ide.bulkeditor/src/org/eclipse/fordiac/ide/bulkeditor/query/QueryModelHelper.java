@@ -45,6 +45,7 @@ public final class QueryModelHelper {
 	public static final String ATTRIBUTE = "Attribute"; //$NON-NLS-1$
 	public static final String PIN_TARGET = "PinTarget"; //$NON-NLS-1$
 
+	public static final String FEATURE_NEGATE = "negate"; //$NON-NLS-1$
 	public static final String REF_TARGET = "target"; //$NON-NLS-1$
 	public static final String REF_PLACE = "place"; //$NON-NLS-1$
 	public static final String REF_PIN = "pin"; //$NON-NLS-1$
@@ -119,6 +120,10 @@ public final class QueryModelHelper {
 
 	public static boolean isInstance(final EObject eObj) {
 		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
+	}
+
+	public static boolean isNegatedConstraint(final EObject eObj) {
+		return Boolean.TRUE.equals(QueryModelHelper.getFeatureValue(eObj, QueryModelHelper.FEATURE_NEGATE));
 	}
 
 	public static boolean isPinTargetQuery(final EObject queryRoot) {
@@ -262,6 +267,7 @@ public final class QueryModelHelper {
 	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
 			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
 			final Predicate<EReference> referenceFilter, final Runnable afterAdd) {
+		addSeparatorIfNeeded(menu);
 		for (final EReference ref : selected.eClass().getEAllContainments()) {
 			if (referenceFilter.test(ref) && (ref.isMany() || !selected.eIsSet(ref))) {
 				addItemsForReference(menu, selected, editingDomain, queryPackage, ref, afterAdd);
@@ -320,6 +326,21 @@ public final class QueryModelHelper {
 		final MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(text);
 		item.addListener(SWT.Selection, e -> action.run());
+	}
+
+	public static void populateNegateToggle(final Menu menu, final EObject selected, final Runnable afterChange) {
+		if (!isConstraint(selected)) {
+			return;
+		}
+		addSeparatorIfNeeded(menu);
+		final boolean currentValue = Boolean.TRUE.equals(getFeatureValue(selected, FEATURE_NEGATE));
+		final MenuItem item = new MenuItem(menu, SWT.NONE);
+		item.setText(Messages.Negate);
+		item.setSelection(currentValue);
+		item.addListener(SWT.Selection, e -> {
+			setFeatureValue(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue));
+			afterChange.run();
+		});
 	}
 
 	@SuppressWarnings("unused")
