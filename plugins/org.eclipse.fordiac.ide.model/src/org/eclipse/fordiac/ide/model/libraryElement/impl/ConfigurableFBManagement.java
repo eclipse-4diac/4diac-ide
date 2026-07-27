@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarDeclarationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -279,7 +280,8 @@ public final class ConfigurableFBManagement {
 
 	private static void createMemberVars(final StructManipulator muxer, final boolean isInput) {
 		((StructuredType) muxer.getDataType()).getMemberVariables().forEach(memberVar -> {
-			final VarDeclaration varDecl = copyVarAsMember(memberVar, isInput);
+			final VarDeclaration varDecl = InterfaceListCopier.copyVar(memberVar, false, false);
+			varDecl.setIsInput(isInput);
 			muxer.getMemberVars().add(varDecl);
 		});
 		// clear any previous withs
