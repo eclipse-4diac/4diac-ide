@@ -107,6 +107,10 @@ public abstract class CommonElementImporter {
 	private static final boolean IS_VISIBLE = false;
 	private static final boolean IS_VAR_CONFIGED = true;
 
+	// legacy attribute needed to convert old DEMUX configurations to new one
+	public static final String DEMUX_VISIBLE_CHILDREN = "VisibleChildren"; //$NON-NLS-1$
+	private static final String MEMBER_VAR_SEPARATOR = "%"; //$NON-NLS-1$
+
 	protected static final class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
 		private final XMLStreamReader reader;
@@ -634,6 +638,8 @@ public abstract class CommonElementImporter {
 			parsePinVarConfigAttribute(block);
 		} else if (isConfigurableFbAttribute(block)) {
 			parseConfigurableFbAttribute((ConfigurableFB) block);
+		} else if (isDemuxVisibleChildrenAttribute(block)) {
+			parseDemuxVisibleChildrenAttribute((Demultiplexer) block);
 		} else {
 			parseGenericAttributeNode(block);
 		}
@@ -663,11 +669,15 @@ public abstract class CommonElementImporter {
 	private boolean isConfigurableFbAttribute(final FBNetworkElement block) {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		return (block instanceof ConfigurableMoveFB && LibraryElementTags.F_MOVE_CONFIG.equals(name)
-				|| (block instanceof StructManipulator && LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(name))
-				|| (block instanceof Demultiplexer && LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(name)));
+				|| (block instanceof StructManipulator && LibraryElementTags.STRUCT_MANIPULATOR_CONFIG.equals(name)));
 	}
 
-	protected void parseConfigurableFbAttribute(final ConfigurableFB block) {
+	private boolean isDemuxVisibleChildrenAttribute(final FBNetworkElement block) {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		return block instanceof Demultiplexer && DEMUX_VISIBLE_CHILDREN.equals(name);
+	}
+
+	private void parseConfigurableFbAttribute(final ConfigurableFB block) {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		final String datatypeName = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		block.loadConfiguration(name, datatypeName);
@@ -917,5 +927,41 @@ public abstract class CommonElementImporter {
 					attributeName, getLineNumber()));
 			return 0.0;
 		}
+	}
+
+	/**
+	 * Legacy method to convert old demultiplexer configurations to the new member
+	 * access format
+	 *
+	 * @param demux Struct demultiplexer to configure with visible children
+	 */
+	private void parseDemuxVisibleChildrenAttribute(final Demultiplexer demux) {
+		final String visibleChildren = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		if (visibleChildren == null) {
+			return;
+		}
+
+		// as the old visible children attribute holds the visible attributes set all
+		// outputs invisible
+		demux.getInterface().getOutputVars().forEach(oVar -> oVar.setVisible(false));
+
+		final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
+		for (final String memberVarName : memberVarNames) {
+			final var path = List.of(splitMemberVarName(memberVarName));
+			final IInterfaceElement ie = demux.getInterface().getInterfaceElement(path, true);
+			if (ie != null) {
+				ie.setVisible(true);
+			}
+		}
+	}
+
+	private static String[] splitMemberVarName(final String memberVarName) {
+		final String trimmedMemberVarName = memberVarName.trim();
+		String[] subnames = trimmedMemberVarName.split(MEMBER_VAR_SEPARATOR);
+		if (subnames.length == 1) {
+			// check if it is an old style member var name
+			subnames = trimmedMemberVarName.split("\\."); //$NON-NLS-1$
+		}
+		return subnames;
 	}
 }

@@ -188,7 +188,6 @@ public final class LibraryElementTags {
 	public static final String TYPENAME_DEMUX = "STRUCT_DEMUX"; //$NON-NLS-1$
 	public static final String PACKAGE_NAME_MUXERS = "eclipse4diac::convert"; //$NON-NLS-1$
 	public static final String STRUCT_MANIPULATOR_CONFIG = "StructuredType"; //$NON-NLS-1$
-	public static final String DEMUX_VISIBLE_CHILDREN = "VisibleChildren"; //$NON-NLS-1$
 	public static final String VARIABLE_SEPARATOR = ","; //$NON-NLS-1$
 
 	public static final String STRUCTURED_TYPE_ELEMENT = "StructuredType"; //$NON-NLS-1$

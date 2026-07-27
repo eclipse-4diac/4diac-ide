@@ -46,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -194,15 +193,6 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 			if (dataTypeName != null) {
 				configFb.loadConfiguration(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG, dataTypeName);
 				oldElement.deleteAttribute(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG);
-
-				if (configFb instanceof Demultiplexer) {
-					final String visibleChildren = oldElement
-							.getAttributeValue(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-					if (visibleChildren != null) {
-						configFb.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, visibleChildren);
-						oldElement.deleteAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-					}
-				}
 			}
 		}
 	}
