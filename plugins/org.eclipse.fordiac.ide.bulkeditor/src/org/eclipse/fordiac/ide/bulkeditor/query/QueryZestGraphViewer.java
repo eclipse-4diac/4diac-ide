@@ -282,9 +282,6 @@ public class QueryZestGraphViewer {
 			if (QueryModelHelper.isConstraint(eObj)) {
 				return new QueryConstraintNodeFigure(eObj, graphViewer.getGraphControl());
 			}
-			if (QueryModelHelper.isInstance(eObj)) {
-				return new QueryOccurrenceNodeFigure(eObj);
-			}
 			if (QueryModelHelper.isPlaceholder(eObj)) {
 				return new QueryPlaceholderNodeFigure(eObj, graphViewer.getGraphControl());
 			}
