@@ -12,10 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.search;
 
-import java.util.Set;
-
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public record PlaceConfig( //@formatter:off
         TypeConfig simpleType,
@@ -34,16 +32,20 @@ public record PlaceConfig( //@formatter:off
         boolean ignoreLinkedLibraries) {
 		// @formatter:on
 
+	public static final String OCC_APPLICATION = "Application"; //$NON-NLS-1$
+	public static final String OCC_COMPOSITE_FB = "CompositeFB"; //$NON-NLS-1$
+	public static final String OCC_TYPED_SUBAPP = "TypedSubapp"; //$NON-NLS-1$
+
 	public boolean needsSystems() {
-		return hasOccurrence(QueryModelHelper.OCC_APPLICATION);
+		return hasOccurrence(OCC_APPLICATION);
 	}
 
 	public boolean needsCompositeFBTypes() {
-		return hasOccurrence(QueryModelHelper.OCC_COMPOSITE_FB);
+		return hasOccurrence(OCC_COMPOSITE_FB);
 	}
 
 	public boolean needsSubappTypesForInstances() {
-		return hasOccurrence(QueryModelHelper.OCC_TYPED_SUBAPP);
+		return hasOccurrence(OCC_TYPED_SUBAPP);
 	}
 
 	public boolean anyInstanceSelected() {
@@ -72,13 +74,65 @@ public record PlaceConfig( //@formatter:off
 		}
 	}
 
-	public record InstanceConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint,
-			Set<String> occurrences, PinConfig pin) {
-		public static final InstanceConfig INACTIVE = new InstanceConfig(false, FilterRecord.INACTIVE,
-				FilterRecord.INACTIVE, Set.of(), PinConfig.INACTIVE);
+	public record OccurrenceConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint) {
+		public static final OccurrenceConfig INACTIVE = new OccurrenceConfig(false, FilterRecord.INACTIVE,
+				FilterRecord.INACTIVE);
 
-		public boolean hasOccurrence(final String occurrence) {
-			return selected && occurrences.contains(occurrence);
+		public boolean matchesContext(final INamedElement context) {
+			if (!selected) {
+				return false;
+			}
+			return !constraint.isSelected() || constraint.matches(context.getName(), "", context.getComment());
+		}
+
+		public boolean matchesContextAttribute(final INamedElement context) {
+			if (!selected || !attributeConstraint.isSelected()) {
+				return true;
+			}
+			if (context instanceof final ConfigurableObject confObj) {
+				return confObj.getAttributes().stream().anyMatch(
+						att -> attributeConstraint.matches(att.getName(), att.getTypeName(), att.getComment()));
+			}
+			return true;
+		}
+	}
+
+	public record InstanceConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint,
+			OccurrenceConfig application, OccurrenceConfig compositeFBOcc, OccurrenceConfig typedSubappOcc,
+			PinConfig pin) {
+		public static final InstanceConfig INACTIVE = new InstanceConfig(false, FilterRecord.INACTIVE,
+				FilterRecord.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE,
+				OccurrenceConfig.INACTIVE, PinConfig.INACTIVE);
+
+		private boolean noOccurrenceRestriction() {
+			return !application.selected() && !compositeFBOcc.selected() && !typedSubappOcc.selected();
+		}
+
+		public boolean hasOccurrence(final String kind) {
+			if (!selected) {
+				return false;
+			}
+			return noOccurrenceRestriction() || occurrenceFor(kind).selected();
+		}
+
+		public boolean matchesOccurrence(final String kind, final INamedElement context) {
+			if (!selected) {
+				return false;
+			}
+			if (noOccurrenceRestriction()) {
+				return true;
+			}
+			final OccurrenceConfig occ = occurrenceFor(kind);
+			return occ.matchesContext(context) && occ.matchesContextAttribute(context);
+		}
+
+		private OccurrenceConfig occurrenceFor(final String kind) {
+			return switch (kind) {
+			case OCC_APPLICATION -> application;
+			case OCC_COMPOSITE_FB -> compositeFBOcc;
+			case OCC_TYPED_SUBAPP -> typedSubappOcc;
+			case null, default -> OccurrenceConfig.INACTIVE;
+			};
 		}
 
 		public boolean matches(final String name, final String type, final String comment) {

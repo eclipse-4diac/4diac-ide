@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class FilterRecord {
 
 	public static final FilterRecord INACTIVE = new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE,
-			MatcherConfig.INACTIVE, FilterRecord.INACTIVE, FilterRecord.INACTIVE);
+			MatcherConfig.INACTIVE, null, null);
 
 	private final boolean selected;
 	private final MatcherConfig nameConfig;
@@ -48,8 +48,9 @@ public class FilterRecord {
 	}
 
 	public boolean matches(final String name, final String type, final String comment) {
-		return (matchesFields(name, type, comment) && andConstraint.matches(name, type, comment))
-				|| orConstraint.matches(name, type, comment);
+		return (matchesFields(name, type, comment)
+				&& (andConstraint == null || andConstraint.matches(name, type, comment)))
+				|| (orConstraint != null && orConstraint.matches(name, type, comment));
 
 	}
 

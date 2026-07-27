@@ -75,17 +75,15 @@ public final class QueryModelHelper {
 	public static final String FEATURE_REGEX = "regex"; //$NON-NLS-1$
 	public static final String REF_AND_CONSTRAINTS = "andConstraint"; //$NON-NLS-1$
 	public static final String REF_OR_CONSTRAINTS = "orConstraint"; //$NON-NLS-1$
+	public static final String REF_APPLICATION_OCCURRENCE = "applicationOccurrence"; //$NON-NLS-1$
+	public static final String REF_COMPOSITE_FB_OCCURRENCE = "compositeFBOccurrence"; //$NON-NLS-1$
+	public static final String REF_TYPED_SUBAPP_OCCURRENCE = "typedSubappOccurrence"; //$NON-NLS-1$
 
-	public static final String FEATURE_OCCURRENCE = "occurrence"; //$NON-NLS-1$
 	public static final String FEATURE_KEY = "key"; //$NON-NLS-1$
 	public static final String FEATURE_VAL = "val"; //$NON-NLS-1$
 
 	public static final String FEATURE_PLACEHOLDER = "placeholder"; //$NON-NLS-1$
 	public static final String FEATURE_IGNORE_LINKED_LIBRARIES = "ignoreLinkedLibraries"; //$NON-NLS-1$
-
-	public static final String OCC_APPLICATION = "Application"; //$NON-NLS-1$
-	public static final String OCC_COMPOSITE_FB = "CompositeFB"; //$NON-NLS-1$
-	public static final String OCC_TYPED_SUBAPP = "TypedSubapp"; //$NON-NLS-1$
 
 	public record FieldConstraintData(String value, boolean caseSensitive, boolean wholeWord, boolean entire,
 			boolean regex) {
@@ -164,10 +162,6 @@ public final class QueryModelHelper {
 
 	public static void setIgnoreLinkedLibrary(final EObject instance, final boolean value) {
 		setFeatureValue(instance, FEATURE_IGNORE_LINKED_LIBRARIES, Boolean.valueOf(value));
-	}
-
-	public static void setOccurrences(final EObject instance, final List<?> occurrences) {
-		setFeatureValue(instance, FEATURE_OCCURRENCE, occurrences);
 	}
 
 	// field constraints
