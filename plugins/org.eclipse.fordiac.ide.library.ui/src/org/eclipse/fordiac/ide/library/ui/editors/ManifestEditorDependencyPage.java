@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
-import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.library.provider.ILibraryProvider;
@@ -70,7 +69,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class ManifestEditorDependencyPage extends FormPage {
 
@@ -169,7 +167,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 	}
 
 	public void refresh() {
-		if (treeViewer == null || treeViewer.getTree().isDisposed()) {
+		if (treeViewer == null || treeViewer.getControl().isDisposed()) {
 			return;
 		}
 		collectLinkedLibraryVersions();
@@ -203,12 +201,12 @@ public class ManifestEditorDependencyPage extends FormPage {
 		final Button manageLibrariesButton = new Button(buttonBar, SWT.PUSH);
 		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
 		manageLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		manageLibrariesButton.addListener(SWT.Selection,
-				event -> ManageLibraryWizard.openWizardDialog(getProject(), getEditor().getSite().getShell()));
+		manageLibrariesButton.addListener(SWT.Selection, event -> ManageLibraryWizard
+				.openWizardDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
 	}
 
 	private List<LibContainer> createViewerInput() {
-		final var manifest = getManifest();
+		final var manifest = getManifestEditor().getManifest();
 		if (manifest == null || manifest.getDependencies() == null) {
 			return Collections.emptyList();
 		}
@@ -223,23 +221,9 @@ public class ManifestEditorDependencyPage extends FormPage {
 		return LibraryManager.INSTANCE.getStandardLibraries().containsKey(symbolicName);
 	}
 
-	private Manifest getManifest() {
-		if (getEditor() instanceof final ManifestEditor editor) {
-			return editor.getManifest();
-		}
-		return null;
-	}
-
-	private IProject getProject() {
-		if (getEditorInput() instanceof final FileEditorInput input && input.getFile() != null) {
-			return input.getFile().getProject();
-		}
-		return null;
-	}
-
 	private void collectLinkedLibraryVersions() {
 		linkedLibVersions.clear();
-		final IProject project = getProject();
+		final IProject project = getManifestEditor().getProject();
 		if (project == null) {
 			return;
 		}
@@ -250,6 +234,10 @@ public class ManifestEditorDependencyPage extends FormPage {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
+	}
+
+	private ManifestEditor getManifestEditor() {
+		return (ManifestEditor) getEditor();
 	}
 
 	private String getUsedVersion(final String symbolicName) {
@@ -283,9 +271,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 					required.setVersion(version);
 					getViewer().refresh(required);
 					getViewer().setSelection(StructuredSelection.EMPTY);
-					if (getEditor() instanceof final ManifestEditor editor) {
-						editor.setDirty(true);
-					}
+					getManifestEditor().setDirty(true);
 				}
 			}
 
