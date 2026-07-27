@@ -23,11 +23,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="regex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint" eSuperTypes="#//Constraint"/>
-  <eClassifiers xsi:type="ecore:EEnum" name="InstanceOccurrence">
-    <eLiterals name="Application"/>
-    <eLiterals name="CompositeFB"/>
-    <eLiterals name="TypedSubapp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Occurrence" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConstraint" eType="#//AttributeConstraint"
+        containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicationOccurrence" eSuperTypes="#//Occurrence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFBOccurrence" eSuperTypes="#//Occurrence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedSubappOccurrence" eSuperTypes="#//Occurrence"/>
   <eClassifiers xsi:type="ecore:EClass" name="Query">
     <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" upperBound="-1"
         eType="#//Placeholder" containment="true"/>
@@ -104,8 +108,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Instance" abstract="true" eSuperTypes="#//SearchTarget">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" upperBound="-1"
-        eType="#//InstanceOccurrence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="applicationOccurrence"
+        eType="#//ApplicationOccurrence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compositeFBOccurrence"
+        eType="#//CompositeFBOccurrence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedSubappOccurrence"
+        eType="#//TypedSubappOccurrence" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleFB" eSuperTypes="#//Instance">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
