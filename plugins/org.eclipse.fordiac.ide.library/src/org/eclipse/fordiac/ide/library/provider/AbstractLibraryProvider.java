@@ -29,7 +29,7 @@ public abstract class AbstractLibraryProvider implements ILibraryProvider {
 
 	protected static final String PLUGIN_ID = "org.eclipse.fordiac.ide.library"; //$NON-NLS-1$
 
-	private static final Comparator<LibraryDescriptor> comparator = (o1, o2) -> o1.version().compareTo(o2.version());
+	private static final Comparator<LibraryDescriptor> comparator = (o1, o2) -> o2.version().compareTo(o1.version());
 
 	@Override
 	public Optional<LibraryDescriptor> getLatest(final String symbolicName) {
@@ -38,7 +38,8 @@ public abstract class AbstractLibraryProvider implements ILibraryProvider {
 
 	@Override
 	public Optional<LibraryDescriptor> getLatest(final String symbolicName, final VersionRange range) {
-		return getAll(symbolicName).stream().filter(lib -> range.includes(lib.version())).findFirst();
+		return getAll(symbolicName).stream().filter(lib -> range.includes(lib.version())).sorted(comparator)
+				.findFirst();
 	}
 
 	@Override

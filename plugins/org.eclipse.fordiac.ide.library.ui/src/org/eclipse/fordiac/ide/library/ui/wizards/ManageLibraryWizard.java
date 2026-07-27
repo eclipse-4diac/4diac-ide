@@ -24,8 +24,11 @@ import org.eclipse.fordiac.ide.library.LibraryChange;
 import org.eclipse.fordiac.ide.library.LibraryResolver;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class ManageLibraryWizard extends Wizard {
@@ -33,6 +36,19 @@ public class ManageLibraryWizard extends Wizard {
 	private final LibraryPlanningPage planningPage;
 	private final LibraryChangePreviewPage previewPage;
 	private List<LibraryChange> changesIncludingTransitive = List.of();
+
+	public static int openWizardDialog(final IProject project, final Shell shell) {
+		if (project != null) {
+			final ManageLibraryWizard wizard = new ManageLibraryWizard(project);
+			wizard.setWindowTitle("Manage Linked Libraries"); //$NON-NLS-1$
+			final WizardDialog dialog = new WizardDialog(shell, wizard);
+			dialog.setBlockOnOpen(false);
+			dialog.setModal(false);
+			dialog.create();
+			return dialog.open();
+		}
+		return Window.CANCEL;
+	}
 
 	public ManageLibraryWizard(final IProject project) {
 		this.project = project;
