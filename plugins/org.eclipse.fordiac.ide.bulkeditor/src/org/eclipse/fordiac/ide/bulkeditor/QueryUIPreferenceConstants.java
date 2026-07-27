@@ -26,6 +26,7 @@ public class QueryUIPreferenceConstants {
 
 	private static final String BACKGROUND_COLOR = "org.eclipse.fordiac.ide.bulkeditor.query.backgroundColor"; //$NON-NLS-1$
 	private static final String HEADER_BACKGROUND_COLOR = "org.eclipse.fordiac.ide.bulkeditor.query.headerBackgroundColor"; //$NON-NLS-1$
+	private static final String NEGATED_HEADER_BACKGROUND_COLOR = "org.eclipse.fordiac.ide.bulkeditor.query.negatedHeaderBackgroundColor"; //$NON-NLS-1$
 	private static final String HEADER_FOREGROUND_COLOR = "org.eclipse.fordiac.ide.bulkeditor.query.headerForegroundColor"; //$NON-NLS-1$
 	private static final String VALUE_BORDER_COLOR = "org.eclipse.fordiac.ide.bulkeditor.query.valueBorderColor"; //$NON-NLS-1$
 
@@ -35,6 +36,10 @@ public class QueryUIPreferenceConstants {
 
 	public static Color getHeaderBackgroundColor() {
 		return JFaceResources.getColorRegistry().get(HEADER_BACKGROUND_COLOR);
+	}
+
+	public static Color getNegatedHeaderBackgroundColor() {
+		return JFaceResources.getColorRegistry().get(NEGATED_HEADER_BACKGROUND_COLOR);
 	}
 
 	public static Color getHeaderForegroundColor() {
