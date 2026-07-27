@@ -59,7 +59,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
@@ -173,14 +172,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		if (newElement instanceof final ConfigurableFB configFb) {
 			if (oldElement instanceof final ConfigurableFB oldConfigFb) {
 				configFb.setDataType(oldConfigFb.getDataType());
-
-				if (configFb instanceof final Demultiplexer newDemux
-						&& oldConfigFb instanceof final Demultiplexer oldDemux && oldDemux.isIsConfigured()) {
-					newDemux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN,
-							ConfigurableFBManagement.buildVisibleChildrenString(oldDemux.getMemberVars()));
-				} else {
-					configFb.updateConfiguration();
-				}
+				configFb.updateConfiguration();
 			} else {
 				// transfer data from error marker
 				handleConFBUpdateFromErrorMarker(configFb);
@@ -448,7 +440,8 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	private void checkErrorMarkerPinParameters() {
 		for (final ErrorMarkerInterface errorMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasData(errorMarker)) {
-				final IInterfaceElement newInterfaceElement = newElement.getInterface().getInterfaceElement(errorMarker);
+				final IInterfaceElement newInterfaceElement = newElement.getInterface()
+						.getInterfaceElement(errorMarker);
 				if (newInterfaceElement != null) {
 					copyErrorMarkerData(errorMarker, newInterfaceElement);
 					if (newInterfaceElement instanceof final VarDeclaration varDeclaration
