@@ -14,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.text.MessageFormat;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -36,14 +35,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
@@ -141,34 +138,52 @@ public final class ConnectionHelper {
 		}
 
 		public void handleErrorCases() {
-			if (isMissingConnectionDestination()) {
-				handleMissingConnectionDestination();
-			}
-
-			if (isMissingConnectionDestinationEndpoint()) {
-				createErrorMarkerInterface(true);
-			}
-
 			if (isMissingConnectionSource()) {
-				handleMissingConnectionSource();
+				addMissingSourceBlock();
+			}
+			if (isMissingConnectionDestination()) {
+				addMissingDestBlock();
 			}
 
+			var source = getSourceEndpoint();
+			var destination = getDestinationEndpoint();
 			if (isMissingConnectionSourceEndpoint()) {
-				createErrorMarkerInterface(false);
+				source = addMissingPin(true);
+			}
+			if (isMissingConnectionDestinationEndpoint()) {
+				destination = addMissingPin(false);
 			}
 
-			if (isMissingSourceAndDestEndpoint()) {
-				handleMissingSrcAndDestEnpoint();
+			connection.setSource(source);
+			connection.setDestination(destination);
+		}
+
+		private void addMissingSourceBlock() {
+			final BlockFBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(getSourceFbName());
+			srcInterfaceList = sourceFB.getInterface();
+			importer.addFBNetworkElement(sourceFB);
+			sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
+		}
+
+		private void addMissingDestBlock() {
+			final BlockFBNetworkElement destinationFb = FordiacMarkerHelper.createErrorMarkerFB(getDestFbName());
+			destInterfaceList = destinationFb.getInterface();
+			importer.addFBNetworkElement(destinationFb);
+			destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
+		}
+
+		private IInterfaceElement addMissingPin(final boolean isSource) {
+			final IInterfaceElement oppositeEndpoint = isSource ? getDestinationEndpoint() : getSourceEndpoint();
+
+			DataType type = oppositeEndpoint != null ? oppositeEndpoint.getType() : null;
+			if (type == null) {
+				getConnectionState().add(ConnectionState.MISSING_TYPE);
+				type = determineConnectionType();
 			}
 
-			if (isEmptyConnection()) {
-				// if 4diac should be capable of seeing the error marker in the FBNetworkEditor
-				// then error marker blocks need to be created at this location
-				importer.getErrors()
-						.add(new TypeImportDiagnostic("Connection missing both source and destination element", //$NON-NLS-1$
-								MessageFormat.format("{0} -> {1}", sourceString, destinationString), //$NON-NLS-1$
-								importer.getLineNumber()));
-			}
+			final InterfaceList ieList = isSource ? srcInterfaceList : destInterfaceList;
+			final String pinName = isSource ? getSourcePinName() : getDestinationPinName();
+			return FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterface(type, pinName, !isSource, ieList);
 		}
 
 		public String getSourceFbName() {
@@ -210,12 +225,7 @@ public final class ConnectionHelper {
 		}
 
 		public T getConnection() {
-			return isEmptyConnection() ? null : connection;
-		}
-
-		public boolean isMissingConnectionDestination() {
-			return connectionState
-					.containsAll(EnumSet.of(ConnectionState.DEST_MISSING, ConnectionState.SOURCE_ENDPOINT_EXISTS));
+			return connection;
 		}
 
 		public boolean isValidConnection() {
@@ -230,25 +240,29 @@ public final class ConnectionHelper {
 			return connectionState.contains(ConnectionState.DATATYPE_MISSMATCH);
 		}
 
-		public boolean isMissingConnectionDestinationEndpoint() {
-			return connectionState.containsAll(EnumSet.of(ConnectionState.DEST_ENDPOINT_MISSING,
-					ConnectionState.SOURCE_EXITS, ConnectionState.SOURCE_ENDPOINT_EXISTS, ConnectionState.DEST_EXISTS));
+		public boolean isMissingType() {
+			return connectionState.contains(ConnectionState.MISSING_TYPE);
+		}
+
+		public boolean isMissingConnectionDestination() {
+			return connectionState.contains(ConnectionState.DEST_MISSING);
 		}
 
 		public boolean isMissingConnectionSource() {
-			return connectionState
-					.containsAll(EnumSet.of(ConnectionState.SOURCE_MISSING, ConnectionState.SOURCE_ENDPOINT_MISSING,
-							ConnectionState.DEST_EXISTS, ConnectionState.DEST_ENPOINT_EXITS));
+			return connectionState.contains(ConnectionState.SOURCE_MISSING);
+		}
+
+		public boolean isMissingConnectionDestinationEndpoint() {
+			return connectionState.contains(ConnectionState.DEST_ENDPOINT_MISSING);
 		}
 
 		public boolean isMissingConnectionSourceEndpoint() {
-			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
-					ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS, ConnectionState.DEST_ENPOINT_EXITS));
+			return connectionState.contains(ConnectionState.SOURCE_ENDPOINT_MISSING);
 		}
 
 		public boolean isMissingSourceAndDestEndpoint() {
-			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
-					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS));
+			return connectionState.containsAll(
+					EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING, ConnectionState.DEST_ENDPOINT_MISSING));
 		}
 
 		public boolean isEmptyConnection() {
@@ -295,34 +309,6 @@ public final class ConnectionHelper {
 			return ""; //$NON-NLS-1$
 		}
 
-		private void handleMissingConnectionSource() {
-			final BlockFBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(getSourceFbName());
-			srcInterfaceList = sourceFB.getInterface();
-			importer.getFbNetwork().getNetworkElements().add(sourceFB);
-			sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
-			createErrorMarkerInterface(false);
-		}
-
-		private void handleMissingConnectionDestination() {
-			// check if there is already one
-			final BlockFBNetworkElement destinationFb = FordiacMarkerHelper.createErrorMarkerFB(getDestFbName());
-			destInterfaceList = destinationFb.getInterface();
-			importer.getFbNetwork().getNetworkElements().add(destinationFb);
-			destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
-			createErrorMarkerInterface(true);
-		}
-
-		private void handleMissingSrcAndDestEnpoint() {
-			final DataType pinType = determineConnectionType();
-
-			final ErrorMarkerInterface srcEndpoint = FordiacErrorMarkerInterfaceHelper
-					.createErrorMarkerInterface(pinType, getSourcePinName(), false, srcInterfaceList);
-			final ErrorMarkerInterface destEndpoint = FordiacErrorMarkerInterfaceHelper
-					.createErrorMarkerInterface(pinType, getDestinationPinName(), true, destInterfaceList);
-			connection.setSource(srcEndpoint);
-			connection.setDestination(destEndpoint);
-		}
-
 		private DataType determineConnectionType() {
 			if (connection instanceof EventConnection) {
 				return EventTypeLibrary.getInstance().getType(null);
@@ -339,35 +325,6 @@ public final class ConnectionHelper {
 				return IecTypes.GenericTypes.ANY;
 			}
 			return null;
-		}
-
-		private ErrorMarkerInterface createErrorMarkerInterface(final boolean isInput) {
-			final IInterfaceElement oppositeEndpoint = isInput ? getSourceEndpoint() : getDestinationEndpoint();
-
-			// we need a special treatment for FB's that lost their type
-			if (oppositeEndpoint == null) {
-				getConnectionState().add(ConnectionState.MISSING_TYPE);
-				return null;
-			}
-
-			DataType type = oppositeEndpoint.getType();
-			if (type == null) {
-				type = determineConnectionType();
-			}
-
-			final InterfaceList ieList = isInput ? destInterfaceList : srcInterfaceList;
-			final String pinName = isInput ? getDestinationPinName() : getSourcePinName();
-			final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
-					.createErrorMarkerInterface(type, pinName, isInput, ieList);
-
-			if (isInput) {
-				connection.setSource(oppositeEndpoint);
-				connection.setDestination(errorMarkerInterface);
-			} else {
-				connection.setSource(errorMarkerInterface);
-				connection.setDestination(oppositeEndpoint);
-			}
-			return errorMarkerInterface;
 		}
 
 		private IInterfaceElement getConnectionEndPoint(final String path, final boolean isInput) {
