@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,16 +8,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Bianca Wiesmayr
- *      - initial implementation and documentation
+ *   Bianca Wiesmayr - initial implementation and documentation
+ *   Alois Zoitl     - migrated mux and demux to new struct member access
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
@@ -34,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
@@ -136,8 +132,6 @@ public final class ConfigurableFBManagement {
 	static void loadFbConfiguration(final ConfigurableFB fb, final String attributeName, final String typeName) {
 		if (fb instanceof final ConfigurableMoveFB moveFB) {
 			loadFbMoveConfiguration(moveFB, attributeName, typeName);
-		} else if (fb instanceof final Demultiplexer demux) {
-			loadVisibleChildrenDemuxConfiguration(demux, attributeName, typeName);
 		}
 		if (fb instanceof final StructManipulator structFB) {
 			loadStructManipulatorConfiguration(structFB, attributeName, typeName);
@@ -165,14 +159,6 @@ public final class ConfigurableFBManagement {
 		final DataType dataType = fb.getTypeLibrary().getDataTypeLibrary().getType(typeName);
 		fb.setDataType(dataType);
 		fb.updateConfiguration();
-	}
-
-	private static void loadVisibleChildrenDemuxConfiguration(final Demultiplexer fb, final String attributeName,
-			final String visibleChildren) {
-		if (LibraryElementTags.DEMUX_VISIBLE_CHILDREN.equals(attributeName) && visibleChildren != null) {
-			fb.setIsConfigured(true);
-			updateConfiguredDemuxConfiguration(fb, visibleChildren);
-		}
 	}
 
 	static EList<Attribute> getConfigurableFbAttributes(final ConfigurableFB fb) {
@@ -210,12 +196,6 @@ public final class ConfigurableFBManagement {
 		return sb.toString();
 	}
 
-	static void setMemberVarName(final MemberVarDeclaration varDecl, final String name) {
-		// ensure that we are always only setting the last segment as name
-		final String[] subNames = ConfigurableFBManagement.splitMemberVarName(name);
-		varDecl.setName(subNames[subNames.length - 1]);
-	}
-
 	private static Event getEventWithPins(final StructManipulator muxer) {
 		if (muxer instanceof Multiplexer) {
 			return muxer.getInterface().getEventInputs().get(0);
@@ -246,69 +226,6 @@ public final class ConfigurableFBManagement {
 		});
 	}
 
-	private static MemberVarDeclaration copyVarAsMember(final VarDeclaration memberVar, final boolean isInput) {
-		final MemberVarDeclaration copy = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
-		copy.setName(memberVar.getName());
-		copy.setType(memberVar.getType());
-		copy.setValue(LibraryElementFactory.eINSTANCE.createValue());
-		copy.setIsInput(isInput);
-		copy.setArraySize(EcoreUtil.copy(memberVar.getArraySize()));
-		return copy;
-	}
-
-	private static void updateConfiguredDemuxConfiguration(final Demultiplexer demux, final String visibleChildren) {
-		if (visibleChildren == null || !demux.isIsConfigured()) {
-			demux.updateConfiguration();
-			return;
-		}
-		if (!(demux.getDataType() instanceof StructuredType) && !(demux.getDataType() instanceof ErrorDataType)) {
-			demux.updateConfiguration();
-			return;
-		}
-
-		// delete previous visible children, if any
-		demux.getMemberVars().clear();
-		getEventWithPins(demux).getWith().clear();
-
-		if (!visibleChildren.isBlank()) {
-			final String[] memberVarNames = visibleChildren.trim().split(","); //$NON-NLS-1$
-			for (final String memberVarName : memberVarNames) {
-				final String[] subnames = splitMemberVarName(memberVarName);
-				final MemberVarDeclaration pin = createConfiguredDemuxPin(demux.getDataType(), subnames);
-				if (pin != null) {
-					pin.getParentNames().addAll(Arrays.asList(subnames).subList(0, subnames.length - 1));
-					demux.getMemberVars().add(pin);
-				}
-			}
-			// create with constructs
-			demux.getMemberVars().forEach(varDecl -> {
-				final With with = LibraryElementFactory.eINSTANCE.createWith();
-				with.setVariables(varDecl);
-				getEventWithPins(demux).getWith().add(with);
-			});
-		}
-		// configure pin
-		getStructuredTypePin(demux).setType(demux.getDataType());
-	}
-
-	private static MemberVarDeclaration createConfiguredDemuxPin(final DataType dataType, final String[] subnames) {
-		if (dataType instanceof final StructuredType structType) {
-			final VarDeclaration varInStruct = findVarDeclarationInStruct(structType, subnames);
-			return varInStruct != null ? copyVarAsMember(varInStruct, false) : null;
-		}
-		if (dataType instanceof ErrorDataType) {
-			// Preserve the configured paths while a rename temporarily resolves the
-			// structured type to an error type.
-			final MemberVarDeclaration pin = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
-			pin.setName(subnames[subnames.length - 1]);
-			pin.setType(dataType);
-			pin.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			pin.setIsInput(false);
-			return pin;
-		}
-		return null;
-	}
-
 	static String[] splitMemberVarName(final String memberVarName) {
 		final String trimmedMemberVarName = memberVarName.trim();
 		String[] subnames = trimmedMemberVarName.split(MEMBER_VAR_SEPARATOR);
@@ -317,30 +234,6 @@ public final class ConfigurableFBManagement {
 			subnames = trimmedMemberVarName.split("\\."); //$NON-NLS-1$
 		}
 		return subnames;
-	}
-
-	private static VarDeclaration findVarDeclarationInStruct(final StructuredType struct, final String[] subnames) {
-		// we have to check each element separately
-		VarDeclaration found = null;
-		List<VarDeclaration> members = struct.getMemberVariables();
-		for (final String subname : subnames) { //
-			final List<VarDeclaration> findings = members.stream().filter(memVar -> memVar.getName().equals(subname))
-					.toList();
-			if (findings.isEmpty()) {
-				// we failed to go along the whole path
-				found = null;
-				break;
-			}
-			found = findings.get(0);
-			if (found.getType() instanceof final StructuredType structType) {
-				members = structType.getMemberVariables();
-			} else {
-				// in case of previously deleted vars, we would otherwise look at the wrong
-				// hierarchy level
-				members = Collections.emptyList();
-			}
-		}
-		return found;
 	}
 
 	private ConfigurableFBManagement() {

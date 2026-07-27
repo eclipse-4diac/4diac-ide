@@ -18,7 +18,6 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -91,15 +90,9 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 			}
 
 		}
-		if (isDemuxConfiguration()) {
-			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
-		} else if (getNewElement() instanceof final ConfigurableFB confFB) {
+		if (getNewElement() instanceof final ConfigurableFB confFB) {
 			confFB.updateConfiguration();
 		}
-	}
-
-	private boolean isDemuxConfiguration() {
-		return newElement instanceof Demultiplexer && newVisibleChildren != null;
 	}
 
 	public StructManipulator getNewMux() {
