@@ -18,9 +18,12 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
+import org.eclipse.swt.graphics.Color;
 
 public class QueryConstraintNodeFigure extends QueryNodeFigure {
 
+	private static final Color NEGATED_COLOR_HEADER_BG = QueryUIPreferenceConstants.getNegatedHeaderBackgroundColor();
 	private final FigureCanvas canvas;
 
 	public QueryConstraintNodeFigure(final EObject element, final FigureCanvas canvas) {
@@ -55,5 +58,11 @@ public class QueryConstraintNodeFigure extends QueryNodeFigure {
 		filter.addFilterChangeListener(data -> QueryModelHelper.writeFieldConstraint(fc, data));
 		row.add(filter);
 		return row;
+	}
+
+	@Override
+	public Color getBackgroundColor() {
+		return QueryModelHelper.isNegatedConstraint(getElement()) ? NEGATED_COLOR_HEADER_BG
+				: super.getBackgroundColor();
 	}
 }

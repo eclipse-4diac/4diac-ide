@@ -16,10 +16,11 @@ import java.util.regex.Pattern;
 
 public class FilterRecord {
 
-	public static final FilterRecord INACTIVE = new FilterRecord(false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE,
-			MatcherConfig.INACTIVE, null, null);
+	public static final FilterRecord INACTIVE = new FilterRecord(false, false, MatcherConfig.INACTIVE,
+			MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, null, null);
 
 	private final boolean selected;
+	private final boolean negate;
 	private final MatcherConfig nameConfig;
 	private final MatcherConfig typeConfig;
 	private final MatcherConfig commentConfig;
@@ -29,9 +30,11 @@ public class FilterRecord {
 	private final FilterRecord orConstraint;
 	private final FilterRecord andConstraint;
 
-	public FilterRecord(final boolean selected, final MatcherConfig nameConfig, final MatcherConfig typeConfig,
-			final MatcherConfig commentConfig, final FilterRecord orConstraint, final FilterRecord andConstraint) {
+	public FilterRecord(final boolean selected, final boolean negate, final MatcherConfig nameConfig,
+			final MatcherConfig typeConfig, final MatcherConfig commentConfig, final FilterRecord orConstraint,
+			final FilterRecord andConstraint) {
 		this.selected = selected;
+		this.negate = negate;
 		this.nameConfig = nameConfig;
 		this.typeConfig = typeConfig;
 		this.commentConfig = commentConfig;
@@ -48,7 +51,7 @@ public class FilterRecord {
 	}
 
 	public boolean matches(final String name, final String type, final String comment) {
-		return (matchesFields(name, type, comment)
+		return (matchesFields(name, type, comment) != negate
 				&& (andConstraint == null || andConstraint.matches(name, type, comment)))
 				|| (orConstraint != null && orConstraint.matches(name, type, comment));
 

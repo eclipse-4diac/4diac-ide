@@ -246,7 +246,7 @@ public class QuerySearchAdapter {
 		if (constraint == null) {
 			return FilterRecord.INACTIVE;
 		}
-		return new FilterRecord(true, //
+		return new FilterRecord(true, QueryModelHelper.isNegatedConstraint(constraint),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_NAME, placeholders),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_TYPE, placeholders),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_COMMENT, placeholders),

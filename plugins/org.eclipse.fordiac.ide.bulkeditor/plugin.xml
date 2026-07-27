@@ -121,6 +121,13 @@
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.negatedHeaderBackgroundColor"
+			label="Query viewer node negated header background color"
+			value="200, 40, 40"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.bulkeditor.query.headerForegroundColor"
 			label="Query viewer node header foreground color"
 			value="255, 255, 255"
