@@ -20,7 +20,7 @@ public class SimpleFBTypeFilter extends FBTypePropertiesFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		return getFBTypeFromSelectedElement(toTest) instanceof SimpleFBType;
+		return getFBTypeFromSelected(toTest) != null;
 	}
 
 	public static SimpleFBType getFBTypeFromSelected(final Object selected) {
