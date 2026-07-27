@@ -39,7 +39,7 @@ public class DeleteSimpleECStateCommand extends Command {
 
 	@Override
 	public void execute() {
-		redo();
+		removeState();
 	}
 
 	@Override
@@ -54,6 +54,10 @@ public class DeleteSimpleECStateCommand extends Command {
 
 	@Override
 	public void redo() {
+		removeState();
+	}
+
+	private void removeState() {
 		simpleFBType.getSimpleECStates().remove(state.get());
 	}
 }

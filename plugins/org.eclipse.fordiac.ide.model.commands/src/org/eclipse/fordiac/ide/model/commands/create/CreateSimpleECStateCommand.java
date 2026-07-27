@@ -41,7 +41,7 @@ public class CreateSimpleECStateCommand extends Command {
 		state = LibraryElementFactory.eINSTANCE.createSimpleECState();
 		state.setInputEvent(inputEvent);
 		state.setName(inputEvent.getName());
-		redo();
+		addState();
 	}
 
 	@Override
@@ -51,6 +51,10 @@ public class CreateSimpleECStateCommand extends Command {
 
 	@Override
 	public void redo() {
+		addState();
+	}
+
+	private void addState() {
 		simpleFBType.getSimpleECStates().add(state);
 	}
 }
