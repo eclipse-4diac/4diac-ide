@@ -86,28 +86,16 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//SearchTarget"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//Type">
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//SearchTarget">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BasicType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CompositeType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SubappType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StructType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubappType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeType" eSuperTypes="#//Type"/>
   <eClassifiers xsi:type="ecore:EClass" name="Instance" abstract="true" eSuperTypes="#//SearchTarget">
     <eStructuralFeatures xsi:type="ecore:EReference" name="applicationOccurrence"
         eType="#//ApplicationOccurrence" containment="true"/>
@@ -115,25 +103,14 @@
         eType="#//CompositeFBOccurrence" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="typedSubappOccurrence"
         eType="#//TypedSubappOccurrence" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleFB" eSuperTypes="#//Instance">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BasicFB" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CompositeFB" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFB" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TypedSubapp" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="UntypedSubapp" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedSubapp" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UntypedSubapp" eSuperTypes="#//Instance"/>
   <eClassifiers xsi:type="ecore:EClass" name="PIN" eSuperTypes="#//SearchTarget"/>
   <eClassifiers xsi:type="ecore:EClass" name="PinTarget" eSuperTypes="#//TargetOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"

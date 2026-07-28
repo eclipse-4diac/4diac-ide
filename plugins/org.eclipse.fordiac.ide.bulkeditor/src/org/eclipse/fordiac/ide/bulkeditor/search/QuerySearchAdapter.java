@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.PinConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.TypeConfig;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
 
@@ -116,12 +115,12 @@ public class QuerySearchAdapter {
 			final Map<String, String> placeholders) {
 		final FilterRecord constraint = readFilterRecord(targetOption, QueryModelHelper.REF_CONSTRAINT, placeholders);
 
-		return searchCandidate -> {
-			if (!isValidCandidate(searchCandidate, mode)) {
-				return false;
-			}
-			final ITypedElement typed = (ITypedElement) searchCandidate;
-			return constraint.matches(typed.getName(), typed.getTypeName(), typed.getComment());
+		return searchCandidate -> switch (searchCandidate) {
+		case final Attribute attribute when mode == BulkEditorMode.ADVANCED_ATTRIBUTE -> constraint
+				.matches(attribute.getName(), attribute.getTypeName(), attribute.getComment(), attribute.getValue());
+		case final VarDeclaration varDecl when mode == BulkEditorMode.VARIABLE -> constraint.matches(varDecl.getName(),
+				varDecl.getTypeName(), varDecl.getComment(), varDecl.getValueString());
+		case null, default -> false;
 		};
 	}
 
@@ -137,11 +136,6 @@ public class QuerySearchAdapter {
 		return searchCandidate -> (searchCandidate instanceof final Attribute attribute
 				&& attribute.getAttributeDeclaration() != null
 				&& declName.equals(PackageNameHelper.getFullTypeName(attribute.getAttributeDeclaration())));
-	}
-
-	private static boolean isValidCandidate(final Object candidate, final BulkEditorMode mode) {
-		return (candidate instanceof VarDeclaration && mode == BulkEditorMode.VARIABLE)
-				|| (candidate instanceof Attribute && mode == BulkEditorMode.ADVANCED_ATTRIBUTE);
 	}
 
 	public static PlaceConfig buildPlaceConfig(final EObject queryRoot) {
@@ -247,6 +241,7 @@ public class QuerySearchAdapter {
 				readConstraintField(constraint, QueryModelHelper.FEATURE_NAME, placeholders),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_TYPE, placeholders),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_COMMENT, placeholders),
+				readConstraintField(constraint, QueryModelHelper.FEATURE_VALUE, placeholders),
 				readSubConstraints(constraint, QueryModelHelper.REF_OR_CONSTRAINTS, placeholders),
 				readSubConstraints(constraint, QueryModelHelper.REF_AND_CONSTRAINTS, placeholders));
 	}
