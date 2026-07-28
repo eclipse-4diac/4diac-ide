@@ -44,6 +44,10 @@ public final class QueryModelHelper {
 	public static final String ATTRIBUTE_DECLARATION = "AttributeDeclaration"; //$NON-NLS-1$
 	public static final String ATTRIBUTE = "Attribute"; //$NON-NLS-1$
 	public static final String PIN_TARGET = "PinTarget"; //$NON-NLS-1$
+	public static final String TYPE = "Type"; //$NON-NLS-1$
+	public static final String OCCURRENCE = "Occurrence"; //$NON-NLS-1$
+	public static final String PIN = "PIN"; //$NON-NLS-1$
+	public static final String UNTYPED_SUBAPP = "UntypedSubapp"; //$NON-NLS-1$
 
 	public static final String FEATURE_NEGATE = "negate"; //$NON-NLS-1$
 	public static final String REF_TARGET = "target"; //$NON-NLS-1$
@@ -120,6 +124,50 @@ public final class QueryModelHelper {
 
 	public static boolean isInstance(final EObject eObj) {
 		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
+	}
+
+	public static boolean isOccurrence(final EObject eObj) {
+		return eObj != null
+				&& eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> OCCURRENCE.equals(st.getName()));
+	}
+
+	public static boolean isType(final EObject eObj) {
+		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> TYPE.equals(st.getName()));
+	}
+
+	public static boolean isFieldAllowedForConstraint(final EObject constraint, final String fieldRefName) {
+		if (FEATURE_NAME.equals(fieldRefName) || FEATURE_COMMENT.equals(fieldRefName)) {
+			return true;
+		}
+
+		final EObject owner = findConstraintOwner(constraint);
+		if (owner == null) {
+			return true;
+		}
+
+		if (isOfType(owner, PIN)) {
+			return true;
+		}
+		if (isType(owner) || isOccurrence(owner) || isOfType(owner, UNTYPED_SUBAPP)) {
+			// Types, UntypedSubapp, Occurrences: no type and value
+			return false;
+		}
+		if (isInstance(owner)) {
+			// Instances: no value
+			return !FEATURE_VALUE.equals(fieldRefName);
+		}
+		return true;
+	}
+
+	private static EObject findConstraintOwner(final EObject obj) {
+		EObject current = obj;
+		while (current != null) {
+			if (!isConstraint(current) && !isOfType(current, FIELD_CONSTRAINT)) {
+				return current;
+			}
+			current = current.eContainer();
+		}
+		return null;
 	}
 
 	public static boolean isNegatedConstraint(final EObject eObj) {

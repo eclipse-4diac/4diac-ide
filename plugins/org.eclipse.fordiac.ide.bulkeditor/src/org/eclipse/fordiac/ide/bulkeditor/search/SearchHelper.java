@@ -37,13 +37,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.ISearchChildrenProvider;
@@ -135,46 +135,47 @@ public class SearchHelper {
 		}
 
 		private Stream<? extends TypeEntry> getSimpleTypes(final PlaceConfig cfg) {
-			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof SimpleFBType).filter(
-					entry -> cfg.simpleType().matches(entry.getFullTypeName(), entry.getTypeName(), entry.getComment())
+			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof SimpleFBType)
+					.filter(entry -> cfg.simpleType().matches(entry.getFullTypeName(), entry.getComment())
 							&& cfg.simpleType().matchesAttribute(entry.getType()));
 		}
 
 		private Stream<? extends TypeEntry> getBasicTypes(final PlaceConfig cfg) {
-			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof BasicFBType).filter(
-					entry -> cfg.basicType().matches(entry.getFullTypeName(), entry.getTypeName(), entry.getComment())
+			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof BasicFBType)
+					.filter(entry -> cfg.basicType().matches(entry.getFullTypeName(), entry.getComment())
 							&& cfg.basicType().matchesAttribute(entry.getType()));
 		}
 
 		private Stream<? extends TypeEntry> getCompositeTypes(final PlaceConfig cfg) {
 			return getTypelib().getFbTypes()
 					.filter(entry -> entry.getType() instanceof CompositeFBType
-							&& !(entry.getType() instanceof SubAppType) && cfg.compositeType()
-									.matches(entry.getFullTypeName(), entry.getTypeName(), entry.getComment())
+							&& !(entry.getType() instanceof SubAppType)
+							&& cfg.compositeType().matches(entry.getFullTypeName(), entry.getComment())
 							&& cfg.compositeType().matchesAttribute(entry.getType()));
 		}
 
 		private Stream<? extends TypeEntry> getServiceInterfaceTypes(final PlaceConfig cfg) {
 			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof ServiceInterfaceFBType)
-					.filter(entry -> cfg.serviceInterfaceType().matches(entry.getFullTypeName(), entry.getTypeName(),
-							entry.getComment()) && cfg.serviceInterfaceType().matchesAttribute(entry.getType()));
+					.filter(entry -> cfg.serviceInterfaceType().matches(entry.getFullTypeName(), entry.getComment())
+							&& cfg.serviceInterfaceType().matchesAttribute(entry.getType()));
 		}
 
 		private Stream<? extends TypeEntry> getSubappTypes(final PlaceConfig cfg) {
-			return getTypelib().getSubAppTypes().filter(
-					entry -> cfg.subappType().matches(entry.getFullTypeName(), entry.getTypeName(), entry.getComment())
+			return getTypelib().getSubAppTypes()
+					.filter(entry -> cfg.subappType().matches(entry.getFullTypeName(), entry.getComment())
 							&& cfg.subappType().matchesAttribute(entry.getType()));
 		}
 
 		private Stream<? extends TypeEntry> getStructTypes(final PlaceConfig cfg) {
-			return getTypelib().getDataTypeLibrary().getDerivedDataTypes().filter(
-					entry -> cfg.structType().matches(entry.getFullTypeName(), entry.getTypeName(), entry.getComment())
+			return getTypelib().getDataTypeLibrary().getDerivedDataTypes()
+					.filter(entry -> cfg.structType().matches(entry.getFullTypeName(), entry.getComment())
 							&& cfg.structType().matchesAttribute(entry.getType()));
 		}
 
 		private Stream<? extends TypeEntry> getAttributeTypes(final PlaceConfig cfg) {
-			return getTypelib().getAttributeTypes().filter(entry -> cfg.attributeType().matches(entry.getFullTypeName(),
-					entry.getTypeName(), entry.getComment()) && cfg.attributeType().matchesAttribute(entry.getType()));
+			return getTypelib().getAttributeTypes()
+					.filter(entry -> cfg.attributeType().matches(entry.getFullTypeName(), entry.getComment())
+							&& cfg.attributeType().matchesAttribute(entry.getType()));
 		}
 	}
 
@@ -252,9 +253,7 @@ public class SearchHelper {
 			Stream<? extends EObject> children = elem.getAttributes().stream();
 
 			final PinConfig pinCfg = instanceConfig.pin();
-			if (pinCfg.active()) { // should only be there for attribute
-				children = Stream.concat(children, getFilteredInterfaceChildren(elem.getInterface(), pinCfg));
-			}
+			children = Stream.concat(children, getFilteredInterfaceChildren(elem.getInterface(), pinCfg));
 
 			return children;
 		}
@@ -286,24 +285,17 @@ public class SearchHelper {
 
 		private static Stream<? extends EObject> getFilteredInterfaceChildren(final InterfaceList iface,
 				final PinConfig pinCfg) {
-			Stream<? extends EObject> children = SearchChildrenProviderHelper.getInterfaceListChildren(iface);
-			// Apply the PIN's constraint to filter which pins to enter
-			// constraint
-			children = children.filter(child -> {
-				if (child instanceof final ITypedElement typed) {
-					return pinCfg.includePin(typed.getName(), typed.getTypeName(), typed.getComment());
-				}
-				return true;
-			});
-			// attributeConstraint
-			children = children.filter(child -> {
-				if (child instanceof final ConfigurableObject confObject) {
-					return pinCfg.matchesAttribute(confObject);
-				}
-				return true;
-			});
+			if (!pinCfg.active()) {
+				return Stream.empty();
+			}
 
-			return children;
+			return SearchChildrenProviderHelper.getInterfaceListChildren(iface).filter(pin -> {
+				if (pin instanceof final VarDeclaration varDecl) {
+					return pinCfg.includePin(varDecl.getName(), varDecl.getTypeName(), varDecl.getComment(),
+							varDecl.getValueString());
+				}
+				return pinCfg.includePin(pin.getName(), pin.getTypeName(), pin.getComment(), null);
+			}).filter(pinCfg::matchesAttribute);
 		}
 
 		private Stream<? extends EObject> getFBTypeChildren(final FBType fbType) {
@@ -311,9 +303,8 @@ public class SearchHelper {
 
 			if (isTypeSelected(fbType)) {
 				final PinConfig pinCfg = getTypePinConfig(fbType);
-				if (pinCfg.active()) {
-					children = getFilteredInterfaceChildren(fbType.getInterfaceList(), pinCfg);
-				}
+
+				children = getFilteredInterfaceChildren(fbType.getInterfaceList(), pinCfg);
 				children = Stream.concat(children, fbType.getAttributes().stream());
 				if (fbType instanceof final BaseFBType baseFBType) {
 					children = Stream.concat(children, baseFBType.getInternalVars().stream());
@@ -367,31 +358,16 @@ public class SearchHelper {
 		private Stream<? extends EObject> getAttributeDeclChildren(final AttributeDeclaration attrdecl) {
 			// Attributes on the declaration — always included
 			Stream<? extends EObject> children = attrdecl.getAttributes().stream();
-
-			// Type children (struct members, base type) — gated by AttributeType's PIN
-			// config
 			final PinConfig pinCfg = cfg.attributeType().pin();
-			if (pinCfg.active()) {
-				Stream<? extends EObject> typeChildren = Stream.empty();
-				if (attrdecl.getType() instanceof final StructuredType structType) {
-					typeChildren = SearchChildrenProviderHelper.getStructChildren(structType);
-				} else if (attrdecl.getType() instanceof final DirectlyDerivedType directType) {
-					typeChildren = Stream.of(directType.getBaseType());
-				}
-				typeChildren = typeChildren.filter(child -> {
-					if (child instanceof final ITypedElement typed) {
-						return pinCfg.includePin(typed.getName(), typed.getTypeName(), typed.getComment());
-					}
-					return true;
-				});
-				typeChildren = typeChildren.filter(child -> {
-					if (child instanceof final ConfigurableObject confObject) {
-						return pinCfg.matchesAttribute(confObject);
-					}
-					return true;
-				});
-
+			if (attrdecl.getType() instanceof final StructuredType structType && pinCfg.active()) {
+				// members of attributeType Struct
+				final var typeChildren = SearchChildrenProviderHelper
+						.getStructChildren(structType).filter(member -> pinCfg.includePin(member.getName(),
+								member.getTypeName(), member.getComment(), member.getValueString()))
+						.filter(pinCfg::matchesAttribute);
 				children = Stream.concat(children, typeChildren);
+			} else if (attrdecl.getType() instanceof DirectlyDerivedType) {
+				// TODO: directly derived types (Add special constraint for AttributeType)
 			}
 
 			return children;
@@ -404,20 +380,11 @@ public class SearchHelper {
 			// Member variables — gated and filtered by StructType's PIN config
 			final PinConfig pinCfg = cfg.structType().pin();
 			if (pinCfg.active()) {
-				Stream<? extends EObject> members = SearchChildrenProviderHelper.getStructChildren(structType);
-				members = members.filter(child -> {
-					if (child instanceof final ITypedElement typed) {
-						return pinCfg.includePin(typed.getName(), typed.getTypeName(), typed.getComment());
-					}
-					return true;
-				});
-				members = members.filter(child -> {
-					if (child instanceof final ConfigurableObject confObject) {
-						return pinCfg.matchesAttribute(confObject);
-					}
-					return true;
-				});
-				children = Stream.concat(children, members);
+				final var typeChildren = SearchChildrenProviderHelper
+						.getStructChildren(structType).filter(member -> pinCfg.includePin(member.getName(),
+								member.getTypeName(), member.getComment(), member.getValueString()))
+						.filter(pinCfg::matchesAttribute);
+				children = Stream.concat(children, typeChildren);
 			}
 
 			return children;
@@ -446,14 +413,11 @@ public class SearchHelper {
 			final OccurrenceContext ctx = resolveOccurrenceContext(untypedSubapp);
 			Stream<? extends EObject> stream = Stream.empty();
 
-			if (ctx != null
-					&& cfg.untypedSubapp().matchesOccurrence(ctx.kind(), ctx.context()) && cfg.untypedSubapp()
-							.matches(untypedSubapp.getName(), untypedSubapp.getTypeName(), untypedSubapp.getComment())
+			if (ctx != null && cfg.untypedSubapp().matchesOccurrence(ctx.kind(), ctx.context())
+					&& cfg.untypedSubapp().matches(untypedSubapp.getName(), null, untypedSubapp.getComment())
 					&& cfg.untypedSubapp().matchesAttribute(untypedSubapp)) {
 				final PinConfig pinCfg = resolveInstancePinConfig(untypedSubapp).pin();
-				if (pinCfg.active()) {
-					stream = Stream.concat(stream, getFilteredInterfaceChildren(untypedSubapp.getInterface(), pinCfg));
-				}
+				stream = Stream.concat(stream, getFilteredInterfaceChildren(untypedSubapp.getInterface(), pinCfg));
 				stream = Stream.concat(stream, untypedSubapp.getAttributes().stream());
 			}
 			if (ctx != null) {
