@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -97,6 +99,14 @@ public interface SimpleECState extends INamedElement, BaseECState<SimpleECAction
 	 * @generated
 	 */
 	void setSimpleFBType(SimpleFBType value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateActionsNonEmpty(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 	/**
 	 * <!-- begin-user-doc -->
