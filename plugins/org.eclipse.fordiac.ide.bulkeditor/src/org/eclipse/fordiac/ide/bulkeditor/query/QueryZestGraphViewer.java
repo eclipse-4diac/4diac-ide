@@ -185,13 +185,21 @@ public class QueryZestGraphViewer {
 		final Runnable afterChange = this::refresh;
 		QueryModelHelper.populateNegateToggle(menu, selected, this::refresh);
 		QueryModelHelper.populateAddChildMenuItems(menu, selected, editingDomain, queryPackage,
-				this::isReferenceAddable, afterChange);
+				child -> isReferenceAddable(child) && isFieldReferenceAllowed(selected, child), afterChange);
 		QueryModelHelper.populateFieldConstraintRemoval(menu, selected, editingDomain, afterChange);
 		QueryModelHelper.populateRemoveMenuItem(menu, selected, editingDomain, afterChange);
 	}
 
 	private boolean isReferenceAddable(final EReference ref) {
 		return !(QueryModelHelper.REF_PIN.equals(ref.getName()) && QueryModelHelper.isPinTargetQuery(rootElement));
+	}
+
+	private static boolean isFieldReferenceAllowed(final EObject constraint, final EReference child) {
+		if (!QueryModelHelper.isConstraint(constraint)
+				|| !child.getEReferenceType().getName().equals(QueryModelHelper.FIELD_CONSTRAINT)) {
+			return true;
+		}
+		return QueryModelHelper.isFieldAllowedForConstraint(constraint, child.getName());
 	}
 
 	@SuppressWarnings("unused")
