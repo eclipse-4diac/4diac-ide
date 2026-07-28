@@ -44,6 +44,7 @@ public final class Messages extends NLS {
 	public static String ConnectionAnnotations_DuplicateConnection;
 
 	public static String BaseFBTypeAnnotations_UnusedSimpleFBOutputEvent;
+	public static String SimpleECStateAnnotations_EmptyActions;
 
 	public static String ConnectionAnnotations_GenericEndpoints;
 	public static String ConnectionAnnotations_SourceElementMissing;
