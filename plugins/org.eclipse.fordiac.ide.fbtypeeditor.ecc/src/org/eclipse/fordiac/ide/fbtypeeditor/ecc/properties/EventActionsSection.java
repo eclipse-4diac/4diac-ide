@@ -63,10 +63,20 @@ public class EventActionsSection extends AbstractSection {
 	@Override
 	protected void performRefresh() {
 		actionGroup.refresh();
+		refreshEventInputs();
 	}
 
 	@Override
 	protected void setInputInit() {
+		refreshEventInputs();
+	}
+
+	@Override
+	protected Object getInputType(final Object input) {
+		return SimpleFBTypeFilter.getFBTypeFromSelected(input);
+	}
+
+	private void refreshEventInputs() {
 		eventInputs.removeAll();
 
 		for (final Event event : getType().getInterfaceList().getEventInputs()) {
@@ -74,11 +84,6 @@ public class EventActionsSection extends AbstractSection {
 			item.setText(event.getName());
 		}
 		selectEventInput(eventInputs.getSelectionIndex());
-	}
-
-	@Override
-	protected Object getInputType(final Object input) {
-		return SimpleFBTypeFilter.getFBTypeFromSelected(input);
 	}
 
 	private void selectEventInput(final int index) {
