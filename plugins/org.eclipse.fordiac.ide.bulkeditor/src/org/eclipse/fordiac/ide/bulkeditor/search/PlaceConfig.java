@@ -64,13 +64,14 @@ public record PlaceConfig( //@formatter:off
 		public static final TypeConfig INACTIVE = new TypeConfig(false, FilterRecord.INACTIVE, FilterRecord.INACTIVE,
 				PinConfig.INACTIVE);
 
-		public boolean matches(final String name, final String type, final String comment) {
-			return !constraint.isSelected() || constraint.matches(name, type, comment);
+		public boolean matches(final String name, final String comment) {
+			return !constraint.isSelected() || constraint.matches(name, null, comment, null);
 		}
 
 		public boolean matchesAttribute(final ConfigurableObject confObj) {
-			return !attributeConstraint.isSelected() || confObj.getAttributes().stream()
-					.anyMatch(att -> attributeConstraint.matches(att.getName(), att.getTypeName(), att.getComment()));
+			return !attributeConstraint.isSelected()
+					|| confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
+							att.getTypeName(), att.getComment(), att.getValue()));
 		}
 	}
 
@@ -82,7 +83,7 @@ public record PlaceConfig( //@formatter:off
 			if (!selected) {
 				return false;
 			}
-			return !constraint.isSelected() || constraint.matches(context.getName(), "", context.getComment());
+			return !constraint.isSelected() || constraint.matches(context.getName(), null, context.getComment(), null);
 		}
 
 		public boolean matchesContextAttribute(final INamedElement context) {
@@ -90,8 +91,8 @@ public record PlaceConfig( //@formatter:off
 				return true;
 			}
 			if (context instanceof final ConfigurableObject confObj) {
-				return confObj.getAttributes().stream().anyMatch(
-						att -> attributeConstraint.matches(att.getName(), att.getTypeName(), att.getComment()));
+				return confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
+						att.getTypeName(), att.getComment(), att.getValue()));
 			}
 			return true;
 		}
@@ -101,8 +102,8 @@ public record PlaceConfig( //@formatter:off
 			OccurrenceConfig application, OccurrenceConfig compositeFBOcc, OccurrenceConfig typedSubappOcc,
 			PinConfig pin) {
 		public static final InstanceConfig INACTIVE = new InstanceConfig(false, FilterRecord.INACTIVE,
-				FilterRecord.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE,
-				OccurrenceConfig.INACTIVE, PinConfig.INACTIVE);
+				FilterRecord.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE,
+				PinConfig.INACTIVE);
 
 		private boolean noOccurrenceRestriction() {
 			return !application.selected() && !compositeFBOcc.selected() && !typedSubappOcc.selected();
@@ -136,12 +137,13 @@ public record PlaceConfig( //@formatter:off
 		}
 
 		public boolean matches(final String name, final String type, final String comment) {
-			return !constraint.isSelected() || constraint.matches(name, type, comment);
+			return !constraint.isSelected() || constraint.matches(name, type, comment, null);
 		}
 
 		public boolean matchesAttribute(final ConfigurableObject confObj) {
-			return !attributeConstraint.isSelected() || confObj.getAttributes().stream()
-					.anyMatch(att -> attributeConstraint.matches(att.getName(), att.getTypeName(), att.getComment()));
+			return !attributeConstraint.isSelected()
+					|| confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
+							att.getTypeName(), att.getComment(), att.getValue()));
 		}
 	}
 
@@ -150,13 +152,14 @@ public record PlaceConfig( //@formatter:off
 		public static final PinConfig ACTIVE_UNFILTERED = new PinConfig(true, FilterRecord.INACTIVE,
 				FilterRecord.INACTIVE);
 
-		public boolean includePin(final String name, final String type, final String comment) {
-			return !constraint.isSelected() || constraint.matches(name, type, comment);
+		public boolean includePin(final String name, final String type, final String comment, final String value) {
+			return !constraint.isSelected() || constraint.matches(name, type, comment, value);
 		}
 
 		public boolean matchesAttribute(final ConfigurableObject confObj) {
-			return !attributeConstraint.isSelected() || confObj.getAttributes().stream()
-					.anyMatch(att -> attributeConstraint.matches(att.getName(), att.getTypeName(), att.getComment()));
+			return !attributeConstraint.isSelected()
+					|| confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
+							att.getTypeName(), att.getComment(), att.getValue()));
 		}
 	}
 }
