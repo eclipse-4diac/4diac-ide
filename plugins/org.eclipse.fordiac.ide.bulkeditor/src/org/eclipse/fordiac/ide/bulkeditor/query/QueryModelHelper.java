@@ -283,12 +283,20 @@ public final class QueryModelHelper {
 		// the reference
 		final boolean useClassName = type.getName().equals(TARGET_OPTION);
 		for (final EClass concrete : getInstantiableClasses(queryPackage, type)) {
-			final String name = useClassName ? concrete.getName() : ref.getName();
+			final EClass actualType = resolveChildType(selected, concrete);
+			final String name = useClassName ? actualType.getName() : ref.getName();
 			addMenuItem(menu, NLS.bind(Messages.AddChild, name), () -> {
-				addChild(editingDomain, queryPackage, selected, ref, concrete);
+				addChild(editingDomain, queryPackage, selected, ref, actualType);
 				afterAdd.run();
 			});
 		}
+	}
+
+	private static EClass resolveChildType(final EObject parent, final EClass childType) {
+		if (isOfType(parent, ATTRIBUTE_CONSTRAINT) && CONSTRAINT.equals(childType.getName())) {
+			return parent.eClass();
+		}
+		return childType;
 	}
 
 	public static void populateRemoveMenuItem(final Menu menu, final EObject selected,
