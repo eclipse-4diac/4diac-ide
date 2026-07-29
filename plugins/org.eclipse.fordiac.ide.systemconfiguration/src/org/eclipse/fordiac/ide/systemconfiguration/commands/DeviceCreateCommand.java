@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2008  Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                                Johannes Keppler University Linz, Aimirim STI
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,7 +11,10 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger, Kiril Dorofeev
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo
+ *   Alois Zoitl 
+ *     - removed editor check from canUndo
+ *   Pedro Ricardo
+ *     - set default profile as the first supported
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
@@ -20,12 +23,15 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.helpers.DeviceProfileHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -83,14 +89,29 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private void setDeviceProfile() {
-		String profile;
-		if ((null != device.getType().getProfile()) && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
-			profile = device.getType().getProfile();
-		} else {
-			profile = Platform.getPreferencesService().getString(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
-					UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "", null); //$NON-NLS-1$
+		final DeviceType type = device.getType();
+		String profile = getDefaultSupportedProfile(type);
+		if (profile == null) {
+			if ((type.getProfile() != null) && !type.getProfile().isEmpty()) {
+				profile = type.getProfile();
+			} else {
+				profile = Platform.getPreferencesService().getString(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+						UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "", null); //$NON-NLS-1$
+			}
 		}
 		device.setProfile(profile);
+	}
+
+	/* Return the first of 'SupportedProfiles' attribute if declared,
+     * else returns null to enable fallback to previous behaviour. */
+	private static String getDefaultSupportedProfile(final DeviceType type) {
+		final List<String> supportedProfiles = DeviceProfileHelper.getSupportedProfiles(type);
+		if (supportedProfiles.isEmpty()) {
+			return null;
+		}
+		final List<String> availableProfiles = DeviceManagementInteractorFactory.INSTANCE.getAvailableProfileNames();
+		return supportedProfiles.stream().filter(availableProfiles::contains).findFirst()
+				.orElseGet(() -> supportedProfiles.get(0));
 	}
 
 	protected void createDevice() {
