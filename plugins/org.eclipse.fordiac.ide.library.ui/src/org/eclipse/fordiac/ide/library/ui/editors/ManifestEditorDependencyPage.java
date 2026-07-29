@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,20 +51,22 @@ import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -252,7 +255,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 		symbolicNameColumn.setLabelProvider(createLabelProvider(Required::getSymbolicName, cell -> {
 			if (cell.getElement() instanceof LibContainer(final String name, final List<Required> children)
 					&& !children.isEmpty()) {
-				cell.setText(name);
+				cell.setText(MessageFormat.format("{0} ({1})", name, Integer.valueOf(children.size()))); //$NON-NLS-1$
 			}
 		}, false));
 
@@ -264,6 +267,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 			@Override
 			protected void setValue(final Object element, final Object value) {
 				if (element instanceof final Required required) {
+
 					final String version = value.toString();
 					if (version.equals(required.getVersion())) {
 						return;
@@ -285,7 +289,21 @@ public class ManifestEditorDependencyPage extends FormPage {
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				return new TextCellEditor(treeViewer.getTree());
+				return new DialogCellEditor(treeViewer.getTree()) {
+
+					@Override
+					protected Object openDialogBox(final Control cellEditorWindow) {
+						if (element instanceof final Required req) {
+							final VersionRangeSelectionDialog dialog = new VersionRangeSelectionDialog(req.getVersion(),
+									cellEditorWindow.getShell());
+							dialog.setBlockOnOpen(true);
+							if (dialog.open() == Window.OK) {
+								return dialog.getVersionRange();
+							}
+						}
+						return null;
+					}
+				};
 			}
 
 			@Override
