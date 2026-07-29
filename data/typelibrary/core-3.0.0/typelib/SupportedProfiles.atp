@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AttributeDeclaration Name="SupportedProfiles" Comment="Comma-separated list of communication profiles a device type supports (first entry is the default)">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Contributors to the Eclipse Foundation&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Pedro Ricardo" Date="2026-07-17" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::core">
+	</CompilerInfo>
+	<DirectlyDerivedType BaseType="STRING" InitialValue="''" Comment="Comma-separated list of supported communication profiles (first entry is the default)"/>
+	<Attribute Name="TARGET" Value="(AutomationSystem:=FALSE,Application:=FALSE,GlobalConstant:=FALSE,Connection:=FALSE,Comment:=FALSE,Group:=FALSE,Link:=FALSE,ServiceSequence:=FALSE,FBType:=FALSE,SubAppType:=FALSE,DeviceType:=TRUE,ResourceType:=FALSE,SegmentType:=FALSE,DataType:=FALSE,AttributeDeclaration:=FALSE,FB:=FALSE,TypedSubApp:=FALSE,UntypedSubApp:=FALSE,Device:=FALSE,Resource:=FALSE,Segment:=FALSE,DataTypeMember:=FALSE,InstanceEvent:=FALSE,InstanceVarDecl:=FALSE,InstanceAdapter:=FALSE,TypeEvent:=FALSE,TypeVarDecl:=FALSE,TypeAdapter:=FALSE,Untyped_SubAppEvent:=FALSE,Untyped_SubAppVarDecl:=FALSE,Untyped_SubAppAdapter:=FALSE)"/>
+</AttributeDeclaration>
