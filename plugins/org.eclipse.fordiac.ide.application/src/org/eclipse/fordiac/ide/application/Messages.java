@@ -200,16 +200,6 @@ public final class Messages extends NLS {
 
 	public static String SearchStringProperties;
 
-	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
-
-	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;
-
-	public static String StructManipulatorSection_MEMBERVAR_COLUMN_TYPE;
-
-	public static String StructManipulatorSection_STRUCTURED_TYPE;
-
-	public static String StructManipulatorSection_Contained_variables;
-
 	public static String ToggleSegments;
 
 	public static String ToggleSegments_3;

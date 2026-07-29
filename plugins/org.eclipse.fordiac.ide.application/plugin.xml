@@ -54,10 +54,6 @@
                    label="%propertyInterfaceTab_label">
       </propertyTab>
       <propertyTab category="FB"
-                   id="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
-                   label="%propertyStructManipulatorTab_label">
-      </propertyTab>
-      <propertyTab category="FB"
                    id="org.eclipse.fordiac.ide.application.propertyCommentTab"
                    label="%propertyCommentTab_label">
       </propertyTab>
@@ -194,12 +190,6 @@
               filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
               id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
               tab="org.eclipse.fordiac.ide.application.propertyCommentTab">
-        </propertySection>
-        <propertySection
-              class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-              filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter"
-              id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-              tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab">
         </propertySection>
         <propertySection
               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
