@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2017 fortiss GmbH, Johannes Kepler University, Aimirim STI
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,15 +12,20 @@
  *      - initial API and implementation and/or initial documentation
  *    Bianca Wiesmayr
  *      - merged two DeviceInterfaceSection plus Abstract Class into DeviceSection
- *   Alois Zoitl - fixed layout, reduced code duplication
+ *    Alois Zoitl 
+ *      - fixed layout, reduced code duplication
+ *    Pedro Ricardo
+ *      - Added available profiles filter
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.gef.commands.ChangeProfileCommand;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
+import org.eclipse.fordiac.ide.model.helpers.DeviceProfileHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
@@ -30,23 +35,25 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
 
 public class DeviceSection extends AbstractInterfaceSection {
-	private static String[] profileNames;
+	private static List<String> availableProfileNames;
 	private CCombo profile;
 
 	@Override
 	protected void performRefresh() {
 		super.performRefresh();
-		setProfile();
+		final Device device = (Device) getType();
+		if (device == null) {
+			return;
+		}
+		profile.setItems(getSelectableProfiles(device));
+		setProfile(device);
 	}
 
-	private void setProfile() {
-		int i = 0;
-		for (final String p : profile.getItems()) {
-			if (p.equals(((Device) getType()).getProfile())) {
-				profile.select(i);
-				break;
-			}
-			i++;
+	private void setProfile(final Device device) {
+		final String currentProfile = device.getProfile() != null ? device.getProfile() : ""; //$NON-NLS-1$
+		final int index = profile.indexOf(currentProfile);
+		if (index >= 0) {
+			profile.select(index);
 		}
 	}
 
@@ -72,14 +79,31 @@ public class DeviceSection extends AbstractInterfaceSection {
 			refresh();
 			addContentAdapter();
 		});
-		profile.setItems(getAvailableProfileNames());
 	}
 
-	protected static String[] getAvailableProfileNames() {
-		if (null == profileNames) {
-			final List<String> newProfileNames = DeviceManagementInteractorFactory.INSTANCE.getAvailableProfileNames();
-			profileNames = newProfileNames.toArray(new String[newProfileNames.size()]);
+	/** Filter the globally available profiles with the list of allowed profiles 
+     * for the given device via 'SupportedProfiles' attribute. Returns all profiles if
+     * the attribute is not there. */
+	private static String[] getSelectableProfiles(final Device device) {
+		final List<String> available = getAvailableProfileNames();
+		final List<String> supported = DeviceProfileHelper.getSupportedProfiles(device.getType());
+		final List<String> selectable = new ArrayList<>();
+		if (supported.isEmpty()) {
+			selectable.addAll(available);
+		} else {
+			supported.stream().filter(available::contains).forEach(selectable::add);
 		}
-		return profileNames;
+		final String currentProfile = device.getProfile();
+		if (currentProfile != null && !currentProfile.isEmpty() && !selectable.contains(currentProfile)) {
+			selectable.add(currentProfile);
+		}
+		return selectable.toArray(new String[0]);
+	}
+
+	private static List<String> getAvailableProfileNames() {
+		if (availableProfileNames == null) {
+			availableProfileNames = DeviceManagementInteractorFactory.INSTANCE.getAvailableProfileNames();
+		}
+		return availableProfileNames;
 	}
 }
