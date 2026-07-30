@@ -32,7 +32,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECAlgorithmToolTipFigure;
@@ -40,20 +39,17 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferen
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
-import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
-import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -83,7 +79,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if ((notification.getEventType() == Notification.SET) && (null != getAction().getAlgorithm())
-					&& getAction().getAlgorithm().getName().equals(notification.getNewValue())) {
+					&& getAction().getAlgorithm().equals(notification.getNewValue())) {
 				refreshAlgLabel();
 			}
 		}
@@ -136,7 +132,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteECActionCommand(getAction());
+				return new DeleteECActionCommand<>(getAction(), getAction().getECState());
 			}
 		});
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
@@ -158,16 +154,6 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			@Override
 			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// handled by the direct edit manager
-			}
-		});
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy() {
-			@Override
-			protected Command getCreateCommand(final CreateRequest request) {
-				if (request != null && request.getNewObject() instanceof STAlgorithm
-						&& getHost() instanceof final ECActionAlgorithmEditPart ep) {
-					return new CreateAlgorithmCommand(ep.getBFB(), ep.getAction());
-				}
-				return null;
 			}
 		});
 	}
@@ -205,8 +191,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		final List<String> algNames = ECCContentAndLabelProvider
 				.getAlgorithmNames(ECCContentAndLabelProvider.getFBType(getAction()));
 
-		final int selected = (getAction().getAlgorithm() != null)
-				? algNames.indexOf(getAction().getAlgorithm().getName())
+		final int selected = (getAction().getAlgorithm() != null) ? algNames.indexOf(getAction().getAlgorithm())
 				: algNames.size() - 1;
 
 		final ComboDirectEditManager editManager = createDirectEditManager();
@@ -229,7 +214,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 
 	@Override
 	public INamedElement getINamedElement() {
-		return getAction().getAlgorithm();
+		return getAction().getAlgorithmModel();
 	}
 
 	@Override
@@ -243,7 +228,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		algorithmLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
 		algorithmLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
 		algorithmLabel.setOpaque(true);
-		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm().getName() : ""); //$NON-NLS-1$
+		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
 		algorithmLabel.setBorder(new MarginBorder(ALG_INSETS));
 		algorithmLabel.setTextAlignment(PositionConstants.LEFT);
 		algorithmLabel.setLabelAlignment(PositionConstants.LEFT);
@@ -255,13 +240,14 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	}
 
 	private void refreshAlgLabel() {
-		getNameLabel().setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm().getName() : ""); //$NON-NLS-1$
+		getNameLabel().setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
 	}
 
 	private void refreshAlgorithmToolTip(final IFigure iFigure) {
 		if (null != algToolTip) {
-			algToolTip.setAlgorithm(getCastedModel().getAction().getAlgorithm());
-			if (null != getCastedModel().getAction().getAlgorithm()) {
+			final Algorithm alg = getCastedModel().getAction().getAlgorithmModel();
+			algToolTip.setAlgorithm(alg);
+			if (null != alg) {
 				iFigure.setToolTip(algToolTip);
 			} else {
 				iFigure.setToolTip(null);

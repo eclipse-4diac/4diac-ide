@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026
+ * Copyright (c) 2026 Dimitrios Kalligaridis
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,11 +35,9 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.ltk.core.refactoring.Change;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class StructDataTypeRenameTest {
@@ -61,6 +59,7 @@ class StructDataTypeRenameTest {
 
 	@BeforeEach
 	void loadFixture() throws Exception {
+		RefactoringTestSupport.flushUndoHistory();
 		project = RefactoringTestSupport.importProjectIntoWorkspace(PROJECT_NAME, PROJECT_PATH);
 		RefactoringTestSupport.linkStandardLibraries(project, CORE, CONVERT, IEC_61131_3);
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
@@ -105,29 +104,35 @@ class StructDataTypeRenameTest {
 	}
 
 	@Test
-	void renameInnerStruct_undoRestoresOriginalState() throws Exception {
-		final Change undo = renameInnerStruct();
+	void renameInnerStruct_undoRedoRoundTrip() throws Exception {
+		renameInnerStruct();
+		assertRenamedState();
+
+		RefactoringTestSupport.undoLastRefactoring();
+		assertOriginalState();
+
+		RefactoringTestSupport.redoLastRefactoring();
+		assertRenamedState();
+	}
+
+	private void assertRenamedState() {
+		assertFalse(file(INNER_STRUCT_FILE).exists());
+		assertTrue(file(RENAMED_FILE).exists());
 		assertOuterMember(NEW_NAME, INNER_STRUCT_RENAMED);
+		// Pin the .dtp content: the entry must resolve without error, so undo and
+		// redo never leave the stale internal name fixed in #2514.
+		assertTypeEntryFullTypeNameEqual(file(RENAMED_FILE), INNER_STRUCT_RENAMED);
+	}
 
-		RefactoringTestSupport.performChange(undo);
-
+	private void assertOriginalState() {
 		assertTrue(file(INNER_STRUCT_FILE).exists());
+		assertFalse(file(RENAMED_FILE).exists());
 		assertOuterMember(OLD_NAME, INNER_STRUCT);
+		assertTypeEntryFullTypeNameEqual(file(INNER_STRUCT_FILE), INNER_STRUCT);
 	}
 
-	@Disabled("performChange on an undo Change returns null from PerformChangeOperation.getUndoChange, so the redo step has no Change to apply; re-enable once a redo-capable helper is in place") //$NON-NLS-1$
-	@Test
-	void renameInnerStruct_redoReappliesRename() throws Exception {
-		final Change undo = renameInnerStruct();
-		final Change redo = RefactoringTestSupport.performChange(undo);
-		assertOuterMember(OLD_NAME, INNER_STRUCT);
-
-		RefactoringTestSupport.performChange(redo);
-		assertOuterMember(NEW_NAME, INNER_STRUCT_RENAMED);
-	}
-
-	private Change renameInnerStruct() throws Exception {
-		return RefactoringTestSupport.performRename(file(INNER_STRUCT_FILE), NEW_FILE_NAME);
+	private void renameInnerStruct() throws Exception {
+		RefactoringTestSupport.performRename(file(INNER_STRUCT_FILE), NEW_FILE_NAME);
 	}
 
 	private void assertOuterMember(final String expectedName, final String expectedQualifiedType) {

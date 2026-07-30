@@ -45,7 +45,7 @@ public class EvaluatorModelBreakpoint extends Breakpoint implements IEvaluatorBr
 		return marker;
 	}
 
-	private String getQualifiedName() {
+	public String getQualifiedName() {
 		final IMarker m = getMarker();
 		if (m != null) {
 			return m.getAttribute(IMarker.LOCATION, ""); //$NON-NLS-1$

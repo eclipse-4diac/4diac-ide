@@ -56,7 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *
  * @generated
  */
-public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
+public abstract class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	/**
 	 * The cached value of the '{@link #getInternalVars() <em>Internal Vars</em>}' containment reference list.
 	 * <!-- begin-user-doc -->

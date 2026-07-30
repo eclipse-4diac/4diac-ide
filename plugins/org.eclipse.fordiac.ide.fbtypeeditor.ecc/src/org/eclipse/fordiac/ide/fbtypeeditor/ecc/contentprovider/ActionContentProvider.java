@@ -13,52 +13,63 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;
 
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 public class ActionContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		if (inputElement instanceof ECState) {
-			return ((ECState) inputElement).getECAction().toArray();
+		if (inputElement instanceof final BaseECState baseState) {
+			return baseState.getECActions().toArray();
 		}
-		if (inputElement instanceof ECAction) {
-			return ((ECAction) inputElement).getECState().getECC().getBasicFBType().getAlgorithm().toArray();
+		if (inputElement instanceof final ECAction action) {
+			return action.getECState().getECC().getBasicFBType().getAlgorithm().toArray();
+		}
+		if (inputElement instanceof final SimpleECAction simpleAction) {
+			return simpleAction.getSimpleECState().getSimpleFBType().getAlgorithm().toArray();
 		}
 		return new Object[] {};
 	}
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof ECState && null != ((ECState) parentElement).getECAction()) {
-			return ((ECState) parentElement).getECAction().toArray();
+		if (parentElement instanceof final BaseECState state && null != state.getECActions()) {
+			return state.getECActions().toArray();
 		}
-		if (parentElement instanceof BasicFBType) {
-			return ((BasicFBType) parentElement).getAlgorithm().toArray();
+		if (parentElement instanceof final BaseFBType baseType) {
+			return baseType.getAlgorithm().toArray();
 		}
 		return new Object[0];
 	}
 
 	@Override
 	public Object getParent(final Object element) {
-		if (element instanceof ECState) {
-			return ((ECState) element).getECC();
+		if (element instanceof final ECState state) {
+			return state.getECC();
 		}
-		if ((element instanceof ECAction) && (null != ((ECAction) element).getECState())) {
-			return ((ECAction) element).getECState().getECC().getBasicFBType();
+		if (element instanceof final ECAction action && null != action.getECState()) {
+			return action.getECState().getBaseFBType();
+		}
+		if (element instanceof final SimpleECAction simpleAction && null != simpleAction.getSimpleECState()) {
+			return simpleAction.getSimpleECState().getBaseFBType();
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		if (element instanceof ECState) {
-			return !((ECState) element).getECAction().isEmpty();
+		if (element instanceof final BaseECState state) {
+			return !state.getECActions().isEmpty();
 		}
-		if (element instanceof ECAction) {
-			return !((ECAction) element).getECState().getECC().getBasicFBType().getAlgorithm().isEmpty();
+		if (element instanceof final ECAction action) {
+			return !action.getECState().getBaseFBType().getAlgorithm().isEmpty();
+		}
+		if (element instanceof final SimpleECAction simpleAction) {
+			return !simpleAction.getSimpleECState().getBaseFBType().getAlgorithm().isEmpty();
 		}
 		return false;
 	}

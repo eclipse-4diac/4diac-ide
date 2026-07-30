@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2010 - 2016  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -106,10 +106,6 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
-		if (libPage.getControl() != null) {
-			libPage.performImport(getContainer());
-		}
-
 		// everything worked fine
 		return true;
 	}
@@ -121,11 +117,8 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	 */
 	private void createProject(final IProgressMonitor monitor) {
 		try {
-			final ProjectCreator projectCreator = new ProjectCreator(page.getProjectName(), page.getLocationPath());
-
-			final IProject newProject = projectCreator
-					.createProject(monitor != null ? monitor : new NullProgressMonitor());
-			libPage.setTargetProject(newProject);
+			final IProject newProject = ProjectCreator.of(page.getProjectName(), page.getLocationPath())
+					.withLibraries(libPage.getChosenLibraries().values()).create(monitor);
 			final SystemCreator systemCreator = new SystemCreator(newProject, page.getInitialSystemName(),
 					page.getInitialApplicationName());
 

@@ -31,8 +31,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class CreateInterfaceElementCommand extends CreationCommand implements ScopedCommand {
 	private IInterfaceElement newInterfaceElement;
@@ -46,7 +48,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	private final String arraySize;
 	private final String value;
 
-	private AdapterFBCreateCommand adapterCreateCmd;
+	private final CompoundCommand additionalCommands = new CompoundCommand();
 
 	private final InterfaceList targetInterfaceList;
 
@@ -149,15 +151,15 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		}
 		createValue();
 		createAdapterFBCreateCommand();
+		createSimpleECStateCreateCommand();
 		insertElement();
 		newInterfaceElement.setName(NameRepository.createUniqueName(newInterfaceElement, name));
 		if (!isInput && isInOut) {
 			switchOpposite = true;
 			newInterfaceElement = ((VarDeclaration) newInterfaceElement).getInOutVarOpposite();
 		}
-		if (null != adapterCreateCmd) {
-			adapterCreateCmd.execute();
-		}
+		additionalCommands.execute();
+
 	}
 
 	private void createValue() {
@@ -196,9 +198,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 			switchOpposite = true;
 			newInterfaceElement = ((VarDeclaration) newInterfaceElement).getInOutVarOpposite();
 		}
-		if (null != adapterCreateCmd) {
-			adapterCreateCmd.redo();
-		}
+		additionalCommands.redo();
 	}
 
 	@Override
@@ -208,9 +208,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 			newInterfaceElement = ((VarDeclaration) newInterfaceElement).getInOutVarOpposite();
 		}
 		getInterfaceListContainer().remove(newInterfaceElement);
-		if ((null != adapterCreateCmd) && adapterCreateCmd.canExecute()) {
-			adapterCreateCmd.undo();
-		}
+		additionalCommands.undo();
 	}
 
 	private void insertElement() {
@@ -227,8 +225,15 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	private void createAdapterFBCreateCommand() {
 		if (dataType instanceof AdapterType) {
 			final int xyPos = 10;
-			adapterCreateCmd = new AdapterFBCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
-					targetInterfaceList.getFBType());
+			additionalCommands.add(new AdapterFBCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
+					targetInterfaceList.getFBType()));
+		}
+	}
+
+	private void createSimpleECStateCreateCommand() {
+		if (targetInterfaceList.getFBType() instanceof final SimpleFBType simpleType
+				&& newInterfaceElement instanceof final Event event && isInput) {
+			additionalCommands.add(new CreateSimpleECStateCommand(event, simpleType));
 		}
 	}
 

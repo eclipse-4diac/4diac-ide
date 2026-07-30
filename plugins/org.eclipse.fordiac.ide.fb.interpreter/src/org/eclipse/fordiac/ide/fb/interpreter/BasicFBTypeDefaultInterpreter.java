@@ -43,7 +43,7 @@ public class BasicFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInt
 
 	public EList<EventOccurrence> run(final BasicFBTypeRuntime basicFBTypeRuntime) {
 		// Initialization of variables
-		VariableUtils.fBVariableInitialization(basicFBTypeRuntime.getBasicfbtype());
+		VariableUtils.fBVariableInitialization(basicFBTypeRuntime.getBasicfbtype(), null);
 		final var outputEvents = new BasicEList<EventOccurrence>();
 		final var eCC = basicFBTypeRuntime.getBasicfbtype().getECC();
 		// Active State
@@ -84,7 +84,7 @@ public class BasicFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInt
 		for (final ECAction action : basicFBTypeRuntime.getActiveState(basicFBTypeRuntime.getActiveState())
 				.getECAction()) {
 			if (action.getAlgorithm() != null) {
-				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithm(),
+				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithmModel(),
 						eventOccurrence);
 			}
 			if (action.getOutput() != null) {

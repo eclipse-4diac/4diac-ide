@@ -37,9 +37,9 @@ public class AddECCActionAction extends SelectionAction {
 	 */
 	public static final String ADD_ECC_ACTION = "org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction";//$NON-NLS-1$
 
-	private ActionCreationFactory actionFactory = new ActionCreationFactory();
+	private final ActionCreationFactory actionFactory = new ActionCreationFactory();
 
-	public AddECCActionAction(IWorkbenchPart part) {
+	public AddECCActionAction(final IWorkbenchPart part) {
 		super(part);
 		setId(ADD_ECC_ACTION);
 		setText(Messages.ECCActions_AddAction);
@@ -49,7 +49,7 @@ public class AddECCActionAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		if (1 == getSelectedObjects().size()) {
-			ECState state = getState(getSelectedObjects());
+			final ECState state = getState(getSelectedObjects());
 			if (null != state) {
 				// only allow to add actions if we are not the the initial state
 				return !state.isStartState();
@@ -61,24 +61,21 @@ public class AddECCActionAction extends SelectionAction {
 
 	@Override
 	public void run() {
-		IFBTEditorPart editor = (IFBTEditorPart) getWorkbenchPart();
-		ECAction action = (ECAction) actionFactory.getNewObject();
-		execute(new CreateECActionCommand(action, getState(getSelectedObjects())));
+		final IFBTEditorPart editor = (IFBTEditorPart) getWorkbenchPart();
+		final ECAction action = (ECAction) actionFactory.getNewObject();
+		execute(new CreateECActionCommand<>(action, getState(getSelectedObjects())));
 		editor.outlineSelectionChanged(action);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private static ECState getState(List selectedObjects) {
-		ECState state = null;
-		if (selectedObjects.get(0) instanceof ECStateEditPart) {
-			state = ((ECStateEditPart) selectedObjects.get(0)).getModel();
-		} else if (selectedObjects.get(0) instanceof ECActionAlgorithmEditPart) {
-			ECActionAlgorithmEditPart part = (ECActionAlgorithmEditPart) selectedObjects.get(0);
-			state = part.getAction().getECState();
-		} else if (selectedObjects.get(0) instanceof ECActionOutputEventEditPart) {
-			ECActionOutputEventEditPart part = (ECActionOutputEventEditPart) selectedObjects.get(0);
-			state = part.getAction().getECState();
+	private static ECState getState(final List<Object> selectedObjects) {
+		if (selectedObjects == null || selectedObjects.isEmpty()) {
+			return null;
 		}
-		return state;
+		return switch (selectedObjects.get(0)) {
+		case final ECStateEditPart stateEP -> stateEP.getModel();
+		case final ECActionAlgorithmEditPart algoEP -> algoEP.getAction().getECState();
+		case final ECActionOutputEventEditPart eventEP -> eventEP.getAction().getECState();
+		default -> null;
+		};
 	}
 }

@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
@@ -197,7 +196,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
 			case LibraryElementPackage.AUTOMATION_SYSTEM: return createAutomationSystem();
-			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
 			case LibraryElementPackage.BASIC_FB_TYPE: return createBasicFBType();
 			case LibraryElementPackage.CFB_INSTANCE: return createCFBInstance();
 			case LibraryElementPackage.COLOR: return createColor();
@@ -469,17 +467,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public AutomationSystem createAutomationSystem() {
 		AutomationSystemImpl automationSystem = new AutomationSystemImpl();
 		return automationSystem;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public BaseFBType createBaseFBType() {
-		BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
-		return baseFBType;
 	}
 
 	/**

@@ -12,9 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.VersionRange;
 
 class DependencyNode {
@@ -68,6 +71,17 @@ class DependencyNode {
 
 	public boolean isRangeEmpty() {
 		return range.isEmpty();
+	}
+
+	public String getCauseMessage() {
+		return getCauses().entrySet().stream().map(entry -> {
+			if (entry.getValue().isExact()) {
+				return MessageFormat.format(" - {0} requires version {1}", entry.getKey(), //$NON-NLS-1$
+						VersionComparator.formatVersionRange(entry.getValue()));
+			}
+			return MessageFormat.format(" - {0} requires a version in range {1}", entry.getKey(), //$NON-NLS-1$
+					VersionComparator.formatVersionRange(entry.getValue()));
+		}).collect(Collectors.joining(System.lineSeparator()));
 	}
 
 	public boolean recalculate() {

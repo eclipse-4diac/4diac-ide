@@ -19,15 +19,11 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.library.messages"; //$NON-NLS-1$
 
-	public static String Confirm;
-
 	public static String ErrorMarkerLibNotAvailable;
 	public static String ErrorMarkerStandardLibNotAvailable;
 	public static String ErrorMarkerVersionRangeEmpty;
 
-	public static String ImportFailed;
 	public static String ImportFailedOnLinkCreation;
-	public static String InstanceUpdate;
 
 	public static String LibraryManager_BrokenLink;
 
@@ -36,6 +32,18 @@ public class Messages extends NLS {
 	public static String LibraryBuilder_LibraryBuild;
 
 	public static String LibraryBuilder_ResolveProjectDependencies;
+
+	// Library Change
+	public static String LibraryChange_Downgrade;
+	public static String LibraryChange_Select;
+	public static String LibraryChange_Remove;
+	public static String LibraryChange_Update;
+
+	public static String LibraryChange_Downgrade_fullText;
+	public static String LibraryChange_Select_fullText;
+	public static String LibraryChange_Remove_fullText;
+	public static String LibraryChange_Update_fullText;
+	public static String LibraryChange_Add_fullText;
 
 	public static String LibraryManager_BuildingDependencyGraph;
 
@@ -60,19 +68,6 @@ public class Messages extends NLS {
 	public static String LibraryManager_UnresolvableDependencies;
 
 	public static String LibraryManager_UpdateLibraryPackage;
-
-	public static String PreferenceForceLoad;
-	public static String PreferenceLoadingGroup;
-
-	public static String OldTypeLibVersionCouldNotBeDeleted;
-
-	public static String TypeLibrary_ProjectLoadingProblem;
-	public static String TypeLibrary_LibraryLoadingProblem;
-
-	public static String UpdatedInstances;
-
-	public static String Warning;
-	public static String WillBeImported;
 
 	public static String DownloadNullResult;
 	public static String DownloadUnexpectedError;

@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
@@ -28,10 +29,13 @@ import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
@@ -87,6 +91,14 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 			result.setValidateName(false); // do not validate attribute names (may contain FQN)
 			if (ChangeAttributeDeclarationCommand.attributeDeclarationChanged(attribute, name)) {
 				result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
+			}
+		}
+		if (element instanceof final Event event && event.isIsInput()
+				&& event.getFBType() instanceof final SimpleFBType simpleType) {
+			final Optional<SimpleECState> state = simpleType.getSimpleECStates().stream()
+					.filter(s -> s.getName().equals(event.getName())).findFirst();
+			if (state.isPresent()) {
+				result.getAdditionalCommands().add(new ChangeNameCommand(state.get(), name));
 			}
 		}
 	}

@@ -42,7 +42,7 @@ public final class ECCContentAndLabelProvider {
 	// selecting nothing
 	public static final String ONE_CONDITION = "1"; //$NON-NLS-1$
 
-	public static List<Event> getOutputEvents(final BasicFBType type) {
+	public static List<Event> getOutputEvents(final BaseFBType type) {
 		final List<Event> events = new ArrayList<>();
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventOutputs());
@@ -60,7 +60,7 @@ public final class ECCContentAndLabelProvider {
 		return transition.getConditionExpression() != null && transition.getConditionExpression().equals(ONE_CONDITION);
 	}
 
-	public static List<String> getOutputEventNames(final BasicFBType type) {
+	public static List<String> getOutputEventNames(final BaseFBType type) {
 		final List<String> eventNames = new ArrayList<>(getEventNames(getOutputEvents(type)));
 		eventNames.add(EMPTY_FIELD);
 		return eventNames;
@@ -98,7 +98,7 @@ public final class ECCContentAndLabelProvider {
 		return algorithms;
 	}
 
-	public static List<String> getAlgorithmNames(final BasicFBType type) {
+	public static List<String> getAlgorithmNames(final BaseFBType type) {
 		final List<String> algNames = new ArrayList<>(getAlgorithms(type).stream().map(Algorithm::getName).toList());
 		algNames.add(EMPTY_FIELD);
 		return algNames;

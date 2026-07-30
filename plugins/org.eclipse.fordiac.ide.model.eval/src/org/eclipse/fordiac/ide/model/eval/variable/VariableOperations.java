@@ -161,19 +161,55 @@ public final class VariableOperations {
 		return newVariable(varDeclaration.getName(), evaluateResultType(varDeclaration));
 	}
 
-	private static Value doEvaluateValue(final VarDeclaration varDeclaration)
-			throws EvaluatorException, InterruptedException {
+	public static Variable<?> newVariableWithoutDeclaredInitialValue(final VarDeclaration varDeclaration)
+			throws EvaluatorException {
+		if (hasInheritedInitialValue(varDeclaration)) {
+			try (EvaluatorCache cache = EvaluatorCache.open()) {
+				final VarDeclaration typeVariable = varDeclaration.findInTypeInterface();
+				return newVariable(varDeclaration.getName(), evaluateResultType(varDeclaration),
+						cache.computeInitialValueIfAbsent(typeVariable, VariableOperations::doEvaluateValue));
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		return newVariable(varDeclaration.getName(), evaluateResultType(varDeclaration));
+	}
+
+	private static Variable<?> doEvaluateVariable(final VarDeclaration varDeclaration,
+			final Set<Variable<?>> explicitlyInitialized) throws EvaluatorException, InterruptedException {
 		final Evaluator evaluator = EvaluatorFactory.createEvaluator(varDeclaration, VarDeclaration.class, null,
 				Collections.emptySet(), null);
-		if (evaluator instanceof VariableEvaluator) {
-			return evaluator.evaluate();
+		if (evaluator instanceof final VariableEvaluator variableEvaluator) {
+			return evaluateVariable(variableEvaluator, explicitlyInitialized);
 		}
 		throw new UnsupportedOperationException(Messages.VariableOperations_NoEvaluatorForVarDeclaration);
 	}
 
+	private static Variable<?> evaluateVariable(final VariableEvaluator evaluator,
+			final Set<Variable<?>> explicitlyInitialized) throws EvaluatorException, InterruptedException {
+		return explicitlyInitialized != null ? evaluator.evaluateVariable(explicitlyInitialized)
+				: evaluator.evaluateVariable();
+	}
+
+	private static Value doEvaluateValue(final VarDeclaration varDeclaration)
+			throws EvaluatorException, InterruptedException {
+		return doEvaluateVariable(varDeclaration, null).getValue();
+	}
+
 	public static Variable<?> newVariable(final VarDeclaration varDeclaration, final String initialValue)
 			throws EvaluatorException {
-		return newVariable(withValue(varDeclaration, initialValue));
+		return newVariable(varDeclaration, initialValue, null);
+	}
+
+	public static Variable<?> newVariable(final VarDeclaration varDeclaration, final String initialValue,
+			final Set<Variable<?>> explicitlyInitialized) throws EvaluatorException {
+		final VarDeclaration declaration = withValue(varDeclaration, initialValue);
+		try {
+			return doEvaluateVariable(declaration, explicitlyInitialized);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		return newVariable(declaration.getName(), evaluateResultType(declaration));
 	}
 
 	public static Variable<?> newVariable(final VarDeclaration varDeclaration, final Value value)
@@ -203,7 +239,26 @@ public final class VariableOperations {
 
 	public static Variable<?> newVariable(final Attribute attribute, final String initialValue)
 			throws EvaluatorException {
-		return newVariable(withValue(attribute, initialValue));
+		return newVariable(attribute, initialValue, null);
+	}
+
+	public static Variable<?> newVariable(final Attribute attribute, final String initialValue,
+			final Set<Variable<?>> explicitlyInitialized) throws EvaluatorException {
+		final Attribute declaration = withValue(attribute, initialValue);
+		if (!hasValue(declaration)) {
+			return newVariable(declaration.getName(), declaration.getType());
+		}
+		try {
+			final Evaluator evaluator = EvaluatorFactory.createEvaluator(declaration, Attribute.class, null,
+					Collections.emptySet(), null);
+			if (evaluator instanceof final VariableEvaluator variableEvaluator) {
+				return evaluateVariable(variableEvaluator, explicitlyInitialized);
+			}
+			throw new UnsupportedOperationException(Messages.VariableOperations_NoEvaluatorForAttribute);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		return newVariable(declaration.getName(), declaration.getType());
 	}
 
 	public static Variable<?> newVariable(final DirectlyDerivedType type) throws EvaluatorException {
@@ -224,7 +279,26 @@ public final class VariableOperations {
 
 	public static Variable<?> newVariable(final DirectlyDerivedType type, final String initialValue)
 			throws EvaluatorException {
-		return newVariable(withValue(type, initialValue));
+		return newVariable(type, initialValue, null);
+	}
+
+	public static Variable<?> newVariable(final DirectlyDerivedType type, final String initialValue,
+			final Set<Variable<?>> explicitlyInitialized) throws EvaluatorException {
+		final DirectlyDerivedType declaration = withValue(type, initialValue);
+		if (!hasInitialValue(declaration)) {
+			return newVariable(declaration.getName(), declaration.getBaseType());
+		}
+		try {
+			final Evaluator evaluator = EvaluatorFactory.createEvaluator(declaration, DirectlyDerivedType.class, null,
+					Collections.emptySet(), null);
+			if (evaluator instanceof final VariableEvaluator variableEvaluator) {
+				return evaluateVariable(variableEvaluator, explicitlyInitialized);
+			}
+			throw new UnsupportedOperationException(Messages.VariableOperations_NoEvaluatorForDirectlyDerivedType);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		return newVariable(declaration.getName(), declaration.getBaseType());
 	}
 
 	public static LibraryElement evaluateResultType(final VarDeclaration decl) throws EvaluatorException {

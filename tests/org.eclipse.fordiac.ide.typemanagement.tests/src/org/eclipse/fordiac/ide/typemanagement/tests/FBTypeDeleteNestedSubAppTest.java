@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026
+ * Copyright (c) 2026 Dimitrios Kalligaridis
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,17 +12,40 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.tests;
 
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.APPLICATION_NAME;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.CONTAINER_SUBAPP;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.DEEPLY_NESTED_INSTANCE;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.DEEPLY_NESTED_INSTANCE_SINK;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.DEEP_CONTAINER_SUBAPP;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.MY_BLOCK;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.MY_BLOCK_FILE;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.NESTED_INSTANCE;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.NESTED_INSTANCE_SINK;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.PROJECT_NAME;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.PROJECT_PATH;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.SYSTEM_FILE;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.TOP_INSTANCE;
+import static org.eclipse.fordiac.ide.typemanagement.tests.NestedSubAppTestFixture.TOP_INSTANCE_SINK;
 import static org.eclipse.fordiac.ide.typemanagement.tests.StandardLibrary.CORE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -34,20 +57,14 @@ import org.junit.jupiter.api.Test;
 
 class FBTypeDeleteNestedSubAppTest {
 
-	private static final String PROJECT_NAME = "FBTypeDeleteNestedSubAppTest"; //$NON-NLS-1$
-	private static final String PROJECT_PATH = "data/FBTypeDeleteNestedSubAppTest"; //$NON-NLS-1$
+	private static final Set<String> MY_BLOCK_INSTANCES = Set.of(TOP_INSTANCE, TOP_INSTANCE_SINK, NESTED_INSTANCE,
+			NESTED_INSTANCE_SINK, DEEPLY_NESTED_INSTANCE, DEEPLY_NESTED_INSTANCE_SINK);
 
-	private static final String FB_FILE = "Type Library/mypackage/MyBlock.fbt"; //$NON-NLS-1$
-	private static final String SYSTEM_FILE = "FBTypeDeleteNestedSubAppTest.sys"; //$NON-NLS-1$
-
-	private static final String MY_BLOCK_TYPE_NAME = "MyBlock"; //$NON-NLS-1$
-
-	private static final String APPLICATION_NAME = "App"; //$NON-NLS-1$
-	private static final String TOP_INSTANCE = "TopInstance"; //$NON-NLS-1$
-	private static final String CONTAINER_SUBAPP = "Container"; //$NON-NLS-1$
-	private static final String NESTED_INSTANCE = "NestedInstance"; //$NON-NLS-1$
-	private static final String DEEP_CONTAINER_SUBAPP = "DeepContainer"; //$NON-NLS-1$
-	private static final String DEEPLY_NESTED_INSTANCE = "DeeplyNestedInstance"; //$NON-NLS-1$
+	private static final Set<String> INSTANCE_CONNECTIONS = Set.of("TopInstance.CNF -> TopInstanceSink.REQ", //$NON-NLS-1$
+			"TopInstance.DO -> TopInstanceSink.DI", "NestedInstance.CNF -> NestedInstanceSink.REQ", //$NON-NLS-1$ //$NON-NLS-2$
+			"NestedInstance.DO -> NestedInstanceSink.DI", //$NON-NLS-1$
+			"DeeplyNestedInstance.CNF -> DeeplyNestedInstanceSink.REQ", //$NON-NLS-1$
+			"DeeplyNestedInstance.DO -> DeeplyNestedInstanceSink.DI"); //$NON-NLS-1$
 
 	private IProject project;
 	private TypeLibrary typeLibrary;
@@ -71,53 +88,72 @@ class FBTypeDeleteNestedSubAppTest {
 
 	@Test
 	void deleteMyBlock_removesItFromWorkspace() throws Exception {
-		assertTrue(file(FB_FILE).exists());
+		assertTrue(file(MY_BLOCK_FILE).exists());
 
 		deleteMyBlock();
 
-		assertFalse(file(FB_FILE).exists());
+		assertFalse(file(MY_BLOCK_FILE).exists());
 	}
 
 	@Test
 	void deleteMyBlock_clearsItFromTypeLibrary() throws Exception {
-		assertNotNull(typeLibrary.getFBTypeEntry(MY_BLOCK_TYPE_NAME));
+		assertNotNull(typeLibrary.getFBTypeEntry(MY_BLOCK));
 
 		deleteMyBlock();
 
-		assertNull(typeLibrary.getFBTypeEntry(MY_BLOCK_TYPE_NAME));
+		assertNull(typeLibrary.getFBTypeEntry(MY_BLOCK));
 	}
 
 	@Test
-	void deleteMyBlock_leavesAllNestedSubAppInstancesStructurallyIntact() throws Exception {
-		findInstance(TOP_INSTANCE);
-		findInstance(CONTAINER_SUBAPP, NESTED_INSTANCE);
-		findInstance(CONTAINER_SUBAPP, DEEP_CONTAINER_SUBAPP, DEEPLY_NESTED_INSTANCE);
+	void deleteMyBlock_keepsInstancesAndConnectionsAtEveryNestingLevel() throws Exception {
+		assertEquals(MY_BLOCK_INSTANCES, myBlockInstanceNames());
+		assertEquals(INSTANCE_CONNECTIONS, connectionNames());
 
 		deleteMyBlock();
 
-		// DeleteTypeRefactoringParticipant only removes internal FBs whose
-		// container is a BaseFBType, so System FB instances at every nesting
-		// level remain in place; findInstance throws if any is missing.
-		findInstance(TOP_INSTANCE);
-		findInstance(CONTAINER_SUBAPP, NESTED_INSTANCE);
-		findInstance(CONTAINER_SUBAPP, DEEP_CONTAINER_SUBAPP, DEEPLY_NESTED_INSTANCE);
+		// DeleteTypeRefactoringParticipant only removes internal FBs whose container is
+		// a BaseFBType, so the instances in the application and the connections between
+		// them stay untouched on every nesting level.
+		assertEquals(MY_BLOCK_INSTANCES, myBlockInstanceNames());
+		assertEquals(INSTANCE_CONNECTIONS, connectionNames());
 	}
 
 	private void deleteMyBlock() throws Exception {
-		RefactoringTestSupport.performDelete(file(FB_FILE));
+		RefactoringTestSupport.performDelete(file(MY_BLOCK_FILE));
+	}
+
+	private Set<String> myBlockInstanceNames() {
+		return networksAtEveryNestingLevel().flatMap(network -> network.getNetworkElements().stream())
+				.filter(FB.class::isInstance).map(FBNetworkElement::getName).collect(Collectors.toSet());
+	}
+
+	private Set<String> connectionNames() {
+		return networksAtEveryNestingLevel()
+				.flatMap(network -> Stream.concat(network.getEventConnections().stream(),
+						network.getDataConnections().stream()))
+				.map(FBTypeDeleteNestedSubAppTest::connectionName).collect(Collectors.toSet());
+	}
+
+	private Stream<FBNetwork> networksAtEveryNestingLevel() {
+		return Stream.of(system().getApplicationNamed(APPLICATION_NAME).getFBNetwork(),
+				subAppNetwork(CONTAINER_SUBAPP), subAppNetwork(CONTAINER_SUBAPP, DEEP_CONTAINER_SUBAPP));
+	}
+
+	private FBNetwork subAppNetwork(final String... namePath) {
+		return ((UntypedSubApp) findInstance(namePath)).getSubAppNetwork();
+	}
+
+	private static String connectionName(final Connection connection) {
+		return endpointName(connection.getSource()) + " -> " + endpointName(connection.getDestination()); //$NON-NLS-1$
+	}
+
+	private static String endpointName(final IInterfaceElement pin) {
+		final BlockFBNetworkElement block = pin.getBlockFBNetworkElement();
+		return block.getName() + "." + pin.getRelativeName(block); //$NON-NLS-1$
 	}
 
 	private FBNetworkElement findInstance(final String... namePath) {
-		FBNetwork network = system().getApplicationNamed(APPLICATION_NAME).getFBNetwork();
-		for (int i = 0; i < namePath.length - 1; i++) {
-			final String subAppName = namePath[i];
-			final UntypedSubApp subApp = (UntypedSubApp) network.getNetworkElements().stream()
-					.filter(element -> subAppName.equals(element.getName())).findFirst().orElseThrow();
-			network = subApp.getSubAppNetwork();
-		}
-		final String instanceName = namePath[namePath.length - 1];
-		return network.getNetworkElements().stream().filter(element -> instanceName.equals(element.getName()))
-				.findFirst().orElseThrow();
+		return RefactoringTestSupport.findInstance(system(), APPLICATION_NAME, namePath);
 	}
 
 	private AutomationSystem system() {

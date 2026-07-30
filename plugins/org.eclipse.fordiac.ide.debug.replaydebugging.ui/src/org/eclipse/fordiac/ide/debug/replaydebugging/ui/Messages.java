@@ -48,6 +48,7 @@ public class Messages extends NLS {
 	public static String LaunchConfigurationTab_BrowseButtonText;
 	public static String LaunchConfigurationTab_ComponentsSelectionText;
 	public static String LaunchConfigurationTab_LaunchConfigurationTabName;
+	public static String LaunchConfigurationTab_NoDevicesSelected;
 	public static String LaunchConfigurationTab_RemoteText;
 	public static String LaunchConfigurationTab_ReplayerSectionText;
 	public static String LaunchConfigurationTab_SelectPathDialogText;

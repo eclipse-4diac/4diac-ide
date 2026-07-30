@@ -5,9 +5,17 @@
 	<Application Name="App" Comment="">
 		<SubAppNetwork>
 			<FB Name="Producer" Type="StructProducer" Comment="" x="500.0" y="500.0">
+				<Parameter Name="OUT.A" Value="">
+					<Attribute Name="Visible" Value="true"/>
+					<Attribute Name="TestAttribute" Type="STRING" Value="42"/>
+				</Parameter>
+				<Parameter Name="OUT.C" Value="">
+					<Attribute Name="Visible" Value="true"/>
+				</Parameter>
 			</FB>
 			<FB Name="Demux" Type="STRUCT_DEMUX" Comment="" x="1500.0" y="500.0">
 				<Attribute Name="StructuredType" Type="STRING" Value="mypackage::InnerStruct"/>
+				<Attribute Name="VisibleChildren" Type="STRING" Value="A,C"/>
 			</FB>
 			<FB Name="Mux" Type="STRUCT_MUX" Comment="" x="1500.0" y="1500.0">
 				<Attribute Name="StructuredType" Type="STRING" Value="mypackage::InnerStruct"/>
@@ -16,9 +24,43 @@
 				<Attribute Name="DataType" Type="STRING" Value="mypackage::InnerStruct"/>
 			</FB>
 			<FB Name="Consumer" Type="StructConsumer" Comment="" x="4400.0" y="1500.0">
+				<Parameter Name="DI.A" Value="">
+					<Attribute Name="Visible" Value="true"/>
+				</Parameter>
+				<Parameter Name="DI.C" Value="">
+					<Attribute Name="Visible" Value="true"/>
+				</Parameter>
 			</FB>
+			<SubApp Name="Container" Comment="" x="2500.0" y="2500.0">
+				<SubAppInterfaceList>
+					<SubAppEventInputs>
+						<SubAppEvent Name="REQ" Type="Event">
+						</SubAppEvent>
+					</SubAppEventInputs>
+					<InputVars>
+						<VarDeclaration Name="DI" Type="mypackage::InnerStruct"/>
+					</InputVars>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<FB Name="NestedConsumer" Type="StructConsumer" Comment="" x="500.0" y="500.0">
+					</FB>
+					<EventConnections>
+						<Connection Source="REQ" Destination="NestedConsumer.REQ"/>
+					</EventConnections>
+					<DataConnections>
+						<Connection Source="DI" Destination="NestedConsumer.DI"/>
+					</DataConnections>
+				</SubAppNetwork>
+			</SubApp>
+			<EventConnections>
+				<Connection Source="Producer.CNF" Destination="Container.REQ" Comment=""/>
+			</EventConnections>
 			<DataConnections>
-				<Connection Source="Producer.OUT" Destination="Consumer.DI" Comment="" dx1="1435.71"/>
+				<Connection Source="Producer.OUT.A" Destination="Consumer.DI.A" Comment="" dx1="1435.71"/>
+				<Connection Source="Producer.OUT.C" Destination="Consumer.DI.C" Comment="" dx1="1435.71">
+					<Attribute Name="Visible" Value="false"/>
+				</Connection>
+				<Connection Source="Producer.OUT" Destination="Container.DI" Comment=""/>
 			</DataConnections>
 		</SubAppNetwork>
 	</Application>

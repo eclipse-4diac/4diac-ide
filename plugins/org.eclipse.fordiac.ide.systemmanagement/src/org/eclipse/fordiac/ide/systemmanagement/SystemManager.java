@@ -1,8 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Austria GmbH,
- *                          Martin Erich Jobst
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                    Johannes Kepler University Linz,
+ *                    Primetals Technologies Austria GmbH, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,23 +22,13 @@
 package org.eclipse.fordiac.ide.systemmanagement;
 
 import java.text.MessageFormat;
-import java.util.List;
-import java.util.stream.Stream;
 
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -66,8 +55,6 @@ public enum SystemManager {
 
 	private final IResourceChangeListener fordiacListener = new FordiacResourceChangeListener();
 
-	/** The listeners. */
-
 	/** Instantiates a new system manager. */
 	SystemManager() {
 		addFordiacChangeListener();
@@ -80,49 +67,8 @@ public enum SystemManager {
 						&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase((file).getFileExtension()));
 	}
 
-	@SuppressWarnings("static-method")
-	public IProject createNew4diacProject(final String projectName, final IPath location,
-			final IProgressMonitor monitor) throws CoreException {
-		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-		final IProject project = root.getProject(projectName);
-		final IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
-
-		if (!Platform.getLocation().equals(location)) {
-			description.setLocation(location);
-		}
-
-		description.setNatureIds(getNatureIDs());
-
-		final List<ICommand> commands = Stream.of(getBuilderIDs()).map(builder -> {
-			final ICommand command = description.newCommand();
-			command.setBuilderName(builder);
-			return command;
-		}).toList();
-		description.setBuildSpec(commands.toArray(new ICommand[commands.size()]));
-
-		project.create(description, monitor);
-		project.open(monitor);
-
-		project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).create(true, true, monitor);
-		project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE, true,
-				monitor);
-		project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE, true,
-				monitor);
-
-		ManifestHelper.getOrCreateProjectManifest(project);
-
-		project.refreshLocal(IResource.DEPTH_ONE, monitor);
-		return project;
-	}
-
 	public static String[] getNatureIDs() {
 		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID, XtextProjectHelper.NATURE_ID };
-	}
-
-	private static String[] getBuilderIDs() {
-		return new String[] { FORDIAC_LIBRARY_BUILDER_ID, XtextProjectHelper.BUILDER_ID,
-				FORDIAC_OCL_VALIDATION_BUILDER_ID, FORDIAC_EXPORT_BUILDER_ID };
 	}
 
 	public void removeFordiacChangeListener() {

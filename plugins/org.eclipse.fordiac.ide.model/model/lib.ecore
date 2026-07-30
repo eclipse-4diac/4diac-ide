@@ -201,7 +201,24 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="systemConfiguration" lowerBound="1"
         eType="#//SystemConfiguration" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" eSuperTypes="#//FBType">
+  <eClassifiers xsi:type="ecore:EClass" name="BaseECAction" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseECState" abstract="true" interface="true">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//BaseECAction"/>
+    </eTypeParameters>
+    <eOperations name="getECActions" upperBound="-1">
+      <eGenericType eTypeParameter="#//BaseECState/T"/>
+    </eOperations>
+    <eOperations name="getBaseFBType" eType="#//BaseFBType"/>
+    <eOperations name="isStartState" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+    <eOperations name="createNewAction">
+      <eGenericType eTypeParameter="#//BaseECState/T"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" abstract="true" eSuperTypes="#//FBType">
     <eOperations name="getAlgorithmNamed" lowerBound="1" eType="#//Algorithm">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);"/>
@@ -988,9 +1005,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclarations"
         upperBound="-1" eType="#//AttributeDeclaration" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ECAction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="algorithm" eType="#//Algorithm"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ECAction" eSuperTypes="#//BaseECAction">
+    <eOperations name="getAlgorithmModel" eType="#//Algorithm">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (getECState() == null) {return null;} return getECState().getECC().getBasicFBType().getAlgorithmNamed(getAlgorithm());"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCState" lowerBound="1"
         eType="#//ECState" eOpposite="#//ECState/eCAction"/>
   </eClassifiers>
@@ -1016,10 +1036,25 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicFBType" lowerBound="1"
         eType="#//BasicFBType" eOpposite="#//BasicFBType/eCC"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ECState" eSuperTypes="#//INamedElement #//PositionableElement">
+  <eClassifiers xsi:type="ecore:EClass" name="ECState">
+    <eOperations name="getECActions" upperBound="-1" eType="#//ECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getECAction();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getBaseFBType" eType="#//BaseFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getECC().getBasicFBType();"/>
+      </eAnnotations>
+    </eOperations>
     <eOperations name="isStartState" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="createNewAction" eType="#//ECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return LibraryElementFactory.eINSTANCE.createECAction();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCAction" upperBound="-1"
@@ -1035,6 +1070,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inTransitions" upperBound="-1"
         eType="#//ECTransition" eOpposite="#//ECTransition/destination"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" eType="#//ECC" eOpposite="#//ECC/eCState"/>
+    <eGenericSuperTypes eClassifier="#//INamedElement"/>
+    <eGenericSuperTypes eClassifier="#//PositionableElement"/>
+    <eGenericSuperTypes eClassifier="#//BaseECState">
+      <eTypeArguments eClassifier="#//ECAction"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ECTransition" eSuperTypes="#//PositionableElement">
     <eOperations name="getConditionText" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -2316,13 +2356,46 @@
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBType" eSuperTypes="#//FBType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleECAction">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleECAction" eSuperTypes="#//BaseECAction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleECState" lowerBound="1"
         eType="#//SimpleECState" eOpposite="#//SimpleECState/simpleECActions"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleECState" eSuperTypes="#//INamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleECState">
+    <eOperations name="validateActionsNonEmpty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleECStateAnnotations.validateActionsNonEmpty(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getECActions" upperBound="-1" eType="#//SimpleECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getSimpleECActions();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getBaseFBType" eType="#//BaseFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getSimpleFBType();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isStartState" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return false;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="createNewAction" eType="#//SimpleECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return LibraryElementFactory.eINSTANCE.createSimpleECAction();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleECActions" upperBound="-1"
         eType="#//SimpleECAction" containment="true" resolveProxies="false" eOpposite="#//SimpleECAction/simpleECState">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -2335,6 +2408,10 @@
         eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFBType" lowerBound="1"
         eType="#//SimpleFBType" eOpposite="#//SimpleFBType/simpleECStates"/>
+    <eGenericSuperTypes eClassifier="#//INamedElement"/>
+    <eGenericSuperTypes eClassifier="#//BaseECState">
+      <eTypeArguments eClassifier="#//SimpleECAction"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleFBType" eSuperTypes="#//BaseFBType">
     <eOperations name="validateEventUsage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

@@ -163,4 +163,10 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 	public Resource getModel() {
 		return (Resource) super.getModel();
 	}
+
+	@Override
+	public void deactivate() {
+		getModel().dispose();
+		super.deactivate();
+	}
 }

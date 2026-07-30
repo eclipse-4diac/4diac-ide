@@ -20,7 +20,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.library.ui.wizards.ManageLibraryWizard;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -35,15 +34,7 @@ public class OpenManageLibraryWizardHandler extends AbstractHandler {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 		final IProject project = getProject(selection);
 
-		if (project != null) {
-			final ManageLibraryWizard wizard = new ManageLibraryWizard(project);
-			wizard.setWindowTitle("Manage Linked Libraries");
-			final WizardDialog dialog = new WizardDialog(shell, wizard);
-			dialog.setBlockOnOpen(false);
-			dialog.setModal(false);
-			dialog.create();
-			dialog.open();
-		}
+		ManageLibraryWizard.openWizardDialog(project, shell);
 
 		return Status.OK_STATUS;
 	}

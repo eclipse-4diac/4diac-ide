@@ -13,11 +13,13 @@
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -26,16 +28,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
-import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
-import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.LibraryChange;
+import org.eclipse.fordiac.ide.library.LibraryChange.ChangeType;
+import org.eclipse.fordiac.ide.library.LibraryResolver;
+import org.eclipse.fordiac.ide.library.LibraryResolver.ResolveResult;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
-import org.eclipse.fordiac.ide.library.download.DownloadResult;
+import org.eclipse.fordiac.ide.library.model.library.Manifest;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
+import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
+import org.eclipse.fordiac.ide.library.provider.ILibraryProvider;
+import org.eclipse.fordiac.ide.library.provider.ILibraryProvider.LibraryDescriptor;
+import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
+import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
-import org.eclipse.fordiac.ide.library.ui.wizards.LibraryChangeAction.ActionType;
-import org.eclipse.fordiac.ide.library.ui.wizards.LibraryDescriptorNode.LibraryDescriptorLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -50,29 +56,41 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 
 public class LibraryPlanningPage extends WizardPage {
 
 	private TreeViewer treeViewer;
+
+	private final ILibraryProvider offlineLibraryProvider;
+	private final ILibraryProvider onlineLibraryProvider;
+
+	private List<LibContainer> input;
 	private final IProject project;
-	private final Map<String, List<String>> localVersionLookup;
-	private Map<String, List<String>> remoteVersionLookup;
-	private List<LibraryDescriptorNode> input;
+	private StyledText detailsText;
+	private ResolveResult resolveResult;
 
 	protected LibraryPlanningPage(final String pageName, final IProject project) {
 		super(pageName);
+		setTitle(Messages.ManageLibraryWizard_PlannigPage_Titel);
+		this.offlineLibraryProvider = new OfflineLibraryProvider();
+		this.onlineLibraryProvider = new OnlineLibraryProvider();
 		this.project = project;
-		this.localVersionLookup = new HashMap<>();
-		this.remoteVersionLookup = Map.of();
 	}
 
-	public List<LibraryDescriptorNode> getModifiedNodes() {
-		return getLibraryNodes().filter(node -> node.getAction().getType() != ActionType.EMPTY).toList();
+	public List<LibraryChange> getChanges() {
+		return getAllChanges().filter(change -> change.getType() != ChangeType.NOP).toList();
+	}
+
+	public ResolveResult getResolveResult() {
+		return resolveResult;
 	}
 
 	@Override
@@ -90,9 +108,9 @@ public class LibraryPlanningPage extends WizardPage {
 				SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		treeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		initLocalVersionLookup();
-
 		configureColumns(columnLayout);
+
+		offlineLibraryProvider.refresh(new NullProgressMonitor(), true);
 
 		treeViewer.getTree().setHeaderVisible(true);
 		treeViewer.setContentProvider(new ITreeContentProvider() {
@@ -102,8 +120,8 @@ public class LibraryPlanningPage extends WizardPage {
 				if (element instanceof final Collection<?> list) {
 					return !list.isEmpty();
 				}
-				if (element instanceof final LibraryDescriptorNode desc) {
-					return !desc.getChildren().isEmpty();
+				if (element instanceof final LibContainer container) {
+					return !container.children().isEmpty();
 				}
 				return false;
 			}
@@ -118,6 +136,9 @@ public class LibraryPlanningPage extends WizardPage {
 				if (inputElement instanceof final Collection<?> list) {
 					return list.toArray();
 				}
+				if (inputElement instanceof final LibContainer container) {
+					return container.children().toArray();
+				}
 				return new Object[0];
 			}
 
@@ -126,14 +147,16 @@ public class LibraryPlanningPage extends WizardPage {
 				if (parentElement instanceof final Collection<?> list) {
 					return list.toArray();
 				}
-				if (parentElement instanceof final LibraryDescriptorNode desc) {
-					return desc.getChildren().toArray();
+				if (parentElement instanceof final LibContainer desc) {
+					return desc.children().toArray();
 				}
 				return new Object[0];
 			}
 		});
 
-		input = getViewerInput();
+		createValidationInfo(root);
+
+		input = createViewerInput();
 		treeViewer.setInput(input);
 		treeViewer.getTree().setLinesVisible(true);
 		treeViewer.expandAll();
@@ -147,46 +170,111 @@ public class LibraryPlanningPage extends WizardPage {
 
 	}
 
-	private List<LibraryDescriptorNode> getViewerInput() {
-		final LibraryDescriptorNode stdLib = new LibraryDescriptorNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
-		stdLib.setAction(null);
-		final LibraryDescriptorNode extLib = new LibraryDescriptorNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
-		extLib.setAction(null);
+	private void createValidationInfo(final Composite container) {
+		final Composite detailsBox = new Composite(container, SWT.BORDER);
+		detailsBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		detailsBox.setLayout(new GridLayout(1, false));
+
+		final Label detailsLabel = new Label(detailsBox, SWT.NONE);
+		detailsLabel.setText("Problems"); //$NON-NLS-1$
+
+		detailsText = new StyledText(detailsBox, SWT.V_SCROLL | SWT.READ_ONLY | SWT.WRAP);
+		final GridData detailsData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		detailsData.heightHint = 90;
+		detailsText.setLayoutData(detailsData);
+	}
+
+	private IStatus validateChanges() {
+		final Set<String> excluded = getAllChanges().filter(n -> n.getType() == ChangeType.REMOVE)
+				.map(LibraryChange::getSymbolicName).collect(Collectors.toSet());
+		final Set<LibraryDescriptor> included = getPlannedLinkedLibraries().stream().collect(Collectors.toSet());
+
+		resolveResult = LibraryResolver.resolveDependencies(getProjectDependencies(), getAvailableLibraries(), included,
+				excluded);
+		detailsText.setText(resolveResult.getMessage());
+		final GridData gd = (GridData) detailsText.getLayoutData();
+		gd.heightHint = Math.min(90, detailsText.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		detailsText.getParent().layout();
+		return resolveResult.status();
+	}
+
+	private Map<String, List<LibraryDescriptor>> getAvailableLibraries() {
+		final Map<String, List<LibraryDescriptor>> availableLibraries = new HashMap<>();
+		offlineLibraryProvider.getAll().forEach((symbolicName, libraries) -> availableLibraries
+				.computeIfAbsent(symbolicName, k -> new ArrayList<>()).addAll(libraries));
+		onlineLibraryProvider.getAll().forEach((symbolicName, libraries) -> availableLibraries
+				.computeIfAbsent(symbolicName, k -> new ArrayList<>()).addAll(libraries));
+		availableLibraries.replaceAll((k, v) -> v.stream().distinct().toList());
+		return availableLibraries;
+	}
+
+	private Map<String, VersionRange> getProjectDependencies() {
+		final Map<String, VersionRange> dependencies = new HashMap<>();
+		final Manifest man = ManifestHelper.getOrCreateProjectManifest(project);
+
+		if (man == null || man.getDependencies() == null) {
+			return Map.of();
+		}
+
+		man.getDependencies().getRequired().forEach(
+				req -> dependencies.put(req.getSymbolicName(), VersionComparator.parseVersionRange(req.getVersion())));
+
+		return dependencies;
+	}
+
+	public List<LibraryDescriptor> getPlannedLinkedLibraries() {
+		return getAllChanges().filter(n -> n.getType() != ChangeType.REMOVE).map(n -> {
+			final Version version = switch (n.getType()) {
+			case UPDATE, DOWNGRADE -> new Version(n.getTargetVersion());
+			default -> new Version(n.getCurrentVersion());
+			};
+
+			return offlineLibraryProvider.getLibrary(n.getSymbolicName(), version)
+					.orElse(onlineLibraryProvider.getLibrary(n.getSymbolicName(), version)
+							.orElse(new LibraryDescriptor(n.getSymbolicName(), version, Map.of())));
+		}).toList();
+	}
+
+	private List<LibContainer> createViewerInput() {
+		final LibContainer stdLibNode = new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
+		final LibContainer extLibNode = new LibContainer(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 
 		try {
-			LinkedLibrary.getStandard(project, new NullProgressMonitor()).forEach(lib -> stdLib
-					.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString())));
+			LinkedLibrary.getExternal(project, new NullProgressMonitor()).forEach(folder -> extLibNode.children()
+					.add(LibraryChange.createEmpty(folder.getSymbolicName(), folder.getVersion().toString())));
 
-			LinkedLibrary.getExternal(project, new NullProgressMonitor()).forEach(lib -> extLib
-					.addChild(new LibraryDescriptorNode(lib.getSymbolicName(), lib.getVersion().toString())));
+			LinkedLibrary.getStandard(project, new NullProgressMonitor()).forEach(folder -> stdLibNode.children()
+					.add(LibraryChange.createEmpty(folder.getSymbolicName(), folder.getVersion().toString())));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Error fetching linked Libraries", e); //$NON-NLS-1$
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
-		return List.of(extLib, stdLib);
+
+		return List.of(extLibNode, stdLibNode);
 	}
 
 	private void configureColumns(final TreeColumnLayout layout) {
-		final TreeViewerColumn symbolicNameColumn = createColumn(Messages.LibraryPlanningPage_SymbolicName,
-				new LibraryDescriptorLabelProvider(LibraryDescriptorNode::getName, false));
+		final TreeViewerColumn symbolicNameColumn = createColumn(Messages.ManageLibraryWizard_SymbolicName,
+				new LibraryChangeLabelProvider(LibraryChange::getSymbolicName, false));
 		layout.setColumnData(symbolicNameColumn.getColumn(), new ColumnWeightData(40));
 
-		final TreeViewerColumn activeVersionColumn = createColumn(Messages.LibraryPlanningPage_ActiveVersion,
-				new LibraryDescriptorLabelProvider(LibraryDescriptorNode::getActiveVersion, false));
+		final TreeViewerColumn activeVersionColumn = createColumn(Messages.ManageLibraryWizard_CurrentVersion,
+				new LibraryChangeLabelProvider(LibraryChange::getCurrentVersion, false));
 		layout.setColumnData(activeVersionColumn.getColumn(), new ColumnWeightData(20));
 
-		final TreeViewerColumn actionColumn = createColumn(Messages.LibraryPlanningPage_Action,
-				new LibraryDescriptorLabelProvider(node -> LibraryChangeAction.getActionText(node.getAction()), true));
-		layout.setColumnData(actionColumn.getColumn(), new ColumnWeightData(20));
+		final TreeViewerColumn changeSelectionColumn = createColumn(Messages.ManageLibraryWizard_Change,
+				new LibraryChangeLabelProvider(LibraryChange::getText, true));
+		layout.setColumnData(changeSelectionColumn.getColumn(), new ColumnWeightData(20));
 
-		actionColumn.setEditingSupport(new EditingSupport(treeViewer) {
+		changeSelectionColumn.setEditingSupport(new EditingSupport(treeViewer) {
 
 			@Override
 			protected void setValue(final Object element, final Object value) {
-				if (element instanceof final LibraryDescriptorNode rec && value instanceof final Integer i) {
-					final List<LibraryChangeAction> actions = getAvailableActions(rec);
-
-					if (i.intValue() >= 0 && i.intValue() < actions.size()) {
-						rec.setAction(actions.get(i.intValue()));
+				if (element instanceof final LibraryChange currentChange && value instanceof final Integer i) {
+					final List<LibraryChange> changes = getAvailableChanges(currentChange);
+					if (i.intValue() >= 0 && i.intValue() < changes.size()) {
+						final var newChange = changes.get(i.intValue());
+						currentChange.setTargetVersion(newChange.getTargetVersion());
+						currentChange.setType(newChange.getType());
 						treeViewer.update(element, null);
 						checkPageComplete();
 					}
@@ -195,44 +283,44 @@ public class LibraryPlanningPage extends WizardPage {
 
 			@Override
 			protected Object getValue(final Object element) {
-				if (element instanceof final LibraryDescriptorNode rec) {
-					return Integer.valueOf(getAvailableActions(rec).indexOf(rec.getAction()));
+				if (element instanceof final LibraryChange rec) {
+					return Integer.valueOf(getAvailableChanges(rec).indexOf(rec));
 				}
 				return Integer.valueOf(0);
 			}
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				if (element instanceof final LibraryDescriptorNode rec) {
-					return new ComboBoxCellEditor(treeViewer.getTree(),
-							getAvailableActionStrings(rec).toArray(new String[0]), SWT.READ_ONLY);
+				if (element instanceof final LibraryChange rec) {
+					final String[] changes = getAvailableChanges(rec).stream().map(LibraryChange::getText).toList()
+							.toArray(new String[0]);
+					return new ComboBoxCellEditor(treeViewer.getTree(), changes, SWT.READ_ONLY);
 				}
 				return new ComboBoxCellEditor(treeViewer.getTree(), new String[0], SWT.READ_ONLY);
 			}
 
 			@Override
 			protected boolean canEdit(final Object element) {
-				if (element instanceof final LibraryDescriptorNode rec) {
-					return rec.getChildren().isEmpty();
-				}
-				return false;
+				return element instanceof LibraryChange;
 			}
 
-			private List<String> getAvailableVersions(final LibraryDescriptorNode node) {
+			private List<String> getAvailableVersions(final String symbolicName) {
 				return Stream
-						.concat(localVersionLookup.getOrDefault(node.getName(), Collections.emptyList()).stream(),
-								remoteVersionLookup.getOrDefault(node.getName(), Collections.emptyList()).stream())
-						.distinct().toList();
+						.concat(offlineLibraryProvider.getAll(symbolicName).stream(),
+								onlineLibraryProvider.getAll(symbolicName).stream())
+						.map(lib -> lib.version().toString()).distinct().toList();
 			}
 
-			private List<String> getAvailableActionStrings(final LibraryDescriptorNode node) {
-				return getAvailableActions(node).stream().map(LibraryChangeAction::getActionText).toList();
-			}
-
-			private List<LibraryChangeAction> getAvailableActions(final LibraryDescriptorNode node) {
-				return Stream.concat(Stream.of(LibraryChangeAction.emptyAction(), LibraryChangeAction.removeAction()),
-						getAvailableVersions(node).stream().filter(v -> !v.equals(node.getActiveVersion()))
-								.map(v -> LibraryChangeAction.createAction(node, v)))
+			private List<LibraryChange> getAvailableChanges(final LibraryChange change) {
+				final LibraryChange select = LibraryChange.createEmpty(change.getSymbolicName(),
+						change.getCurrentVersion());
+				final LibraryChange remove = LibraryChange.createRemove(change.getSymbolicName(),
+						change.getCurrentVersion());
+				return Stream
+						.concat(Stream.of(select, remove),
+								getAvailableVersions(change.getSymbolicName()).stream()
+										.filter(v -> !v.equals(change.getCurrentVersion())).map(v -> LibraryChange
+												.createChange(change.getSymbolicName(), change.getCurrentVersion(), v)))
 						.toList();
 			}
 
@@ -240,23 +328,13 @@ public class LibraryPlanningPage extends WizardPage {
 
 	}
 
-	private void initLocalVersionLookup() {
-		try {
-			LinkedLibrary.getAll(project, SubMonitor.convert(null))
-					.forEach(f -> localVersionLookup.computeIfAbsent(f.getSymbolicName(), s -> new ArrayList<>())
-							.addAll(LibraryManager.INSTANCE.getAllAvailableVersions(f.getSymbolicName())
-									.map(Version::toString).toList()));
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Error while fetching local library versions", e); //$NON-NLS-1$
-		}
-	}
-
 	private void checkPageComplete() {
-		setPageComplete(getLibraryNodes().anyMatch(node -> node.getAction().getType() != ActionType.EMPTY));
+		final IStatus status = validateChanges();
+		setPageComplete(getAllChanges().anyMatch(change -> change.getType() != ChangeType.NOP) && status.isOK());
 	}
 
-	private Stream<LibraryDescriptorNode> getLibraryNodes() {
-		return input.stream().flatMap(node -> node.getChildren().stream());
+	private Stream<LibraryChange> getAllChanges() {
+		return input.stream().flatMap(node -> node.children().stream());
 	}
 
 	private TreeViewerColumn createColumn(final String name, final CellLabelProvider labelProvider) {
@@ -267,26 +345,24 @@ public class LibraryPlanningPage extends WizardPage {
 	}
 
 	private void startRemoteVersionLookupJob() {
-		setMessage(Messages.LibraryPlanningPage_LoadRemoteVersions + " ...", IMessageProvider.INFORMATION); //$NON-NLS-1$
-		final Job job = new Job(Messages.LibraryPlanningPage_LoadRemoteVersions) {
+		setMessage(Messages.ManageLibraryWizard_LoadRemoteVersions + " ...", IMessageProvider.INFORMATION); //$NON-NLS-1$
+		final Job job = new Job(Messages.ManageLibraryWizard_LoadRemoteVersions) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
-				final Map<String, List<String>> fetchedVersions = new HashMap<>();
-				final StringBuilder warningMessage = new StringBuilder();
 
-				loadRemoteVersionLookup(fetchedVersions, warningMessage);
+				final IStatus status = onlineLibraryProvider.refresh(monitor, true);
 
 				Display.getDefault().asyncExec(() -> {
 					if (treeViewer == null || treeViewer.getTree().isDisposed()) {
 						return;
 					}
 
-					remoteVersionLookup = fetchedVersions;
-
-					if (!warningMessage.isEmpty()) {
-						setMessage(warningMessage.toString(), IMessageProvider.WARNING);
-					} else {
+					if (status.isOK()) {
 						setMessage(null);
+					} else {
+						final String combinedMessage = Arrays.stream(status.getChildren()).map(IStatus::getMessage)
+								.collect(Collectors.joining(System.lineSeparator()));
+						setMessage(combinedMessage, toMessageProviderSeverity(status));
 					}
 
 					treeViewer.refresh();
@@ -300,29 +376,19 @@ public class LibraryPlanningPage extends WizardPage {
 		job.schedule();
 	}
 
-	private void loadRemoteVersionLookup(final Map<String, List<String>> target, final StringBuilder message) {
-		final GitLabDownloader downloader = new GitLabDownloader();
+	private static int toMessageProviderSeverity(final IStatus status) {
+		return switch (status.getSeverity()) {
+		case IStatus.ERROR -> IMessageProvider.ERROR;
+		case IStatus.WARNING -> IMessageProvider.WARNING;
+		case IStatus.INFO -> IMessageProvider.INFORMATION;
+		default -> IMessageProvider.NONE;
+		};
+	}
 
-		downloader.convertEndpointsToDownloader().forEach(d -> {
-			if (d.isActive()) {
-				final DownloadResult<Void> fetch = downloader.fetchProjectsAndPackages();
-
-				if (fetch.status() == DownloadResult.Status.OK) {
-					final Map<String, List<LeafNode>> packagesAndLeaves = downloader.getPackagesAndLeaves();
-
-					for (final String symbolicName : localVersionLookup.keySet()) {
-						packagesAndLeaves.getOrDefault(symbolicName, Collections.emptyList()).stream()
-								.map(LeafNode::getVersion).distinct()
-								.forEach(v -> target.computeIfAbsent(symbolicName, s -> new ArrayList<>()).add(v));
-					}
-				} else {
-					if (!message.isEmpty()) {
-						message.append(System.lineSeparator());
-					}
-					message.append(fetch.message());
-				}
-			}
-		});
+	record LibContainer(String name, List<LibraryChange> children) {
+		LibContainer(final String name) {
+			this(name, new ArrayList<>());
+		}
 	}
 
 }

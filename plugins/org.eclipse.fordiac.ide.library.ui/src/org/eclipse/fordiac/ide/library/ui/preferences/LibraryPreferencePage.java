@@ -10,9 +10,10 @@
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.library.preferences;
+package org.eclipse.fordiac.ide.library.ui.preferences;
 
-import org.eclipse.fordiac.ide.library.Messages;
+import org.eclipse.fordiac.ide.library.preferences.LibraryPreferenceConstants;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.ui.preferences.FordiacPropertyPreferencePage;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.swt.SWT;
