@@ -12,16 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.globalconstantseditor.ui;
 
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.builder.GlobalConstantsToBeBuiltComputerContribution;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.resource.GlobalConstantsResourceSetInitializer;
+import org.eclipse.xtext.builder.impl.IToBeBuiltComputerContribution;
 import org.eclipse.xtext.ui.resource.IResourceSetInitializer;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
 
+@SuppressWarnings("restriction")
 public class GlobalConstantsSharedModule implements Module {
 
 	@Override
 	public void configure(final Binder binder) {
 		binder.bind(IResourceSetInitializer.class).to(GlobalConstantsResourceSetInitializer.class);
+		binder.bind(IToBeBuiltComputerContribution.class).to(GlobalConstantsToBeBuiltComputerContribution.class);
 	}
 }
