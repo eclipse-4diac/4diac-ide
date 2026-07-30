@@ -706,8 +706,11 @@ public enum LibraryManager {
 
 		final int maxSeverity = markerList.stream().mapToInt(ErrorMarkerBuilder::getSeverity).max().orElse(-1);
 		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
-			markerList.add(ErrorMarkerBuilder.createErrorMarkerBuilder(Messages.LibraryManager_UnresolvableDependencies)
-					.setType(FordiacErrorMarker.LIBRARY_MARKER));
+			FordiacMarkerHelper.updateMarkers(project, FordiacErrorMarker.LIBRARY_MARKER,
+					List.of(ErrorMarkerBuilder
+							.createErrorMarkerBuilder(Messages.LibraryManager_UnresolvableDependencies)
+							.setType(FordiacErrorMarker.LIBRARY_MARKER)),
+					true);
 		}
 
 		FordiacMarkerHelper.updateMarkers(project.getFile(MANIFEST), FordiacErrorMarker.LIBRARY_MARKER, markerList,
