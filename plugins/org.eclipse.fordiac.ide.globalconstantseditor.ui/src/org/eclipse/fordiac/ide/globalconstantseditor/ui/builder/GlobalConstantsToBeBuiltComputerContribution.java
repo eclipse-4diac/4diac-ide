@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2026 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,16 +10,16 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder;
+package org.eclipse.fordiac.ide.globalconstantseditor.ui.builder;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.builder.STCoreToBeBuiltComputerContribution;
 
-public class STAlgorithmToBeBuiltComputerContribution extends STCoreToBeBuiltComputerContribution {
+public class GlobalConstantsToBeBuiltComputerContribution extends STCoreToBeBuiltComputerContribution {
 
 	@Override
 	protected boolean isValidFileExtension(final IFile file) {
-		return STAlgorithmResource.isValidFileExtension(file.getFileExtension());
+		return TypeLibraryTags.GLOBAL_CONST_FILE_ENDING.equalsIgnoreCase(file.getFileExtension());
 	}
 }
