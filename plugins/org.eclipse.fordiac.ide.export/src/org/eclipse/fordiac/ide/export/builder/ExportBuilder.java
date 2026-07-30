@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.export.builder;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -79,7 +78,8 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 		final BuildContext context = createBuildContext();
 
-		if (context.filter == null || !ExportFilterUtil.validateExportPath(context.outputDirectory, getProject())) {
+		if (context.filter == null || !ExportFilterUtil.validateExportPath(context.outputDirectory, getProject())
+				|| hasRelevantErrorMarker(getProject())) {
 			return new IProject[0];
 		}
 
@@ -294,9 +294,9 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	private static boolean hasRelevantErrorMarker(final IFile file) throws CoreException {
-		return Arrays.stream(file.findMarkers(FordiacErrorMarker.PROBLEM_MARKER, true, IResource.DEPTH_INFINITE))
-				.anyMatch(m -> m.getAttribute(IMarker.SEVERITY, -1) == IMarker.SEVERITY_ERROR);
+	private static boolean hasRelevantErrorMarker(final IResource resource) throws CoreException {
+		return resource.findMaxProblemSeverity(FordiacErrorMarker.PROBLEM_MARKER, true,
+				IResource.DEPTH_ZERO) >= IMarker.SEVERITY_ERROR;
 	}
 
 	private boolean isExportCanceled(final IProgressMonitor monitor) {
