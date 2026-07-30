@@ -47,6 +47,7 @@
 			<unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.ocl.unified.core.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.sirius.samples.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.sirius.specifier.feature.group" version="0.0.0"/>
