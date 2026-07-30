@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.builder;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +34,10 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LibraryValidation;
-import org.eclipse.fordiac.ide.library.LinkedLibrary;
 import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class LibraryBuilder extends IncrementalProjectBuilder {
@@ -79,21 +76,11 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 
 	@Override
 	protected void clean(final IProgressMonitor monitor) throws CoreException {
-		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary, 3);
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary, 1);
 
-		// clean manifest library marker
-		final IFile manifestFile = getProject().getFile(LibraryManager.MANIFEST);
-		if (manifestFile.exists()) {
-			manifestFile.deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, true, IResource.DEPTH_ZERO);
-		}
+		// clean all library markers
+		getProject().deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, true, IResource.DEPTH_INFINITE);
 		progress.worked(1);
-
-		// clean broken link markers
-		LinkedLibrary.getAll(getProject(), progress).filter(LinkedLibrary::isValid)
-				.map(LinkedLibrary::getFolder).forEach(f -> FordiacMarkerHelper.updateMarkers(f,
-						FordiacErrorMarker.LIBRARY_MARKER, Collections.emptyList(), true));
-
-		progress.worked(2);
 
 		SubMonitor.done(monitor);
 	}

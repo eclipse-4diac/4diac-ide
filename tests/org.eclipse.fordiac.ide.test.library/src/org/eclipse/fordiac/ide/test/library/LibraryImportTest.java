@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.library;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -298,8 +299,11 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertEquals(2, markers.length);
+		assertEquals(1, markers.length);
 		assertEquals(TEST01, findFirstDependencyMarker(markers).orElse(null));
+
+		assertTrue(project.findMaxProblemSeverity(FordiacErrorMarker.LIBRARY_MARKER, false,
+				IResource.DEPTH_ZERO) >= IMarker.SEVERITY_ERROR);
 	}
 
 	@Test
@@ -337,8 +341,11 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertEquals(2, markers.length);
+		assertEquals(1, markers.length);
 		assertEquals(MATH, findFirstDependencyMarker(markers).orElse(null));
+
+		assertTrue(project.findMaxProblemSeverity(FordiacErrorMarker.LIBRARY_MARKER, false,
+				IResource.DEPTH_ZERO) >= IMarker.SEVERITY_ERROR);
 	}
 
 	static Optional<String> findFirstDependencyMarker(final IMarker[] markers) {
