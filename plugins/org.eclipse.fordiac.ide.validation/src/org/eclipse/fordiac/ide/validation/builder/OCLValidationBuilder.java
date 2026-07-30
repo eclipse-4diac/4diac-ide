@@ -55,7 +55,7 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 			// nothing to do
 		}
 		}
-		return new IProject[0];
+		return OCLSourceScanner.findReferencedProjects(getProject()).toArray(IProject[]::new);
 	}
 
 	private void fullBuild(final SubMonitor monitor) throws CoreException {
@@ -90,6 +90,13 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 		if (projectDelta == null || needsFullOclBuild(projectDelta)) {
 			fullBuild(monitor);
 			return;
+		}
+		for (final IProject referencedProject : OCLSourceScanner.findReferencedProjects(getProject())) {
+			final IResourceDelta referencedDelta = getDelta(referencedProject);
+			if (referencedDelta != null && needsFullOclBuild(referencedDelta)) {
+				fullBuild(monitor);
+				return;
+			}
 		}
 	}
 
