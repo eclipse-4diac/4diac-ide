@@ -717,10 +717,6 @@ public enum LibraryManager {
 				true);
 
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
-
-		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
-			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
-		}
 	}
 
 	/**
