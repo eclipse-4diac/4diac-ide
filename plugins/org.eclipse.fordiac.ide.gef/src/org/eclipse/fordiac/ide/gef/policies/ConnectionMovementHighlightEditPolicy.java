@@ -67,7 +67,8 @@ public class ConnectionMovementHighlightEditPolicy extends org.eclipse.gef.editp
 			final Point pos = selReq.getLocation();
 			getHostFigure().translateToRelative(pos);
 			if (getHostFigure() instanceof final InteractionStyleFigure isFigure) {
-				switch (isFigure.getIntersectionStyle(pos)) {
+				style = isFigure.getIntersectionStyle(pos);
+				switch (style) {
 				case InteractionStyleFigure.REGION_CONNECTION ->
 					getHostFigure().setCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
 				case InteractionStyleFigure.REGION_DRAG ->
