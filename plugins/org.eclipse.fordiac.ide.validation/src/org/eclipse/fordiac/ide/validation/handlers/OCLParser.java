@@ -14,33 +14,39 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation.handlers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.Activator;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
-import org.eclipse.ocl.pivot.Constraint;
-import org.eclipse.ocl.pivot.resource.ASResource;
-import org.eclipse.ocl.pivot.resource.CSResource;
-import org.eclipse.ocl.pivot.utilities.OCL;
-import org.eclipse.ocl.pivot.utilities.ParserException;
-import org.eclipse.ocl.pivot.utilities.PivotUtil;
+import org.eclipse.ocl.OCLInput;
+import org.eclipse.ocl.ParserException;
+import org.eclipse.ocl.ecore.Constraint;
+import org.eclipse.ocl.ecore.OCL;
 import org.osgi.framework.Bundle;
 
 public final class OCLParser {
 	private static final String CONSTRAINT_DIRECTORY = "constraints"; //$NON-NLS-1$
 	private static final String CONSTRAINT_FILE_FBTYPE = "ECC.ocl"; //$NON-NLS-1$
+
+	private static final Pattern IMPORT_STATEMENT = Pattern.compile("""
+			(?m)^[\\t ]*import[\\t ]+\
+			(?:[A-Za-z_][A-Za-z0-9_]*[\\t ]*:[\\t ]*)?\
+			'[^'\\r\\n]+'[\\t ]*;?[\\t ]*(?=\\r?$)"""); //$NON-NLS-1$
 
 	private OCLParser() {
 		throw new UnsupportedOperationException();
@@ -62,9 +68,8 @@ public final class OCLParser {
 		if (url == null) {
 			return List.of();
 		}
-		try {
-			final URI uri = URI.createURI(FileLocator.toFileURL(url).toExternalForm());
-			return parse(uri, ocl).stream().map(constraint -> new LoadedConstraint(constraint, null)).toList();
+		try (InputStream inputStream = FileLocator.toFileURL(url).openStream()) {
+			return parse(inputStream, ocl).stream().map(constraint -> new LoadedConstraint(constraint, null)).toList();
 		} catch (ParserException | IOException | RuntimeException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
@@ -83,28 +88,39 @@ public final class OCLParser {
 
 	private static void loadOCLConstraints(final IFile file, final OCL ocl, final List<LoadedConstraint> constraints,
 			final List<ParseProblem> problems) {
-		try {
-			final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-			parse(uri, ocl).forEach(constraint -> constraints.add(new LoadedConstraint(constraint, file)));
-		} catch (final ParserException | IOException | RuntimeException e) {
+		try (InputStream inputStream = file.getContents()) {
+			parse(inputStream, ocl).forEach(constraint -> constraints.add(new LoadedConstraint(constraint, file)));
+		} catch (final ParserException | IOException | RuntimeException | CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			problems.add(new ParseProblem(file, e.getMessage()));
 		}
 	}
 
-	private static List<Constraint> parse(final URI uri, final OCL ocl) throws ParserException, IOException {
-		final CSResource concreteSyntax = ocl.getCSResource(uri);
-		PivotUtil.checkResourceErrors("Failed to parse '" + uri + "'", concreteSyntax); //$NON-NLS-1$ //$NON-NLS-2$
-		final ASResource abstractSyntax = ocl.cs2as(concreteSyntax);
-		PivotUtil.checkResourceErrors("Failed to parse '" + uri + "'", abstractSyntax); //$NON-NLS-1$ //$NON-NLS-2$
+	private static List<Constraint> parse(final InputStream inputStream, final OCL ocl)
+			throws ParserException, IOException {
+		return ocl.parse(new OCLInput(skipImports(inputStream)));
+	}
 
-		final List<Constraint> constraints = new ArrayList<>();
-		for (final TreeIterator<EObject> iterator = abstractSyntax.getAllContents(); iterator.hasNext();) {
-			if (iterator.next() instanceof final Constraint constraint) {
-				constraints.add(constraint);
-			}
+	private static InputStream skipImports(final InputStream inputStream) throws IOException {
+		final String source = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+		final Matcher matcher = IMPORT_STATEMENT.matcher(source);
+		final StringBuilder parserSource = new StringBuilder(source.length());
+
+		while (matcher.find()) {
+			/*
+			 * The classic Ecore OCL parser does not accept Complete OCL import
+			 * declarations. The required generated 4diac EPackages are registered
+			 * explicitly by OCLValidationSession.
+			 *
+			 * Remove this compatibility handling when org.eclipse.ocl.xtext.completeocl
+			 * (injects JDT dependency) can be used again, as the Xtext Complete OCL parser
+			 * processes import declarations directly.
+			 */
+			matcher.appendReplacement(parserSource, Matcher.quoteReplacement(" ".repeat(matcher.group().length()))); //$NON-NLS-1$
 		}
-		return constraints;
+		matcher.appendTail(parserSource);
+
+		return new ByteArrayInputStream(parserSource.toString().getBytes(StandardCharsets.UTF_8));
 	}
 
 	public record ParseResult(List<LoadedConstraint> constraints, List<ParseProblem> problems) {

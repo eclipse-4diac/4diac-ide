@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EPackageRegistryImpl;
+import org.eclipse.fordiac.ide.model.buildpath.BuildpathPackage;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -38,20 +39,10 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
 import org.eclipse.fordiac.ide.validation.handlers.OCLParser;
 import org.eclipse.fordiac.ide.validation.handlers.ValidationHelper;
-import org.eclipse.ocl.pivot.evaluation.ModelManager;
-import org.eclipse.ocl.pivot.utilities.OCL;
-import org.eclipse.ocl.xtext.completeocl.CompleteOCLStandaloneSetup;
+import org.eclipse.ocl.ecore.EcoreEnvironmentFactory;
+import org.eclipse.ocl.ecore.OCL;
 
 public final class OCLValidationSession implements AutoCloseable {
-
-	private static final String LIB_MODEL_URI =
-			"platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore"; //$NON-NLS-1$
-	private static final String DATA_MODEL_URI =
-			"platform:/resource/org.eclipse.fordiac.ide.model/model/data.ecore"; //$NON-NLS-1$
-
-	static {
-		CompleteOCLStandaloneSetup.doSetup();
-	}
 
 	private final OCL ocl;
 	private final List<OCLConstraintDefinition> definitions;
@@ -71,12 +62,11 @@ public final class OCLValidationSession implements AutoCloseable {
 	}
 
 	public static OCL createOCL() {
-		return OCL.newInstance(createPackageRegistry());
+		return OCL.newInstance(new EcoreEnvironmentFactory(createPackageRegistry()));
 	}
 
 	public static void setValidationExtent(final OCL ocl, final Collection<? extends EObject> roots) {
-		final Map<EClass, Set<EObject>> validationExtent = createValidationExtent(roots);
-		ocl.setModelManager(createModelManager(ocl, validationExtent));
+		ocl.setExtentMap(createValidationExtent(roots));
 	}
 
 	public static Map<EClass, Set<EObject>> createValidationExtent(final Collection<? extends EObject> roots) {
@@ -91,18 +81,18 @@ public final class OCLValidationSession implements AutoCloseable {
 		return Collections.unmodifiableMap(extent);
 	}
 
-	private static ModelManager createModelManager(final OCL ocl, final Map<EClass, Set<EObject>> extent) {
-		return pivotClass -> {
-			final EClass eClass = ocl.getMetamodelManager().getEcoreOfPivot(EClass.class, pivotClass);
-			return eClass != null ? extent.getOrDefault(eClass, Set.of()) : Set.of();
-		};
+	private static EPackage.Registry createPackageRegistry() {
+		final EPackage.Registry packageRegistry = new EPackageRegistryImpl();
+		packageRegistry.putAll(EPackage.Registry.INSTANCE);
+		registerPackage(packageRegistry, LibraryElementPackage.eINSTANCE);
+		registerPackage(packageRegistry, DataPackage.eINSTANCE);
+		registerPackage(packageRegistry, BuildpathPackage.eINSTANCE);
+		return packageRegistry;
 	}
 
-	private static EPackage.Registry createPackageRegistry() {
-		final EPackage.Registry packageRegistry = new EPackageRegistryImpl(EPackage.Registry.INSTANCE);
-		packageRegistry.put(LIB_MODEL_URI, LibraryElementPackage.eINSTANCE);
-		packageRegistry.put(DATA_MODEL_URI, DataPackage.eINSTANCE);
-		return packageRegistry;
+	private static void registerPackage(final EPackage.Registry packageRegistry, final EPackage ePackage) {
+		packageRegistry.put(ePackage.getNsURI(), ePackage);
+		packageRegistry.put(ePackage.getName(), ePackage);
 	}
 
 	private static void addToValidationExtent(final Map<EClass, Set<EObject>> extent, final EObject object) {
@@ -123,8 +113,8 @@ public final class OCLValidationSession implements AutoCloseable {
 		final List<OCLConstraintDefinition> loadedDefinitions = new ArrayList<>(parseResult.constraints().size());
 		for (final OCLParser.LoadedConstraint loadedConstraint : parseResult.constraints()) {
 			try {
-				loadedDefinitions.add(OCLConstraintDefinition.from(
-						loadedConstraint.constraint(), ocl, loadedConstraint.source()));
+				loadedDefinitions
+						.add(OCLConstraintDefinition.from(loadedConstraint.constraint(), loadedConstraint.source()));
 			} catch (final RuntimeException e) {
 				addConstraintProblem(loadedConstraint.source(), e.getMessage(), e);
 			}
@@ -134,8 +124,8 @@ public final class OCLValidationSession implements AutoCloseable {
 	}
 
 	public void validate(final INamedElement validationTarget, final IProgressMonitor monitor) {
-		final List<OCLMarker> validationMarkers = ValidationHelper
-				.createValidationMarkers(validationTarget, definitions, evaluator, monitor);
+		final List<OCLMarker> validationMarkers = ValidationHelper.createValidationMarkers(validationTarget,
+				definitions, evaluator, monitor);
 		markers.addAll(validationMarkers);
 	}
 
@@ -154,9 +144,10 @@ public final class OCLValidationSession implements AutoCloseable {
 
 	private void addSourceMarker(final IFile source, final String message) {
 		if (source != null) {
-			markers.add(new OCLMarker(source, ErrorMarkerBuilder.createErrorMarkerBuilder(message)
-					.setType(IValidationMarker.TYPE).setSeverity(IMarker.SEVERITY_ERROR)
-					.setLocation(source.getProjectRelativePath().toString())));
+			markers.add(new OCLMarker(source,
+					ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE)
+							.setSeverity(IMarker.SEVERITY_ERROR)
+							.setLocation(source.getProjectRelativePath().toString())));
 		}
 	}
 

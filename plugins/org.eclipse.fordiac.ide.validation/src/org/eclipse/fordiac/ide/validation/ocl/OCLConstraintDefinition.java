@@ -14,22 +14,21 @@ package org.eclipse.fordiac.ide.validation.ocl;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.fordiac.ide.validation.handlers.ConstraintHelper;
-import org.eclipse.ocl.pivot.Constraint;
-import org.eclipse.ocl.pivot.ExpressionInOCL;
-import org.eclipse.ocl.pivot.utilities.OCL;
-import org.eclipse.ocl.pivot.utilities.ParserException;
+import org.eclipse.ocl.ecore.Constraint;
+import org.eclipse.ocl.expressions.Variable;
+import org.eclipse.ocl.utilities.ExpressionInOCL;
 
 public record OCLConstraintDefinition(Constraint constraint, EClass contextClass,
 		OCLTupleDiagnostic tupleDiagnostic, ConstraintHelper legacyDiagnostic, IFile sourceFile) {
 
-	public static OCLConstraintDefinition from(final Constraint constraint, final OCL ocl,
-			final IFile sourceFile) {
-		final EClass contextClass = getContextClass(constraint, ocl);
-		final ExpressionInOCL specification = getSpecification(constraint, ocl);
+	public static OCLConstraintDefinition from(final Constraint constraint, final IFile sourceFile) {
+		final EClass contextClass = getContextClass(constraint);
+		final ExpressionInOCL<EClassifier, EParameter> specification = constraint.getSpecification();
 		return new OCLConstraintDefinition(constraint, contextClass,
-				OCLTupleDiagnostic.from(specification, ocl.getIdResolver()),
+				OCLTupleDiagnostic.from(specification),
 				createLegacyDiagnostic(constraint), sourceFile);
 	}
 
@@ -41,34 +40,12 @@ public record OCLConstraintDefinition(Constraint constraint, EClass contextClass
 		return tupleDiagnostic != null;
 	}
 
-	private static EClass getContextClass(final Constraint constraint, final OCL ocl) {
-		if (constraint.getContext() instanceof final org.eclipse.ocl.pivot.Class contextClass) {
-			final EClass eClass = ocl.getMetamodelManager().getEcoreOfPivot(EClass.class, contextClass);
-			if (eClass != null) {
-				return getRegisteredClass(eClass);
-			}
+	private static EClass getContextClass(final Constraint constraint) {
+		final Variable<EClassifier, EParameter> contextVariable = constraint.getSpecification().getContextVariable();
+		if (contextVariable != null && contextVariable.getType() instanceof final EClass contextClass) {
+			return contextClass;
 		}
 		throw new IllegalArgumentException("Constraint has no EClass context: " + constraint.getName()); //$NON-NLS-1$
-	}
-
-	private static EClass getRegisteredClass(final EClass eClass) {
-		final EPackage ePackage = eClass.getEPackage();
-		if (ePackage != null && ePackage.getNsURI() != null) {
-			final EPackage registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ePackage.getNsURI());
-			if (registeredPackage != null
-					&& registeredPackage.getEClassifier(eClass.getName()) instanceof final EClass registeredClass) {
-				return registeredClass;
-			}
-		}
-		return eClass;
-	}
-
-	private static ExpressionInOCL getSpecification(final Constraint constraint, final OCL ocl) {
-		try {
-			return ocl.getSpecification(constraint);
-		} catch (final ParserException e) {
-			throw new IllegalArgumentException("Cannot parse constraint: " + constraint.getName(), e); //$NON-NLS-1$
-		}
 	}
 
 	private static ConstraintHelper createLegacyDiagnostic(final Constraint constraint) {
