@@ -1,0 +1,52 @@
+/*******************************************************************************
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+import 'platform:/resource/org.eclipse.fordiac.ide.model/model/lib.ecore'
+
+package libraryElement
+
+context BaseFBType
+inv RichError:
+	Tuple {
+		status = self.name = 'valid',
+		message = 'Invalid BaseFBType: ' + self.name,
+		severity = -1,
+		markerTarget = self
+	}.status
+
+inv RichWarningContext:
+	Tuple {
+		status = false,
+		message = 'Context warning',
+		severity = 1,
+		markerTarget = 'context'
+	}.status
+
+inv RichOkSeverity:
+	Tuple {
+		status = false,
+		message = 'No marker',
+		severity = 0
+	}.status
+
+inv InvalidMarkerTarget:
+	Tuple {
+		status = false,
+		message = 'Invalid marker target',
+		severity = -1,
+		markerTarget = 42
+	}.status
+
+inv _'ERROR;[SelfCycleMustBeGatedByEvent]':
+	self.name = 'valid'
+
+endpackage
