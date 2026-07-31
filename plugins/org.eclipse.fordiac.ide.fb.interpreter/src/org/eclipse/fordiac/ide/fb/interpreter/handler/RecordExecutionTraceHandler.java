@@ -65,6 +65,10 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 		// user should have selected an event pin of an FB
 		var selectedPin = getSelectedPin(selection);
+		if (selectedPin == null) {
+			openSelectionErrorDialog(event);
+			return Status.CANCEL_STATUS;
+		}
 
 		// identify the FB network associated with this pin
 		final FBNetwork network;
@@ -80,9 +84,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 			selectedPin = handleAdapterSelection(aDecl, event);
 		}
 		if (!(selectedPin instanceof final Event triggerEvent)) {
-			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
-					Messages.RecordExecutionTraceHandler_Incorrect_Selection,
-					Messages.RecordExecutionTraceHandler_Select_FB_input_event);
+			openSelectionErrorDialog(event);
 			return Status.CANCEL_STATUS;
 		}
 
@@ -98,9 +100,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 		if (typelib != null) {
 			final IProject project = typelib.getProject();
-			typelib.getAllTypes().forEach(type -> {
-				addResourceForFile(type, type.getFile(), reset);
-			});
+			typelib.getAllTypes().forEach(type -> addResourceForFile(type, type.getFile(), reset));
 			addResourceForEventTypeLib(reset);
 			addResourceForDataTypeLib(typelib.getDataTypeLibrary(), reset);
 
@@ -132,6 +132,12 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 			}
 		}
 		return Status.OK_STATUS;
+	}
+
+	private static void openSelectionErrorDialog(final ExecutionEvent event) {
+		MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
+				Messages.RecordExecutionTraceHandler_Incorrect_Selection,
+				Messages.RecordExecutionTraceHandler_Select_FB_event);
 	}
 
 	private static void addResourceForEventTypeLib(final ResourceSet reset) {
@@ -181,8 +187,8 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 	private static IInterfaceElement getSelectedPin(final IStructuredSelection structuredSelection) {
 		Object selected = structuredSelection.getFirstElement();
-		if (selected instanceof EditPart) {
-			selected = ((EditPart) structuredSelection.getFirstElement()).getModel();
+		if (selected instanceof final EditPart editPart) {
+			selected = editPart.getModel();
 		}
 		if (selected instanceof final IInterfaceElement pin) {
 			return pin;
