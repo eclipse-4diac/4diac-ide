@@ -21,8 +21,8 @@ import java.util.function.Consumer;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.ocl.pivot.utilities.OCL;
-import org.eclipse.ocl.pivot.values.TupleValue;
+import org.eclipse.ocl.ecore.OCL;
+import org.eclipse.ocl.util.Tuple;
 
 public final class OCLConstraintEvaluator {
 
@@ -60,7 +60,7 @@ public final class OCLConstraintEvaluator {
 	private Optional<OCLDiagnostic> evaluateTupleDiagnostic(final EObject context,
 			final OCLConstraintDefinition definition) {
 		final OCLTupleDiagnostic tupleDiagnostic = definition.tupleDiagnostic();
-		final TupleValue tuple = evaluateTuple(context, tupleDiagnostic);
+		final Tuple<?, ?> tuple = evaluateTuple(context, tupleDiagnostic);
 		if (tupleDiagnostic.getRequiredField(tuple, STATUS_FIELD, Boolean.class).booleanValue()) {
 			return Optional.empty();
 		}
@@ -73,9 +73,9 @@ public final class OCLConstraintEvaluator {
 				getMarkerTarget(tuple, tupleDiagnostic, context)));
 	}
 
-	private TupleValue evaluateTuple(final EObject context, final OCLTupleDiagnostic tupleDiagnostic) {
-		final Object value = ocl.evaluate(context, tupleDiagnostic.expression());
-		if (value instanceof final TupleValue tuple) {
+	private Tuple<?, ?> evaluateTuple(final EObject context, final OCLTupleDiagnostic tupleDiagnostic) {
+		final Object value = ocl.evaluate(context, tupleDiagnostic.expression().getBodyExpression());
+		if (value instanceof final Tuple<?, ?> tuple) {
 			return tuple;
 		}
 		throw new IllegalArgumentException("diagnostic expression did not evaluate to a Tuple"); //$NON-NLS-1$
@@ -90,12 +90,12 @@ public final class OCLConstraintEvaluator {
 				definition.legacyDiagnostic().getSeverity(), context));
 	}
 
-	private static String getMessage(final TupleValue tuple, final OCLConstraintDefinition definition) {
+	private static String getMessage(final Tuple<?, ?> tuple, final OCLConstraintDefinition definition) {
 		return definition.tupleDiagnostic().getOptionalField(tuple, MESSAGE_FIELD, String.class,
 				definition.legacyDiagnostic().getMessage());
 	}
 
-	private static OptionalInt getMarkerSeverity(final TupleValue tuple,
+	private static OptionalInt getMarkerSeverity(final Tuple<?, ?> tuple,
 			final OCLTupleDiagnostic tupleDiagnostic) {
 		final Number number = tupleDiagnostic.getOptionalField(tuple, SEVERITY_FIELD, Number.class, null);
 		if (number == null) {
@@ -108,7 +108,7 @@ public final class OCLConstraintEvaluator {
 		return severity > 0 ? OptionalInt.of(IMarker.SEVERITY_WARNING) : OptionalInt.empty();
 	}
 
-	private static EObject getMarkerTarget(final TupleValue tuple,
+	private static EObject getMarkerTarget(final Tuple<?, ?> tuple,
 			final OCLTupleDiagnostic tupleDiagnostic, final EObject context) {
 		final Object value = tupleDiagnostic.getOptionalValue(tuple, MARKER_TARGET_FIELD);
 		return switch (value) {
