@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchValueAnnotation;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
@@ -69,12 +70,12 @@ public class SelectionService implements ISelectionListener {
 				continue;
 			}
 
-			if (ep.getModel() instanceof final IInterfaceElement mo) {
-				lastSelectedDatapoints.add(mo.getQualifiedName());
-			} else if (ep.getModel() instanceof final FBNetworkElement mo) {
+			switch (ep.getModel()) {
+			case final IInterfaceElement interf -> lastSelectedDatapoints.add(interf.getQualifiedName());
+			case final FBNetworkElement fb -> {
 				// find all interfaces and variables from a FB block
 				// omit non interface elements, or interface from subApps
-				final var fbBlockIt = mo.eAllContents();
+				final var fbBlockIt = fb.eAllContents();
 				while (fbBlockIt.hasNext()) {
 					final EObject obj = fbBlockIt.next();
 					if (!(obj instanceof final IInterfaceElement interfaceElement)) {
@@ -82,14 +83,20 @@ public class SelectionService implements ISelectionListener {
 					}
 					lastSelectedDatapoints.add(interfaceElement.getQualifiedName());
 				}
-			} else if (ep.getModel() instanceof final org.eclipse.fordiac.ide.model.libraryElement.Connection mo) {
-				lastSelectedDatapoints.add(mo.getSource().getQualifiedName());
-				lastSelectedDatapoints.add(mo.getDestination().getQualifiedName());
 			}
-
+			case final org.eclipse.fordiac.ide.model.libraryElement.Connection conn -> {
+				lastSelectedDatapoints.add(conn.getSource().getQualifiedName());
+				lastSelectedDatapoints.add(conn.getDestination().getQualifiedName());
+			}
+			case final WatchValueAnnotation watch -> lastSelectedDatapoints.add(watch.getElement().getQualifiedName());
+			default -> {
+				// ignore other types of elements
+			}
+			}
 		}
 
 		pcs.firePropertyChange(PROPERTY_SELECTION, null, null);
+
 	}
 
 	public List<String> getSelectedElements() {
