@@ -47,11 +47,12 @@ public class TimelineAnchor extends AbstractConnectionAnchor {
 	public Point getLocation(final Point reference) {
 
 		final Rectangle bounds = getOwner().getBounds().getCopy();
-		getOwner().translateToAbsolute(bounds);
 
 		final var currentNumberOfEvents = numberOfEvents.getAsInt();
 		if (currentNumberOfEvents < 1) {
-			return new Point(bounds.x, bounds.y);
+			final Point p = new Point(bounds.x, bounds.y);
+			getOwner().translateToAbsolute(p);
+			return p;
 		}
 
 		final int availableWidth = bounds.width;
@@ -59,6 +60,9 @@ public class TimelineAnchor extends AbstractConnectionAnchor {
 
 		final int x = bounds.x + (eventIndex * markerSpacing) + (isSource ? markerSpacing / 2 : 0);
 		final int y = bounds.y + (isSource ? bounds.height : bounds.height / 2);
-		return new Point(x, y);
+
+		final Point result = new Point(x, y);
+		getOwner().translateToAbsolute(result);
+		return result;
 	}
 }
