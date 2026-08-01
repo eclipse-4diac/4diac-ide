@@ -35,6 +35,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.fordiac.ide.fbtypeeditor.network
 Export-Package: org.eclipse.fordiac.ide.deployment.debug.ui,
+ org.eclipse.fordiac.ide.deployment.debug.ui.annotation,
  org.eclipse.fordiac.ide.deployment.debug.ui.actions,
  org.eclipse.fordiac.ide.deployment.debug.ui.fb,
  org.eclipse.fordiac.ide.deployment.debug.ui.handler,
