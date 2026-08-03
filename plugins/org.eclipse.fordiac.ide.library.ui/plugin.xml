@@ -89,18 +89,6 @@
    		</enabledWhen>
   	</activity>
    </extension>
-   <extension
-         point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
-      <changePreviewViewer
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.ChangeConfigurationViewer"
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteLibraryChangeViewer">
-         <enablement>
-         <or>
-		 <instanceof value="org.eclipse.fordiac.ide.library.refactoring.DeleteLibraryDependencyChange"/>
-         </or>
-         </enablement>
-      </changePreviewViewer>
-   </extension>
    
 	<extension point="org.eclipse.ui.commands">
   		<command
