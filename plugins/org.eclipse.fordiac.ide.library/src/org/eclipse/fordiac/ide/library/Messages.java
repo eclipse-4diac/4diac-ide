@@ -19,6 +19,12 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.library.messages"; //$NON-NLS-1$
 
+	public static String AddLibraryDependency_Change_Title;
+
+	public static String DeleteLibraryParticipant_Name;
+	public static String DeleteLibraryParticipant_Change_Title;
+	public static String DeleteLibraryParticipant_Block_Delete;
+
 	public static String ErrorMarkerLibNotAvailable;
 	public static String ErrorMarkerStandardLibNotAvailable;
 	public static String ErrorMarkerVersionRangeEmpty;
