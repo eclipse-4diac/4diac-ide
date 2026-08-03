@@ -19,11 +19,6 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
-	public static String AddLibraryDependency_Change_Title;
-
-	public static String DeleteLibraryParticipant_Name;
-	public static String DeleteLibraryParticipant_Change_Title;
-	public static String DeleteLibraryParticipant_Block_Delete;
 	public static String DirsWithArchives;
 	public static String DirsWithUnzippedTypeLibs;
 
