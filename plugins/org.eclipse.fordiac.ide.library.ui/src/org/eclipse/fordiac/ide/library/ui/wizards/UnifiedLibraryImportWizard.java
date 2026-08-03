@@ -16,14 +16,31 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 
 public class UnifiedLibraryImportWizard extends Wizard implements IImportWizard {
 
 	private UnifiedLibraryImportWizardPage page;
 	private IProject targetProject;
+
+	public static int openDialog(final IProject project, final Shell shell) {
+		if (project != null) {
+			final UnifiedLibraryImportWizard wizard = new UnifiedLibraryImportWizard();
+			wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
+			final WizardDialog dialog = new WizardDialog(shell, wizard);
+			dialog.setBlockOnOpen(true);
+			dialog.create();
+			return dialog.open();
+		}
+		return Window.CANCEL;
+	}
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {

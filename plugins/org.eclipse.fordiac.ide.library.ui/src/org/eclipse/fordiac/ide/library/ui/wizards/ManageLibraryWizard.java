@@ -37,7 +37,7 @@ public class ManageLibraryWizard extends Wizard {
 	private final LibraryChangePreviewPage previewPage;
 	private List<LibraryChange> changesIncludingTransitive = List.of();
 
-	public static int openWizardDialog(final IProject project, final Shell shell) {
+	public static int openDialog(final IProject project, final Shell shell) {
 		if (project != null) {
 			final ManageLibraryWizard wizard = new ManageLibraryWizard(project);
 			wizard.setWindowTitle("Manage Linked Libraries"); //$NON-NLS-1$
