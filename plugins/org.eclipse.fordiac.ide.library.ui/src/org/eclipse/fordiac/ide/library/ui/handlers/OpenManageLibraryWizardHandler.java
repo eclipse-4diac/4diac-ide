@@ -34,7 +34,7 @@ public class OpenManageLibraryWizardHandler extends AbstractHandler {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 		final IProject project = getProject(selection);
 
-		ManageLibraryWizard.openWizardDialog(project, shell);
+		ManageLibraryWizard.openDialog(project, shell);
 
 		return Status.OK_STATUS;
 	}

@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
 import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.ManageLibraryWizard;
+import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -191,9 +192,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 		final Composite buttonBar = new Composite(parent, SWT.NONE);
 		buttonBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 
-		final GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
+		final GridLayout layout = new GridLayout(3, false);
 		buttonBar.setLayout(layout);
 
 		final Button refreshButton = new Button(buttonBar, SWT.PUSH);
@@ -205,7 +204,13 @@ public class ManifestEditorDependencyPage extends FormPage {
 		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
 		manageLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		manageLibrariesButton.addListener(SWT.Selection, event -> ManageLibraryWizard
-				.openWizardDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
+				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
+
+		final Button importLibrariesButton = new Button(buttonBar, SWT.PUSH);
+		importLibrariesButton.setText(Messages.ManifestEditor_ImportLibraries);
+		importLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		importLibrariesButton.addListener(SWT.Selection, event -> UnifiedLibraryImportWizard
+				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
 	}
 
 	private List<LibContainer> createViewerInput() {
@@ -248,7 +253,6 @@ public class ManifestEditorDependencyPage extends FormPage {
 	}
 
 	private void configureColumns(final TreeColumnLayout layout) {
-
 		// symbolic name column
 		final TreeViewerColumn symbolicNameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		symbolicNameColumn.getColumn().setText(Messages.ManifestEditor_Column_SymbolicName);
