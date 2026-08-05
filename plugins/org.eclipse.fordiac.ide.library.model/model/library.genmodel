@@ -34,6 +34,7 @@
     <genClasses ecoreClass="library.ecore#//Library">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Library/includes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Library/excludes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Library/dependencies"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference library.ecore#//Library/attribute"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/comment"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Library/name"/>

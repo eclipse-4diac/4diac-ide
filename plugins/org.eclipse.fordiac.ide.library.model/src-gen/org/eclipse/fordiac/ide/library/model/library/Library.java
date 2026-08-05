@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Library#getIncludes <em>Includes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Library#getExcludes <em>Excludes</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Library#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Library#getAttribute <em>Attribute</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Library#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.Library#getName <em>Name</em>}</li>
@@ -154,5 +155,28 @@ public interface Library extends EObject {
 	 * @generated
 	 */
 	void setSymbolicName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Dependencies</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dependencies</em>' containment reference.
+	 * @see #setDependencies(Dependencies)
+	 * @see org.eclipse.fordiac.ide.library.model.library.LibraryPackage#getLibrary_Dependencies()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='Dependencies' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	Dependencies getDependencies();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.library.model.library.Library#getDependencies <em>Dependencies</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dependencies</em>' containment reference.
+	 * @see #getDependencies()
+	 * @generated
+	 */
+	void setDependencies(Dependencies value);
 
 } // Library
