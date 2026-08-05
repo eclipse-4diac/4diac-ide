@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.library.model.library.Attribute;
+import org.eclipse.fordiac.ide.library.model.library.Dependencies;
 import org.eclipse.fordiac.ide.library.model.library.Excludes;
 import org.eclipse.fordiac.ide.library.model.library.Includes;
 import org.eclipse.fordiac.ide.library.model.library.Library;
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryImpl#getIncludes <em>Includes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryImpl#getExcludes <em>Excludes</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryImpl#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryImpl#getAttribute <em>Attribute</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryImpl#getName <em>Name</em>}</li>
@@ -56,6 +58,16 @@ public class LibraryImpl extends EObjectImpl implements Library {
 	 * @ordered
 	 */
 	protected Excludes excludes;
+
+	/**
+	 * The cached value of the '{@link #getDependencies() <em>Dependencies</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDependencies()
+	 * @generated
+	 * @ordered
+	 */
+	protected Dependencies dependencies;
 
 	/**
 	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' containment reference list.
@@ -324,12 +336,59 @@ public class LibraryImpl extends EObjectImpl implements Library {
 	 * @generated
 	 */
 	@Override
+	public Dependencies getDependencies() {
+		return dependencies;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetDependencies(Dependencies newDependencies, NotificationChain msgs) {
+		Dependencies oldDependencies = dependencies;
+		dependencies = newDependencies;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__DEPENDENCIES, oldDependencies, newDependencies);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDependencies(Dependencies newDependencies) {
+		if (newDependencies != dependencies) {
+			NotificationChain msgs = null;
+			if (dependencies != null)
+				msgs = ((InternalEObject)dependencies).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.LIBRARY__DEPENDENCIES, null, msgs);
+			if (newDependencies != null)
+				msgs = ((InternalEObject)newDependencies).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryPackage.LIBRARY__DEPENDENCIES, null, msgs);
+			msgs = basicSetDependencies(newDependencies, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.LIBRARY__DEPENDENCIES, newDependencies, newDependencies));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryPackage.LIBRARY__INCLUDES:
 				return basicSetIncludes(null, msgs);
 			case LibraryPackage.LIBRARY__EXCLUDES:
 				return basicSetExcludes(null, msgs);
+			case LibraryPackage.LIBRARY__DEPENDENCIES:
+				return basicSetDependencies(null, msgs);
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
 				return ((InternalEList<?>)getAttribute()).basicRemove(otherEnd, msgs);
 			default:
@@ -349,6 +408,8 @@ public class LibraryImpl extends EObjectImpl implements Library {
 				return getIncludes();
 			case LibraryPackage.LIBRARY__EXCLUDES:
 				return getExcludes();
+			case LibraryPackage.LIBRARY__DEPENDENCIES:
+				return getDependencies();
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
 				return getAttribute();
 			case LibraryPackage.LIBRARY__COMMENT:
@@ -376,6 +437,9 @@ public class LibraryImpl extends EObjectImpl implements Library {
 				return;
 			case LibraryPackage.LIBRARY__EXCLUDES:
 				setExcludes((Excludes)newValue);
+				return;
+			case LibraryPackage.LIBRARY__DEPENDENCIES:
+				setDependencies((Dependencies)newValue);
 				return;
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
 				getAttribute().clear();
@@ -410,6 +474,9 @@ public class LibraryImpl extends EObjectImpl implements Library {
 			case LibraryPackage.LIBRARY__EXCLUDES:
 				setExcludes((Excludes)null);
 				return;
+			case LibraryPackage.LIBRARY__DEPENDENCIES:
+				setDependencies((Dependencies)null);
+				return;
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
 				getAttribute().clear();
 				return;
@@ -440,6 +507,8 @@ public class LibraryImpl extends EObjectImpl implements Library {
 				return includes != null;
 			case LibraryPackage.LIBRARY__EXCLUDES:
 				return excludes != null;
+			case LibraryPackage.LIBRARY__DEPENDENCIES:
+				return dependencies != null;
 			case LibraryPackage.LIBRARY__ATTRIBUTE:
 				return attribute != null && !attribute.isEmpty();
 			case LibraryPackage.LIBRARY__COMMENT:

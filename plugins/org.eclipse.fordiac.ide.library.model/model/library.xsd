@@ -48,6 +48,7 @@
     <xsd:sequence>
       <xsd:element minOccurs="0" name="Includes" type="Includes"/>
       <xsd:element minOccurs="0" name="Excludes" type="Excludes"/>
+      <xsd:element minOccurs="0" name="Dependencies" type="Dependencies"/>
       <xsd:element maxOccurs="unbounded" minOccurs="0" name="Attribute" type="Attribute"/>
     </xsd:sequence>
     <xsd:attribute name="Name" type="xsd:string" use="required"/>
