@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataType Name="ECDeviceConfig" Comment="A Template for a Data Type">
+	<Identification>
+	</Identification>
+	<VersionInfo Version="1.0" Author="hyperion" Date="2026-04-10">
+	</VersionInfo>
+	<CompilerInfo packageName="forte::eclipse4diac::io::ethercat">
+	</CompilerInfo>
+	<StructuredType>
+		<VarDeclaration Name="Alias" Type="UINT"/>
+		<VarDeclaration Name="Position" Type="UINT"/>
+		<VarDeclaration Name="VendorId" Type="UDINT"/>
+		<VarDeclaration Name="ProductCode" Type="UDINT"/>
+	</StructuredType>
+</DataType>

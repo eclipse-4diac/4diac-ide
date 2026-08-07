@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.fordiac.ide.ethercat.wizard.category"
+            name="%ethercat.category.name">
+      </category>
+      <wizard
+            category="org.eclipse.fordiac.ide.ethercat.wizard.category"
+            class="org.eclipse.fordiac.ide.ethercat.EsiFileImporter"
+            icon="icons/ethercat.svg"
+            id="org.eclipse.fordiac.ide.ethercat.wizard.esiFileImporter"
+            name="%ethercat.wizard.name">
+         <description>
+            %ethercat.wizard.description
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>

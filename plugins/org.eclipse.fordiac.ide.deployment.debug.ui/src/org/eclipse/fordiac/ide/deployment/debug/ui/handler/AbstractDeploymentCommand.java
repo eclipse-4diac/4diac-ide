@@ -18,12 +18,14 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
@@ -121,11 +123,25 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		final List<Object> list = getObjectSelectionArray(event);
 		for (final Object currentElement : list) {
 			if (prepareParametersToExecute(currentElement)) {
+				final OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(
+						this);
+				final Optional<DeploymentDebugDevice> activeDevice = AbstractDeploymentHandler.findActiveDevice(device);
+				if (activeDevice.isPresent()) {
+					final IDeviceManagementInteractor interactor = activeDevice.get()
+							.getDeviceManagementExecutorService();
+					interactor.addDeploymentListener(errorChecker);
+					try {
+						executeCommand(interactor);
+					} catch (final DeploymentException e) {
+						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrIDSafe(device), this);
+					}
+					interactor.removeDeploymentListener(errorChecker);
+					continue;
+				}
+
 				final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 						.getDeviceManagementInteractor(device);
 				if (null != interactor) {
-					final OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(
-							this);
 					interactor.addDeploymentListener(errorChecker);
 
 					try (IDeviceManagementInteractorCloser closer = interactor::disconnect) {
