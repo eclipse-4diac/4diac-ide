@@ -2,6 +2,8 @@
 <FBType Name="E_TON" Comment="standard timer function block (on-delay timing)">
 	<Identification Standard="61499-2" Classification="standard timer function block" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  &#10;   &#10;   &#10;E_TON -- On-delay timer FB  &#10;&#10;When IN goes TRUE, Q becomes TRUE after delay PT.  &#10;When IN goes FALSE, Q becomes FALSE immediately.">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.2" Author="Franz Höpfinger" Date="2026-06-22" Remarks="validate all timers">
+	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-05-08" Remarks="E_RF_TRIG instead of E_SWITCH">
 	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
