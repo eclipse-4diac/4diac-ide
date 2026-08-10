@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -79,10 +78,7 @@ public class FBEndpointFinder {
 	 * @param startDecl    the interface to find the destinations/sources from
 	 * @param connectedIfs Set where the corresponding interfaces are stored
 	 */
-	public static void traceMembers(final MemberVarDeclaration startDecl, final Set<IInterfaceElement> connectedIfs) {
-		final ArrayDeque<String> queue = new ArrayDeque<>();
-		queue.add(startDecl.getName());
-
+	public static void traceMembers(final VarDeclaration startDecl, final Set<IInterfaceElement> connectedIfs) {
 		trace(new RecursionState(new ArrayDeque<>(), !startDecl.isIsInput(), startDecl, connectedIfs, true));
 	}
 
@@ -420,7 +416,7 @@ public class FBEndpointFinder {
 		}
 
 		// push interface onto the stack
-		state.plexStack.push(state.ifElem.getName());
+		state.plexStack.push(getFullPinName(state.ifElem));
 		// next item to skip through the only in/output of the plexer
 		if (state.traceMember) {
 			for (final var con : varCons) {
@@ -448,13 +444,8 @@ public class FBEndpointFinder {
 	 * @param state the current state of the recursion
 	 */
 	private static void traceFan(final RecursionState state) {
-		final BlockFBNetworkElement fb = state.ifElem.getBlockFBNetworkElement();
-
 		// trace find right interface from the interface stack
-		for (final IInterfaceElement structMem : ((StructManipulator) fb).getMemberVars().stream()
-				.filter(mem -> fb.getInterface().getInterfaceElement(List.of(mem.getName())) != null).toList()) {
-			final IInterfaceElement realInt = fb.getInterface().getInterfaceElement(List.of(structMem.getName()));
-
+		for (final IInterfaceElement structMem : getAllPins(state)) {
 			Deque<String> subStack;
 			/*
 			 * case stack empty: occurs when a FB has a struct as output data type which is
@@ -467,13 +458,13 @@ public class FBEndpointFinder {
 			 * case stack is not empty: first destination plexer was a mux -> go to last
 			 * added interface from the stack
 			 */
-			else if (structMem.getName().equals(state.plexStack.peek())) {
+			else if (getFullPinName(structMem).equals(state.plexStack.peek())) {
 				subStack = ((ArrayDeque<String>) state.plexStack).clone();
 				subStack.pop();
 				if (state.traceMember
-						&& (subStack.isEmpty() || (state.inputSide ? realInt.getInputConnections().isEmpty()
-								: realInt.getOutputConnections().isEmpty()))) {
-					state.connections.add(realInt);
+						&& (subStack.isEmpty() || (state.inputSide ? structMem.getInputConnections().isEmpty()
+								: structMem.getOutputConnections().isEmpty()))) {
+					state.connections.add(structMem);
 					continue;
 				}
 			} else {
@@ -482,8 +473,8 @@ public class FBEndpointFinder {
 
 			// find destinations (skip plexers between) from the interface of the plexer
 			// according to the previously updated interface-stack
-			for (final Connection next : state.inputSide ? realInt.getInputConnections()
-					: realInt.getOutputConnections()) {
+			for (final Connection next : state.inputSide ? structMem.getInputConnections()
+					: structMem.getOutputConnections()) {
 				final IInterfaceElement nextInterface = state.inputSide ? next.getSource() : next.getDestination();
 
 				if (state.traceMember && next.isVisible()) {
@@ -495,4 +486,16 @@ public class FBEndpointFinder {
 			}
 		}
 	}
+
+	private static List<VarDeclaration> getAllPins(final RecursionState state) {
+		final BlockFBNetworkElement fb = state.ifElem.getBlockFBNetworkElement();
+		final Stream<IInterfaceElement> pins = (state.inputSide) ? fb.getInterface().getAllInputs()
+				: fb.getInterface().getAllOutputs();
+		return pins.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).toList();
+	}
+
+	private static String getFullPinName(final IInterfaceElement pin) {
+		return pin.getRelativeName(pin.getBlockFBNetworkElement());
+	}
+
 }
