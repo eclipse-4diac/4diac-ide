@@ -10,6 +10,7 @@
 		<EventInputs>
 			<Event Name="INIT" Type="Event" Comment="Initialize controller">
 				<With Var="QI"/>
+				<With Var="ACTUAL"/>
 			</Event>
 			<Event Name="REQ" Type="Event" Comment="Execute control step">
 				<With Var="QI"/>
@@ -57,6 +58,7 @@
 			<VarDeclaration Name="P_TERM" Type="REAL"/>
 			<VarDeclaration Name="OUT_UNSAT" Type="REAL"/>
 			<VarDeclaration Name="ACTUAL_OLD" Type="REAL"/>
+			<VarDeclaration Name="I_DELTA" Type="REAL"/>
 		</InternalVars>
 		<ECC>
 			<ECState Name="START" Comment="Initial State" x="-1440" y="-800">
@@ -127,10 +129,15 @@ ELSE
 
 			(* I-Term with Anti-Windup *)
 		IF TN > 0.0 THEN
-			OUT_UNSAT := P_TERM + I_SUM + D_TERM;
-			IF NOT ((OUT_UNSAT >= 100.0 AND ERR > 0.0) OR (OUT_UNSAT <= 0.0 AND ERR < 0.0)) THEN
-				I_SUM := I_SUM + (KP * ERR * DT_SEC / TN);
+			I_DELTA := KP * ERR * DT_SEC / TN;
+			OUT_UNSAT := P_TERM + I_SUM + I_DELTA + D_TERM;
+
+			IF ((OUT_UNSAT <= 100.0) AND (OUT_UNSAT >= 0.0)) OR ((OUT_UNSAT > 100.0) AND (I_DELTA < 0.0))
+				OR ((OUT_UNSAT < 0.0) AND (I_DELTA > 0.0))
+			THEN
+				I_SUM := I_SUM + I_DELTA;
 			END_IF;
+
 		ELSE
 			I_SUM := 0.0;
 		END_IF;
