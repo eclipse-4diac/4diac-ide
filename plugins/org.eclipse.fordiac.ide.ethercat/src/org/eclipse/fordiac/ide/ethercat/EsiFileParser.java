@@ -123,6 +123,22 @@ public class EsiFileParser {
 		return devices;
 	}
 
+	public ArrayList<Module> parseModulesCatalog() {
+		final ArrayList<Module> modules = new ArrayList<>();
+		try {
+			final NodeList moduleNodes = (NodeList) xpath.evaluate("//Modules/Module", document, XPathConstants.NODESET); //$NON-NLS-1$
+			for(int i = 0; i < moduleNodes.getLength(); i++) {
+				final Module module = parseModule((Element) moduleNodes.item(i));
+				if(module != null) {
+					modules.add(module);
+				}
+			}
+		} catch(final XPathExpressionException e) {
+			// ignore and return parsed part
+		}
+		return modules;
+	}
+
 	private Device parseDevice(final Element deviceElement) {
 		try {
 			final Element typeElement = (Element) deviceElement.getElementsByTagName("Type").item(0); //$NON-NLS-1$
@@ -138,18 +154,30 @@ public class EsiFileParser {
 			if(!"GL20_RTU_ECT".equals(deviceType)) { //$NON-NLS-1$
 				parseDevicePdos(deviceElement, device);
 			}
-			parseModules(device);
 
 			final Element commentElement = (Element) deviceElement.getElementsByTagName("Comment").item(0); //$NON-NLS-1$
 			if(commentElement != null) {
 				device.setComment(commentElement.getTextContent());
 			}
 			device.productCode = typeElement.getAttribute("ProductCode"); //$NON-NLS-1$
-			device.setDeviceCategory(device.modules.isEmpty() ? Device.DeviceCategory.GEN_Device : Device.DeviceCategory.GEN_Coupler);
+			device.revisionNo = typeElement.getAttribute("RevisionNo"); //$NON-NLS-1$
+			device.setDeviceCategory(
+					hasSlots(deviceElement) ? Device.DeviceCategory.GEN_Coupler : Device.DeviceCategory.GEN_Device);
 			return device;
 		} catch(final Exception e) {
 			return null;
 		}
+	}
+
+	private static boolean hasSlots(final Element deviceElement) {
+		final NodeList slotsNodes = deviceElement.getElementsByTagName("Slots"); //$NON-NLS-1$
+		for(int i = 0; i < slotsNodes.getLength(); i++) {
+			final Element slotsElement = (Element) slotsNodes.item(i);
+			if(slotsElement.getElementsByTagName("Slot").getLength() > 0) { //$NON-NLS-1$
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void parseDevicePdos(final Element deviceElement, final Device device) {
@@ -170,25 +198,6 @@ public class EsiFileParser {
 					}
 				}
 			}
-		}
-	}
-
-	private void parseModules(final Device device) {
-		try {
-			final NodeList modulesNodes = (NodeList) xpath.evaluate("//Modules", document, XPathConstants.NODESET); //$NON-NLS-1$
-			if(modulesNodes.getLength() == 0) {
-				return;
-			}
-			final Element modulesElement = (Element) modulesNodes.item(0);
-			final NodeList moduleNodes = modulesElement.getElementsByTagName("Module"); //$NON-NLS-1$
-			for(int i = 0; i < moduleNodes.getLength(); i++) {
-				final Module module = parseModule((Element) moduleNodes.item(i));
-				if(module != null) {
-					device.modules.add(module);
-				}
-			}
-		} catch(final XPathExpressionException e) {
-			// ignore
 		}
 	}
 
@@ -314,6 +323,30 @@ public class EsiFileParser {
 		}
 		try {
 			return new BigInteger(raw, radix).toString(10);
+		} catch(final NumberFormatException e) {
+			return "0"; //$NON-NLS-1$
+		}
+	}
+
+	/** Hex suffix without leading zeros, e.g. {@code #x001022cf} → {@code 1022CF}. */
+	public static String toUnsignedHexSuffix(final String value) {
+		if(value == null) {
+			return "0"; //$NON-NLS-1$
+		}
+		String raw = value.trim();
+		if(raw.isEmpty()) {
+			return "0"; //$NON-NLS-1$
+		}
+		int radix = 10;
+		if(raw.startsWith("#x") || raw.startsWith("#X")) { //$NON-NLS-1$ //$NON-NLS-2$
+			raw = raw.substring(2);
+			radix = 16;
+		} else if(raw.startsWith("0x") || raw.startsWith("0X")) { //$NON-NLS-1$ //$NON-NLS-2$
+			raw = raw.substring(2);
+			radix = 16;
+		}
+		try {
+			return new BigInteger(raw, radix).toString(16).toUpperCase();
 		} catch(final NumberFormatException e) {
 			return "0"; //$NON-NLS-1$
 		}

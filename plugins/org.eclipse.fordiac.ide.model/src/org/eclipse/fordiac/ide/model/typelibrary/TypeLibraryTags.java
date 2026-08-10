@@ -11,7 +11,7 @@
  *  Waldemar Eisenmenger
  *    - initial API and implementation and/or initial documentation
  *  Daniel Lindhuber - Added system type file ending
- *  Zijun Tang - Added GenericClassName attribute tags
+ *  Zijun Tang - Added GenericClassName and RevisionNo attribute tags
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -87,6 +87,9 @@ public final class TypeLibraryTags {
 
 	public static final String GENERIC_CLASS_NAME_ATTRIBUTE_NAME = "GenericClassName"; //$NON-NLS-1$
 	public static final String GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::GenericClassName"; //$NON-NLS-1$
+
+	public static final String REVISION_NO_ATTRIBUTE_NAME = "RevisionNo"; //$NON-NLS-1$
+	public static final String REVISION_NO_ATTRIBUTE_FULL_NAME = "eclipse4diac::io::ethercat::RevisionNo"; //$NON-NLS-1$
 
 	private TypeLibraryTags() {
 		throw new UnsupportedOperationException("Helper class TypeLibraryTags can not be instantiated."); //$NON-NLS-1$

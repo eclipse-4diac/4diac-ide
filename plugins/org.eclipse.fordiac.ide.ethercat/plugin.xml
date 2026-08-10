@@ -10,13 +10,61 @@
       <wizard
             category="org.eclipse.fordiac.ide.ethercat.wizard.category"
             class="org.eclipse.fordiac.ide.ethercat.EsiFileImporter"
-            icon="icons/ethercat.svg"
             id="org.eclipse.fordiac.ide.ethercat.wizard.esiFileImporter"
             name="%ethercat.wizard.name">
          <description>
             %ethercat.wizard.description
          </description>
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.activities">
+      <activity
+            description="Show EtherCAT ESI import only for 4diac projects or Type Library selection"
+            id="org.eclipse.fordiac.ide.ethercat.importWizardActivity"
+            name="EtherCAT Import Wizard">
+         <enabledWhen>
+            <and>
+               <count
+                     value="1">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <or>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+                        </test>
+                     </adapt>
+                     <and>
+                        <instanceof
+                              value="org.eclipse.core.resources.IFolder">
+                        </instanceof>
+                        <test
+                              property="org.eclipse.core.resources.name"
+                              value="Type Library">
+                        </test>
+                     </and>
+                     <instanceof
+                           value="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement">
+                     </instanceof>
+                  </or>
+               </iterate>
+            </and>
+         </enabledWhen>
+      </activity>
+      <activityPatternBinding
+            activityId="org.eclipse.fordiac.ide.ethercat.importWizardActivity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.fordiac.ide.ethercat/org.eclipse.fordiac.ide.ethercat.wizard.esiFileImporter">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="org.eclipse.fordiac.ide.ethercat.importWizardActivity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.fordiac.ide.ethercat/org.eclipse.fordiac.ide.ethercat.wizard.category">
+      </activityPatternBinding>
    </extension>
 
 </plugin>

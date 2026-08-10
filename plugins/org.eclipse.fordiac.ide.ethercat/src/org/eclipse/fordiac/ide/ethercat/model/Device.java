@@ -27,6 +27,7 @@ public class Device {
 	public int outputNums = 0;
 	public String vendorId;
 	public String productCode;
+	public String revisionNo;
 
 	public enum DeviceCategory {
 		GEN_Device,

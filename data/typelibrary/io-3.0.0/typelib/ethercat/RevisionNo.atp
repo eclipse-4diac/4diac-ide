@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AttributeDeclaration Name="RevisionNo" Comment="EtherCAT device revision number from ESI Type/@RevisionNo">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Zijun Tang" Date="2026-08-10" Remarks="initial API and implementation">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::io::ethercat">
+	</CompilerInfo>
+	<DirectlyDerivedType BaseType="STRING" InitialValue="''" Comment="EtherCAT device revision number"/>
+	<Attribute Name="TARGET" Value="(IInterfaceElement:=FALSE,SubApp:=FALSE,FBType:=TRUE,Application:=FALSE,Connection:=FALSE,FB:=FALSE,DataType:=FALSE)"/>
+</AttributeDeclaration>

@@ -20,6 +20,7 @@ public final class Messages extends NLS {
 
 	public static String EsiFileImporter_PageName;
 	public static String EsiFileImporter_WindowTitle;
+	public static String EsiFileImporter_NoProjectSelected;
 
 	public static String EsiFileImporterWizardPage_Description;
 	public static String EsiFileImporterWizardPage_Title;
