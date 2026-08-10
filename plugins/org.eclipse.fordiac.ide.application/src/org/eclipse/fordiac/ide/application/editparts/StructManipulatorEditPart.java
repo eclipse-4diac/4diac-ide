@@ -32,8 +32,9 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-public abstract class AbstractStructManipulatorEditPart extends AbstractBlockFBNElementEditPart {
-	protected AbstractStructManipulatorEditPart() {
+public class StructManipulatorEditPart extends AbstractBlockFBNElementEditPart {
+
+	public StructManipulatorEditPart() {
 	}
 
 	@Override
