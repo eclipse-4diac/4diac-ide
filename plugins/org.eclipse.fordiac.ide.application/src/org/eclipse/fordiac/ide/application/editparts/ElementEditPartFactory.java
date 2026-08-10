@@ -82,35 +82,17 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	}
 
 	private static EditPart getPartForFBNetworkElement(final EditPart context, final FBNetworkElement element) {
-		if (element instanceof ErrorMarkerFBNElement) {
-			return new ErrorMarkerFBNEditPart();
-		}
-		if (element instanceof CommunicationChannel) {
-			return new CommunicationChannelEditPart();
-		}
-		if (element instanceof ConfigurableMoveFB) {
-			return new ConfigurableMoveFBEditPart();
-		}
-		if (element instanceof Multiplexer) {
-			return new MultiplexerEditPart();
-		}
-		if (element instanceof Demultiplexer) {
-			return new DemultiplexerEditPart();
-		}
-		if (element instanceof FB) {
-			return new FBEditPart();
-		}
-		if (element instanceof SubApp) {
-			return new SubAppForFBNetworkEditPart();
-		}
-		if (element instanceof Group) {
-			return new GroupEditPart();
-		}
-		if (element instanceof Comment) {
-			return new CommentEditPart();
-		}
-
-		throw createEditpartCreationException(context, element);
+		return switch (element) {
+		case final ErrorMarkerFBNElement emFBN -> new ErrorMarkerFBNEditPart();
+		case final CommunicationChannel comChannel -> new CommunicationChannelEditPart();
+		case final ConfigurableMoveFB moveFB -> new ConfigurableMoveFBEditPart();
+		case final StructManipulator structMan -> new StructManipulatorEditPart();
+		case final FB fb -> new FBEditPart();
+		case final SubApp subApp -> new SubAppForFBNetworkEditPart();
+		case final Group group -> new GroupEditPart();
+		case final Comment comment -> new CommentEditPart();
+		case null, default -> throw createEditpartCreationException(context, element);
+		};
 	}
 
 	@SuppressWarnings("static-method") // not static to allow subclasses to provide own elements
