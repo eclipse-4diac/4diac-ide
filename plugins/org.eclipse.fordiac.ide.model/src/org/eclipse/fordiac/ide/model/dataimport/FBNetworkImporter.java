@@ -254,7 +254,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	static IInterfaceElement getInterfaceElement(final InterfaceList il, final String interfaceElement,
 			final EClass conType, final boolean isInput) {
 		final Stream<? extends IInterfaceElement> ies = getInterfaceElementList(il, conType, isInput);
-		return ies.filter(ie -> ie.getName().equals(interfaceElement)).findAny().orElse(null);
+		return ies.filter(ie -> ie.getName().equalsIgnoreCase(interfaceElement)).findAny().orElse(null);
 	}
 
 	private static Stream<? extends IInterfaceElement> getInterfaceElementList(final InterfaceList il,

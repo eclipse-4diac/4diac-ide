@@ -35,8 +35,8 @@ public class MemberAccessTree {
 	}
 
 	private static MemberAccessTreeNode getChild(final List<MemberAccessTreeNode> children, final String[] nameList) {
-		final MemberAccessTreeNode treeNode = children.stream().filter(n -> n.getName().equals(nameList[0])).findFirst()
-				.orElse(null);
+		final MemberAccessTreeNode treeNode = children.stream().filter(n -> n.getName().equalsIgnoreCase(nameList[0]))
+				.findFirst().orElse(null);
 
 		if (nameList.length == 1) {
 			return treeNode;
