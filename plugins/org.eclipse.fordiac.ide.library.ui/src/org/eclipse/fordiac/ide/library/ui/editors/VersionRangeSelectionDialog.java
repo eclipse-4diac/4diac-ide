@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.VersionRange;
 
-public class VersionRangeSelectionDialog extends TitleAreaDialog {
+class VersionRangeSelectionDialog extends TitleAreaDialog {
 
 	private Text minVersionText;
 	private Text maxVersionText;
@@ -41,7 +41,7 @@ public class VersionRangeSelectionDialog extends TitleAreaDialog {
 	private Label rangePreviewLabel;
 	private String versionRange;
 
-	public VersionRangeSelectionDialog(final String versionRange, final Shell parentShell) {
+	public VersionRangeSelectionDialog(final Shell parentShell, final String versionRange) {
 		super(parentShell);
 		this.versionRange = versionRange;
 	}
@@ -81,7 +81,7 @@ public class VersionRangeSelectionDialog extends TitleAreaDialog {
 		minVersionText = new Text(group, SWT.BORDER);
 		minVersionText.setMessage("e.g. 1.0.0"); //$NON-NLS-1$
 		minVersionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		minVersionText.addVerifyListener(VERSION_VERIFY_LISTENER);
+		minVersionText.addVerifyListener(VERSION_CHARACTER_FILTER);
 
 		includeMinVersion = new Button(group, SWT.CHECK);
 		includeMinVersion.setText(Messages.ManifestEditor_VersionRange_IncludeInRange);
@@ -96,7 +96,7 @@ public class VersionRangeSelectionDialog extends TitleAreaDialog {
 		maxVersionText = new Text(group, SWT.BORDER);
 		maxVersionText.setMessage("e.g. 2.0.0"); //$NON-NLS-1$
 		maxVersionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		maxVersionText.addVerifyListener(VERSION_VERIFY_LISTENER);
+		maxVersionText.addVerifyListener(VERSION_CHARACTER_FILTER);
 
 		includeMaxVersion = new Button(group, SWT.CHECK);
 		includeMaxVersion.setText(Messages.ManifestEditor_VersionRange_IncludeInRange);
@@ -157,7 +157,8 @@ public class VersionRangeSelectionDialog extends TitleAreaDialog {
 			return max;
 		}
 
-		if (max.isBlank() || min.equals(max)) {
+		// no max version specified or represents exact range e.g [1.0.0-1.0.0]
+		if (max.isBlank() || min.equals(max) && includeMinVersion.getSelection() && includeMaxVersion.getSelection()) {
 			return min;
 		}
 
@@ -165,7 +166,7 @@ public class VersionRangeSelectionDialog extends TitleAreaDialog {
 				+ (includeMaxVersion.getSelection() ? VersionRange.RIGHT_CLOSED : VersionRange.RIGHT_OPEN);
 	}
 
-	private static final VerifyListener VERSION_VERIFY_LISTENER = e -> {
+	private static final VerifyListener VERSION_CHARACTER_FILTER = e -> {
 		for (final char c : e.text.toCharArray()) {
 			if (!Character.isDigit(c) && c != '.') {
 				e.doit = false;
