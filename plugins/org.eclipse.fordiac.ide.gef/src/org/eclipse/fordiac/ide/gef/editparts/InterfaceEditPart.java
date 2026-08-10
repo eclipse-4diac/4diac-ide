@@ -64,7 +64,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -194,9 +193,6 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	private static String getPinName(final IInterfaceElement pin) {
-		if (pin instanceof final MemberVarDeclaration memberVarDecl) {
-			return memberVarDecl.getDisplayName();
-		}
 		return pin.getRelativeName(pin.getBlockFBNetworkElement());
 	}
 
