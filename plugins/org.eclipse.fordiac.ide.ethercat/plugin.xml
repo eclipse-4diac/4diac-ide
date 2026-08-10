@@ -38,15 +38,13 @@
                               value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
                         </test>
                      </adapt>
-                     <and>
-                        <instanceof
-                              value="org.eclipse.core.resources.IFolder">
-                        </instanceof>
+                     <adapt
+                           type="org.eclipse.core.resources.IFolder">
                         <test
                               property="org.eclipse.core.resources.name"
                               value="Type Library">
                         </test>
-                     </and>
+                     </adapt>
                      <instanceof
                            value="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement">
                      </instanceof>
