@@ -134,6 +134,8 @@ public class Messages extends NLS {
 	public static String ManifestEditor_Column_LatestInRange;
 	public static String ManifestEditor_Column_Latest;
 
+	public static String ManifestEditor_ConfigureVersionRange;
+
 	public static String ManifestEditor_ImportLibraries;
 	public static String ManifestEditor_RefreshLibraries;
 

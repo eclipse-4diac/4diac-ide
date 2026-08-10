@@ -52,7 +52,6 @@ import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -61,20 +60,18 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
-public class ManifestEditorDependencyPage extends FormPage {
+class ManifestEditorDependencyPage extends FormPage {
 
 	private final ILibraryProvider offlineLibraryProvider = new OfflineLibraryProvider();
 	private final ILibraryProvider onlineLibraryProvider = new OnlineLibraryProvider();
@@ -268,6 +265,8 @@ public class ManifestEditorDependencyPage extends FormPage {
 		versionRangeColumn.getColumn().setText(Messages.ManifestEditor_Column_VersionRange);
 		versionRangeColumn.setLabelProvider(createLabelProvider(Required::getVersion, null, true));
 		versionRangeColumn.setEditingSupport(new EditingSupport(treeViewer) {
+			private final CellEditor editor = new VersionRangeCellEditor(treeViewer.getTree());
+
 			@Override
 			protected void setValue(final Object element, final Object value) {
 				if (element instanceof final Required required) {
@@ -293,21 +292,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				return new DialogCellEditor(treeViewer.getTree()) {
-
-					@Override
-					protected Object openDialogBox(final Control cellEditorWindow) {
-						if (element instanceof final Required req) {
-							final VersionRangeSelectionDialog dialog = new VersionRangeSelectionDialog(req.getVersion(),
-									cellEditorWindow.getShell());
-							dialog.setBlockOnOpen(true);
-							if (dialog.open() == Window.OK) {
-								return dialog.getVersionRange();
-							}
-						}
-						return null;
-					}
-				};
+				return editor;
 			}
 
 			@Override
