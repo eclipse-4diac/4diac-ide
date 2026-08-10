@@ -2,7 +2,7 @@
 <DataType Name="ECDeviceConfig" Comment="A Template for a Data Type">
 	<Identification>
 	</Identification>
-	<VersionInfo Version="1.0" Author="hyperion" Date="2026-04-10">
+	<VersionInfo Version="1.0" Author="Zijun Tang" Date="2026-04-10">
 	</VersionInfo>
 	<CompilerInfo packageName="forte::eclipse4diac::io::ethercat">
 	</CompilerInfo>

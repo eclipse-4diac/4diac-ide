@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Sichuan Qunyuan Technology Co., Ltd. - initial API and implementation
+ *   Zijun Tang - initial API and implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ethercat;
 

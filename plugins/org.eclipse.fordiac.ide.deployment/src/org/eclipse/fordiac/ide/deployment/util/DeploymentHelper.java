@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2025 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2018, 2026 fortiss GmbH, Johannes Kepler University
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,7 @@
  *   Martin Jobst - adopt new ST editor for values
  *                - rework initial value handling
  *                - add connection source suffix for delegate connections
- *   Sichuan Qunyuan Technology Co., Ltd. - deploy declared initial values
+ *   Zijun Tang - deploy declared initial values
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.util;
 

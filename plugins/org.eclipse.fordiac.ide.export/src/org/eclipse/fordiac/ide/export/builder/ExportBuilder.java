@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
- *https://github.com/eclipse-4diac/4diac-ide/pull/655
+ * Copyright (c) 2024, 2026 Martin Erich Jobst
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -10,6 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Mario Kastner - implementation of auto export
+ *   Zijun Tang - use TypeLibraryTags for GenericClassName attribute
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.builder;
 
@@ -58,8 +59,6 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 	public static final String BUILDER_ID = "org.eclipse.fordiac.ide.export.builder"; //$NON-NLS-1$
 	private static final String FORTE_NG_FILTER_ID = "org.eclipse.fordiac.ide.export.exportFilter.forteNg"; //$NON-NLS-1$
-
-	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "eclipse4diac::core::GenericClassName"; //$NON-NLS-1$
 
 	private static final Set<String> FILE_TYPES = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
 			TypeLibraryTags.DATA_TYPE_FILE_ENDING, TypeLibraryTags.FB_TYPE_FILE_ENDING,
@@ -205,7 +204,8 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			return false;
 		}
 		final var type = typeEntry.getType();
-		return type != null && type.getAttribute(GENERIC_CLASS_NAME_ATTRIBUTE) != null;
+		return type != null && (type.getAttribute(TypeLibraryTags.GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME) != null
+				|| type.getAttribute(TypeLibraryTags.GENERIC_CLASS_NAME_ATTRIBUTE_NAME) != null);
 	}
 
 	private List<SourceFolder> getExportableFoldersFromBuildpath() {

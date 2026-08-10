@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017, 2026 fortiss GmbH
  * 				 2019 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  * Contributors:
  *   Jose Cabral - initial API and implementation and/or initial documentation
  *   Alois Zoitl - re-enabled monitoring after command execution
+ *   Zijun Tang - reuse monitoring MGM connection for online deployment commands
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 

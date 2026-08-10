@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Sichuan Qunyuan Technology Co., Ltd. - initial API and implementation
+ *   Zijun Tang - initial API and implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ethercat;
 
@@ -195,20 +195,13 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 	private Document createBasicFB(final String fbName, final String fbType, final String fbComment) throws ParserConfigurationException {
 		final Document doc = createDocument();
 		final Element fbTypeElement = addElement(doc, doc, "FBType", mapOf("Name", fbName, "Comment", fbComment)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		addElement(doc, fbTypeElement, "Identification", mapOf("Standard", "6149902", "Type", "eclipse4diac::io::ethercat::" + fbType)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		addElement(doc, fbTypeElement, "VersionInfo", mapOf("Version", "1.0", "Author", "cqyt", "Date", LocalDate.now().toString())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+		addElement(doc, fbTypeElement, "Identification", mapOf("Standard", "61499-2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addElement(doc, fbTypeElement, "VersionInfo", mapOf("Version", "1.0", "Author", "Zijun Tang", "Date", LocalDate.now().toString())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 		addElement(doc, fbTypeElement, "CompilerInfo", mapOf("packageName", "eclipse4diac::io::ethercat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addElement(doc, fbTypeElement, "Attribute", mapOf("Name","eclipse4diac::core::TypeHash","Value","''")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		
-		String genericTypeName = "";
-		if(fbType.contains("ECCoupler")) {
-			genericTypeName = "'GEN_ECCoupler'";			
-		} else if(fbType.contains("ECDevice")) {
-			genericTypeName = "'GEN_ECDevice'";
-		} else {
-			genericTypeName = "'GEN_ECModule'";
-		}
-		addElement(doc, fbTypeElement, "Attribute", mapOf("Name","eclipse4diac::core::GenericClassName", "Value", genericTypeName));//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		// Package-qualified configured type name for deployment (e.g. ECDevice_2_3).
+		final String deployTypeName = "'eclipse4diac::io::ethercat::" + fbType + "'"; //$NON-NLS-1$ //$NON-NLS-2$
+		addElement(doc, fbTypeElement, "Attribute", mapOf("Name", "eclipse4diac::core::GenericClassName", "Value", deployTypeName)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		final Element interfaceListElement = addElement(doc, fbTypeElement, "InterfaceList"); //$NON-NLS-1$
 		final Element eventInputsElement = addElement(doc, interfaceListElement, "EventInputs"); //$NON-NLS-1$

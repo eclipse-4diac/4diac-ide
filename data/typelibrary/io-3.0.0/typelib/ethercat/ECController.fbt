@@ -2,7 +2,7 @@
 <FBType Name="ECController" Comment="Service Interface Function Block Type">
 	<Identification Standard="61499-2">
 	</Identification>
-	<VersionInfo Version="1.0" Author="hyperion" Date="2026-04-09">
+	<VersionInfo Version="1.0" Author="Zijun Tang" Date="2026-04-09">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::io::ethercat">
 	</CompilerInfo>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2007, 2026 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  * 							Johannes Kepler University,
  * 							Primetals Technologies Austria GmbH
  *
@@ -11,18 +11,22 @@
  *
  * Contributors:
  *  Alois Zoitl - Extracted from DeploymentExecutor and extended for Configurable move
+ *  Zijun Tang - resolve package-qualified GenericClassName for deployment
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 
 public class ForteTypeNameCreator implements TypeNameCreator {
@@ -31,6 +35,10 @@ public class ForteTypeNameCreator implements TypeNameCreator {
 
 	@Override
 	public String getTypeName(final TypeEntry entry) {
+		final String override = getDeployTypeOverride(entry.getType());
+		if (override != null) {
+			return override;
+		}
 		return convertFullTypeNameToFORTE(entry.getFullTypeName());
 	}
 
@@ -39,6 +47,10 @@ public class ForteTypeNameCreator implements TypeNameCreator {
 		if (fb != null && fb.getTypeEntry() != null) {
 			if (fb instanceof final ConfigurableFB confFB) {
 				return getConfigureFBType(confFB);
+			}
+			final String override = getDeployTypeOverride(fb.getType());
+			if (override != null) {
+				return override;
 			}
 			return getForteTypeName(fb);
 		}
@@ -52,6 +64,43 @@ public class ForteTypeNameCreator implements TypeNameCreator {
 			return getTypeName(entry);
 		}
 		return getTypeName(entry) + '#' + hash;
+	}
+
+	/**
+	 * Resolve a package-qualified deploy type name from GenericClassName. Short
+	 * values such as {@code GEN_PUBLISH} are ignored so existing typelib FBs keep
+	 * deploying their concrete type name.
+	 */
+	private static String getDeployTypeOverride(final LibraryElement type) {
+		if (type == null) {
+			return null;
+		}
+		final String genericClassName = getGenericClassName(type);
+		if (genericClassName != null && genericClassName.contains("::")) { //$NON-NLS-1$
+			return convertFullTypeNameToFORTE(genericClassName);
+		}
+		return null;
+	}
+
+	private static String getGenericClassName(final LibraryElement type) {
+		Attribute attribute = type.getAttribute(TypeLibraryTags.GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME);
+		if (attribute == null) {
+			attribute = type.getAttribute(TypeLibraryTags.GENERIC_CLASS_NAME_ATTRIBUTE_NAME);
+		}
+		if (attribute == null) {
+			return null;
+		}
+		return stripQuotes(attribute.getValue());
+	}
+
+	private static String stripQuotes(final String value) {
+		if (value == null || value.isEmpty()) {
+			return value;
+		}
+		if (value.length() >= 2 && value.charAt(0) == '\'' && value.charAt(value.length() - 1) == '\'') {
+			return value.substring(1, value.length() - 1);
+		}
+		return value;
 	}
 
 	private static String getForteTypeName(final FBNetworkElement fb) {

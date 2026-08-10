@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2014 fortiss GmbH
+ * Copyright (c) 2014, 2026 fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  *  Waldemar Eisenmenger
  *    - initial API and implementation and/or initial documentation
  *  Daniel Lindhuber - Added system type file ending
+ *  Zijun Tang - Added GenericClassName attribute tags
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -83,6 +84,9 @@ public final class TypeLibraryTags {
 
 	public static final String TYPE_HASH_ATTRIBUTE_NAME = "TypeHash"; //$NON-NLS-1$
 	public static final String TYPE_HASH_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::TypeHash"; //$NON-NLS-1$
+
+	public static final String GENERIC_CLASS_NAME_ATTRIBUTE_NAME = "GenericClassName"; //$NON-NLS-1$
+	public static final String GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::GenericClassName"; //$NON-NLS-1$
 
 	private TypeLibraryTags() {
 		throw new UnsupportedOperationException("Helper class TypeLibraryTags can not be instantiated."); //$NON-NLS-1$
