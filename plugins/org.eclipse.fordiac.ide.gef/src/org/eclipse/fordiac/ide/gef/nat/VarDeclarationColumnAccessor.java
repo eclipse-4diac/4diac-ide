@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -56,8 +55,7 @@ public class VarDeclarationColumnAccessor
 	@Override
 	public Object getDataValue(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
 		return switch (column) {
-		case NAME ->
-			(rowObject instanceof final MemberVarDeclaration memVar) ? memVar.getDisplayName() : rowObject.getName();
+		case NAME -> rowObject.getName();
 		case TYPE -> rowObject.getFullTypeName();
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		case INITIAL_VALUE -> getInitialValue(rowObject);

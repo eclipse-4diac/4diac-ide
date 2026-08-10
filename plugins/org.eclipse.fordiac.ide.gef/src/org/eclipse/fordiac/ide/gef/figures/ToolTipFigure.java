@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
@@ -72,10 +71,6 @@ public class ToolTipFigure extends Figure {
 	}
 
 	private static String getName(final INamedElement element) {
-		if (element instanceof final MemberVarDeclaration memberVarDecl) {
-			return memberVarDecl.getDisplayName();
-		}
-
 		if (element instanceof final IInterfaceElement ie) {
 			return ie.getRelativeName(ie.getBlockFBNetworkElement());
 		}
