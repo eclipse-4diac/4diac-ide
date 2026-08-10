@@ -359,7 +359,7 @@
     <genClasses image="false" ecoreClass="lib.ecore#//ContainerVarDeclaration">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ContainerVarDeclaration/cachedMembers"/>
       <genOperations ecoreOperation="lib.ecore#//ContainerVarDeclaration/getCachedMember"
-          body="return getCachedMembers().stream().filter(vm -> vm.getName().equals(name)).findAny().orElse(null);">
+          body="return getCachedMembers().stream().filter(vm -> vm.getName().equalsIgnoreCase(name)).findAny().orElse(null);">
         <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/getCachedMember/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//ContainerVarDeclaration/getCachedMember.1"
@@ -1177,7 +1177,7 @@
           body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//StructuredType/isAssignableFrom/other"/>
       </genOperations>
-      <genOperations ecoreOperation="data.ecore#//StructuredType/getMemberVar" body="return getMemberVariables().stream().filter(mv -> mv.getName().equals(name)).findAny().orElse(null);">
+      <genOperations ecoreOperation="data.ecore#//StructuredType/getMemberVar" body="return getMemberVariables().stream().filter(mv -> mv.getName().equalsIgnoreCase(name)).findAny().orElse(null);">
         <genParameters ecoreParameter="data.ecore#//StructuredType/getMemberVar/name"/>
       </genOperations>
     </genClasses>
