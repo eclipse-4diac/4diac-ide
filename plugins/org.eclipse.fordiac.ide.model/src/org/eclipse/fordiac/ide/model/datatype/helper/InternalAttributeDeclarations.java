@@ -30,8 +30,8 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class InternalAttributeDeclarations {
 
@@ -100,8 +100,8 @@ public final class InternalAttributeDeclarations {
 		return declaration;
 	}
 
-	private static MemberVarDeclaration createTargetMember(final AttributeTarget target) {
-		final MemberVarDeclaration member = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+	private static VarDeclaration createTargetMember(final AttributeTarget target) {
+		final VarDeclaration member = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		member.setName(target.name());
 		member.setType(ElementaryTypes.BOOL);
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
