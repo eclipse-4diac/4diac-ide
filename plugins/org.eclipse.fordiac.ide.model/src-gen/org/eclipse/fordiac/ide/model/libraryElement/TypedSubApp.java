@@ -31,6 +31,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getSubAppNetwork <em>Sub App Network</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getVarConfigParams <em>Var Config Params</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getOverrideAttributes <em>Override Attributes</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp()
@@ -71,6 +72,18 @@ public interface TypedSubApp extends SubApp {
 	 * @generated
 	 */
 	EList<VarConfigInstance> getVarConfigParams();
+
+	/**
+	 * Returns the value of the '<em><b>Override Attributes</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Override Attributes</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp_OverrideAttributes()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<OverrideAttribute> getOverrideAttributes();
 
 	/**
 	 * <!-- begin-user-doc -->
