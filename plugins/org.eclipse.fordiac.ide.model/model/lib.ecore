@@ -2583,6 +2583,8 @@
         transient="true" derived="true" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="varConfigParams" upperBound="-1"
         eType="#//VarConfigInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="overrideAttributes" upperBound="-1"
+        eType="#//OverrideAttribute" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UntypedSubApp" eSuperTypes="#//SubApp">
     <eOperations name="getType" lowerBound="1" eType="#//SubAppType">
@@ -2941,6 +2943,36 @@
   <eClassifiers xsi:type="ecore:EClass" name="With">
     <eStructuralFeatures xsi:type="ecore:EReference" name="variables" lowerBound="1"
         eType="#//VarDeclaration" eOpposite="#//VarDeclaration/withs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OverrideAttribute" eSuperTypes="#//Attribute">
+    <eOperations name="getFullName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeAnnotations.getFullName(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="validateLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeAnnotations.validateLocation(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getQualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeAnnotations.getQualifiedName(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+        defaultValueLiteral=""/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
   <eClassifiers xsi:type="ecore:EDataType" name="InterfaceElementStream" instanceTypeName="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement>"/>

@@ -902,6 +902,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass overrideAttributeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum languageEEnum = null;
 
 	/**
@@ -4123,6 +4130,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EReference getTypedSubApp_OverrideAttributes() {
+		return (EReference)typedSubAppEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getUntypedSubApp() {
 		return untypedSubAppEClass;
 	}
@@ -4285,6 +4302,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EClass getVarConfigInstance() {
 		return varConfigInstanceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getOverrideAttribute() {
+		return overrideAttributeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getOverrideAttribute_Location() {
+		return (EAttribute)overrideAttributeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -4845,6 +4882,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		typedSubAppEClass = createEClass(TYPED_SUB_APP);
 		createEReference(typedSubAppEClass, TYPED_SUB_APP__SUB_APP_NETWORK);
 		createEReference(typedSubAppEClass, TYPED_SUB_APP__VAR_CONFIG_PARAMS);
+		createEReference(typedSubAppEClass, TYPED_SUB_APP__OVERRIDE_ATTRIBUTES);
 
 		untypedSubAppEClass = createEClass(UNTYPED_SUB_APP);
 		createEReference(untypedSubAppEClass, UNTYPED_SUB_APP__SUB_APP_NETWORK);
@@ -4868,6 +4906,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		withEClass = createEClass(WITH);
 		createEReference(withEClass, WITH__VARIABLES);
+
+		overrideAttributeEClass = createEClass(OVERRIDE_ATTRIBUTE);
+		createEAttribute(overrideAttributeEClass, OVERRIDE_ATTRIBUTE__LOCATION);
 
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
@@ -5054,6 +5095,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		untypedSubAppEClass.getESuperTypes().add(this.getSubApp());
 		varConfigInstanceEClass.getESuperTypes().add(this.getVarDeclaration());
 		varDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
+		overrideAttributeEClass.getESuperTypes().add(this.getAttribute());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterConnectionEClass, AdapterConnection.class, "AdapterConnection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -6248,6 +6290,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(typedSubAppEClass, TypedSubApp.class, "TypedSubApp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getTypedSubApp_SubAppNetwork(), this.getFBNetwork(), null, "subAppNetwork", null, 0, 1, TypedSubApp.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getTypedSubApp_VarConfigParams(), this.getVarConfigInstance(), null, "varConfigParams", null, 0, -1, TypedSubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getTypedSubApp_OverrideAttributes(), this.getOverrideAttribute(), null, "overrideAttributes", null, 0, -1, TypedSubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(typedSubAppEClass, theXMLTypePackage.getBoolean(), "isTyped", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -6438,6 +6481,22 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(withEClass, With.class, "With", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getWith_Variables(), this.getVarDeclaration(), this.getVarDeclaration_Withs(), "variables", null, 1, 1, With.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(overrideAttributeEClass, OverrideAttribute.class, "OverrideAttribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getOverrideAttribute_Location(), theXMLTypePackage.getString(), "location", "", 1, 1, OverrideAttribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+
+		addEOperation(overrideAttributeEClass, ecorePackage.getEString(), "getFullName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(overrideAttributeEClass, ecorePackage.getEBoolean(), "validateLocation", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(overrideAttributeEClass, ecorePackage.getEString(), "getQualifiedName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
@@ -7377,6 +7436,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   });
 		addAnnotation
 		  (varDeclarationEClass.getEOperations().get(17),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (overrideAttributeEClass.getEOperations().get(1),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$

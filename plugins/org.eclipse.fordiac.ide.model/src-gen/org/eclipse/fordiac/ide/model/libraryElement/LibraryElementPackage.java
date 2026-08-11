@@ -8874,13 +8874,22 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_SUB_APP__VAR_CONFIG_PARAMS = SUB_APP_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Override Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__OVERRIDE_ATTRIBUTES = SUB_APP_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Typed Sub App</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 2;
+	int TYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.
@@ -9147,6 +9156,16 @@ public interface LibraryElementPackage extends EPackage {
 	int VAR_CONFIG_INSTANCE_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeImpl <em>Override Attribute</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOverrideAttribute()
+	 * @generated
+	 */
+	int OVERRIDE_ATTRIBUTE = 120;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9239,6 +9258,69 @@ public interface LibraryElementPackage extends EPackage {
 	int WITH_FEATURE_COUNT = 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OVERRIDE_ATTRIBUTE__NAME = ATTRIBUTE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OVERRIDE_ATTRIBUTE__COMMENT = ATTRIBUTE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attribute Declaration</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OVERRIDE_ATTRIBUTE__ATTRIBUTE_DECLARATION = ATTRIBUTE__ATTRIBUTE_DECLARATION;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OVERRIDE_ATTRIBUTE__TYPE = ATTRIBUTE__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OVERRIDE_ATTRIBUTE__VALUE = ATTRIBUTE__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OVERRIDE_ATTRIBUTE__LOCATION = ATTRIBUTE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Override Attribute</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OVERRIDE_ATTRIBUTE_FEATURE_COUNT = ATTRIBUTE_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9246,7 +9328,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 120;
+	int LANGUAGE = 121;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -9256,7 +9338,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 121;
+	int IFILE = 122;
 
 	/**
 	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
@@ -9266,7 +9348,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
 	 * @generated
 	 */
-	int INTERFACE_ELEMENT_STREAM = 122;
+	int INTERFACE_ELEMENT_STREAM = 123;
 
 	/**
 	 * The meta object id for the '<em>Named Element Stream</em>' data type.
@@ -9276,7 +9358,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getNamedElementStream()
 	 * @generated
 	 */
-	int NAMED_ELEMENT_STREAM = 123;
+	int NAMED_ELEMENT_STREAM = 124;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -9286,7 +9368,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 124;
+	int TYPE_ENTRY = 125;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -9296,7 +9378,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 125;
+	int TYPE_LIBRARY = 126;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -9306,7 +9388,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 126;
+	int VAR_DECL_LIST = 127;
 
 	/**
 	 * The meta object id for the '<em>Interface Type Entry</em>' data type.
@@ -9316,7 +9398,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceTypeEntry()
 	 * @generated
 	 */
-	int INTERFACE_TYPE_ENTRY = 127;
+	int INTERFACE_TYPE_ENTRY = 128;
 
 	/**
 	 * The meta object id for the '<em>Block FBNW Element Stream</em>' data type.
@@ -9326,7 +9408,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBlockFBNWElementStream()
 	 * @generated
 	 */
-	int BLOCK_FBNW_ELEMENT_STREAM = 128;
+	int BLOCK_FBNW_ELEMENT_STREAM = 129;
 
 	/**
 	 * The meta object id for the '<em>String Array</em>' data type.
@@ -9335,7 +9417,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringArray()
 	 * @generated
 	 */
-	int STRING_ARRAY = 129;
+	int STRING_ARRAY = 130;
 
 	/**
 	 * The meta object id for the '<em>String List</em>' data type.
@@ -9345,7 +9427,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringList()
 	 * @generated
 	 */
-	int STRING_LIST = 130;
+	int STRING_LIST = 131;
 
 
 	/**
@@ -12601,6 +12683,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getTypedSubApp_VarConfigParams();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getOverrideAttributes <em>Override Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Override Attributes</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getOverrideAttributes()
+	 * @see #getTypedSubApp()
+	 * @generated
+	 */
+	EReference getTypedSubApp_OverrideAttributes();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp <em>Untyped Sub App</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12651,6 +12744,27 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getVarConfigInstance();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute <em>Override Attribute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Override Attribute</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute
+	 * @generated
+	 */
+	EClass getOverrideAttribute();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute#getLocation()
+	 * @see #getOverrideAttribute()
+	 * @generated
+	 */
+	EAttribute getOverrideAttribute_Location();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration <em>Var Declaration</em>}'.
@@ -15599,6 +15713,14 @@ public interface LibraryElementPackage extends EPackage {
 		EReference TYPED_SUB_APP__VAR_CONFIG_PARAMS = eINSTANCE.getTypedSubApp_VarConfigParams();
 
 		/**
+		 * The meta object literal for the '<em><b>Override Attributes</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TYPED_SUB_APP__OVERRIDE_ATTRIBUTES = eINSTANCE.getTypedSubApp_OverrideAttributes();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -15643,6 +15765,24 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass VAR_CONFIG_INSTANCE = eINSTANCE.getVarConfigInstance();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeImpl <em>Override Attribute</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOverrideAttribute()
+		 * @generated
+		 */
+		EClass OVERRIDE_ATTRIBUTE = eINSTANCE.getOverrideAttribute();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OVERRIDE_ATTRIBUTE__LOCATION = eINSTANCE.getOverrideAttribute_Location();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl <em>Var Declaration</em>}' class.
