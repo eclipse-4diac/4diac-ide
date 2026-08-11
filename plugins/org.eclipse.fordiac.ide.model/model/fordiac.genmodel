@@ -388,8 +388,6 @@
           body="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Demultiplexer">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Demultiplexer/isConfigured"/>
-      <genOperations ecoreOperation="lib.ecore#//Demultiplexer/getMemberVars" body="return getInterface().getOutputVars();"/>
       <genOperations ecoreOperation="lib.ecore#//Demultiplexer/updateConfiguration"
           body="ConfigurableFBManagement.updateConfiguration(this);"/>
     </genClasses>
@@ -772,20 +770,8 @@
       <genOperations ecoreOperation="lib.ecore#//Mapping/getAutomationSystem" body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
-    <genClasses ecoreClass="lib.ecore#//MemberVarDeclaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//MemberVarDeclaration/parentNames"/>
-      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getName" body="return ConfigurableFBManagement.getMemberVarName(this, ConfigurableFBManagement.MEMBER_VAR_SEPARATOR);"/>
-      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getDisplayName"
-          body="return ConfigurableFBManagement.getMemberVarName(this, &quot;.&quot;);   //$NON-NLS-1$"/>
-      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/getVarName"
-          body="return super.getName();"/>
-      <genOperations ecoreOperation="lib.ecore#//MemberVarDeclaration/setName" body="// ensure that we are always only setting the last segment as name&#xA;final String[] subNames = ConfigurableFBManagement.splitMemberVarName(name);&#xA;super.setName(subNames[subNames.length - 1]);">
-        <genParameters ecoreParameter="lib.ecore#//MemberVarDeclaration/setName/name"/>
-      </genOperations>
-    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Method"/>
     <genClasses image="false" ecoreClass="lib.ecore#//Multiplexer">
-      <genOperations ecoreOperation="lib.ecore#//Multiplexer/getMemberVars" body="return getInterface().getInputVars();"/>
       <genOperations ecoreOperation="lib.ecore#//Multiplexer/updateConfiguration"
           body="ConfigurableFBManagement.updateConfiguration(this);"/>
     </genClasses>
@@ -901,9 +887,7 @@
     <genClasses ecoreClass="lib.ecore#//STFunction"/>
     <genClasses ecoreClass="lib.ecore#//STFunctionBody"/>
     <genClasses ecoreClass="lib.ecore#//STMethod"/>
-    <genClasses image="false" ecoreClass="lib.ecore#//StructManipulator">
-      <genOperations ecoreOperation="lib.ecore#//StructManipulator/getMemberVars"/>
-    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//StructManipulator"/>
     <genClasses image="false" ecoreClass="lib.ecore#//SubApp">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/width"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/height"/>

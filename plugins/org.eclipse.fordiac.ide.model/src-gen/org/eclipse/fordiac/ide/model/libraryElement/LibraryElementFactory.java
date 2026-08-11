@@ -594,15 +594,6 @@ public interface LibraryElementFactory extends EFactory {
 	MappingTarget createMappingTarget();
 
 	/**
-	 * Returns a new object of class '<em>Member Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Member Var Declaration</em>'.
-	 * @generated
-	 */
-	MemberVarDeclaration createMemberVarDeclaration();
-
-	/**
 	 * Returns a new object of class '<em>Multiplexer</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

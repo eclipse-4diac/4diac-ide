@@ -20,10 +20,8 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -215,29 +213,17 @@ public final class FBShapeHelper {
 				: Predicate.not(IInterfaceElement::isIsInput);
 
 		if (element.getInterface().getAllInterfaceElements().filter(inputFilter)
-				.anyMatch(Predicate.not(IInterfaceElement::isVisible)) || (!isInput && checkHiddenDemuxPin(element))) {
+				.anyMatch(Predicate.not(IInterfaceElement::isVisible))) {
 			return WIDTH_ADJUST_HIDDEN;
 		}
 		return 0.0;
 	}
 
 	protected static double getHiddenHeightAdjust(final BlockFBNetworkElement element) {
-		if (element.getInterface().getAllInterfaceElements().anyMatch(Predicate.not(IInterfaceElement::isVisible))
-				|| checkHiddenDemuxPin(element)) {
+		if (element.getInterface().getAllInterfaceElements().anyMatch(Predicate.not(IInterfaceElement::isVisible))) {
 			return HEIGHT_ADJUST_HIDDEN;
 		}
 		return 0.0;
-	}
-
-	private static boolean checkHiddenDemuxPin(final FBNetworkElement element) {
-		if (element instanceof final Demultiplexer demux && demux.getDataType() != null) {
-			final int visibleVars = demux.getMemberVars().size();
-			final int allVars = ((StructuredType) demux.getDataType()).getMemberVariables().size();
-			if (visibleVars != allVars) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private static int getMaxLinesCounter(final List<? extends IInterfaceElement> inputPins,

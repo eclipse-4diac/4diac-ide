@@ -31,9 +31,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -44,12 +44,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  */
 public final class ConfigurableFBManagement {
 
-	public static final String MEMBER_VAR_SEPARATOR = "%"; //$NON-NLS-1$
-
 	static void updateConfiguration(final StructManipulator muxer) {
 		if (!(muxer.getDataType() instanceof StructuredType)) {
 			// e.g., error data type
-			muxer.getMemberVars().clear();
+			getMuxedVars(muxer).clear();
 			getEventWithPins(muxer).getWith().clear();
 		} else {
 			// create member variables of struct as data input ports
@@ -189,13 +187,6 @@ public final class ConfigurableFBManagement {
 		return ECollections.asEList(attr);
 	}
 
-	static String getMemberVarName(final MemberVarDeclaration varDecl, final String separator) {
-		final StringBuilder sb = new StringBuilder();
-		varDecl.getParentNames().forEach(name -> sb.append(name).append(separator));
-		sb.append(varDecl.getVarName());
-		return sb.toString();
-	}
-
 	private static Event getEventWithPins(final StructManipulator muxer) {
 		if (muxer instanceof Multiplexer) {
 			return muxer.getInterface().getEventInputs().get(0);
@@ -214,26 +205,21 @@ public final class ConfigurableFBManagement {
 		((StructuredType) muxer.getDataType()).getMemberVariables().forEach(memberVar -> {
 			final VarDeclaration varDecl = InterfaceListCopier.copyVar(memberVar, false, false);
 			varDecl.setIsInput(isInput);
-			muxer.getMemberVars().add(varDecl);
+			getMuxedVars(muxer).add(varDecl);
 		});
 		// clear any previous withs
 		getEventWithPins(muxer).getWith().clear();
 		// create with constructs
-		muxer.getMemberVars().forEach(varDecl -> {
+		getMuxedVars(muxer).forEach(varDecl -> {
 			final With with = LibraryElementFactory.eINSTANCE.createWith();
 			with.setVariables(varDecl);
 			getEventWithPins(muxer).getWith().add(with);
 		});
 	}
 
-	static String[] splitMemberVarName(final String memberVarName) {
-		final String trimmedMemberVarName = memberVarName.trim();
-		String[] subnames = trimmedMemberVarName.split(MEMBER_VAR_SEPARATOR);
-		if (subnames.length == 1) {
-			// check if it is an old style member var name
-			subnames = trimmedMemberVarName.split("\\."); //$NON-NLS-1$
-		}
-		return subnames;
+	private static EList<VarDeclaration> getMuxedVars(final StructManipulator structMan) {
+		return (structMan instanceof Demultiplexer) ? structMan.getInterface().getOutputVars()
+				: structMan.getInterface().getInputVars();
 	}
 
 	private ConfigurableFBManagement() {

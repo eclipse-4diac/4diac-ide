@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.emf.common.util.EList;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Struct Manipulator</b></em>'.
@@ -29,12 +27,5 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface StructManipulator extends ConfigurableFB {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	EList<VarDeclaration> getMemberVars();
 
 } // StructManipulator
