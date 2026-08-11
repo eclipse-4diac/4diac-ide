@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl#getSubAppNetwork <em>Sub App Network</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl#getVarConfigParams <em>Var Config Params</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedSubAppImpl#getOverrideAttributes <em>Override Attributes</em>}</li>
  * </ul>
  *
  * @generated
@@ -69,6 +71,16 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 * @ordered
 	 */
 	protected EList<VarConfigInstance> varConfigParams;
+
+	/**
+	 * The cached value of the '{@link #getOverrideAttributes() <em>Override Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOverrideAttributes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<OverrideAttribute> overrideAttributes;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -176,6 +188,19 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 * @generated
 	 */
 	@Override
+	public EList<OverrideAttribute> getOverrideAttributes() {
+		if (overrideAttributes == null) {
+			overrideAttributes = new EObjectContainmentEList.Resolving<OverrideAttribute>(OverrideAttribute.class, this, LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES);
+		}
+		return overrideAttributes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean isTyped() {
 		return true;
 	}
@@ -212,6 +237,8 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 				return basicSetSubAppNetwork(null, msgs);
 			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
 				return ((InternalEList<?>)getVarConfigParams()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES:
+				return ((InternalEList<?>)getOverrideAttributes()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -230,6 +257,8 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 				return basicGetSubAppNetwork();
 			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
 				return getVarConfigParams();
+			case LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES:
+				return getOverrideAttributes();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -251,6 +280,10 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 				getVarConfigParams().clear();
 				getVarConfigParams().addAll((Collection<? extends VarConfigInstance>)newValue);
 				return;
+			case LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES:
+				getOverrideAttributes().clear();
+				getOverrideAttributes().addAll((Collection<? extends OverrideAttribute>)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -271,6 +304,9 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
 				getVarConfigParams().clear();
 				return;
+			case LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES:
+				getOverrideAttributes().clear();
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -289,6 +325,8 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 				return subAppNetwork != null;
 			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
 				return varConfigParams != null && !varConfigParams.isEmpty();
+			case LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES:
+				return overrideAttributes != null && !overrideAttributes.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
