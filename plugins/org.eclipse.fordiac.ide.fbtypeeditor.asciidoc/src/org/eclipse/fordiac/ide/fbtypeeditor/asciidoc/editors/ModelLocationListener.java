@@ -34,7 +34,12 @@ final class ModelLocationListener extends LocationAdapter {
 	@Override
 	public void changing(final LocationEvent event) {
 		if (event.location != null && event.location.startsWith(FbtMacroProcessor.FBT_TYPE_ENTRY_URI)) {
-			openFbtEntry(event.location.substring(FbtMacroProcessor.FBT_TYPE_ENTRY_URI.length()));
+			final String typeFileUri = event.location.substring(FbtMacroProcessor.FBT_TYPE_ENTRY_URI.length());
+			PlatformUI.getWorkbench().getDisplay().asyncExec(() -> {
+				if (PlatformUI.isWorkbenchRunning()) {
+					openFbtEntry(typeFileUri);
+				}
+			});
 			event.doit = false;
 		}
 	}
