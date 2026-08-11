@@ -96,7 +96,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -245,7 +244,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
 			case LibraryElementPackage.MAPPING: return createMapping();
 			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
-			case LibraryElementPackage.MEMBER_VAR_DECLARATION: return createMemberVarDeclaration();
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
 			case LibraryElementPackage.ORIGINAL_SOURCE: return createOriginalSource();
 			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
@@ -1038,17 +1036,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public MappingTarget createMappingTarget() {
 		MappingTargetImpl mappingTarget = new MappingTargetImpl();
 		return mappingTarget;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public MemberVarDeclaration createMemberVarDeclaration() {
-		MemberVarDeclarationImpl memberVarDeclaration = new MemberVarDeclarationImpl();
-		return memberVarDeclaration;
 	}
 
 	/**

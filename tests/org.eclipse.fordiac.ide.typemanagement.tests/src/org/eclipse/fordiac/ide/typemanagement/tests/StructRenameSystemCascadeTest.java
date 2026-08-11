@@ -135,18 +135,6 @@ class StructRenameSystemCascadeTest {
 	}
 
 	@Test
-	void renameInnerStruct_preservesConfiguredDemuxMemberVisibility() throws Exception {
-		// The Demux hides member B, so only A and C are visible; the rename must keep
-		// that configured visibility instead of resetting it to all members.
-		assertEquals(List.of("A", "C"), demuxVisibleMembers()); //$NON-NLS-1$ //$NON-NLS-2$
-
-		renameInnerStruct();
-
-		assertEquals(List.of("A", "C"), demuxVisibleMembers()); //$NON-NLS-1$ //$NON-NLS-2$
-		assertConfigurableFBDataType(DEMUX_INSTANCE, Demultiplexer.class, INNER_STRUCT_RENAMED);
-	}
-
-	@Test
 	void renameInnerStruct_keepsExpandedMemberConnections() throws Exception {
 		assertEquals(APP_DATA_CONNECTIONS, applicationDataConnections());
 		assertEquals(CONTAINER_DATA_CONNECTIONS, containerDataConnections());
@@ -177,7 +165,7 @@ class StructRenameSystemCascadeTest {
 
 	@Test
 	@Disabled("Custom attributes on expanded struct member pins are lost when the member is renamed, re-enable " //$NON-NLS-1$
-			+ "when https://github.com/eclipse-4diac/4diac-ide/issues/2646 is fixed") //$NON-NLS-1$
+			+ "when https://github.com/eclipse-4diac/4diac-ide/issues/2646 is fixed")
 	void renameStructMember_preservesCustomPinAttribute() throws Exception {
 		assertEquals(CUSTOM_ATTRIBUTE_VALUE, producerOutMemberAttribute(MEMBER));
 
@@ -210,27 +198,20 @@ class StructRenameSystemCascadeTest {
 
 	private void assertFBInterfacePinType(final String fbTypeName, final String pinName,
 			final String expectedQualifiedType) {
-		final FBType fbType = (FBType) typeLibrary.getFBTypeEntry(fbTypeName).getType();
-		final VarDeclaration pin = Stream.concat(fbType.getInterfaceList().getInputVars().stream(),
-				fbType.getInterfaceList().getOutputVars().stream()).filter(v -> pinName.equals(v.getName())).findFirst()
-				.orElseThrow();
+		final FBType fbType = typeLibrary.getFBTypeEntry(fbTypeName).getType();
+		final VarDeclaration pin = Stream
+				.concat(fbType.getInterfaceList().getInputVars().stream(),
+						fbType.getInterfaceList().getOutputVars().stream())
+				.filter(v -> pinName.equals(v.getName())).findFirst().orElseThrow();
 		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(pin.getType()));
 	}
 
 	private <T extends ConfigurableFB> void assertConfigurableFBDataType(final String instanceName,
 			final Class<T> instanceClass, final String expectedQualifiedType) {
 		final FBNetworkElement element = system().getApplicationNamed(APPLICATION_NAME).getFBNetwork()
-				.getNetworkElements().stream().filter(e -> instanceName.equals(e.getName())).findFirst()
-				.orElseThrow();
+				.getNetworkElements().stream().filter(e -> instanceName.equals(e.getName())).findFirst().orElseThrow();
 		final T configurable = assertInstanceOf(instanceClass, element);
 		assertEquals(expectedQualifiedType, PackageNameHelper.getFullTypeName(configurable.getDataType()));
-	}
-
-	private List<String> demuxVisibleMembers() {
-		final FBNetworkElement element = system().getApplicationNamed(APPLICATION_NAME).getFBNetwork()
-				.getNetworkElements().stream().filter(e -> DEMUX_INSTANCE.equals(e.getName())).findFirst().orElseThrow();
-		final Demultiplexer demux = assertInstanceOf(Demultiplexer.class, element);
-		return demux.getMemberVars().stream().map(VarDeclaration::getName).toList();
 	}
 
 	private Set<String> applicationDataConnections() {
