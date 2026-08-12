@@ -77,6 +77,16 @@ public final class Messages extends NLS {
 
 	public static String ErrorMarkerFBNEditPart_OldType;
 
+	public static String EventSequencePage_ConnectionsColumn;
+
+	public static String EventSequencePage_NameColumn;
+
+	public static String EventSequencePage_RefreshJobName;
+
+	public static String EventSequencePage_SequenceColumn;
+
+	public static String EventSequenceView_DefaultMessage;
+
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
 
