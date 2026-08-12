@@ -1941,4 +1941,166 @@
   		point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
    		<listener class = "org.eclipse.fordiac.ide.application.listeners.UtilityMarkerListener"/>
   </extension>
+  <extension point="org.eclipse.ui.themes">
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.1"
+          label="Chart Series 1"
+          value="1, 34, 105"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.2"
+          label="Chart Series 2"
+          value="224, 130, 12"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.3"
+          label="Chart Series 3"
+          value="0, 158, 115"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.4"
+          label="Chart Series 4"
+          value="94, 60, 153"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.5"
+          label="Chart Series 5"
+          value="44, 160, 44"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.6"
+          label="Chart Series 6"
+          value="214, 39, 40"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.7"
+          label="Chart Series 7"
+          value="230, 159, 0"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.8"
+          label="Chart Series 8"
+          value="86, 180, 233"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.9"
+          label="Chart Series 9"
+          value="110, 161, 31"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.10"
+          label="Chart Series 10"
+          value="117, 112, 179"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.11"
+          label="Chart Series 11"
+          value="0, 83, 138"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.12"
+          label="Chart Series 12"
+          value="127, 127, 127"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.13"
+          label="Chart Series 13"
+          value="251, 128, 114"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.14"
+          label="Chart Series 14"
+          value="128, 128, 0"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.15"
+          label="Chart Series 15"
+          value="213, 94, 0"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.16"
+          label="Chart Series 16"
+          value="0, 150, 150"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.17"
+          label="Chart Series 17"
+          value="159, 105, 0"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.18"
+          label="Chart Series 18"
+          value="148, 0, 0"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.19"
+          label="Chart Series 19"
+          value="166, 206, 227"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.20"
+          label="Chart Series 20"
+          value="199, 134, 57"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.21"
+          label="Chart Series 21"
+          value="178, 223, 138"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.22"
+          label="Chart Series 22"
+          value="255, 255, 153"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.23"
+          label="Chart Series 23"
+          value="0, 0, 0"
+          isEditable="false"/>
+    <colorDefinition
+          categoryId="org.eclipse.fordiac.ide.themeCategory"
+          id="org.eclipse.fordiac.ide.application.chart.series.24"
+          label="Chart Series 24"
+          value="217, 217, 217"
+          isEditable="false"/>
+  </extension>
+
+  <extension point="org.eclipse.e4.ui.css.swt.theme">
+    <stylesheet uri="css/dark_chart_colors.css">
+      <themeid refid="org.eclipse.e4.ui.css.theme.e4_dark"/>
+    </stylesheet>
+  </extension>
+  <extension
+        point="org.eclipse.ui.views">
+     <view
+           category="org.eclipse.fordiac.ide.view.category"
+           class="org.eclipse.fordiac.ide.application.views.graph.EventSequenceView"
+           id="org.eclipse.fordiac.ide.application.eventSequence"
+           name="%view.eventSequence.name"
+           restorable="true">
+     </view>
+  </extension>
 </plugin>
