@@ -39,5 +39,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		preferences.putBoolean(GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
 				GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE);
+
+		preferences.putBoolean(GefPreferenceConstants.EXPLOSION_EFFECT_ON_DELETE, false);
 	}
 }

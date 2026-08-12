@@ -79,6 +79,11 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 				Messages.DiagramPreferences_ManageConnectionOfEventsAutomatically, parent);
 		addField(manageConnections);
 
+		final BooleanFieldEditor explosionEffect = new BooleanFieldEditor(
+				GefPreferenceConstants.EXPLOSION_EFFECT_ON_DELETE, Messages.DiagramPreferences_ExplosionEffectOnDelete,
+				parent);
+		addField(explosionEffect);
+
 		// Create a Group to hold the interface pin field
 		createGroupInterfacePins();
 

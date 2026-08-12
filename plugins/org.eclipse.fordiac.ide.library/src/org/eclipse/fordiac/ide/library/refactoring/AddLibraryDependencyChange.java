@@ -11,26 +11,26 @@
  *   Patrick Aigner
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.library.ui.refactoring;
+package org.eclipse.fordiac.ide.library.refactoring;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
-public class DeleteLibraryDependencyChange extends CompositeChange {
+public class AddLibraryDependencyChange extends CompositeChange {
 	private final IProject project;
-	private final String symbolicName;
+	private final Required dependency;
 
-	public DeleteLibraryDependencyChange(final IProject project, final String symbolicName) {
-		super(Messages.DeleteLibraryParticipant_Change_Title);
+	public AddLibraryDependencyChange(final IProject project, final Required dependency) {
+		super(Messages.AddLibraryDependency_Change_Title);
 		this.project = project;
-		this.symbolicName = symbolicName;
+		this.dependency = dependency;
 	}
 
 	@Override
@@ -39,12 +39,10 @@ public class DeleteLibraryDependencyChange extends CompositeChange {
 		if (projectManifest == null || projectManifest.getDependencies() == null) {
 			return null;
 		}
-		final Required dependency = projectManifest.getDependencies().getRequired().stream()
-				.filter(r -> symbolicName.equals(r.getSymbolicName())).findAny().orElse(null);
 
-		if (dependency != null && ManifestHelper.removeDependency(projectManifest, dependency)
+		if (dependency != null && ManifestHelper.addDependency(projectManifest, dependency)
 				&& ManifestHelper.saveManifest(projectManifest)) {
-			return new AddLibraryDependencyChange(project, dependency);
+			return new DeleteLibraryDependencyChange(project, dependency.getSymbolicName());
 		}
 		return null;
 	}

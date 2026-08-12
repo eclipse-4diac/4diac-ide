@@ -888,7 +888,8 @@ public abstract class CommonElementImporter {
 	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver,
 			final EClass typeClass) {
 		if (name == null || name.isEmpty()) {
-			return null;
+			// create a type entry with no name for missing or empty type names
+			return (T) getTypeLibrary().createErrorTypeEntry("", typeClass); //$NON-NLS-1$
 		}
 		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver,
 				typeName -> (T) getTypeLibrary().createErrorTypeEntry(typeName, typeClass)));

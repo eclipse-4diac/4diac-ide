@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class CopyTypeChange extends Change {
@@ -83,7 +84,7 @@ public class CopyTypeChange extends Change {
 			throw new CoreException(
 					Status.error(MessageFormat.format(Messages.CopyTypeChange_CannotSaveResource, destination), e));
 		}
-		return null; // no undo change necessary, the element will be deleted
+		return new NullChange(); // no undo change necessary, the element will be deleted
 	}
 
 	@Override

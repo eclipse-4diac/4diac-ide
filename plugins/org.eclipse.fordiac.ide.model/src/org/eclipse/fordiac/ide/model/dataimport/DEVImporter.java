@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008, 2009, 2011 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008  Profactor GmbH, TU Wien ACIN, fortiss GmbH, 
+ *                                Johannes Kepler University Linz, Aimirim STI
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *    - initial API and implementation and/or initial documentation
  *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
+ *  Pedro Ricardo - Added parsing of the SupportedProfiles attribute
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -24,9 +25,11 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -146,10 +149,13 @@ public class DEVImporter extends TypeImporter {
 
 	}
 
-	private void parseDeviceTypeAttribute() {
+	private void parseDeviceTypeAttribute() throws XMLStreamException, TypeImportException {
 		if (isProfileAttribute()) {
 			parseProfile();
+		} else {
+			parseGenericAttributeNode(getElement());
 		}
+		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 	}
 
 	private void parseProfile() {

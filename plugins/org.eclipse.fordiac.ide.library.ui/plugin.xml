@@ -89,32 +89,6 @@
    		</enabledWhen>
   	</activity>
    </extension>
-   <extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
-      <deleteParticipant
-            class="org.eclipse.fordiac.ide.library.ui.refactoring.DeleteLibraryRefactoringParticipant"
-            id="org.eclipse.fordiac.ide.library.ui.deleteLibrary"
-            name="Delete Library Folder Handler">
-         <enablement>
-            <and>
-               <instanceof
-                     value="org.eclipse.core.resources.IResource">
-               </instanceof>
-            </and>
-         </enablement>
-      </deleteParticipant>
-   </extension>
-   <extension
-         point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
-      <changePreviewViewer
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.ChangeConfigurationViewer"
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteLibraryChangeViewer">
-         <enablement>
-         <or>
-		 <instanceof value="org.eclipse.fordiac.ide.library.ui.refactoring.DeleteLibraryDependencyChange"/>
-         </or>
-         </enablement>
-      </changePreviewViewer>
-   </extension>
    
 	<extension point="org.eclipse.ui.commands">
   		<command

@@ -42,6 +42,8 @@ public class GefPreferenceConstants {
 
 	public static final String MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY = "ManageEventConnectionsAutomatically"; //$NON-NLS-1$
 
+	public static final String EXPLOSION_EFFECT_ON_DELETE = "ExplosionEffectOnDelete"; //$NON-NLS-1$
+
 	private GefPreferenceConstants() {
 
 	}
