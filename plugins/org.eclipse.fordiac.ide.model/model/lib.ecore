@@ -860,7 +860,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ContainerVarDeclaration" eSuperTypes="#//VarDeclaration">
     <eOperations name="getCachedMember" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getCachedMembers().stream().filter(vm -> vm.getName().equals(name)).findAny().orElse(null);"/>
+        <details key="body" value="return getCachedMembers().stream().filter(vm -> vm.getName().equalsIgnoreCase(name)).findAny().orElse(null);"/>
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
