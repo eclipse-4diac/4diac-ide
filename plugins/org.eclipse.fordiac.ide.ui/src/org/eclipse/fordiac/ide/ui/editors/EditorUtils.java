@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2016 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -80,7 +79,7 @@ public final class EditorUtils {
 				.getEditorReferences();
 
 		return Arrays.stream(editorReferences).map(ref -> ref.getEditor(false)).filter(Objects::nonNull)
-				.filter(editor -> filter.filter(editor)).toArray(IEditorPart[]::new);
+				.filter(filter::filter).toArray(IEditorPart[]::new);
 	}
 
 	public static void forEachOpenEditorFiltered(final EditorFilter filter, final EditorAction action) {
@@ -95,6 +94,11 @@ public final class EditorUtils {
 
 	public static void refreshPropertySheetWithSelection(final IEditorPart activeEditor, final EditPartViewer viewer,
 			final Object obj) {
+		refreshPropertySheetWithSelection(activeEditor, viewer, obj, false);
+	}
+
+	public static void refreshPropertySheetWithSelection(final IEditorPart activeEditor, final EditPartViewer viewer,
+			final Object obj, final boolean raisePropertySheet) {
 		if (viewer != null) {
 			viewer.select((EditPart) obj);
 		}
@@ -103,7 +107,9 @@ public final class EditorUtils {
 		if (activeEditor != null && view instanceof final PropertySheet propertySheet) {
 			final ISelection selection = activeEditor.getSite().getSelectionProvider().getSelection();
 			propertySheet.selectionChanged(activeEditor, selection);
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(view);
+			if (raisePropertySheet) {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(view);
+			}
 		}
 	}
 }

@@ -522,7 +522,8 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	public void selectPropertySheet() {
 		if (null != getViewer()) {
 			getViewer().flush();
-			EditorUtils.refreshPropertySheetWithSelection(EditorUtils.getCurrentActiveEditor(), getViewer(), this);
+			EditorUtils.refreshPropertySheetWithSelection(EditorUtils.getCurrentActiveEditor(), getViewer(), this,
+					true);
 		}
 	}
 
