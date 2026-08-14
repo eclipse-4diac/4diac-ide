@@ -8,8 +8,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.core.resources,
- org.eclipse.fordiac.ide.util
+ org.eclipse.core.resources
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.2.100.qualifier

@@ -19,19 +19,17 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.commands.testinfra.VersionInfoTestBase;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class ChangeVersionCommandTest extends VersionInfoTestBase {
 
 	private static final String NEW_VERSION = "3.141592"; //$NON-NLS-1$
 
-	private static State executeCommand(State state) {
+	private static State executeCommand(final State state) {
 		state.setCommand(new ChangeVersionCommand(state.getVersionInfo(), NEW_VERSION));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyState(State state, State oldState, TestFunction t) {
+	private static void verifyState(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getVersionInfo().getVersion(), NEW_VERSION);
 		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
 		t.test(state.getVersionInfo().getOrganization(), oldState.getVersionInfo().getOrganization());
@@ -39,13 +37,13 @@ public class ChangeVersionCommandTest extends VersionInfoTestBase {
 		t.test(state.getVersionInfo().getAuthor(), oldState.getVersionInfo().getAuthor());
 	}
 
-	private static State executeCommandToNull(State state) {
+	private static State executeCommandToNull(final State state) {
 		state.setCommand(new ChangeVersionCommand(state.getVersionInfo(), null));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyStateNull(State state, State oldState, TestFunction t) {
+	private static void verifyStateNull(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getVersionInfo().getVersion(), EMPTY);
 		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
 		t.test(state.getVersionInfo().getOrganization(), oldState.getVersionInfo().getOrganization());

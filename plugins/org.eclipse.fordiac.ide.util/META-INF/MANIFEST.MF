@@ -1,15 +1,9 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.util
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.gef,
- org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.model.commands,
- org.eclipse.ui.views.properties.tabbed,
- org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.systemmanagement
+Require-Bundle: org.eclipse.swt
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.2.100.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-Name: Utils
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.util;singleton:=true

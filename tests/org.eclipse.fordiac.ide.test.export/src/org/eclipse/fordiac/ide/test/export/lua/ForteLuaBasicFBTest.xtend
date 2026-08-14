@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 
 	@Test

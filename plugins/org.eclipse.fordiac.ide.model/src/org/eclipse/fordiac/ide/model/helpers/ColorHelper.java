@@ -16,7 +16,7 @@
  *   Bianca Wiesmayr
  *     - define a first color for devices
  *******************************************************************************/
-package org.eclipse.fordiac.ide.util;
+package org.eclipse.fordiac.ide.model.helpers;
 
 import java.security.SecureRandom;
 import java.util.Random;

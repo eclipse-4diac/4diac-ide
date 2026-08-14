@@ -28,8 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.commands.Command;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTestBase {
 
 	protected static final String EVENT_TYPE = "Event"; //$NON-NLS-1$
