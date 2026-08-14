@@ -17,9 +17,6 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
-
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -442,26 +439,6 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	@Override
 	public SystemConfiguration getSystemConfiguration() {
 		return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getSystemConfiguration(this); 
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final int x, final int y) {
-		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final Point newPos) {
-		updatePositionFromScreenCoordinates(newPos.x, newPos.y);
 	}
 
 	/**

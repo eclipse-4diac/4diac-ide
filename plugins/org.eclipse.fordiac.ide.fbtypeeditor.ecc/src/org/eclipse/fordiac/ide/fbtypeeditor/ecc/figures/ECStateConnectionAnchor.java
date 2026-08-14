@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import org.eclipse.draw2d.AbstractConnectionAnchor;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
@@ -40,7 +41,7 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 	@Override
 	public Point getReferencePoint() {
 		if (transition != null && transition.getPosition() != null) {
-			final Point p = transition.getPosition().toScreenPoint();
+			final Point p = CoordinateConverter.INSTANCE.toScreenPoint(transition.getPosition());
 			getOwner().translateToAbsolute(p);
 			return p;
 		}
@@ -93,16 +94,16 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 
 		return Stream.concat(state.getOutTransitions().stream(), state.getInTransitions().stream())
 				.filter(t -> t.getPosition() != null).filter(t -> {
-					final Point p = t.getPosition().toScreenPoint();
+					final Point p = CoordinateConverter.INSTANCE.toScreenPoint(t.getPosition());
 
 					getOwner().translateToAbsolute(p);
 
 					return EdgeDirection.of(p, nameBounds, state) == edge;
 				}).sorted((t1, t2) -> {
-					final Point p1 = t1.getPosition().toScreenPoint();
+					final Point p1 = CoordinateConverter.INSTANCE.toScreenPoint(t1.getPosition());
 					getOwner().translateToAbsolute(p1);
 
-					final Point p2 = t2.getPosition().toScreenPoint();
+					final Point p2 = CoordinateConverter.INSTANCE.toScreenPoint(t2.getPosition());
 					getOwner().translateToAbsolute(p2);
 
 					return (edge == EdgeDirection.TOP || edge == EdgeDirection.BOTTOM) ? Integer.compare(p1.x, p2.x)

@@ -22,10 +22,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -883,12 +879,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateIFile((IFile)value, diagnostics, context);
 			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
 				return validateInterfaceElementStream((Stream<IInterfaceElement>)value, diagnostics, context);
-			case LibraryElementPackage.IPROJECT:
-				return validateIProject((IProject)value, diagnostics, context);
 			case LibraryElementPackage.NAMED_ELEMENT_STREAM:
 				return validateNamedElementStream((Stream<INamedElement>)value, diagnostics, context);
-			case LibraryElementPackage.POINT:
-				return validatePoint((Point)value, diagnostics, context);
 			case LibraryElementPackage.TYPE_ENTRY:
 				return validateTypeEntry((TypeEntry)value, diagnostics, context);
 			case LibraryElementPackage.TYPE_LIBRARY:
@@ -3616,25 +3608,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIProject(IProject iProject, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public boolean validateNamedElementStream(Stream<INamedElement> namedElementStream, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validatePoint(Point point, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

@@ -245,7 +245,8 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			final Position position = getModel().getPosition();
-			final Rectangle bounds = new Rectangle(position.toScreenPoint(), getCommentSize());
+			final Rectangle bounds = new Rectangle(CoordinateConverter.INSTANCE.toScreenPoint(position),
+					getCommentSize());
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}

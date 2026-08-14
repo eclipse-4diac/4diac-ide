@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.draw2d.FreeformViewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -140,7 +141,7 @@ public final class HandlerHelper {
 				final EditPart subappEP = viewer.getEditPartForModel(subapp);
 				if ((subappEP != null) && (subappEP.getRoot() instanceof final ScalableFreeformRootEditPart gep
 						&& gep.getFigure() instanceof final FreeformViewport viewp)) {
-					final Point pos = subapp.getPosition().toScreenPoint();
+					final Point pos = CoordinateConverter.INSTANCE.toScreenPoint(subapp.getPosition());
 					viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
 					viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
 				}
