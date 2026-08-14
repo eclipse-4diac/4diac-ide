@@ -16,6 +16,7 @@ Require-Bundle:
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.debug,
  org.eclipse.fordiac.ide.deployment.debug.ui,
+ org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.gef,
  org.eclipse.jface,
