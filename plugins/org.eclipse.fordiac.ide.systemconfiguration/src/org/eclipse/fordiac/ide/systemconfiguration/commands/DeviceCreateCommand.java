@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger, Kiril Dorofeev
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl 
+ *   Alois Zoitl
  *     - removed editor check from canUndo
  *   Pedro Ricardo
  *     - set default profile as the first supported
@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.fordiac.ide.util.YUV;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.graphics.RGB;
 
 public class DeviceCreateCommand extends Command {
 
@@ -102,8 +101,10 @@ public class DeviceCreateCommand extends Command {
 		device.setProfile(profile);
 	}
 
-	/* Return the first of 'SupportedProfiles' attribute if declared,
-     * else returns null to enable fallback to previous behaviour. */
+	/*
+	 * Return the first of 'SupportedProfiles' attribute if declared, else returns
+	 * null to enable fallback to previous behaviour.
+	 */
 	private static String getDefaultSupportedProfile(final DeviceType type) {
 		final List<String> supportedProfiles = DeviceProfileHelper.getSupportedProfiles(type);
 		if (supportedProfiles.isEmpty()) {
@@ -164,14 +165,14 @@ public class DeviceCreateCommand extends Command {
 		final List<YUV> existingColors = new ArrayList<>();
 		for (final Device dev : parent.getDevices()) {
 			final Color devcolor = dev.getColor();
-			existingColors.add(new YUV(new RGB(devcolor.getRed(), devcolor.getGreen(), devcolor.getBlue())));
+			existingColors.add(new YUV(devcolor.getRed(), devcolor.getGreen(), devcolor.getBlue()));
 		}
 		if (existingColors.isEmpty()) {
 			return ColorHelper.getStartingColor();
 		}
 		do {
 			randomColor = ColorHelper.createRandomColor();
-			final YUV randYUV = new YUV(new RGB(randomColor.getRed(), randomColor.getGreen(), randomColor.getBlue()));
+			final YUV randYUV = new YUV(randomColor.getRed(), randomColor.getGreen(), randomColor.getBlue());
 			exist = false;
 			for (final YUV yuv : existingColors) {
 				if (randYUV.nearbyColor(yuv)) {
