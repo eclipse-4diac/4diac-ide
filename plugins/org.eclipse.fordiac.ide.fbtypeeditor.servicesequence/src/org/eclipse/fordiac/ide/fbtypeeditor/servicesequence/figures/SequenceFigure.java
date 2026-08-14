@@ -32,7 +32,6 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
 import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
-import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
 
 public final class SequenceFigure extends Layer {
@@ -75,12 +74,12 @@ public final class SequenceFigure extends Layer {
 
 		// creating title bar
 		titleBar.setLayoutManager(new GridLayout(2, true));
-		titleBar.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHT_GRAY));
+		titleBar.setBackgroundColor(ServiceConstants.LIGHT_GRAY);
 		titleBar.setOpaque(true);
 
 		final MarginBorder titleBorder = new MarginBorder(new Insets(10, 20, 3, 0));
 		nameLabel.setBorder(titleBorder);
-		nameLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
+		nameLabel.setForegroundColor(ServiceConstants.TEXT_BLUE);
 		nameLabel.setFont(ServiceFigure.getFontRegistry().get(ServiceFigure.LABEL_FONT));
 		nameLabel.setLabelAlignment(PositionConstants.LEFT);
 
@@ -140,16 +139,12 @@ public final class SequenceFigure extends Layer {
 	}
 
 	private static String getIconText(final String serviceSequenceType) {
-		switch (serviceSequenceType) {
-		case ServiceSequenceTypes.ALWAYS:
-			return TYPE_ALWAYS;
-		case ServiceSequenceTypes.FORBIDDEN:
-			return TYPE_FORBIDDEN;
-		case ServiceSequenceTypes.CONDITIONAL:
-			return TYPE_CONDITIONAL;
-		default:
-			return TYPE_POSSIBLE;
-		}
+		return switch (serviceSequenceType) {
+		case ServiceSequenceTypes.ALWAYS -> TYPE_ALWAYS;
+		case ServiceSequenceTypes.FORBIDDEN -> TYPE_FORBIDDEN;
+		case ServiceSequenceTypes.CONDITIONAL -> TYPE_CONDITIONAL;
+		default -> TYPE_POSSIBLE;
+		};
 	}
 
 }

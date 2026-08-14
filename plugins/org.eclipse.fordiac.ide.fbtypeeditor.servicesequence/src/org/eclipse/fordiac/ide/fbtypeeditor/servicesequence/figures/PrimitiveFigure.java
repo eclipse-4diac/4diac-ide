@@ -25,7 +25,6 @@ import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
-import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
 
 public class PrimitiveFigure extends Layer {
@@ -44,14 +43,13 @@ public class PrimitiveFigure extends Layer {
 		mainLayout.marginWidth = 0;
 		mainLayout.horizontalSpacing = 0;
 
-
 		nameLabel = new Label();
 		nameLabel.setForegroundColor(ColorConstants.black);
 		final GridData nameLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
 		nameLabelData.widthHint = ServiceConstants.getNameLabelWidth();
 
 		parameterLabel = new Label();
-		parameterLabel.setForegroundColor(ColorManager.getColor(ServiceConstants.GRAY));
+		parameterLabel.setForegroundColor(ServiceConstants.GRAY);
 		final GridData parameterLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
 		parameterLabelData.widthHint = ServiceConstants.getParameterLabelWidth();
 
