@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;

@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {

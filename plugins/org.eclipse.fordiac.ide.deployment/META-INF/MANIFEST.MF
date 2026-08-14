@@ -13,7 +13,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.gef
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -25,3 +24,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment
 Bundle-RequiredExecutionEnvironment: JavaSE-21
+Import-Package: org.eclipse.fordiac.ide.util

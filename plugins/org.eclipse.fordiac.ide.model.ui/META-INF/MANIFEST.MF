@@ -27,3 +27,4 @@ Export-Package: org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.model.ui.preferences,
  org.eclipse.fordiac.ide.model.ui.validation,
  org.eclipse.fordiac.ide.model.ui.widgets
+Import-Package: org.eclipse.fordiac.ide.util

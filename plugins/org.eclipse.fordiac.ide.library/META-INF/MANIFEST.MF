@@ -12,7 +12,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.fordiac.ide.library.model,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.ui,
  org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.services,
  org.osgi.service.event
@@ -20,3 +19,4 @@ Export-Package: org.eclipse.fordiac.ide.library,
  org.eclipse.fordiac.ide.library.download,
  org.eclipse.fordiac.ide.library.preferences,
  org.eclipse.fordiac.ide.library.provider
+Import-Package: org.eclipse.fordiac.ide.util

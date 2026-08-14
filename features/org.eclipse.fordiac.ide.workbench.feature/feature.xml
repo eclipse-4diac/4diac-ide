@@ -109,10 +109,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.fordiac.ide.ui.errormessages"
-         version="0.0.0"/>
-
-   <plugin
          id="org.eclipse.fordiac.ide.model.eval"
          version="0.0.0"/>
 

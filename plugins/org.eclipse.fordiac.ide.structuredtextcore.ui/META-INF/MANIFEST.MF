@@ -31,6 +31,7 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.ui
 Import-Package: org.apache.log4j,
+ org.eclipse.fordiac.ide.util,
  org.eclipse.xtext.ui.codemining;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,

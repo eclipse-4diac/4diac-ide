@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class ResourceReplayer implements IResourceReplayer {
 

@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;

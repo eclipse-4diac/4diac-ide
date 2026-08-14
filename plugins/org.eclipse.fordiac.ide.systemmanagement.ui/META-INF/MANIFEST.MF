@@ -43,3 +43,4 @@ Bundle-Version: 3.3.0.qualifier
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemmanagement.ui;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.systemmanagement.ui
+Import-Package: org.eclipse.fordiac.ide.util

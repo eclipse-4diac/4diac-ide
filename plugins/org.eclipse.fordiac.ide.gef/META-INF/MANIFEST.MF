@@ -42,7 +42,6 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.jface.text,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.model.eval,
- org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.nebula.widgets.nattable.core,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.structuredtextcore.ui,
@@ -57,3 +56,4 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.gef
+Import-Package: org.eclipse.fordiac.ide.util

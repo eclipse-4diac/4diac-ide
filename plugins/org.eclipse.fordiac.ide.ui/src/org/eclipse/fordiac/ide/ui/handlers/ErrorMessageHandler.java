@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessage;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.handlers.internal.ErrorMessageDialog;
+import org.eclipse.fordiac.ide.util.ErrorMessage;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;

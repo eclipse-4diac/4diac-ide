@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.search.ISearchSupport;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 public class OrganizeImportsCommand extends Command implements ScopedCommand {

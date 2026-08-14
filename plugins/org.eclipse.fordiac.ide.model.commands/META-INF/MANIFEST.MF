@@ -12,7 +12,6 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface,
- org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.core.resources,
  org.eclipse.ui.ide
 Export-Package: org.eclipse.fordiac.ide.model.commands,
@@ -22,3 +21,4 @@ Export-Package: org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.model.commands.insert
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.commands
+Import-Package: org.eclipse.fordiac.ide.util

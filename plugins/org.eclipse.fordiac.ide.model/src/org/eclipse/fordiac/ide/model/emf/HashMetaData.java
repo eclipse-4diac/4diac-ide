@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.util.ITransformer;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class HashMetaData {
 	public static final String ANNOTATION_URI = "http:///org/eclipse/fordiac/ide/model/HashMetaData"; //$NON-NLS-1$

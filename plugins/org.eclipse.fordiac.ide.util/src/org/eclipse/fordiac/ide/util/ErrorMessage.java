@@ -9,7 +9,7 @@
  * Contributors:
  *   Ernst Blecha - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.errormessages;
+package org.eclipse.fordiac.ide.util;
 
 public class ErrorMessage {
 
