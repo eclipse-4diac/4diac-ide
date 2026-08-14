@@ -5,7 +5,6 @@ Export-Package: org.eclipse.fordiac.ide.deployment.iec61499,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.ui,
  org.eclipse.ui,
  org.eclipse.fordiac.ide.export.forte_lua,
  org.eclipse.fordiac.ide.export,
@@ -25,3 +24,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.iec61499;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.iec61499
+Import-Package: org.eclipse.fordiac.ide.util

@@ -29,3 +29,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse 4diac
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.subapptypeeditor
+Import-Package: org.eclipse.fordiac.ide.util

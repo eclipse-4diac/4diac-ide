@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.search;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 

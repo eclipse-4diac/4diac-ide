@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.model.buildpath.BuildpathFactory;
 import org.eclipse.fordiac.ide.model.buildpath.DocumentRoot;
 import org.eclipse.fordiac.ide.model.buildpath.Pattern;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class BuildpathUtil {
 

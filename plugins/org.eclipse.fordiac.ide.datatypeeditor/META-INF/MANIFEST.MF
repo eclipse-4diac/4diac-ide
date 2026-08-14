@@ -27,3 +27,4 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.datatypeeditor
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.datatypeeditor.properties,
  org.eclipse.fordiac.ide.datatypeeditor.widgets
+Import-Package: org.eclipse.fordiac.ide.util

@@ -25,8 +25,8 @@ import org.eclipse.fordiac.ide.deployment.bootfile.BootFileDeviceManagementCommu
 import org.eclipse.fordiac.ide.deployment.bootfile.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;

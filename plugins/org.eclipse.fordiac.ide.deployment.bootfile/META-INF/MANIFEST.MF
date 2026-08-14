@@ -24,3 +24,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment.debug,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.gef
+Import-Package: org.eclipse.fordiac.ide.util

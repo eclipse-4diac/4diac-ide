@@ -14,10 +14,9 @@
  *                 is no workbench
  *   Martin Jobst - change logError argument to Throwable
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui;
+package org.eclipse.fordiac.ide.util;
 
 import java.lang.StackWalker.Option;
-
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;

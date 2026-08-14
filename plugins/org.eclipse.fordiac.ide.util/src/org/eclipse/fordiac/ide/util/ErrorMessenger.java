@@ -10,7 +10,7 @@
  *   Ernst Blecha - initial API and implementation and/or initial documentation
  *   Alexander Fedorov (ArSysOp) - remove redundant bundle activator
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.errormessages;
+package org.eclipse.fordiac.ide.util;
 
 import java.util.ArrayList;
 import java.util.List;

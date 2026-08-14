@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper
+import org.eclipse.fordiac.ide.util.FordiacLogHelper
 
 class ForteLuaExportFilter implements IExportFilter {
 

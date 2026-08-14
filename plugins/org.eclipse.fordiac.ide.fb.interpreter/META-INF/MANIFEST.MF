@@ -37,3 +37,4 @@ Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.fordiac.ide.util

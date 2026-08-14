@@ -2,8 +2,7 @@ Manifest-Version: 1.0
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.export,
- org.eclipse.compare,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.compare
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.1.200.qualifier
@@ -12,3 +11,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.compare;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.compare
+Import-Package: org.eclipse.fordiac.ide.util
