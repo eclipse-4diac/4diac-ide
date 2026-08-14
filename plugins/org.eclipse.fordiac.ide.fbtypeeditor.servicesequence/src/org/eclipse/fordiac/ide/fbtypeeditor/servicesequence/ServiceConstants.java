@@ -14,22 +14,22 @@
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Color;
 
 public final class ServiceConstants {
 	private static final int LIGHT_GRAY_RGB = 234;
-	public static final RGB LIGHT_GRAY = new RGB(LIGHT_GRAY_RGB, LIGHT_GRAY_RGB, LIGHT_GRAY_RGB);
+	public static final Color LIGHT_GRAY = new Color(LIGHT_GRAY_RGB, LIGHT_GRAY_RGB, LIGHT_GRAY_RGB);
 
 	private static final int LIGHTER_GRAY_RGB = 250;
-	public static final RGB LIGHTER_GRAY = new RGB(LIGHTER_GRAY_RGB, LIGHTER_GRAY_RGB, LIGHTER_GRAY_RGB);
+	public static final Color LIGHTER_GRAY = new Color(LIGHTER_GRAY_RGB, LIGHTER_GRAY_RGB, LIGHTER_GRAY_RGB);
 
 	private static final int GRAY_RGB = 75;
-	public static final RGB GRAY = new RGB(GRAY_RGB, GRAY_RGB, GRAY_RGB);
+	public static final Color GRAY = new Color(GRAY_RGB, GRAY_RGB, GRAY_RGB);
 
 	private static final int TEXT_BLUE_R = 0;
 	private static final int TEXT_BLUE_G = 120;
 	private static final int TEXT_BLUE_B = 215;
-	public static final RGB TEXT_BLUE = new RGB(TEXT_BLUE_R, TEXT_BLUE_G, TEXT_BLUE_B);
+	public static final Color TEXT_BLUE = new Color(TEXT_BLUE_R, TEXT_BLUE_G, TEXT_BLUE_B);
 
 	public static final int LINE_WIDTH = 1;
 
