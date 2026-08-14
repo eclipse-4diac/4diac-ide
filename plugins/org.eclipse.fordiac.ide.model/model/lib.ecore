@@ -2125,30 +2125,12 @@
     <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
       <details key="ignored" value="true"/>
     </eAnnotations>
-    <eOperations name="toScreenPoint" lowerBound="1" eType="#//Point">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return PositionAnnotation.toScreenPoint(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
         defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
         defaultValueLiteral="0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PositionableElement">
-    <eOperations name="updatePositionFromScreenCoordinates" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);"/>
-      </eAnnotations>
-      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-      <eParameters name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-    </eOperations>
-    <eOperations name="updatePositionFromScreenCoordinates" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="updatePositionFromScreenCoordinates(newPos.x, newPos.y);"/>
-      </eAnnotations>
-      <eParameters name="newPos" lowerBound="1" eType="#//Point"/>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//Position"
         containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -2999,9 +2981,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
   <eClassifiers xsi:type="ecore:EDataType" name="InterfaceElementStream" instanceTypeName="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement>"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EDataType" name="NamedElementStream" instanceTypeName="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.INamedElement>"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeEntry" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeEntry"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeLibrary" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary"/>
   <eClassifiers xsi:type="ecore:EDataType" name="VarDeclList" instanceTypeName="java.util.List&lt;org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration>"/>

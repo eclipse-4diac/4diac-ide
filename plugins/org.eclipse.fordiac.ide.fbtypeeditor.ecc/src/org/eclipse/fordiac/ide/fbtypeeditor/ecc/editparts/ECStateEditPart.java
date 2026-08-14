@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateSelectionPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -158,7 +159,8 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected void refreshVisuals() {
-		final Rectangle rect = new Rectangle(getModel().getPosition().toScreenPoint(), new Dimension(-1, -1));
+		final Rectangle rect = new Rectangle(CoordinateConverter.INSTANCE.toScreenPoint(getModel().getPosition()),
+				new Dimension(-1, -1));
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
 		getFigure().setHasAction(!getModel().getECAction().isEmpty());
 		refreshStateTooltip();

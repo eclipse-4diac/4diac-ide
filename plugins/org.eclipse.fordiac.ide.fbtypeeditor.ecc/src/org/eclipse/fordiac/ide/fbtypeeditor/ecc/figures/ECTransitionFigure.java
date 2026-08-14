@@ -36,6 +36,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -139,7 +140,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 	public void updateBendPoints(final ECTransition ecTransition) {
 		final List<Bendpoint> bendPoints = new ArrayList<>();
-		bendPoints.add(new AbsoluteBendpoint(ecTransition.getPosition().toScreenPoint()));
+		bendPoints.add(new AbsoluteBendpoint(CoordinateConverter.INSTANCE.toScreenPoint(ecTransition.getPosition())));
 		getConnectionRouter().setConstraint(this, bendPoints);
 	}
 

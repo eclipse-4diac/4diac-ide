@@ -19,8 +19,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -427,24 +425,6 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	@Override
 	public ECAction createNewAction() {
 		return LibraryElementFactory.eINSTANCE.createECAction();
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final int x, final int y) {
-		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final Point newPos) {
-		updatePositionFromScreenCoordinates(newPos.x, newPos.y);
 	}
 
 	/**
