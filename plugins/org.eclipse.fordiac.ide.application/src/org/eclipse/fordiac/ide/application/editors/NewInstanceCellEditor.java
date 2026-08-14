@@ -12,7 +12,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Fabio Gandolfi - insideCell parameter to use the CellEditor inside TableViewer cells
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.editors;
+package org.eclipse.fordiac.ide.application.editors;
 
 import java.util.List;
 
@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.CellEditorLayoutFactory;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
