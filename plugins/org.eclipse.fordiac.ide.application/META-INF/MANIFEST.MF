@@ -13,7 +13,6 @@ Export-Package: org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.application.wizards
 Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.ui,

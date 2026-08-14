@@ -19,8 +19,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class ExporterTestBasicFBTypeBase extends ExporterTestBase<BasicFBType> {
 
 	@Override

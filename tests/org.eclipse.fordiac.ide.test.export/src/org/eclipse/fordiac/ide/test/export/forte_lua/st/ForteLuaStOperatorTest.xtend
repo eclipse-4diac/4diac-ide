@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 	static String var_a = "ENV.st_lv_a"
 	static String var_b = "ENV.st_lv_b"

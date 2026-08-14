@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertNotNull
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 
 	protected static final boolean VALID_DECLARATION = true

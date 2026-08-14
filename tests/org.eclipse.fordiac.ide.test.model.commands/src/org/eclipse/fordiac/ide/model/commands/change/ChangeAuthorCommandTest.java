@@ -19,19 +19,17 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.commands.testinfra.VersionInfoTestBase;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class ChangeAuthorCommandTest extends VersionInfoTestBase {
 
 	private static final String NEW_AUTHOR = "new author"; //$NON-NLS-1$
 
-	private static State executeCommand(State state) {
+	private static State executeCommand(final State state) {
 		state.setCommand(new ChangeAuthorCommand(state.getVersionInfo(), NEW_AUTHOR));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyState(State state, State oldState, TestFunction t) {
+	private static void verifyState(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getVersionInfo().getAuthor(), NEW_AUTHOR);
 		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
 		t.test(state.getVersionInfo().getOrganization(), oldState.getVersionInfo().getOrganization());
@@ -39,13 +37,13 @@ public class ChangeAuthorCommandTest extends VersionInfoTestBase {
 		t.test(state.getVersionInfo().getVersion(), oldState.getVersionInfo().getVersion());
 	}
 
-	private static State executeCommandToNull(State state) {
+	private static State executeCommandToNull(final State state) {
 		state.setCommand(new ChangeAuthorCommand(state.getVersionInfo(), null));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyStateNull(State state, State oldState, TestFunction t) {
+	private static void verifyStateNull(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getVersionInfo().getAuthor(), EMPTY);
 		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
 		t.test(state.getVersionInfo().getOrganization(), oldState.getVersionInfo().getOrganization());
@@ -55,7 +53,7 @@ public class ChangeAuthorCommandTest extends VersionInfoTestBase {
 
 	// parameter creation function
 	public static Collection<Arguments> data() {
-		List<ExecutionDescription<?>> executionDescriptions = List.of( //
+		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
 				new ExecutionDescription<>("Change Author", // //$NON-NLS-1$
 						ChangeAuthorCommandTest::executeCommand, //
 						ChangeAuthorCommandTest::verifyState //

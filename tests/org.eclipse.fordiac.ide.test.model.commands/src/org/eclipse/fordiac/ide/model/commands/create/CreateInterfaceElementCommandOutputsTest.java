@@ -22,8 +22,6 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInterfaceElementCo
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class CreateInterfaceElementCommandOutputsTest extends CreateInterfaceElementCommandTestBase {
 
 	private static final String ELEMENT1_NAME = FordiacKeywords.DATA_OUTPUT;

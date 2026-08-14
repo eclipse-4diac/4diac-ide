@@ -23,8 +23,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class CreateInterfaceElementCommandEventOutputsTest extends CreateInterfaceElementCommandTestBase {
 
 	private static final String ELEMENT1_NAME = FordiacKeywords.EVENT_OUTPUT;

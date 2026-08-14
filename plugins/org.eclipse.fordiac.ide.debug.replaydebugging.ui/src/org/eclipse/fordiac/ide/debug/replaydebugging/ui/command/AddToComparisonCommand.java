@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventP
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonColumn;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
-import org.eclipse.fordiac.ide.util.ColorHelper;
+import org.eclipse.fordiac.ide.model.helpers.ColorHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.Color;
 

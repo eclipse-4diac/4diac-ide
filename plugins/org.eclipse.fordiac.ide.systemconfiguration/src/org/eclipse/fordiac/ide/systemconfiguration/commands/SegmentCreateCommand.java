@@ -20,13 +20,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.helpers.ColorHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
-import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.commands.Command;
 
 public class SegmentCreateCommand extends Command {
