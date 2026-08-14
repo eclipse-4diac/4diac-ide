@@ -221,8 +221,8 @@ public abstract class FBNetworkGraphTest {
 
 	protected void setupInterconnectedLanes() {
 		/*-
-		 * C -> B ----------> A
-		 *         F -> D -/
+		 * C -> B --------\
+		 *         F -> D --> A
 		 *                 \----> E
 		 */
 		final FB fbA = newFB("A");
@@ -329,8 +329,8 @@ public abstract class FBNetworkGraphTest {
 
 	protected void setupInterleavedCycles() {
 		/*-
-		 * D --> A ------> C
-		 *    E ---> B -/  |
+		 * D --> A ----\
+		 *    E ---> B --> C
 		 *       ^--<--<---|
 		 *           ^--<--/
 		 */
