@@ -787,7 +787,8 @@ public interface StandardFunctions extends Functions {
 			@Comment("The input date time.") final LTimeOfDayValue in,
 			@Comment("The hour number.") final Variable<T> hour,
 			@Comment("The minute number.") final Variable<U> minute,
-			@Comment("The millisecond number.") final Variable<V> second, final Variable<W> millisecond) {
+			@Comment("The second number.") final Variable<V> second,
+			@Comment("The millisecond number,") final Variable<W> millisecond) {
 		final LocalTime value = in.toLocalTime();
 		hour.setValue(DIntValue.toDIntValue(value.getHour()));
 		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
