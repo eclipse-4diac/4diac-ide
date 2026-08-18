@@ -87,6 +87,16 @@ class OCLConstraintEvaluatorTest {
 	}
 
 	@Test
+	void usesTupleDiagnosticDefaults() {
+		final OCLDiagnostic diagnostic = evaluator.evaluate(context, getDefinition("RichDefaults")).orElseThrow(); //$NON-NLS-1$
+
+		assertEquals("RichDefaults", diagnostic.message()); //$NON-NLS-1$
+		assertEquals(IMarker.SEVERITY_ERROR, diagnostic.severity());
+		assertSame(context, diagnostic.markerTarget());
+		assertTrue(errors.isEmpty());
+	}
+
+	@Test
 	void disablesInvalidTupleDiagnosticAfterFirstFailure() {
 		final OCLConstraintDefinition definition = getDefinition("InvalidMarkerTarget"); //$NON-NLS-1$
 

@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -42,6 +43,9 @@ class OCLMarkerManagerTest {
 	void setUp() throws CoreException {
 		firstProject = createProject("OCLMarkerOwnerA"); //$NON-NLS-1$
 		secondProject = createProject("OCLMarkerOwnerB"); //$NON-NLS-1$
+		final IProjectDescription description = secondProject.getDescription();
+		description.setReferencedProjects(new IProject[] { firstProject });
+		secondProject.setDescription(description, null);
 		sharedFile = firstProject.getFile("shared.fbt"); //$NON-NLS-1$
 		sharedFile.create(new ByteArrayInputStream("test".getBytes(StandardCharsets.UTF_8)), true, null); //$NON-NLS-1$
 	}
@@ -67,6 +71,10 @@ class OCLMarkerManagerTest {
 		OCLMarkerManager.replaceMarkers(firstProject, List.of());
 
 		assertEquals(Set.of(secondProject.getFullPath().toPortableString()), getMarkerOwners());
+
+		OCLMarkerManager.replaceMarkers(secondProject, List.of());
+
+		assertEquals(Set.of(), getMarkerOwners());
 	}
 
 	private OCLMarker createMarker(final String message) {

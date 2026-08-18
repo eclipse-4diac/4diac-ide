@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
 import org.eclipse.fordiac.ide.validation.handlers.OCLParser;
 import org.eclipse.fordiac.ide.validation.handlers.ValidationHelper;
