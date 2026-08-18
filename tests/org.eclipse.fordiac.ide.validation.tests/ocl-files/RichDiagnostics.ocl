@@ -38,6 +38,11 @@ inv RichOkSeverity:
 		severity = 0
 	}.status
 
+inv RichDefaults:
+	Tuple {
+		status = false
+	}.status
+
 inv InvalidMarkerTarget:
 	Tuple {
 		status = false,

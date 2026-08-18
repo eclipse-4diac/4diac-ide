@@ -14,11 +14,11 @@ package org.eclipse.fordiac.ide.validation.ocl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
 
@@ -37,18 +37,24 @@ public final class OCLMarkerManager {
 	}
 
 	public static void deleteMarkers(final IProject owner) throws CoreException {
-		if (owner == null) {
+		if (owner == null || !owner.isAccessible()) {
 			return;
 		}
 		final String ownerId = getOwnerId(owner);
-		for (final IMarker marker : ResourcesPlugin.getWorkspace().getRoot().findMarkers(IValidationMarker.TYPE, true,
-				IResource.DEPTH_INFINITE)) {
-			final String markerOwner = marker.getAttribute(OWNER_PROJECT, null);
-			if (ownerId.equals(markerOwner)
-					|| (markerOwner == null && owner.equals(marker.getResource().getProject()))) {
-				marker.delete();
+		for (final IProject markerProject : getMarkerProjects(owner)) {
+			for (final IMarker marker : markerProject.findMarkers(IValidationMarker.TYPE, true,
+					IResource.DEPTH_INFINITE)) {
+				final String markerOwner = marker.getAttribute(OWNER_PROJECT, null);
+				if (ownerId.equals(markerOwner)
+						|| (markerOwner == null && owner.equals(marker.getResource().getProject()))) {
+					marker.delete();
+				}
 			}
 		}
+	}
+
+	private static List<IProject> getMarkerProjects(final IProject owner) {
+		return Stream.concat(Stream.of(owner), OCLSourceScanner.findReferencedProjects(owner).stream()).toList();
 	}
 
 	private static String getOwnerId(final IProject owner) {

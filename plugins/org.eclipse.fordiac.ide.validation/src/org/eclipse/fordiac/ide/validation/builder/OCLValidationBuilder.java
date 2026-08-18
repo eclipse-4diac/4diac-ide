@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.ocl.OCLMarkerManager;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
 import org.eclipse.fordiac.ide.validation.ocl.OCLValidationSession;
