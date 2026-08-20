@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataType Name="RegComCmd" Comment="Write register communication">
+	<Identification Description="Copyright (c) 2026 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2026-07-21">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::io::wago">
+	</CompilerInfo>
+	<StructuredType>
+		<VarDeclaration Name="RegNr" Type="USINT"/>
+		<VarDeclaration Name="REG_D0" Type="BYTE"/>
+		<VarDeclaration Name="REG_D1" Type="BYTE"/>
+	</StructuredType>
+</DataType>
