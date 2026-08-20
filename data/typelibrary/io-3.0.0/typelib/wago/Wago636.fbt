@@ -3,7 +3,7 @@
 	<Identification Standard="61499-2" Description="Copyright (c) 2025 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
 	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2026-07-20" Remarks="change package">
-	</VersionInfo>
+    </VersionInfo>
 	<VersionInfo Version="1.0" Author="Monika Wenger" Date="2025-05-05">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::io::wago">
@@ -67,6 +67,8 @@
 		</Plugs>
 		<Sockets>
 			<AdapterDeclaration Name="BusAdapterIn" Type="eclipse4diac::io::wago::WagoBusAdapter"/>
+			<AdapterDeclaration Name="RegCom" Type="eclipse4diac::io::wago::WagoRegCom"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
 </FBType>
