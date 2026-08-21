@@ -288,4 +288,14 @@ public class DebugClockWidget {
 	public void setUpdateRunnable(final Runnable updateRunnable) {
 		this.updateRunnable = updateRunnable;
 	}
+
+	protected boolean isDisposed() {
+		return group == null || group.isDisposed() //
+				|| systemClockRadio == null || systemClockRadio.isDisposed()//
+				|| intervalClockRadio == null || intervalClockRadio.isDisposed()//
+				|| fixedClockRadio == null || fixedClockRadio.isDisposed()//
+				|| clockIntervalText == null || clockIntervalText.isDisposed() //
+				|| realtimeClockText == null || realtimeClockText.isDisposed() //
+				|| monotonicClockText == null || monotonicClockText.isDisposed();
+	}
 }
