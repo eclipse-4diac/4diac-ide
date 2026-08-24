@@ -30,6 +30,5 @@
 			<VarDeclaration Name="Index" Type="UINT"/>
 		</OutputVars>
 	</InterfaceList>
-	<Service RightInterface="PLUG" LeftInterface="SOCKET">
-	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
 </AdapterType>
