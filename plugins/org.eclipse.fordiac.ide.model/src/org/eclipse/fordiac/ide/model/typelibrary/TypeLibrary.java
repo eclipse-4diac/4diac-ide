@@ -80,6 +80,8 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private IProject project;
 	private Buildpath buildpath;
+	private MostRecentlyUsedTracker mostRecentlyUsedTracker;
+	private TypeUsageTracker typeUsageTracker;
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary(this);
 	private final Map<String, AdapterTypeEntry> adapterTypes = new ConcurrentHashMap<>();
 	private final Map<String, AttributeTypeEntry> attributeTypes = new ConcurrentHashMap<>();
@@ -207,6 +209,28 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	public IProject getProject() {
 		return project;
+	}
+
+	/**
+	 * The per-project tracker of most recently used FB types, feeding the type
+	 * search's "Recent" section.
+	 */
+	public synchronized MostRecentlyUsedTracker getMostRecentlyUsedTracker() {
+		if (mostRecentlyUsedTracker == null) {
+			mostRecentlyUsedTracker = new MostRecentlyUsedTracker(project);
+		}
+		return mostRecentlyUsedTracker;
+	}
+
+	/**
+	 * The per-project tracker of FB type usage counts, feeding the type search's
+	 * "Frequent" section.
+	 */
+	public synchronized TypeUsageTracker getTypeUsageTracker() {
+		if (typeUsageTracker == null) {
+			typeUsageTracker = new TypeUsageTracker(project);
+		}
+		return typeUsageTracker;
 	}
 
 	public Buildpath getBuildpath() {
@@ -717,6 +741,8 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	void setProject(final IProject newProject) {
 		project = newProject;
+		mostRecentlyUsedTracker = null;
+		typeUsageTracker = null;
 	}
 
 	private static class TypeLibraryNotificationImpl extends NotificationImpl {
