@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
@@ -131,18 +132,28 @@ public enum OpenListenerManager {
 
 	static IEditorPart openDefaultEditorForFile(final LibraryElement element) {
 		final TypeEntry entry = element.getTypeEntry();
-		if (null != entry) {
-			final IFile file = entry.getFile();
-			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-					.getDefaultEditor(file.getName());
-			try {
-				final IEditorPart part = page.openEditor(new FileEditorInput(file), desc.getId());
-				checkBreadCrumb(part, element);
-				return part;
-			} catch (final PartInitException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
+		if (entry == null) {
+			return null;
+		}
+		final IFile file = entry.getFile();
+		if (file == null) {
+			return null;
+		}
+		final IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow == null) {
+			return null;
+		}
+		final IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+		if (page == null || desc == null) {
+			return null;
+		}
+		try {
+			final IEditorPart part = page.openEditor(new FileEditorInput(file), desc.getId());
+			checkBreadCrumb(part, element);
+			return part;
+		} catch (final PartInitException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return null;
 	}
