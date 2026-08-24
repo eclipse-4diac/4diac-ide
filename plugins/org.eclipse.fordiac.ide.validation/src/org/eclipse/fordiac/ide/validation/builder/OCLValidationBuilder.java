@@ -49,7 +49,10 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 
 		final SubMonitor progress = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
 		switch (kind) {
-		case FULL_BUILD -> fullBuild(progress);
+		case FULL_BUILD -> {
+			OCLMarkerManager.deleteMarkers(getProject());
+			fullBuild(progress);
+		}
 		case INCREMENTAL_BUILD, AUTO_BUILD -> incrementalBuild(progress);
 		default -> {
 			// nothing to do
@@ -88,21 +91,33 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 	private void incrementalBuild(final SubMonitor monitor) throws CoreException {
 		final IResourceDelta projectDelta = getDelta(getProject());
 		if (projectDelta == null || needsFullOclBuild(projectDelta)) {
+			deleteAllOwnedMarkersIfNeeded(projectDelta);
 			fullBuild(monitor);
 			return;
 		}
 		for (final IProject referencedProject : OCLSourceScanner.findReferencedProjects(getProject())) {
 			final IResourceDelta referencedDelta = getDelta(referencedProject);
 			if (referencedDelta != null && needsFullOclBuild(referencedDelta)) {
+				deleteAllOwnedMarkersIfNeeded(referencedDelta);
 				fullBuild(monitor);
 				return;
 			}
 		}
 	}
 
+	private void deleteAllOwnedMarkersIfNeeded(final IResourceDelta delta) throws CoreException {
+		if (delta == null || hasProjectDescriptionChanged(delta)) {
+			OCLMarkerManager.deleteMarkers(getProject());
+		}
+	}
+
 	private static boolean needsFullOclBuild(final IResourceDelta delta) throws CoreException {
 		final boolean[] result = { false };
 		delta.accept((IResourceDeltaVisitor) resourceDelta -> {
+			if (hasProjectDescriptionChanged(resourceDelta)) {
+				result[0] = true;
+				return false;
+			}
 			if (resourceDelta.getResource() instanceof final IFile file
 					&& (OCLSourceScanner.isOclFile(file) || OCLSourceScanner.isValidationTargetFile(file)
 							|| BuildpathUtil.BUILDPATH_FILE_NAME.equals(file.getName()))) {
@@ -112,6 +127,11 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 			return !result[0];
 		});
 		return result[0];
+	}
+
+	private static boolean hasProjectDescriptionChanged(final IResourceDelta delta) {
+		return delta.getResource() instanceof IProject
+				&& (delta.getFlags() & IResourceDelta.DESCRIPTION) != 0;
 	}
 
 	private static INamedElement loadValidationTarget(final IFile file) {
