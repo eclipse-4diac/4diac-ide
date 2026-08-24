@@ -408,6 +408,8 @@ public final class Annotations {
 		// Pins
 		case final VarDeclaration decl when decl.eContainer() instanceof StructuredType ->
 			getValueFromTarget(target, AttributeTarget.DataTypeMember); // member of DataType
+		case final VarDeclaration decl when decl.eContainer() instanceof BaseFBType ->
+			getValueFromTarget(target, AttributeTarget.TypeVarDecl);
 		case final VarDeclaration decl when decl.eContainer() instanceof InterfaceList
 				&& decl.eContainer().eContainer() instanceof FBType ->
 			getValueFromTarget(target, AttributeTarget.TypeVarDecl);
