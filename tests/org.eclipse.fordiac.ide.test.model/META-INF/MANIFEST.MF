@@ -17,4 +17,5 @@ Require-Bundle: org.eclipse.osgi,
  org.eclipse.core.resources,
  org.eclipse.fordiac.ide.model
 Export-Package: org.eclipse.fordiac.ide.test.model,
+ org.eclipse.fordiac.ide.test.model.graph,
  org.eclipse.fordiac.ide.test.model.typelibrary

@@ -16,7 +16,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.graph.FBNetworkEventLaneGraph;
@@ -25,6 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -32,18 +37,30 @@ import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.progress.UIJob;
 
-public class EventSequencePage extends Page {
+public class EventSequencePage extends Page implements IAdaptable {
 
 	private static final long REFRESH_DELAY = 500; // in milliseconds
 
+	private static final Transfer[] DND_TRANSFER_TYPES = new Transfer[] { LocalSelectionTransfer.getTransfer() };
+
+	private final IWorkbenchPart part;
+	private final CommandStack commandStack;
 	private FBNetworkLaneGraphTreeViewer viewer;
 	private FBNetwork network;
 
@@ -51,10 +68,38 @@ public class EventSequencePage extends Page {
 	private final UIJob refreshJob = UIJob.create(Messages.EventSequencePage_RefreshJobName,
 			(ICoreRunnable) monitor -> refreshViewer());
 
+	public EventSequencePage(final IWorkbenchPart part) {
+		this.part = part;
+		this.commandStack = Adapters.adapt(part, CommandStack.class);
+	}
+
+	@Override
+	public void init(final IPageSite pageSite) {
+		super.init(pageSite);
+		setupActions();
+	}
+
+	private void setupActions() {
+		final IActionBars partActionBars = switch (part) {
+		case final IEditorPart editorPart -> editorPart.getEditorSite().getActionBars();
+		case final IViewPart viewPart -> viewPart.getViewSite().getActionBars();
+		case null, default -> null;
+		};
+
+		if (partActionBars != null) {
+			final IActionBars actionBars = getSite().getActionBars();
+			actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(),
+					partActionBars.getGlobalActionHandler(ActionFactory.UNDO.getId()));
+			actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(),
+					partActionBars.getGlobalActionHandler(ActionFactory.REDO.getId()));
+			actionBars.updateActionBars();
+		}
+	}
+
 	@Override
 	public void createControl(final Composite parent) {
 		viewer = new FBNetworkLaneGraphTreeViewer(parent,
-				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
 		final Tree tree = viewer.getTree();
 		tree.setHeaderVisible(true);
 		tree.setLinesVisible(true);
@@ -63,6 +108,8 @@ public class EventSequencePage extends Page {
 
 		viewer.setContentProvider(new FBNetworkGraphContentProvider());
 		viewer.addDoubleClickListener(EventSequencePage::handleDoubleClick);
+		viewer.addDragSupport(DND.DROP_MOVE, DND_TRANSFER_TYPES, new EventSequenceDragSource(viewer));
+		viewer.addDropSupport(DND.DROP_MOVE, DND_TRANSFER_TYPES, new EventSequenceDropAdapter(viewer, commandStack));
 		viewer.addTreeListener(new ITreeViewerListener() {
 			@Override
 			public void treeExpanded(final TreeExpansionEvent event) {
@@ -220,5 +267,13 @@ public class EventSequencePage extends Page {
 		removeNetworkAdapters();
 		refreshJob.cancel();
 		super.dispose();
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == CommandStack.class) {
+			return adapter.cast(commandStack);
+		}
+		return Platform.getAdapterManager().getAdapter(this, adapter);
 	}
 }

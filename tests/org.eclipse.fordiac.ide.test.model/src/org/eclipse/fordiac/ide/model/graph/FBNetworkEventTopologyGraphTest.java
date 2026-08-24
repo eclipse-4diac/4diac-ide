@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.graph.FBNetworkEventTopologyGraph.EventTopologyNode;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.test.model.graph.FBNetworkGraphTest;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("nls")

@@ -166,6 +166,22 @@ public final class Messages extends NLS {
 
 	public static String PasteEditPartsAction_Text;
 
+	public static String ReorderEventSequenceCommand_ElementsMultipleConnections;
+
+	public static String ReorderEventSequenceCommand_ElementsNoEvents;
+
+	public static String ReorderEventSequenceCommand_InvalidElements;
+
+	public static String ReorderEventSequenceCommand_NotInSameNetwork;
+
+	public static String ReorderEventSequenceCommand_TargetMultipleInputConnections;
+
+	public static String ReorderEventSequenceCommand_TargetMultipleOutputConnections;
+
+	public static String ReorderEventSequenceCommand_TargetNoInputEvents;
+
+	public static String ReorderEventSequenceCommand_TargetNoOutputEvents;
+
 	public static String SaveAsStructTypeWizard_WindowTitle;
 
 	public static String SaveAsStructTypeWizard_WizardPageName;
