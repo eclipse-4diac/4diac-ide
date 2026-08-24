@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.graph;
+package org.eclipse.fordiac.ide.test.model.graph;
 
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.fordiac.ide.model.graph.FBNetworkGraph;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;

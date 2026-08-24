@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.graph.FBNetworkEventLaneGraph.EventLane;
 import org.eclipse.fordiac.ide.model.graph.FBNetworkEventLaneGraph.EventLaneNode;
 import org.eclipse.fordiac.ide.model.graph.FBNetworkLaneGraph.Lane;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.test.model.graph.FBNetworkGraphTest;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({ "nls", "java:S5961" })

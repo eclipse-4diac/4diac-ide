@@ -40,7 +40,7 @@ public class EventSequenceView extends PageBookView {
 			return null;
 		}
 
-		final EventSequencePage page = new EventSequencePage();
+		final EventSequencePage page = new EventSequencePage(part);
 		initPage(page);
 		page.createControl(getPageBook());
 		page.setNetwork(network);
