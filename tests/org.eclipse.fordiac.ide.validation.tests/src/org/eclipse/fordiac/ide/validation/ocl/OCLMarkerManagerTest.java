@@ -77,6 +77,18 @@ class OCLMarkerManagerTest {
 		assertEquals(Set.of(), getMarkerOwners());
 	}
 
+	@Test
+	void deletesMarkersAfterProjectReferenceIsRemoved() throws CoreException {
+		OCLMarkerManager.replaceMarkers(secondProject, List.of(createMarker("second"))); //$NON-NLS-1$
+		final IProjectDescription description = secondProject.getDescription();
+		description.setReferencedProjects(new IProject[0]);
+		secondProject.setDescription(description, null);
+
+		OCLMarkerManager.deleteMarkers(secondProject);
+
+		assertEquals(Set.of(), getMarkerOwners());
+	}
+
 	private OCLMarker createMarker(final String message) {
 		return new OCLMarker(sharedFile,
 				ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE));
