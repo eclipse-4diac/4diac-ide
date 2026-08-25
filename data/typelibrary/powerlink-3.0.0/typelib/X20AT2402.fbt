@@ -41,8 +41,8 @@
 			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
 			<VarDeclaration Name="CNIDO" Type="USINT" Comment="Client Node ID out"/>
 			<VarDeclaration Name="STATUS" Type="STRING" Comment="Network Status"/>
-			<VarDeclaration Name="T01" Type="REAL" Comment="Temperatur Input 01"/>
-			<VarDeclaration Name="T02" Type="REAL" Comment="Temperatur Input 02"/>
+			<VarDeclaration Name="T01" Type="REAL" Comment="Temperature Input 01"/>
+			<VarDeclaration Name="T02" Type="REAL" Comment="Temperature Input 02"/>
 		</OutputVars>
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">

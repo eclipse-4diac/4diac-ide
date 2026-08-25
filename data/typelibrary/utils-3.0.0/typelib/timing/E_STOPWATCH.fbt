@@ -40,7 +40,7 @@
 	</InterfaceList>
 	<BasicFB>
 		<InternalVars>
-			<VarDeclaration Name="startTime" Type="TIME" Comment="Holds the time value when the start event occured."/>
+			<VarDeclaration Name="startTime" Type="TIME" Comment="Holds the time value when the start event occurred."/>
 		</InternalVars>
 		<ECC>
 			<ECState Name="START" Comment="" x="373.33" y="746.67">
