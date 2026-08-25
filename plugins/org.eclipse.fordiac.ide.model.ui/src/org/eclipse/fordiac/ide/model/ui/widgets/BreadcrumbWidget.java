@@ -122,6 +122,10 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		// @formatter:on
 	}
 
+	public void dispose() {
+		toolbar.dispose();
+	}
+
 	ToolBar getToolBar() {
 		return toolbar;
 	}

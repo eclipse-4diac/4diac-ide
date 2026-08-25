@@ -68,7 +68,11 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 			if (subNavigationLocation != null) {
 				return subNavigationLocation.getText();
 			}
-			return typeEditor.getTitle() + "." + activeEditor.getTitle(); //$NON-NLS-1$
+			String title = typeEditor.getTitle();
+			if (activeEditor != null) {
+				title += "." + activeEditor.getTitle(); //$NON-NLS-1$
+			}
+			return title;
 		}
 		return super.getText();
 	}
@@ -86,7 +90,7 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 	@Override
 	public void restoreLocation() {
 		final FBTypeEditor part = getEditorPart();
-		if (part != null) {
+		if (part != null && activeEditor != null) {
 			part.setActiveEditor(activeEditor);
 			if (subNavigationLocation != null) {
 				subNavigationLocation.restoreLocation();
@@ -107,8 +111,8 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 	public boolean mergeInto(final INavigationLocation currentLocation) {
 		if (currentLocation instanceof final FBTypeNavigationLocation currentFBTypeLocation) {
 			final FBTypeEditor typeEditor = getEditorPart();
-			if ((typeEditor != null) && (typeEditor.equals(currentFBTypeLocation.getEditorPart()))
-					&& (activeEditor.equals(currentFBTypeLocation.activeEditor))) {
+			if (typeEditor != null && typeEditor.equals(currentFBTypeLocation.getEditorPart()) && activeEditor != null
+					&& activeEditor.equals(currentFBTypeLocation.activeEditor)) {
 				if (subNavigationLocation != null) {
 					return subNavigationLocation.mergeInto(currentFBTypeLocation.subNavigationLocation);
 				}

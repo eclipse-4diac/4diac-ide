@@ -161,7 +161,7 @@ public enum OpenListenerManager {
 	static void checkBreadCrumb(final IEditorPart part, final LibraryElement element) {
 		if (null != part) {
 			final AbstractBreadCrumbEditor breadCrumbEditor = part.getAdapter(AbstractBreadCrumbEditor.class);
-			if (null != breadCrumbEditor) {
+			if (breadCrumbEditor != null && breadCrumbEditor.getBreadcrumb() != null) {
 				breadCrumbEditor.getBreadcrumb().setInput(element);
 			}
 		}
