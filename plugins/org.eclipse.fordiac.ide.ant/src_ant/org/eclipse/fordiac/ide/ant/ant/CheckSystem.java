@@ -44,7 +44,8 @@ public class CheckSystem extends AbstractCheckTask {
 
 		buildProject(systemFile.getProject());
 		final var markers = findProblemMarkers(systemFile, IResource.DEPTH_ZERO);
-		reportAndFail("checkSystem", systemFile.getProject(), systemFile.getFullPath().toPortableString(), markers); //$NON-NLS-1$
+		reportAndFail("checkSystem", systemFile.getProject(), systemFile.getFullPath().toPortableString(), //$NON-NLS-1$
+				markers);
 	}
 
 	private IFile getSystemFile() {

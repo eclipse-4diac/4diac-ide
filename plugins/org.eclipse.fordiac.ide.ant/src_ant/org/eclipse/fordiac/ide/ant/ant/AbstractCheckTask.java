@@ -55,7 +55,8 @@ public abstract class AbstractCheckTask extends Task {
 
 		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		if (!project.exists() || !project.isAccessible()) {
-			throw new BuildException("Project named '" + projectName + "' not in workspace or not accessible"); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new BuildException(
+					"Project named '" + projectName + "' not in workspace or not accessible"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return project;
 	}
