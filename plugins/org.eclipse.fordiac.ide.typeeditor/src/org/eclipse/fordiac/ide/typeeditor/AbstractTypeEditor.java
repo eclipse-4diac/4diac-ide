@@ -331,24 +331,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 	}
 
 	@Override
-	public void reloadType() {
-		try {
-			LibraryElementProvider.INSTANCE.resetLibraryElement(getEditorInput(), null);
-			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
-			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
-			getEditorPages().forEach(ITypeEditorPage::reloadType);
-			if (getActiveEditor() instanceof final ITypeEditorPage page) {
-				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-						page.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
-			}
-			setPartName(newType.getName());
-		} catch (final CoreException e) {
-			clearEditorContent();
-			createEditorContent();
-		}
-	}
-
-	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
 			if (selection instanceof final StructuredSelection structSel

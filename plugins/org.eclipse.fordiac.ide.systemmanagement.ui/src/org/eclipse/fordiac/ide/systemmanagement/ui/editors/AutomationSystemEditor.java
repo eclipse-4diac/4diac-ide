@@ -381,28 +381,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return null;
 	}
 
-	@Override
-	public void reloadType() {
-		try {
-			LibraryElementProvider.INSTANCE.resetLibraryElement(getEditorInput(), null);
-			system = LibraryElementProvider.INSTANCE.getElement(getEditorInput(), AutomationSystem.class);
-			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
-		} catch (ClassCastException | CoreException e) {
-			system = null;
-			commandStack.setUndoContext(new UndoContext());
-		}
-
-		clearEditorContent();
-		createEditorContent();
-
-		if (system == null) {
-			return;
-		}
-
-		setPartName(system.getName());
-		restoreOpenEditor();
-	}
-
 	protected void restoreOpenEditor() {
 		final String path = getBreadcrumb().serializePath();
 		final boolean opened = getBreadcrumb().openPath(path, system);
