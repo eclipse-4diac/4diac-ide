@@ -71,7 +71,7 @@ public abstract class OpenListener implements IOpenListener {
 		if (null != openedEditor) {
 			final AbstractBreadCrumbEditor breadCrumbEditor = getBreadCrumbEditor(openedEditor);
 			final EObject elementToOpen = getElementToOpen(openedEditor, element);
-			if (breadCrumbEditor != null && elementToOpen != null) {
+			if (breadCrumbEditor != null && elementToOpen != null && breadCrumbEditor.getBreadcrumb() != null) {
 				if (sameLevelAsParent(elementToOpen)) {
 					breadCrumbEditor.getBreadcrumb().setInput(elementToOpen.eContainer().eContainer());
 					HandlerHelper.selectElement(elementToOpen, openedEditor);

@@ -23,6 +23,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.Optional;
 
 import org.eclipse.core.commands.operations.UndoContext;
 import org.eclipse.core.resources.IFile;
@@ -46,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -63,6 +65,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.model.ui.editors.SubEditorInput;
 import org.eclipse.fordiac.ide.model.ui.listeners.CommentDecoratorCommandStackListener;
 import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
+import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
@@ -124,19 +127,21 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	private void createEditorContent() {
-		if (system != null) {
+		if (isSystemValid()) {
 			super.createPartControl(mainComposite);
 		} else {
 			showLoadErrorMessage(mainComposite);
 		}
 	}
 
-	private void clearEditorContent() {
+	@Override
+	protected void clearEditorContent() {
 		getModelToEditorNumMapping().clear();
 		for (int i = getPageCount() - 1; i >= 0; i--) {
 			removePage(i);
 		}
 		pages.clear();
+		super.clearEditorContent();
 		for (final Control child : mainComposite.getChildren()) {
 			child.dispose();
 		}
@@ -167,6 +172,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			textEditorButton.setText(Messages.AutomationSystemEditor_OpenTextEditor);
 			textEditorButton.addListener(SWT.Selection, e -> EditorUtils.openTextEditor(getEditorInput()));
 		}
+		parent.layout(true, true);
 	}
 
 	@Override
@@ -327,7 +333,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return adapter.cast(new SelectionTabbedPropertySheetPage(this));
 		}
 		if (adapter == IContentOutlinePage.class) {
-			if (outlinePage == null && system != null) {
+			if (outlinePage == null && isSystemValid()) {
 				outlinePage = new DiagramOutlinePage(getActiveEditor().getAdapter(GraphicalViewer.class));
 			}
 			return adapter.cast(outlinePage);
@@ -381,22 +387,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return null;
 	}
 
-	protected void restoreOpenEditor() {
-		final String path = getBreadcrumb().serializePath();
-		final boolean opened = getBreadcrumb().openPath(path, system);
-
-		if (!opened) {
-			if (!system.getApplication().isEmpty()) {
-				OpenListenerManager.openEditor(system.getApplication().get(0));
-				showReloadErrorMessage(path, Messages.AutomationSystemEditor_ShowingFirstApplication);
-			} else {
-				OpenListenerManager.openEditor(system);
-				showReloadErrorMessage(path, Messages.AutomationSystemEditor_ShowingSystem);
-			}
-		}
-		selectRootModelOfEditor();
-	}
-
 	@Override
 	public void setInput(final IEditorInput input) {
 		try {
@@ -412,26 +402,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		super.setInput(input);
 	}
 
-	private void selectRootModelOfEditor() {
-		Display.getDefault().asyncExec(() -> {
-			final GraphicalViewer viewer = getAdapter(GraphicalViewer.class);
-			if (viewer != null) {
-				final Object selection = getSelection(viewer);
-				EditorUtils.refreshPropertySheetWithSelection(this, viewer, selection);
-			}
-		});
-	}
-
-	private Object getSelection(final GraphicalViewer viewer) {
-		Object selection = null;
-		final IEditorPart activeEditor = getActiveEditor();
-		if (activeEditor instanceof final DiagramEditorWithFlyoutPalette diagramEditor) {
-			selection = viewer.getEditPartForModel(diagramEditor.getModel());
-		}
-		if (selection == null) {
-			selection = viewer.getRootEditPart();
-		}
-		return selection;
+	private boolean isSystemValid() {
+		return system != null && !(system instanceof ErrorLibraryElement);
 	}
 
 	protected class EditorStateListener implements LibraryElementStateListener {
@@ -448,12 +420,18 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			if (!input.equals(getEditorInput())) {
 				return;
 			}
-			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
-			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
+			final Optional<String> path = Optional.ofNullable(getBreadcrumb()).map(BreadcrumbWidget::serializePath);
+			try {
+				system = LibraryElementProvider.INSTANCE.getElement(getEditorInput(), AutomationSystem.class);
+				commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
+			} catch (final ClassCastException e) {
+				system = null;
+				commandStack.setUndoContext(new UndoContext());
+			}
 			clearEditorContent();
 			createEditorContent();
-			setPartName(newType.getName());
-			restoreOpenEditor();
+			setPartName(system != null ? system.getName() : input.getName());
+			restoreOpenEditor(path);
 		}
 
 		@Override
@@ -469,5 +447,48 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				setInput(movedInput);
 			}
 		}
+
+		private void restoreOpenEditor(final Optional<String> path) {
+			if (!isSystemValid()) {
+				return;
+			}
+
+			path.ifPresent(p -> {
+				final boolean opened = getBreadcrumb().openPath(p, system);
+				if (!opened) {
+					if (!system.getApplication().isEmpty()) {
+						OpenListenerManager.openEditor(system.getApplication().get(0));
+						showReloadErrorMessage(p, Messages.AutomationSystemEditor_ShowingFirstApplication);
+					} else {
+						OpenListenerManager.openEditor(system);
+						showReloadErrorMessage(p, Messages.AutomationSystemEditor_ShowingSystem);
+					}
+				}
+				selectRootModelOfEditor();
+			});
+		}
+
+		private void selectRootModelOfEditor() {
+			Display.getDefault().asyncExec(() -> {
+				final GraphicalViewer viewer = getAdapter(GraphicalViewer.class);
+				if (viewer != null) {
+					final Object selection = getSelection(viewer);
+					EditorUtils.refreshPropertySheetWithSelection(AutomationSystemEditor.this, viewer, selection);
+				}
+			});
+		}
+
+		private Object getSelection(final GraphicalViewer viewer) {
+			Object selection = null;
+			final IEditorPart activeEditor = getActiveEditor();
+			if (activeEditor instanceof final DiagramEditorWithFlyoutPalette diagramEditor) {
+				selection = viewer.getEditPartForModel(diagramEditor.getModel());
+			}
+			if (selection == null) {
+				selection = viewer.getRootEditPart();
+			}
+			return selection;
+		}
+
 	}
 }

@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -119,7 +120,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 	}
 
 	private void createEditorContent() {
-		if (getType() != null) {
+		if (isValidLibraryElement(getType())) {
 			if (getTypeEntry() != null && getTypeEntry().getFile() != null && getTypeEntry().getFile().isReadOnly()) {
 				readOnly = true;
 				// create read only banner
@@ -365,18 +366,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 		setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 	}
 
-	private void clearEditorContent() {
-		for (int i = getPageCount() - 1; i >= 0; i--) {
-			removePage(i);
-		}
-		pages.clear();
-		editorPages = null;
-		for (final Control child : mainComposite.getChildren()) {
-			child.dispose();
-		}
-		mainComposite.layout(true, true);
-	}
-
 	public void showLoadErrorMessage(final Composite parent) {
 		final boolean fileExists = getTypeEntry() != null && getTypeEntry().getFile() != null
 				&& getTypeEntry().getFile().exists();
@@ -406,6 +395,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class) || (adapter == FBNetworkEditor.class);
 	}
 
+	private static boolean isValidLibraryElement(final LibraryElement libElem) {
+		return libElem != null && !(libElem instanceof ErrorLibraryElement);
+	}
+
 	protected class EditorStateListener implements LibraryElementStateListener {
 
 		@Override
@@ -422,14 +415,24 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			}
 			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
 			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
-			getEditorPages().forEach(ITypeEditorPage::reloadType);
-			setPartName(newType.getName());
 
-			final var active = getActiveEditor();
-			if (active instanceof final ITypeEditorPage page) {
-				Display.getDefault()
-						.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(AbstractTypeEditor.this,
-								active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
+			if (!isValidLibraryElement(newType) || getPageCount() == 0) {
+				// we have now an error type or had one before
+				clearEditorContent();
+				createEditorContent();
+				mainComposite.layout(true, true);
+			} else {
+				getEditorPages().forEach(ITypeEditorPage::reloadType);
+			}
+			setPartName(newType != null ? newType.getName() : input.getName());
+
+			if (isValidLibraryElement(newType)) {
+				final var active = getActiveEditor();
+				if (active instanceof final ITypeEditorPage page) {
+					Display.getDefault()
+							.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(AbstractTypeEditor.this,
+									active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
+				}
 			}
 		}
 
@@ -445,6 +448,20 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			if (originalInput.equals(getEditorInput())) {
 				setInput(movedInput);
 			}
+		}
+
+		private void clearEditorContent() {
+			readOnly = false;
+			for (int i = getPageCount() - 1; i >= 0; i--) {
+				removePage(i);
+			}
+			pages.clear();
+			editorPages = null;
+
+			for (final Control child : mainComposite.getChildren()) {
+				child.dispose();
+			}
+			mainComposite.layout(true, true);
 		}
 	}
 }

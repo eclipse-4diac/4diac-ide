@@ -90,6 +90,11 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 	private static IStructuredSelection handleTypeEditor(final IEditorPart editor, final IEditorInput anInput) {
 		final IEditorPart activeEditor = ((FormEditor) editor).getActiveEditor();
 
+		if (activeEditor == null) {
+			// we have an editor for a broken file with no pages return default selection
+			return defaultFileSelection(anInput);
+		}
+
 		final InterfaceList il = activeEditor.getAdapter(InterfaceList.class);
 		if (il != null) {
 			return new StructuredSelection(il);
@@ -133,7 +138,7 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 		if (editor != null) {
 			final AbstractBreadCrumbEditor breadCrumbEditor = OpenListener.getBreadCrumbEditor(editor);
 			final EObject elementToOpen = OpenListener.getElementToOpen(editor, sel);
-			if (breadCrumbEditor != null && elementToOpen != null) {
+			if (breadCrumbEditor != null && elementToOpen != null && breadCrumbEditor.getBreadcrumb() != null) {
 				final EObject breadCrumbRef = getBreadCrumbRefElement(elementToOpen);
 				breadCrumbEditor.getBreadcrumb().setInput(breadCrumbRef);
 				if (breadCrumbRef != elementToOpen || elementToOpen instanceof Device) {
