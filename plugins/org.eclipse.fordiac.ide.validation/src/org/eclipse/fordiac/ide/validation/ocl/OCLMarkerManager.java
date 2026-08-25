@@ -60,7 +60,8 @@ public final class OCLMarkerManager {
 	}
 
 	private static List<IProject> getMarkerProjects(final IProject owner) {
-		return Stream.concat(Stream.of(owner), OCLSourceScanner.findReferencedProjects(owner).stream()).toList();
+		return Stream.concat(Stream.of(owner), OCLSourceScanner.findReferencedProjects(owner).stream())
+				.filter(IProject::isAccessible).toList();
 	}
 
 	private static String getOwnerId(final IProject owner) {
