@@ -10,19 +10,19 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<Sockets>
-			<AdapterDeclaration Name="TimeOutSocket" Type="iec61499::events::ARTimeOut" x="190" y="380"/>
+			<AdapterDeclaration Name="TimeOutSocket" Type="iec61499::events::ARTimeOut" x="200" y="0"/>
 		</Sockets>
 	</InterfaceList>
 	<FBNetwork>
-		<FB Name="DLY" Type="iec61499::events::E_RDELAY" x="1045" y="380">
+		<FB Name="DLY" Type="iec61499::events::E_RDELAY" x="1100" y="0">
 		</FB>
 		<EventConnections>
-			<Connection Source="TimeOutSocket.START" Destination="DLY.START" dx1="80" dx2="80" dy="160"/>
-			<Connection Source="TimeOutSocket.STOP" Destination="DLY.STOP" dx1="80" dx2="80" dy="160"/>
-			<Connection Source="DLY.EO" Destination="TimeOutSocket.TimeOut" dx1="80" dx2="80" dy="160"/>
+			<Connection Source="TimeOutSocket.START" Destination="DLY.START"/>
+			<Connection Source="TimeOutSocket.STOP" Destination="DLY.STOP"/>
+			<Connection Source="DLY.EO" Destination="TimeOutSocket.TimeOut" dx1="80" dx2="80" dy="-260"/>
 		</EventConnections>
 		<DataConnections>
-			<Connection Source="TimeOutSocket.DT" Destination="DLY.DT" dx1="80" dx2="80" dy="160"/>
+			<Connection Source="TimeOutSocket.DT" Destination="DLY.DT"/>
 		</DataConnections>
 	</FBNetwork>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

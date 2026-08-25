@@ -1,53 +1,55 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
-<FBType Comment="Reloadable delayed propagation of an event-Cancellable" Name="E_RDELAY">
-  <Identification Classification="Event processing" Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_RDELAY" Comment="Reloadable delayed propagation of an event-Cancellable">
+	<Identification Standard="61499-1" Classification="Event processing" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Begin/Reset Delay" Name="START" Type="Event">
-        <With Var="DT"/>
-      </Event>
-      <Event Comment="Cancel Delay" Name="STOP" Type="Event"/>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Delayed Event" Name="EO" Type="Event"/>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Delay Time" Name="DT" Type="TIME"/>
-    </InputVars>
-    <OutputVars/>
-  </InterfaceList>
-  <Service Comment="Reloadable delayed propagation of an event-Cancellable" LeftInterface="E_DELAY" RightInterface="RESOURCE">
-    <ServiceSequence Comment="" Name="event_delay">
-      <ServiceTransaction>
-        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
-        <OutputPrimitive Event="EO" Interface="E_DELAY"/>
-      </ServiceTransaction>
-    </ServiceSequence>
-    <ServiceSequence Comment="" Name="delay_canceled">
-      <ServiceTransaction>
-        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
-      </ServiceTransaction>
-      <ServiceTransaction>
-        <InputPrimitive Event="STOP" Interface="E_DELAY"/>
-      </ServiceTransaction>
-    </ServiceSequence>
-    <ServiceSequence Comment="" Name="no_multiple_delay">
-      <ServiceTransaction>
-        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
-      </ServiceTransaction>
-      <ServiceTransaction>
-        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
-      </ServiceTransaction>
-      <ServiceTransaction>
-        <OutputPrimitive Event="EO" Interface="E_DELAY"/>
-      </ServiceTransaction>
-    </ServiceSequence>
-  </Service>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Begin/Reset Delay">
+				<With Var="DT"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Cancel Delay">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Delayed Event">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="Delay Time"/>
+		</InputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="E_DELAY" Comment="Reloadable delayed propagation of an event-Cancellable">
+		<ServiceSequence Name="event_delay">
+			<ServiceTransaction>
+				<InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT"/>
+				<OutputPrimitive Interface="E_DELAY" Event="EO"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="delay_canceled">
+			<ServiceTransaction>
+				<InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="E_DELAY" Event="STOP"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="no_multiple_delay">
+			<ServiceTransaction>
+				<InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="E_DELAY" Event="START" Parameters="DT"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<OutputPrimitive Interface="E_DELAY" Event="EO"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
