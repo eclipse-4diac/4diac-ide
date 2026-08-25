@@ -20,11 +20,11 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="First funtion input" Name="IN1" Type="ANY_NUM"/>
+      <VarDeclaration Comment="First function input" Name="IN1" Type="ANY_NUM"/>
       <VarDeclaration Comment="Second function input" Name="IN2" Type="ANY_NUM"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="IN1 multiplie with IN2" Name="OUT" Type="ANY_NUM"/>
+      <VarDeclaration Comment="IN1 multiplied by IN2" Name="OUT" Type="ANY_NUM"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
