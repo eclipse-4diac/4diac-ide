@@ -106,7 +106,7 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 	}
 
 	private void deleteAllOwnedMarkersIfNeeded(final IResourceDelta delta) throws CoreException {
-		if (delta == null || hasProjectDescriptionChanged(delta)) {
+		if (delta == null || hasProjectStateChanged(delta)) {
 			OCLMarkerManager.deleteMarkers(getProject());
 		}
 	}
@@ -114,7 +114,7 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 	private static boolean needsFullOclBuild(final IResourceDelta delta) throws CoreException {
 		final boolean[] result = { false };
 		delta.accept((IResourceDeltaVisitor) resourceDelta -> {
-			if (hasProjectDescriptionChanged(resourceDelta)) {
+			if (hasProjectStateChanged(resourceDelta)) {
 				result[0] = true;
 				return false;
 			}
@@ -129,9 +129,10 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 		return result[0];
 	}
 
-	private static boolean hasProjectDescriptionChanged(final IResourceDelta delta) {
+	private static boolean hasProjectStateChanged(final IResourceDelta delta) {
 		return delta.getResource() instanceof IProject
-				&& (delta.getFlags() & IResourceDelta.DESCRIPTION) != 0;
+				&& (delta.getKind() != IResourceDelta.CHANGED
+						|| (delta.getFlags() & (IResourceDelta.DESCRIPTION | IResourceDelta.OPEN)) != 0);
 	}
 
 	private static INamedElement loadValidationTarget(final IFile file) {

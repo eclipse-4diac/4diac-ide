@@ -62,11 +62,13 @@ public final class OCLSourceScanner {
 			final Predicate<IFile> matcher) {
 		final Set<IFile> result = new LinkedHashSet<>();
 		for (final IProject sourceProject : collectProjects(project)) {
-			collectBuildpathFiles(sourceProject, attribute, file -> {
-				if (matcher.test(file)) {
-					result.add(file);
-				}
-			});
+			if (sourceProject.isAccessible()) {
+				collectBuildpathFiles(sourceProject, attribute, file -> {
+					if (matcher.test(file)) {
+						result.add(file);
+					}
+				});
+			}
 		}
 		return new ArrayList<>(result);
 	}
@@ -78,7 +80,7 @@ public final class OCLSourceScanner {
 	}
 
 	private static void collectProjects(final IProject project, final Set<IProject> result) {
-		if (project == null || !project.isAccessible() || !result.add(project)) {
+		if (project == null || !result.add(project) || !project.isAccessible()) {
 			return;
 		}
 		try {
