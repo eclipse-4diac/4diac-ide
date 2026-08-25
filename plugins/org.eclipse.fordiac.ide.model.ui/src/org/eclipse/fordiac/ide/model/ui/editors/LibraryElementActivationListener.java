@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025, 2026 Martin Erich Jobst
+ * Copyright (c) 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,6 +20,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.PlainMessageDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
@@ -27,6 +29,7 @@ import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWindowListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
@@ -85,7 +88,7 @@ public class LibraryElementActivationListener implements IPartListener, IWindowL
 
 	protected void handleEditorInputChanged(final IEditorInput editorInput) {
 		final PlainMessageDialog replaceContentDialog = PlainMessageDialog
-				.getBuilder(editorPart.getSite().getShell(), Messages.LibraryElementActivationListener_FileChangedTitle)
+				.getBuilder(getShell(), Messages.LibraryElementActivationListener_FileChangedTitle)
 				.message(MessageFormat.format(Messages.LibraryElementActivationListener_FileChangedMessage,
 						editorInput.getToolTipText()))
 				.buttonLabels(List.of(Messages.LibraryElementActivationListener_ReplaceContentButton,
@@ -98,12 +101,21 @@ public class LibraryElementActivationListener implements IPartListener, IWindowL
 		try {
 			LibraryElementProvider.INSTANCE.synchronize(editorInput, new NullProgressMonitor());
 		} catch (final CoreException e) {
-			ErrorDialog.openError(editorPart.getSite().getShell(),
-					Messages.LibraryElementActivationListener_SyncErrorTitle,
-					MessageFormat.format(Messages.LibraryElementActivationListener_SyncErrorMessage,
-							editorInput.getToolTipText()),
+			ErrorDialog.openError(getShell(), Messages.LibraryElementActivationListener_SyncErrorTitle, MessageFormat
+					.format(Messages.LibraryElementActivationListener_SyncErrorMessage, editorInput.getToolTipText()),
 					e.getStatus());
 		}
+	}
+
+	protected final Shell getShell() {
+		final IWorkbenchPartSite site = editorPart.getSite();
+		if (site != null) {
+			final IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
+			if (workbenchWindow != null) {
+				return workbenchWindow.getShell();
+			}
+		}
+		return Display.getCurrent().getActiveShell();
 	}
 
 	public IEditorPart getEditorPart() {
