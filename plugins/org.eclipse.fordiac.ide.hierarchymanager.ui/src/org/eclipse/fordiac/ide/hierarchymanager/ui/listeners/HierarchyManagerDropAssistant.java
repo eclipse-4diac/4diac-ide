@@ -52,12 +52,13 @@ public class HierarchyManagerDropAssistant extends CommonDropAdapterAssistant {
 
 		// prevent duplicates
 		if ((getCurrentEvent().data instanceof final TreeSelection selection)
-				&& (selection.getFirstElement() instanceof final SubApp subapp)) {
-			final RootLevel root = (RootLevel) EcoreUtil.getRootContainer((Level) target);
+				&& (selection.getFirstElement() instanceof final SubApp subapp) && target instanceof final EObject refObj) {
+			final RootLevel root = (RootLevel) EcoreUtil.getRootContainer(refObj);
 			if (root != null && root.getLevels().stream().anyMatch(l -> hasChild(l, subapp.getQualifiedName()))) {
 				return Status.CANCEL_STATUS;
 			}
 		}
+
 		return Status.OK_STATUS;
 	}
 
