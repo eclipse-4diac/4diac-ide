@@ -53,6 +53,7 @@
                 <include name="plugins/org.eclipse.equinox.security*.jar"/>
                 <include name="plugins/org.eclipse.ant.core*.jar"/>
                 <include name="plugins/org.apache.ant*/lib/*.jar"/>
+                <include name="plugins/com.google.gson*.jar"/>
                 <include name="plugins/org.eclipse.xtext*.jar"/>
             </fileset>
          </classpath>

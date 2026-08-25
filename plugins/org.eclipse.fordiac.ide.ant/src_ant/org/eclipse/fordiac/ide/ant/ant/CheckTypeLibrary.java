@@ -51,6 +51,7 @@ public class CheckTypeLibrary extends Task {
 		if (project == null) {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
+		AbstractCheckTask.buildProject(project);
 
 		// log Markers, only visible in console output
 		try {
