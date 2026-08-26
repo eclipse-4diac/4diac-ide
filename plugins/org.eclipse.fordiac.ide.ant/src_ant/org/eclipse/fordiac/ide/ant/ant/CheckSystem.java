@@ -22,7 +22,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
-public class CheckSystem extends AbstractCheckTask {
+public class CheckSystem extends AbstractMarkerCheckTask {
 
 	private String systemPathString;
 

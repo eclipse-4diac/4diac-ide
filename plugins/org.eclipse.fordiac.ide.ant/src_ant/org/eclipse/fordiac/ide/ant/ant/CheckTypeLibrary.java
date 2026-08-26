@@ -19,7 +19,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
-public class CheckTypeLibrary extends AbstractCheckTask {
+public class CheckTypeLibrary extends AbstractMarkerCheckTask {
 
 	private String projectNameString;
 

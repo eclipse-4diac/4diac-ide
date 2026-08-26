@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public abstract class AbstractCheckTask extends Task {
+public abstract class AbstractMarkerCheckTask extends Task {
 
 	private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
@@ -76,7 +76,7 @@ public abstract class AbstractCheckTask extends Task {
 
 	protected final void reportAndFail(final String task, final IProject project, final String system,
 			final List<IMarker> markers) {
-		final List<DiagnosticOutput> diagnostics = markers.stream().map(AbstractCheckTask::toDiagnostic)
+		final List<DiagnosticOutput> diagnostics = markers.stream().map(AbstractMarkerCheckTask::toDiagnostic)
 				.sorted(DIAGNOSTIC_COMPARATOR).toList();
 		final long errors = countSeverity(diagnostics, "ERROR"); //$NON-NLS-1$
 		final long warnings = countSeverity(diagnostics, "WARNING"); //$NON-NLS-1$
