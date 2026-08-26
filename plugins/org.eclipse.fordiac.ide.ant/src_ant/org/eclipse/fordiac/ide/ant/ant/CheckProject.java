@@ -16,7 +16,7 @@ import org.apache.tools.ant.BuildException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
-public class CheckProject extends AbstractCheckTask {
+public class CheckProject extends AbstractMarkerCheckTask {
 
 	private String projectNameString;
 
