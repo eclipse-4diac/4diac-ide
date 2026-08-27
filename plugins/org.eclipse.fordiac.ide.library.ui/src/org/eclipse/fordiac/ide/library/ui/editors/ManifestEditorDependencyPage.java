@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,8 +44,9 @@ import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
 import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.ManageLibraryWizard;
+import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
@@ -55,7 +57,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -70,7 +71,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
-public class ManifestEditorDependencyPage extends FormPage {
+class ManifestEditorDependencyPage extends FormPage {
 
 	private final ILibraryProvider offlineLibraryProvider = new OfflineLibraryProvider();
 	private final ILibraryProvider onlineLibraryProvider = new OnlineLibraryProvider();
@@ -188,9 +189,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 		final Composite buttonBar = new Composite(parent, SWT.NONE);
 		buttonBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 
-		final GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
+		final GridLayout layout = new GridLayout(3, false);
 		buttonBar.setLayout(layout);
 
 		final Button refreshButton = new Button(buttonBar, SWT.PUSH);
@@ -202,7 +201,13 @@ public class ManifestEditorDependencyPage extends FormPage {
 		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
 		manageLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		manageLibrariesButton.addListener(SWT.Selection, event -> ManageLibraryWizard
-				.openWizardDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
+				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
+
+		final Button importLibrariesButton = new Button(buttonBar, SWT.PUSH);
+		importLibrariesButton.setText(Messages.ManifestEditor_ImportLibraries);
+		importLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		importLibrariesButton.addListener(SWT.Selection, event -> UnifiedLibraryImportWizard
+				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
 	}
 
 	private List<LibContainer> createViewerInput() {
@@ -245,14 +250,13 @@ public class ManifestEditorDependencyPage extends FormPage {
 	}
 
 	private void configureColumns(final TreeColumnLayout layout) {
-
 		// symbolic name column
 		final TreeViewerColumn symbolicNameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		symbolicNameColumn.getColumn().setText(Messages.ManifestEditor_Column_SymbolicName);
 		symbolicNameColumn.setLabelProvider(createLabelProvider(Required::getSymbolicName, cell -> {
 			if (cell.getElement() instanceof LibContainer(final String name, final List<Required> children)
 					&& !children.isEmpty()) {
-				cell.setText(name);
+				cell.setText(MessageFormat.format("{0} ({1})", name, Integer.valueOf(children.size()))); //$NON-NLS-1$
 			}
 		}, false));
 
@@ -261,9 +265,12 @@ public class ManifestEditorDependencyPage extends FormPage {
 		versionRangeColumn.getColumn().setText(Messages.ManifestEditor_Column_VersionRange);
 		versionRangeColumn.setLabelProvider(createLabelProvider(Required::getVersion, null, true));
 		versionRangeColumn.setEditingSupport(new EditingSupport(treeViewer) {
+			private final CellEditor editor = new VersionRangeCellEditor(treeViewer.getTree());
+
 			@Override
 			protected void setValue(final Object element, final Object value) {
 				if (element instanceof final Required required) {
+
 					final String version = value.toString();
 					if (version.equals(required.getVersion())) {
 						return;
@@ -285,7 +292,7 @@ public class ManifestEditorDependencyPage extends FormPage {
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				return new TextCellEditor(treeViewer.getTree());
+				return editor;
 			}
 
 			@Override

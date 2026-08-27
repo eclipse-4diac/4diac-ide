@@ -8,7 +8,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.e4.core.services,
  org.eclipse.e4.core.contexts,
- org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.ui.views.properties.tabbed
 Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.annotations;x-internal:=true,
@@ -24,10 +23,10 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.datatype.helper,
  org.eclipse.fordiac.ide.model.emf,
  org.eclipse.fordiac.ide.model.errormarker,
+ org.eclipse.fordiac.ide.model.graph,
  org.eclipse.fordiac.ide.model.helpers,
  org.eclipse.fordiac.ide.model.libraryElement,
- org.eclipse.fordiac.ide.model.libraryElement.impl;
-  x-friends:="org.eclipse.fordiac.ide.test.model",
+ org.eclipse.fordiac.ide.model.libraryElement.impl;x-friends:="org.eclipse.fordiac.ide.test.model",
  org.eclipse.fordiac.ide.model.libraryElement.util,
  org.eclipse.fordiac.ide.model.preferences,
  org.eclipse.fordiac.ide.model.resource,
@@ -38,7 +37,8 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.validation,
  org.eclipse.fordiac.ide.model.value
 Import-Package: jakarta.annotation,
- jakarta.inject
+ jakarta.inject,
+ org.eclipse.fordiac.ide.util
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.model.ModelPlugin

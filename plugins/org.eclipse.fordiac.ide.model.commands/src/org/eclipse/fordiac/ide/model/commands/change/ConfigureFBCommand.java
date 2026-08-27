@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 
 /**
  * Command for updating the data type of the F_MOVE
@@ -35,10 +34,8 @@ public class ConfigureFBCommand extends UpdateFBTypeCommand {
 	@Override
 	protected void handleConfigurableFB() {
 		// for the configurable move fb we have to modify the data type
-		if (newElement instanceof final ConfigurableMoveFB fMove) {
-			fMove.setDataType(configuration);
-			fMove.updateConfiguration();
-		}
+		getNewElement().setDataType(configuration);
+		getNewElement().updateConfiguration();
 	}
 
 	@Override

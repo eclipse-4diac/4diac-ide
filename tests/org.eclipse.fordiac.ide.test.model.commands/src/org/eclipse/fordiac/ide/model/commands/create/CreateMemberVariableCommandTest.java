@@ -28,8 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class CreateMemberVariableCommandTest extends CreateMemberVariableCommandTestBase {
 
 	private static final String STRUCT_NAME = "mystruct"; //$NON-NLS-1$
@@ -53,19 +51,20 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 		return result;
 	}
 
-	private static State executeAdvancedInsertion(final State state, final int index, final String name, final DataType type) {
+	private static State executeAdvancedInsertion(final State state, final int index, final String name,
+			final DataType type) {
 		state.setCommand(new CreateMemberVariableCommand(state.getStructuredType(), index, name, type));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyAdvancedInsertion(final State state, final State oldState, final TestFunction t, final int index, final String name,
-			final DataType type) {
+	private static void verifyAdvancedInsertion(final State state, final State oldState, final TestFunction t,
+			final int index, final String name, final DataType type) {
 		// verify that new variable is there at correct position
 		final VarDeclaration varDecl = state.getStructuredType().getMemberVariables().get(index);
 		// verify that old variables are also still there
-		t.test((oldState.getStructuredType().getMemberVariables().size() + 1), state.getStructuredType()
-				.getMemberVariables().size());
+		t.test((oldState.getStructuredType().getMemberVariables().size() + 1),
+				state.getStructuredType().getMemberVariables().size());
 		// verify the datatype
 		t.test(varDecl.getTypeName(), type.getName());
 		// verify the name
@@ -85,8 +84,8 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 	}
 
 	private static void verifySimpleInsertion(final State state, final State oldState, final TestFunction t) {
-		t.test(state.getStructuredType().getMemberVariables()
-				.size(), (oldState.getStructuredType().getMemberVariables().size() + 1));
+		t.test(state.getStructuredType().getMemberVariables().size(),
+				(oldState.getStructuredType().getMemberVariables().size() + 1));
 		final VarDeclaration inserted = state.getStructuredType().getMemberVariables()
 				.get(state.getStructuredType().getMemberVariables().size() - 1);
 
@@ -110,45 +109,39 @@ public class CreateMemberVariableCommandTest extends CreateMemberVariableCommand
 				new ExecutionDescription<>("Create second default member var", // //$NON-NLS-1$
 						CreateMemberVariableCommandTest::executeSimpleInsertion, //
 						CreateMemberVariableCommandTest::verifySimpleInsertion //
-						) //
-				);
+				) //
+		);
 
 		final List<ExecutionDescription<?>> configuredExecutionDescriptions = List.of(
 				new ExecutionDescription<>("Create first configured member var", //$NON-NLS-1$
 						(final State state) -> executeAdvancedInsertion(state, 0, VARIABLE1,
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
-								VARIABLE1,
-								datatypeLib.getType(FordiacKeywords.BOOL))), //
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(
+								state, oldState, t, 0, VARIABLE1, datatypeLib.getType(FordiacKeywords.BOOL))), //
 
 				new ExecutionDescription<>("Create second configured member var with same name", //$NON-NLS-1$
 						(final State state) -> executeAdvancedInsertion(state, 1, VARIABLE1,
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 1,
-								VARIABLE2,
-								datatypeLib.getType(FordiacKeywords.BOOL))), //
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(
+								state, oldState, t, 1, VARIABLE2, datatypeLib.getType(FordiacKeywords.BOOL))), //
 
 				new ExecutionDescription<>("Create first configured member var at pos 0", //$NON-NLS-1$
 						(final State state) -> executeAdvancedInsertion(state, 0, VARIABLE3,
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
-								VARIABLE3,
-								datatypeLib.getType(FordiacKeywords.BOOL))), //
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(
+								state, oldState, t, 0, VARIABLE3, datatypeLib.getType(FordiacKeywords.BOOL))), //
 
 				new ExecutionDescription<>("Create first configured member struct at pos 0", //$NON-NLS-1$
-						(final State state) -> executeAdvancedInsertion(state, 0, VARIABLE4,
-								struct), //
-						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 0,
-								VARIABLE4,
-								struct)), //
+						(final State state) -> executeAdvancedInsertion(state, 0, VARIABLE4, struct), //
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(
+								state, oldState, t, 0, VARIABLE4, struct)), //
 
 				new ExecutionDescription<>("Create first configured member var in the middle", //$NON-NLS-1$
 						(final State state) -> executeAdvancedInsertion(state, 2, VARIABLE5,
 								datatypeLib.getType(FordiacKeywords.BOOL)), //
-						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(state, oldState, t, 2,
-								VARIABLE5,
-								datatypeLib.getType(FordiacKeywords.BOOL))) //
-				);
+						(final State state, final State oldState, final TestFunction t) -> verifyAdvancedInsertion(
+								state, oldState, t, 2, VARIABLE5, datatypeLib.getType(FordiacKeywords.BOOL))) //
+		);
 
 		return createCommands(autofilledExecutionDescriptions, configuredExecutionDescriptions);
 	}

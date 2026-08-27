@@ -828,18 +828,6 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.MEMBER_VAR_DECLARATION: {
-				MemberVarDeclaration memberVarDeclaration = (MemberVarDeclaration)theEObject;
-				T1 result = caseMemberVarDeclaration(memberVarDeclaration);
-				if (result == null) result = caseVarDeclaration(memberVarDeclaration);
-				if (result == null) result = caseIInterfaceElement(memberVarDeclaration);
-				if (result == null) result = caseITypedElement(memberVarDeclaration);
-				if (result == null) result = caseHiddenElement(memberVarDeclaration);
-				if (result == null) result = caseINamedElement(memberVarDeclaration);
-				if (result == null) result = caseConfigurableObject(memberVarDeclaration);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case LibraryElementPackage.METHOD: {
 				Method method = (Method)theEObject;
 				T1 result = caseMethod(method);
@@ -3058,21 +3046,6 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseVarConfigInstance(VarConfigInstance object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Member Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Member Var Declaration</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseMemberVarDeclaration(MemberVarDeclaration object) {
 		return null;
 	}
 

@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.IEC61499PreferenceConstants;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class EthernetDeviceManagementCommunicationHandler implements IDeviceManagementCommunicationHandler {
 	private static final int ASN1_TAG_IECSTRING = 80;

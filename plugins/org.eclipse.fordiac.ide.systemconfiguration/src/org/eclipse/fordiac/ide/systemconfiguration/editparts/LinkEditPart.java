@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteLinkEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.routers.LinkConnectionRouter;
-import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 
@@ -50,7 +49,8 @@ public class LinkEditPart extends AbstractConnectionEditPart {
 		if (null != getModel().getSegment()) {
 			final Color segmentColor = getModel().getSegment().getColor();
 			if (null != segmentColor) {
-				connection.setForegroundColor(ColorManager.getColor(segmentColor));
+				connection.setForegroundColor(new org.eclipse.swt.graphics.Color(segmentColor.getRed(),
+						segmentColor.getGreen(), segmentColor.getBlue()));
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Martin Erich Jobst, Primetals Technologies Austria GmbH
+ * Copyright (c) 2023 Martin Erich Jobst, Primetals Technologies Austria GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,7 +10,10 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
- *   Sebastian Hollersbacher - changed sizes calculation to correctly represent figures
+ *   Sebastian Hollersbacher - changed sizes calculation to correctly represent
+ *                  figures
+ *   Alois Zoitl  - removed dependency on CoordinateConverter and used default
+ *                  values for size calculations
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
@@ -19,11 +23,8 @@ import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -50,28 +51,31 @@ import org.eclipse.fordiac.ide.model.preferences.PreferenceProvider;
  *           }
  */
 public final class FBShapeHelper {
+
+	private static final double DEFAULT_LINE_HEIGHT = 19.0;
+	private static final double DEFAULT_CHARACTER_WIDTH = 8.0;
+
 	public static final double IEC61499_LINE_HEIGHT = 100.0;
-	private static final double AVARAGE_CHAR_WIDTH = CoordinateConverter.INSTANCE
-			.screenToIEC61499((int) CoordinateConverter.INSTANCE.getAverageCharacterWidth());
+	private static final double AVERAGE_CHAR_WIDTH = screenToIEC61499((int) DEFAULT_CHARACTER_WIDTH);
 
 	/*
 	 * Constants for width and height adjustments to account for borders, padding,
 	 * and so on.
 	 */
-	private static final double WIDTH_ADJUST_NAME = CoordinateConverter.INSTANCE.screenToIEC61499(5);
-	private static final double WIDTH_ADJUST_TYPE_NAME = CoordinateConverter.INSTANCE.screenToIEC61499(47);
-	private static final double WIDTH_ADJUST_STRUCT_NAME = CoordinateConverter.INSTANCE.screenToIEC61499(48);
+	private static final double WIDTH_ADJUST_NAME = screenToIEC61499(5);
+	private static final double WIDTH_ADJUST_TYPE_NAME = screenToIEC61499(47);
+	private static final double WIDTH_ADJUST_STRUCT_NAME = screenToIEC61499(48);
 
-	private static final double WIDTH_ADJUST_INTERFACE = CoordinateConverter.INSTANCE.screenToIEC61499(12);
-	private static final double WIDTH_ADJUST_INTERFACE_ADAPTER = CoordinateConverter.INSTANCE.screenToIEC61499(17);
-	private static final double WIDTH_ADJUST_INTERFACE_INOUT = CoordinateConverter.INSTANCE.screenToIEC61499(18);
-	private static final double WIDTH_ADJUST_HIDDEN = CoordinateConverter.INSTANCE.screenToIEC61499(21);
-	private static final double WIDTH_ADJUST_SUBAPP_INTERFACE = CoordinateConverter.INSTANCE.screenToIEC61499(35);
+	private static final double WIDTH_ADJUST_INTERFACE = screenToIEC61499(12);
+	private static final double WIDTH_ADJUST_INTERFACE_ADAPTER = screenToIEC61499(17);
+	private static final double WIDTH_ADJUST_INTERFACE_INOUT = screenToIEC61499(18);
+	private static final double WIDTH_ADJUST_HIDDEN = screenToIEC61499(21);
+	private static final double WIDTH_ADJUST_SUBAPP_INTERFACE = screenToIEC61499(35);
 
-	private static final double HEIGHT_ADJUST = CoordinateConverter.INSTANCE.screenToIEC61499(7);
-	private static final double HEIGHT_ADJUST_MUX = CoordinateConverter.INSTANCE.screenToIEC61499(8);
-	private static final double HEIGHT_ADJUST_HIDDEN = CoordinateConverter.INSTANCE.screenToIEC61499(15);
-	private static final double HEIGHT_ADJUST_SUBAPP = CoordinateConverter.INSTANCE.screenToIEC61499(19);
+	private static final double HEIGHT_ADJUST = screenToIEC61499(7);
+	private static final double HEIGHT_ADJUST_MUX = screenToIEC61499(8);
+	private static final double HEIGHT_ADJUST_HIDDEN = screenToIEC61499(15);
+	private static final double HEIGHT_ADJUST_SUBAPP = screenToIEC61499(19);
 
 	/**
 	 * Get the width of an FB network element
@@ -88,8 +92,8 @@ public final class FBShapeHelper {
 		final int maxTypeLabelSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
 				ModelPreferenceConstants.MAX_TYPE_LABEL_SIZE, 120, project) + 1;
 
-		final double nameWidth = element.getName().length() * AVARAGE_CHAR_WIDTH + WIDTH_ADJUST_NAME;
-		final double typeNameWidth = getTypeNameCharacters(element, maxTypeLabelSize) * AVARAGE_CHAR_WIDTH
+		final double nameWidth = element.getName().length() * AVERAGE_CHAR_WIDTH + WIDTH_ADJUST_NAME;
+		final double typeNameWidth = getTypeNameCharacters(element, maxTypeLabelSize) * AVERAGE_CHAR_WIDTH
 				+ WIDTH_ADJUST_TYPE_NAME;
 		final double structNameWidth = getStructNameWidth(element);
 
@@ -138,7 +142,7 @@ public final class FBShapeHelper {
 		final IProject project = ModelHelper.getProjectFromContext(element);
 		final int maxInterfaceBarSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
 				ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 40, project);
-		return 2 * (AVARAGE_CHAR_WIDTH * maxInterfaceBarSize + WIDTH_ADJUST_SUBAPP_INTERFACE);
+		return 2 * (AVERAGE_CHAR_WIDTH * maxInterfaceBarSize + WIDTH_ADJUST_SUBAPP_INTERFACE);
 	}
 
 	/**
@@ -162,7 +166,7 @@ public final class FBShapeHelper {
 
 	private static double getStructNameWidth(final FBNetworkElement element) {
 		if (element instanceof final StructManipulator structManipulator && structManipulator.getDataType() != null) {
-			return structManipulator.getDataType().getName().length() * AVARAGE_CHAR_WIDTH + WIDTH_ADJUST_STRUCT_NAME;
+			return structManipulator.getDataType().getName().length() * AVERAGE_CHAR_WIDTH + WIDTH_ADJUST_STRUCT_NAME;
 		}
 		return 0;
 	}
@@ -177,7 +181,7 @@ public final class FBShapeHelper {
 
 		topInputLabelSize = Math.clamp(topInputLabelSize, minPinLabelSize, maxPinLabelSize);
 
-		return topInputLabelSize * AVARAGE_CHAR_WIDTH + WIDTH_ADJUST_INTERFACE;
+		return topInputLabelSize * AVERAGE_CHAR_WIDTH + WIDTH_ADJUST_INTERFACE;
 	}
 
 	private static double getMaxPinWidth(final BlockFBNetworkElement element, final int minPinLabelSize,
@@ -196,7 +200,7 @@ public final class FBShapeHelper {
 					default -> WIDTH_ADJUST_INTERFACE;
 					};
 
-					return labelSize * AVARAGE_CHAR_WIDTH + symbolSize;
+					return labelSize * AVERAGE_CHAR_WIDTH + symbolSize;
 				}).max().orElse(0.0);
 
 		if (largestInterface < WIDTH_ADJUST_HIDDEN) {
@@ -215,29 +219,17 @@ public final class FBShapeHelper {
 				: Predicate.not(IInterfaceElement::isIsInput);
 
 		if (element.getInterface().getAllInterfaceElements().filter(inputFilter)
-				.anyMatch(Predicate.not(IInterfaceElement::isVisible)) || (!isInput && checkHiddenDemuxPin(element))) {
+				.anyMatch(Predicate.not(IInterfaceElement::isVisible))) {
 			return WIDTH_ADJUST_HIDDEN;
 		}
 		return 0.0;
 	}
 
 	protected static double getHiddenHeightAdjust(final BlockFBNetworkElement element) {
-		if (element.getInterface().getAllInterfaceElements().anyMatch(Predicate.not(IInterfaceElement::isVisible))
-				|| checkHiddenDemuxPin(element)) {
+		if (element.getInterface().getAllInterfaceElements().anyMatch(Predicate.not(IInterfaceElement::isVisible))) {
 			return HEIGHT_ADJUST_HIDDEN;
 		}
 		return 0.0;
-	}
-
-	private static boolean checkHiddenDemuxPin(final FBNetworkElement element) {
-		if (element instanceof final Demultiplexer demux && demux.getDataType() != null) {
-			final int visibleVars = demux.getMemberVars().size();
-			final int allVars = ((StructuredType) demux.getDataType()).getMemberVariables().size();
-			if (visibleVars != allVars) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private static int getMaxLinesCounter(final List<? extends IInterfaceElement> inputPins,
@@ -252,6 +244,10 @@ public final class FBShapeHelper {
 
 	private static int countVisiblePins(final Stream<? extends IInterfaceElement> pins) {
 		return (int) pins.filter(IInterfaceElement::isVisible).count();
+	}
+
+	private static double screenToIEC61499(final int value) {
+		return value / (DEFAULT_LINE_HEIGHT / IEC61499_LINE_HEIGHT);
 	}
 
 	private FBShapeHelper() {

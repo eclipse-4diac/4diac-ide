@@ -16,12 +16,13 @@ Require-Bundle:
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.debug,
  org.eclipse.fordiac.ide.deployment.debug.ui,
+ org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.util,
  org.eclipse.gef,
  org.eclipse.jface,
  org.eclipse.osgi,
  org.eclipse.swt,
  org.eclipse.ui.ide
-Import-Package: org.eclipse.ui.contexts,
+Import-Package: org.eclipse.fordiac.ide.util,
+ org.eclipse.ui.contexts,
  org.eclipse.ui.handlers

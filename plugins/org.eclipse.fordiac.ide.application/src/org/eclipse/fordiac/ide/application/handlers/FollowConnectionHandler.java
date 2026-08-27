@@ -30,10 +30,11 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -208,7 +209,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		}
 	}
 
-	public List<IInterfaceElement> jumpOverStruct(final MemberVarDeclaration startPin, final boolean goRight) {
+	public List<IInterfaceElement> jumpOverStruct(final VarDeclaration startPin, final boolean goRight) {
 		final Set<IInterfaceElement> structEndpoints = new HashSet<>();
 		FBEndpointFinder.traceMembers(startPin, structEndpoints);
 
@@ -236,14 +237,14 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 		final List<Connection> connections = getConnectionList(startPin);
 		if (connections.isEmpty()) {
-			if (!(startPin instanceof final MemberVarDeclaration memberDeclaration)) {
+			if (!isStructManipulatorMember(startPin)) {
 				// dead-end (Endpoint)
 				destinations.add(startPin);
 				return;
 			}
 			// skip over Struct
 			final Set<IInterfaceElement> memberEnd = new HashSet<>();
-			FBEndpointFinder.traceMembers(memberDeclaration, memberEnd);
+			FBEndpointFinder.traceMembers((VarDeclaration) startPin, memberEnd);
 			memberEnd.forEach(member -> {
 				final List<Connection> cons = getConnectionList(member);
 				if (cons.isEmpty()) {
@@ -259,7 +260,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	private static boolean isValidPin(final IInterfaceElement startPin, final boolean goRight) {
-		if (startPin instanceof MemberVarDeclaration) {
+		if (isStructManipulatorMember(startPin)) {
 			return false; // jump over struct
 		}
 		if (startPin.getBlockFBNetworkElement() instanceof UntypedSubApp) {
@@ -280,4 +281,14 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			}
 		}
 	}
+
+	protected static boolean isStructManipulatorMember(final IInterfaceElement pin) {
+		if (!(pin instanceof VarDeclaration)) {
+			return false;
+		}
+
+		return pin.isIsInput() ? pin.getBlockFBNetworkElement() instanceof Multiplexer
+				: pin.getBlockFBNetworkElement() instanceof Demultiplexer;
+	}
+
 }

@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.validation.ValidationJob;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;

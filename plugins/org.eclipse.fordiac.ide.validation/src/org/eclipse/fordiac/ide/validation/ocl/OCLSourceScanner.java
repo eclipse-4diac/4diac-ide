@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
@@ -29,7 +30,7 @@ import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class OCLSourceScanner {
 
@@ -43,50 +44,60 @@ public final class OCLSourceScanner {
 			TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING, TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING);
 
 	public static List<IFile> findOclFiles(final IProject project) {
+		return findBuildpathFiles(project, BuildpathAttributes.OCL_SOURCE, OCLSourceScanner::isOclFile);
+	}
+
+	public static List<IFile> findValidationTargets(final IProject project) {
+		return findBuildpathFiles(project, BuildpathAttributes.OCL_TARGET,
+				OCLSourceScanner::isValidationTargetFile);
+	}
+
+	public static List<IProject> findReferencedProjects(final IProject project) {
+		final Set<IProject> result = collectProjects(project);
+		result.remove(project);
+		return new ArrayList<>(result);
+	}
+
+	private static List<IFile> findBuildpathFiles(final IProject project, final String attribute,
+			final Predicate<IFile> matcher) {
 		final Set<IFile> result = new LinkedHashSet<>();
-		collectOclFiles(project, result);
+		for (final IProject sourceProject : collectProjects(project)) {
+			if (sourceProject.isAccessible()) {
+				collectBuildpathFiles(sourceProject, attribute, file -> {
+					if (matcher.test(file)) {
+						result.add(file);
+					}
+				});
+			}
+		}
+		return new ArrayList<>(result);
+	}
+
+	private static Set<IProject> collectProjects(final IProject project) {
+		final Set<IProject> result = new LinkedHashSet<>();
+		collectProjects(project, result);
+		return result;
+	}
+
+	private static void collectProjects(final IProject project, final Set<IProject> result) {
+		if (project == null || !result.add(project) || !project.isAccessible()) {
+			return;
+		}
 		try {
 			for (final IProject referencedProject : project.getReferencedProjects()) {
-				if (referencedProject.isAccessible()) {
-					collectOclFiles(referencedProject, result);
-				}
+				collectProjects(referencedProject, result);
 			}
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
-		return new ArrayList<>(result);
-	}
-
-	public static List<IFile> findValidationTargets(final IProject project) {
-		final Set<IFile> result = new LinkedHashSet<>();
-		if (project != null && project.isAccessible()) {
-			collectBuildpathFiles(project, BuildpathAttributes.OCL_TARGET, true, file -> {
-				if (isValidationTargetFile(file)) {
-					result.add(file);
-				}
-			});
-			collectProjectFiles(project, result, OCLSourceScanner::isValidationTargetFile);
-		}
-		return new ArrayList<>(result);
-	}
-
-	private static void collectOclFiles(final IProject project, final Set<IFile> result) {
-		if (project != null && project.isAccessible()) {
-			collectBuildpathFiles(project, BuildpathAttributes.OCL_SOURCE, true, file -> {
-				if (isOclFile(file)) {
-					result.add(file);
-				}
-			});
-			collectProjectFiles(project, result, OCLSourceScanner::isOclFile);
-		}
 	}
 
 	private static void collectBuildpathFiles(final IProject project, final String attribute,
-			final boolean defaultValue, final FileConsumer consumer) {
+			final Consumer<IFile> consumer) {
 		try {
 			final Buildpath buildpath = TypeLibraryManager.INSTANCE.getTypeLibrary(project).getBuildpath();
 			for (final SourceFolder folder : buildpath.getSourceFolders()) {
-				if (getBooleanAttribute(folder, attribute, defaultValue)) {
+				if (Boolean.parseBoolean(BuildpathAttributes.getAttributeValue(folder.getAttributes(), attribute))) {
 					BuildpathUtil.acceptMatches(folder, project, (IResourceVisitor) resource -> {
 						if (resource instanceof final IFile file) {
 							consumer.accept(file);
@@ -101,31 +112,6 @@ public final class OCLSourceScanner {
 		}
 	}
 
-	private static void collectProjectFiles(final IProject project, final Set<IFile> result,
-			final FileMatcher matcher) {
-		try {
-			project.accept(resource -> {
-				if (resource instanceof final IFile file && matcher.matches(file)) {
-					result.add(file);
-					return false;
-				}
-				if (resource instanceof final IFolder folder
-						&& (folder.isLinked() || TypeLibraryTags.TYPE_LIBRARY.equalsIgnoreCase(folder.getName()))) {
-					return false;
-				}
-				return true;
-			}, IResource.NONE);
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-	}
-
-	private static boolean getBooleanAttribute(final SourceFolder folder, final String attribute,
-			final boolean defaultValue) {
-		final String value = BuildpathAttributes.getAttributeValue(folder.getAttributes(), attribute);
-		return value != null ? Boolean.parseBoolean(value) : defaultValue;
-	}
-
 	public static boolean isOclFile(final IFile file) {
 		return hasExtension(file, OCL_FILE_EXTENSION);
 	}
@@ -137,16 +123,6 @@ public final class OCLSourceScanner {
 
 	private static boolean hasExtension(final IFile file, final String extension) {
 		return file != null && extension.equalsIgnoreCase(file.getFileExtension());
-	}
-
-	@FunctionalInterface
-	private interface FileConsumer {
-		void accept(IFile file);
-	}
-
-	@FunctionalInterface
-	private interface FileMatcher {
-		boolean matches(IFile file);
 	}
 
 	private OCLSourceScanner() {

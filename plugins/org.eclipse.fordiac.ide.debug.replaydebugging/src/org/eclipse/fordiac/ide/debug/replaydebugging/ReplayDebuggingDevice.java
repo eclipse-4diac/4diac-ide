@@ -46,7 +46,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /**
  * @brief A debug device for replay debugging. It handles the watches of the

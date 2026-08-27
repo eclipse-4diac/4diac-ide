@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -140,26 +138,6 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, newPosition, newPosition));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final int x, final int y) {
-		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final Point newPos) {
-		updatePositionFromScreenCoordinates(newPos.x, newPos.y);
 	}
 
 	/**

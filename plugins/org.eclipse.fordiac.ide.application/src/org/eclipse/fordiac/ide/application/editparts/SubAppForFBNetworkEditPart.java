@@ -31,6 +31,7 @@ import java.util.List;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -53,7 +54,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
@@ -421,8 +421,8 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 	@Override
 	protected void refreshPosition() {
 		if (getParent() != null) {
-			final Position position = getModel().getPosition();
-			final Rectangle bounds = new Rectangle(position.toScreenPoint(), getSubappSize());
+			final Point screenPos = CoordinateConverter.INSTANCE.toScreenPoint(getModel().getPosition());
+			final Rectangle bounds = new Rectangle(screenPos, getSubappSize());
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}

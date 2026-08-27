@@ -133,7 +133,17 @@ public class Messages extends NLS {
 	public static String ManifestEditor_Column_Used;
 	public static String ManifestEditor_Column_LatestInRange;
 	public static String ManifestEditor_Column_Latest;
+
+	public static String ManifestEditor_ConfigureVersionRange;
+
+	public static String ManifestEditor_ImportLibraries;
 	public static String ManifestEditor_RefreshLibraries;
+
+	public static String ManifestEditor_VersionRange_Title;
+	public static String ManifestEditor_VersionRange_Description;
+	public static String ManifestEditor_VersionRange_IncludeInRange;
+	public static String ManifestEditor_VersionRange_Min;
+	public static String ManifestEditor_VersionRange_Max;
 
 	static {
 		// initialize resource bundle

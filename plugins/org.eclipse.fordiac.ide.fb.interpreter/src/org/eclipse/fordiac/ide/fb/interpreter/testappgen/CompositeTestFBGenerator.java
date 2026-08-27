@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal.AbstractCompositeFBGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestCase;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
@@ -83,7 +85,9 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 				// different position for muxFB and runAllFB
 				if (i == getTestCases().size() - 1 && (j == blocksToAdd.size() - 2 || j == blocksToAdd.size() - 1)) {
 					x = 50 + 400 * j;
-					y = net.getNetworkElements().get((getTestCases().size() * 3) / 2).getPosition().toScreenPoint().y;
+					final Position position = net.getNetworkElements().get((getTestCases().size() * 3) / 2)
+							.getPosition();
+					y = CoordinateConverter.INSTANCE.iec61499ToScreen(position.getY());
 				} else {
 					x = 50 + 400 * j;
 					y = 50 + 250 * i;

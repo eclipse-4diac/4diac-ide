@@ -64,8 +64,6 @@ import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public abstract class ExporterTestBase<T extends FBType> {
 
 	protected static final String ALGORITHM_NAME = "ALG"; //$NON-NLS-1$

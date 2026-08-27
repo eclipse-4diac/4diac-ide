@@ -63,7 +63,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
@@ -333,7 +332,7 @@ public final class Annotations {
 				continue;
 			}
 
-			final MemberVarDeclaration member = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
+			final VarDeclaration member = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			member.setName(keyValue[0]);
 			member.setType(ElementaryTypes.BOOL);
 

@@ -13,7 +13,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.ui.forms,
- org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.emf.edit,
@@ -41,3 +40,4 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor
+Import-Package: org.eclipse.fordiac.ide.util

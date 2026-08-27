@@ -19,19 +19,17 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.commands.testinfra.VersionInfoTestBase;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class ChangeOrganizationCommandTest extends VersionInfoTestBase {
 
 	private static final String NEW_ORGANIZATION = "new org"; //$NON-NLS-1$
 
-	private static State executeCommand(State state) {
+	private static State executeCommand(final State state) {
 		state.setCommand(new ChangeOrganizationCommand(state.getVersionInfo(), NEW_ORGANIZATION));//
 
 		return commandExecution(state);
 	}
 
-	private static void verifyState(State state, State oldState, TestFunction t) {
+	private static void verifyState(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getVersionInfo().getOrganization(), NEW_ORGANIZATION);
 		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
 		t.test(state.getVersionInfo().getRemarks(), oldState.getVersionInfo().getRemarks());
@@ -39,13 +37,13 @@ public class ChangeOrganizationCommandTest extends VersionInfoTestBase {
 		t.test(state.getVersionInfo().getVersion(), oldState.getVersionInfo().getVersion());
 	}
 
-	private static State executeCommandToNull(State state) {
+	private static State executeCommandToNull(final State state) {
 		state.setCommand(new ChangeOrganizationCommand(state.getVersionInfo(), null));
 
 		return commandExecution(state);
 	}
 
-	private static void verifyStateNull(State state, State oldState, TestFunction t) {
+	private static void verifyStateNull(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getVersionInfo().getOrganization(), EMPTY);
 		t.test(state.getVersionInfo().getDate(), oldState.getVersionInfo().getDate());
 		t.test(state.getVersionInfo().getRemarks(), oldState.getVersionInfo().getRemarks());

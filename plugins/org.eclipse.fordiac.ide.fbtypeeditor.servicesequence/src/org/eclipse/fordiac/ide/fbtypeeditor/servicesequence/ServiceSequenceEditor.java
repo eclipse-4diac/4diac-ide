@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
-import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
+import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
@@ -124,7 +124,7 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
 			@Override
 			protected AbstractFreeformFigure createDrawingAreaContainer() {
-				return new ModuloFreeformFigure(this, false);
+				return new MinSpaceFreeformFigure();
 			}
 		};
 	}

@@ -22,8 +22,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class SetPositionCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommand(final State state, final double newX, final double newY) {
@@ -35,8 +33,7 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 		pos.setX(newX);
 		pos.setY(newY);
-		state.setCommand(
-				new SetPositionCommand(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME), pos));
+		state.setCommand(new SetPositionCommand(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME), pos));
 	}
 
 	public static void verifyState(final State state, final TestFunction t, final double x, final double y) {

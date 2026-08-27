@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanP
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class ProtocolSelector {
 

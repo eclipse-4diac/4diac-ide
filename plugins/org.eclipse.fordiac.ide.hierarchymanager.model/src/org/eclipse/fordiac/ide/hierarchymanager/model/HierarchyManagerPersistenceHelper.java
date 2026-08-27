@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceImpl;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class HierarchyManagerPersistenceHelper {
 

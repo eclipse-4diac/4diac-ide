@@ -3,7 +3,7 @@
 	<Identification Standard="61499-2" Description="Copyright (c) 2025 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
 	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2026-07-20" Remarks="change package">
-	</VersionInfo>
+    </VersionInfo>
 	<VersionInfo Version="1.0" Author="Monika Wenger" Date="2025-05-05">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::io::wago">
@@ -47,7 +47,7 @@
 			<VarDeclaration Name="PresetInput" Type="STRING" Comment="(Hardware pin) IX"/>
 			<VarDeclaration Name="OptimizeOnZInput" Type="STRING" Comment="(Hardware pin) IX"/>
 			<VarDeclaration Name="OnTarget" Type="STRING" Comment="True when Positioning ended at target area as IX"/>
-			<VarDeclaration Name="ReferenceOk" Type="STRING" Comment="True when reference movement was successfull as IX"/>
+			<VarDeclaration Name="ReferenceOk" Type="STRING" Comment="True when reference movement was successful as IX"/>
 			<VarDeclaration Name="CurrentPosition" Type="STRING" Comment="Current position as ID"/>
 			<VarDeclaration Name="TargetPosition" Type="STRING" Comment="Target position as QD"/>
 			<VarDeclaration Name="MotorN" Type="STRING" Comment="Motor A- (Hardware pin) as QX"/>
@@ -55,7 +55,7 @@
 			<VarDeclaration Name="Positioning" Type="STRING" Comment="Drive to target position (MotorN, MotorP = false) as QX"/>
 			<VarDeclaration Name="OptimizeOn" Type="STRING" Comment="turn prestop optimization on as QX"/>
 			<VarDeclaration Name="Preset" Type="STRING" Comment="A rising edge copies the target position into the current position as QX"/>
-			<VarDeclaration Name="PresetInputEnable" Type="STRING" Comment="preset input enabled (OptimizeOnZInput means optimize on), preset input disbaled (OptimizeOnZInput means z input) as QX"/>
+			<VarDeclaration Name="PresetInputEnable" Type="STRING" Comment="preset input enabled (OptimizeOnZInput means optimize on), preset input disabled (OptimizeOnZInput means z input) as QX"/>
 			<VarDeclaration Name="QuitErrors" Type="STRING" Comment="Quits error Bits as QX"/>
 		</InputVars>
 		<OutputVars>
@@ -67,6 +67,8 @@
 		</Plugs>
 		<Sockets>
 			<AdapterDeclaration Name="BusAdapterIn" Type="eclipse4diac::io::wago::WagoBusAdapter"/>
+			<AdapterDeclaration Name="RegCom" Type="eclipse4diac::io::wago::WagoRegCom"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
 </FBType>

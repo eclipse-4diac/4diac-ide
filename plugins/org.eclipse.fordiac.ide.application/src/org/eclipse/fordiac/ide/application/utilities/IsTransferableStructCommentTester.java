@@ -13,9 +13,10 @@
 package org.eclipse.fordiac.ide.application.utilities;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.fordiac.ide.application.editparts.DemultiplexerEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 public class IsTransferableStructCommentTester extends PropertyTester {
@@ -24,11 +25,11 @@ public class IsTransferableStructCommentTester extends PropertyTester {
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		if ((property.equalsIgnoreCase("isTansferableStruct") //$NON-NLS-1$
 				&& receiver instanceof final IStructuredSelection selectedFB)
-				&& selectedFB.getFirstElement() instanceof final DemultiplexerEditPart editPart) {
+				&& selectedFB.getFirstElement() instanceof final EditPart ep
+				&& ep.getModel() instanceof final Demultiplexer demux) {
 
 			return !PreferenceStoreProvider
-					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID,
-							editPart.getModel().getTypeLibrary().getProject())
+					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, demux.getTypeLibrary().getProject())
 					.getBoolean(GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX);
 		}
 		return true;

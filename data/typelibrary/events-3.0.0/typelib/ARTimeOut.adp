@@ -1,47 +1,52 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<AdapterType Comment="Interface for a resetable time out service" Name="ARTimeOut">
-  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<AdapterType Name="ARTimeOut" Comment="Interface for a resettable time out service">
+	<Identification Standard="61499-1" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0.1" Author="Franz Höpfinger" Date="2026-08-25" Remarks="Fix Service Definition.">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Request from Socket" Name="TimeOut" Type="Event"/>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="start/reset timeout notifcation" Name="START" Type="Event">
-        <With Var="DT"/>
-      </Event>
-      <Event Comment="stop timeout notification" Name="STOP" Type="Event"/>
-    </EventOutputs>
-    <InputVars/>
-    <OutputVars>
-      <VarDeclaration Comment="timeout duration" InitialValue="" Name="DT" Type="TIME"/>
-    </OutputVars>
-  </InterfaceList>
-  <Service Comment="Interface for a resetable time out service" LeftInterface="SOCKET" RightInterface="PLUG">
-    <ServiceSequence Comment="" Name="Timeout">
-      <ServiceTransaction>
-        <InputPrimitive Event="START" Interface="PLUG" Parameters="TD"/>
-        <OutputPrimitive Event="START" Interface="SOCKET" Parameters="TD"/>
-      </ServiceTransaction>
-      <ServiceTransaction>
-        <InputPrimitive Event="TimeOut" Interface="SOCKET" Parameters=""/>
-        <OutputPrimitive Event="TimeOut" Interface="PLUG"/>
-      </ServiceTransaction>
-    </ServiceSequence>
-    <ServiceSequence Comment="" Name="NormalOperation">
-      <ServiceTransaction>
-        <InputPrimitive Event="Start" Interface="PLUG" Parameters="TD"/>
-        <OutputPrimitive Event="Start" Interface="SOCKET" Parameters="TD"/>
-      </ServiceTransaction>
-      <ServiceTransaction>
-        <InputPrimitive Event="STOP" Interface="PLUG" Parameters=""/>
-        <OutputPrimitive Event="STOP" Interface="SOCKET" Parameters=""/>
-      </ServiceTransaction>
-    </ServiceSequence>
-  </Service>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="TimeOut" Type="Event" Comment="Request from Socket">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="START" Type="Event" Comment="start/reset timeout notification">
+				<With Var="DT"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="stop timeout notification">
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="timeout duration"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="PLUG" LeftInterface="SOCKET" Comment="Interface for a resettable time out service">
+		<ServiceSequence Name="Timeout">
+			<ServiceTransaction>
+				<InputPrimitive Interface="PLUG" Event="START" Parameters="DT"/>
+				<OutputPrimitive Interface="SOCKET" Event="START" Parameters="DT"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="SOCKET" Event="TimeOut" Parameters=""/>
+				<OutputPrimitive Interface="PLUG" Event="TimeOut"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="NormalOperation">
+			<ServiceTransaction>
+				<InputPrimitive Interface="PLUG" Event="START" Parameters="DT"/>
+				<OutputPrimitive Interface="SOCKET" Event="START" Parameters="DT"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="PLUG" Event="STOP" Parameters=""/>
+				<OutputPrimitive Interface="SOCKET" Event="STOP" Parameters=""/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </AdapterType>

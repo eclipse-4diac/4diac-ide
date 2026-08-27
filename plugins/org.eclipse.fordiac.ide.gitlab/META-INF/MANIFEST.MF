@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Gitlab
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gitlab;singleton:=true
 Bundle-Version: 3.3.0.qualifier
-Import-Package: org.eclipse.ui.preferences
+Import-Package: org.eclipse.fordiac.ide.util,
+ org.eclipse.ui.preferences
 Require-Bundle: 
  org.eclipse.equinox.security,
  org.eclipse.equinox.security.ui,
@@ -12,8 +13,7 @@ Require-Bundle:
  org.eclipse.jface,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.library,
- org.eclipse.fordiac.ide.library.model,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.library.model
 Automatic-Module-Name: org.eclipse.fordiac.gitlab
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: Eclipse 4diac

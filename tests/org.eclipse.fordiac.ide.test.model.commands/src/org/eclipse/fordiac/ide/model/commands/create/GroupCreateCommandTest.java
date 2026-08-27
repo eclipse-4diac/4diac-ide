@@ -22,8 +22,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class GroupCreateCommandTest extends FBNetworkTestBase {
 
 	private static final String NAME_GROUP1 = "Group01"; //$NON-NLS-1$

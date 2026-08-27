@@ -20,11 +20,11 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="First funtion input" Name="IN1" Type="DATE"/>
+      <VarDeclaration Comment="First function input" Name="IN1" Type="DATE"/>
       <VarDeclaration Comment="Second function input" Name="IN2" Type="DATE"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="IN2 substracted from IN1" Name="OUT" Type="TIME"/>
+      <VarDeclaration Comment="IN2 subtracted from IN1" Name="OUT" Type="TIME"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

@@ -22,8 +22,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.service.prefs.BackingStoreException;
 

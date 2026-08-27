@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
 
 public class InterfaceValueEntity {
 

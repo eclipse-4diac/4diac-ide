@@ -46,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -59,7 +58,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
@@ -173,14 +171,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		if (newElement instanceof final ConfigurableFB configFb) {
 			if (oldElement instanceof final ConfigurableFB oldConfigFb) {
 				configFb.setDataType(oldConfigFb.getDataType());
-
-				if (configFb instanceof final Demultiplexer newDemux
-						&& oldConfigFb instanceof final Demultiplexer oldDemux && oldDemux.isIsConfigured()) {
-					newDemux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN,
-							ConfigurableFBManagement.buildVisibleChildrenString(oldDemux.getMemberVars()));
-				} else {
-					configFb.updateConfiguration();
-				}
+				configFb.updateConfiguration();
 			} else {
 				// transfer data from error marker
 				handleConFBUpdateFromErrorMarker(configFb);
@@ -202,15 +193,6 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 			if (dataTypeName != null) {
 				configFb.loadConfiguration(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG, dataTypeName);
 				oldElement.deleteAttribute(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG);
-
-				if (configFb instanceof Demultiplexer) {
-					final String visibleChildren = oldElement
-							.getAttributeValue(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-					if (visibleChildren != null) {
-						configFb.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, visibleChildren);
-						oldElement.deleteAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-					}
-				}
 			}
 		}
 	}
@@ -448,7 +430,8 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	private void checkErrorMarkerPinParameters() {
 		for (final ErrorMarkerInterface errorMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasData(errorMarker)) {
-				final IInterfaceElement newInterfaceElement = newElement.getInterface().getInterfaceElement(errorMarker);
+				final IInterfaceElement newInterfaceElement = newElement.getInterface()
+						.getInterfaceElement(errorMarker);
 				if (newInterfaceElement != null) {
 					copyErrorMarkerData(errorMarker, newInterfaceElement);
 					if (newInterfaceElement instanceof final VarDeclaration varDeclaration

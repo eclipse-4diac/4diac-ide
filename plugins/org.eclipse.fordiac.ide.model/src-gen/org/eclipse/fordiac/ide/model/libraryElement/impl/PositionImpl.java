@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -146,16 +144,6 @@ public class PositionImpl extends EObjectImpl implements Position {
 		y = newY;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.POSITION__Y, oldY, y));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Point toScreenPoint() {
-		return PositionAnnotation.toScreenPoint(this);
 	}
 
 	/**

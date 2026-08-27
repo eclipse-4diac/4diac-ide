@@ -30,10 +30,10 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConf
 import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.providers.TsnWindowLabelProvider;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.widget.MappedFbMenu;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;

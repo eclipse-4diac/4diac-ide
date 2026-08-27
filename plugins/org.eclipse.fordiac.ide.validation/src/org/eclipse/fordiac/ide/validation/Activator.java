@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Sandor Bacsi
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,12 +10,11 @@
  *
  * Contributors:
  *   Sandor Bacsi - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - manage build-scoped OCL instances
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation;
 
 import org.eclipse.fordiac.ide.ui.Abstract4DIACUIPlugin;
-import org.eclipse.ocl.ecore.EcoreEnvironmentFactory;
-import org.eclipse.ocl.ecore.OCL;
 import org.osgi.framework.BundleContext;
 
 public class Activator extends Abstract4DIACUIPlugin {
@@ -23,13 +23,10 @@ public class Activator extends Abstract4DIACUIPlugin {
 
 	private static Activator plugin;
 
-	private OCL oclInstance;
-
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		setPlugin(this);
-		oclInstance = OCL.newInstance(EcoreEnvironmentFactory.INSTANCE);
 	}
 
 	@Override
@@ -46,7 +43,4 @@ public class Activator extends Abstract4DIACUIPlugin {
 		return plugin;
 	}
 
-	public OCL getOclInstance() {
-		return oclInstance;
-	}
 }

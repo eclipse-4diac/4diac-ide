@@ -17,8 +17,8 @@ import java.util.List;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessage;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.fordiac.ide.util.ErrorMessage;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 

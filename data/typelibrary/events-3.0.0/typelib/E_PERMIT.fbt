@@ -24,7 +24,7 @@
   <BasicFB>
     <ECC>
       <ECState Comment="Initial State" Name="START" x="550.0" y="500.0"/>
-      <ECState Comment="Event propagration permited" Name="EO" x="1500.0" y="500.0">
+      <ECState Comment="Event propagation permitted" Name="EO" x="1500.0" y="500.0">
         <ECAction Output="EO"/>
       </ECState>
       <ECTransition Comment="" Condition="EI[PERMIT]" Destination="EO" Source="START" x="1100.0" y="515.0"/>

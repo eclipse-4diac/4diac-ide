@@ -12,32 +12,28 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation.builder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
-import org.eclipse.fordiac.ide.validation.handlers.OCLParser;
-import org.eclipse.fordiac.ide.validation.handlers.ValidationHelper;
+import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.fordiac.ide.validation.ocl.OCLMarkerManager;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
-import org.eclipse.fordiac.ide.validation.preferences.PreferenceConstants;
-import org.eclipse.ocl.ecore.Constraint;
+import org.eclipse.fordiac.ide.validation.ocl.OCLValidationSession;
 
 public class OCLValidationBuilder extends IncrementalProjectBuilder {
 
@@ -46,56 +42,85 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(final int kind, final Map<String, String> args, final IProgressMonitor monitor)
 			throws CoreException {
-		if (!isOclValidationEnabled()) {
-			getProject().deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
+		if (!FordiacNature.isOCLValidationBuilderEnabled(getProject())) {
+			OCLMarkerManager.deleteMarkers(getProject());
 			return new IProject[0];
 		}
 
 		final SubMonitor progress = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
 		switch (kind) {
-		case FULL_BUILD -> fullBuild(progress);
+		case FULL_BUILD -> {
+			OCLMarkerManager.deleteMarkers(getProject());
+			fullBuild(progress);
+		}
 		case INCREMENTAL_BUILD, AUTO_BUILD -> incrementalBuild(progress);
 		default -> {
 			// nothing to do
 		}
 		}
-		return new IProject[0];
+		return OCLSourceScanner.findReferencedProjects(getProject()).toArray(IProject[]::new);
 	}
 
-	private void fullBuild(final SubMonitor monitor) {
-		final List<Constraint> constraints = OCLParser.loadOCLConstraints(getProject());
-		for (final IFile file : OCLSourceScanner.findValidationTargets(getProject())) {
+	private void fullBuild(final SubMonitor monitor) throws CoreException {
+		final List<IFile> files = OCLSourceScanner.findValidationTargets(getProject());
+		monitor.setWorkRemaining(files.size() * 2 + 1);
+		final List<INamedElement> validationTargets = new ArrayList<>(files.size());
+		for (final IFile file : files) {
 			if (isBuildCanceled(monitor)) {
 				throw new OperationCanceledException();
 			}
-			validateFile(file, constraints, monitor.split(1));
+			final INamedElement validationTarget = loadValidationTarget(file);
+			if (validationTarget != null) {
+				validationTargets.add(validationTarget);
+			}
+			monitor.worked(1);
+		}
+
+		try (OCLValidationSession session = OCLValidationSession.create(getProject(), validationTargets)) {
+			monitor.worked(1);
+			for (final INamedElement validationTarget : validationTargets) {
+				if (isBuildCanceled(monitor)) {
+					throw new OperationCanceledException();
+				}
+				session.validate(validationTarget, monitor.split(1));
+			}
+			OCLMarkerManager.replaceMarkers(getProject(), session.getMarkers());
 		}
 	}
 
 	private void incrementalBuild(final SubMonitor monitor) throws CoreException {
-		final IResourceDelta delta = getDelta(getProject());
-		if (delta == null || needsFullOclBuild(delta)) {
+		final IResourceDelta projectDelta = getDelta(getProject());
+		if (projectDelta == null || needsFullOclBuild(projectDelta)) {
+			deleteAllOwnedMarkersIfNeeded(projectDelta);
 			fullBuild(monitor);
 			return;
 		}
-		final List<Constraint> constraints = OCLParser.loadOCLConstraints(getProject());
-		delta.accept((IResourceDeltaVisitor) resourceDelta -> {
-			if (isBuildCanceled(monitor)) {
-				throw new OperationCanceledException();
+		for (final IProject referencedProject : OCLSourceScanner.findReferencedProjects(getProject())) {
+			final IResourceDelta referencedDelta = getDelta(referencedProject);
+			if (referencedDelta != null && needsFullOclBuild(referencedDelta)) {
+				deleteAllOwnedMarkersIfNeeded(referencedDelta);
+				fullBuild(monitor);
+				return;
 			}
-			if (resourceDelta.getResource() instanceof final IFile file
-					&& resourceDelta.getKind() != IResourceDelta.REMOVED && OCLSourceScanner.isValidationTargetFile(file)) {
-				validateFile(file, constraints, monitor.split(1));
-			}
-			return true;
-		}, IResourceDelta.ADDED | IResourceDelta.CHANGED | IResourceDelta.CONTENT | IResourceDelta.REMOVED);
+		}
+	}
+
+	private void deleteAllOwnedMarkersIfNeeded(final IResourceDelta delta) throws CoreException {
+		if (delta == null || hasProjectStateChanged(delta)) {
+			OCLMarkerManager.deleteMarkers(getProject());
+		}
 	}
 
 	private static boolean needsFullOclBuild(final IResourceDelta delta) throws CoreException {
 		final boolean[] result = { false };
 		delta.accept((IResourceDeltaVisitor) resourceDelta -> {
+			if (hasProjectStateChanged(resourceDelta)) {
+				result[0] = true;
+				return false;
+			}
 			if (resourceDelta.getResource() instanceof final IFile file
-					&& (OCLSourceScanner.isOclFile(file) || BuildpathUtil.BUILDPATH_FILE_NAME.equals(file.getName()))) {
+					&& (OCLSourceScanner.isOclFile(file) || OCLSourceScanner.isValidationTargetFile(file)
+							|| BuildpathUtil.BUILDPATH_FILE_NAME.equals(file.getName()))) {
 				result[0] = true;
 				return false;
 			}
@@ -104,31 +129,30 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 		return result[0];
 	}
 
-	private static void validateFile(final IFile file, final List<Constraint> constraints,
-			final IProgressMonitor monitor) {
+	private static boolean hasProjectStateChanged(final IResourceDelta delta) {
+		return delta.getResource() instanceof IProject
+				&& (delta.getKind() != IResourceDelta.CHANGED
+						|| (delta.getFlags() & (IResourceDelta.DESCRIPTION | IResourceDelta.OPEN)) != 0);
+	}
+
+	private static INamedElement loadValidationTarget(final IFile file) {
 		try {
 			TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (entry == null) {
 				entry = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).createTypeEntry(file);
 			}
 			if (entry != null && entry.getType() instanceof final INamedElement namedElement) {
-				ValidationHelper.validateSync(namedElement, constraints, monitor);
+				return namedElement;
 			}
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
+		return null;
 	}
 
 	@Override
 	protected void clean(final IProgressMonitor monitor) throws CoreException {
-		getProject().deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
-	}
-
-	private boolean isOclValidationEnabled() {
-		final IEclipsePreferences preferences = new ProjectScope(getProject())
-				.getNode(PreferenceConstants.VALIDATION_PREFERENCES_ID);
-		return preferences.getBoolean(PreferenceConstants.ENABLE_OCL_VALIDATION_BUILDER,
-				PreferenceConstants.DEFAULT_ENABLE_OCL_VALIDATION_BUILDER);
+		OCLMarkerManager.deleteMarkers(getProject());
 	}
 
 	private boolean isBuildCanceled(final IProgressMonitor monitor) {

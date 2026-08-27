@@ -57,7 +57,8 @@ public final class Messages extends NLS {
 
 	public static String ConvertToStructHandler_Title;
 
-	public static String ConfigurableMoveFBSection_DataType;
+	public static String ConfigFBInstancePropertySection_DataType;
+	public static String ConfigFBInstancePropertySection_StructType;
 
 	public static String CopyEditPartsAction_Text;
 
@@ -75,6 +76,16 @@ public final class Messages extends NLS {
 	public static String ErrorMarkerFBNEditPart_ErrorMarker;
 
 	public static String ErrorMarkerFBNEditPart_OldType;
+
+	public static String EventSequencePage_ConnectionsColumn;
+
+	public static String EventSequencePage_NameColumn;
+
+	public static String EventSequencePage_RefreshJobName;
+
+	public static String EventSequencePage_SequenceColumn;
+
+	public static String EventSequenceView_DefaultMessage;
 
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
@@ -155,6 +166,22 @@ public final class Messages extends NLS {
 
 	public static String PasteEditPartsAction_Text;
 
+	public static String ReorderEventSequenceCommand_ElementsMultipleConnections;
+
+	public static String ReorderEventSequenceCommand_ElementsNoEvents;
+
+	public static String ReorderEventSequenceCommand_InvalidElements;
+
+	public static String ReorderEventSequenceCommand_NotInSameNetwork;
+
+	public static String ReorderEventSequenceCommand_TargetMultipleInputConnections;
+
+	public static String ReorderEventSequenceCommand_TargetMultipleOutputConnections;
+
+	public static String ReorderEventSequenceCommand_TargetNoInputEvents;
+
+	public static String ReorderEventSequenceCommand_TargetNoOutputEvents;
+
 	public static String SaveAsStructTypeWizard_WindowTitle;
 
 	public static String SaveAsStructTypeWizard_WizardPageName;
@@ -198,16 +225,6 @@ public final class Messages extends NLS {
 	public static String SaveAsWizardPage_SaveAsStructType_WizardPageTitle;
 
 	public static String SearchStringProperties;
-
-	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
-
-	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;
-
-	public static String StructManipulatorSection_MEMBERVAR_COLUMN_TYPE;
-
-	public static String StructManipulatorSection_STRUCTURED_TYPE;
-
-	public static String StructManipulatorSection_Contained_variables;
 
 	public static String ToggleSegments;
 

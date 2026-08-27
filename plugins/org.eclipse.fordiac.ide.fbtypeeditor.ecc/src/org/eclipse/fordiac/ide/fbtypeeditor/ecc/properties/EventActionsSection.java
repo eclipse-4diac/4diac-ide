@@ -22,12 +22,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -47,15 +50,18 @@ public class EventActionsSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, true));
 
 		final Group group = getWidgetFactory().createGroup(parent, Messages.EventActionsSection_EventInputs);
-		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final int style = SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION;
 		eventInputs = new Table(group, style);
 		eventInputs.setLinesVisible(true);
 		eventInputs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
+		eventInputs.setHeaderVisible(false);
 		eventInputs.addListener(SWT.Selection, event -> selectEventInput(eventInputs.getSelectionIndex()));
+
+		final TableColumnLayout tableColumnLayout = new TableColumnLayout();
+		tableColumnLayout.setColumnData(new TableColumn(eventInputs, SWT.NONE), new ColumnWeightData(100));
+		group.setLayout(tableColumnLayout);
+		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		actionGroup = new ActionEditingComposite<>(parent, getWidgetFactory(), this);
 	}

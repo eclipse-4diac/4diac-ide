@@ -26,7 +26,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="RDO" Type="Event" Comment="Read data notifcation">
+			<Event Name="RDO" Type="Event" Comment="Read data notification">
 				<With Var="RD_1"/>
 				<With Var="RD_2"/>
 				<With Var="RD_3"/>

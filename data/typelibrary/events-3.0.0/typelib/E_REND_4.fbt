@@ -16,11 +16,11 @@
 			</Event>
 			<Event Name="EI4" Type="Event" Comment="Fourth event to wait for">
 			</Event>
-			<Event Name="R" Type="Event" Comment="Reset the FB to inital state (i.e., wait again for all events)">
+			<Event Name="R" Type="Event" Comment="Reset the FB to initial state (i.e., wait again for all events)">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="EO" Type="Event" Comment="Triggered when all input events occured at least once">
+			<Event Name="EO" Type="Event" Comment="Triggered when all input events occurred at least once">
 			</Event>
 		</EventOutputs>
 	</InterfaceList>

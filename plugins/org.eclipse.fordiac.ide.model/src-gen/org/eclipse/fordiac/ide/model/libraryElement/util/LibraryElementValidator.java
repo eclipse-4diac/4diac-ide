@@ -22,10 +22,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -111,7 +107,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
@@ -789,8 +784,6 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateMapping((Mapping)value, diagnostics, context);
 			case LibraryElementPackage.MAPPING_TARGET:
 				return validateMappingTarget((MappingTarget)value, diagnostics, context);
-			case LibraryElementPackage.MEMBER_VAR_DECLARATION:
-				return validateMemberVarDeclaration((MemberVarDeclaration)value, diagnostics, context);
 			case LibraryElementPackage.METHOD:
 				return validateMethod((Method)value, diagnostics, context);
 			case LibraryElementPackage.MULTIPLEXER:
@@ -883,12 +876,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateIFile((IFile)value, diagnostics, context);
 			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
 				return validateInterfaceElementStream((Stream<IInterfaceElement>)value, diagnostics, context);
-			case LibraryElementPackage.IPROJECT:
-				return validateIProject((IProject)value, diagnostics, context);
 			case LibraryElementPackage.NAMED_ELEMENT_STREAM:
 				return validateNamedElementStream((Stream<INamedElement>)value, diagnostics, context);
-			case LibraryElementPackage.POINT:
-				return validatePoint((Point)value, diagnostics, context);
 			case LibraryElementPackage.TYPE_ENTRY:
 				return validateTypeEntry((TypeEntry)value, diagnostics, context);
 			case LibraryElementPackage.TYPE_LIBRARY:
@@ -2676,39 +2665,6 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateMemberVarDeclaration(MemberVarDeclaration memberVarDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(memberVarDeclaration, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateITypedElement_validateType(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateIInterfaceElement_validateUnused(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateIllegalVariableLengthArrayVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueOverriddenBySubAppInput(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateDestinationTypeMismatch(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateHiddenPinConnected(memberVarDeclaration, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public boolean validateMethod(Method method, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(method, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(method, diagnostics, context);
@@ -3616,25 +3572,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIProject(IProject iProject, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public boolean validateNamedElementStream(Stream<INamedElement> namedElementStream, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validatePoint(Point point, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

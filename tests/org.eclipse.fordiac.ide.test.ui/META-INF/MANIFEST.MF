@@ -9,6 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-21
 Import-Package: org.eclipse.core.runtime,
  org.eclipse.draw2d.geometry,
  org.eclipse.fordiac.ide.model.eval.variable,
+ org.eclipse.fordiac.ide.util,
  org.eclipse.ui.internal.views.properties.tabbed.view,
  org.eclipse.ui.views.properties.tabbed,
  org.junit.jupiter.api;version="[6.0.0,7.0.0)",

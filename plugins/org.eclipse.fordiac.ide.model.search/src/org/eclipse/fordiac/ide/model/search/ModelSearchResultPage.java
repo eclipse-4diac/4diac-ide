@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -168,7 +169,10 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof final SearchResultTextMatch textMatch) {
-					return textMatch.getElementName();
+					final String elementText = textMatch.getElementText();
+					return (elementText != null && !elementText.isEmpty())
+							? MessageFormat.format("{0} : {1}", textMatch.getElementName(), elementText) //$NON-NLS-1$
+							: textMatch.getElementName();
 				}
 				if (element instanceof final INamedElement ne) {
 					return ne.getName();

@@ -22,7 +22,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.typemanagement,
- org.eclipse.fordiac.ide.util,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.fordiac.ide.model.search
@@ -30,3 +29,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse 4diac
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.subapptypeeditor
+Import-Package: org.eclipse.fordiac.ide.util

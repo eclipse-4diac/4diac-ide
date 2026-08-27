@@ -61,21 +61,6 @@
       <propertyTabs
             contributorId="property.contributor.fb">
          <propertyTab
-               category="Config"
-               id="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-               label="Struct Handling">
-         </propertyTab>
-         <propertyTab
-               category="Config"
-               id="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
-               label="Struct Handling">
-         </propertyTab>
-         <propertyTab
-            category="Config"
-            id="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab"
-            label="Config">
-     	 </propertyTab>
-         <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
                label="Instance">
@@ -145,24 +130,24 @@
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections
             contributorId="property.contributor.fb">
-        <propertySection
-              class="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBSection"
-              filter="org.eclipse.fordiac.ide.application.properties.ConfigurableMoveFBFilter"
-              id="org.eclipse.fordiac.ide.application.properties.ConfigurableFBSection"
-              tab="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab">
-        </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InstancePropertySection"
                filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
          </propertySection>
-               <propertySection
+         <propertySection
+              class="org.eclipse.fordiac.ide.application.properties.ConfigFBInstancePropertySection"
+              filter="org.eclipse.fordiac.ide.application.properties.ConfigFBInstanceSectionFilter"
+              id="org.eclipse.fordiac.ide.fbnet.properties.ConfigFbInterfaceSection"
+              tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
+        </propertySection>
+        <propertySection
             class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
-            id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
-            tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
-      </propertySection>
+            id="org.eclipse.fordiac.ide.fbnet.properties.CommentPropertySection"
+            tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
+        </propertySection>
          <propertySection
             class="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
@@ -189,18 +174,6 @@
                filter="org.eclipse.fordiac.ide.application.properties.CreateConnectionFilter"
                id="org.eclipse.fordiac.ide.fbnet.properties.ConnectionSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab">
-         </propertySection>
-          <propertySection
-         	class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-         	id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
-         	tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
-         	filter="org.eclipse.fordiac.ide.application.properties.DemultiplexerFilter">
-         </propertySection>
-         <propertySection
-         	class="org.eclipse.fordiac.ide.application.properties.MultiplexerSection"
-         	id="org.eclipse.fordiac.ide.application.properties.MultiplexerSection"
-         	tab="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-         	filter="org.eclipse.fordiac.ide.application.properties.MultiplexerFilter">
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
