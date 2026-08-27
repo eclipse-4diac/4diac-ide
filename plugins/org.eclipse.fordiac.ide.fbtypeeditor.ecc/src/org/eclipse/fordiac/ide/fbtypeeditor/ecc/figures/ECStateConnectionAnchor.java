@@ -12,6 +12,7 @@
 *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -26,11 +27,17 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 
 	private final ECState state;
 	private final ECTransition transition;
+	private final boolean sourceEnd;
 
-	public ECStateConnectionAnchor(final ECStateFigure owner, final ECState state, final ECTransition transition) {
+	public ECStateConnectionAnchor(final ECStateFigure owner, final ECState state, final ECTransition transition,
+			final boolean sourceEnd) {
 		super(owner);
 		this.state = state;
 		this.transition = transition;
+		this.sourceEnd = sourceEnd;
+	}
+
+	private record Endpoint(ECTransition transition, boolean sourceEnd) {
 	}
 
 	@Override
@@ -41,9 +48,7 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 	@Override
 	public Point getReferencePoint() {
 		if (transition != null && transition.getPosition() != null) {
-			final Point p = CoordinateConverter.INSTANCE.toScreenPoint(transition.getPosition());
-			getOwner().translateToAbsolute(p);
-			return p;
+			return bendPoint(transition);
 		}
 		final Rectangle bounds = getOwner().getBounds().getCopy();
 		getOwner().translateToAbsolute(bounds);
@@ -57,14 +62,20 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 
 		final Point ref = (reference != null) ? reference : nameBounds.getCenter();
 
-		final EdgeDirection edge = EdgeDirection.of(ref, nameBounds, state);
-
-		return applySpacing(nameBounds, edge, nameBounds);
+		return applySpacing(nameBounds, edgeOf(transition, sourceEnd, ref, nameBounds));
 	}
 
-	private Point applySpacing(final Rectangle bounds, final EdgeDirection edge, final Rectangle nameBounds) {
-		final List<ECTransition> ordered = getTransitionsOnEdge(edge, nameBounds);
-		final int index = indexOf(ordered, transition);
+	private EdgeDirection edgeOf(final ECTransition ecTransition, final boolean isSourceEnd, final Point reference,
+			final Rectangle nameBounds) {
+		if (isSelfTransition(ecTransition) && ecTransition.getPosition() != null) {
+			return EdgeDirection.selfLoopEdge(bendPoint(ecTransition), nameBounds, isSourceEnd);
+		}
+		return EdgeDirection.of(reference, nameBounds, state);
+	}
+
+	private Point applySpacing(final Rectangle bounds, final EdgeDirection edge) {
+		final List<Endpoint> ordered = endpointsOnEdge(edge, bounds);
+		final int index = Math.max(0, ordered.indexOf(new Endpoint(transition, sourceEnd)));
 		final int count = Math.max(1, ordered.size());
 
 		return switch (edge) {
@@ -87,39 +98,34 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 		};
 	}
 
-	private List<ECTransition> getTransitionsOnEdge(final EdgeDirection edge, final Rectangle nameBounds) {
+	private List<Endpoint> endpointsOnEdge(final EdgeDirection edge, final Rectangle nameBounds) {
 		if (state == null) {
 			return List.of();
 		}
 
-		return Stream.concat(state.getOutTransitions().stream(), state.getInTransitions().stream())
-				.filter(t -> t.getPosition() != null).filter(t -> {
-					final Point p = CoordinateConverter.INSTANCE.toScreenPoint(t.getPosition());
-
-					getOwner().translateToAbsolute(p);
-
-					return EdgeDirection.of(p, nameBounds, state) == edge;
-				}).sorted((t1, t2) -> {
-					final Point p1 = CoordinateConverter.INSTANCE.toScreenPoint(t1.getPosition());
-					getOwner().translateToAbsolute(p1);
-
-					final Point p2 = CoordinateConverter.INSTANCE.toScreenPoint(t2.getPosition());
-					getOwner().translateToAbsolute(p2);
-
-					return (edge == EdgeDirection.TOP || edge == EdgeDirection.BOTTOM) ? Integer.compare(p1.x, p2.x)
-							: Integer.compare(p1.y, p2.y);
-				}).toList();
+		return Stream
+				.concat(state.getOutTransitions().stream().map(t -> new Endpoint(t, true)),
+						state.getInTransitions().stream().map(t -> new Endpoint(t, false)))
+				.filter(e -> e.transition().getPosition() != null)
+				.filter(e -> edgeOf(e.transition(), e.sourceEnd(), bendPoint(e.transition()), nameBounds) == edge)
+				.sorted(comparator(edge)).toList();
 	}
 
-	private static int indexOf(final List<ECTransition> list, final ECTransition t) {
-		if (t == null) {
-			return 0;
-		}
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i) == t) {
-				return i;
-			}
-		}
-		return 0;
+	private Comparator<Endpoint> comparator(final EdgeDirection edge) {
+		final boolean horizontal = (edge == EdgeDirection.TOP) || (edge == EdgeDirection.BOTTOM);
+		return Comparator
+				.<Endpoint>comparingInt(e -> horizontal ? bendPoint(e.transition()).x : bendPoint(e.transition()).y)
+				.thenComparing(Endpoint::sourceEnd);
+	}
+
+	private static boolean isSelfTransition(final ECTransition ecTransition) {
+		return ecTransition != null && ecTransition.getSource() != null
+				&& ecTransition.getSource() == ecTransition.getDestination();
+	}
+
+	private Point bendPoint(final ECTransition ecTransition) {
+		final Point p = CoordinateConverter.INSTANCE.toScreenPoint(ecTransition.getPosition());
+		getOwner().translateToAbsolute(p);
+		return p;
 	}
 }

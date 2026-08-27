@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateSelectionPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionNodeEditPolicy;
-import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -179,28 +178,22 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
-		if ((connection.getTarget() != null) && connection.getTarget().equals(connection.getSource())) {
-			return new FixedAnchor(getFigure().getNameLabel(), false);
-		}
-		return new ECStateConnectionAnchor(getFigure(), getModel(), (ECTransition) connection.getModel());
+		return new ECStateConnectionAnchor(getFigure(), getModel(), (ECTransition) connection.getModel(), true);
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return new ECStateConnectionAnchor(getFigure(), getModel(), null);
+		return new ECStateConnectionAnchor(getFigure(), getModel(), null, true);
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		if ((connection.getSource() != null) && connection.getSource().equals(connection.getTarget())) {
-			return new FixedAnchor(getFigure().getNameLabel(), true);
-		}
-		return new ECStateConnectionAnchor(getFigure(), getModel(), (ECTransition) connection.getModel());
+		return new ECStateConnectionAnchor(getFigure(), getModel(), (ECTransition) connection.getModel(), false);
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
-		return new ECStateConnectionAnchor(getFigure(), getModel(), null);
+		return new ECStateConnectionAnchor(getFigure(), getModel(), null, false);
 	}
 
 	@Override
