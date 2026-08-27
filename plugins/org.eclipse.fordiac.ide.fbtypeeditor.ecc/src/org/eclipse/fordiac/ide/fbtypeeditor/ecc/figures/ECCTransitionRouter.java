@@ -31,6 +31,7 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 	private static final double MIN_LENGTH = 1.0;
 	private static final double EPSILON = 0.001;
 	private static final double MAX_HANDLE_DISTANCE = 150.0;
+	private static final double SELF_LOOP_ARC_FACTOR = 1.1;
 
 	@Override
 	public void route(final Connection conn) {
@@ -58,6 +59,11 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 		conn.translateToRelative(p4);
 		conn.translateToRelative(p7);
 
+		conn.setPoints(isSelfLoop(conn) ? routeSelfLoop(conn, p1, p4, p7) : routeTransition(conn, p1, p4, p7));
+	}
+
+	private static PointList routeTransition(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7) {
 		final Vector seg1 = new Vector(p1, p4);
 		final Vector seg2 = new Vector(p4, p7);
 
@@ -84,7 +90,37 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 		points.addPoint(toPoint(p6));
 		points.addPoint(toPoint(p7));
 
-		conn.setPoints(points);
+		return points;
+	}
+
+	private static PointList routeSelfLoop(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7) {
+		final double reach = Math.max(MIN_LENGTH,
+				Math.max(new Vector(p1, p4).getLength(), new Vector(p7, p4).getLength()));
+		final double handle = Math.min(SELF_LOOP_ARC_FACTOR * reach, MAX_HANDLE_DISTANCE);
+
+		final Vector axis = getNormalized(new Vector(p1, p7));
+
+		final PrecisionPoint p2 = calcOrthogonalControlPoint(p1, conn.getSourceAnchor().getOwner(), handle, conn);
+		final PrecisionPoint p6 = calcOrthogonalControlPoint(p7, conn.getTargetAnchor().getOwner(), handle, conn);
+
+		final PrecisionPoint p3 = translate(p4, axis, -handle);
+		final PrecisionPoint p5 = translate(p4, axis, handle);
+
+		final PointList points = new PointList(7);
+		points.addPoint(toPoint(p1));
+		points.addPoint(toPoint(p2));
+		points.addPoint(toPoint(p3));
+		points.addPoint(toPoint(p4));
+		points.addPoint(toPoint(p5));
+		points.addPoint(toPoint(p6));
+		points.addPoint(toPoint(p7));
+
+		return points;
+	}
+
+	private static boolean isSelfLoop(final Connection conn) {
+		return conn.getSourceAnchor().getOwner() == conn.getTargetAnchor().getOwner();
 	}
 
 	private static PrecisionPoint calcOrthogonalControlPoint(final PrecisionPoint anchor, final IFigure owner,
