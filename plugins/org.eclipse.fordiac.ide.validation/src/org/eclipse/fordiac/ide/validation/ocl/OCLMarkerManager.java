@@ -21,11 +21,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
+import org.eclipse.fordiac.ide.validation.handlers.ValidationMarkerConstants;
 
 public final class OCLMarkerManager {
 
-	public static final String OWNER_PROJECT = IValidationMarker.TYPE + ".ownerProject"; //$NON-NLS-1$
+	public static final String OWNER_PROJECT = ValidationMarkerConstants.TYPE + ".ownerProject"; //$NON-NLS-1$
 
 	public static void replaceMarkers(final IProject owner, final List<OCLMarker> markers) throws CoreException {
 		deleteMarkers(owner, getMarkerProjects(owner));
@@ -48,7 +48,7 @@ public final class OCLMarkerManager {
 			throws CoreException {
 		final String ownerId = getOwnerId(owner);
 		for (final IResource markerRoot : markerRoots) {
-			for (final IMarker marker : markerRoot.findMarkers(IValidationMarker.TYPE, true,
+			for (final IMarker marker : markerRoot.findMarkers(ValidationMarkerConstants.TYPE, true,
 					IResource.DEPTH_INFINITE)) {
 				final String markerOwner = marker.getAttribute(OWNER_PROJECT, null);
 				if (ownerId.equals(markerOwner)

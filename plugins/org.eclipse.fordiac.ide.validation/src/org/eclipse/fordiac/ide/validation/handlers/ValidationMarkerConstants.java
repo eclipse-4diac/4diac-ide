@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Sandor Bacsi
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020 Sandor Bacsi, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,9 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation.handlers;
 
-import org.eclipse.fordiac.ide.validation.Activator;
+public final class ValidationMarkerConstants {
+	public static final String VALIDATION_PLUGIN_ID = "org.eclipse.fordiac.ide.validation"; //$NON-NLS-1$
 
-public interface IValidationMarker {
-	String LEGACY_TYPE = Activator.PLUGIN_ID + ".ValidationMarker"; //$NON-NLS-1$
-	String TYPE = Activator.PLUGIN_ID + ".OCLMarker"; //$NON-NLS-1$
+	public static final String LEGACY_TYPE = VALIDATION_PLUGIN_ID + ".ValidationMarker"; //$NON-NLS-1$
+
+	public static final String TYPE = VALIDATION_PLUGIN_ID + ".OCLMarker"; //$NON-NLS-1$
+
+	private ValidationMarkerConstants() {
+		throw new UnsupportedOperationException("Helper class should not be instantiated"); //$NON-NLS-1$
+	}
+
 }

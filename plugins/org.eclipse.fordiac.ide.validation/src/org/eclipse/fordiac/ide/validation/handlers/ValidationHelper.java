@@ -83,7 +83,7 @@ public final class ValidationHelper {
 		final EObject markerTarget = diagnostic.markerTarget();
 		final IResource targetResource = ModelHelper.getFileFromContext(markerTarget);
 		final ErrorMarkerBuilder builder = ErrorMarkerBuilder.createErrorMarkerBuilder(diagnostic.message())
-				.setType(IValidationMarker.TYPE).setSeverity(diagnostic.severity())
+				.setType(ValidationMarkerConstants.TYPE).setSeverity(diagnostic.severity())
 				.setLocation(createHierarchicalName(markerTarget)).setTarget(markerTarget);
 		return new OCLMarker(targetResource != null ? targetResource : defaultResource, builder);
 	}
