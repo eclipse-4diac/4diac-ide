@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Runtime
 Bundle-SymbolicName: org.eclipse.fordiac.ide.runtime;singleton:=true
-Bundle-Version: 3.1.200.qualifier
+Bundle-Version: 3.1.300.qualifier
 Bundle-Vendor: Eclipse 4diac
 Export-Package: org.eclipse.fordiac.ide.runtime
 Require-Bundle: org.eclipse.ui,

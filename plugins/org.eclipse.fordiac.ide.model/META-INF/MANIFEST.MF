@@ -43,7 +43,7 @@ Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.model.ModelPlugin
 Bundle-ClassPath: .
-Bundle-Version: 3.3.0.qualifier
+Bundle-Version: 3.3.100.qualifier
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-ManifestVersion: 2

@@ -49,7 +49,7 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.xtext.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.3.0.qualifier
+Bundle-Version: 3.3.100.qualifier
 Bundle-Name: Graphical Utilites
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
