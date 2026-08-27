@@ -28,7 +28,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
+import org.eclipse.fordiac.ide.validation.handlers.ValidationMarkerConstants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,8 +65,9 @@ class OCLMarkerManagerTest {
 		OCLMarkerManager.replaceMarkers(firstProject, List.of(createMarker("first"))); //$NON-NLS-1$
 		OCLMarkerManager.replaceMarkers(secondProject, List.of(createMarker("second"))); //$NON-NLS-1$
 
-		assertEquals(Set.of(firstProject.getFullPath().toPortableString(),
-				secondProject.getFullPath().toPortableString()), getMarkerOwners());
+		assertEquals(
+				Set.of(firstProject.getFullPath().toPortableString(), secondProject.getFullPath().toPortableString()),
+				getMarkerOwners());
 
 		OCLMarkerManager.replaceMarkers(firstProject, List.of());
 
@@ -91,11 +92,11 @@ class OCLMarkerManagerTest {
 
 	private OCLMarker createMarker(final String message) {
 		return new OCLMarker(sharedFile,
-				ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE));
+				ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(ValidationMarkerConstants.TYPE));
 	}
 
 	private Set<String> getMarkerOwners() throws CoreException {
-		return Arrays.stream(sharedFile.findMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_ZERO))
+		return Arrays.stream(sharedFile.findMarkers(ValidationMarkerConstants.TYPE, true, IResource.DEPTH_ZERO))
 				.map(marker -> marker.getAttribute(OCLMarkerManager.OWNER_PROJECT, null)).collect(Collectors.toSet());
 	}
 

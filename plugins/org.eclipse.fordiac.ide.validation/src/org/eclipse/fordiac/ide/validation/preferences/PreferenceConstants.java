@@ -12,11 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.validation.preferences;
 
-import org.eclipse.fordiac.ide.validation.Activator;
-
 public final class PreferenceConstants {
 
-	public static final String VALIDATION_PREFERENCES_ID = Activator.PLUGIN_ID;
+	public static final String VALIDATION_PREFERENCES_ID = "org.eclipse.fordiac.ide.validation"; //$NON-NLS-1$
 
 	public static final String ENABLE_OCL_VALIDATION_BUILDER = "ENABLE_OCL_VALIDATION_BUILDER"; //$NON-NLS-1$
 
