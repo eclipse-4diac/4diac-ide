@@ -30,7 +30,7 @@ Import-Package: org.eclipse.fordiac.ide.util,
  org.osgi.service.event
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.3.0.qualifier
+Bundle-Version: 3.3.100.qualifier
 Bundle-Name: Common UI Controls
 Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
 Bundle-ManifestVersion: 2

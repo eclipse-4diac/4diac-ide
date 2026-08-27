@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor.ide
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.globalconstantseditor.ide
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 3.1.200.qualifier
+Bundle-Version: 3.1.300.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor.ide; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,

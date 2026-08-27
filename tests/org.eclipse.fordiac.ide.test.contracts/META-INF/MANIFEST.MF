@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Contracts Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.contracts
-Bundle-Version: 3.1.200.qualifier
+Bundle-Version: 3.1.300.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.contracts
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.contracts
 Bundle-RequiredExecutionEnvironment: JavaSE-21
