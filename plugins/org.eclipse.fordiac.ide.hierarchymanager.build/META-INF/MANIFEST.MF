@@ -16,5 +16,5 @@ Bundle-Vendor: Eclipse 4diac Project
 Automatic-Module-Name: org.eclipse.fordiac.ide.hierarchymanager.build
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.hierarchymanager.build.HierarchyBuildPlugin
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Import-Package: org.apache.log4j;version="[1.2.0,2.0.0)"

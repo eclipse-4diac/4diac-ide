@@ -9,6 +9,6 @@ Bundle-Version: 3.1.300.qualifier
 Bundle-Name: Compare exported FBs
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.compare;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.compare
 Import-Package: org.eclipse.fordiac.ide.util

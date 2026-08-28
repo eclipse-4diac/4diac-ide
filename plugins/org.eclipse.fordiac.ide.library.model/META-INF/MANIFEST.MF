@@ -7,7 +7,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-Version: 3.3.100.qualifier
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.library.model.library,
  org.eclipse.fordiac.ide.library.model.library.impl;x-internal:=true,
  org.eclipse.fordiac.ide.library.model.library.util,

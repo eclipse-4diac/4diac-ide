@@ -4,5 +4,5 @@ Bundle-Name: Images
 Bundle-SymbolicName: org.eclipse.fordiac.ide.images
 Bundle-Version: 3.2.200.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-Vendor: Eclipse 4diac

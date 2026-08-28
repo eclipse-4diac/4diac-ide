@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.test.ui
 Bundle-Version: 3.1.300.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Import-Package: org.eclipse.core.runtime,
  org.eclipse.draw2d.geometry,
  org.eclipse.fordiac.ide.model.eval.variable,

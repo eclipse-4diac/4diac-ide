@@ -16,7 +16,7 @@ Bundle-Version: 3.1.300.qualifier
 Bundle-Name: FMU exporter
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fmu;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Import-Package: org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.util
 Automatic-Module-Name: org.eclipse.fordiac.ide.fmu

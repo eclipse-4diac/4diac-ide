@@ -6,7 +6,7 @@ Bundle-Version: 3.3.100.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.debug.replaydebugging.ui
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Require-Bundle: 
  org.eclipse.core.runtime,
  org.eclipse.debug.core,

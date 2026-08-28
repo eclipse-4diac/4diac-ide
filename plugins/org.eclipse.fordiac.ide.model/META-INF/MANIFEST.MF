@@ -49,4 +49,4 @@ Bundle-Name: %pluginName
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.model
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25

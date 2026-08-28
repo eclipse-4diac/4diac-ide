@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.typemanagement.tests
 Bundle-Version: 3.1.200.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.typemanagement.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
  org.junit.jupiter.api.condition;version="[6.0.0,7.0.0)",
  org.opentest4j

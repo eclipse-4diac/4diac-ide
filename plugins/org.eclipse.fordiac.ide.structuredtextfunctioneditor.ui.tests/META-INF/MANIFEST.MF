@@ -22,5 +22,5 @@ Require-Bundle: org.eclipse.xtext.testing,
  org.eclipse.fordiac.ide.test.model,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.tests;x-internal=true

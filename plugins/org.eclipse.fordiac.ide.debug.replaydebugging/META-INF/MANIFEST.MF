@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.debug.replaydebugging;singleton:=tr
 Bundle-Version: 3.3.100.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.debug.replaydebugging
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.debug.replaydebugging,
  org.eclipse.fordiac.ide.debug.replaydebugging.core,
  org.eclipse.fordiac.ide.debug.replaydebugging.response,

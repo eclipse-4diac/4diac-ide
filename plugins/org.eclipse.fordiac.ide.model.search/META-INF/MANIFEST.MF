@@ -8,7 +8,7 @@ Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.search
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.model.search.plugin.SearchPlugin
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.model.search,
  org.eclipse.fordiac.ide.model.search.dialog,
  org.eclipse.fordiac.ide.model.search.types

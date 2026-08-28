@@ -40,7 +40,7 @@ The development workflow, pull request process, commit guidelines, and testing e
 
 To build and develop the 4diac IDE you need:
 
-- Java 21 or newer
+- Java 25 or newer
 - Eclipse IDE (Eclipse IDE for Java and DSL Developers edition recommended)
 
 Additional Eclipse plugins (should be included in the Eclipse IDE for Java and DSL Developers):

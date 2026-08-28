@@ -12,7 +12,7 @@ Bundle-Version: 3.1.300.qualifier
 Bundle-Name: Forte Launcher
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fortelauncher;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: org.eclipse.fordiac.ide.fortelauncher
 Import-Package: org.eclipse.fordiac.ide.debug,
  org.eclipse.fordiac.ide.util

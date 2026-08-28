@@ -4,7 +4,7 @@ Bundle-Name: Library Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.library;singleton:=true
 Bundle-Version: 3.3.100.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.library
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-Vendor: Eclipse 4diac
 Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
  org.junit.jupiter.api.function;version="[6.0.0,7.0.0)",
