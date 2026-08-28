@@ -6,7 +6,7 @@ Bundle-Version: 3.3.100.qualifier
 Export-Package: org.eclipse.fordiac.ide.typeeditor
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.typeeditor
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.inject,
  org.eclipse.core.commands.common,

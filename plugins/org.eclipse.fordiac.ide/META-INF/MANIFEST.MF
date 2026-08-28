@@ -12,7 +12,7 @@ Bundle-Name: %Bundle-Name
 Bundle-Activator: org.eclipse.fordiac.ide.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: org.eclipse.fordiac.ide
 Bundle-Localization: plugin
 Import-Package: org.eclipse.fordiac.ide.util

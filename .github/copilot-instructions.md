@@ -8,7 +8,7 @@ It follows the **Eclipse Foundation development process** and is licensed under 
 
 **Default Branch:** `develop`  
 **Build Tool:** Maven  
-**Key Technologies:** Java 21+, Eclipse IDE, Eclipse GEF Classic, Xtext
+**Key Technologies:** Java 25+, Eclipse IDE, Eclipse GEF Classic, Xtext
 
 ## Coding Guidelines
 

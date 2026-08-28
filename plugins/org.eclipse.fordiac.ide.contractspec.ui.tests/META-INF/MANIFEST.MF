@@ -15,5 +15,5 @@ Require-Bundle: org.eclipse.fordiac.ide.contractspec.ui,
  org.eclipse.ui.workbench;resolution:=optional
 Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
  org.junit.jupiter.api.extension;version="[6.0.0,7.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.ui.tests;x-internal=true

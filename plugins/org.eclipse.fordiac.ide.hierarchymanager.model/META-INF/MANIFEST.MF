@@ -7,7 +7,7 @@ Bundle-Version: 3.2.100.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.hierarchymanager.model,
  org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy,
  org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.impl;x-internal:=true,

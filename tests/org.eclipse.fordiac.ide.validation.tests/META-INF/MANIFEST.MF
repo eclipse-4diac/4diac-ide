@@ -4,7 +4,7 @@ Bundle-Name: Validation Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.validation.tests;singleton:=true
 Bundle-Version: 3.1.300.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.validation.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-Vendor: Eclipse 4diac
 Fragment-Host: org.eclipse.fordiac.ide.validation
 Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)"

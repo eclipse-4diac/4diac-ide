@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.asciidoc;singleton:=tr
 Bundle-Localization: fbtasciidoc
 Bundle-Version: 3.1.100.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.ftypeeditor.asciidoc
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ui.workbench,

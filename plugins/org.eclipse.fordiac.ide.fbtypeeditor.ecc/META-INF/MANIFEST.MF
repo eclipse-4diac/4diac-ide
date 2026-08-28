@@ -26,7 +26,7 @@ Bundle-Version: 3.3.100.qualifier
 Bundle-Name: ECC Editor
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.ecc;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc;x-internal:=true,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;x-internal:=true,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;x-internal:=true,

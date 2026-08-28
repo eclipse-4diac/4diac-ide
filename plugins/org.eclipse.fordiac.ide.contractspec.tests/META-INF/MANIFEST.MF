@@ -12,5 +12,5 @@ Require-Bundle: org.eclipse.fordiac.ide.contractspec,
  org.eclipse.xtext.xbase.lib;bundle-version="2.42.0"
 Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
  org.junit.jupiter.api.extension;version="[6.0.0,7.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Export-Package: org.eclipse.fordiac.ide.tests;x-internal=true
