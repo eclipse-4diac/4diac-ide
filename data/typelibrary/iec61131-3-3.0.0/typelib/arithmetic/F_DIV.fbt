@@ -20,8 +20,8 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="First function input" Name="IN1" Type="ANY_NUM"/>
-      <VarDeclaration Comment="Second function input" Name="IN2" Type="ANY_NUM"/>
+      <VarDeclaration Comment="dividend" Name="IN1" Type="ANY_NUM"/>
+      <VarDeclaration Comment="divisor" Name="IN2" Type="ANY_NUM"/>
     </InputVars>
     <OutputVars>
       <VarDeclaration Comment="Function output" Name="OUT" Type="ANY_NUM"/>

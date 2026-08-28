@@ -20,8 +20,8 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="First function input" Name="IN1" Type="ANY_MAGNITUDE"/>
-      <VarDeclaration Comment="Second function input" Name="IN2" Type="ANY_MAGNITUDE"/>
+      <VarDeclaration Comment="first summand" Name="IN1" Type="ANY_MAGNITUDE"/>
+      <VarDeclaration Comment="second summand" Name="IN2" Type="ANY_MAGNITUDE"/>
     </InputVars>
     <OutputVars>
       <VarDeclaration Comment="IN1 plus IN2" Name="OUT" Type="ANY_MAGNITUDE"/>
