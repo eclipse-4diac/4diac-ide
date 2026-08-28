@@ -33,7 +33,7 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>5.0.3</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
+		<tycho.version>5.0.4</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
 		<tycho-repo.url>https://download.eclipse.org/releases/2026-09</tycho-repo.url>
 		<sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
@@ -41,12 +41,15 @@
 		<sonar.java.source>21</sonar.java.source>
 		<sonar.java.binaries>${project.build.outputDirectory}</sonar.java.binaries>
 		<sonar.organization>eclipse</sonar.organization>
-		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.3</org.eclipse.justj.jre.repository>
-        <xtend-version>2.43.0</xtend-version>
-        <xtend-java-version>21</xtend-java-version>
-        <eclipse.cbi.version>1.5.4</eclipse.cbi.version>
-        <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
-        <maven-resources-plugin-version>3.5.0</maven-resources-plugin-version>
+		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.4</org.eclipse.justj.jre.repository>
+		<xtend-version>2.44.0</xtend-version>
+		<xtend-maven-plugin.version>2.44.0</xtend-maven-plugin.version>
+		<xtend-java-version>21</xtend-java-version>
+		<eclipse.cbi.version>1.5.4</eclipse.cbi.version>
+		<build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+		<maven-resources-plugin-version>3.5.0</maven-resources-plugin-version>
+		<maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
+		<maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
 	</properties>
 
 	<repositories>
@@ -90,7 +93,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>${maven-clean-plugin.version}</version>
 				<configuration>
 					<filesets>
 						<fileset>
@@ -108,7 +111,7 @@
 			<plugin>
 				<groupId>org.eclipse.xtext</groupId>
 				<artifactId>xtend-maven-plugin</artifactId>
-				<version>${xtend-version}</version>
+				<version>${xtend-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -195,7 +198,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>${maven-checkstyle-plugin.version}</version>
 				<configuration>
 					<logViolationsToConsole>true</logViolationsToConsole>
 					<consoleOutput>true</consoleOutput>
