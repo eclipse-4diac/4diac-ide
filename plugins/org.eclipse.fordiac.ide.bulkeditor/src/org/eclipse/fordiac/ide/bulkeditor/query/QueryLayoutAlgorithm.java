@@ -32,6 +32,9 @@ public class QueryLayoutAlgorithm {
 	private Map<EObject, GraphNode> nodeMap;
 	private final Map<EObject, double[]> subtreeSizes = new HashMap<>();
 
+	private record SubConstraints(List<EObject> and, List<EObject> or) {
+	}
+
 	public QueryLayoutAlgorithm() {
 		this(60, 25, 60, 25);
 	}
@@ -84,52 +87,82 @@ public class QueryLayoutAlgorithm {
 		final double[] nodeSize = getNodeSize(eObj);
 		final List<EObject> children = getContainedChildren(eObj);
 
-		if (children.isEmpty()) {
-			final double[] size = { nodeSize[0], nodeSize[1] };
-			subtreeSizes.put(eObj, size);
-			return size;
-		}
-
-		final List<double[]> childSizes = new ArrayList<>();
 		for (final EObject child : children) {
-			childSizes.add(computeSize(child));
+			computeSize(child);
 		}
 
-		final double totalWidth;
-		final double totalHeight;
-
-		if (QueryModelHelper.isOfType(eObj, QueryModelHelper.PLACE)) {
-			double childrenWidth = 0;
-			double childrenMaxHeight = 0;
-			for (int i = 0; i < childSizes.size(); i++) {
-				if (i > 0) {
-					childrenWidth += hGap;
-				}
-				childrenWidth += childSizes.get(i)[0];
-				childrenMaxHeight = Math.max(childrenMaxHeight, childSizes.get(i)[1]);
-			}
-			final double indent = nodeSize[0] / 2.0;
-			totalWidth = Math.max(nodeSize[0], indent + childrenWidth);
-			totalHeight = nodeSize[1] + vGap + childrenMaxHeight;
+		final double[] size;
+		if (children.isEmpty()) {
+			size = new double[] { nodeSize[0], nodeSize[1] };
+		} else if (QueryModelHelper.isOfType(eObj, QueryModelHelper.PLACE)) {
+			size = computeHorizontalSize(nodeSize, children);
+		} else if (QueryModelHelper.isConstraint(eObj)) {
+			size = computeConstraintSize(nodeSize, children);
 		} else {
-			double childrenHeight = 0;
-			double childrenMaxWidth = 0;
-			for (int i = 0; i < childSizes.size(); i++) {
-				if (i > 0) {
-					childrenHeight += vGap;
-				}
-				childrenHeight += childSizes.get(i)[1];
-				childrenMaxWidth = Math.max(childrenMaxWidth, childSizes.get(i)[0]);
-			}
-			final double indent = nodeSize[0] / 2.0 + childIndent;
-			totalWidth = Math.max(nodeSize[0], indent + childrenMaxWidth);
-			totalHeight = nodeSize[1] + vGap + childrenHeight;
+			size = computeVerticalSize(nodeSize, children);
 		}
-
-		final double[] size = { totalWidth, totalHeight };
 		subtreeSizes.put(eObj, size);
 		return size;
 	}
+
+	private double[] computeHorizontalSize(final double[] nodeSize, final List<EObject> children) {
+		double childrenWidth = 0;
+		double childrenMaxHeight = 0;
+		for (int i = 0; i < children.size(); i++) {
+			final double[] childSize = subtreeSizes.get(children.get(i));
+			if (i > 0) {
+				childrenWidth += hGap;
+			}
+			childrenWidth += childSize[0];
+			childrenMaxHeight = Math.max(childrenMaxHeight, childSize[1]);
+		}
+		final double indent = nodeSize[0] / 2.0;
+		return new double[] { Math.max(nodeSize[0], indent + childrenWidth), nodeSize[1] + vGap + childrenMaxHeight };
+	}
+
+	private double[] computeVerticalSize(final double[] nodeSize, final List<EObject> children) {
+		double childrenHeight = 0;
+		double childrenMaxWidth = 0;
+		for (int i = 0; i < children.size(); i++) {
+			final double[] childSize = subtreeSizes.get(children.get(i));
+			if (i > 0) {
+				childrenHeight += vGap;
+			}
+			childrenHeight += childSize[1];
+			childrenMaxWidth = Math.max(childrenMaxWidth, childSize[0]);
+		}
+		final double indent = nodeSize[0] / 2.0 + childIndent;
+		return new double[] { Math.max(nodeSize[0], indent + childrenMaxWidth), nodeSize[1] + vGap + childrenHeight };
+	}
+
+	private double[] computeConstraintSize(final double[] nodeSize, final List<EObject> children) {
+		final SubConstraints subs = partitionSubConstraints(children);
+
+		double rowWidth = nodeSize[0];
+		double rowHeight = nodeSize[1];
+		for (final EObject and : subs.and()) {
+			final double[] childSize = subtreeSizes.get(and);
+			rowWidth += hGap + childSize[0];
+			rowHeight = Math.max(rowHeight, childSize[1]);
+		}
+
+		double orHeight = 0;
+		double orMaxWidth = 0;
+		for (int i = 0; i < subs.or().size(); i++) {
+			final double[] childSize = subtreeSizes.get(subs.or().get(i));
+			if (i > 0) {
+				orHeight += vGap;
+			}
+			orHeight += childSize[1];
+			orMaxWidth = Math.max(orMaxWidth, childSize[0]);
+		}
+
+		final double orIndent = nodeSize[0] / 2.0 + childIndent;
+		final double width = Math.max(rowWidth, subs.or().isEmpty() ? 0 : orIndent + orMaxWidth);
+		final double height = rowHeight + (subs.or().isEmpty() ? 0 : vGap + orHeight);
+		return new double[] { width, height };
+	}
+
 
 	private void position(final EObject eObj, final double x, final double y) {
 		final GraphNode node = nodeMap.get(eObj);
@@ -144,44 +177,66 @@ public class QueryLayoutAlgorithm {
 		if (children.isEmpty()) {
 			return;
 		}
-		final double childStartX = x + nodeSize[0] / 2.0 + childIndent;
-		final double childStartY = y + nodeSize[1] + vGap;
 
 		if (QueryModelHelper.isOfType(eObj, QueryModelHelper.PLACE)) {
-			// horizontal layout of nodes (For children of Place)
-			double cx = childStartX;
-			for (final EObject child : children) {
-				position(child, cx, childStartY);
-				final double[] childSize = subtreeSizes.get(child);
-				cx += childSize[0] + hGap;
-			}
+			positionHorizontal(children, x + nodeSize[0] / 2.0 + childIndent, y + nodeSize[1] + vGap);
+		} else if (QueryModelHelper.isConstraint(eObj)) {
+			positionConstraintChildren(children, x, y, nodeSize);
 		} else {
-			double cy = childStartY;
-			for (final EObject child : children) {
-				position(child, childStartX, cy);
-				final double[] childSize = subtreeSizes.get(child);
-				cy += childSize[1] + vGap;
-			}
+			positionVertical(children, x + nodeSize[0] / 2.0 + childIndent, y + nodeSize[1] + vGap);
 		}
 	}
 
-	private List<EObject> getContainedChildren(final EObject eObj) {
-		final List<EObject> children = new ArrayList<>();
-		for (final EReference ref : eObj.eClass().getEAllContainments()) {
-			final Object val = eObj.eGet(ref);
-			if (val instanceof final EObject child) {
-				if (nodeMap.containsKey(child)) {
-					children.add(child);
-				}
-			} else if (val instanceof final List<?> list) {
-				for (final Object c : list) {
-					if (c instanceof final EObject child && nodeMap.containsKey(child)) {
-						children.add(child);
-					}
-				}
+	private void positionHorizontal(final List<EObject> children, final double startX, final double startY) {
+		double cx = startX;
+		for (final EObject child : children) {
+			position(child, cx, startY);
+			cx += subtreeSizes.get(child)[0] + hGap;
+		}
+	}
+
+	private void positionVertical(final List<EObject> children, final double startX, final double startY) {
+		double cy = startY;
+		for (final EObject child : children) {
+			position(child, startX, cy);
+			cy += subtreeSizes.get(child)[1] + vGap;
+		}
+	}
+
+	private void positionConstraintChildren(final List<EObject> children, final double x, final double y,
+			final double[] nodeSize) {
+		final SubConstraints subs = partitionSubConstraints(children);
+
+		// and-chain
+		double cx = x + nodeSize[0] + hGap;
+		double rowHeight = nodeSize[1];
+		for (final EObject and : subs.and()) {
+			position(and, cx, y);
+			final double[] childSize = subtreeSizes.get(and);
+			cx += childSize[0] + hGap;
+			rowHeight = Math.max(rowHeight, childSize[1]);
+		}
+
+		// or-stack
+		positionVertical(subs.or(), x, y + rowHeight + vGap);
+	}
+
+	private static SubConstraints partitionSubConstraints(final List<EObject> children) {
+		final List<EObject> and = new ArrayList<>();
+		final List<EObject> or = new ArrayList<>();
+		for (final EObject child : children) {
+			final EReference containment = child.eContainmentFeature();
+			if (containment != null && QueryModelHelper.REF_AND_CONSTRAINTS.equals(containment.getName())) {
+				and.add(child);
+			} else {
+				or.add(child);
 			}
 		}
-		return children;
+		return new SubConstraints(and, or);
+	}
+
+	private List<EObject> getContainedChildren(final EObject eObj) {
+		return QueryModelHelper.getChildNodes(eObj).stream().filter(nodeMap::containsKey).toList();
 	}
 
 	private double[] getNodeSize(final EObject eObj) {

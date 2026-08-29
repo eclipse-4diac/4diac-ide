@@ -18,45 +18,26 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
-	public static String BulkEditor;
-
 	public static String BulkEditor_ProblemOpeningSearchResult;
-
-	public static String Variable;
-	public static String Attribute;
 
 	public static String Name;
 	public static String Type;
 	public static String Comment;
 	public static String InitialValue;
 
-	public static String CaseSensitve;
+	public static String CaseSensitive;
 	public static String WholeWord;
 	public static String ExactMatch;
 	public static String RegularExpression;
 
-	public static String SearchFor;
-	public static String SearchWhere;
-	public static String SearchIn;
-	public static String ClearFilter;
-	public static String Advanced;
-
-	public static String IgnoreLinkedLibraries;
-
-	public static String FBandSubappTypes;
-	public static String FBandSubappInstances;
-	public static String UntypedSubapps;
-	public static String DataTypes;
-	public static String AttributeTypes;
-
-	public static String Scope;
-	public static String Project;
-	public static String Workspace;
-	public static String SubappHierarchy;
-	public static String SelectSubappHierarchy;
-	public static String NoHierarchySelected;
-
 	public static String Search;
+	public static String Load;
+	public static String SaveQuery;
+	public static String LoadQuery;
+	public static String QueryFileFilterName;
+
+	public static String AddChild;
+	public static String RemoveChild;
 
 	public static String Search_Changes;
 	public static String NoUsage;
@@ -70,13 +51,10 @@ public final class Messages extends NLS {
 	public static String AddElementDialog_EmptyName;
 	public static String AddElementDialog_DuplicateName;
 
-	public static String ContextMenu_Find;
-
-	public static String UnexpectedValue;
-
-	public static String Tab_Controls;
 	public static String Tab_Result;
 	public static String Tab_Query;
+
+	public static String Negate;
 
 	static {
 		// initialize resource bundle

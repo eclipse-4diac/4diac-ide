@@ -14,38 +14,57 @@ package org.eclipse.fordiac.ide.bulkeditor.search;
 
 import java.util.regex.Pattern;
 
-import org.eclipse.fordiac.ide.bulkeditor.ui.FilterComposite.Filter;
-
 public class FilterRecord {
 
+	public static final FilterRecord INACTIVE = new FilterRecord(false, false, MatcherConfig.INACTIVE,
+			MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, null, null);
+
 	private final boolean selected;
-
-	private final Filter nameFilter;
-	private final Filter typeFilter;
-	private final Filter commentFilter;
-
+	private final boolean negate;
+	private final MatcherConfig nameConfig;
+	private final MatcherConfig typeConfig;
+	private final MatcherConfig commentConfig;
+	private final MatcherConfig valueConfig;
 	private final Pattern namePattern;
 	private final Pattern typePattern;
 	private final Pattern commentPattern;
+	private final Pattern valuePattern;
+	private final FilterRecord orConstraint;
+	private final FilterRecord andConstraint;
 
-	public FilterRecord(final boolean selected, final Filter nameFilter, final Filter typeFilter,
-			final Filter commentFilter) {
+	public FilterRecord(final boolean selected, final boolean negate, final MatcherConfig nameConfig,
+			final MatcherConfig typeConfig, final MatcherConfig commentConfig, final MatcherConfig valueConfig,
+			final FilterRecord orConstraint, final FilterRecord andConstraint) {
 		this.selected = selected;
-		this.nameFilter = nameFilter;
-		this.typeFilter = typeFilter;
-		this.commentFilter = commentFilter;
-		this.namePattern = StringMatcher.createPattern(nameFilter);
-		this.typePattern = StringMatcher.createPattern(typeFilter);
-		this.commentPattern = StringMatcher.createPattern(commentFilter);
+		this.negate = negate;
+		this.nameConfig = nameConfig;
+		this.typeConfig = typeConfig;
+		this.commentConfig = commentConfig;
+		this.valueConfig = valueConfig;
+		this.namePattern = StringMatcher.createPattern(nameConfig);
+		this.typePattern = StringMatcher.createPattern(typeConfig);
+		this.commentPattern = StringMatcher.createPattern(commentConfig);
+		this.valuePattern = StringMatcher.createPattern(valueConfig);
+
+		this.orConstraint = orConstraint;
+		this.andConstraint = andConstraint;
 	}
 
 	public boolean isSelected() {
 		return selected;
 	}
 
-	public boolean matches(final String name, final String type, final String comment) {
-		return StringMatcher.matches(name, nameFilter, namePattern)
-				&& StringMatcher.matches(type, typeFilter, typePattern)
-				&& StringMatcher.matches(comment, commentFilter, commentPattern);
+	public boolean matches(final String name, final String type, final String comment, final String value) {
+		return (matchesFields(name, type, comment, value) != negate
+				&& (andConstraint == null || andConstraint.matches(name, type, comment, value)))
+				|| (orConstraint != null && orConstraint.matches(name, type, comment, value));
+
+	}
+
+	private boolean matchesFields(final String name, final String type, final String comment, final String value) {
+		return StringMatcher.matches(name, nameConfig, namePattern)
+				&& StringMatcher.matches(type, typeConfig, typePattern)
+				&& StringMatcher.matches(comment, commentConfig, commentPattern)
+				&& StringMatcher.matches(value, valueConfig, valuePattern);
 	}
 }

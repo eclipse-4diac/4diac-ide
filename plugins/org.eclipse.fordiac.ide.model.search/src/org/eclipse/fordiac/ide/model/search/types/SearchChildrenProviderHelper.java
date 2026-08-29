@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -61,8 +62,8 @@ public class SearchChildrenProviderHelper {
 		return retval;
 	}
 
-	public static Stream<? extends EObject> getInterfaceListChildren(final InterfaceList interfaceList) {
-		Stream<? extends EObject> retval = Stream.concat(interfaceList.getInputVars().stream(),
+	public static Stream<? extends IInterfaceElement> getInterfaceListChildren(final InterfaceList interfaceList) {
+		Stream<? extends IInterfaceElement> retval = Stream.concat(interfaceList.getInputVars().stream(),
 				interfaceList.getOutputVars().stream());
 		retval = Stream.concat(retval, interfaceList.getInOutVars().stream());
 		return retval;

@@ -12,12 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -26,6 +25,8 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.fordiac.ide.bulkeditor.Messages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -41,22 +42,66 @@ public final class QueryModelHelper {
 	public static final String TARGET_OPTION = "TargetOption"; //$NON-NLS-1$
 	public static final String PLACEHOLDER = "Placeholder"; //$NON-NLS-1$
 	public static final String ATTRIBUTE_DECLARATION = "AttributeDeclaration"; //$NON-NLS-1$
+	public static final String ATTRIBUTE = "Attribute"; //$NON-NLS-1$
+	public static final String PIN_TARGET = "PinTarget"; //$NON-NLS-1$
+	public static final String TYPE = "Type"; //$NON-NLS-1$
+	public static final String OCCURRENCE = "Occurrence"; //$NON-NLS-1$
+	public static final String PIN = "PIN"; //$NON-NLS-1$
+	public static final String UNTYPED_SUBAPP = "UntypedSubapp"; //$NON-NLS-1$
+
+	public static final String FEATURE_NEGATE = "negate"; //$NON-NLS-1$
+	public static final String REF_TARGET = "target"; //$NON-NLS-1$
+	public static final String REF_PLACE = "place"; //$NON-NLS-1$
+	public static final String REF_PIN = "pin"; //$NON-NLS-1$
+	public static final String REF_CONSTRAINT = "constraint"; //$NON-NLS-1$
+	public static final String REF_ATTRIBUTE_CONSTRAINT = "attributeConstraint"; //$NON-NLS-1$
+
+	public static final String REF_SIMPLE_TYPE = "simpleType"; //$NON-NLS-1$
+	public static final String REF_BASIC_TYPE = "basicType"; //$NON-NLS-1$
+	public static final String REF_COMPOSITE_TYPE = "compositeType"; //$NON-NLS-1$
+	public static final String REF_SERVICE_INTERFACE_TYPE = "serviceInterfaceType"; //$NON-NLS-1$
+	public static final String REF_SUBAPP_TYPE = "subappType"; //$NON-NLS-1$
+	public static final String REF_STRUCT_TYPE = "structType"; //$NON-NLS-1$
+	public static final String REF_ATTRIBUTE_TYPE = "attributeType"; //$NON-NLS-1$
+	public static final String REF_SIMPLE_FB = "simpleFB"; //$NON-NLS-1$
+	public static final String REF_BASIC_FB = "basicFB"; //$NON-NLS-1$
+	public static final String REF_COMPOSITE_FB = "compositeFB"; //$NON-NLS-1$
+	public static final String REF_SERVICE_INTERFACE_FB = "serviceInterfaceFB"; //$NON-NLS-1$
+	public static final String REF_TYPED_SUBAPP = "typedSubapp"; //$NON-NLS-1$
+	public static final String REF_UNTYPED_SUBAPP = "untypedSubapp"; //$NON-NLS-1$
 
 	public static final String FEATURE_NAME = "name"; //$NON-NLS-1$
+	public static final String FEATURE_TYPE = "type"; //$NON-NLS-1$
+	public static final String FEATURE_COMMENT = "comment"; //$NON-NLS-1$
 	public static final String FEATURE_VALUE = "value"; //$NON-NLS-1$
 	public static final String FEATURE_CASE_SENSITIVE = "caseSensitive"; //$NON-NLS-1$
 	public static final String FEATURE_WHOLE_WORD = "wholeWord"; //$NON-NLS-1$
 	public static final String FEATURE_ENTIRE = "entire"; //$NON-NLS-1$
 	public static final String FEATURE_REGEX = "regex"; //$NON-NLS-1$
+	public static final String REF_AND_CONSTRAINTS = "andConstraint"; //$NON-NLS-1$
+	public static final String REF_OR_CONSTRAINTS = "orConstraint"; //$NON-NLS-1$
+	public static final String REF_APPLICATION_OCCURRENCE = "applicationOccurrence"; //$NON-NLS-1$
+	public static final String REF_COMPOSITE_FB_OCCURRENCE = "compositeFBOccurrence"; //$NON-NLS-1$
+	public static final String REF_TYPED_SUBAPP_OCCURRENCE = "typedSubappOccurrence"; //$NON-NLS-1$
 
-	public static final String FEATURE_OCCURRENCE = "occurrence"; //$NON-NLS-1$
 	public static final String FEATURE_KEY = "key"; //$NON-NLS-1$
 	public static final String FEATURE_VAL = "val"; //$NON-NLS-1$
+
+	public static final String FEATURE_PLACEHOLDER = "placeholder"; //$NON-NLS-1$
+	public static final String FEATURE_IGNORE_LINKED_LIBRARIES = "ignoreLinkedLibraries"; //$NON-NLS-1$
+
+	public record FieldConstraintData(String value, boolean caseSensitive, boolean wholeWord, boolean entire,
+			boolean regex) {
+	}
+
+	public record FieldConstraintEntry(EReference reference, EObject fieldConstraint) {
+	}
 
 	private QueryModelHelper() {
 		// utility class
 	}
 
+	// type checks
 	public static boolean isOfType(final EObject eObj, final String className) {
 		return eObj != null && eObj.eClass().getName().equals(className);
 	}
@@ -65,82 +110,189 @@ public final class QueryModelHelper {
 		return isOfType(eObj, CONSTRAINT) || isOfType(eObj, ATTRIBUTE_CONSTRAINT);
 	}
 
+	public static boolean isPlace(final EObject eObj) {
+		return isOfType(eObj, PLACE);
+	}
+
 	public static boolean isPlaceholder(final EObject eObj) {
 		return isOfType(eObj, PLACEHOLDER);
-	}
-
-	public static void setPlaceholderFeature(final EObject placeholder, final String featureName, final String value) {
-		final EStructuralFeature feature = placeholder.eClass().getEStructuralFeature(featureName);
-		if (feature != null) {
-			placeholder.eSet(feature, value);
-		}
-	}
-
-	public static boolean isInstance(final EObject eObj) {
-		return eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
 	}
 
 	public static boolean isAttributeDeclaration(final EObject eObj) {
 		return isOfType(eObj, ATTRIBUTE_DECLARATION);
 	}
 
-	public static void setAttributeDeclarationName(final EObject attrDecl, final String name) {
-		final EStructuralFeature feature = attrDecl.eClass().getEStructuralFeature(FEATURE_NAME);
-		if (feature != null) {
-			attrDecl.eSet(feature, name);
-		}
+	public static boolean isInstance(final EObject eObj) {
+		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
 	}
 
+	public static boolean isOccurrence(final EObject eObj) {
+		return eObj != null
+				&& eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> OCCURRENCE.equals(st.getName()));
+	}
+
+	public static boolean isType(final EObject eObj) {
+		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> TYPE.equals(st.getName()));
+	}
+
+	public static boolean isFieldAllowedForConstraint(final EObject constraint, final String fieldRefName) {
+		if (FEATURE_NAME.equals(fieldRefName) || FEATURE_COMMENT.equals(fieldRefName)) {
+			return true;
+		}
+
+		final EObject owner = findConstraintOwner(constraint);
+		if (owner == null) {
+			return true;
+		}
+
+		if (isOfType(owner, PIN)) {
+			return true;
+		}
+		if (isType(owner) || isOccurrence(owner) || isOfType(owner, UNTYPED_SUBAPP)) {
+			// Types, UntypedSubapp, Occurrences: no type and value
+			return false;
+		}
+		if (isInstance(owner)) {
+			// Instances: no value
+			return !FEATURE_VALUE.equals(fieldRefName);
+		}
+		return true;
+	}
+
+	private static EObject findConstraintOwner(final EObject obj) {
+		EObject current = obj;
+		while (current != null) {
+			if (!isConstraint(current) && !isOfType(current, FIELD_CONSTRAINT)) {
+				return current;
+			}
+			current = current.eContainer();
+		}
+		return null;
+	}
+
+	public static boolean isNegatedConstraint(final EObject eObj) {
+		return Boolean.TRUE.equals(QueryModelHelper.getFeatureValue(eObj, QueryModelHelper.FEATURE_NEGATE));
+	}
+
+	public static boolean isPinTargetQuery(final EObject queryRoot) {
+		final EObject target = getContainedChild(queryRoot, REF_TARGET);
+		final EObject targetOption = getContainedChild(target, REF_TARGET);
+		return isOfType(targetOption, PIN_TARGET);
+	}
+
+	// generic feature access
 	public static Object getFeatureValue(final EObject eObj, final String featureName) {
+		if (eObj == null) {
+			return null;
+		}
 		final EStructuralFeature feature = eObj.eClass().getEStructuralFeature(featureName);
 		return (feature != null && eObj.eIsSet(feature)) ? eObj.eGet(feature) : null;
 	}
 
-	public record FieldConstraintData(String value, boolean caseSensitive, boolean wholeWord, boolean entire,
-			boolean regex) {
+	public static void setFeatureValue(final EObject eObj, final String featureName, final Object value) {
+		final EStructuralFeature feature = eObj.eClass().getEStructuralFeature(featureName);
+		if (feature != null) {
+			eObj.eSet(feature, value);
+		}
 	}
 
+	private static boolean getBooleanFeature(final EObject eObj, final String featureName) {
+		return Boolean.TRUE.equals(getFeatureValue(eObj, featureName));
+	}
+
+	public static EObject getContainedChild(final EObject parent, final String refName) {
+		return (getFeatureValue(parent, refName) instanceof final EObject eObj) ? eObj : null;
+	}
+
+	// named setters for readable call sites
+	public static void setPlaceholderFeature(final EObject placeholder, final String featureName, final String value) {
+		setFeatureValue(placeholder, featureName, value);
+	}
+
+	public static void setAttributeDeclarationName(final EObject attrDecl, final String name) {
+		setFeatureValue(attrDecl, FEATURE_NAME, name);
+	}
+
+	public static void setIgnoreLinkedLibrary(final EObject instance, final boolean value) {
+		setFeatureValue(instance, FEATURE_IGNORE_LINKED_LIBRARIES, Boolean.valueOf(value));
+	}
+
+	// field constraints
 	public static FieldConstraintData readFieldConstraint(final EObject fc) {
-		final String value = (String) fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_VALUE));
-		final boolean caseSensitive = Boolean.TRUE
-				.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_CASE_SENSITIVE)));
-		final boolean wholeWord = Boolean.TRUE.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_WHOLE_WORD)));
-		final boolean entire = Boolean.TRUE.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_ENTIRE)));
-		final boolean regex = Boolean.TRUE.equals(fc.eGet(fc.eClass().getEStructuralFeature(FEATURE_REGEX)));
-		return new FieldConstraintData(value, caseSensitive, wholeWord, entire, regex);
+		return new FieldConstraintData((String) getFeatureValue(fc, FEATURE_VALUE),
+				getBooleanFeature(fc, FEATURE_CASE_SENSITIVE), getBooleanFeature(fc, FEATURE_WHOLE_WORD),
+				getBooleanFeature(fc, FEATURE_ENTIRE), getBooleanFeature(fc, FEATURE_REGEX));
 	}
 
 	public static void writeFieldConstraint(final EObject fc, final FieldConstraintData data) {
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_VALUE), data.value());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_CASE_SENSITIVE), data.caseSensitive());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_WHOLE_WORD), data.wholeWord());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_ENTIRE), data.entire());
-		fc.eSet(fc.eClass().getEStructuralFeature(FEATURE_REGEX), data.regex());
+		setFeatureValue(fc, FEATURE_VALUE, data.value());
+		setFeatureValue(fc, FEATURE_CASE_SENSITIVE, Boolean.valueOf(data.caseSensitive()));
+		setFeatureValue(fc, FEATURE_WHOLE_WORD, Boolean.valueOf(data.wholeWord()));
+		setFeatureValue(fc, FEATURE_ENTIRE, Boolean.valueOf(data.entire()));
+		setFeatureValue(fc, FEATURE_REGEX, Boolean.valueOf(data.regex()));
 	}
 
 	public static List<FieldConstraintEntry> getContainedFieldConstraints(final EObject constraint) {
-		final List<FieldConstraintEntry> result = new ArrayList<>();
-		for (final EReference ref : constraint.eClass().getEAllContainments()) {
-			if (constraint.eIsSet(ref)) {
-				final Object val = constraint.eGet(ref);
-				if (val instanceof final EObject child && isOfType(child, FIELD_CONSTRAINT)) {
-					result.add(new FieldConstraintEntry(ref, child));
+		return constraint.eContents().stream().filter(child -> isOfType(child, FIELD_CONSTRAINT))
+				.map(child -> new FieldConstraintEntry(child.eContainmentFeature(), child)).toList();
+	}
+
+	// structural rules
+	private static boolean isInstantiable(final EClass type) {
+		return !type.isAbstract() && !type.isInterface();
+	}
+
+	private static boolean isMandatorySlot(final EReference ref) {
+		return !ref.isMany() && ref.getLowerBound() >= 1 && isInstantiable(ref.getEReferenceType());
+	}
+
+	public static boolean isMandatoryChild(final EObject obj) {
+		final EReference containment = obj.eContainmentFeature();
+		return containment != null && isMandatorySlot(containment);
+	}
+
+	public static void ensureMandatoryChildren(final EPackage queryPackage, final EObject parent) {
+		if (parent == null) {
+			return;
+		}
+		for (final EReference ref : parent.eClass().getEAllContainments()) {
+			if (isMandatorySlot(ref)) {
+				if (!parent.eIsSet(ref)) {
+					parent.eSet(ref, queryPackage.getEFactoryInstance().create(ref.getEReferenceType()));
 				}
+				ensureMandatoryChildren(queryPackage, (EObject) parent.eGet(ref));
 			}
 		}
-		return result;
 	}
 
-	public record FieldConstraintEntry(EReference reference, EObject fieldConstraint) {
+	private static List<EClass> getInstantiableClasses(final EPackage queryPackage, final EClass type) {
+		return isInstantiable(type) ? List.of(type) : getConcreteSubclasses(queryPackage, type);
 	}
 
-	public static void setOccurrences(final EObject instance, final List<?> occurrences) {
-		final EStructuralFeature feature = instance.eClass().getEStructuralFeature(FEATURE_OCCURRENCE);
-		if (feature != null) {
-			instance.eSet(feature, occurrences);
+	public static List<EClass> getConcreteSubclasses(final EPackage queryPackage, final EClass abstractType) {
+		return queryPackage.getEClassifiers().stream() //
+				.filter(EClass.class::isInstance).map(EClass.class::cast) //
+				.filter(QueryModelHelper::isInstantiable) //
+				.filter(abstractType::isSuperTypeOf) //
+				.toList();
+	}
+
+	// graph structure
+	public static List<EObject> getChildNodes(final EObject eObj) {
+		if (eObj == null) {
+			return List.of();
 		}
+		if (isConstraint(eObj)) {
+			return eObj.eContents().stream().filter(child -> !isOfType(child, FIELD_CONSTRAINT)).toList();
+		}
+		return eObj.eContents();
 	}
 
+	public static boolean hasCollapsibleChildren(final EObject eObj) {
+		return !getChildNodes(eObj).isEmpty();
+	}
+
+	// model modification
 	public static EObject addChild(final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
 			final EObject parent, final EReference reference, final EClass childType) {
 		final EObject child = queryPackage.getEFactoryInstance().create(childType);
@@ -159,49 +311,49 @@ public final class QueryModelHelper {
 		editingDomain.getCommandStack().execute(cmd);
 	}
 
-	public static List<EClass> getConcreteSubclasses(final EPackage queryPackage, final EClass abstractType) {
-		final List<EClass> result = new ArrayList<>();
-		for (final EClassifier classifier : queryPackage.getEClassifiers()) {
-			if (classifier instanceof final EClass candidate && !candidate.isAbstract() && !candidate.isInterface()
-					&& abstractType.isSuperTypeOf(candidate)) {
-				result.add(candidate);
+	// context menu
+	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
+			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
+			final Predicate<EReference> referenceFilter, final Runnable afterAdd) {
+		addSeparatorIfNeeded(menu);
+		for (final EReference ref : selected.eClass().getEAllContainments()) {
+			if (referenceFilter.test(ref) && (ref.isMany() || !selected.eIsSet(ref))) {
+				addItemsForReference(menu, selected, editingDomain, queryPackage, ref, afterAdd);
 			}
 		}
-		return result;
 	}
 
-	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final Runnable afterAdd) {
-		for (final EReference ref : selected.eClass().getEAllContainments()) {
-			if (!ref.isMany() && selected.eIsSet(ref)) {
-				continue;
-			}
-			final EClass childType = ref.getEReferenceType();
-			if (childType.isAbstract() || childType.isInterface()) {
-				final boolean isTargetNode = childType.getName().equals(TARGET_OPTION);
-				for (final EClass concrete : getConcreteSubclasses(queryPackage, childType)) {
-					final var name = isTargetNode ? concrete.getName() : ref.getName();
-					addMenuItem(menu, "Add " + name, () -> { //$NON-NLS-1$
-						addChild(editingDomain, queryPackage, selected, ref, concrete);
-						afterAdd.run();
-					});
-				}
-			} else {
-				addMenuItem(menu, "Add " + ref.getName(), () -> { //$NON-NLS-1$
-					addChild(editingDomain, queryPackage, selected, ref, childType);
-					afterAdd.run();
-				});
-			}
+	private static void addItemsForReference(final Menu menu, final EObject selected,
+			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final EReference ref,
+			final Runnable afterAdd) {
+		final EClass type = ref.getEReferenceType();
+		// TargetOption children are labeled by their concrete class, everything else by
+		// the reference
+		final boolean useClassName = type.getName().equals(TARGET_OPTION);
+		for (final EClass concrete : getInstantiableClasses(queryPackage, type)) {
+			final EClass actualType = resolveChildType(selected, concrete);
+			final String name = useClassName ? actualType.getName() : ref.getName();
+			addMenuItem(menu, NLS.bind(Messages.AddChild, name), () -> {
+				addChild(editingDomain, queryPackage, selected, ref, actualType);
+				afterAdd.run();
+			});
 		}
+	}
+
+	private static EClass resolveChildType(final EObject parent, final EClass childType) {
+		if (isOfType(parent, ATTRIBUTE_CONSTRAINT) && CONSTRAINT.equals(childType.getName())) {
+			return parent.eClass();
+		}
+		return childType;
 	}
 
 	public static void populateRemoveMenuItem(final Menu menu, final EObject selected,
 			final AdapterFactoryEditingDomain editingDomain, final Runnable afterRemove) {
-		if (selected.eContainer() == null) {
+		if (selected.eContainer() == null || isMandatoryChild(selected)) {
 			return;
 		}
 		addSeparatorIfNeeded(menu);
-		addMenuItem(menu, "Remove " + selected.eClass().getName(), () -> { //$NON-NLS-1$
+		addMenuItem(menu, NLS.bind(Messages.RemoveChild, selected.eClass().getName()), () -> {
 			removeChild(editingDomain, selected);
 			afterRemove.run();
 		});
@@ -218,7 +370,7 @@ public final class QueryModelHelper {
 		}
 		addSeparatorIfNeeded(menu);
 		for (final FieldConstraintEntry entry : entries) {
-			final String label = "Remove " + entry.reference().getName(); //$NON-NLS-1$
+			final String label = NLS.bind(Messages.RemoveChild, entry.reference().getName());
 			addMenuItem(menu, label, () -> {
 				removeChild(editingDomain, entry.fieldConstraint());
 				afterRemove.run();
@@ -226,10 +378,25 @@ public final class QueryModelHelper {
 		}
 	}
 
-	private static void addMenuItem(final Menu menu, final String text, final Runnable action) {
+	public static void addMenuItem(final Menu menu, final String text, final Runnable action) {
 		final MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(text);
 		item.addListener(SWT.Selection, e -> action.run());
+	}
+
+	public static void populateNegateToggle(final Menu menu, final EObject selected, final Runnable afterChange) {
+		if (!isConstraint(selected)) {
+			return;
+		}
+		addSeparatorIfNeeded(menu);
+		final boolean currentValue = Boolean.TRUE.equals(getFeatureValue(selected, FEATURE_NEGATE));
+		final MenuItem item = new MenuItem(menu, SWT.NONE);
+		item.setText(Messages.Negate);
+		item.setSelection(currentValue);
+		item.addListener(SWT.Selection, e -> {
+			setFeatureValue(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue));
+			afterChange.run();
+		});
 	}
 
 	@SuppressWarnings("unused")
@@ -237,25 +404,5 @@ public final class QueryModelHelper {
 		if (menu.getItemCount() > 0) {
 			new MenuItem(menu, SWT.SEPARATOR);
 		}
-	}
-
-	public static boolean hasCollapsibleChildren(final EObject eObj) {
-		final boolean constraintNode = isConstraint(eObj);
-		for (final EReference ref : eObj.eClass().getEAllContainments()) {
-			if (!eObj.eIsSet(ref)) {
-				continue;
-			}
-			final Object val = eObj.eGet(ref);
-			if (val instanceof final EObject child) {
-				if (constraintNode && isOfType(child, FIELD_CONSTRAINT)) {
-					continue; // inline, not a separate node
-				}
-				return true;
-			}
-			if (val instanceof final List<?> list && !list.isEmpty()) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

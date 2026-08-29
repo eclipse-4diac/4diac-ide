@@ -27,6 +27,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
+import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper.FieldConstraintData;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -92,17 +93,18 @@ public class FilterFigure extends Figure {
 		caseSensitive = createImageToggle(
 				ImageDescriptor.createFromURL(
 						FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(CASE_SENSITIVE_IMAGE))),
-				gl, initial.caseSensitive());
+				gl, initial.caseSensitive(), Messages.CaseSensitive);
 
-		wholeWord = createImageToggle(FordiacImage.ICON_WHOLE_WORD.getImageDescriptor(), gl, initial.wholeWord());
+		wholeWord = createImageToggle(FordiacImage.ICON_WHOLE_WORD.getImageDescriptor(), gl, initial.wholeWord(),
+				Messages.WholeWord);
 		exactMatch = createImageToggle(
 				ImageDescriptor
 						.createFromURL(FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(EXACT_MATCH_IMAGE))),
-				gl, initial.entire());
+				gl, initial.entire(), Messages.ExactMatch);
 		regularExpression = createImageToggle(
 				ImageDescriptor.createFromURL(
 						FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(REGULAR_EXPRESSION_IMAGE))),
-				gl, initial.regex());
+				gl, initial.regex(), Messages.RegularExpression);
 
 		final ActionListener onToggleChanged = event -> {
 			updateEnablement();
@@ -168,8 +170,9 @@ public class FilterFigure extends Figure {
 	}
 
 	private ToggleButton createImageToggle(final ImageDescriptor descriptor, final GridLayout gl,
-			final boolean initialSelection) {
+			final boolean initialSelection, final String tooltip) {
 		final var btn = new ToggleButton(descriptor);
+		btn.setToolTip(new Label(tooltip));
 		add(btn);
 		gl.setConstraint(btn, new GridData(SWT.CENTER, SWT.CENTER, false, false));
 		btn.setSelected(initialSelection);
