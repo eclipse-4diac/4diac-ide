@@ -66,7 +66,7 @@ public class BulkEditorWidgetUtils {
 		}
 
 		expandCompositeTwistie.setExpanded(true);
-		expandCompositeTwistie.addListener(SWT.MouseUp, event -> {
+		expandCompositeTwistie.addListener(SWT.MouseUp, _ -> {
 			final boolean isVisible = expandCompositeTwistie.isExpanded();
 			if (clearButton != null) {
 				clearButton.setVisible(isVisible);

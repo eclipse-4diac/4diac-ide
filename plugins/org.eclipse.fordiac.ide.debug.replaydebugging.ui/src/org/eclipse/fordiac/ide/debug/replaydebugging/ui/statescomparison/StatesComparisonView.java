@@ -367,13 +367,13 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		final MenuItem removeItem = new MenuItem(menu, SWT.PUSH);
 		removeItem.setText(Messages.StatesComparisonView_RemoveColumnLabel);
 		removeItem.addListener(SWT.Selection,
-				e -> ComparisonService.getInstance().removeColumn(columnState.getColumnId()));
+				_ -> ComparisonService.getInstance().removeColumn(columnState.getColumnId()));
 
 		// Disable / Enable toggle
 		final MenuItem toggleItem = new MenuItem(menu, SWT.CHECK);
 		toggleItem.setText(Messages.StatesComparisonView_ColumnEnabledLabel);
 		toggleItem.setSelection(!columnState.isDisabled()); // checked = enabled
-		toggleItem.addListener(SWT.Selection, e -> {
+		toggleItem.addListener(SWT.Selection, _ -> {
 			columnState.setDisabled(!columnState.isDisabled());
 			rebuildTable();
 		});
@@ -382,7 +382,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		final MenuItem showHideColor = new MenuItem(menu, SWT.PUSH);
 		showHideColor.setText(columnState.isShowColor() ? Messages.StatesComparisonView_HideColumnColor
 				: Messages.StatesComparisonView_ShowColumnColor);
-		showHideColor.addListener(SWT.Selection, e -> {
+		showHideColor.addListener(SWT.Selection, _ -> {
 			columnState.toggleShowColor();
 			rebuildTable();
 		});

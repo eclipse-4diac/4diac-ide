@@ -57,7 +57,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
 	private boolean blockListeners = false;
 
-	private final Listener nameModifyListener = e -> {
+	private final Listener nameModifyListener = _ -> {
 		if (!blockListeners) {
 			setPageComplete(validatePage());
 		}

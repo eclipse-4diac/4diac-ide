@@ -195,18 +195,18 @@ class ManifestEditorDependencyPage extends FormPage {
 		final Button refreshButton = new Button(buttonBar, SWT.PUSH);
 		refreshButton.setText(Messages.ManifestEditor_RefreshLibraries);
 		refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		refreshButton.addListener(SWT.Selection, event -> refreshLibraries(form));
+		refreshButton.addListener(SWT.Selection, _ -> refreshLibraries(form));
 
 		final Button manageLibrariesButton = new Button(buttonBar, SWT.PUSH);
 		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
 		manageLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		manageLibrariesButton.addListener(SWT.Selection, event -> ManageLibraryWizard
+		manageLibrariesButton.addListener(SWT.Selection, _ -> ManageLibraryWizard
 				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
 
 		final Button importLibrariesButton = new Button(buttonBar, SWT.PUSH);
 		importLibrariesButton.setText(Messages.ManifestEditor_ImportLibraries);
 		importLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		importLibrariesButton.addListener(SWT.Selection, event -> UnifiedLibraryImportWizard
+		importLibrariesButton.addListener(SWT.Selection, _ -> UnifiedLibraryImportWizard
 				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
 	}
 

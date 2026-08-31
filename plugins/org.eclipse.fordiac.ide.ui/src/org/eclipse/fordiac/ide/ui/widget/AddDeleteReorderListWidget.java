@@ -89,7 +89,7 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 	// this is needed for correct execution of move down with multiselection
 	public static Listener getReverseSelectionListener(final TableViewer viewer, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
 				final List<?> bottomup = viewer.getStructuredSelection().toList();
 				Collections.reverse(bottomup);
@@ -101,7 +101,7 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 
 	public static Listener getReverseSelectionListener(final NatTable table, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
 			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
 					.getDataProvider();

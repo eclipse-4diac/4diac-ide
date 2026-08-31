@@ -48,7 +48,7 @@ public class ImportTypeSelectionProposalProvider extends TypeSelectionProposalPr
 	@Override
 	protected ContentProposal createProposal(final TypeEntry typeEntry) {
 		final TypeEntry resolvedEntry = ImportHelper.resolveImport(typeEntry.getTypeName(), supplier.get(),
-				name -> typeResolver.apply(getTypeLibrary(), name), name -> null);
+				name -> typeResolver.apply(getTypeLibrary(), name), _ -> null);
 		if (resolvedEntry == null) { // no import yet -> use unqualified name and add import
 			return new ImportContentProposal(typeEntry.getTypeName(), typeEntry.getTypeName(),
 					typeEntry.getFullTypeName(), typeEntry.getFullTypeName());

@@ -102,12 +102,12 @@ public class LibraryElementDependencyTracker extends EContentAdapter {
 
 	protected boolean addDependency(final TypeEntry typeEntry) {
 		return typeEntry != null
-				&& dependencies.computeIfAbsent(typeEntry, unused -> new AtomicInteger()).getAndIncrement() == 0;
+				&& dependencies.computeIfAbsent(typeEntry, _ -> new AtomicInteger()).getAndIncrement() == 0;
 	}
 
 	protected boolean removeDependency(final TypeEntry typeEntry) {
 		return typeEntry != null && dependencies.computeIfPresent(typeEntry,
-				(unused, old) -> old.decrementAndGet() == 0 ? null : old) == null;
+				(_, old) -> old.decrementAndGet() == 0 ? null : old) == null;
 	}
 
 	protected static boolean isRelevant(final EStructuralFeature structuralFeature) {

@@ -113,7 +113,7 @@ public class EventManagerProcessor {
 		if (transaction instanceof final FBTransaction fbTransaction) {
 
 			eventCounter++;
-			try (final var contextKeeper = new RuntimeContextHandler(networkRuntime,
+			try (final var _ = new RuntimeContextHandler(networkRuntime,
 					fbTransaction.getInputEventOccurrence())) {
 				final var transactionProcessor = new FBTransactionProcessor(fbTransaction);
 				transactionProcessor.process(startTime.isPresent() ? startTime.getAsLong() : 0);

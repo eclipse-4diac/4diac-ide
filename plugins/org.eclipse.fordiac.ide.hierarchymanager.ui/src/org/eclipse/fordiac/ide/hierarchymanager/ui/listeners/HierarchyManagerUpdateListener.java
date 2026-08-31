@@ -107,7 +107,7 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 
 	protected void storeUndoDeleteOperations(final String qualName, final Leaf leaf) {
 		final AddLeafOperation op = new AddLeafOperation((Level) leaf.eContainer(), leaf);
-		undoDeleteOperations.computeIfAbsent(qualName, k -> new ArrayList<>()).add(op);
+		undoDeleteOperations.computeIfAbsent(qualName, _ -> new ArrayList<>()).add(op);
 	}
 
 }

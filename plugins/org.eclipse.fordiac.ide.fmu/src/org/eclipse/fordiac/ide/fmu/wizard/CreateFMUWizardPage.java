@@ -115,7 +115,7 @@ public class CreateFMUWizardPage extends CreateBootFilesWizardPage {
 		// Check the selected libraries from preferences
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].setSelection(store.getBoolean(preferences[i]));
-			buttons[i].addListener(SWT.Selection, e -> updatePageCompletion());
+			buttons[i].addListener(SWT.Selection, _ -> updatePageCompletion());
 		}
 
 		librariesGroup.setLayoutData(gridData);

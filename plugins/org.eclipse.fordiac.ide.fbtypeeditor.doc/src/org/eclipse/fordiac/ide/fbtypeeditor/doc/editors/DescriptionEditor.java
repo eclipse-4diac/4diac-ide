@@ -166,7 +166,7 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
 			editor.setText(getType().getDocumentation());
-			editor.addModifyListener(e -> {
+			editor.addModifyListener(_ -> {
 				if (editor != null && editor.getText() != null
 						&& !editor.getText().equals(getType().getDocumentation())) {
 					executeCommand(new ChangeDocumentationCommand(getType(), editor.getText()));
@@ -174,7 +174,7 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 			});
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
 			editor.setText(getType().getDocumentation());
-			editor.addModifyListener(e -> {
+			editor.addModifyListener(_ -> {
 				if (editor != null && editor.getText() != null
 						&& !editor.getText().equals(getType().getDocumentation())) {
 					executeCommand(new ChangeDocumentationCommand(getType(), editor.getText()));

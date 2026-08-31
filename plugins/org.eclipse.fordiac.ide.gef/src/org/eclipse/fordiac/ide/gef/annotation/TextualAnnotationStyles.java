@@ -29,7 +29,7 @@ import org.eclipse.ui.texteditor.AnnotationPreference;
 public final class TextualAnnotationStyles {
 
 	public static Styler getAnnotationStyle(final Set<GraphicalAnnotation> annotations) {
-		return getAnnotationStyle(annotations, annotation -> true);
+		return getAnnotationStyle(annotations, _ -> true);
 	}
 
 	public static Styler getAnnotationStyle(final Set<GraphicalAnnotation> annotations,

@@ -156,38 +156,38 @@ class ValueConverterTest {
 						"[17,4]error"), //
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
-								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+								new StructValueConverter(_ -> NumericValueConverter.INSTANCE)),
 						named("{a=17, b=4}", Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4))),
 						"(a:=17,b:=4)"), //
 				arguments(
 						named("StructValueConverter [StringValueConverter]",
-								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
+								new StructValueConverter(_ -> StringValueConverter.INSTANCE)),
 						named("{a=ab,xy, b=ab,',xy}", Map.of("a", "ab,xy", "b", "ab,',xy")),
 						"(a:='ab,xy',b:='ab,$',xy')"), //
 				arguments(
 						named("StructValueConverter [TimeValueConverter]",
-								new StructValueConverter(unused -> new TypedValueConverter(ElementaryTypes.TIME))),
+								new StructValueConverter(_ -> new TypedValueConverter(ElementaryTypes.TIME))),
 						named("{a=T#0ns, b=T#17d4m21.42s}",
 								Map.of("a", Duration.ZERO, "b", Duration.ofDays(17).plusMinutes(4).plusSeconds(21))),
 						"(a:=T#0ns, b:=T#17d4m21s)"), //
 				arguments(
 						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
 								new StructValueConverter(
-										unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
+										_ -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
 						named("{a=[abc, ab,xy, ab,',xy], b=[test, value]}",
 								Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value"))),
 						"(a:=['abc','ab,xy','ab,$',xy'],b:=['test','value'])"), //
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
-								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+								new StructValueConverter(_ -> NumericValueConverter.INSTANCE)),
 						IllegalArgumentException.class, ""), //
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
-								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+								new StructValueConverter(_ -> NumericValueConverter.INSTANCE)),
 						IllegalArgumentException.class, "(a:=invalid,b:=4)"), //
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
-								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+								new StructValueConverter(_ -> NumericValueConverter.INSTANCE)),
 						IllegalArgumentException.class, "(a:=17,b:=4)error") //
 		);
 	}
@@ -263,24 +263,24 @@ class ValueConverterTest {
 						List.of(Duration.ZERO, Duration.ofDays(17).plusMinutes(4).plusSeconds(21))), //
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
-								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+								new StructValueConverter(_ -> NumericValueConverter.INSTANCE)),
 						"(a := 17, b := 4)",
 						named("{a=17, b=4}", Map.of("a", BigInteger.valueOf(17), "b", BigInteger.valueOf(4)))), //
 				arguments(
 						named("StructValueConverter [StringValueConverter]",
-								new StructValueConverter(unused -> StringValueConverter.INSTANCE)),
+								new StructValueConverter(_ -> StringValueConverter.INSTANCE)),
 						"(a := 'ab,xy', b := 'ab,$',xy')",
 						named("{a=ab,xy, b=ab,',xy}", Map.of("a", "ab,xy", "b", "ab,',xy"))), //
 				arguments(
 						named("StructValueConverter [TimeValueConverter]",
-								new StructValueConverter(unused -> new TypedValueConverter(ElementaryTypes.TIME))),
+								new StructValueConverter(_ -> new TypedValueConverter(ElementaryTypes.TIME))),
 						"(a := T#0s, b := T#17d4m21s)",
 						named("{a=T#0ns, b=T#17d4m21s}",
 								Map.of("a", Duration.ZERO, "b", Duration.ofDays(17).plusMinutes(4).plusSeconds(21)))), //
 				arguments(
 						named("StructValueConverter [ArrayValueConverter [StringValueConverter]]",
 								new StructValueConverter(
-										unused -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
+										_ -> new ArrayValueConverter<>(StringValueConverter.INSTANCE))),
 						"(a := ['abc', 'ab,xy', 'ab,$',xy'], b := ['test', 'value'])",
 						named("{a=[abc, ab,xy, ab,',xy], b=[test, value]}",
 								Map.of("a", List.of("abc", "ab,xy", "ab,',xy"), "b", List.of("test", "value"))))//

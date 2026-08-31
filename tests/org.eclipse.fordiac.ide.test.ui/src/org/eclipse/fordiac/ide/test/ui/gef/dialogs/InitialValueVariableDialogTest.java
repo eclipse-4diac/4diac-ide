@@ -105,7 +105,7 @@ class InitialValueVariableDialogTest {
 				newStructType("TestInheritedStruct", newMember("a", ElementaryTypes.BOOL)));
 		variable.getMembers().get("a").setValue("TRUE");
 
-		assertEquals("", serialize(variable, unused -> false));
+		assertEquals("", serialize(variable, _ -> false));
 	}
 
 	private static String serialize(final Variable<?> variable, final Predicate<Variable<?>> explicitPredicate) {

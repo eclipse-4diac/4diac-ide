@@ -67,7 +67,7 @@ public class InitialValueVariableDialog extends VariableDialog {
 		final Variable<?>[] baseVariable = new Variable[1];
 		final Set<Variable<?>> explicitlyInitialized = Collections.newSetFromMap(new IdentityHashMap<>());
 		try {
-			PlatformUI.getWorkbench().getProgressService().busyCursorWhile(monitor -> {
+			PlatformUI.getWorkbench().getProgressService().busyCursorWhile(_ -> {
 				variable[0] = newDialogVariable(element, getDialogInitialValue(element, initialValue),
 						explicitlyInitialized);
 				baseVariable[0] = newBaseVariable(element);

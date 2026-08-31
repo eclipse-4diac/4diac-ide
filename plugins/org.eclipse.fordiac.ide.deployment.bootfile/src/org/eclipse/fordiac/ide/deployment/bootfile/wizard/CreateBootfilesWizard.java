@@ -130,7 +130,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 	}
 
 	private static List<Object> getWorkLoadEntryList(final Map<Device, List<Object>> workLoad, final Device device) {
-		return workLoad.computeIfAbsent(device, dev -> new ArrayList<>());
+		return workLoad.computeIfAbsent(device, _ -> new ArrayList<>());
 	}
 
 }

@@ -156,7 +156,7 @@ public class AddDeleteWidget {
 		addCreateListener(createListener);
 		addDeleteListener(deleteListener);
 
-		viewer.addSelectionChangedListener(ev -> setButtonEnablement(!viewer.getSelection().isEmpty() && enabled));
+		viewer.addSelectionChangedListener(_ -> setButtonEnablement(!viewer.getSelection().isEmpty() && enabled));
 
 		viewer.getTable().addKeyListener(new KeyListener() {
 
@@ -179,7 +179,7 @@ public class AddDeleteWidget {
 	public void bindToTableViewer(final NatTable table, final Listener createListener, final Listener deleteListener) {
 		addCreateListener(createListener);
 		addDeleteListener(deleteListener);
-		table.addListener(SWT.Selection, event -> {
+		table.addListener(SWT.Selection, _ -> {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
 			final int[] rows = selectionLayer.getFullySelectedRowPositions();
 			setButtonEnablement(rows.length > 0 && enabled);
@@ -199,7 +199,7 @@ public class AddDeleteWidget {
 
 	public static Listener getSelectionListener(final TableViewer viewer, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
 				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
 						commandProvider);
@@ -209,7 +209,7 @@ public class AddDeleteWidget {
 
 	public static Listener getSelectionListener(final NatTable table, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
 			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
 					.getDataProvider();
@@ -255,7 +255,7 @@ public class AddDeleteWidget {
 
 	public static Listener getDeleteListener(final TableViewer viewer, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			if (!viewer.getStructuredSelection().isEmpty()) {
 				int pos = viewer.getTable().getSelectionIndices()[0];
 				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
@@ -276,7 +276,7 @@ public class AddDeleteWidget {
 
 	public static Listener getDeleteListener(final NatTable table, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			final int[] rows = NatTableWidgetFactory.getSelectionLayer(table).getFullySelectedRowPositions();
 			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
 					.getDataProvider();
@@ -294,7 +294,7 @@ public class AddDeleteWidget {
 
 	private static Listener getAddListener(final TableViewer viewer, final CommandExecutor executor,
 			final CreationCommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			final CreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
 			if (cmd.canExecute()) {
 				executor.executeCommand(cmd);
@@ -309,7 +309,7 @@ public class AddDeleteWidget {
 
 	private static Listener getAddListener(final NatTable table, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
-		return ev -> {
+		return _ -> {
 			Object refObject = null;
 			int[] rows = null;
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);

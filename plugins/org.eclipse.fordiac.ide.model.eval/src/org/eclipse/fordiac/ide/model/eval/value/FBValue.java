@@ -69,7 +69,7 @@ public final class FBValue implements Value, Iterable<Value> {
 			baseFBType.getInternalFbs().forEach(this::initializeMember);
 		}
 		if (type instanceof final BasicFBType basicFBType) {
-			members.computeIfAbsent(ECStateVariable.NAME, unused -> new ECStateVariable(basicFBType));
+			members.computeIfAbsent(ECStateVariable.NAME, _ -> new ECStateVariable(basicFBType));
 		}
 	}
 
@@ -84,7 +84,7 @@ public final class FBValue implements Value, Iterable<Value> {
 	}
 
 	protected void initializeMember(final VarDeclaration variable) {
-		members.computeIfAbsent(variable.getName(), unused -> {
+		members.computeIfAbsent(variable.getName(), _ -> {
 			try {
 				return VariableOperations.newVariable(variable);
 			} catch (final Exception e) {
@@ -94,7 +94,7 @@ public final class FBValue implements Value, Iterable<Value> {
 	}
 
 	protected void initializeMember(final FB fb) {
-		members.computeIfAbsent(fb.getName(), unused -> {
+		members.computeIfAbsent(fb.getName(), _ -> {
 			try {
 				return VariableOperations.newVariable(fb);
 			} catch (final Exception e) {

@@ -95,7 +95,7 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 		column = new TableColumn(varTable, SWT.NONE);
 		column.setText(Messages.RepairBrokenConnectionWizardPage_Type);
 
-		structButton.addListener(SWT.Selection, event -> {
+		structButton.addListener(SWT.Selection, _ -> {
 			final DataTypeSelectionTreeContentProvider instance = DataTypeSelectionTreeContentProvider.INSTANCE;
 			final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getShell(), instance);
 			dialog.setInput(lib);
@@ -119,7 +119,7 @@ public class RepairBrokenConnectionWizardPage extends WizardPage {
 
 		});
 
-		varTable.addListener(SWT.Selection, event -> {
+		varTable.addListener(SWT.Selection, _ -> {
 			final TableItem[] sel = varTable.getSelection();
 			if (sel.length != 0 && sel[0] != null) {
 				targetVar = sel[0].getText(0);

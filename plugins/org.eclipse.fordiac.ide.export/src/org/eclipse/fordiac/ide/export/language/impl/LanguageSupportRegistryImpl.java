@@ -34,7 +34,7 @@ public class LanguageSupportRegistryImpl implements Registry {
 	public ILanguageSupportFactory registerFactory(final String filter, final Class<?> sourceClass,
 			final ILanguageSupportFactory factory) {
 		final var classToFactoryMap = ILanguageSupportFactory.Registry.INSTANCE.getFilterClassToFactoryMap()
-				.computeIfAbsent(filter, f -> new ConcurrentHashMap<>());
+				.computeIfAbsent(filter, _ -> new ConcurrentHashMap<>());
 		return classToFactoryMap.put(sourceClass, factory);
 	}
 

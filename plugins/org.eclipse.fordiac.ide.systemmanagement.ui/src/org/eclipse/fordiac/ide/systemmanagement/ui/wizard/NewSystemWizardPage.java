@@ -36,7 +36,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 	private InitialNameGroup applicationName;
 	private boolean blockListeners = false;
 
-	private final Listener nameModifyListener = e -> {
+	private final Listener nameModifyListener = _ -> {
 		if (!blockListeners) {
 			setPageComplete(validatePage());
 		}
@@ -137,7 +137,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 		openApplicationCheckbox.setSelection(true);
 		setPageComplete(validatePage());
 		openApplicationCheckbox.addListener(SWT.Selection,
-				ev -> openApplication = openApplicationCheckbox.getSelection());
+				_ -> openApplication = openApplicationCheckbox.getSelection());
 		return openApplicationCheckbox;
 	}
 

@@ -84,11 +84,11 @@ public class SubAppHierarchyDialog {
 
 				final Button expandAll = WidgetFactory.button(SWT.NONE).image(FordiacImage.ICON_EXPAND_ALL.getImage())
 						.create(buttonsComposite);
-				expandAll.addListener(SWT.Selection, event -> viewer.expandAll());
+				expandAll.addListener(SWT.Selection, _ -> viewer.expandAll());
 				final Button collapseAll = WidgetFactory.button(SWT.NONE)
 						.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL))
 						.create(buttonsComposite);
-				collapseAll.addListener(SWT.Selection, event -> viewer.collapseAll());
+				collapseAll.addListener(SWT.Selection, _ -> viewer.collapseAll());
 				return viewer;
 			}
 		};

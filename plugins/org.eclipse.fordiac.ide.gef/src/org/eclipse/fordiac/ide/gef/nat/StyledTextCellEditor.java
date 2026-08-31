@@ -749,7 +749,7 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 
 		// add the necessary listeners to support the interaction between the
 		// content proposal and this text editor
-		contentProposalAdapter.addContentProposalListener(proposal -> {
+		contentProposalAdapter.addContentProposalListener(_ -> {
 			if (StyledTextCellEditor.this.editMode == EditModeEnum.INLINE) {
 				commit(MoveDirectionEnum.NONE);
 				StyledTextCellEditor.this.contentProposalAdapter = null;

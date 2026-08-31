@@ -44,11 +44,11 @@ public class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 		return switch (o) {
 		case final VarDeclaration varDeclaration -> getKind(varDeclaration);
 		case final STVarDeclaration stVarDeclaration -> getKind(stVarDeclaration);
-		case final Event event -> Messages.STCoreHoverProvider_EventKind;
-		case final FB fb -> Messages.STCoreHoverProvider_FBKind;
-		case final FunctionFBType functionFBType -> Messages.STCoreHoverProvider_FunctionFBTypeKind;
-		case final FBType fbType -> Messages.STCoreHoverProvider_FBTypeKind;
-		case final StructuredType struct -> Messages.STCoreHoverProvider_StructKind;
+		case final Event _ -> Messages.STCoreHoverProvider_EventKind;
+		case final FB _ -> Messages.STCoreHoverProvider_FBKind;
+		case final FunctionFBType _ -> Messages.STCoreHoverProvider_FunctionFBTypeKind;
+		case final FBType _ -> Messages.STCoreHoverProvider_FBTypeKind;
+		case final StructuredType _ -> Messages.STCoreHoverProvider_StructKind;
 		default -> null;
 		};
 	}

@@ -120,7 +120,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		identificationGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Standard + ":"); //$NON-NLS-1$
 		standardText = createGroupText(identificationGroup, true);
-		standardText.addModifyListener(e -> {
+		standardText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				executeCommand(new ChangeStandardCommand(type, standardText.getText()));
 			}
@@ -128,7 +128,7 @@ public class TypeInfoWidget implements CommandExecutor {
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Classification + ":"); //$NON-NLS-1$
 		classificationText = createGroupText(identificationGroup, true);
-		classificationText.addModifyListener(e -> {
+		classificationText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				executeCommand(new ChangeClassificationCommand(type, classificationText.getText()));
 			}
@@ -136,7 +136,7 @@ public class TypeInfoWidget implements CommandExecutor {
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.ApplicationDomain + ":"); //$NON-NLS-1$
 		domainText = createGroupText(identificationGroup, true);
-		domainText.addModifyListener(e -> {
+		domainText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				executeCommand(new ChangeApplicationDomainCommand(type, domainText.getText()));
 			}
@@ -144,7 +144,7 @@ public class TypeInfoWidget implements CommandExecutor {
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Function + ":"); //$NON-NLS-1$
 		functionText = createGroupText(identificationGroup, true);
-		functionText.addModifyListener(e -> {
+		functionText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				executeCommand(new ChangeFunctionCommand(type, functionText.getText()));
 			}
@@ -152,7 +152,7 @@ public class TypeInfoWidget implements CommandExecutor {
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeText = createGroupText(identificationGroup, true);
-		typeText.addModifyListener(e -> {
+		typeText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				executeCommand(new ChangeIdentifcationTypeCommand(type, typeText.getText()));
 			}
@@ -164,7 +164,7 @@ public class TypeInfoWidget implements CommandExecutor {
 				SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		final GridData descriptionTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		descriptionText.setLayoutData(descriptionTextData);
-		descriptionText.addModifyListener(e -> {
+		descriptionText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				executeCommand(new ChangeDescriptionCommand(type, descriptionText.getText()));
 			}
@@ -191,7 +191,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		versionViewer.setColumnProperties(new String[] { VERSION_PROPERTY, ORGANIZATION_PROPERTY, AUTHOR_PROPERTY,
 				DATE_PROPERTY, REMARKS_PROPERTY });
 
-		addDeleteVersionInfoButtons.bindToTableViewer(versionViewer, this, ref -> new AddNewVersionInfoCommand(type),
+		addDeleteVersionInfoButtons.bindToTableViewer(versionViewer, this, _ -> new AddNewVersionInfoCommand(type),
 				ref -> new DeleteVersionInfoCommand(type, (VersionInfo) ref));
 
 		versionViewer.setCellModifier(new ICellModifier() {

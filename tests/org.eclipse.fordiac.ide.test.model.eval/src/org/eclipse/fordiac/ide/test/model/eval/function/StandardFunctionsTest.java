@@ -1633,14 +1633,14 @@ class StandardFunctionsTest {
 
 	static long getDigitsMask(final DataType type) {
 		return switch (type) {
-		case final UsintType usintType -> 100L;
-		case final UintType uintType -> 10000L;
-		case final UdintType udintType -> 100000000L;
-		case final UlintType ulintType -> 10000000000000000L;
-		case final ByteType byteType -> 100L;
-		case final WordType wordType -> 10000L;
-		case final DwordType dwordType -> 100000000L;
-		case final LwordType lwordType -> 10000000000000000L;
+		case final UsintType _ -> 100L;
+		case final UintType _ -> 10000L;
+		case final UdintType _ -> 100000000L;
+		case final UlintType _ -> 10000000000000000L;
+		case final ByteType _ -> 100L;
+		case final WordType _ -> 10000L;
+		case final DwordType _ -> 100000000L;
+		case final LwordType _ -> 10000000000000000L;
 		default -> 0;
 		};
 	}

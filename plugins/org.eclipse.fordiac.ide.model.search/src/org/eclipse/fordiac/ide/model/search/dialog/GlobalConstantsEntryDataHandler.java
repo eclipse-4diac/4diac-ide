@@ -34,7 +34,7 @@ public class GlobalConstantsEntryDataHandler extends AbstractTypeEntryDataHandle
 		case final STFunctionBody func -> func.eContainer(); // STFunctionBody isn't an INamedElement
 		default -> obj;
 		}).filter(INamedElement.class::isInstance).map(INamedElement.class::cast)
-				.collect(Collectors.toMap(el -> el, el -> inputTypeEntry));
+				.collect(Collectors.toMap(el -> el, _ -> inputTypeEntry));
 	}
 
 }

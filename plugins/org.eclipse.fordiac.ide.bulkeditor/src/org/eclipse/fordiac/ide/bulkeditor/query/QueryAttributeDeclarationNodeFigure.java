@@ -141,7 +141,7 @@ public class QueryAttributeDeclarationNodeFigure extends QueryNodeFigure {
 			}
 		};
 
-		searchText.addListener(SWT.FocusOut, e -> commit.run());
+		searchText.addListener(SWT.FocusOut, _ -> commit.run());
 		searchText.addListener(SWT.KeyDown, e -> {
 			if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
 				commit.run();

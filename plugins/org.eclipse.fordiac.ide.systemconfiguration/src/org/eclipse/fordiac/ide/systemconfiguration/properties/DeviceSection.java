@@ -73,7 +73,7 @@ public class DeviceSection extends AbstractInterfaceSection {
 		super.createInfoGroup(container);
 		getWidgetFactory().createCLabel(container, Messages.DeviceSection_Profile + ":"); //$NON-NLS-1$
 		profile = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), container);
-		profile.addListener(SWT.Selection, event -> {
+		profile.addListener(SWT.Selection, _ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeProfileCommand((Device) getType(), profile.getText()));
 			refresh();

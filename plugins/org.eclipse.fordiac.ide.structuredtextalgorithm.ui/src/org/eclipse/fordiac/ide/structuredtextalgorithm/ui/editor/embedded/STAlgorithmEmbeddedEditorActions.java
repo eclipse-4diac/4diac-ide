@@ -61,7 +61,7 @@ public class STAlgorithmEmbeddedEditorActions extends EmbeddedEditorActions {
 		final IContextActivation contextActivation = contextService.activateContext(EMBEDDED_TEXT_EDITOR_SCOPE,
 				expression);
 
-		viewer.getTextWidget().addFocusListener(FocusListener.focusGainedAdapter(e -> {
+		viewer.getTextWidget().addFocusListener(FocusListener.focusGainedAdapter(_ -> {
 			if (handlerActivations.isEmpty()) {
 				for (final IAction action : allActions.values()) {
 					handlerActivations.add(handlerService.activateHandler(action.getActionDefinitionId(),
@@ -70,7 +70,7 @@ public class STAlgorithmEmbeddedEditorActions extends EmbeddedEditorActions {
 			}
 		}));
 
-		viewer.getTextWidget().addDisposeListener(e -> {
+		viewer.getTextWidget().addDisposeListener(_ -> {
 			handlerService.deactivateHandlers(handlerActivations);
 			contextService.deactivateContext(contextActivation);
 		});

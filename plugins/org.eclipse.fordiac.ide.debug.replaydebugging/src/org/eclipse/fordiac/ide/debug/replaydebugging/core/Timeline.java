@@ -87,7 +87,7 @@ public class Timeline {
 		eventChanges.add(new EventChange(eventChanges.size(), newValues));
 		// add mapping from datapoints to event numbers
 		for (final var newValue : newValues) {
-			eventsWhereDatapointsChange.computeIfAbsent(newValue.datapoint(), k -> new HashSet<>());
+			eventsWhereDatapointsChange.computeIfAbsent(newValue.datapoint(), _ -> new HashSet<>());
 			eventsWhereDatapointsChange.get(newValue.datapoint()).add(Integer.valueOf(eventChanges.size() - 1));
 		}
 		notifyNewEvent();

@@ -117,7 +117,7 @@ public abstract class QualNameChangeListener {
 
 	protected void addChangeToPendingList(final QualNameChange qualNameChange) {
 		final List<QualNameChange> changeList = pendingChanges.computeIfAbsent(qualNameChange.key(),
-				key -> new ArrayList<>());
+				_ -> new ArrayList<>());
 		changeList.add(qualNameChange);
 	}
 

@@ -144,7 +144,7 @@ public class VariableDialog extends Dialog {
 			throws InvocationTargetException, InterruptedException {
 		final Variable<?>[] result = new Variable[1];
 		PlatformUI.getWorkbench().getProgressService()
-				.busyCursorWhile(monitor -> result[0] = VariableOperations.newVariable(element, initialValue));
+				.busyCursorWhile(_ -> result[0] = VariableOperations.newVariable(element, initialValue));
 		return result[0];
 	}
 }

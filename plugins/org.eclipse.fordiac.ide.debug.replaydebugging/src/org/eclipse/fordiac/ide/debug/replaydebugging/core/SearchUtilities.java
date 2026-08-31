@@ -79,7 +79,7 @@ public class SearchUtilities {
 			(actual, expected) -> actual.doubleValue() <= expected.doubleValue());
 
 	// Presence
-	public static final ValueHandler<Void> Presence = new ValueHandler<>(s -> null, (actual, expected) -> true);
+	public static final ValueHandler<Void> Presence = new ValueHandler<>(_ -> null, (_, _) -> true);
 
 	public static <T> List<ReplayNavigator.EventPosition> searchFor(final Timeline timeline, final String datapoint,
 			final String value, final ValueHandler<T> handler) {

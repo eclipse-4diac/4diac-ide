@@ -243,7 +243,7 @@ public enum LibraryManager {
 				final Manifest manifest = ManifestHelper.getManifest(it.next());
 				if (manifest != null && ManifestHelper.isLibrary(manifest) && manifest.getProduct() != null
 						&& manifest.getProduct().getSymbolicName() != null) {
-					map.computeIfAbsent(manifest.getProduct().getSymbolicName(), s -> new ArrayList<>())
+					map.computeIfAbsent(manifest.getProduct().getSymbolicName(), _ -> new ArrayList<>())
 							.add(new LibraryRecord(manifest.getProduct().getSymbolicName(),
 									manifest.getProduct().getName(),
 									manifest.getProduct().getVersionInfo().getVersion(),
@@ -788,7 +788,7 @@ public enum LibraryManager {
 
 			// updated dependencies
 			rnode.getDependencies().forEach((symb, val) -> {
-				final var dn = data.dependencyNodes().computeIfAbsent(symb, s -> new DependencyNode(symb));
+				final var dn = data.dependencyNodes().computeIfAbsent(symb, _ -> new DependencyNode(symb));
 				dn.putCause(symbolicName, val);
 				if (dn.isChanged()) {
 					queue.add(symb);
@@ -948,7 +948,7 @@ public enum LibraryManager {
 			final Manifest manifest = ManifestHelper.getContainerManifest(refProject);
 			final String symbolicName = ManifestHelper.getSymbolicName(manifest, refProject.getName());
 			final Version version = ManifestHelper.getVersion(manifest, Version.emptyVersion);
-			referenced.computeIfAbsent(symbolicName, name -> new ArrayList<>()).add(version);
+			referenced.computeIfAbsent(symbolicName, _ -> new ArrayList<>()).add(version);
 		}
 
 	}

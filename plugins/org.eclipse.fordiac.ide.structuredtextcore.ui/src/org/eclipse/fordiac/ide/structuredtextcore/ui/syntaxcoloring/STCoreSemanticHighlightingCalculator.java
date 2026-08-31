@@ -90,17 +90,17 @@ public class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlig
 	protected boolean highlightElement(final STFeatureExpression expression,
 			final IHighlightedPositionAcceptor acceptor, final CancelIndicator cancelIndicator) {
 		final String style = switch (expression.getFeature()) {
-		case final VarDeclaration unused -> STCoreHighlightingStyles.MEMBER_VARIABLE_ID;
-		case final FB unused -> STCoreHighlightingStyles.CALL_FUNCTION_BLOCK_ID;
-		case final STMethod method when expression.isCall() -> STCoreHighlightingStyles.CALL_METHOD_ID;
-		case final STMethod unused -> STCoreHighlightingStyles.RETURN_METHOD_ID;
-		case final STStandardFunction unused -> STCoreHighlightingStyles.CALL_FUNCTION_ID;
-		case final STFunction unused when expression.isCall() -> STCoreHighlightingStyles.CALL_FUNCTION_ID;
-		case final STFunction unused -> STCoreHighlightingStyles.RETURN_FUNCTION_ID;
+		case final VarDeclaration _ -> STCoreHighlightingStyles.MEMBER_VARIABLE_ID;
+		case final FB _ -> STCoreHighlightingStyles.CALL_FUNCTION_BLOCK_ID;
+		case final STMethod _ when expression.isCall() -> STCoreHighlightingStyles.CALL_METHOD_ID;
+		case final STMethod _ -> STCoreHighlightingStyles.RETURN_METHOD_ID;
+		case final STStandardFunction _ -> STCoreHighlightingStyles.CALL_FUNCTION_ID;
+		case final STFunction _ when expression.isCall() -> STCoreHighlightingStyles.CALL_FUNCTION_ID;
+		case final STFunction _ -> STCoreHighlightingStyles.RETURN_FUNCTION_ID;
 		case final STVarDeclaration varDeclaration when varDeclaration
 				.eContainer() instanceof STVarGlobalDeclarationBlock ->
 			STCoreHighlightingStyles.GLOBAL_CONST_ID;
-		case final STVarDeclaration unused -> STCoreHighlightingStyles.LOCAL_VARIABLE_ID;
+		case final STVarDeclaration _ -> STCoreHighlightingStyles.LOCAL_VARIABLE_ID;
 		case null, default -> null;
 		};
 		final Iterable<ILeafNode> leafNodes = NodeModelUtils.findActualNodeFor(expression).getLeafNodes();

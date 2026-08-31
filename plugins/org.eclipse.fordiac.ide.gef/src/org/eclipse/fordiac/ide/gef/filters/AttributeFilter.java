@@ -53,7 +53,7 @@ public class AttributeFilter implements IFilter {
 				&& ie.getFBType() instanceof FunctionFBType ->
 			null;
 		case final IAdaptable adaptable -> adaptable.getAdapter(ConfigurableObject.class);
-		case final TextSelection textSel -> getConfObjectFromActiveEditor();
+		case final TextSelection _ -> getConfObjectFromActiveEditor();
 		case null, default -> null;
 		};
 	}

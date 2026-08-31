@@ -233,18 +233,18 @@ public final class ValueOperations {
 
 	private static AnyMagnitudeValue add(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> toLRealValue(first.doubleValue() + second.doubleValue());
-		case final RealType unused -> toRealValue(first.floatValue() + second.floatValue());
-		case final LintType unused -> toLIntValue(first.longValue() + second.longValue());
-		case final DintType unused -> toDIntValue(first.intValue() + second.intValue());
-		case final IntType unused -> toIntValue((short) (first.shortValue() + second.shortValue()));
-		case final SintType unused -> toSIntValue((byte) (first.byteValue() + second.byteValue()));
-		case final UlintType unused -> toULIntValue(first.longValue() + second.longValue());
-		case final UdintType unused -> toUDIntValue(first.intValue() + second.intValue());
-		case final UintType unused -> toUIntValue((short) (first.shortValue() + second.shortValue()));
-		case final UsintType unused -> toUSIntValue((byte) (first.byteValue() + second.byteValue()));
-		case final LtimeType unused -> toLTimeValue(first.longValue() + second.longValue());
-		case final TimeType unused -> toTimeValue(first.longValue() + second.longValue());
+		case final LrealType _ -> toLRealValue(first.doubleValue() + second.doubleValue());
+		case final RealType _ -> toRealValue(first.floatValue() + second.floatValue());
+		case final LintType _ -> toLIntValue(first.longValue() + second.longValue());
+		case final DintType _ -> toDIntValue(first.intValue() + second.intValue());
+		case final IntType _ -> toIntValue((short) (first.shortValue() + second.shortValue()));
+		case final SintType _ -> toSIntValue((byte) (first.byteValue() + second.byteValue()));
+		case final UlintType _ -> toULIntValue(first.longValue() + second.longValue());
+		case final UdintType _ -> toUDIntValue(first.intValue() + second.intValue());
+		case final UintType _ -> toUIntValue((short) (first.shortValue() + second.shortValue()));
+		case final UsintType _ -> toUSIntValue((byte) (first.byteValue() + second.byteValue()));
+		case final LtimeType _ -> toLTimeValue(first.longValue() + second.longValue());
+		case final TimeType _ -> toTimeValue(first.longValue() + second.longValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Add, first, second);
 		};
@@ -252,10 +252,10 @@ public final class ValueOperations {
 
 	private static AnyDateValue add(final AnyDateValue first, final TimeValue second) {
 		return switch (first) {
-		case final TimeOfDayValue timeOfDayValue -> toTimeOfDayValue(first.toNanos() + second.longValue());
-		case final LTimeOfDayValue ltimeOfDayValue -> toLTimeOfDayValue(first.toNanos() + second.longValue());
-		case final DateAndTimeValue dateAndTimeValue -> toDateAndTimeValue(first.toNanos() + second.longValue());
-		case final LDateAndTimeValue ldateAndTimeValue -> toLDateAndTimeValue(first.toNanos() + second.longValue());
+		case final TimeOfDayValue _ -> toTimeOfDayValue(first.toNanos() + second.longValue());
+		case final LTimeOfDayValue _ -> toLTimeOfDayValue(first.toNanos() + second.longValue());
+		case final DateAndTimeValue _ -> toDateAndTimeValue(first.toNanos() + second.longValue());
+		case final LDateAndTimeValue _ -> toLDateAndTimeValue(first.toNanos() + second.longValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Add, first, second);
 		};
@@ -263,10 +263,10 @@ public final class ValueOperations {
 
 	private static AnyDateValue add(final AnyDateValue first, final LTimeValue second) {
 		return switch (first) {
-		case final TimeOfDayValue timeOfDayValue -> toLTimeOfDayValue(first.toNanos() + second.longValue());
-		case final LTimeOfDayValue ltimeOfDayValue -> toLTimeOfDayValue(first.toNanos() + second.longValue());
-		case final DateAndTimeValue dateAndTimeValue -> toLDateAndTimeValue(first.toNanos() + second.longValue());
-		case final LDateAndTimeValue ldateAndTimeValue -> toLDateAndTimeValue(first.toNanos() + second.longValue());
+		case final TimeOfDayValue _ -> toLTimeOfDayValue(first.toNanos() + second.longValue());
+		case final LTimeOfDayValue _ -> toLTimeOfDayValue(first.toNanos() + second.longValue());
+		case final DateAndTimeValue _ -> toLDateAndTimeValue(first.toNanos() + second.longValue());
+		case final LDateAndTimeValue _ -> toLDateAndTimeValue(first.toNanos() + second.longValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Add, first, second);
 		};
@@ -293,18 +293,18 @@ public final class ValueOperations {
 
 	private static AnyMagnitudeValue subtract(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> toLRealValue(first.doubleValue() - second.doubleValue());
-		case final RealType unused -> toRealValue(first.floatValue() - second.floatValue());
-		case final LintType unused -> toLIntValue(first.longValue() - second.longValue());
-		case final DintType unused -> toDIntValue(first.intValue() - second.intValue());
-		case final IntType unused -> toIntValue((short) (first.shortValue() - second.shortValue()));
-		case final SintType unused -> toSIntValue((byte) (first.byteValue() - second.byteValue()));
-		case final UlintType unused -> toULIntValue(first.longValue() - second.longValue());
-		case final UdintType unused -> toUDIntValue(first.intValue() - second.intValue());
-		case final UintType unused -> toUIntValue((short) (first.shortValue() - second.shortValue()));
-		case final UsintType unused -> toUSIntValue((byte) (first.byteValue() - second.byteValue()));
-		case final LtimeType unused -> toLTimeValue(first.longValue() - second.longValue());
-		case final TimeType unused -> toTimeValue(first.longValue() - second.longValue());
+		case final LrealType _ -> toLRealValue(first.doubleValue() - second.doubleValue());
+		case final RealType _ -> toRealValue(first.floatValue() - second.floatValue());
+		case final LintType _ -> toLIntValue(first.longValue() - second.longValue());
+		case final DintType _ -> toDIntValue(first.intValue() - second.intValue());
+		case final IntType _ -> toIntValue((short) (first.shortValue() - second.shortValue()));
+		case final SintType _ -> toSIntValue((byte) (first.byteValue() - second.byteValue()));
+		case final UlintType _ -> toULIntValue(first.longValue() - second.longValue());
+		case final UdintType _ -> toUDIntValue(first.intValue() - second.intValue());
+		case final UintType _ -> toUIntValue((short) (first.shortValue() - second.shortValue()));
+		case final UsintType _ -> toUSIntValue((byte) (first.byteValue() - second.byteValue()));
+		case final LtimeType _ -> toLTimeValue(first.longValue() - second.longValue());
+		case final TimeType _ -> toTimeValue(first.longValue() - second.longValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Subtract, first, second);
 		};
@@ -312,10 +312,10 @@ public final class ValueOperations {
 
 	private static AnyDateValue subtract(final AnyDateValue first, final TimeValue second) {
 		return switch (first) {
-		case final TimeOfDayValue timeOfDayValue -> toTimeOfDayValue(first.toNanos() - second.longValue());
-		case final LTimeOfDayValue ltimeOfDayValue -> toLTimeOfDayValue(first.toNanos() - second.longValue());
-		case final DateAndTimeValue dateAndTimeValue -> toDateAndTimeValue(first.toNanos() - second.longValue());
-		case final LDateAndTimeValue ldateAndTimeValue -> toLDateAndTimeValue(first.toNanos() - second.longValue());
+		case final TimeOfDayValue _ -> toTimeOfDayValue(first.toNanos() - second.longValue());
+		case final LTimeOfDayValue _ -> toLTimeOfDayValue(first.toNanos() - second.longValue());
+		case final DateAndTimeValue _ -> toDateAndTimeValue(first.toNanos() - second.longValue());
+		case final LDateAndTimeValue _ -> toLDateAndTimeValue(first.toNanos() - second.longValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Subtract, first, second);
 		};
@@ -323,10 +323,10 @@ public final class ValueOperations {
 
 	private static AnyDateValue subtract(final AnyDateValue first, final LTimeValue second) {
 		return switch (first) {
-		case final TimeOfDayValue timeOfDayValue -> toLTimeOfDayValue(first.toNanos() - second.longValue());
-		case final LTimeOfDayValue ltimeOfDayValue -> toLTimeOfDayValue(first.toNanos() - second.longValue());
-		case final DateAndTimeValue dateAndTimeValue -> toLDateAndTimeValue(first.toNanos() - second.longValue());
-		case final LDateAndTimeValue ldateAndTimeValue -> toLDateAndTimeValue(first.toNanos() - second.longValue());
+		case final TimeOfDayValue _ -> toLTimeOfDayValue(first.toNanos() - second.longValue());
+		case final LTimeOfDayValue _ -> toLTimeOfDayValue(first.toNanos() - second.longValue());
+		case final DateAndTimeValue _ -> toLDateAndTimeValue(first.toNanos() - second.longValue());
+		case final LDateAndTimeValue _ -> toLDateAndTimeValue(first.toNanos() - second.longValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Subtract, first, second);
 		};
@@ -334,12 +334,12 @@ public final class ValueOperations {
 
 	private static AnyDurationValue subtract(final AnyDateValue first, final AnyDateValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final DateType unused -> toTimeValue(first.toNanos() - second.toNanos());
-		case final TimeOfDayType unused -> toTimeValue(first.toNanos() - second.toNanos());
-		case final DateAndTimeType unused -> toTimeValue(first.toNanos() - second.toNanos());
-		case final LdateType unused -> toLTimeValue(first.toNanos() - second.toNanos());
-		case final LtodType unused -> toLTimeValue(first.toNanos() - second.toNanos());
-		case final LdtType unused -> toLTimeValue(first.toNanos() - second.toNanos());
+		case final DateType _ -> toTimeValue(first.toNanos() - second.toNanos());
+		case final TimeOfDayType _ -> toTimeValue(first.toNanos() - second.toNanos());
+		case final DateAndTimeType _ -> toTimeValue(first.toNanos() - second.toNanos());
+		case final LdateType _ -> toLTimeValue(first.toNanos() - second.toNanos());
+		case final LtodType _ -> toLTimeValue(first.toNanos() - second.toNanos());
+		case final LdtType _ -> toLTimeValue(first.toNanos() - second.toNanos());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Subtract, first, second);
 		};
@@ -355,20 +355,20 @@ public final class ValueOperations {
 
 	private static AnyMagnitudeValue multiply(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> toLRealValue(first.doubleValue() * second.doubleValue());
-		case final RealType unused -> toRealValue(first.floatValue() * second.floatValue());
-		case final LintType unused -> toLIntValue(first.longValue() * second.longValue());
-		case final DintType unused -> toDIntValue(first.intValue() * second.intValue());
-		case final IntType unused -> toIntValue((short) (first.shortValue() * second.shortValue()));
-		case final SintType unused -> toSIntValue((byte) (first.byteValue() * second.byteValue()));
-		case final UlintType unused -> toULIntValue(first.longValue() * second.longValue());
-		case final UdintType unused -> toUDIntValue(first.intValue() * second.intValue());
-		case final UintType unused -> toUIntValue((short) (first.shortValue() * second.shortValue()));
-		case final UsintType unused -> toUSIntValue((byte) (first.byteValue() * second.byteValue()));
-		case final LtimeType unused -> second instanceof AnyRealValue ? //
+		case final LrealType _ -> toLRealValue(first.doubleValue() * second.doubleValue());
+		case final RealType _ -> toRealValue(first.floatValue() * second.floatValue());
+		case final LintType _ -> toLIntValue(first.longValue() * second.longValue());
+		case final DintType _ -> toDIntValue(first.intValue() * second.intValue());
+		case final IntType _ -> toIntValue((short) (first.shortValue() * second.shortValue()));
+		case final SintType _ -> toSIntValue((byte) (first.byteValue() * second.byteValue()));
+		case final UlintType _ -> toULIntValue(first.longValue() * second.longValue());
+		case final UdintType _ -> toUDIntValue(first.intValue() * second.intValue());
+		case final UintType _ -> toUIntValue((short) (first.shortValue() * second.shortValue()));
+		case final UsintType _ -> toUSIntValue((byte) (first.byteValue() * second.byteValue()));
+		case final LtimeType _ -> second instanceof AnyRealValue ? //
 				toLTimeValue((long) (first.doubleValue() * second.doubleValue()))
 				: toLTimeValue(first.longValue() * second.longValue());
-		case final TimeType unused -> second instanceof AnyRealValue ? //
+		case final TimeType _ -> second instanceof AnyRealValue ? //
 				toTimeValue((long) (first.doubleValue() * second.doubleValue()))
 				: toTimeValue(first.longValue() * second.longValue());
 		case null, default ->
@@ -386,17 +386,17 @@ public final class ValueOperations {
 
 	private static AnyMagnitudeValue divideBy(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> toLRealValue(first.doubleValue() / second.doubleValue());
-		case final RealType unused -> toRealValue(first.floatValue() / second.floatValue());
-		case final LintType unused -> toLIntValue(first.longValue() / second.longValue());
-		case final DintType unused -> toDIntValue(first.intValue() / second.intValue());
-		case final IntType unused -> toIntValue((short) (first.shortValue() / second.shortValue()));
-		case final SintType unused -> toSIntValue((byte) (first.byteValue() / second.byteValue()));
-		case final UlintType unused -> toULIntValue(Long.divideUnsigned(first.longValue(), second.longValue()));
-		case final UdintType unused -> toUDIntValue(Integer.divideUnsigned(first.intValue(), second.intValue()));
-		case final UintType unused -> toUIntValue((short) Integer.divideUnsigned(first.intValue(), second.intValue()));
-		case final UsintType unused -> toUSIntValue((byte) Integer.divideUnsigned(first.intValue(), second.intValue()));
-		case final LtimeType unused -> {
+		case final LrealType _ -> toLRealValue(first.doubleValue() / second.doubleValue());
+		case final RealType _ -> toRealValue(first.floatValue() / second.floatValue());
+		case final LintType _ -> toLIntValue(first.longValue() / second.longValue());
+		case final DintType _ -> toDIntValue(first.intValue() / second.intValue());
+		case final IntType _ -> toIntValue((short) (first.shortValue() / second.shortValue()));
+		case final SintType _ -> toSIntValue((byte) (first.byteValue() / second.byteValue()));
+		case final UlintType _ -> toULIntValue(Long.divideUnsigned(first.longValue(), second.longValue()));
+		case final UdintType _ -> toUDIntValue(Integer.divideUnsigned(first.intValue(), second.intValue()));
+		case final UintType _ -> toUIntValue((short) Integer.divideUnsigned(first.intValue(), second.intValue()));
+		case final UsintType _ -> toUSIntValue((byte) Integer.divideUnsigned(first.intValue(), second.intValue()));
+		case final LtimeType _ -> {
 			if (second instanceof AnyRealValue) {
 				if (second.doubleValue() == 0.0) {
 					throw new ArithmeticException(Messages.ValueOperations_DivisionByZero);
@@ -405,7 +405,7 @@ public final class ValueOperations {
 			}
 			yield toLTimeValue(first.longValue() / second.longValue());
 		}
-		case final TimeType unused -> {
+		case final TimeType _ -> {
 			if (second instanceof AnyRealValue) {
 				if (second.doubleValue() == 0.0) {
 					throw new ArithmeticException(Messages.ValueOperations_DivisionByZero);
@@ -432,16 +432,14 @@ public final class ValueOperations {
 			return (AnyIntValue) defaultValue(resultType(first.getType(), second.getType()));
 		}
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LintType unused -> toLIntValue(first.longValue() % second.longValue());
-		case final DintType unused -> toDIntValue(first.intValue() % second.intValue());
-		case final IntType unused -> toIntValue((short) (first.shortValue() % second.shortValue()));
-		case final SintType unused -> toSIntValue((byte) (first.byteValue() % second.byteValue()));
-		case final UlintType unused -> toULIntValue(Long.remainderUnsigned(first.longValue(), second.longValue()));
-		case final UdintType unused -> toUDIntValue(Integer.remainderUnsigned(first.intValue(), second.intValue()));
-		case final UintType unused ->
-			toUIntValue((short) Integer.remainderUnsigned(first.intValue(), second.intValue()));
-		case final UsintType unused ->
-			toUSIntValue((byte) Integer.remainderUnsigned(first.intValue(), second.intValue()));
+		case final LintType _ -> toLIntValue(first.longValue() % second.longValue());
+		case final DintType _ -> toDIntValue(first.intValue() % second.intValue());
+		case final IntType _ -> toIntValue((short) (first.shortValue() % second.shortValue()));
+		case final SintType _ -> toSIntValue((byte) (first.byteValue() % second.byteValue()));
+		case final UlintType _ -> toULIntValue(Long.remainderUnsigned(first.longValue(), second.longValue()));
+		case final UdintType _ -> toUDIntValue(Integer.remainderUnsigned(first.intValue(), second.intValue()));
+		case final UintType _ -> toUIntValue((short) Integer.remainderUnsigned(first.intValue(), second.intValue()));
+		case final UsintType _ -> toUSIntValue((byte) Integer.remainderUnsigned(first.intValue(), second.intValue()));
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Remainder, first, second);
 		};
@@ -457,8 +455,8 @@ public final class ValueOperations {
 
 	private static AnyNumValue power(final AnyNumValue first, final AnyNumValue second) {
 		return switch (first) {
-		case final RealValue realValue -> toRealValue((float) Math.pow(first.floatValue(), second.floatValue()));
-		case final LRealValue lrealValue -> toLRealValue(Math.pow(first.doubleValue(), second.doubleValue()));
+		case final RealValue _ -> toRealValue((float) Math.pow(first.floatValue(), second.floatValue()));
+		case final LRealValue _ -> toLRealValue(Math.pow(first.doubleValue(), second.doubleValue()));
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Power, first, second);
 		};
@@ -474,11 +472,11 @@ public final class ValueOperations {
 
 	private static AnyBitValue bitwiseAnd(final AnyBitValue first, final AnyBitValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LwordType unused -> toLWordValue(first.longValue() & second.longValue());
-		case final DwordType unused -> toDWordValue(first.intValue() & second.intValue());
-		case final WordType unused -> toWordValue((short) (first.shortValue() & second.shortValue()));
-		case final ByteType unused -> toByteValue((byte) (first.byteValue() & second.byteValue()));
-		case final BoolType unused -> toBoolValue(first.boolValue() && second.boolValue());
+		case final LwordType _ -> toLWordValue(first.longValue() & second.longValue());
+		case final DwordType _ -> toDWordValue(first.intValue() & second.intValue());
+		case final WordType _ -> toWordValue((short) (first.shortValue() & second.shortValue()));
+		case final ByteType _ -> toByteValue((byte) (first.byteValue() & second.byteValue()));
+		case final BoolType _ -> toBoolValue(first.boolValue() && second.boolValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_And, first, second);
 		};
@@ -494,11 +492,11 @@ public final class ValueOperations {
 
 	private static AnyBitValue bitwiseOr(final AnyBitValue first, final AnyBitValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LwordType unused -> toLWordValue(first.longValue() | second.longValue());
-		case final DwordType unused -> toDWordValue(first.intValue() | second.intValue());
-		case final WordType unused -> toWordValue((short) (first.shortValue() | second.shortValue()));
-		case final ByteType unused -> toByteValue((byte) (first.byteValue() | second.byteValue()));
-		case final BoolType unused -> toBoolValue(first.boolValue() || second.boolValue());
+		case final LwordType _ -> toLWordValue(first.longValue() | second.longValue());
+		case final DwordType _ -> toDWordValue(first.intValue() | second.intValue());
+		case final WordType _ -> toWordValue((short) (first.shortValue() | second.shortValue()));
+		case final ByteType _ -> toByteValue((byte) (first.byteValue() | second.byteValue()));
+		case final BoolType _ -> toBoolValue(first.boolValue() || second.boolValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Or, first, second);
 		};
@@ -514,11 +512,11 @@ public final class ValueOperations {
 
 	private static AnyBitValue bitwiseXor(final AnyBitValue first, final AnyBitValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LwordType unused -> toLWordValue(first.longValue() ^ second.longValue());
-		case final DwordType unused -> toDWordValue(first.intValue() ^ second.intValue());
-		case final WordType unused -> toWordValue((short) (first.shortValue() ^ second.shortValue()));
-		case final ByteType unused -> toByteValue((byte) (first.byteValue() ^ second.byteValue()));
-		case final BoolType unused -> toBoolValue(first.boolValue() ^ second.boolValue());
+		case final LwordType _ -> toLWordValue(first.longValue() ^ second.longValue());
+		case final DwordType _ -> toDWordValue(first.intValue() ^ second.intValue());
+		case final WordType _ -> toWordValue((short) (first.shortValue() ^ second.shortValue()));
+		case final ByteType _ -> toByteValue((byte) (first.byteValue() ^ second.byteValue()));
+		case final BoolType _ -> toBoolValue(first.boolValue() ^ second.boolValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Xor, first, second);
 		};
@@ -534,10 +532,10 @@ public final class ValueOperations {
 
 	private static AnyBitValue shiftLeft(final AnyBitValue first, final AnyIntValue second) {
 		return switch (first) {
-		case final LWordValue lwordValue -> toLWordValue(first.longValue() << second.intValue());
-		case final DWordValue dwordValue -> toDWordValue(first.intValue() << second.intValue());
-		case final WordValue wordValue -> toWordValue((short) (first.shortValue() << second.intValue()));
-		case final ByteValue byteValue -> toByteValue((byte) (first.byteValue() << second.intValue()));
+		case final LWordValue _ -> toLWordValue(first.longValue() << second.intValue());
+		case final DWordValue _ -> toDWordValue(first.intValue() << second.intValue());
+		case final WordValue _ -> toWordValue((short) (first.shortValue() << second.intValue()));
+		case final ByteValue _ -> toByteValue((byte) (first.byteValue() << second.intValue()));
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_ShiftLeft, first, second);
 		};
@@ -553,10 +551,10 @@ public final class ValueOperations {
 
 	private static AnyBitValue shiftRight(final AnyBitValue first, final AnyIntValue second) {
 		return switch (first) {
-		case final LWordValue lwordValue -> toLWordValue(first.longValue() >>> second.intValue());
-		case final DWordValue dwordValue -> toDWordValue(first.intValue() >>> second.intValue());
-		case final WordValue wordValue -> toWordValue((short) (first.intValue() >>> second.intValue()));
-		case final ByteValue byteValue -> toByteValue((byte) (first.intValue() >>> second.intValue()));
+		case final LWordValue _ -> toLWordValue(first.longValue() >>> second.intValue());
+		case final DWordValue _ -> toDWordValue(first.intValue() >>> second.intValue());
+		case final WordValue _ -> toWordValue((short) (first.intValue() >>> second.intValue()));
+		case final ByteValue _ -> toByteValue((byte) (first.intValue() >>> second.intValue()));
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_ShiftRight, first, second);
 		};
@@ -572,11 +570,11 @@ public final class ValueOperations {
 
 	private static AnyBitValue rotateLeft(final AnyBitValue first, final AnyIntValue second) {
 		return switch (first) {
-		case final LWordValue lwordValue -> toLWordValue(Long.rotateLeft(first.longValue(), second.intValue()));
-		case final DWordValue dwordValue -> toDWordValue(Integer.rotateLeft(first.intValue(), second.intValue()));
-		case final WordValue wordValue -> toWordValue(
+		case final LWordValue _ -> toLWordValue(Long.rotateLeft(first.longValue(), second.intValue()));
+		case final DWordValue _ -> toDWordValue(Integer.rotateLeft(first.intValue(), second.intValue()));
+		case final WordValue _ -> toWordValue(
 				(short) ((first.intValue() << second.intValue()) | (first.intValue() >>> (16 - second.intValue()))));
-		case final ByteValue byteValue -> toByteValue(
+		case final ByteValue _ -> toByteValue(
 				(byte) ((first.intValue() << second.intValue()) | (first.intValue() >>> (8 - second.intValue()))));
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_RotateLeft, first, second);
@@ -593,11 +591,11 @@ public final class ValueOperations {
 
 	private static AnyBitValue rotateRight(final AnyBitValue first, final AnyIntValue second) {
 		return switch (first) {
-		case final LWordValue lwordValue -> toLWordValue(Long.rotateRight(first.longValue(), second.intValue()));
-		case final DWordValue dwordValue -> toDWordValue(Integer.rotateRight(first.intValue(), second.intValue()));
-		case final WordValue wordValue -> toWordValue(
+		case final LWordValue _ -> toLWordValue(Long.rotateRight(first.longValue(), second.intValue()));
+		case final DWordValue _ -> toDWordValue(Integer.rotateRight(first.intValue(), second.intValue()));
+		case final WordValue _ -> toWordValue(
 				(short) ((first.intValue() >>> second.intValue()) | (first.intValue() << (16 - second.intValue()))));
-		case final ByteValue byteValue -> toByteValue(
+		case final ByteValue _ -> toByteValue(
 				(byte) ((first.intValue() >>> second.intValue()) | (first.intValue() << (8 - second.intValue()))));
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_RotateRight, first, second);
@@ -638,27 +636,27 @@ public final class ValueOperations {
 
 	private static boolean equals(final AnyNumValue first, final AnyNumValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> first.doubleValue() == second.doubleValue();
-		case final RealType unused -> first.floatValue() == second.floatValue();
-		case final LintType unused -> first.longValue() == second.longValue();
-		case final UlintType unused -> first.longValue() == second.longValue();
-		case final DintType unused -> first.intValue() == second.intValue();
-		case final UdintType unused -> first.intValue() == second.intValue();
-		case final IntType unused -> first.shortValue() == second.shortValue();
-		case final UintType unused -> first.shortValue() == second.shortValue();
-		case final SintType unused -> first.byteValue() == second.byteValue();
-		case final UsintType unused -> first.byteValue() == second.byteValue();
+		case final LrealType _ -> first.doubleValue() == second.doubleValue();
+		case final RealType _ -> first.floatValue() == second.floatValue();
+		case final LintType _ -> first.longValue() == second.longValue();
+		case final UlintType _ -> first.longValue() == second.longValue();
+		case final DintType _ -> first.intValue() == second.intValue();
+		case final UdintType _ -> first.intValue() == second.intValue();
+		case final IntType _ -> first.shortValue() == second.shortValue();
+		case final UintType _ -> first.shortValue() == second.shortValue();
+		case final SintType _ -> first.byteValue() == second.byteValue();
+		case final UsintType _ -> first.byteValue() == second.byteValue();
 		case null, default -> first.bigDecimalValue().equals(second.bigDecimalValue());
 		};
 	}
 
 	private static boolean equals(final AnyBitValue first, final AnyBitValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LwordType unused -> first.longValue() == second.longValue();
-		case final DwordType unused -> first.intValue() == second.intValue();
-		case final WordType unused -> first.shortValue() == second.shortValue();
-		case final ByteType unused -> first.byteValue() == second.byteValue();
-		case final BoolType unused -> first.boolValue() == second.boolValue();
+		case final LwordType _ -> first.longValue() == second.longValue();
+		case final DwordType _ -> first.intValue() == second.intValue();
+		case final WordType _ -> first.shortValue() == second.shortValue();
+		case final ByteType _ -> first.byteValue() == second.byteValue();
+		case final BoolType _ -> first.boolValue() == second.boolValue();
 		case null, default -> first.bigIntegerValue().equals(second.bigIntegerValue());
 		};
 	}
@@ -705,18 +703,18 @@ public final class ValueOperations {
 
 	private static boolean lessThan(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> first.doubleValue() < second.doubleValue();
-		case final RealType unused -> first.floatValue() < second.floatValue();
-		case final LintType unused -> first.longValue() < second.longValue();
-		case final DintType unused -> first.intValue() < second.intValue();
-		case final IntType unused -> first.shortValue() < second.shortValue();
-		case final SintType unused -> first.byteValue() < second.byteValue();
-		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) < 0;
-		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
-		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
-		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
-		case final LtimeType unused -> first.longValue() < second.longValue();
-		case final TimeType unused -> first.longValue() < second.longValue();
+		case final LrealType _ -> first.doubleValue() < second.doubleValue();
+		case final RealType _ -> first.floatValue() < second.floatValue();
+		case final LintType _ -> first.longValue() < second.longValue();
+		case final DintType _ -> first.intValue() < second.intValue();
+		case final IntType _ -> first.shortValue() < second.shortValue();
+		case final SintType _ -> first.byteValue() < second.byteValue();
+		case final UlintType _ -> Long.compareUnsigned(first.longValue(), second.longValue()) < 0;
+		case final UdintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
+		case final UintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
+		case final UsintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) < 0;
+		case final LtimeType _ -> first.longValue() < second.longValue();
+		case final TimeType _ -> first.longValue() < second.longValue();
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
 		};
@@ -744,18 +742,18 @@ public final class ValueOperations {
 
 	private static boolean lessEquals(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> first.doubleValue() <= second.doubleValue();
-		case final RealType unused -> first.floatValue() <= second.floatValue();
-		case final LintType unused -> first.longValue() <= second.longValue();
-		case final DintType unused -> first.intValue() <= second.intValue();
-		case final IntType unused -> first.shortValue() <= second.shortValue();
-		case final SintType unused -> first.byteValue() <= second.byteValue();
-		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) <= 0;
-		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
-		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
-		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
-		case final LtimeType unused -> first.longValue() <= second.longValue();
-		case final TimeType unused -> first.longValue() <= second.longValue();
+		case final LrealType _ -> first.doubleValue() <= second.doubleValue();
+		case final RealType _ -> first.floatValue() <= second.floatValue();
+		case final LintType _ -> first.longValue() <= second.longValue();
+		case final DintType _ -> first.intValue() <= second.intValue();
+		case final IntType _ -> first.shortValue() <= second.shortValue();
+		case final SintType _ -> first.byteValue() <= second.byteValue();
+		case final UlintType _ -> Long.compareUnsigned(first.longValue(), second.longValue()) <= 0;
+		case final UdintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
+		case final UintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
+		case final UsintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) <= 0;
+		case final LtimeType _ -> first.longValue() <= second.longValue();
+		case final TimeType _ -> first.longValue() <= second.longValue();
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
 		};
@@ -783,18 +781,18 @@ public final class ValueOperations {
 
 	private static boolean greaterThan(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> first.doubleValue() > second.doubleValue();
-		case final RealType unused -> first.floatValue() > second.floatValue();
-		case final LintType unused -> first.longValue() > second.longValue();
-		case final DintType unused -> first.intValue() > second.intValue();
-		case final IntType unused -> first.shortValue() > second.shortValue();
-		case final SintType unused -> first.byteValue() > second.byteValue();
-		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) > 0;
-		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
-		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
-		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
-		case final LtimeType unused -> first.longValue() > second.longValue();
-		case final TimeType unused -> first.longValue() > second.longValue();
+		case final LrealType _ -> first.doubleValue() > second.doubleValue();
+		case final RealType _ -> first.floatValue() > second.floatValue();
+		case final LintType _ -> first.longValue() > second.longValue();
+		case final DintType _ -> first.intValue() > second.intValue();
+		case final IntType _ -> first.shortValue() > second.shortValue();
+		case final SintType _ -> first.byteValue() > second.byteValue();
+		case final UlintType _ -> Long.compareUnsigned(first.longValue(), second.longValue()) > 0;
+		case final UdintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
+		case final UintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
+		case final UsintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) > 0;
+		case final LtimeType _ -> first.longValue() > second.longValue();
+		case final TimeType _ -> first.longValue() > second.longValue();
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
 		};
@@ -822,18 +820,18 @@ public final class ValueOperations {
 
 	private static boolean greaterEquals(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> first.doubleValue() >= second.doubleValue();
-		case final RealType unused -> first.floatValue() >= second.floatValue();
-		case final LintType unused -> first.longValue() >= second.longValue();
-		case final DintType unused -> first.intValue() >= second.intValue();
-		case final IntType unused -> first.shortValue() >= second.shortValue();
-		case final SintType unused -> first.byteValue() >= second.byteValue();
-		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue()) >= 0;
-		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
-		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
-		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
-		case final LtimeType unused -> first.longValue() >= second.longValue();
-		case final TimeType unused -> first.longValue() >= second.longValue();
+		case final LrealType _ -> first.doubleValue() >= second.doubleValue();
+		case final RealType _ -> first.floatValue() >= second.floatValue();
+		case final LintType _ -> first.longValue() >= second.longValue();
+		case final DintType _ -> first.intValue() >= second.intValue();
+		case final IntType _ -> first.shortValue() >= second.shortValue();
+		case final SintType _ -> first.byteValue() >= second.byteValue();
+		case final UlintType _ -> Long.compareUnsigned(first.longValue(), second.longValue()) >= 0;
+		case final UdintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
+		case final UintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
+		case final UsintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue()) >= 0;
+		case final LtimeType _ -> first.longValue() >= second.longValue();
+		case final TimeType _ -> first.longValue() >= second.longValue();
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
 		};
@@ -861,18 +859,18 @@ public final class ValueOperations {
 
 	private static int compareTo(final AnyMagnitudeValue first, final AnyMagnitudeValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LrealType unused -> Double.compare(first.doubleValue(), second.doubleValue());
-		case final RealType unused -> Float.compare(first.floatValue(), second.floatValue());
-		case final LintType unused -> Long.compare(first.longValue(), second.longValue());
-		case final DintType unused -> Integer.compare(first.intValue(), second.intValue());
-		case final IntType unused -> Short.compare(first.shortValue(), second.shortValue());
-		case final SintType unused -> Byte.compare(first.byteValue(), second.byteValue());
-		case final UlintType unused -> Long.compareUnsigned(first.longValue(), second.longValue());
-		case final UdintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue());
-		case final UintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue());
-		case final UsintType unused -> Integer.compareUnsigned(first.intValue(), second.intValue());
-		case final LtimeType unused -> Long.compare(first.longValue(), second.longValue());
-		case final TimeType unused -> Long.compare(first.longValue(), second.longValue());
+		case final LrealType _ -> Double.compare(first.doubleValue(), second.doubleValue());
+		case final RealType _ -> Float.compare(first.floatValue(), second.floatValue());
+		case final LintType _ -> Long.compare(first.longValue(), second.longValue());
+		case final DintType _ -> Integer.compare(first.intValue(), second.intValue());
+		case final IntType _ -> Short.compare(first.shortValue(), second.shortValue());
+		case final SintType _ -> Byte.compare(first.byteValue(), second.byteValue());
+		case final UlintType _ -> Long.compareUnsigned(first.longValue(), second.longValue());
+		case final UdintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue());
+		case final UintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue());
+		case final UsintType _ -> Integer.compareUnsigned(first.intValue(), second.intValue());
+		case final LtimeType _ -> Long.compare(first.longValue(), second.longValue());
+		case final TimeType _ -> Long.compare(first.longValue(), second.longValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
 		};
@@ -880,11 +878,11 @@ public final class ValueOperations {
 
 	private static int compareTo(final AnyBitValue first, final AnyBitValue second) {
 		return switch (resultType(first.getType(), second.getType())) {
-		case final LwordType unused -> Long.compareUnsigned(first.longValue(), second.longValue());
-		case final DwordType unused -> Integer.compareUnsigned(first.intValue(), second.intValue());
-		case final WordType unused -> Integer.compareUnsigned(first.intValue(), second.intValue());
-		case final ByteType unused -> Integer.compareUnsigned(first.intValue(), second.intValue());
-		case final BoolType unused -> Boolean.compare(first.boolValue(), second.boolValue());
+		case final LwordType _ -> Long.compareUnsigned(first.longValue(), second.longValue());
+		case final DwordType _ -> Integer.compareUnsigned(first.intValue(), second.intValue());
+		case final WordType _ -> Integer.compareUnsigned(first.intValue(), second.intValue());
+		case final ByteType _ -> Integer.compareUnsigned(first.intValue(), second.intValue());
+		case final BoolType _ -> Boolean.compare(first.boolValue(), second.boolValue());
 		case null, default ->
 			throw createUnsupportedBinaryOperationException(Messages.ValueOperations_Compare, first, second);
 		};
@@ -916,34 +914,34 @@ public final class ValueOperations {
 
 	private static Value partial(final ByteValue value, final DataType type, final int index) {
 		return switch (type) {
-		case final BoolType unused -> toBoolValue(((value.byteValue() >>> index) & 0x1) != 0);
+		case final BoolType _ -> toBoolValue(((value.byteValue() >>> index) & 0x1) != 0);
 		case null, default -> throw createUnsupportedPartialOperationException(value, type);
 		};
 	}
 
 	private static Value partial(final WordValue value, final DataType type, final int index) {
 		return switch (type) {
-		case final BoolType unused -> toBoolValue(((value.shortValue() >>> index) & 0x1) != 0);
-		case final ByteType unused -> toByteValue((byte) (value.shortValue() >>> (index * 8)));
+		case final BoolType _ -> toBoolValue(((value.shortValue() >>> index) & 0x1) != 0);
+		case final ByteType _ -> toByteValue((byte) (value.shortValue() >>> (index * 8)));
 		case null, default -> throw createUnsupportedPartialOperationException(value, type);
 		};
 	}
 
 	private static Value partial(final DWordValue value, final DataType type, final int index) {
 		return switch (type) {
-		case final BoolType unused -> toBoolValue(((value.intValue() >>> index) & 0x1) != 0);
-		case final ByteType unused -> toByteValue((byte) (value.intValue() >>> (index * 8)));
-		case final WordType unused -> toWordValue((short) (value.intValue() >>> (index * 16)));
+		case final BoolType _ -> toBoolValue(((value.intValue() >>> index) & 0x1) != 0);
+		case final ByteType _ -> toByteValue((byte) (value.intValue() >>> (index * 8)));
+		case final WordType _ -> toWordValue((short) (value.intValue() >>> (index * 16)));
 		case null, default -> throw createUnsupportedPartialOperationException(value, type);
 		};
 	}
 
 	private static Value partial(final LWordValue value, final DataType type, final int index) {
 		return switch (type) {
-		case final BoolType unused -> toBoolValue(((value.longValue() >>> index) & 0x1) != 0);
-		case final ByteType unused -> toByteValue((byte) (value.longValue() >>> (index * 8)));
-		case final WordType unused -> toWordValue((short) (value.longValue() >>> (index * 16)));
-		case final DwordType unused -> toDWordValue((int) (value.longValue() >>> (index * 32)));
+		case final BoolType _ -> toBoolValue(((value.longValue() >>> index) & 0x1) != 0);
+		case final ByteType _ -> toByteValue((byte) (value.longValue() >>> (index * 8)));
+		case final WordType _ -> toWordValue((short) (value.longValue() >>> (index * 16)));
+		case final DwordType _ -> toDWordValue((int) (value.longValue() >>> (index * 32)));
 		case null, default -> throw createUnsupportedPartialOperationException(value, type);
 		};
 	}
@@ -1015,50 +1013,50 @@ public final class ValueOperations {
 	public static Value defaultValue(final LibraryElement type) {
 		return switch (type) { // NOSONAR
 		case null -> null;
-		case final LrealType unused -> LRealValue.DEFAULT;
-		case final RealType unused -> RealValue.DEFAULT;
-		case final LintType unused -> LIntValue.DEFAULT;
-		case final DintType unused -> DIntValue.DEFAULT;
-		case final IntType unused -> IntValue.DEFAULT;
-		case final SintType unused -> SIntValue.DEFAULT;
-		case final UlintType unused -> ULIntValue.DEFAULT;
-		case final UdintType unused -> UDIntValue.DEFAULT;
-		case final UintType unused -> UIntValue.DEFAULT;
-		case final UsintType unused -> USIntValue.DEFAULT;
-		case final LtimeType unused -> LTimeValue.DEFAULT;
-		case final TimeType unused -> TimeValue.DEFAULT;
-		case final LwordType unused -> LWordValue.DEFAULT;
-		case final DwordType unused -> DWordValue.DEFAULT;
-		case final WordType unused -> WordValue.DEFAULT;
-		case final ByteType unused -> ByteValue.DEFAULT;
-		case final BoolType unused -> BoolValue.DEFAULT;
-		case final WstringType unused -> WStringValue.DEFAULT;
-		case final StringType unused -> StringValue.DEFAULT;
-		case final WcharType unused -> WCharValue.DEFAULT;
-		case final CharType unused -> CharValue.DEFAULT;
-		case final LdtType unused -> LDateAndTimeValue.DEFAULT;
-		case final DateAndTimeType unused -> DateAndTimeValue.DEFAULT;
-		case final LtodType unused -> LTimeOfDayValue.DEFAULT;
-		case final TimeOfDayType unused -> TimeOfDayValue.DEFAULT;
-		case final LdateType unused -> LDateValue.DEFAULT;
-		case final DateType unused -> DateValue.DEFAULT;
-		case final AnyDateType unused -> LDateAndTimeValue.DEFAULT;
-		case final AnyCharType unused -> WCharValue.DEFAULT;
-		case final AnyStringType unused -> WStringValue.DEFAULT;
-		case final AnyCharsType unused -> WStringValue.DEFAULT;
-		case final AnyBitType unused -> DWordValue.DEFAULT;
-		case final AnyDurationType unused -> LTimeValue.DEFAULT;
-		case final AnyRealType unused -> LRealValue.DEFAULT;
-		case final AnyUnsignedType unused -> UDIntValue.DEFAULT;
-		case final AnySignedType unused -> DIntValue.DEFAULT;
-		case final AnyIntType unused -> DIntValue.DEFAULT;
-		case final AnyNumType unused -> DIntValue.DEFAULT;
-		case final AnyMagnitudeType unused -> DIntValue.DEFAULT;
-		case final AnyElementaryType unused -> DIntValue.DEFAULT;
+		case final LrealType _ -> LRealValue.DEFAULT;
+		case final RealType _ -> RealValue.DEFAULT;
+		case final LintType _ -> LIntValue.DEFAULT;
+		case final DintType _ -> DIntValue.DEFAULT;
+		case final IntType _ -> IntValue.DEFAULT;
+		case final SintType _ -> SIntValue.DEFAULT;
+		case final UlintType _ -> ULIntValue.DEFAULT;
+		case final UdintType _ -> UDIntValue.DEFAULT;
+		case final UintType _ -> UIntValue.DEFAULT;
+		case final UsintType _ -> USIntValue.DEFAULT;
+		case final LtimeType _ -> LTimeValue.DEFAULT;
+		case final TimeType _ -> TimeValue.DEFAULT;
+		case final LwordType _ -> LWordValue.DEFAULT;
+		case final DwordType _ -> DWordValue.DEFAULT;
+		case final WordType _ -> WordValue.DEFAULT;
+		case final ByteType _ -> ByteValue.DEFAULT;
+		case final BoolType _ -> BoolValue.DEFAULT;
+		case final WstringType _ -> WStringValue.DEFAULT;
+		case final StringType _ -> StringValue.DEFAULT;
+		case final WcharType _ -> WCharValue.DEFAULT;
+		case final CharType _ -> CharValue.DEFAULT;
+		case final LdtType _ -> LDateAndTimeValue.DEFAULT;
+		case final DateAndTimeType _ -> DateAndTimeValue.DEFAULT;
+		case final LtodType _ -> LTimeOfDayValue.DEFAULT;
+		case final TimeOfDayType _ -> TimeOfDayValue.DEFAULT;
+		case final LdateType _ -> LDateValue.DEFAULT;
+		case final DateType _ -> DateValue.DEFAULT;
+		case final AnyDateType _ -> LDateAndTimeValue.DEFAULT;
+		case final AnyCharType _ -> WCharValue.DEFAULT;
+		case final AnyStringType _ -> WStringValue.DEFAULT;
+		case final AnyCharsType _ -> WStringValue.DEFAULT;
+		case final AnyBitType _ -> DWordValue.DEFAULT;
+		case final AnyDurationType _ -> LTimeValue.DEFAULT;
+		case final AnyRealType _ -> LRealValue.DEFAULT;
+		case final AnyUnsignedType _ -> UDIntValue.DEFAULT;
+		case final AnySignedType _ -> DIntValue.DEFAULT;
+		case final AnyIntType _ -> DIntValue.DEFAULT;
+		case final AnyNumType _ -> DIntValue.DEFAULT;
+		case final AnyMagnitudeType _ -> DIntValue.DEFAULT;
+		case final AnyElementaryType _ -> DIntValue.DEFAULT;
 		case final ArrayType arrayType -> new ArrayValue(arrayType);
 		case final StructuredType structType -> new StructValue(structType);
 		case final EnumeratedType enumeratedType -> new EnumValue(enumeratedType);
-		case final AnyType unused -> DIntValue.DEFAULT;
+		case final AnyType _ -> DIntValue.DEFAULT;
 		case final FBType fbType -> new FBValue(fbType);
 		default -> throw createUnsupportedTypeException(type);
 		};
@@ -1087,10 +1085,10 @@ public final class ValueOperations {
 
 	private static Value castValue(final BoolValue value, final LibraryElement type) {
 		return switch (type) {
-		case final LwordType unused -> toLWordValue(value.longValue());
-		case final DwordType unused -> toDWordValue(value.intValue());
-		case final WordType unused -> toWordValue(value.shortValue());
-		case final ByteType unused -> toByteValue(value.byteValue());
+		case final LwordType _ -> toLWordValue(value.longValue());
+		case final DwordType _ -> toDWordValue(value.intValue());
+		case final WordType _ -> toWordValue(value.shortValue());
+		case final ByteType _ -> toByteValue(value.byteValue());
 		case final DataType dataType when dataType.isAssignableFrom(value.getType()) -> value;
 		case null, default -> throw createCastException(value, type);
 		};
@@ -1098,22 +1096,22 @@ public final class ValueOperations {
 
 	private static Value castValue(final AnyMagnitudeValue value, final LibraryElement type) {
 		return switch (type) {
-		case final LrealType unused -> toLRealValue(value);
-		case final RealType unused -> toRealValue(value);
-		case final LintType unused -> toLIntValue(value);
-		case final DintType unused -> toDIntValue(value);
-		case final IntType unused -> toIntValue(value);
-		case final SintType unused -> toSIntValue(value);
-		case final UlintType unused -> toULIntValue(value);
-		case final UdintType unused -> toUDIntValue(value);
-		case final UintType unused -> toUIntValue(value);
-		case final UsintType unused -> toUSIntValue(value);
-		case final LtimeType unused -> toLTimeValue(value);
-		case final TimeType unused -> toTimeValue(value);
-		case final LwordType unused -> toLWordValue(value.longValue());
-		case final DwordType unused -> toDWordValue(value.intValue());
-		case final WordType unused -> toWordValue(value.shortValue());
-		case final ByteType unused -> toByteValue(value.byteValue());
+		case final LrealType _ -> toLRealValue(value);
+		case final RealType _ -> toRealValue(value);
+		case final LintType _ -> toLIntValue(value);
+		case final DintType _ -> toDIntValue(value);
+		case final IntType _ -> toIntValue(value);
+		case final SintType _ -> toSIntValue(value);
+		case final UlintType _ -> toULIntValue(value);
+		case final UdintType _ -> toUDIntValue(value);
+		case final UintType _ -> toUIntValue(value);
+		case final UsintType _ -> toUSIntValue(value);
+		case final LtimeType _ -> toLTimeValue(value);
+		case final TimeType _ -> toTimeValue(value);
+		case final LwordType _ -> toLWordValue(value.longValue());
+		case final DwordType _ -> toDWordValue(value.intValue());
+		case final WordType _ -> toWordValue(value.shortValue());
+		case final ByteType _ -> toByteValue(value.byteValue());
 		case final DataType dataType when dataType.isAssignableFrom(value.getType()) -> value;
 		case null, default -> throw createCastException(value, type);
 		};
@@ -1121,21 +1119,21 @@ public final class ValueOperations {
 
 	private static Value castValue(final AnyBitValue value, final LibraryElement type) {
 		return switch (type) {
-		case final LrealType unused -> toLRealValue(value.longValue());
-		case final RealType unused -> toRealValue(value.longValue());
-		case final LintType unused -> toLIntValue(value.longValue());
-		case final DintType unused -> toDIntValue(value.intValue());
-		case final IntType unused -> toIntValue(value.shortValue());
-		case final SintType unused -> toSIntValue(value.byteValue());
-		case final UlintType unused -> toULIntValue(value.longValue());
-		case final UdintType unused -> toUDIntValue(value.intValue());
-		case final UintType unused -> toUIntValue(value.shortValue());
-		case final UsintType unused -> toUSIntValue(value.byteValue());
-		case final LwordType unused -> toLWordValue(value);
-		case final DwordType unused -> toDWordValue(value);
-		case final WordType unused -> toWordValue(value);
-		case final ByteType unused -> toByteValue(value);
-		case final BoolType unused -> toBoolValue(value);
+		case final LrealType _ -> toLRealValue(value.longValue());
+		case final RealType _ -> toRealValue(value.longValue());
+		case final LintType _ -> toLIntValue(value.longValue());
+		case final DintType _ -> toDIntValue(value.intValue());
+		case final IntType _ -> toIntValue(value.shortValue());
+		case final SintType _ -> toSIntValue(value.byteValue());
+		case final UlintType _ -> toULIntValue(value.longValue());
+		case final UdintType _ -> toUDIntValue(value.intValue());
+		case final UintType _ -> toUIntValue(value.shortValue());
+		case final UsintType _ -> toUSIntValue(value.byteValue());
+		case final LwordType _ -> toLWordValue(value);
+		case final DwordType _ -> toDWordValue(value);
+		case final WordType _ -> toWordValue(value);
+		case final ByteType _ -> toByteValue(value);
+		case final BoolType _ -> toBoolValue(value);
 		case final DataType dataType when dataType.isAssignableFrom(value.getType()) -> value;
 		case null, default -> throw createCastException(value, type);
 		};
@@ -1147,8 +1145,8 @@ public final class ValueOperations {
 			wstringType.isSetMaxLength() ? toWStringValue(value, wstringType.getMaxLength()) : toWStringValue(value);
 		case final StringType stringType ->
 			stringType.isSetMaxLength() ? toStringValue(value, stringType.getMaxLength()) : toStringValue(value);
-		case final WcharType unused -> toWCharValue(value);
-		case final CharType unused -> toCharValue(value);
+		case final WcharType _ -> toWCharValue(value);
+		case final CharType _ -> toCharValue(value);
 		case final DataType dataType when dataType.isAssignableFrom(value.getType()) -> value;
 		case null, default -> throw createCastException(value, type);
 		};
@@ -1156,12 +1154,12 @@ public final class ValueOperations {
 
 	private static Value castValue(final AnyDateValue value, final LibraryElement type) {
 		return switch (type) {
-		case final LdtType unused -> toLDateAndTimeValue(value);
-		case final DateAndTimeType unused -> toDateAndTimeValue(value);
-		case final LtodType unused -> toLTimeOfDayValue(value);
-		case final TimeOfDayType unused -> toTimeOfDayValue(value);
-		case final LdateType unused -> toLDateValue(value);
-		case final DateType unused -> toDateValue(value);
+		case final LdtType _ -> toLDateAndTimeValue(value);
+		case final DateAndTimeType _ -> toDateAndTimeValue(value);
+		case final LtodType _ -> toLTimeOfDayValue(value);
+		case final TimeOfDayType _ -> toTimeOfDayValue(value);
+		case final LdateType _ -> toLDateValue(value);
+		case final DateType _ -> toDateValue(value);
 		case final DataType dataType when dataType.isAssignableFrom(value.getType()) -> value;
 		case null, default -> throw createCastException(value, type);
 		};
@@ -1183,73 +1181,73 @@ public final class ValueOperations {
 		}
 		return switch (type) { // NOSONAR
 		case null -> null;
-		case final LrealType unused -> switch (value) {
+		case final LrealType _ -> switch (value) {
 		case final Number number -> toLRealValue(number);
 		default -> toLRealValue(value.toString());
 		};
-		case final RealType unused -> switch (value) {
+		case final RealType _ -> switch (value) {
 		case final Number number -> toRealValue(number);
 		default -> toRealValue(value.toString());
 		};
-		case final LintType unused -> switch (value) {
+		case final LintType _ -> switch (value) {
 		case final Number number -> toLIntValue(number);
 		default -> toLIntValue(value.toString());
 		};
-		case final DintType unused -> switch (value) {
+		case final DintType _ -> switch (value) {
 		case final Number number -> toDIntValue(number);
 		default -> toDIntValue(value.toString());
 		};
-		case final IntType unused -> switch (value) {
+		case final IntType _ -> switch (value) {
 		case final Number number -> toIntValue(number);
 		default -> toIntValue(value.toString());
 		};
-		case final SintType unused -> switch (value) {
+		case final SintType _ -> switch (value) {
 		case final Number number -> toSIntValue(number);
 		default -> toSIntValue(value.toString());
 		};
-		case final UlintType unused -> switch (value) {
+		case final UlintType _ -> switch (value) {
 		case final Number number -> toULIntValue(number);
 		default -> toULIntValue(value.toString());
 		};
-		case final UdintType unused -> switch (value) {
+		case final UdintType _ -> switch (value) {
 		case final Number number -> toUDIntValue(number);
 		default -> toUDIntValue(value.toString());
 		};
-		case final UintType unused -> switch (value) {
+		case final UintType _ -> switch (value) {
 		case final Number number -> toUIntValue(number);
 		default -> toUIntValue(value.toString());
 		};
-		case final UsintType unused -> switch (value) {
+		case final UsintType _ -> switch (value) {
 		case final Number number -> toUSIntValue(number);
 		default -> toUSIntValue(value.toString());
 		};
-		case final LtimeType unused -> switch (value) {
+		case final LtimeType _ -> switch (value) {
 		case final Number number -> toLTimeValue(number);
 		case final Duration duration -> toLTimeValue(duration);
 		default -> toLTimeValue(value.toString());
 		};
-		case final TimeType unused -> switch (value) {
+		case final TimeType _ -> switch (value) {
 		case final Number number -> toTimeValue(number);
 		case final Duration duration -> toTimeValue(duration);
 		default -> toTimeValue(value.toString());
 		};
-		case final LwordType unused -> switch (value) {
+		case final LwordType _ -> switch (value) {
 		case final Number number -> toLWordValue(number);
 		default -> toLWordValue(value.toString());
 		};
-		case final DwordType unused -> switch (value) {
+		case final DwordType _ -> switch (value) {
 		case final Number number -> toDWordValue(number);
 		default -> toDWordValue(value.toString());
 		};
-		case final WordType unused -> switch (value) {
+		case final WordType _ -> switch (value) {
 		case final Number number -> toWordValue(number);
 		default -> toWordValue(value.toString());
 		};
-		case final ByteType unused -> switch (value) {
+		case final ByteType _ -> switch (value) {
 		case final Number number -> toByteValue(number);
 		default -> toByteValue(value.toString());
 		};
-		case final BoolType unused -> toBoolValue(switch (value) {
+		case final BoolType _ -> toBoolValue(switch (value) {
 		case final Boolean bool -> bool.booleanValue();
 		case final Number number -> number.longValue() != 0;
 		default -> true;
@@ -1260,60 +1258,60 @@ public final class ValueOperations {
 		case final StringType stringType ->
 			stringType.isSetMaxLength() ? toStringValue(value.toString(), stringType.getMaxLength())
 					: toStringValue(value.toString());
-		case final WcharType unused -> switch (value) {
+		case final WcharType _ -> switch (value) {
 		case final Character character -> toWCharValue(character.charValue());
 		default -> toWCharValue(value.toString());
 		};
-		case final CharType unused -> switch (value) {
+		case final CharType _ -> switch (value) {
 		case final Byte byteValue -> toCharValue(byteValue.byteValue());
 		case final Character character -> toCharValue((byte) character.charValue());
 		default -> toCharValue(value.toString());
 		};
-		case final LdtType unused -> switch (value) {
+		case final LdtType _ -> switch (value) {
 		case final Number number -> toLDateAndTimeValue(number);
 		case final LocalDateTime localDateTime -> toLDateAndTimeValue(localDateTime);
 		default -> toLDateAndTimeValue(value.toString());
 		};
-		case final DateAndTimeType unused -> switch (value) {
+		case final DateAndTimeType _ -> switch (value) {
 		case final Number number -> toDateAndTimeValue(number);
 		case final LocalDateTime localDateTime -> toDateAndTimeValue(localDateTime);
 		default -> toDateAndTimeValue(value.toString());
 		};
-		case final LtodType unused -> switch (value) {
+		case final LtodType _ -> switch (value) {
 		case final Number number -> toLTimeOfDayValue(number);
 		case final LocalTime localTime -> toLTimeOfDayValue(localTime);
 		default -> toLTimeOfDayValue(value.toString());
 		};
-		case final TimeOfDayType unused -> switch (value) {
+		case final TimeOfDayType _ -> switch (value) {
 		case final Number number -> toTimeOfDayValue(number);
 		case final LocalTime localTime -> toTimeOfDayValue(localTime);
 		default -> toTimeOfDayValue(value.toString());
 		};
-		case final LdateType unused -> switch (value) {
+		case final LdateType _ -> switch (value) {
 		case final Number number -> toLDateValue(number);
 		case final LocalDate localDate -> toLDateValue(localDate);
 		default -> toLDateValue(value.toString());
 		};
-		case final DateType unused -> switch (value) {
+		case final DateType _ -> switch (value) {
 		case final Number number -> toDateValue(number);
 		case final LocalDate localDate -> toDateValue(localDate);
 		default -> toDateValue(value.toString());
 		};
-		case final AnyDateType unused -> switch (value) {
+		case final AnyDateType _ -> switch (value) {
 		case final Number number -> toLDateAndTimeValue(number);
 		case final LocalDateTime localDateTime -> toLDateAndTimeValue(localDateTime);
 		case final LocalTime localTime -> toLTimeOfDayValue(localTime);
 		case final LocalDate localDate -> toLDateValue(localDate);
 		default -> toLDateAndTimeValue(value.toString());
 		};
-		case final AnyCharType unused -> switch (value) {
+		case final AnyCharType _ -> switch (value) {
 		case final Byte byteValue -> toCharValue(byteValue.byteValue());
 		case final Character character -> toWCharValue(character.charValue());
 		default -> toWCharValue(value.toString());
 		};
-		case final AnyStringType unused -> toWStringValue(value.toString());
-		case final AnyCharsType unused -> toWStringValue(value.toString());
-		case final AnyBitType unused -> switch (value) {
+		case final AnyStringType _ -> toWStringValue(value.toString());
+		case final AnyCharsType _ -> toWStringValue(value.toString());
+		case final AnyBitType _ -> switch (value) {
 		case final Byte byteValue -> toByteValue(byteValue);
 		case final Short shortValue -> toWordValue(shortValue);
 		case final Character character -> toWordValue((short) character.charValue());
@@ -1322,17 +1320,17 @@ public final class ValueOperations {
 		case final Number number -> toDWordValue(number);
 		default -> toDWordValue(value.toString());
 		};
-		case final AnyDurationType unused -> switch (value) {
+		case final AnyDurationType _ -> switch (value) {
 		case final Number number -> toLTimeValue(number);
 		case final Duration duration -> toLTimeValue(duration);
 		default -> toLTimeValue(value.toString());
 		};
-		case final AnyRealType unused -> switch (value) {
+		case final AnyRealType _ -> switch (value) {
 		case final Float floatValue -> toRealValue(floatValue);
 		case final Number number -> toLRealValue(number);
 		default -> toLRealValue(value.toString());
 		};
-		case final AnyUnsignedType unused -> switch (value) {
+		case final AnyUnsignedType _ -> switch (value) {
 		case final Byte byteValue -> toUSIntValue(byteValue);
 		case final Short shortValue -> toUIntValue(shortValue);
 		case final Character character -> toUIntValue((short) character.charValue());
@@ -1341,7 +1339,7 @@ public final class ValueOperations {
 		case final Number number -> toUDIntValue(number);
 		default -> toUDIntValue(value.toString());
 		};
-		case final AnySignedType unused -> switch (value) {
+		case final AnySignedType _ -> switch (value) {
 		case final Byte byteValue -> toSIntValue(byteValue);
 		case final Short shortValue -> toIntValue(shortValue);
 		case final Character character -> toIntValue((short) character.charValue());
@@ -1350,7 +1348,7 @@ public final class ValueOperations {
 		case final Number number -> toDIntValue(number);
 		default -> toDIntValue(value.toString());
 		};
-		case final AnyIntType unused -> switch (value) {
+		case final AnyIntType _ -> switch (value) {
 		case final Byte byteValue -> toSIntValue(byteValue);
 		case final Short shortValue -> toIntValue(shortValue);
 		case final Character character -> toUIntValue((short) character.charValue());
@@ -1364,8 +1362,8 @@ public final class ValueOperations {
 		// AnyElementaryType
 		case final ArrayType arrayType -> new ArrayValue(arrayType, (List<?>) value);
 		case final StructuredType structType -> new StructValue(structType, castMemberMap((Map<?, ?>) value));
-		case final EnumeratedType enumeratedType -> new EnumValue((EnumeratedValue) value);
-		case final AnyType unused -> switch (value) {
+		case final EnumeratedType _ -> new EnumValue((EnumeratedValue) value);
+		case final AnyType _ -> switch (value) {
 		case final Byte byteValue -> toSIntValue(byteValue);
 		case final Short shortValue -> toIntValue(shortValue);
 		case final Character character -> toUIntValue((short) character.charValue());
@@ -1398,51 +1396,51 @@ public final class ValueOperations {
 
 	public static Class<? extends Value> valueType(final LibraryElement type) {
 		return switch (type) { // NOSONAR
-		case final LrealType unused -> LRealValue.class;
-		case final RealType unused -> RealValue.class;
-		case final LintType unused -> LIntValue.class;
-		case final DintType unused -> DIntValue.class;
-		case final IntType unused -> IntValue.class;
-		case final SintType unused -> SIntValue.class;
-		case final UlintType unused -> ULIntValue.class;
-		case final UdintType unused -> UDIntValue.class;
-		case final UintType unused -> UIntValue.class;
-		case final UsintType unused -> USIntValue.class;
-		case final LtimeType unused -> LTimeValue.class;
-		case final TimeType unused -> TimeValue.class;
-		case final LwordType unused -> LWordValue.class;
-		case final DwordType unused -> DWordValue.class;
-		case final WordType unused -> WordValue.class;
-		case final ByteType unused -> ByteValue.class;
-		case final BoolType unused -> BoolValue.class;
-		case final WstringType unused -> WStringValue.class;
-		case final StringType unused -> StringValue.class;
-		case final WcharType unused -> WCharValue.class;
-		case final CharType unused -> CharValue.class;
-		case final LdtType unused -> LDateAndTimeValue.class;
-		case final DateAndTimeType unused -> DateAndTimeValue.class;
-		case final LtodType unused -> LTimeOfDayValue.class;
-		case final TimeOfDayType unused -> TimeOfDayValue.class;
-		case final LdateType unused -> LDateValue.class;
-		case final DateType unused -> DateValue.class;
-		case final AnySignedType unused -> AnySignedValue.class;
-		case final AnyUnsignedType unused -> AnyUnsignedValue.class;
-		case final AnyIntType unused -> AnyIntValue.class;
-		case final AnyRealType unused -> AnyRealValue.class;
-		case final AnyNumType unused -> AnyNumValue.class;
-		case final AnyDurationType unused -> AnyDurationValue.class;
-		case final AnyMagnitudeType unused -> AnyMagnitudeValue.class;
-		case final AnyBitType unused -> AnyBitValue.class;
-		case final AnyCharType unused -> AnyCharValue.class;
-		case final AnyStringType unused -> AnyStringValue.class;
-		case final AnyCharsType unused -> AnyCharsValue.class;
-		case final AnyDateType unused -> AnyDateValue.class;
-		case final AnyElementaryType unused -> AnyElementaryValue.class;
-		case final ArrayType unused -> ArrayValue.class;
-		case final StructuredType unused -> StructValue.class;
-		case final EnumeratedType unused -> EnumValue.class;
-		case final AnyDerivedType unused -> AnyDerivedValue.class;
-		case final AnyType unused -> AnyValue.class;
+		case final LrealType _ -> LRealValue.class;
+		case final RealType _ -> RealValue.class;
+		case final LintType _ -> LIntValue.class;
+		case final DintType _ -> DIntValue.class;
+		case final IntType _ -> IntValue.class;
+		case final SintType _ -> SIntValue.class;
+		case final UlintType _ -> ULIntValue.class;
+		case final UdintType _ -> UDIntValue.class;
+		case final UintType _ -> UIntValue.class;
+		case final UsintType _ -> USIntValue.class;
+		case final LtimeType _ -> LTimeValue.class;
+		case final TimeType _ -> TimeValue.class;
+		case final LwordType _ -> LWordValue.class;
+		case final DwordType _ -> DWordValue.class;
+		case final WordType _ -> WordValue.class;
+		case final ByteType _ -> ByteValue.class;
+		case final BoolType _ -> BoolValue.class;
+		case final WstringType _ -> WStringValue.class;
+		case final StringType _ -> StringValue.class;
+		case final WcharType _ -> WCharValue.class;
+		case final CharType _ -> CharValue.class;
+		case final LdtType _ -> LDateAndTimeValue.class;
+		case final DateAndTimeType _ -> DateAndTimeValue.class;
+		case final LtodType _ -> LTimeOfDayValue.class;
+		case final TimeOfDayType _ -> TimeOfDayValue.class;
+		case final LdateType _ -> LDateValue.class;
+		case final DateType _ -> DateValue.class;
+		case final AnySignedType _ -> AnySignedValue.class;
+		case final AnyUnsignedType _ -> AnyUnsignedValue.class;
+		case final AnyIntType _ -> AnyIntValue.class;
+		case final AnyRealType _ -> AnyRealValue.class;
+		case final AnyNumType _ -> AnyNumValue.class;
+		case final AnyDurationType _ -> AnyDurationValue.class;
+		case final AnyMagnitudeType _ -> AnyMagnitudeValue.class;
+		case final AnyBitType _ -> AnyBitValue.class;
+		case final AnyCharType _ -> AnyCharValue.class;
+		case final AnyStringType _ -> AnyStringValue.class;
+		case final AnyCharsType _ -> AnyCharsValue.class;
+		case final AnyDateType _ -> AnyDateValue.class;
+		case final AnyElementaryType _ -> AnyElementaryValue.class;
+		case final ArrayType _ -> ArrayValue.class;
+		case final StructuredType _ -> StructValue.class;
+		case final EnumeratedType _ -> EnumValue.class;
+		case final AnyDerivedType _ -> AnyDerivedValue.class;
+		case final AnyType _ -> AnyValue.class;
 		case null, default -> null;
 		};
 	}

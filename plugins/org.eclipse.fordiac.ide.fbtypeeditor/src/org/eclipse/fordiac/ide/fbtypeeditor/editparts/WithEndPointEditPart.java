@@ -125,8 +125,8 @@ public class WithEndPointEditPart extends AbstractConnectableEditPart {
 	private void updateLineColor(final IFigure fig) {
 		final IInterfaceElement pin = getModel().getPin();
 		fig.setForegroundColor(switch (pin) {
-		case final Event ev -> UIPreferenceConstants.getEventConnectorColor();
-		case final AdapterDeclaration adp -> UIPreferenceConstants.getAdapterConnectorColor();
+		case final Event _ -> UIPreferenceConstants.getEventConnectorColor();
+		case final AdapterDeclaration _ -> UIPreferenceConstants.getAdapterConnectorColor();
 		default -> PreferenceGetter.getDataColor(pin.getType().getName());
 		});
 	}

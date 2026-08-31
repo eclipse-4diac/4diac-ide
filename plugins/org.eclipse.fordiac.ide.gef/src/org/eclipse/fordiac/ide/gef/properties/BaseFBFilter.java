@@ -30,7 +30,7 @@ public class BaseFBFilter implements IFilter {
 
 	static BaseFBType getFBTypeFromSelectedElement(final Object element) {
 		final Object retval = switch (element) {
-		case final TextSelection textSel -> getTypeFromActiveEditor();
+		case final TextSelection _ -> getTypeFromActiveEditor();
 		case final EditPart ep -> ep.getModel();
 		case final ECC ecc -> ecc.getBasicFBType();
 		default -> element;

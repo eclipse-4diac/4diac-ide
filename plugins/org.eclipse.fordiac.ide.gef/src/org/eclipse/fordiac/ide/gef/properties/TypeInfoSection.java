@@ -90,14 +90,14 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 		renameTypeButton = getWidgetFactory().createButton(composite, null, SWT.PUSH);
 		renameTypeButton.setToolTipText(Messages.RenameType_Name);
 		renameTypeButton.setImage(getRenameTypeImage());
-		renameTypeButton.addDisposeListener(e -> disposeRenameTypeImage());
-		renameTypeButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(ev -> openTypeRefactoring()));
+		renameTypeButton.addDisposeListener(_ -> disposeRenameTypeImage());
+		renameTypeButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> openTypeRefactoring()));
 		GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(renameTypeButton);
 		final Label commentLabel = getWidgetFactory().createLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(commentLabel);
 		commentText = createGroupText(composite, true);
 		GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(commentText);
-		commentText.addModifyListener(e -> executeCommand(new ChangeCommentCommand(getType(), commentText.getText())));
+		commentText.addModifyListener(_ -> executeCommand(new ChangeCommentCommand(getType(), commentText.getText())));
 	}
 
 	private Image getRenameTypeImage() {

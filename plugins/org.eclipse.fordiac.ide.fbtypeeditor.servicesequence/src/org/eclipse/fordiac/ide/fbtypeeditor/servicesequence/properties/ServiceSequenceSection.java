@@ -113,7 +113,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Name);
 		nameText = createGroupText(typeAndCommentGroup, true);
 		nameText.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
-		nameText.addModifyListener(e -> {
+		nameText.addModifyListener(_ -> {
 			final Command cmd = new ChangeSequenceNameCommand(nameText.getText(), getType());
 			executeCommand(cmd);
 		});
@@ -121,7 +121,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Comment);
 		commentText = createGroupText(typeAndCommentGroup, true);
 		commentText.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		commentText.addModifyListener(e -> {
+		commentText.addModifyListener(_ -> {
 			final Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
 			executeCommand(cmd);
 		});
@@ -129,7 +129,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_StartState);
 		startState = createStartStateSelector(typeAndCommentGroup);
 		startState.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		startState.addModifyListener(e -> {
+		startState.addModifyListener(_ -> {
 			final Command cmd = new ChangeSequenceStartStateCommand(startState.getText(), getType());
 			executeCommand(cmd);
 		});
@@ -137,7 +137,7 @@ public class ServiceSequenceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Type);
 		serviceSequencetype = createTypeSelector(typeAndCommentGroup);
 		serviceSequencetype.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		serviceSequencetype.addModifyListener(e -> {
+		serviceSequencetype.addModifyListener(_ -> {
 			final Command cmd = new ChangeSequenceTypeCommand(serviceSequencetype.getText(), getType());
 			executeCommand(cmd);
 		});

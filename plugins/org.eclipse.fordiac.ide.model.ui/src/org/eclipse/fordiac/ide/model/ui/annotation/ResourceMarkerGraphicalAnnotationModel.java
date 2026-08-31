@@ -108,7 +108,7 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 	}
 
 	protected void markerAdded(final IMarker marker, final Set<GraphicalAnnotation> added) {
-		markerAnnotations.computeIfAbsent(marker, unused -> {
+		markerAnnotations.computeIfAbsent(marker, _ -> {
 			final GraphicalMarkerAnnotation annotation = createMarkerAnnotation(marker);
 			if (annotation != null) {
 				added.add(annotation);
@@ -118,7 +118,7 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 	}
 
 	protected void markerRemoved(final IMarker marker, final Set<GraphicalAnnotation> removed) {
-		markerAnnotations.computeIfPresent(marker, (unused, annotation) -> {
+		markerAnnotations.computeIfPresent(marker, (_, annotation) -> {
 			removed.add(annotation);
 			return null;
 		});

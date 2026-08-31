@@ -128,7 +128,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	protected void updateWatches(final Response response) {
 		incrementVariableUpdateCount();
 		final DeploymentDebugWatchData watchData = new DeploymentDebugWatchData(response);
-		try (EvaluatorCache cache = EvaluatorCache.open()) {
+		try (EvaluatorCache _ = EvaluatorCache.open()) {
 			watches.values().forEach(watch -> watch.updateValue(watchData));
 		}
 		getPrimaryDebugTarget().updateWatches(false);
@@ -149,7 +149,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 					pollingInterval.toMillis(), TimeUnit.MILLISECONDS);
 			deviceManagementExecutor.readWatchesPeriodically(this::updateWatches, this::handleDeviceError,
 					pollingInterval.toMillis(), TimeUnit.MILLISECONDS);
-			try (EvaluatorCache cache = EvaluatorCache.open()) {
+			try (EvaluatorCache _ = EvaluatorCache.open()) {
 				launchWatches.forEach(this::addWatch);
 				Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
 						.forEachOrdered(this::breakpointAdded);

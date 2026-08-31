@@ -107,7 +107,7 @@ abstract class AbstractInstanceSection extends AbstractSection {
 	protected void createNameInput(final Composite parent) {
 		getWidgetFactory().createLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(parent, true);
-		nameText.addModifyListener(e -> {
+		nameText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
@@ -121,7 +121,7 @@ abstract class AbstractInstanceSection extends AbstractSection {
 		commentText = createGroupText(parent, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false)
 				.hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
-		commentText.addModifyListener(e -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 			final Command cmd = createChangeCommentCommand();
 			executeCommand(cmd);

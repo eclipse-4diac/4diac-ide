@@ -77,7 +77,7 @@ public final class OCLValidationSession implements AutoCloseable {
 				addToValidationExtent(extent, iterator.next());
 			}
 		}
-		extent.replaceAll((type, instances) -> Collections.unmodifiableSet(instances));
+		extent.replaceAll((_, instances) -> Collections.unmodifiableSet(instances));
 		return Collections.unmodifiableMap(extent);
 	}
 
@@ -103,7 +103,7 @@ public final class OCLValidationSession implements AutoCloseable {
 	}
 
 	private static void addInstance(final Map<EClass, Set<EObject>> extent, final EClass type, final EObject object) {
-		extent.computeIfAbsent(type, key -> new LinkedHashSet<>()).add(object);
+		extent.computeIfAbsent(type, _ -> new LinkedHashSet<>()).add(object);
 	}
 
 	private OCLValidationSession(final OCL ocl, final OCLParser.ParseResult parseResult) {

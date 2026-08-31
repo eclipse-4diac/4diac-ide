@@ -97,7 +97,7 @@ public class ConnectionDisplayWidget {
 
 		connectionsViewer = createConnectionsViewer(composite);
 
-		inputButtons.bindToTableViewer(connectionsViewer, parentSection, ref -> null,
+		inputButtons.bindToTableViewer(connectionsViewer, parentSection, _ -> null,
 				ref -> new DeleteConnectionCommand((Connection) ref),
 				ref -> new ChangeDestinationSourceDialog(connectionsViewer.getControl().getShell(), (Connection) ref,
 						getInterfaceElement((Connection) ref)));

@@ -89,7 +89,7 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 		systemTree = new DownloadSelectionTree(composite,
 				SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
 		systemTree.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		systemTree.addCheckStateListener(event -> updatePageCompletion());
+		systemTree.addCheckStateListener(_ -> updatePageCompletion());
 	}
 
 	private void createDestinationDirectorySelection(final Composite composite) {
@@ -99,7 +99,7 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 		stretch.horizontalAlignment = SWT.FILL;
 
 		dcc = new DirectoryChooserControl(composite, SWT.NONE, Messages.CreateBootFilesWizardPage_Destination);
-		dcc.addChooserValueChangedListener(newDirectory -> updatePageCompletion());
+		dcc.addChooserValueChangedListener(_ -> updatePageCompletion());
 		dcc.setLayoutData(stretch);
 	}
 

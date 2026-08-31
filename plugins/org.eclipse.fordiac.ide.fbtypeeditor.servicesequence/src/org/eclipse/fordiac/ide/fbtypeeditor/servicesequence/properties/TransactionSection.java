@@ -119,7 +119,7 @@ public class TransactionSection extends AbstractSection {
 		eventNameInput = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
 		eventNameInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		eventNameInput.setSize(100, getMinimumHeight());
-		eventNameInput.addListener(SWT.Selection, event -> {
+		eventNameInput.addListener(SWT.Selection, _ -> {
 			final Command cmd = new ChangePrimitiveEventCommand(getType().getInputPrimitive(),
 					eventNameInput.getText());
 			executeCommand(cmd);
@@ -130,7 +130,7 @@ public class TransactionSection extends AbstractSection {
 
 		parameterNameInput = new Text(composite, SWT.BORDER);
 		parameterNameInput.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
-		parameterNameInput.addModifyListener(e -> {
+		parameterNameInput.addModifyListener(_ -> {
 			final Command cmd = new ChangePrimitiveParameterCommand(getType().getInputPrimitive(),
 					parameterNameInput.getText());
 			executeCommand(cmd);

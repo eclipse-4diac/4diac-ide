@@ -49,7 +49,7 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 
 	public static DeploymentEvaluatorSharedState fromContext(final TypeLibrary typeLibrary) {
 		return (DeploymentEvaluatorSharedState) AbstractEvaluator.getSharedResources().computeIfAbsent(
-				SHARED_STATE_NAME, unused -> new DeploymentEvaluatorSharedState(DeploymentEvaluatorConfigurationBuilder
+				SHARED_STATE_NAME, _ -> new DeploymentEvaluatorSharedState(DeploymentEvaluatorConfigurationBuilder
 						.fromContext(AbstractEvaluator.currentContext(), typeLibrary)));
 	}
 

@@ -178,7 +178,7 @@ public class ActionEditingComposite<T extends BaseECAction> {
 		actionViewer.setLabelProvider(new ActionListLabelProvider());
 
 		actionMgmButtons.bindToTableViewer(actionViewer, commandExecutor,
-				ref -> new CreateECActionCommand<>(type.createNewAction(), type),
+				_ -> new CreateECActionCommand<>(type.createNewAction(), type),
 				ref -> new DeleteECActionCommand<>((T) ref, type),
 				ref -> new ChangeActionOrderCommand<>(type, (T) ref, true),
 				ref -> new ChangeActionOrderCommand<>(type, (T) ref, false));

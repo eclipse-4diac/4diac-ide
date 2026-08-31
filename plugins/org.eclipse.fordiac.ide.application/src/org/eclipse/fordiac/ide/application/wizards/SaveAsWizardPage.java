@@ -197,7 +197,7 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		final Button openTypeCheckbox = new Button(groupComposite, SWT.CHECK);
 		openTypeCheckbox.setText(checkBoxText);
 		openTypeCheckbox.setSelection(openType);
-		openTypeCheckbox.addListener(SWT.Selection, ev -> openType = openTypeCheckbox.getSelection());
+		openTypeCheckbox.addListener(SWT.Selection, _ -> openType = openTypeCheckbox.getSelection());
 
 		return groupComposite;
 	}

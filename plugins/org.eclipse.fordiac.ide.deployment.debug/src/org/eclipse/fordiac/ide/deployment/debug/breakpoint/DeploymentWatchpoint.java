@@ -58,7 +58,7 @@ public class DeploymentWatchpoint extends Breakpoint {
 	}
 
 	public DeploymentWatchpoint(final IResource resource, final INamedElement element) throws CoreException {
-		run(getMarkerRule(resource), monitor -> createMarker(resource, element));
+		run(getMarkerRule(resource), _ -> createMarker(resource, element));
 	}
 
 	protected IMarker createMarker(final IResource resource, final INamedElement element) throws CoreException {
@@ -229,9 +229,8 @@ public class DeploymentWatchpoint extends Breakpoint {
 
 	public static boolean isWatchSubElementsDefault(final IResource resource, final INamedElement element) {
 		return switch (element) {
-		case final SubApp subApp -> DeploymentDebugPreferences.isWatchInternalNetworksDefault(resource.getProject());
-		case final CFBInstance cfbInstance ->
-			DeploymentDebugPreferences.isWatchInternalNetworksDefault(resource.getProject());
+		case final SubApp _ -> DeploymentDebugPreferences.isWatchInternalNetworksDefault(resource.getProject());
+		case final CFBInstance _ -> DeploymentDebugPreferences.isWatchInternalNetworksDefault(resource.getProject());
 		case final FB fb when LibraryElementPackage.Literals.BASE_FB_TYPE
 				.isSuperTypeOf(fb.getTypeEntry().getTypeEClass()) ->
 			DeploymentDebugPreferences.isWatchInternalVariablesDefault(resource.getProject());

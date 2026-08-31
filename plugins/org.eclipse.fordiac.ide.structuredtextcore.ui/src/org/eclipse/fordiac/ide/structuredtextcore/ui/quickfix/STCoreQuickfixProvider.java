@@ -535,7 +535,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	@SuppressWarnings("static-method") // subclasses may override
 	protected void createImportProposal(final Issue issue, final String label, final String importedNamespace,
 			final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, label, label, null, (element, context) -> {
+		acceptor.accept(issue, label, label, null, (element, _) -> {
 			final EList<STImport> imports = getImports(EcoreUtil2.getContainerOfType(element, STSource.class));
 			if (imports != null) {
 				imports.add(createImport(importedNamespace));
@@ -546,16 +546,16 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public void createMissingVariable(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInputVariable,
 				Messages.STCoreQuickfixProvider_CreateMissingInputVariable, null,
-				(element, context) -> createMissingVariable(element, VarDeclarationKind.INPUT));
+				(element, _) -> createMissingVariable(element, VarDeclarationKind.INPUT));
 		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingInOutVariable,
 				Messages.STCoreQuickfixProvider_CreateMissingInOutVariable, null,
-				(element, context) -> createMissingVariable(element, VarDeclarationKind.INOUT));
+				(element, _) -> createMissingVariable(element, VarDeclarationKind.INOUT));
 		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingOutputVariable,
 				Messages.STCoreQuickfixProvider_CreateMissingOutputVariable, null,
-				(element, context) -> createMissingVariable(element, VarDeclarationKind.OUTPUT));
+				(element, _) -> createMissingVariable(element, VarDeclarationKind.OUTPUT));
 		acceptor.accept(issue, Messages.STCoreQuickfixProvider_CreateMissingTempVariable,
 				Messages.STCoreQuickfixProvider_CreateMissingTempVariable, null,
-				(element, context) -> createMissingVariable(element, VarDeclarationKind.TEMP));
+				(element, _) -> createMissingVariable(element, VarDeclarationKind.TEMP));
 	}
 
 	protected void createMissingVariable(final EObject element, final VarDeclarationKind kind) {

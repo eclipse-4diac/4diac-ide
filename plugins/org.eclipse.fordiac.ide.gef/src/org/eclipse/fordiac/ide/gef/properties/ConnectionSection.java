@@ -68,7 +68,7 @@ public class ConnectionSection extends AbstractSection {
 		targetText = createGroupText(composite, false);
 		getWidgetFactory().createCLabel(composite, Messages.ConnectionSection_Comment);
 		commentText = createGroupText(composite, true);
-		commentText.addModifyListener(event -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeConnectionCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();

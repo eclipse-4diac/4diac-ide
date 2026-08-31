@@ -52,7 +52,7 @@ public class ExtractCallableWizardPage extends UserInputWizardPage {
 		nameLabel.setText(Messages.ExtractCallableWizardPage_NameField);
 		nameText = new Text(parent, SWT.BORDER);
 		nameText.setText(refactoring.getCallableName());
-		nameText.addModifyListener(e -> {
+		nameText.addModifyListener(_ -> {
 			refactoring.setCallableName(nameText.getText());
 			validatePage();
 		});

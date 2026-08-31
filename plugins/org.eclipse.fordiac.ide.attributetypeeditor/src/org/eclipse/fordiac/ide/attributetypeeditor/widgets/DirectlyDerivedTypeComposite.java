@@ -98,7 +98,7 @@ public class DirectlyDerivedTypeComposite extends Composite implements ISelectio
 			}
 		};
 		final DataLayer inputDataLayer = new DataLayer(prov);
-		inputDataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+		inputDataLayer.setConfigLabelAccumulator((configLabels, columnPosition, _) -> {
 			if (columnPosition == 0) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}

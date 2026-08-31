@@ -52,9 +52,9 @@ public class ForteLaunchTab extends RuntimeLaunchTab {
 		setControl(comp);
 
 		forteChooser = new FileChooserControl(comp, SWT.NONE, Messages.FortePreferencePage_FORTELocation, true);
-		forteChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
+		forteChooser.addChooserValueChangedListener(_ -> scheduleUpdateJob());
 		workingDirChooser = new DirectoryChooserControl(comp, SWT.NONE, Messages.ForteLaunchTab_WorkingDirectory, true);
-		workingDirChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
+		workingDirChooser.addChooserValueChangedListener(_ -> scheduleUpdateJob());
 		createPortSelection(comp);
 		createArguments(comp);
 	}
@@ -126,7 +126,7 @@ public class ForteLaunchTab extends RuntimeLaunchTab {
 		label.setText(Messages.FortePreferencePage_Arguments);
 		argumentsField = new Text(parent, SWT.BORDER);
 		GridDataFactory.fillDefaults().align(GridData.FILL, GridData.CENTER).applyTo(argumentsField);
-		argumentsField.addModifyListener(ev -> scheduleUpdateJob());
+		argumentsField.addModifyListener(_ -> scheduleUpdateJob());
 	}
 
 }

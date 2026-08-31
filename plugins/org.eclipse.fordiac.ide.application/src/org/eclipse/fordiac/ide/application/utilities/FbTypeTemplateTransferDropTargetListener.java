@@ -64,7 +64,7 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 
 		switch (TemplateTransfer.getInstance().getTemplate()) {
 		// adapter type entries need to be checked before FBTypeEntry
-		case final AdapterTypeEntry adpTypeEntry -> {
+		case final AdapterTypeEntry _ -> {
 			// currently we do not allow the drop of AdapterTypeEntries therefore nothing to
 			// be done here
 		}

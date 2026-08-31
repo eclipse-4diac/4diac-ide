@@ -56,7 +56,7 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 
 		getWidgetFactory().createLabel(container, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(container, true);
-		commentText.addModifyListener(e -> {
+		commentText.addModifyListener(_ -> {
 			/*
 			 * Without this if statement the editor would be "dirty" from the get-go: -
 			 * editor listens for changes on the type - first load also triggers refresh -

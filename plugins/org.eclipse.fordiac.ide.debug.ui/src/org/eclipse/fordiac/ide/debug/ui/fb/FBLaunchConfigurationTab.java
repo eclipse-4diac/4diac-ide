@@ -84,12 +84,12 @@ public class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 
 		repeatEventCheckbox = new Button(comp, SWT.CHECK);
 		repeatEventCheckbox.setText(Messages.FBLaunchConfigurationTab_RepeatEvent);
-		repeatEventCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		repeatEventCheckbox.addSelectionListener(widgetSelectedAdapter(_ -> updateLaunchConfigurationDialog()));
 		GridDataFactory.fillDefaults().applyTo(repeatEventCheckbox);
 
 		keepDebuggerRunningCheckbox = new Button(comp, SWT.CHECK);
 		keepDebuggerRunningCheckbox.setText(Messages.FBLaunchConfigurationTab_KeepDebuggerRunningWhenIdle);
-		keepDebuggerRunningCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		keepDebuggerRunningCheckbox.addSelectionListener(widgetSelectedAdapter(_ -> updateLaunchConfigurationDialog()));
 		GridDataFactory.fillDefaults().applyTo(keepDebuggerRunningCheckbox);
 
 		return group;
@@ -107,7 +107,7 @@ public class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 		eventCombo = new ComboViewer(comp, SWT.DROP_DOWN | SWT.READ_ONLY);
 		eventCombo.setContentProvider(ArrayContentProvider.getInstance());
 		eventCombo.setLabelProvider(new EventsLabelProvider());
-		eventCombo.addSelectionChangedListener(e -> updateLaunchConfigurationDialog());
+		eventCombo.addSelectionChangedListener(_ -> updateLaunchConfigurationDialog());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(eventCombo.getCombo());
 
 		return group;

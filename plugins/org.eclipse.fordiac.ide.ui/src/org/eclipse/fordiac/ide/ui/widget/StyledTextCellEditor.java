@@ -159,7 +159,7 @@ public class StyledTextCellEditor extends CellEditor {
 				}
 			}
 		});
-		text.addKeyListener(keyReleasedAdapter(event -> {
+		text.addKeyListener(keyReleasedAdapter(_ -> {
 			// as a result of processing the above call, clients may have
 			// disposed this cell editor
 			if ((getControl() == null) || getControl().isDisposed()) {

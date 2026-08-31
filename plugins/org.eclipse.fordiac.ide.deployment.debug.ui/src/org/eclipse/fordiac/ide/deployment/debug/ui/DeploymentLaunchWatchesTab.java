@@ -101,12 +101,12 @@ public class DeploymentLaunchWatchesTab extends AbstractLaunchConfigurationTab {
 		addButton = new Button(comp, SWT.PUSH);
 		addButton.setText(Messages.DeploymentLaunchWatchesTab_AddButton);
 		addButton.setEnabled(false);
-		addButton.addSelectionListener(widgetSelectedAdapter(e -> handleAddButtonSelected()));
+		addButton.addSelectionListener(widgetSelectedAdapter(_ -> handleAddButtonSelected()));
 
 		removeButton = new Button(comp, SWT.PUSH);
 		removeButton.setText(Messages.DeploymentLaunchWatchesTab_RemoveButton);
 		removeButton.setEnabled(false);
-		removeButton.addSelectionListener(widgetSelectedAdapter(e -> handleRemoveButtonSelected()));
+		removeButton.addSelectionListener(widgetSelectedAdapter(_ -> handleRemoveButtonSelected()));
 
 		GridLayoutFactory.swtDefaults().generateLayout(comp);
 

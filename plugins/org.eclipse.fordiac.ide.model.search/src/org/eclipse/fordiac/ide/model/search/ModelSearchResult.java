@@ -91,7 +91,7 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 
 	public void addFordiacMatch(final Match match) {
 		matches.computeIfAbsent(match.getUri(),
-				k -> new ConcurrentSkipListSet<Match>(Comparator.comparing(Match::getLocation))).add(match);
+				_ -> new ConcurrentSkipListSet<Match>(Comparator.comparing(Match::getLocation))).add(match);
 	}
 
 	public boolean hasFordiacMatch(final URI uri) {

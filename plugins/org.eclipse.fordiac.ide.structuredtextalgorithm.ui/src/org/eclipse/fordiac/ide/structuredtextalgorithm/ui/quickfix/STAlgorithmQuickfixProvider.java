@@ -61,7 +61,7 @@ public class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 		acceptor.accept(issue,
 				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm, algorithmName),
 				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm, algorithmName), null,
-				(element, context) -> {
+				(element, _) -> {
 					if (element instanceof final STAlgorithmSource source) {
 						final STAlgorithm algorithm = STAlgorithmFactory.eINSTANCE.createSTAlgorithm();
 						algorithm.setName(algorithmName);
@@ -76,7 +76,7 @@ public class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 		final String name = issue.getData()[0];
 		acceptor.accept(issue, MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm, name),
 				MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm, name), null,
-				(element, context) -> {
+				(element, _) -> {
 					if (element.eContainer() instanceof final STAlgorithmSource source) {
 						source.getElements().remove(element);
 					}
@@ -101,7 +101,7 @@ public class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 		super.createMissingVariable(issue, acceptor);
 		acceptor.accept(issue, Messages.STAlgorithmQuickfixProvider_CreateMissingInternalVariable,
 				Messages.STAlgorithmQuickfixProvider_CreateMissingInternalVariable, null,
-				(element, context) -> createMissingVariable(element, VarDeclarationKind.PLAIN));
+				(element, _) -> createMissingVariable(element, VarDeclarationKind.PLAIN));
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 	@Override
 	protected void createImportProposal(final Issue issue, final String label, final String importedNamespace,
 			final IssueResolutionAcceptor acceptor) {
-		acceptor.accept(issue, label, label, null, (element, context) -> {
+		acceptor.accept(issue, label, label, null, (element, _) -> {
 			if (element.eResource() instanceof final STAlgorithmResource resource
 					&& !ImportHelper.matchesImports(importedNamespace, resource.getLibraryElement())) {
 				STAlgorithmEditorUtils.executeCommand(resource.getURI(),

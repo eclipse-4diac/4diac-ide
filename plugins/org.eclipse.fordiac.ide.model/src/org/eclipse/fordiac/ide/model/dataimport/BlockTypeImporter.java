@@ -65,7 +65,7 @@ public abstract class BlockTypeImporter extends TypeImporter {
 
 	public FBType loadInterface() throws IOException, XMLStreamException, TypeImportException {
 		setElement(createRootModelElement());
-		try (ImporterStreams streams = createInputStreams(getInputStream())) {
+		try (ImporterStreams _ = createInputStreams(getInputStream())) {
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(getElement());
 

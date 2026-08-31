@@ -104,7 +104,7 @@ public class TransitionSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(composite, Messages.TransitionSection_Comment);
 		commentText = createGroupText(composite, true);
-		commentText.addModifyListener(event -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeECTransitionCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
@@ -116,7 +116,7 @@ public class TransitionSection extends AbstractSection {
 		GridLayoutFactory.fillDefaults().numColumns(4).applyTo(conditionEditingContainer);
 
 		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), conditionEditingContainer);
-		eventCombo.addListener(SWT.Selection, event -> {
+		eventCombo.addListener(SWT.Selection, _ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeConditionEventCommand(getType(), eventCombo.getText()));
 			updateConditionEditor();

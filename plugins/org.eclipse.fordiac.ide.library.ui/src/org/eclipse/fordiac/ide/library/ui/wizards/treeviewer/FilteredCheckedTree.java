@@ -59,12 +59,12 @@ public class FilteredCheckedTree extends FilteredTree {
 			final ToolItem expandAll = new ToolItem(expandCollapseBar, SWT.PUSH);
 			expandAll.setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
 			expandAll.setToolTipText("Expand All"); //$NON-NLS-1$
-			expandAll.addListener(SWT.Selection, e -> getCheckedViewer().expandAll());
+			expandAll.addListener(SWT.Selection, _ -> getCheckedViewer().expandAll());
 
 			final ToolItem collapseAll = new ToolItem(expandCollapseBar, SWT.PUSH);
 			collapseAll.setImage(shared.getImage(ISharedImages.IMG_ELCL_COLLAPSEALL));
 			collapseAll.setToolTipText("Collapse All"); //$NON-NLS-1$
-			collapseAll.addListener(SWT.Selection, e -> getCheckedViewer().collapseAll());
+			collapseAll.addListener(SWT.Selection, _ -> getCheckedViewer().collapseAll());
 		}
 
 		return super.createTreeControl(parent, style);

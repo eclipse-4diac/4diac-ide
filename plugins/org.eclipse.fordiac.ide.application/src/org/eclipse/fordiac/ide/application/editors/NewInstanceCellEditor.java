@@ -157,7 +157,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	public void configureTextControl() {
 		textControl.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 		textControl.setMessage(Messages.NewInstanceCellEditor_SearchForType);
-		textControl.addListener(SWT.Modify, event -> updateSelectionList());
+		textControl.addListener(SWT.Modify, _ -> updateSelectionList());
 		textControl.addListener(SWT.KeyDown, event -> handleKeyPress(event, textControl));
 	}
 
@@ -240,7 +240,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			}
 		});
 
-		tableViewer.addSelectionChangedListener(event -> {
+		tableViewer.addSelectionChangedListener(_ -> {
 			if (!blockTableSelection) {
 				selectedEntry = (TypeEntry) tableViewer.getStructuredSelection().getFirstElement();
 				fireApplyEditorValue();

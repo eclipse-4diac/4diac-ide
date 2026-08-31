@@ -211,7 +211,7 @@ public class DataTypeDropdown extends TextCellEditor {
 	private void enableContentProposal() {
 		adapter = new ContentProposalAdapter(text, new TextContentAdapter(),
 				new TypeSelectionProposalProvider(supplier, contentProvider), null, ACTIVATION_CHARS);
-		adapter.addContentProposalListener(proposal -> {
+		adapter.addContentProposalListener(_ -> {
 			fireApplyEditorValue();
 			// if apply value was triggered programmatically -> tab to next/previous cell
 			if (isTraverseNextProcessActive) {

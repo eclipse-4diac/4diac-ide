@@ -83,7 +83,7 @@ public class EditorTabCommandStackListener implements CommandStackEventListener 
 
 	private void recordRedoLocation(final Command command) {
 		// to be on the save side create one
-		final EditorLocations location = undoHistory.computeIfAbsent(command, cmd -> new EditorLocations());
+		final EditorLocations location = undoHistory.computeIfAbsent(command, _ -> new EditorLocations());
 		location.redoLocation = locationProvider.createNavigationLocation();
 	}
 

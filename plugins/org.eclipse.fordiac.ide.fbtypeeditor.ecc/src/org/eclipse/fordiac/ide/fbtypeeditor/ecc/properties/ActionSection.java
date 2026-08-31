@@ -110,7 +110,7 @@ public class ActionSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(actionComposite, Messages.ActionSection_Algorithm);
 		algorithmCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
-		algorithmCombo.addListener(SWT.Selection, event -> {
+		algorithmCombo.addListener(SWT.Selection, _ -> {
 			removeContentAdapter();
 			executeCommand(
 					new ChangeAlgorithmCommand(getType(), getFBType().getAlgorithmNamed(algorithmCombo.getText())));
@@ -121,7 +121,7 @@ public class ActionSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(actionComposite, Messages.ActionSection_OutputEvent);
 		outputEventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
-		outputEventCombo.addListener(SWT.Selection, event -> {
+		outputEventCombo.addListener(SWT.Selection, _ -> {
 			removeContentAdapter();
 			final List<Event> outputEvents = ECCContentAndLabelProvider.getOutputEvents(getFBType());
 			final int selItem = outputEventCombo.getSelectionIndex();

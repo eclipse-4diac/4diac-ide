@@ -61,7 +61,7 @@ public class ChangePackageNameRefactoringWizardPage extends UserInputWizardPage 
 		packageNameLabel.setText(Messages.ChangePackageNameRefactoringWizardPage_Name);
 		packageNameText = new Text(parent, SWT.BORDER);
 		packageNameText.setText(Objects.requireNonNullElse(processor.getNewPackageName(), "")); //$NON-NLS-1$
-		packageNameText.addModifyListener(e -> {
+		packageNameText.addModifyListener(_ -> {
 			processor.setNewPackageName(packageNameText.getText());
 			validatePage();
 		});

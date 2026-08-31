@@ -130,7 +130,7 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 
 	@Override
 	public void forEach(final Consumer<? super GraphicalAnnotation> action) {
-		annotations.forEach((unused, values) -> values.forEach(action::accept));
+		annotations.forEach((_, values) -> values.forEach(action::accept));
 	}
 
 	@Override
@@ -156,13 +156,13 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 	}
 
 	protected boolean addAnnotationInternal(final GraphicalAnnotation annotation) {
-		return annotations.computeIfAbsent(annotation.getTarget(), key -> ConcurrentHashMap.newKeySet())
+		return annotations.computeIfAbsent(annotation.getTarget(), _ -> ConcurrentHashMap.newKeySet())
 				.add(annotation);
 	}
 
 	protected boolean removeAnnotationInternal(final GraphicalAnnotation annotation) {
 		final boolean[] result = new boolean[1];
-		annotations.computeIfPresent(annotation.getTarget(), (key, value) -> {
+		annotations.computeIfPresent(annotation.getTarget(), (_, value) -> {
 			result[0] = value.remove(annotation);
 			return value.isEmpty() ? null : value;
 		});

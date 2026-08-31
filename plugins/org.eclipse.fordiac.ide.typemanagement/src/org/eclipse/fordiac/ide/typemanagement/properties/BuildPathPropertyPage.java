@@ -65,7 +65,7 @@ public class BuildPathPropertyPage extends PropertyPage {
 		treeViewer.setContentProvider(new BuildpathContentProvider());
 		treeViewer.setLabelProvider(new BuildpathLabelProvider());
 		treeViewer.setInput(getBuildpath());
-		treeViewer.addSelectionChangedListener(event -> updateButtons());
+		treeViewer.addSelectionChangedListener(_ -> updateButtons());
 
 		createButtons(composite);
 

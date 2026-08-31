@@ -149,7 +149,7 @@ public class ConfigFBInstancePropertySection extends InstancePropertySection imp
 						.resolveImport(PackageNameHelper.extractPlainTypeName(newTypeName), getType(), name -> {
 							final StructuredType temp = getDataTypeLib().getStructuredType(name);
 							return GenericTypes.isAnyType(temp) ? null : temp;
-						}, name -> null);
+						}, _ -> null);
 
 				if (packageStruct == null) {
 					importCommand = new AddNewImportCommand(ModelHelper.getLibraryElementFromContextChecked(getType()),

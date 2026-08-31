@@ -146,11 +146,11 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
 		final Button systemButton = new Button(sytemSelectionComposite, SWT.BORDER);
 		systemButton.setText(SYSTEM_SELECTION_BUTTON_TEXT);
-		systemButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> handleSystemButtonSelected()));
+		systemButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> handleSystemButtonSelected()));
 
 		systemText = new Text(sytemSelectionComposite, SWT.BORDER);
 		systemText.setEnabled(false);
-		systemText.addModifyListener(e -> scheduleUpdateJob());
+		systemText.addModifyListener(_ -> scheduleUpdateJob());
 		systemText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		selectionTree = new CheckboxTreeViewer(group,
@@ -427,8 +427,8 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	private DeviceReplayRow createDeviceRow(final Device device) {
 		final DeviceReplayRow row = new DeviceReplayRow(deviceRowsContainer, device);
 		row.remoteCheckbox
-				.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
-		row.tracePathText.addModifyListener(e -> updateLaunchConfigurationDialog());
+				.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> updateLaunchConfigurationDialog()));
+		row.tracePathText.addModifyListener(_ -> updateLaunchConfigurationDialog());
 		return row;
 	}
 
@@ -472,7 +472,7 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 			tracePathText = new Text(composite, SWT.BORDER);
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(tracePathText);
 
-			browseButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+			browseButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
 				final DirectoryDialog dialog = new DirectoryDialog(composite.getShell());
 				dialog.setText(SELECT_PATH_DIALOG_TEXT);
 				final String selected = dialog.open();

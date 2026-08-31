@@ -114,7 +114,7 @@ public class TypeSelectionWidget {
 
 		openEditorButton = new Button(composite, SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addListener(SWT.Selection, event -> {
+		openEditorButton.addListener(SWT.Selection, _ -> {
 			DataType dataType = null;
 			dataType = getDataTypeForOpenButton(dataType);
 

@@ -59,7 +59,7 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 		setControl(comp);
 
 		workingDirChooser = new DirectoryChooserControl(comp, SWT.NONE, Messages.FBRTPreferencePage_FBRTLocation, true);
-		workingDirChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
+		workingDirChooser.addChooserValueChangedListener(_ -> scheduleUpdateJob());
 
 		createDevType(comp);
 		createPortSelection(comp);

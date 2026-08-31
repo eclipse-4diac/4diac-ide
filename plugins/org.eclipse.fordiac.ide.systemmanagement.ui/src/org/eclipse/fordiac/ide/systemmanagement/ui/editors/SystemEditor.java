@@ -147,7 +147,7 @@ public class SystemEditor extends EditorPart
 		}
 	};
 
-	private final GraphicalAnnotationModelListener annotationModelListener = event -> {
+	private final GraphicalAnnotationModelListener annotationModelListener = _ -> {
 		if (typeInfo != null && !form.isDisposed()) {
 			form.getDisplay().asyncExec(typeInfo::refreshAnnotations);
 		}

@@ -83,7 +83,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 
 	private static Listener getChangeListener(final TableViewer viewer, final CommandExecutor executor,
 			final MessageDialogProvider changeSourceDestinationMessageBox) {
-		return ev -> {
+		return _ -> {
 			final MessageDialog msgDialog = changeSourceDestinationMessageBox
 					.getMessageDialog(getReferencedElement(viewer));
 			msgDialog.open();
@@ -93,7 +93,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 
 	private static Listener getChangeListener(final NatTable table, final CommandExecutor executor,
 			final MessageDialogProvider changeSourceDestinationMessageBox) {
-		return ev -> {
+		return _ -> {
 
 			Object refObject = null;
 			int[] rows = null;
@@ -117,13 +117,13 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 
 		changeDestinationSourceButton.addListener(SWT.Selection, changeListener);
 
-		viewer.addSelectionChangedListener(ev -> setButtonEnablement(!viewer.getSelection().isEmpty()));
+		viewer.addSelectionChangedListener(_ -> setButtonEnablement(!viewer.getSelection().isEmpty()));
 	}
 
 	public void bindToTableViewer(final NatTable table, final Listener changeListener) {
 		changeDestinationSourceButton.addListener(SWT.Selection, changeListener);
 
-		table.addListener(SWT.Selection, event -> {
+		table.addListener(SWT.Selection, _ -> {
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
 			final int[] rows = selectionLayer.getFullySelectedRowPositions();
 			setButtonEnablement(

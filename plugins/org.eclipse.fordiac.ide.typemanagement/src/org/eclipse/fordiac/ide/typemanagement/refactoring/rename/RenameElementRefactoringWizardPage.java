@@ -60,7 +60,7 @@ public class RenameElementRefactoringWizardPage extends UserInputWizardPage {
 		nameLabel.setText(Messages.RenameElementRefactoringWizardPage_Name);
 		nameText = new Text(parent, SWT.BORDER);
 		nameText.setText(Objects.requireNonNullElse(processor.getNewName(), "")); //$NON-NLS-1$
-		nameText.addModifyListener(e -> {
+		nameText.addModifyListener(_ -> {
 			processor.setNewName(nameText.getText());
 			validatePage();
 		});

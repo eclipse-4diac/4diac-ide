@@ -210,7 +210,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected <T extends Connection> void parseConnectionList(final EClass conType, final EList<T> connectionlist,
 			final String parentNodeName) throws XMLStreamException, TypeImportException {
-		processChildren(parentNodeName, name -> {
+		processChildren(parentNodeName, _ -> {
 			final T connection = parseConnection(conType);
 
 			if (connection != null) {

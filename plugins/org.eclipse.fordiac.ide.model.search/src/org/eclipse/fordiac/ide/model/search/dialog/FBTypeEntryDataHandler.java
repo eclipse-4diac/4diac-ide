@@ -27,6 +27,6 @@ public class FBTypeEntryDataHandler extends AbstractTypeEntryDataHandler<TypeEnt
 	@Override
 	public Map<EObject, TypeEntry> createInputSet(final TypeEntry inputTypeEntry) {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntry);
-		return search.performSearch().stream().collect(Collectors.toMap(el -> el, el -> inputTypeEntry));
+		return search.performSearch().stream().collect(Collectors.toMap(el -> el, _ -> inputTypeEntry));
 	}
 }

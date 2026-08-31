@@ -156,8 +156,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,
-				ref -> CreateAttributeCommand.forTemplate(getType(), getLastSelectedAttribute(), getInsertionIndex()),
-				ref -> new DeleteAttributeCommand(getType(), getLastSelectedAttribute()),
+				_ -> CreateAttributeCommand.forTemplate(getType(), getLastSelectedAttribute(), getInsertionIndex()),
+				_ -> new DeleteAttributeCommand(getType(), getLastSelectedAttribute()),
 				ref -> new ChangeAttributeOrderCommand(getType(), (Attribute) ref,
 						getNeighbourListItem((Attribute) ref, true)),
 				ref -> new ChangeAttributeOrderCommand(getType(), (Attribute) ref,

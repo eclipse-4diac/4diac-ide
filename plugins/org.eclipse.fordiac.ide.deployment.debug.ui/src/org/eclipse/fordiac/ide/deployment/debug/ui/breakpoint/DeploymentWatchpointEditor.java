@@ -62,7 +62,7 @@ public class DeploymentWatchpointEditor {
 		pinnedCheckbox = new Button(comp, SWT.CHECK);
 		pinnedCheckbox.setText(Messages.DeploymentWatchpointEditor_Pinned);
 		pinnedCheckbox.setEnabled(false);
-		pinnedCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+		pinnedCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
 			firePropertyChange(PROP_PINNED);
 			setDirty(true);
 		}));
@@ -71,7 +71,7 @@ public class DeploymentWatchpointEditor {
 		subElementsCheckbox = new Button(comp, SWT.CHECK);
 		subElementsCheckbox.setText(Messages.DeploymentWatchpointEditor_SubElements);
 		subElementsCheckbox.setEnabled(false);
-		subElementsCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+		subElementsCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
 			firePropertyChange(PROP_SUB_ELEMENTS);
 			setDirty(true);
 		}));
@@ -80,7 +80,7 @@ public class DeploymentWatchpointEditor {
 		forceCheckbox = new Button(comp, SWT.CHECK);
 		forceCheckbox.setText(Messages.DeploymentWatchpointForceEditor_ForceLabel);
 		forceCheckbox.setEnabled(false);
-		forceCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+		forceCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
 			if (forceText != null) {
 				forceText.setEditable(input != null && forceCheckbox.getSelection());
 			}
@@ -101,7 +101,7 @@ public class DeploymentWatchpointEditor {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
 		forceText = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		forceText.setEditable(false);
-		forceText.addModifyListener(event -> {
+		forceText.addModifyListener(_ -> {
 			firePropertyChange(PROP_FORCE_VALUE);
 			setDirty(true);
 		});
@@ -109,7 +109,7 @@ public class DeploymentWatchpointEditor {
 		dialogButton = new Button(composite, SWT.FLAT);
 		dialogButton.setText("\u2026"); //$NON-NLS-1$
 		dialogButton.setEnabled(false);
-		dialogButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> openDialog()));
+		dialogButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> openDialog()));
 		GridDataFactory.swtDefaults().applyTo(dialogButton);
 		return composite;
 	}

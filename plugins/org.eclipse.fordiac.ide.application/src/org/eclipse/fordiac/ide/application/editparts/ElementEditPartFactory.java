@@ -58,7 +58,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		return switch (modelElement) {
-		case final GroupContentNetwork gcn -> new GroupContentEditPart();
+		case final GroupContentNetwork _ -> new GroupContentEditPart();
 		case final FBNetwork network -> {
 			if (context instanceof SubAppForFBNetworkEditPart) {
 				yield new UnfoldedSubappContentEditPart();
@@ -66,31 +66,31 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			yield getPartForFBNetwork(network);
 		}
 		case final FBNetworkElement fbnel -> getPartForFBNetworkElement(context, fbnel);
-		case final StructuredType structType -> new StructuredTypeEditPart();
-		case final ErrorDataType errorDT -> new ErrorDataTypeEditPart();
-		case final InstanceName in -> new InstanceNameEditPart();
-		case final InstanceComment ic -> new InstanceCommentEditPart();
-		case final InstanceContract instContract -> new InstanceContractEditPart();
-		case final Connection conn -> new ConnectionEditPart();
-		case final IInterfaceElement ie -> createInterfaceEditPart(modelElement);
-		case final Value value -> new FBNValueEditPart();
-		case final HiddenPinIndicator hpi -> new HiddenPinIndicatorEditPart();
-		case final TargetInterfaceElement tie -> new TargetInterfaceElementEditPart();
-		case final Mapping mapping -> new MappingEditPart();
+		case final StructuredType _ -> new StructuredTypeEditPart();
+		case final ErrorDataType _ -> new ErrorDataTypeEditPart();
+		case final InstanceName _ -> new InstanceNameEditPart();
+		case final InstanceComment _ -> new InstanceCommentEditPart();
+		case final InstanceContract _ -> new InstanceContractEditPart();
+		case final Connection _ -> new ConnectionEditPart();
+		case final IInterfaceElement _ -> createInterfaceEditPart(modelElement);
+		case final Value _ -> new FBNValueEditPart();
+		case final HiddenPinIndicator _ -> new HiddenPinIndicatorEditPart();
+		case final TargetInterfaceElement _ -> new TargetInterfaceElementEditPart();
+		case final Mapping _ -> new MappingEditPart();
 		default -> throw createEditpartCreationException(context, modelElement);
 		};
 	}
 
 	private static EditPart getPartForFBNetworkElement(final EditPart context, final FBNetworkElement element) {
 		return switch (element) {
-		case final ErrorMarkerFBNElement emFBN -> new ErrorMarkerFBNEditPart();
-		case final CommunicationChannel comChannel -> new CommunicationChannelEditPart();
-		case final ConfigurableMoveFB moveFB -> new ConfigurableMoveFBEditPart();
-		case final StructManipulator structMan -> new StructManipulatorEditPart();
-		case final FB fb -> new FBEditPart();
-		case final SubApp subApp -> new SubAppForFBNetworkEditPart();
-		case final Group group -> new GroupEditPart();
-		case final Comment comment -> new CommentEditPart();
+		case final ErrorMarkerFBNElement _ -> new ErrorMarkerFBNEditPart();
+		case final CommunicationChannel _ -> new CommunicationChannelEditPart();
+		case final ConfigurableMoveFB _ -> new ConfigurableMoveFBEditPart();
+		case final StructManipulator _ -> new StructManipulatorEditPart();
+		case final FB _ -> new FBEditPart();
+		case final SubApp _ -> new SubAppForFBNetworkEditPart();
+		case final Group _ -> new GroupEditPart();
+		case final Comment _ -> new CommentEditPart();
 		case null, default -> throw createEditpartCreationException(context, element);
 		};
 	}

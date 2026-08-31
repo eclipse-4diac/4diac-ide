@@ -52,7 +52,7 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 				}
 			}
 		});
-		text.addModifyListener(e -> setSearchFilter(text.getText()));
+		text.addModifyListener(_ -> setSearchFilter(text.getText()));
 		super.createPartControl(container);
 		final GridData fillBoth = new GridData();
 		fillBoth.horizontalAlignment = GridData.FILL;

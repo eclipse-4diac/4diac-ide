@@ -117,7 +117,7 @@ public class STCorePackageNameChangeParticipant extends RenameParticipant {
 		changeSerializer.setUpdateRelatedFiles(true);
 		changeSerializer.setProgressMonitor(pm);
 		changeSerializer.addModification(resource, changedResource -> setPackageName(changedResource, newPackageName));
-		final ChangeConverter changeConverter = changeConverterFactory.create(getName(), it -> true, issues);
+		final ChangeConverter changeConverter = changeConverterFactory.create(getName(), _ -> true, issues);
 		changeSerializer.applyModifications(changeConverter);
 		return changeConverter.getChange();
 	}

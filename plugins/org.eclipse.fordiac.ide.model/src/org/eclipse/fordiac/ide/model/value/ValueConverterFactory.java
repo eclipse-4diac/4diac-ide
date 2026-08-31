@@ -41,23 +41,23 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 public final class ValueConverterFactory {
 	public static ValueConverter<?> createValueConverter(final DataType type) {
 		return switch (type) {
-		case final BoolType unused -> BoolValueConverter.INSTANCE;
-		case final AnyNumType unused -> NumericValueConverter.INSTANCE;
-		case final ByteType unused -> NumericValueConverter.INSTANCE_BYTE;
-		case final WordType unused -> NumericValueConverter.INSTANCE_WORD;
-		case final DwordType unused -> NumericValueConverter.INSTANCE_DWORD;
-		case final LwordType unused -> NumericValueConverter.INSTANCE_LWORD;
-		case final AnyDurationType unused -> TimeValueConverter.INSTANCE;
-		case final CharType unused -> StringValueConverter.INSTANCE;
-		case final StringType unused -> StringValueConverter.INSTANCE;
-		case final WcharType unused -> WStringValueConverter.INSTANCE;
-		case final WstringType unused -> WStringValueConverter.INSTANCE;
-		case final DateType unused -> DateValueConverter.INSTANCE;
-		case final LdateType unused -> DateValueConverter.INSTANCE;
-		case final TimeOfDayType unused -> TimeOfDayValueConverter.INSTANCE;
-		case final LtodType unused -> TimeOfDayValueConverter.INSTANCE;
-		case final DateAndTimeType unused -> DateAndTimeValueConverter.INSTANCE;
-		case final LdtType unused -> DateAndTimeValueConverter.INSTANCE;
+		case final BoolType _ -> BoolValueConverter.INSTANCE;
+		case final AnyNumType _ -> NumericValueConverter.INSTANCE;
+		case final ByteType _ -> NumericValueConverter.INSTANCE_BYTE;
+		case final WordType _ -> NumericValueConverter.INSTANCE_WORD;
+		case final DwordType _ -> NumericValueConverter.INSTANCE_DWORD;
+		case final LwordType _ -> NumericValueConverter.INSTANCE_LWORD;
+		case final AnyDurationType _ -> TimeValueConverter.INSTANCE;
+		case final CharType _ -> StringValueConverter.INSTANCE;
+		case final StringType _ -> StringValueConverter.INSTANCE;
+		case final WcharType _ -> WStringValueConverter.INSTANCE;
+		case final WstringType _ -> WStringValueConverter.INSTANCE;
+		case final DateType _ -> DateValueConverter.INSTANCE;
+		case final LdateType _ -> DateValueConverter.INSTANCE;
+		case final TimeOfDayType _ -> TimeOfDayValueConverter.INSTANCE;
+		case final LtodType _ -> TimeOfDayValueConverter.INSTANCE;
+		case final DateAndTimeType _ -> DateAndTimeValueConverter.INSTANCE;
+		case final LdtType _ -> DateAndTimeValueConverter.INSTANCE;
 		case final ArrayType arrayType -> new ArrayValueConverter<>(
 				new TypedValueConverter(getElementType(arrayType), getDataTypeLibrary(arrayType)));
 		case final StructuredType structuredType ->

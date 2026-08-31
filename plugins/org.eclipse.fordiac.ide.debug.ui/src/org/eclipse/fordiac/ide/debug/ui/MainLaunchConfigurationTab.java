@@ -86,12 +86,12 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		resourceText = new Text(comp, SWT.BORDER);
 		resourceText.setEnabled(false);
 		resourceText.setMessage("Location"); //$NON-NLS-1$
-		resourceText.addModifyListener(e -> scheduleUpdateJob());
+		resourceText.addModifyListener(_ -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(resourceText);
 
 		final Button resourceButton = new Button(comp, SWT.BORDER);
 		resourceButton.setText("Browse..."); //$NON-NLS-1$
-		resourceButton.addSelectionListener(widgetSelectedAdapter(e -> handleResourceButtonSelected()));
+		resourceButton.addSelectionListener(widgetSelectedAdapter(_ -> handleResourceButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(resourceButton);
 		return group;
 	}
@@ -107,7 +107,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		stopOnFirstLineCheckbox = new Button(comp, SWT.CHECK);
 		stopOnFirstLineCheckbox.setText("Stop on first line"); //$NON-NLS-1$
-		stopOnFirstLineCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		stopOnFirstLineCheckbox.addSelectionListener(widgetSelectedAdapter(_ -> updateLaunchConfigurationDialog()));
 		GridDataFactory.fillDefaults().applyTo(stopOnFirstLineCheckbox);
 		return group;
 	}
@@ -119,7 +119,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		argumentsWidget = new VariableWidget();
 		argumentsWidget
-				.addVariableModificationListener((variable, oldValue, newValue) -> updateLaunchConfigurationDialog());
+				.addVariableModificationListener((_, _, _) -> updateLaunchConfigurationDialog());
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(argumentsWidget.createWidget(group));
 
 		return group;

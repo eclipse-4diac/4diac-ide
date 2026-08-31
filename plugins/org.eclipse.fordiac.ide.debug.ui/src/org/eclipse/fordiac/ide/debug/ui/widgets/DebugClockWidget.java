@@ -65,12 +65,12 @@ public class DebugClockWidget {
 
 		systemClockRadio = new Button(clockModes, SWT.RADIO);
 		systemClockRadio.setText(Messages.DebugClockWidget_SystemClock);
-		systemClockRadio.addSelectionListener(widgetSelectedAdapter(e -> handleClockModeUpdated()));
+		systemClockRadio.addSelectionListener(widgetSelectedAdapter(_ -> handleClockModeUpdated()));
 		GridDataFactory.fillDefaults().span(2, 1).applyTo(systemClockRadio);
 
 		intervalClockRadio = new Button(clockModes, SWT.RADIO);
 		intervalClockRadio.setText(Messages.DebugClockWidget_IntervalClock);
-		intervalClockRadio.addSelectionListener(widgetSelectedAdapter(e -> handleClockModeUpdated()));
+		intervalClockRadio.addSelectionListener(widgetSelectedAdapter(_ -> handleClockModeUpdated()));
 		GridDataFactory.swtDefaults().applyTo(intervalClockRadio);
 
 		final Composite clockIntervalComposite = createClockIntervalComposite(clockModes);
@@ -78,7 +78,7 @@ public class DebugClockWidget {
 
 		fixedClockRadio = new Button(clockModes, SWT.RADIO);
 		fixedClockRadio.setText(Messages.DebugClockWidget_FixedClock);
-		fixedClockRadio.addSelectionListener(widgetSelectedAdapter(e -> handleClockModeUpdated()));
+		fixedClockRadio.addSelectionListener(widgetSelectedAdapter(_ -> handleClockModeUpdated()));
 		GridDataFactory.fillDefaults().span(2, 1).applyTo(fixedClockRadio);
 
 		final Label realtimeClockLabel = new Label(group, SWT.NONE);
@@ -108,7 +108,7 @@ public class DebugClockWidget {
 
 		clockIntervalText = new Text(clockIntervalComposite, SWT.BORDER);
 		clockIntervalText.setEditable(false);
-		clockIntervalText.addModifyListener(e -> handleClockUpdated());
+		clockIntervalText.addModifyListener(_ -> handleClockUpdated());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(clockIntervalText);
 		return clockIntervalComposite;
 	}
@@ -123,7 +123,7 @@ public class DebugClockWidget {
 
 		realtimeClockText = new Text(realtimeClockComposite, SWT.BORDER);
 		realtimeClockText.setEditable(false);
-		realtimeClockText.addModifyListener(e -> handleClockUpdated());
+		realtimeClockText.addModifyListener(_ -> handleClockUpdated());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(realtimeClockText);
 		return realtimeClockComposite;
 	}
@@ -138,7 +138,7 @@ public class DebugClockWidget {
 
 		monotonicClockText = new Text(monotonicClockComposite, SWT.BORDER);
 		monotonicClockText.setEditable(false);
-		monotonicClockText.addModifyListener(e -> handleClockUpdated());
+		monotonicClockText.addModifyListener(_ -> handleClockUpdated());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(monotonicClockText);
 		return monotonicClockComposite;
 	}

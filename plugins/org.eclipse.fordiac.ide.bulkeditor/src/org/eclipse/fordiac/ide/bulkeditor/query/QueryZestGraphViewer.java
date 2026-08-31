@@ -94,7 +94,7 @@ public class QueryZestGraphViewer {
 
 		final Menu menu = new Menu(graphViewer.getGraphControl());
 		graphViewer.getGraphControl().setMenu(menu);
-		menu.addListener(SWT.Show, event -> rebuildContextMenu(menu));
+		menu.addListener(SWT.Show, _ -> rebuildContextMenu(menu));
 	}
 
 	private GraphViewer createGraphViewer(final Composite parent) {
@@ -130,7 +130,7 @@ public class QueryZestGraphViewer {
 	}
 
 	private void addDoubleClickToggle(final Graph graph) {
-		graph.addListener(SWT.MouseDoubleClick, event -> {
+		graph.addListener(SWT.MouseDoubleClick, _ -> {
 			final List<?> selection = graph.getSelection();
 			if (selection.isEmpty() || !(selection.get(0) instanceof final GraphNode node)
 					|| !(node.getData() instanceof final EObject eObj)) {
@@ -204,7 +204,7 @@ public class QueryZestGraphViewer {
 	private static void addSimpleMenuItem(final Menu menu, final String text, final Runnable action) {
 		final MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(text);
-		item.addListener(SWT.Selection, e -> action.run());
+		item.addListener(SWT.Selection, _ -> action.run());
 	}
 
 	private class QueryGraphContentProvider implements IGraphEntityRelationshipContentProvider {

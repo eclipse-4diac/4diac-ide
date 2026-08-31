@@ -132,7 +132,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		this.name = name;
 		this.variables = Stream.concat(StreamSupport.stream(variables.spliterator(), false), Stream.of(context))
 				.filter(Objects::nonNull)
-				.collect(Collectors.toMap(Variable::getName, Function.identity(), (oldValue, newValue) -> newValue));
+				.collect(Collectors.toMap(Variable::getName, Function.identity(), (_, newValue) -> newValue));
 	}
 
 	@Override
@@ -229,7 +229,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		if (declaration.isArray()) {
 			if (declaration.getRanges().isEmpty()) {
 				return STCoreUtil.newArrayType(type,
-						declaration.getCount().stream().map(unused -> DataFactory.eINSTANCE.createSubrange()).toList());
+						declaration.getCount().stream().map(_ -> DataFactory.eINSTANCE.createSubrange()).toList());
 			}
 			final List<Subrange> subranges = new ArrayList<>(declaration.getRanges().size());
 			for (final STExpression range : declaration.getRanges()) {
@@ -304,7 +304,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 					return variable; // ignore excess initializers
 				}
 				evaluateInitializerExpression(value.getRaw(index), singleArrayInitElement.getInitExpression(),
-					explicitlyInitialized);
+						explicitlyInitialized);
 				index++;
 			} else if (elem instanceof final STRepeatArrayInitElement repeatArrayInitElement) {
 				final int count = repeatArrayInitElement.getRepetitions().intValueExact();
@@ -336,7 +336,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		final StructValue value = (StructValue) variable.getValue();
 		for (final STStructInitElement elem : expression.getValues()) {
 			evaluateInitializerExpression(value.get(elem.getVariable().getName()), elem.getValue(),
-				explicitlyInitialized);
+					explicitlyInitialized);
 		}
 		return variable;
 	}
@@ -762,9 +762,9 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				throw new EvaluatorArrayIndexOutOfBoundsException(indices, arrayValue.getType(), this);
 			}
 		}
-		case final StringValue unused -> new StringCharacterVariable((Variable<StringValue>) receiver,
+		case final StringValue _ -> new StringCharacterVariable((Variable<StringValue>) receiver,
 				ValueOperations.asInteger(evaluateExpression(expr.getIndex().getFirst())));
-		case final WStringValue unused -> new WStringCharacterVariable((Variable<WStringValue>) receiver,
+		case final WStringValue _ -> new WStringCharacterVariable((Variable<WStringValue>) receiver,
 				ValueOperations.asInteger(evaluateExpression(expr.getIndex().getFirst())));
 		case null, default -> throw createUnsupportedOperationException(receiver.getValue());
 		};

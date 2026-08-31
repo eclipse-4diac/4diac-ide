@@ -289,7 +289,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 		final Button left = new Button(composite, SWT.NONE);
 		left.setText("<"); //$NON-NLS-1$
-		left.addSelectionListener(listener(e -> navigateDiagramStep(-1, false)));
+		left.addSelectionListener(listener(_ -> navigateDiagramStep(-1, false)));
 
 		displayRangeLbl = new Label(composite, SWT.NONE);
 		displayRangeLbl.setAlignment(SWT.CENTER);
@@ -298,13 +298,13 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 		final Button right = new Button(composite, SWT.NONE);
 		right.setText(">"); //$NON-NLS-1$
-		right.addSelectionListener(listener(e -> navigateDiagramStep(+1, false)));
+		right.addSelectionListener(listener(_ -> navigateDiagramStep(+1, false)));
 		final Button zoomIn = new Button(composite, SWT.NONE);
 		zoomIn.setText("+"); //$NON-NLS-1$
-		zoomIn.addSelectionListener(listener(e -> navigateDiagramStep(+1, true)));
+		zoomIn.addSelectionListener(listener(_ -> navigateDiagramStep(+1, true)));
 		final Button zoomOut = new Button(composite, SWT.NONE);
 		zoomOut.setText("-"); //$NON-NLS-1$
-		zoomOut.addSelectionListener(listener(e -> navigateDiagramStep(-1, true)));
+		zoomOut.addSelectionListener(listener(_ -> navigateDiagramStep(-1, true)));
 	}
 
 	private void drawDiagram(final Painter painter) {

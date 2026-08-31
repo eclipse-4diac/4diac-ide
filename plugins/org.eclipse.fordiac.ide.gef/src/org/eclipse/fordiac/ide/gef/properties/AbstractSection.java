@@ -201,7 +201,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 	}
 
-	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifiyRefreshAnnotations();
+	private final GraphicalAnnotationModelListener annotationModelListener = _ -> notifiyRefreshAnnotations();
 
 	protected void removeAnnotationModelListener() {
 		if (annotationModel != null) {

@@ -100,7 +100,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,
-				ref -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypeEntry()),
+				_ -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypeEntry()),
 				ref -> new DeleteInternalFBCommand((FB) ref),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.UP),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.DOWN));

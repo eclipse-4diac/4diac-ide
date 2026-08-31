@@ -45,10 +45,10 @@ class VersionRangeCellEditor extends CellEditor {
 		dialogButton.setToolTipText(Messages.ManifestEditor_ConfigureVersionRange);
 		dialogButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
 
-		dialogButton.addListener(SWT.Selection, event -> openDialog());
+		dialogButton.addListener(SWT.Selection, _ -> openDialog());
 
 		// Commit value when pressing enter
-		text.addListener(SWT.DefaultSelection, event -> {
+		text.addListener(SWT.DefaultSelection, _ -> {
 			fireApplyEditorValue();
 			deactivate();
 		});

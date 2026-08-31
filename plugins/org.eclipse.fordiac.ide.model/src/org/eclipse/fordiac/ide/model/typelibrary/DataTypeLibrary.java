@@ -205,7 +205,7 @@ public final class DataTypeLibrary {
 	}
 
 	private AnyDerivedType createErrorMarkerType(final String typeName, final String message) {
-		return derivedTypes.computeIfAbsent(typeName.toUpperCase(), name -> {
+		return derivedTypes.computeIfAbsent(typeName.toUpperCase(), _ -> {
 			FordiacLogHelper.logInfo(message);
 			final DataTypeEntry entry = new DataTypeEntryImpl();
 			final DataType type = entry.getType();

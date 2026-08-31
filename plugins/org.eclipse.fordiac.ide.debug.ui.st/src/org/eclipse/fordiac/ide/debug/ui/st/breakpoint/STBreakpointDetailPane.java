@@ -47,7 +47,7 @@ public class STBreakpointDetailPane implements IDetailPane3 {
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
 
 		editor = new STBreakpointConditionEditor();
-		editor.addPropertyListener((source, propId) -> {
+		editor.addPropertyListener((_, propId) -> {
 			if (propId == STBreakpointConditionEditor.PROP_CONDITION_ENABLED) {
 				editor.doSave(); // autosave only for condition enabled changes
 			}

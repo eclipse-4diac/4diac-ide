@@ -48,7 +48,7 @@ public class ChangeAttributeDeclarationCommand extends AbstractChangeAttributeCo
 		final AttributeDeclaration newDecl = ImportHelper.resolveImport(newName, attribute.eContainer(), name -> {
 			final AttributeTypeEntry entry = typeLibrary.getAttributeTypeEntry(name);
 			return entry != null ? entry.getType() : null;
-		}, name -> null);
+		}, _ -> null);
 
 		if (newDecl != null && !newDecl.isValidObject((ConfigurableObject) attribute.eContainer())) {
 			return false;
@@ -62,7 +62,7 @@ public class ChangeAttributeDeclarationCommand extends AbstractChangeAttributeCo
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(attribute);
 
 		final AttributeTypeEntry entry = ImportHelper.resolveImport(newName, attribute.eContainer(),
-				typeLibrary::getAttributeTypeEntry, name -> null);
+				typeLibrary::getAttributeTypeEntry, _ -> null);
 		return forEntry(attribute, entry);
 	}
 

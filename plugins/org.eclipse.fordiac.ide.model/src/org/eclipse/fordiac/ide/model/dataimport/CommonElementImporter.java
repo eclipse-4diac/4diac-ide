@@ -199,7 +199,7 @@ public abstract class CommonElementImporter {
 
 	public void loadElement() throws IOException, XMLStreamException, TypeImportException {
 		element = createRootModelElement();
-		try (ImporterStreams streams = createInputStreams(getInputStream())) {
+		try (ImporterStreams _ = createInputStreams(getInputStream())) {
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());

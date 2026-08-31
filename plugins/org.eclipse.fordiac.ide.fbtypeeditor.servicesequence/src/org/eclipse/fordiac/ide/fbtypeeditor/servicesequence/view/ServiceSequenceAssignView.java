@@ -170,12 +170,12 @@ public class ServiceSequenceAssignView extends ViewPart {
 
 		// reload button
 		final Button reloadBtn = ButtonFactory.newButton(SWT.PUSH).text(Messages.ServiceSequenceAssignView_RELOAD)
-				.onSelect(x -> refreshGraphicalViewer()).create(subheaderComposite);
+				.onSelect(_ -> refreshGraphicalViewer()).create(subheaderComposite);
 		reloadBtn.setLayoutData(new GridData(SWT.None, SWT.RIGHT));
 		GridDataFactory.fillDefaults().applyTo(reloadBtn);
 
 		// Generate Sequence Button
-		final Consumer<SelectionEvent> gen = x -> {
+		final Consumer<SelectionEvent> gen = _ -> {
 			try {
 				count = Integer.parseInt(numRandom.getText());
 			} catch (final NumberFormatException e) {
@@ -205,23 +205,23 @@ public class ServiceSequenceAssignView extends ViewPart {
 		subselectorComposite.setLayout(new GridLayout());
 
 		final Button possibleBtn = ButtonFactory.newButton(SWT.PUSH).text(Messages.ServiceSequenceAssignView_POSSIBLE)
-				.onSelect(x -> assignType(ServiceSequenceTypes.DEFAULT, gen)).create(subselectorComposite);
+				.onSelect(_ -> assignType(ServiceSequenceTypes.DEFAULT, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(possibleBtn);
 		final Button conditionalBtn = ButtonFactory.newButton(SWT.PUSH)
-				.text("\u2753 " + Messages.ServiceSequenceAssignView_CONDITIONAL).onSelect(x -> //$NON-NLS-1$
+				.text("\u2753 " + Messages.ServiceSequenceAssignView_CONDITIONAL).onSelect(_ -> //$NON-NLS-1$
 				assignType(ServiceSequenceTypes.CONDITIONAL, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(conditionalBtn);
 		final Button alwaysBtn = ButtonFactory.newButton(SWT.PUSH)
-				.text("\u2705 " + Messages.ServiceSequenceAssignView_ALWAYS).onSelect(x -> //$NON-NLS-1$
+				.text("\u2705 " + Messages.ServiceSequenceAssignView_ALWAYS).onSelect(_ -> //$NON-NLS-1$
 				assignType(ServiceSequenceTypes.ALWAYS, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(alwaysBtn);
 		final Button forbiddenBtn = ButtonFactory.newButton(SWT.PUSH)
-				.text("\u26D4 " + Messages.ServiceSequenceAssignView_FORBIDDEN).onSelect(x -> //$NON-NLS-1$
+				.text("\u26D4 " + Messages.ServiceSequenceAssignView_FORBIDDEN).onSelect(_ -> //$NON-NLS-1$
 				assignType(ServiceSequenceTypes.FORBIDDEN, gen)).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(forbiddenBtn);
 
 		final Button skipBtn = ButtonFactory.newButton(SWT.PUSH).text(Messages.ServiceSequenceAssignView_SKIP)
-				.onSelect(x -> gen.accept(null)).create(selectorComposite);
+				.onSelect(_ -> gen.accept(null)).create(selectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(skipBtn);
 
 		createGraphicalViewer(viewerComposite);

@@ -109,7 +109,7 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 		for (final Device device : devices) {
 			final Job job = Job.create(
 					MessageFormat.format(Messages.DeploymentDebugTarget_ConnectJobName, device.getName()),
-					(ICoreRunnable) unused -> doConnect(device));
+					(ICoreRunnable) _ -> doConnect(device));
 			job.setProgressGroup(monitor, 1);
 			job.setJobGroup(group);
 			job.schedule();

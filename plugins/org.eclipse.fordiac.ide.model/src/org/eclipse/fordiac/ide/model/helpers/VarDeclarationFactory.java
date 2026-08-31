@@ -22,8 +22,8 @@ public final class VarDeclarationFactory {
 
 	public static VarDeclaration createVarDecl(final DataType type) {
 		return switch (type) {
-		case final StructuredType structType -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
-		case final ErrorDataType errorType -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
+		case final StructuredType _ -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
+		case final ErrorDataType _ -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
 		default -> LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		};

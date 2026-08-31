@@ -130,7 +130,7 @@ public class PrintPreview extends Dialog {
 		scaleSelection.add(Messages.PrintPreview_LABEL_FitWidth);
 		scaleSelection.add(Messages.PrintPreview_LABEL_FitHeight);
 		scaleSelection.select(0);
-		scaleSelection.addListener(SWT.Selection, ev -> {
+		scaleSelection.addListener(SWT.Selection, _ -> {
 			updatePageNumbers();
 			canvas.redraw();
 		});
@@ -138,7 +138,7 @@ public class PrintPreview extends Dialog {
 		printBorder = new Button(parent, SWT.CHECK);
 		printBorder.setText(Messages.PrintPreview_LABEL_PrintBorder);
 		printBorder.setSelection(true);
-		printBorder.addListener(SWT.Selection, ev -> canvas.redraw());
+		printBorder.addListener(SWT.Selection, _ -> canvas.redraw());
 
 		new Label(parent, SWT.NULL).setText(Messages.PrintPreview_LABEL_Margin);
 		combo = new Combo(parent, SWT.READ_ONLY);
@@ -149,7 +149,7 @@ public class PrintPreview extends Dialog {
 		combo.add("2.5"); //$NON-NLS-1$
 		combo.add("3.0"); //$NON-NLS-1$
 		combo.select(1);
-		combo.addListener(SWT.Selection, ev -> {
+		combo.addListener(SWT.Selection, _ -> {
 			final double value = Double.parseDouble(combo.getItem(combo.getSelectionIndex()));
 			// calculate from cm to inches
 			setPrinter(printer, value / 2.54);
@@ -280,7 +280,7 @@ public class PrintPreview extends Dialog {
 
 		final Button buttonPrint = new Button(buttonArea, SWT.PUSH);
 		buttonPrint.setText(Messages.PrintPreview_LABEL_Print);
-		buttonPrint.addListener(SWT.Selection, ev -> performPrinting());
+		buttonPrint.addListener(SWT.Selection, _ -> performPrinting());
 
 		new Label(buttonArea, SWT.SEPARATOR | SWT.VERTICAL).setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		createPageNavigation(new Composite(buttonArea, SWT.NONE));
@@ -302,7 +302,7 @@ public class PrintPreview extends Dialog {
 
 		final Button closeButton = new Button(closeArea, SWT.PUSH);
 		closeButton.setText(Messages.PrintPreview_LABEL_Close);
-		closeButton.addListener(SWT.Selection, ev -> close());
+		closeButton.addListener(SWT.Selection, _ -> close());
 		closeButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 	}
 
@@ -314,7 +314,7 @@ public class PrintPreview extends Dialog {
 		pageLabel.setText(Messages.PrintPreview_LABEL_Page);
 
 		final Button left = new Button(parent, SWT.ARROW | SWT.LEFT);
-		left.addListener(SWT.Selection, ev -> {
+		left.addListener(SWT.Selection, _ -> {
 			if (currentPage > 1) {
 				setCurrentPage(currentPage - 1);
 			}
@@ -328,7 +328,7 @@ public class PrintPreview extends Dialog {
 		gc.dispose();
 		currentPageText.setSize(currentPageText.computeSize(width, height));
 		currentPageText.setText(String.valueOf(currentPage));
-		currentPageText.addListener(SWT.Modify, ev -> {
+		currentPageText.addListener(SWT.Modify, _ -> {
 			try {
 				final int newCurrentPage = Integer.parseInt(currentPageText.getText());
 				if (0 < newCurrentPage && newCurrentPage <= numberOfPages) {
@@ -347,7 +347,7 @@ public class PrintPreview extends Dialog {
 		numberOfPagesLabel.setText(String.valueOf(numberOfPages));
 
 		final Button right = new Button(parent, SWT.ARROW | SWT.RIGHT);
-		right.addListener(SWT.Selection, ev -> {
+		right.addListener(SWT.Selection, _ -> {
 			if (currentPage < numberOfPages) {
 				setCurrentPage(currentPage + 1);
 			}

@@ -378,31 +378,31 @@ public final class Annotations {
 		}
 
 		return switch (object) {
-		case final AutomationSystem o -> getValueFromTarget(target, AttributeTarget.AutomationSystem);
-		case final Application o -> getValueFromTarget(target, AttributeTarget.Application);
-		case final GlobalConstants o -> getValueFromTarget(target, AttributeTarget.GlobalConstant);
-		case final Connection o -> getValueFromTarget(target, AttributeTarget.Connection);
-		case final Comment o -> getValueFromTarget(target, AttributeTarget.Comment);
-		case final Group o -> getValueFromTarget(target, AttributeTarget.Group);
-		case final Link o -> getValueFromTarget(target, AttributeTarget.Link);
-		case final ServiceSequence o -> getValueFromTarget(target, AttributeTarget.ServiceSequence);
+		case final AutomationSystem _ -> getValueFromTarget(target, AttributeTarget.AutomationSystem);
+		case final Application _ -> getValueFromTarget(target, AttributeTarget.Application);
+		case final GlobalConstants _ -> getValueFromTarget(target, AttributeTarget.GlobalConstant);
+		case final Connection _ -> getValueFromTarget(target, AttributeTarget.Connection);
+		case final Comment _ -> getValueFromTarget(target, AttributeTarget.Comment);
+		case final Group _ -> getValueFromTarget(target, AttributeTarget.Group);
+		case final Link _ -> getValueFromTarget(target, AttributeTarget.Link);
+		case final ServiceSequence _ -> getValueFromTarget(target, AttributeTarget.ServiceSequence);
 
 		// Types:
-		case final SubAppType o -> getValueFromTarget(target, AttributeTarget.SubAppType);
-		case final FBType o -> getValueFromTarget(target, AttributeTarget.FBType);
-		case final DataType o -> getValueFromTarget(target, AttributeTarget.DataType);
-		case final AttributeDeclaration o -> getValueFromTarget(target, AttributeTarget.AttributeDeclaration);
-		case final DeviceType o -> getValueFromTarget(target, AttributeTarget.DeviceType);
-		case final ResourceType o -> getValueFromTarget(target, AttributeTarget.ResourceType);
-		case final SegmentType o -> getValueFromTarget(target, AttributeTarget.SegmentType);
+		case final SubAppType _ -> getValueFromTarget(target, AttributeTarget.SubAppType);
+		case final FBType _ -> getValueFromTarget(target, AttributeTarget.FBType);
+		case final DataType _ -> getValueFromTarget(target, AttributeTarget.DataType);
+		case final AttributeDeclaration _ -> getValueFromTarget(target, AttributeTarget.AttributeDeclaration);
+		case final DeviceType _ -> getValueFromTarget(target, AttributeTarget.DeviceType);
+		case final ResourceType _ -> getValueFromTarget(target, AttributeTarget.ResourceType);
+		case final SegmentType _ -> getValueFromTarget(target, AttributeTarget.SegmentType);
 
 		// Instances:
-		case final TypedSubApp o -> getValueFromTarget(target, AttributeTarget.TypedSubApp);
-		case final UntypedSubApp o -> getValueFromTarget(target, AttributeTarget.UntypedSubApp);
-		case final Device o -> getValueFromTarget(target, AttributeTarget.Device);
-		case final Resource o -> getValueFromTarget(target, AttributeTarget.Resource);
-		case final Segment o -> getValueFromTarget(target, AttributeTarget.Segment);
-		case final FB o -> getValueFromTarget(target, AttributeTarget.FB);
+		case final TypedSubApp _ -> getValueFromTarget(target, AttributeTarget.TypedSubApp);
+		case final UntypedSubApp _ -> getValueFromTarget(target, AttributeTarget.UntypedSubApp);
+		case final Device _ -> getValueFromTarget(target, AttributeTarget.Device);
+		case final Resource _ -> getValueFromTarget(target, AttributeTarget.Resource);
+		case final Segment _ -> getValueFromTarget(target, AttributeTarget.Segment);
+		case final FB _ -> getValueFromTarget(target, AttributeTarget.FB);
 
 		// Pins
 		case final VarDeclaration decl when decl.eContainer() instanceof StructuredType ->

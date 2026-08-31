@@ -30,7 +30,7 @@ public class InputEventValueEditPart extends EventValueEditPart {
 		bt.setOpaque(true);
 		bt.setBackgroundColor(DebugColorProvider.getWatchColor());
 		bt.setForegroundColor(DebugColorProvider.getWatchTextColor());
-		bt.addActionListener(e -> triggerEvent());
+		bt.addActionListener(_ -> triggerEvent());
 		return bt;
 	}
 

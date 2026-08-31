@@ -202,7 +202,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
 		viewer.getControl()
-				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
+				.addDisposeListener(_ -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}

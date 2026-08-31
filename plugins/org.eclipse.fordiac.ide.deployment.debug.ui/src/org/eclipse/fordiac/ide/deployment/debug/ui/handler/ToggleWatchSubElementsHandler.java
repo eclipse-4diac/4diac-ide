@@ -91,8 +91,8 @@ public class ToggleWatchSubElementsHandler extends AbstractHandler implements IE
 
 	private static boolean isValidWatch(final ISubContainerWatch watch) {
 		return switch (watch.getWatchedElement()) {
-		case final SubApp subApp -> true;
-		case final CFBInstance cfb -> true;
+		case final SubApp _ -> true;
+		case final CFBInstance _ -> true;
 		case final BlockFBNetworkElement bfbne when bfbne.getTypeEntry() != null
 				&& LibraryElementPackage.Literals.BASE_FB_TYPE.isSuperTypeOf(bfbne.getTypeEntry().getTypeEClass()) ->
 			true;

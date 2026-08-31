@@ -99,7 +99,7 @@ public final class ManifestHelper {
 		if (container == null || !container.isDirectory()) {
 			return null;
 		}
-		final File[] files = container.listFiles((dir, name) -> MANIFEST_FILENAME.equals(name));
+		final File[] files = container.listFiles((_, name) -> MANIFEST_FILENAME.equals(name));
 		if (files.length == 0) {
 			return null;
 		}

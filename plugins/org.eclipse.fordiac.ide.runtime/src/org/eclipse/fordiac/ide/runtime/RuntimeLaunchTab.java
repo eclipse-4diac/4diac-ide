@@ -76,7 +76,7 @@ public abstract class RuntimeLaunchTab extends AbstractLaunchConfigurationTab {
 		portField = new Text(parent, SWT.BORDER);
 		GridDataFactory.fillDefaults().align(GridData.FILL, GridData.CENTER).applyTo(portField);
 		portField.addVerifyListener(RuntimeLaunchTab::ensureTextIsValidPortNumber);
-		portField.addModifyListener(ev -> scheduleUpdateJob());
+		portField.addModifyListener(_ -> scheduleUpdateJob());
 	}
 
 	private static void ensureTextIsValidPortNumber(final VerifyEvent e) {

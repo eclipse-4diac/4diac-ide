@@ -37,7 +37,7 @@ public class SearchNameDictionary {
 	private final HashMap<FBNetworkElement, Stack<List<FBNetworkElement>>> map = new HashMap<>();
 
 	public void addEntry(final FBNetworkElement fbnetworkElement, final List<FBNetworkElement> composites) {
-		map.computeIfAbsent(fbnetworkElement, elem -> new Stack<>());
+		map.computeIfAbsent(fbnetworkElement, _ -> new Stack<>());
 		map.get(fbnetworkElement).push(composites); // list newly allocated for every depth, so no ownership problems
 	}
 

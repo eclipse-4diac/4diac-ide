@@ -68,7 +68,7 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, "Instance Name:");
 		nameText = createGroupText(composite, true);
-		nameText.addModifyListener(event -> {
+		nameText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
@@ -78,7 +78,7 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 		commentText = createGroupText(composite, true);
 		final GridData gridData = new GridData(SWT.FILL, 0, true, false);
 		commentText.setLayoutData(gridData);
-		commentText.addModifyListener(event -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();

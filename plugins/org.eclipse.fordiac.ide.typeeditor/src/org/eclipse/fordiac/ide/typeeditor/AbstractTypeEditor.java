@@ -416,7 +416,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 		if (fileExists) {
 			final Button textEditorButton = new Button(composite, SWT.NONE);
 			textEditorButton.setText(Messages.TypeEditor_OpenTextEditor);
-			textEditorButton.addListener(SWT.Selection, e -> EditorUtils.openTextEditor(getEditorInput()));
+			textEditorButton.addListener(SWT.Selection, _ -> EditorUtils.openTextEditor(getEditorInput()));
 		}
 	}
 

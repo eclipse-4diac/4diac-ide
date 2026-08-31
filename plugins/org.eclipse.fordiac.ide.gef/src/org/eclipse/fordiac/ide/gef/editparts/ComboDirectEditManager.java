@@ -112,7 +112,7 @@ public class ComboDirectEditManager extends DirectEditManager {
 	protected void initCellEditor() {
 		final CCombo combo = getComboBox();
 		combo.setEditable(false);
-		combo.addModifyListener(e -> setDirty(true));
+		combo.addModifyListener(_ -> setDirty(true));
 		ComboBoxWidgetFactory.configureTypeaheadHandling(combo);
 
 		if (null != comboData) {

@@ -69,7 +69,7 @@ public abstract class XtextStyledTextCellEditor extends StyledTextCellEditor {
 		});
 		if (embeddedEditor.getDocument() instanceof final LibraryElementXtextDocument libDocument) {
 			updater.install(libDocument);
-			embeddedEditor.getViewer().getControl().addDisposeListener(event -> updater.uninstall());
+			embeddedEditor.getViewer().getControl().addDisposeListener(_ -> updater.uninstall());
 		}
 		return (StyledText) embeddedEditor.getViewer().getControl();
 	}

@@ -114,7 +114,7 @@ public class ServiceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(leftInterfaceComposite, Messages.ServiceSection_Name);
 		leftNameInput = new Text(leftInterfaceComposite, SWT.BORDER);
 		leftNameInput.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false));
-		leftNameInput.addModifyListener(e -> {
+		leftNameInput.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeServiceInterfaceNameCommand(leftNameInput.getText(), getType(), true));
 			addContentAdapter();
@@ -124,7 +124,7 @@ public class ServiceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(leftInterfaceComposite, Messages.ServiceSection_Comment);
 		leftCommentInput = new Text(leftInterfaceComposite, SWT.BORDER);
 		leftCommentInput.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		leftCommentInput.addModifyListener(e -> {
+		leftCommentInput.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(
 					new ChangeServiceInterfaceCommentCommand(leftCommentInput.getText(), getType().getService(), true));
@@ -145,7 +145,7 @@ public class ServiceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(rightInterfaceComposite, Messages.ServiceSection_Name);
 		rightNameInput = new Text(rightInterfaceComposite, SWT.BORDER);
 		rightNameInput.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false));
-		rightNameInput.addModifyListener(e -> {
+		rightNameInput.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeServiceInterfaceNameCommand(rightNameInput.getText(), getType(), false));
 			addContentAdapter();
@@ -155,7 +155,7 @@ public class ServiceSection extends AbstractSection {
 		getWidgetFactory().createCLabel(rightInterfaceComposite, Messages.ServiceSection_Comment);
 		rightCommentInput = new Text(rightInterfaceComposite, SWT.BORDER);
 		rightCommentInput.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		rightCommentInput.addModifyListener(e -> {
+		rightCommentInput.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeServiceInterfaceCommentCommand(rightCommentInput.getText(), getType().getService(),
 					false));
@@ -186,19 +186,19 @@ public class ServiceSection extends AbstractSection {
 
 		final Button sequenceNew = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
 		sequenceNew.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
-		sequenceNew.addListener(SWT.Selection, e -> executeCreateCommand());
+		sequenceNew.addListener(SWT.Selection, _ -> executeCreateCommand());
 
 		final Button sequenceReorderUp = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.UP); //$NON-NLS-1$
 		sequenceReorderUp.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		sequenceReorderUp.addListener(SWT.Selection, e -> executeMoveCommand(true));
+		sequenceReorderUp.addListener(SWT.Selection, _ -> executeMoveCommand(true));
 
 		final Button sequenceReorderDown = getWidgetFactory().createButton(buttonComp, "", SWT.ARROW | SWT.DOWN); //$NON-NLS-1$
 		sequenceReorderDown.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		sequenceReorderDown.addListener(SWT.Selection, e -> executeMoveCommand(false));
+		sequenceReorderDown.addListener(SWT.Selection, _ -> executeMoveCommand(false));
 
 		final Button sequenceDelete = getWidgetFactory().createButton(buttonComp, "", SWT.PUSH); //$NON-NLS-1$
 		sequenceDelete.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
-		sequenceDelete.addListener(SWT.Selection, e -> executeDeleteCommand());
+		sequenceDelete.addListener(SWT.Selection, _ -> executeDeleteCommand());
 	}
 
 	private void executeCreateCommand() {

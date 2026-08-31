@@ -84,9 +84,9 @@ final class GitLabEndpointDialog extends TitleAreaDialog {
 			tokenText.setText(Objects.toString(initial.token(), "")); //$NON-NLS-1$
 		}
 
-		nameText.addModifyListener(e -> validate());
-		urlText.addModifyListener(e -> validate());
-		tokenText.addModifyListener(e -> validate());
+		nameText.addModifyListener(_ -> validate());
+		urlText.addModifyListener(_ -> validate());
+		tokenText.addModifyListener(_ -> validate());
 
 		return area;
 	}
