@@ -10,25 +10,35 @@
  * Contributors:
  *   Mario Kastner
  *     - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add support for additional source directories during type export
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.export.ui.properties;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.export.builder.ExportBuilder;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.export.ui.Messages;
+import org.eclipse.fordiac.ide.export.utils.AdditionalSourceDirectories;
 import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringButtonFieldEditor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -36,8 +46,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -50,29 +58,31 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class TypeExportPropertyPage extends PropertyPage {
 
-	private OutputDirectoryFieldEditor directoryEditor;
-	private BooleanFieldEditor checkboxEditor;
+	private OutputDirectoryFieldEditor outputDirectoryEditor;
+	private BooleanFieldEditor enableExportEditor;
 	private ComboFieldEditor exporterEditor;
+	private AdditionalSourceDirectoriesSection additionalSourceDirectoriesSection;
 
 	private Group settingsContainer;
-	private Composite directoryEditorContainer;
+	private Composite outputDirectoryEditorContainer;
 	private Composite exporterEditorContainer;
 
 	@Override
 	protected Control createContents(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().applyTo(composite);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(composite);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
 		createEnableCheckbox(composite);
 
-		this.settingsContainer = new Group(composite, SWT.NONE);
+		settingsContainer = new Group(composite, SWT.NONE);
 		settingsContainer.setText(Messages.TypeExport_Settings);
 		GridLayoutFactory.fillDefaults().margins(10, 10).applyTo(settingsContainer);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(settingsContainer);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(settingsContainer);
 
 		createDirectoryEditor(settingsContainer);
 		createDefaultExporterEditor(settingsContainer);
-		refreshEditors();
+		additionalSourceDirectoriesSection = new AdditionalSourceDirectoriesSection(settingsContainer, this::validatePage);
+		loadPreferences();
 
 		return composite;
 	}
@@ -86,41 +96,40 @@ public class TypeExportPropertyPage extends PropertyPage {
 
 	private void createEnableCheckbox(final Composite parent) {
 		final Composite checkboxEditorContainer = new Composite(parent, SWT.NONE);
-		checkboxEditor = new BooleanFieldEditor(PreferenceConstants.ENABLE_TYPE_EXPORT, Messages.TypeExport_Enable,
+		enableExportEditor = new BooleanFieldEditor(PreferenceConstants.ENABLE_TYPE_EXPORT, Messages.TypeExport_Enable,
 				checkboxEditorContainer);
-		checkboxEditor.setPreferenceStore(getPreferenceStore());
+		enableExportEditor.setPreferenceStore(getPreferenceStore());
 
-		if (checkboxEditor.getDescriptionControl(checkboxEditorContainer) instanceof final Button button) {
-			button.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					enableSettings(checkboxEditor.getBooleanValue());
-					super.widgetSelected(e);
-				}
-			});
+		if (enableExportEditor.getDescriptionControl(checkboxEditorContainer) instanceof final Button button) {
+			button.addListener(SWT.Selection, event -> setSettingsEnabled(enableExportEditor.getBooleanValue()));
 		}
 	}
 
 	@Override
 	protected void performDefaults() {
-		directoryEditor.loadDefault();
-		checkboxEditor.loadDefault();
+		outputDirectoryEditor.loadDefault();
+		enableExportEditor.loadDefault();
 		exporterEditor.loadDefault();
-		enableSettings(false);
+		additionalSourceDirectoriesSection.setDirectories(List.of());
+		updateAdditionalSourceDirectoryOutput();
+		setSettingsEnabled(enableExportEditor.getBooleanValue());
 		super.performDefaults();
 	}
 
 	private void createDirectoryEditor(final Composite parent) {
-		directoryEditorContainer = new Composite(parent, SWT.NONE);
+		outputDirectoryEditorContainer = new Composite(parent, SWT.NONE);
 
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(directoryEditorContainer);
-		directoryEditor = new OutputDirectoryFieldEditor(PreferenceConstants.OUTPUT_FOLDER,
-				Messages.TypeExport_OutputFolder, directoryEditorContainer);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputDirectoryEditorContainer);
+		outputDirectoryEditor = new OutputDirectoryFieldEditor(PreferenceConstants.OUTPUT_FOLDER,
+				Messages.TypeExport_OutputFolder, outputDirectoryEditorContainer);
 
-		directoryEditor.setPreferenceStore(getPreferenceStore());
-		directoryEditor.setPage(this);
-		directoryEditor.getTextControl(directoryEditorContainer)
-				.addModifyListener(_ -> directoryEditor.getTextControl(directoryEditorContainer).requestLayout());
+		outputDirectoryEditor.setPreferenceStore(getPreferenceStore());
+		outputDirectoryEditor.setPage(this);
+		outputDirectoryEditor.getTextControl(outputDirectoryEditorContainer).addModifyListener(_ -> {
+			outputDirectoryEditor.getTextControl(outputDirectoryEditorContainer).requestLayout();
+			updateAdditionalSourceDirectoryOutput();
+			validatePage();
+		});
 	}
 
 	@Override
@@ -129,22 +138,50 @@ public class TypeExportPropertyPage extends PropertyPage {
 		final ScopedPreferenceStore prefStore = new ScopedPreferenceStore(projectScope,
 				PreferenceConstants.EXPORT_PREFERENCES_ID);
 		prefStore.setDefault(PreferenceConstants.OUTPUT_FOLDER, PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
+		prefStore.setDefault(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, ""); //$NON-NLS-1$
 		return prefStore;
 	}
 
 	@Override
 	public boolean performOk() {
-		checkboxEditor.store();
+		enableExportEditor.store();
 
-		if (checkboxEditor.getBooleanValue()) {
-			exporterEditor.store();
-			if (!directoryEditor.isValid()) {
-				directoryEditor.showErrorMessage();
+		if (enableExportEditor.getBooleanValue()) {
+			if (!validatePage()) {
 				return false;
 			}
-			directoryEditor.store();
+			exporterEditor.store();
+			outputDirectoryEditor.store();
+			getPreferenceStore().setValue(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES,
+					AdditionalSourceDirectories.formatPaths(additionalSourceDirectoriesSection.getDirectories()));
+		}
+
+		if (getPreferenceStore() instanceof final IPersistentPreferenceStore store && store.needsSaving()) {
+			if (!saveAndUpdateExport(store)) {
+				return false;
+			}
 		}
 		return super.performOk();
+	}
+
+	/**
+	 * Preference changes do not create a resource delta, therefore the exported
+	 * files have to be regenerated explicitly.
+	 */
+	private boolean saveAndUpdateExport(final IPersistentPreferenceStore store) {
+		try {
+			store.save();
+		} catch (final IOException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			setErrorMessage(e.getLocalizedMessage());
+			return false;
+		}
+		final IProject project = getProject();
+		final Job job = Job.create(Messages.TypeExport_UpdateExportedFiles, (ICoreRunnable) monitor -> project
+				.build(IncrementalProjectBuilder.FULL_BUILD, ExportBuilder.BUILDER_ID, null, monitor));
+		job.setRule(project.getWorkspace().getRuleFactory().buildRule());
+		job.schedule();
+		return true;
 	}
 
 	protected IProject getProject() {
@@ -157,26 +194,69 @@ public class TypeExportPropertyPage extends PropertyPage {
 				.toArray(size -> new String[size][2]);
 	}
 
-	private void refreshEditors() {
-		checkboxEditor.load();
-		directoryEditor.load();
+	private void loadPreferences() {
+		enableExportEditor.load();
+		outputDirectoryEditor.load();
 		exporterEditor.load();
-		enableSettings(checkboxEditor.getBooleanValue());
+		additionalSourceDirectoriesSection.setDirectories(AdditionalSourceDirectories
+				.parsePaths(getPreferenceStore().getString(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES)));
+		updateAdditionalSourceDirectoryOutput();
+		setSettingsEnabled(enableExportEditor.getBooleanValue());
 	}
 
-	private void enableSettings(final boolean enable) {
+	private void setSettingsEnabled(final boolean enable) {
 		settingsContainer.setEnabled(enable);
-		directoryEditor.setEnabled(enable, directoryEditorContainer);
+		outputDirectoryEditor.setEnabled(enable, outputDirectoryEditorContainer);
 		exporterEditor.setEnabled(enable, exporterEditorContainer);
+		additionalSourceDirectoriesSection.setEditorEnabled(enable);
+		validatePage();
+	}
+
+	private IFolder getOutputFolder() {
+		return getProject().getFolder(new Path(outputDirectoryEditor.getStringValue().trim()));
+	}
+
+	private void updateAdditionalSourceDirectoryOutput() {
+		final String outputDirectory = outputDirectoryEditor.getStringValue().trim();
+		additionalSourceDirectoriesSection.setOutputFolder(
+				isValidOutputDirectory(outputDirectory) ? Optional.of(getOutputFolder()) : Optional.empty());
+	}
+
+	private boolean isValidOutputDirectory(final String outputDirectory) {
+		return ExportFilterUtil.validateExportPath(outputDirectory, getProject())
+				&& AdditionalSourceDirectories.validatePaths(getProject(), new Path(outputDirectory), List.of(), false);
+	}
+
+	private boolean validatePage() {
+		if (enableExportEditor == null || !enableExportEditor.getBooleanValue()) {
+			setErrorMessage(null);
+			setValid(true);
+			return true;
+		}
+		if (!outputDirectoryEditor.isValid()) {
+			setErrorMessage(Messages.TypeExport_InvalidPath);
+			setValid(false);
+			return false;
+		}
+		if (!AdditionalSourceDirectories.validatePaths(getProject(),
+				new Path(outputDirectoryEditor.getStringValue().trim()),
+				additionalSourceDirectoriesSection.getDirectories(), true)) {
+			setErrorMessage(Messages.TypeExport_InvalidSourceDirectories);
+			setValid(false);
+			return false;
+		}
+		setErrorMessage(null);
+		setValid(true);
+		return true;
 	}
 
 	/*
 	 * Class partly copied from @see DirectoryFieldEditor editor to handle relative
 	 * paths
 	 */
-	class OutputDirectoryFieldEditor extends StringButtonFieldEditor {
+	private final class OutputDirectoryFieldEditor extends StringButtonFieldEditor {
 
-		public OutputDirectoryFieldEditor(final String name, final String labelText, final Composite parent) {
+		private OutputDirectoryFieldEditor(final String name, final String labelText, final Composite parent) {
 			init(name, labelText);
 			setErrorMessage(Messages.TypeExport_InvalidPath);
 			setChangeButtonText(JFaceResources.getString("openBrowse"));//$NON-NLS-1$
@@ -199,7 +279,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 		protected boolean doCheckState() {
 			String directory = getTextControl().getText();
 			directory = directory.trim();
-			return ExportFilterUtil.validateExportPath(directory, getProject());
+			return isValidOutputDirectory(directory);
 		}
 
 		private Optional<IFolder> chooseOutputFolder() {
