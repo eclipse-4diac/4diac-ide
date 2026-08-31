@@ -222,6 +222,9 @@
 								<property name="format" value="(?s:(\r\n|\r).*)"/>
 								<property name="message" value="Windows (CRLF) or Mac (CR) line endings detected, must use Unix (LF) line endings."/>
 							</module>
+							<module name="NewlineAtEndOfFile">
+								<property name="lineSeparator" value="lf"/>
+							</module>
 						</module>
 					</checkstyleRules>
 				</configuration>
@@ -232,6 +235,20 @@
 						<goals>
 							<goal>check</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>validate-bundle-metadata</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<sourceDirectories>
+								<sourceDirectory>${project.basedir}</sourceDirectory>
+							</sourceDirectories>
+							<includes>META-INF/MANIFEST.MF, plugin.xml, plugin.properties, fragment.xml, feature.xml, feature.properties, build.properties, category.xml</includes>
+							<excludes>target/**, bin/**</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
