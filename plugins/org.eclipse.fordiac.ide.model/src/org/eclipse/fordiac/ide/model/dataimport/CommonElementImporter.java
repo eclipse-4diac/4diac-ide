@@ -697,7 +697,7 @@ public abstract class CommonElementImporter {
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue(value);
 
-		final IInterfaceElement ie = getInterfaceElement(block, name, val);
+		final IInterfaceElement ie = getParameterTargetInterfaceElement(block, name, val);
 
 		if (ie instanceof final VarDeclaration varDecl) {
 			varDecl.setValue(val);
@@ -715,11 +715,18 @@ public abstract class CommonElementImporter {
 		});
 	}
 
-	private static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
-			final Value val) {
+	private static IInterfaceElement getParameterTargetInterfaceElement(final BlockFBNetworkElement block,
+			final String name, final Value val) {
 		final var ie = block.getInterface().getInterfaceElement(List.of(name.split("\\.")), true); //$NON-NLS-1$
 		if (ie != null) {
 			return ie;
+		}
+		if (block instanceof Demultiplexer) {
+			// check if we have a legacy demultiplexer parameter pin
+			final var dmuxIE = block.getInterface().getInterfaceElement(List.of(name.split("%")), true); //$NON-NLS-1$
+			if (dmuxIE != null) {
+				return dmuxIE;
+			}
 		}
 
 		if (block instanceof final TypedSubApp tsa) {
