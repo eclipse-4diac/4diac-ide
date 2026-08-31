@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 Profactor GmbH
+ *               2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add support for additional source directories during type export
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.preferences;
 
@@ -31,6 +33,7 @@ public final class PreferenceConstants {
 	public static final String ENABLE_TYPE_EXPORT = "ENABLE_TYPE_EXPORT"; //$NON-NLS-1$
 	public static final String OUTPUT_FOLDER = "OUTPUT_FOLDER"; //$NON-NLS-1$
 	public static final String EXPORT_FILTER_ID = "EXPORT_FILTER_ID"; //$NON-NLS-1$
+	public static final String ADDITIONAL_SOURCE_DIRECTORIES = "ADDITIONAL_SOURCE_DIRECTORIES"; //$NON-NLS-1$
 
 	public static final String DEFAULT_OUTPUT_FOLDER_NAME = "out"; //$NON-NLS-1$
 
