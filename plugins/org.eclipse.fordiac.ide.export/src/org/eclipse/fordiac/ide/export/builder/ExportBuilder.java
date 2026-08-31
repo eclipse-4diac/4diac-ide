@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2024 Martin Erich Jobst
+ *               2026 Primetals Technologies Austria GmbH
  *https://github.com/eclipse-4diac/4diac-ide/pull/655
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Mario Kastner - implementation of auto export
+ *   Michael Oberlehner - preserve additional source directories during export clean
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.builder;
 
@@ -44,6 +46,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.Messages;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.export.utils.AdditionalSourceDirectories;
 import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
@@ -65,7 +68,8 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			TypeLibraryTags.DATA_TYPE_FILE_ENDING, TypeLibraryTags.FB_TYPE_FILE_ENDING,
 			TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING);
 
-	private static record BuildContext(String outputDirectory, IExportFilter filter, MultiStatus status) {
+	private static record BuildContext(IPath outputDirectory, List<IPath> additionalSourceDirectories,
+			IExportFilter filter, MultiStatus status) {
 	}
 
 	@Override
@@ -78,7 +82,8 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 		final BuildContext context = createBuildContext();
 
-		if (context.filter == null || !ExportFilterUtil.validateExportPath(context.outputDirectory, getProject())
+		if (context.filter == null
+				|| !ExportFilterUtil.validateExportPath(context.outputDirectory.toPortableString(), getProject())
 				|| hasRelevantErrorMarker(getProject())) {
 			return new IProject[0];
 		}
@@ -134,8 +139,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	private void exportElement(final SubMonitor monitor, final IFile file, final BuildContext context) {
 		try {
 			monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, file.getName()));
-			context.filter.export(file, getProject().getLocation().append(new Path(context.outputDirectory)).toString(),
-					true);
+			context.filter.export(file, getProject().getLocation().append(context.outputDirectory).toString(), true);
 			monitor.split(1);
 		} catch (final Exception e) {
 			context.status.add(new Status(IStatus.ERROR, getClass(),
@@ -149,32 +153,35 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			return;
 		}
 
-		final String outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER,
-				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
-
+		final BuildContext context = createBuildContext();
 		final SubMonitor progress = SubMonitor.convert(monitor, 1);
 		progress.setTaskName(Messages.ExportBuilder_Clean);
 
-		if (ExportFilterUtil.validateExportPath(outputDirectory, getProject())) {
-			final IFolder folder = getProject().getFolder(outputDirectory);
-			if (folder.exists()) {
-				folder.delete(true, progress.split(1));
-			}
+		if (ExportFilterUtil.validateExportPath(context.outputDirectory.toPortableString(), getProject())
+				&& AdditionalSourceDirectories.validatePaths(getProject(), context.outputDirectory,
+						context.additionalSourceDirectories, false)) {
+			final IFolder folder = getProject().getFolder(context.outputDirectory);
+			AdditionalSourceDirectories.cleanOutputDirectory(folder, context.additionalSourceDirectories,
+					progress.split(1));
 		}
 	}
 
 	private BuildContext createBuildContext() {
-		final String outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER,
-				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
-		final String exportFilterID = getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, ""); //$NON-NLS-1$
+		final IEclipsePreferences preferences = getProjectPreferenceNode();
+		final IPath outputDirectory = new Path(preferences.get(PreferenceConstants.OUTPUT_FOLDER,
+				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME));
+		final List<IPath> additionalSourceDirectories = AdditionalSourceDirectories
+				.parsePaths(preferences.get(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, "")); //$NON-NLS-1$
+		final String exportFilterID = preferences.get(PreferenceConstants.EXPORT_FILTER_ID, ""); //$NON-NLS-1$
 		final Optional<IConfigurationElement> filterConfig = ExportFilterUtil.getExportFilter(exportFilterID);
 		final IExportFilter filter = filterConfig.isPresent() ? ExportFilterUtil.createExportFilter(filterConfig)
 				: null;
 		final MultiStatus status = new MultiStatus(getClass(), IStatus.OK, "Export Builder Status"); //$NON-NLS-1$
-		return new BuildContext(outputDirectory, filter, status);
+		return new BuildContext(outputDirectory, additionalSourceDirectories, filter, status);
 	}
 
-	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor, final BuildContext context)
+	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor,
+			final BuildContext context)
 			throws CoreException {
 
 		/*
@@ -182,8 +189,9 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		 * cheaper than unnecessary exports of files
 		 */
 		if (containsDeltaRequiringFullBuild(rootDelta, monitor)) {
-			clean(monitor);
-			fullBuild(monitor, context);
+			monitor.setWorkRemaining(2);
+			clean(monitor.split(1));
+			fullBuild(monitor.split(1), context);
 			return;
 		}
 
@@ -281,7 +289,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		}
 
 		if (getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, "").equals(FORTE_NG_FILTER_ID)) { //$NON-NLS-1$
-			final IPath location = getProject().getLocation().append(new Path(context.outputDirectory));
+			final IPath location = getProject().getLocation().append(context.outputDirectory);
 			final CMakeListsMarker marker = new CMakeListsMarker(getProject(), location.toPath());
 			monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, marker.getName()));
 			try {
