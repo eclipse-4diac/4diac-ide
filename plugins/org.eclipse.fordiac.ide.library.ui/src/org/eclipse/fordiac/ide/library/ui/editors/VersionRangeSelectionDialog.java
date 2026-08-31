@@ -131,11 +131,11 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 	}
 
 	private void addUpdateListeners() {
-		minVersionText.addModifyListener(e -> updatePreview());
-		maxVersionText.addModifyListener(e -> updatePreview());
+		minVersionText.addModifyListener(_ -> updatePreview());
+		maxVersionText.addModifyListener(_ -> updatePreview());
 
-		includeMinVersion.addListener(SWT.Selection, e -> updatePreview());
-		includeMaxVersion.addListener(SWT.Selection, e -> updatePreview());
+		includeMinVersion.addListener(SWT.Selection, _ -> updatePreview());
+		includeMaxVersion.addListener(SWT.Selection, _ -> updatePreview());
 	}
 
 	private void updatePreview() {

@@ -121,15 +121,15 @@ public class GitIssueReportingPage extends PreferencePage implements IWorkbenchP
 		buttonComposite.setText(Messages.IssueReporting_ModeGroupLabel);
 
 		noReportButton = createRadioButton(buttonComposite, Messages.IssueReporting_NoReport);
-		noReportButton.addSelectionListener(widgetSelectedAdapter(e -> selectReportMode(ReportMode.NO_REPORT)));
+		noReportButton.addSelectionListener(widgetSelectedAdapter(_ -> selectReportMode(ReportMode.NO_REPORT)));
 		noReportButton.setSelection(reportMode == ReportMode.NO_REPORT);
 
 		promptReportButton = createRadioButton(buttonComposite, Messages.IssueReporting_PromptReport);
-		promptReportButton.addSelectionListener(widgetSelectedAdapter(e -> selectReportMode(ReportMode.PROMPT_REPORT)));
+		promptReportButton.addSelectionListener(widgetSelectedAdapter(_ -> selectReportMode(ReportMode.PROMPT_REPORT)));
 		promptReportButton.setSelection(reportMode == ReportMode.PROMPT_REPORT);
 
 		autoReportButton = createRadioButton(buttonComposite, Messages.IssueReporting_AutoReport);
-		autoReportButton.addSelectionListener(widgetSelectedAdapter(e -> selectReportMode(ReportMode.AUTO_REPORT)));
+		autoReportButton.addSelectionListener(widgetSelectedAdapter(_ -> selectReportMode(ReportMode.AUTO_REPORT)));
 		autoReportButton.setSelection(reportMode == ReportMode.AUTO_REPORT);
 	}
 
@@ -181,7 +181,7 @@ public class GitIssueReportingPage extends PreferencePage implements IWorkbenchP
 	private Button createDestinationButton(final Composite parent, final String label,
 			final ReportDestination reportDest) {
 		final Button button = createRadioButton(parent, label);
-		button.addSelectionListener(widgetSelectedAdapter(e -> selectReportDest(reportDest)));
+		button.addSelectionListener(widgetSelectedAdapter(_ -> selectReportDest(reportDest)));
 		button.setSelection(reportDestination == reportDest);
 		final GridData data = new GridData();
 		data.horizontalSpan = 2;

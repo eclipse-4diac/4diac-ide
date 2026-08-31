@@ -65,7 +65,7 @@ public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I ex
 		instance.setInterface(getType().getInterfaceList().instanceCopy());
 		this.instance = instance;
 		this.eventCounters = instance.getInterface().getEventOutputs().stream()
-				.collect(Collectors.toUnmodifiableMap(Function.identity(), unused -> new AtomicInteger()));
+				.collect(Collectors.toUnmodifiableMap(Function.identity(), _ -> new AtomicInteger()));
 	}
 
 	@Override

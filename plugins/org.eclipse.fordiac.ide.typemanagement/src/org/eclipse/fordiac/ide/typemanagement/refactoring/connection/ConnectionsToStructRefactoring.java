@@ -159,7 +159,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 						MessageFormat.format(Messages.ConnectionsToStructRefactoring_IsServiceFB, target)));
 			}
 			if (varNames.stream().allMatch(
-					name -> interfaceList.stream().map(VarDeclaration::getName).anyMatch(String.class::equals))) {
+					_ -> interfaceList.stream().map(VarDeclaration::getName).anyMatch(String.class::equals))) {
 				status.merge(RefactoringStatus.createFatalErrorStatus(
 						MessageFormat.format(Messages.ConnectionsToStructRefactoring_PortsNoMatch, target)));
 			}

@@ -119,7 +119,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			final Combo combo = new Combo(container, SWT.DROP_DOWN | SWT.READ_ONLY);
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(combo);
 
-			combo.addListener(SWT.Selection, e -> {
+			combo.addListener(SWT.Selection, _ -> {
 				final int selectionIndex = combo.getSelectionIndex();
 				selectedProject = (selectionIndex == 0) ? null : combo.getItem(selectionIndex);
 				applyFilter();

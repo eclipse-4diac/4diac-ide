@@ -34,7 +34,7 @@ public class ContractSpecQuickfixProvider extends DefaultQuickfixProvider {
 	@Fix(ContractSpecValidator.EMPTY_INTERVAL)
 	public static void swapIntervalValues(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, Messages.EmptyIntervalQuickfixLabel, Messages.EmptyIntervalQuickfixDescription, "", //$NON-NLS-1$
-				(element, context) -> {
+				(element, _) -> {
 					if (element instanceof final Interval inter) {
 						final double tmp = inter.getLbValue();
 						inter.setLbValue(inter.getUbValue());
@@ -47,7 +47,7 @@ public class ContractSpecQuickfixProvider extends DefaultQuickfixProvider {
 	public static void simplifyInterval(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, Messages.DegenerateIntervalQuickfixLabel, Messages.DegenerateIntervalQuickfixDescription,
 				"", //$NON-NLS-1$
-				(element, context) -> {
+				(element, _) -> {
 					if (element instanceof final Interval inter) {
 						// create single time
 						final TimeExpr te = ContractSpecFactory.eINSTANCE.createTimeExpr();

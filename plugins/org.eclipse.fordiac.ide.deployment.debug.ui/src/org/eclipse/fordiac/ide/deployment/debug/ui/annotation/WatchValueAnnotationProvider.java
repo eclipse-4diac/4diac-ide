@@ -68,7 +68,7 @@ public class WatchValueAnnotationProvider implements GraphicalAnnotationProvider
 				handleWatchChanged(watch, add, changed);
 			case final DeploymentDebugStackFrame stackFrame when event.getKind() == DebugEvent.CHANGE ->
 				handleWatchesChanged(stackFrame, add, remove, changed);
-			case final DeploymentDebugTarget debugTarget when event.getKind() == DebugEvent.TERMINATE ->
+			case final DeploymentDebugTarget _ when event.getKind() == DebugEvent.TERMINATE ->
 				handleTerminated();
 			default -> {
 				return;

@@ -47,7 +47,7 @@ public class DeploymentWatchpointDetailPane implements IDetailPane3 {
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(comp);
 
 		editor = new DeploymentWatchpointEditor();
-		editor.addPropertyListener((source, propId) -> {
+		editor.addPropertyListener((_, propId) -> {
 			if (propId == DeploymentWatchpointEditor.PROP_FORCE_ENABLED
 					|| propId == DeploymentWatchpointEditor.PROP_PINNED
 					|| propId == DeploymentWatchpointEditor.PROP_SUB_ELEMENTS) {

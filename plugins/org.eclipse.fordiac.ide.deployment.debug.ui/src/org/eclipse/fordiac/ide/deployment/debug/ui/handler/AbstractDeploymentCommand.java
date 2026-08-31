@@ -128,7 +128,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 							this);
 					interactor.addDeploymentListener(errorChecker);
 
-					try (IDeviceManagementInteractorCloser closer = interactor::disconnect) {
+					try (IDeviceManagementInteractorCloser _ = interactor::disconnect) {
 						interactor.connect();
 						executeCommand(interactor);
 					} catch (final DeploymentException e) {

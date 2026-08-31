@@ -80,7 +80,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 
 		runtimeText = new Text(comp, SWT.BORDER);
 		runtimeText.setMessage(Messages.RuntimeLaunchConfigurationTab_LocationMessage);
-		runtimeText.addModifyListener(e -> scheduleUpdateJob());
+		runtimeText.addModifyListener(_ -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(runtimeText);
 		return group;
 	}
@@ -101,7 +101,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 		profileCombo = new Combo(comp, SWT.DROP_DOWN | SWT.READ_ONLY);
 		profileCombo
 				.setItems(DeviceManagementInteractorFactory.INSTANCE.getAvailableProfileNames().toArray(String[]::new));
-		profileCombo.addModifyListener(e -> updateLaunchConfigurationDialog());
+		profileCombo.addModifyListener(_ -> updateLaunchConfigurationDialog());
 		GridDataFactory.fillDefaults().span(2, 1).grab(true, false).applyTo(profileCombo);
 
 		final Label deviceTypeLabel = new Label(comp, SWT.NONE);
@@ -111,12 +111,12 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 		deviceTypeText = new Text(comp, SWT.BORDER);
 		deviceTypeText.setEditable(false);
 		deviceTypeText.setMessage(Messages.RuntimeLaunchConfigurationTab_DeviceTypeMessage);
-		deviceTypeText.addModifyListener(e -> scheduleUpdateJob());
+		deviceTypeText.addModifyListener(_ -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(deviceTypeText);
 
 		final Button deviceTypeButton = new Button(comp, SWT.BORDER);
 		deviceTypeButton.setText(Messages.RuntimeLaunchConfigurationTab_Dots);
-		deviceTypeButton.addSelectionListener(widgetSelectedAdapter(e -> handleDeviceTypeButtonSelected()));
+		deviceTypeButton.addSelectionListener(widgetSelectedAdapter(_ -> handleDeviceTypeButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(deviceTypeButton);
 
 		final Label resourceTypeLabel = new Label(comp, SWT.NONE);
@@ -126,17 +126,17 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 		resourceTypeText = new Text(comp, SWT.BORDER);
 		resourceTypeText.setEditable(false);
 		resourceTypeText.setMessage(Messages.RuntimeLaunchConfigurationTab_ResourceTypeMessage);
-		resourceTypeText.addModifyListener(e -> scheduleUpdateJob());
+		resourceTypeText.addModifyListener(_ -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(resourceTypeText);
 
 		final Button resourceTypeButton = new Button(comp, SWT.BORDER);
 		resourceTypeButton.setText(Messages.RuntimeLaunchConfigurationTab_Dots);
-		resourceTypeButton.addSelectionListener(widgetSelectedAdapter(e -> handleResourceTypeButtonSelected()));
+		resourceTypeButton.addSelectionListener(widgetSelectedAdapter(_ -> handleResourceTypeButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(resourceTypeButton);
 
 		traceButton = new Button(comp, SWT.CHECK);
 		traceButton.setText(Messages.RuntimeLaunchConfigurationTab_TraceLabel);
-		traceButton.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		traceButton.addSelectionListener(widgetSelectedAdapter(_ -> updateLaunchConfigurationDialog()));
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(traceButton);
 		return group;
 	}

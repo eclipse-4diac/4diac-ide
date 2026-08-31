@@ -104,12 +104,12 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 		systemText = new Text(comp, SWT.BORDER);
 		systemText.setEnabled(false);
 		systemText.setMessage(Messages.DeploymentLaunchConfigurationTab_SystemMessage);
-		systemText.addModifyListener(e -> scheduleUpdateJob());
+		systemText.addModifyListener(_ -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(systemText);
 
 		final Button systemButton = new Button(comp, SWT.BORDER);
 		systemButton.setText(Messages.DeploymentLaunchConfigurationTab_BrowseLabel);
-		systemButton.addSelectionListener(widgetSelectedAdapter(e -> handleSystemButtonSelected()));
+		systemButton.addSelectionListener(widgetSelectedAdapter(_ -> handleSystemButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(systemButton);
 
 		selectionTree = new CheckboxTreeViewer(comp,
@@ -168,7 +168,7 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 
 		pollingIntervalText = new Text(comp, SWT.BORDER);
 		pollingIntervalText.setMessage(Messages.DeploymentLaunchConfigurationTab_PollingIntervalMessage);
-		pollingIntervalText.addModifyListener(e -> scheduleUpdateJob());
+		pollingIntervalText.addModifyListener(_ -> scheduleUpdateJob());
 		GridDataFactory.fillDefaults().grab(false, false).applyTo(pollingIntervalText);
 
 		final Label pollingIntervalUnitLabel = new Label(comp, SWT.NONE);
@@ -183,7 +183,7 @@ public class DeploymentLaunchConfigurationTab extends AbstractLaunchConfiguratio
 		for (final AllowTerminate value : AllowTerminate.values()) {
 			allowTerminateCombo.add(value.getDisplayString());
 		}
-		allowTerminateCombo.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> scheduleUpdateJob()));
+		allowTerminateCombo.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> scheduleUpdateJob()));
 		GridDataFactory.swtDefaults().span(2, 1).applyTo(allowTerminateCombo);
 
 		return group;

@@ -177,7 +177,7 @@ public class VarDeclarationEvaluator extends StructuredTextEvaluator implements 
 		if (declaration.isArray()) {
 			if (declaration.getRanges().isEmpty()) {
 				return STCoreUtil.newArrayType(type,
-						declaration.getCount().stream().map(unused -> DataFactory.eINSTANCE.createSubrange()).toList());
+						declaration.getCount().stream().map(_ -> DataFactory.eINSTANCE.createSubrange()).toList());
 			}
 			final List<Subrange> subranges = new ArrayList<>(declaration.getRanges().size());
 			for (final STExpression range : declaration.getRanges()) {

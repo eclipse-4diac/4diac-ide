@@ -209,7 +209,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	protected IEditorInput createEditorInput(final Object model) {
 		return switch (model) {
-		case final IFile file -> getEditorInput();
+		case final IFile _ -> getEditorInput();
 		case final EObject subElement -> new SubEditorInput(getEditorInput(), subElement);
 		case null, default -> null;
 		};

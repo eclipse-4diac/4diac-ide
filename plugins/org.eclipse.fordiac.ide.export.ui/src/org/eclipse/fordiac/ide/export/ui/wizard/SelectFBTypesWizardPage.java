@@ -96,7 +96,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 			filters.add(exportFilter.getAttribute(NAME));
 		}
 
-		filters.addListener(SWT.Selection, event -> updatePageCompletion());
+		filters.addListener(SWT.Selection, _ -> updatePageCompletion());
 	}
 
 	/**
@@ -266,7 +266,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 		// destination browse button
 		final Button destinationBrowseButton = new Button(destinationSelectionGroup, SWT.PUSH);
 		destinationBrowseButton.setText(Messages.SelectFBTypesWizardPage_Browse);
-		destinationBrowseButton.addListener(SWT.Selection, event -> {
+		destinationBrowseButton.addListener(SWT.Selection, _ -> {
 			final DirectoryDialog dialog = new DirectoryDialog(getContainer().getShell(), SWT.SAVE | SWT.SHEET);
 			dialog.setMessage(Messages.SelectFBTypesWizardPage_SelectADirectoryToExportTo);
 			dialog.setText(Messages.SelectFBTypesWizardPage_ExportToDirectory);

@@ -229,7 +229,7 @@ public final class QueryModelHelper {
 	private static void addMenuItem(final Menu menu, final String text, final Runnable action) {
 		final MenuItem item = new MenuItem(menu, SWT.PUSH);
 		item.setText(text);
-		item.addListener(SWT.Selection, e -> action.run());
+		item.addListener(SWT.Selection, _ -> action.run());
 	}
 
 	@SuppressWarnings("unused")

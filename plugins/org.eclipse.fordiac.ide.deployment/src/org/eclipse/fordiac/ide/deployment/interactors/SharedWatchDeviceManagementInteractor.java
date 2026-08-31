@@ -55,6 +55,6 @@ public class SharedWatchDeviceManagementInteractor extends AbstractDelegatingDev
 	}
 
 	protected Map<String, Integer> getResourceWatches(final Resource resource) {
-		return watches.computeIfAbsent(resource.getName(), unused -> new HashMap<>());
+		return watches.computeIfAbsent(resource.getName(), _ -> new HashMap<>());
 	}
 }

@@ -91,7 +91,7 @@ public class DiagramOutlinePage extends org.eclipse.ui.part.Page implements ICon
 	/** The thumbnail. */
 	private Thumbnail thumbnail;
 
-	private final DisposeListener disposeListener = ev -> removeThumbnail();
+	private final DisposeListener disposeListener = _ -> removeThumbnail();
 
 	private GraphicalViewer graphicalViewer;
 
@@ -174,7 +174,7 @@ public class DiagramOutlinePage extends org.eclipse.ui.part.Page implements ICon
 				newThumbnail.setBorder(new MarginBorder(THUMBNAIL_BORDER_MARGIN));
 				newThumbnail.setSource(getSourceFigure(viewport));
 				lws.setContents(newThumbnail);
-				getViewerControl().addDisposeListener(e -> removeThumbnail());
+				getViewerControl().addDisposeListener(_ -> removeThumbnail());
 				return newThumbnail;
 			}
 		}

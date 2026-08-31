@@ -120,7 +120,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 		directoryEditor.setPreferenceStore(getPreferenceStore());
 		directoryEditor.setPage(this);
 		directoryEditor.getTextControl(directoryEditorContainer)
-				.addModifyListener(e -> directoryEditor.getTextControl(directoryEditorContainer).requestLayout());
+				.addModifyListener(_ -> directoryEditor.getTextControl(directoryEditorContainer).requestLayout());
 	}
 
 	@Override

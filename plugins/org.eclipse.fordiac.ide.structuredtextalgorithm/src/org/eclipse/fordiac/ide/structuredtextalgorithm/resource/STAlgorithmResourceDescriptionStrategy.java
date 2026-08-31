@@ -38,10 +38,10 @@ public class STAlgorithmResourceDescriptionStrategy extends STCoreResourceDescri
 		// do not export library element from resource with query:
 		case final LibraryElement libraryElement when libraryElement.eResource().getURI().hasQuery() -> false;
 		// do not export algorithms or methods:
-		case final STAlgorithm unused -> false;
-		case final STMethod unused -> false;
-		case final STAlgorithmBody unused -> false;
-		case final STMethodBody unused -> false;
+		case final STAlgorithm _ -> false;
+		case final STMethod _ -> false;
+		case final STAlgorithmBody _ -> false;
+		case final STMethodBody _ -> false;
 		// do not export anything inside an FB network,
 		// except for the subapp hierarchy (needed for plant hierarchy):
 		// - untyped subapps (incl. contents)
@@ -58,7 +58,7 @@ public class STAlgorithmResourceDescriptionStrategy extends STCoreResourceDescri
 		case final FBNetworkElement fbne when fbne.eContainer() instanceof FBNetwork -> false;
 		case final Attribute attribute when attribute.eContainer() instanceof SubApp -> false;
 		case final InterfaceList interfaceList when interfaceList.eContainer() instanceof SubApp -> false;
-		case final Connection unused -> false;
+		case final Connection _ -> false;
 		// export by default:
 		default -> super.createEObjectDescriptions(eObject, acceptor);
 		};

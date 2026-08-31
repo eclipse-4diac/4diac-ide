@@ -66,7 +66,7 @@ public class EventSequencePage extends Page implements IAdaptable {
 
 	private final Map<FBNetwork, FBNetworkScopedContentAdapter> observedNetworks = new HashMap<>();
 	private final UIJob refreshJob = UIJob.create(Messages.EventSequencePage_RefreshJobName,
-			(ICoreRunnable) monitor -> refreshViewer());
+			(ICoreRunnable) _ -> refreshViewer());
 
 	public EventSequencePage(final IWorkbenchPart part) {
 		this.part = part;

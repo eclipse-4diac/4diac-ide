@@ -263,7 +263,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		case final InterfaceEditPart interfaceEditPart -> addInterfaceElementFigure(child, interfaceEditPart);
 		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			addPinIndicatorFigure(hiddenPinIndicatorEditPart, child);
-		case final MappingEditPart mapping -> addMappingFigure(child);
+		case final MappingEditPart _ -> addMappingFigure(child);
 		default -> getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		}
 	}
@@ -415,7 +415,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		}
 		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			removePinIndicatorFigure(hiddenPinIndicatorEditPart, child);
-		case final MappingEditPart mapping -> getFigure().getBottom().remove(child);
+		case final MappingEditPart _ -> getFigure().getBottom().remove(child);
 		default -> super.removeChildVisual(childEditPart);
 		}
 	}

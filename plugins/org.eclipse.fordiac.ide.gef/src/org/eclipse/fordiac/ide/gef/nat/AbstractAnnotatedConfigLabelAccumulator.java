@@ -33,7 +33,7 @@ public abstract class AbstractAnnotatedConfigLabelAccumulator<T> implements ICon
 	}
 
 	protected void accumulateAttributeConfigLabels(final LabelStack configLabels, final Object target) {
-		accumulateAttributeConfigLabels(configLabels, target, annotation -> true);
+		accumulateAttributeConfigLabels(configLabels, target, _ -> true);
 	}
 
 	protected void accumulateAttributeConfigLabels(final LabelStack configLabels, final Object target,

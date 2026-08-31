@@ -82,7 +82,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		final Label msLbl = widgetFactory.createLabel(detailsComp, Messages.TsnDetails_MS);
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(msLbl);
 
-		cycleTimeValue.addModifyListener(event -> {
+		cycleTimeValue.addModifyListener(_ -> {
 			try {
 				final int newCycleTimeValue = Integer.parseInt(cycleTimeValue.getText());
 				executor.executeCommand(new ChangeTsnCycleTimeCommand(tsnConfig, newCycleTimeValue));
@@ -115,7 +115,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 
 	private static void configureButtonList(final TableViewer windowViewer, final AddDeleteReorderListWidget buttons,
 			final TsnConfiguration tsnConfig, final CommandExecutor executor) {
-		buttons.bindToTableViewer(windowViewer, executor, ref -> new CreateTsnWindowCommand(tsnConfig, 1),
+		buttons.bindToTableViewer(windowViewer, executor, _ -> new CreateTsnWindowCommand(tsnConfig, 1),
 				ref -> new DeleteTsnWindowCommand(tsnConfig, (TsnWindow) ref),
 				ref -> new ChangeTsnWindowOrderCommand((TsnWindow) ref, tsnConfig, true),
 				ref -> new ChangeTsnWindowOrderCommand((TsnWindow) ref, tsnConfig, false));

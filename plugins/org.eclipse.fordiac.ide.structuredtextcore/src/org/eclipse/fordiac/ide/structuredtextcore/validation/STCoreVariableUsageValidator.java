@@ -72,12 +72,12 @@ public class STCoreVariableUsageValidator {
 
 	public void addVariableBlock(final STVarDeclarationBlock block) {
 		addVariables(block.getVarDeclarations(), switch (block) {
-		case final STVarInputDeclarationBlock unused -> EnumSet.of(VariableState.UNUSED, VariableState.UNREAD);
-		case final STVarOutputDeclarationBlock unused -> EnumSet.of(VariableState.UNUSED, VariableState.UNWRITTEN);
-		case final STVarInOutDeclarationBlock unused -> EnumSet.of(VariableState.UNUSED);
-		case final STVarPlainDeclarationBlock unused when block.isConstant() ->
+		case final STVarInputDeclarationBlock _ -> EnumSet.of(VariableState.UNUSED, VariableState.UNREAD);
+		case final STVarOutputDeclarationBlock _ -> EnumSet.of(VariableState.UNUSED, VariableState.UNWRITTEN);
+		case final STVarInOutDeclarationBlock _ -> EnumSet.of(VariableState.UNUSED);
+		case final STVarPlainDeclarationBlock _ when block.isConstant() ->
 			EnumSet.of(VariableState.UNUSED, VariableState.UNREAD);
-		case final STVarTempDeclarationBlock unused when block.isConstant() ->
+		case final STVarTempDeclarationBlock _ when block.isConstant() ->
 			EnumSet.of(VariableState.UNUSED, VariableState.UNREAD);
 		default -> EnumSet.of(VariableState.UNUSED, VariableState.UNREAD, VariableState.UNWRITTEN);
 		});

@@ -181,19 +181,19 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	}
 
 	static List<Event> repeatEvent(final Event event, final int repeat) {
-		return IntStream.range(0, repeat).mapToObj(unused -> event).toList();
+		return IntStream.range(0, repeat).mapToObj(_ -> event).toList();
 	}
 
 	static List<ECState> repeatState(final ECState state, final int repeat) {
-		return IntStream.range(0, repeat).mapToObj(unused -> state).toList();
+		return IntStream.range(0, repeat).mapToObj(_ -> state).toList();
 	}
 
 	static List<Event> repeatEvents(final List<Event> event, final int repeat) {
-		return IntStream.range(0, repeat).mapToObj(unused -> event).flatMap(Collection::stream).toList();
+		return IntStream.range(0, repeat).mapToObj(_ -> event).flatMap(Collection::stream).toList();
 	}
 
 	static List<ECState> repeatStates(final List<ECState> state, final int repeat) {
-		return IntStream.range(0, repeat).mapToObj(unused -> state).flatMap(Collection::stream).toList();
+		return IntStream.range(0, repeat).mapToObj(_ -> state).flatMap(Collection::stream).toList();
 	}
 
 	static BasicFBType newBasicFB(final ECC ecc, final List<ICallable> callables,

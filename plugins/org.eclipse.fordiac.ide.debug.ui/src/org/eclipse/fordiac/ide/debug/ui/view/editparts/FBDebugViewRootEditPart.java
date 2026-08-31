@@ -285,7 +285,7 @@ public class FBDebugViewRootEditPart extends AbstractGraphicalEditPart {
 
 	private IFigure getTargetFigure(final EditPart childEditPart) {
 		return switch (childEditPart) {
-		case final FBTypeEditPart fbtEP -> getFigure().getFBFigureContainer();
+		case final FBTypeEditPart _ -> getFigure().getFBFigureContainer();
 		case final InnerValueEditPart innerEP ->
 			(innerEP.isInput()) ? getFigure().getInnerInputValues() : getFigure().getInnerOutputValues();
 		case final AbstractDebugInterfaceValueEditPart ivEP ->

@@ -231,7 +231,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 			return null;
 		}
 
-		return fileMap.computeIfAbsent(file, f -> {
+		return fileMap.computeIfAbsent(file, _ -> {
 			final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
 			if (entry != null) {
 				final Optional<String> message = IdentifierVerifier.verifyIdentifier(entry.getTypeName());
@@ -414,14 +414,14 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	protected void addPackageNameReference(final String packageName) {
 		if (packageName != null && !packageName.isEmpty()) {
-			packages.computeIfAbsent(packageName.toLowerCase(), key -> new AtomicInteger()).incrementAndGet();
+			packages.computeIfAbsent(packageName.toLowerCase(), _ -> new AtomicInteger()).incrementAndGet();
 		}
 	}
 
 	protected void removePackageNameReference(final String packageName) {
 		if (packageName != null && !packageName.isEmpty()) {
 			packages.computeIfPresent(packageName.toLowerCase(),
-					(key, value) -> value.decrementAndGet() > 0 ? value : null);
+					(_, value) -> value.decrementAndGet() > 0 ? value : null);
 		}
 	}
 
@@ -571,15 +571,15 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	private TypeEntry getBlockTypeEntry(final TypeEntry entry) {
 		final String fullTypeName = entry.getFullTypeName().toLowerCase();
 		return switch (entry) {
-		case final AdapterTypeEntry adpEntry -> adapterTypes.get(fullTypeName);
-		case final AttributeTypeEntry atpEntry -> attributeTypes.get(fullTypeName);
-		case final DeviceTypeEntry devEntry -> deviceTypes.get(fullTypeName);
-		case final FBTypeEntry fbtEntry -> fbTypes.get(fullTypeName);
-		case final ResourceTypeEntry resEntry -> resourceTypes.get(fullTypeName);
-		case final SegmentTypeEntry segEntry -> segmentTypes.get(fullTypeName);
-		case final SubAppTypeEntry subAppEntry -> subAppTypes.get(fullTypeName);
-		case final SystemEntry sysEntry -> systems.get(fullTypeName);
-		case final GlobalConstantsEntry globalConstEntry -> globalConstants.get(fullTypeName);
+		case final AdapterTypeEntry _ -> adapterTypes.get(fullTypeName);
+		case final AttributeTypeEntry _ -> attributeTypes.get(fullTypeName);
+		case final DeviceTypeEntry _ -> deviceTypes.get(fullTypeName);
+		case final FBTypeEntry _ -> fbTypes.get(fullTypeName);
+		case final ResourceTypeEntry _ -> resourceTypes.get(fullTypeName);
+		case final SegmentTypeEntry _ -> segmentTypes.get(fullTypeName);
+		case final SubAppTypeEntry _ -> subAppTypes.get(fullTypeName);
+		case final SystemEntry _ -> systems.get(fullTypeName);
+		case final GlobalConstantsEntry _ -> globalConstants.get(fullTypeName);
 		default -> {
 			FordiacLogHelper.logError("Unknown type entry to be retrieved from library: " + entry.getClass().getName()); //$NON-NLS-1$
 			yield null;

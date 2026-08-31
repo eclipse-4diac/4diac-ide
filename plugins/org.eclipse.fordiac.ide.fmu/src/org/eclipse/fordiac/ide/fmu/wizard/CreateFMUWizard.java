@@ -158,7 +158,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 
 	private static List<Resource> getWorkLoadEntryList(final Map<Device, List<Resource>> toDeploy,
 			final Device device) {
-		return toDeploy.computeIfAbsent(device, dev -> new ArrayList<>());
+		return toDeploy.computeIfAbsent(device, _ -> new ArrayList<>());
 	}
 
 }

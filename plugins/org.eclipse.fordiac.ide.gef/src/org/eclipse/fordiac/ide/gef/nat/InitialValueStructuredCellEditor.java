@@ -62,7 +62,7 @@ public class InitialValueStructuredCellEditor<T> extends InitialValueCellEditor<
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(textControl);
 		dialogButton = new Button(composite, SWT.FLAT);
 		dialogButton.setText("\u2026"); //$NON-NLS-1$
-		dialogButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> openDialog()));
+		dialogButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> openDialog()));
 		GridDataFactory.swtDefaults().applyTo(dialogButton);
 		focusListener = new CompositeFocusListener();
 		return textControl;

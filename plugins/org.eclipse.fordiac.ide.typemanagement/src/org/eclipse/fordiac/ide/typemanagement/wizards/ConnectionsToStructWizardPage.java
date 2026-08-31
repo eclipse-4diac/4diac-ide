@@ -111,11 +111,11 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 		checkboxGridData.horizontalSpan = 2;
 		conflictButton.setLayoutData(checkboxGridData);
 
-		structNameText.addModifyListener(e -> handleInputChanged());
-		sourceNameText.addModifyListener(e -> handleInputChanged());
-		destinationNameText.addModifyListener(e -> handleInputChanged());
-		conflictButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> handleInputChanged()));
-		existingStructButton.addListener(SWT.Selection, event -> {
+		structNameText.addModifyListener(_ -> handleInputChanged());
+		sourceNameText.addModifyListener(_ -> handleInputChanged());
+		destinationNameText.addModifyListener(_ -> handleInputChanged());
+		conflictButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> handleInputChanged()));
+		existingStructButton.addListener(SWT.Selection, _ -> {
 			if (existingStructButton.getSelection()) {
 				structNameText.setEnabled(false);
 				structButton.setEnabled(true);
@@ -125,7 +125,7 @@ public class ConnectionsToStructWizardPage extends UserInputWizardPage {
 			}
 			handleInputChanged();
 		});
-		structButton.addListener(SWT.Selection, event -> {
+		structButton.addListener(SWT.Selection, _ -> {
 			final DataTypeSelectionTreeContentProvider instance = DataTypeSelectionTreeContentProvider.INSTANCE;
 			final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getShell(), instance);
 			dialog.setInput(getConnectionsToStructRefactoring().getTypeLibrary());

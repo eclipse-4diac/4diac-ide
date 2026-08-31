@@ -27,7 +27,7 @@ public class FBTypeSelectionTreeContentProvider extends TypeSelectionTreeContent
 	private final Predicate<FBTypeEntry> filter;
 
 	protected FBTypeSelectionTreeContentProvider() {
-		this(unused -> true);
+		this(_ -> true);
 	}
 
 	public FBTypeSelectionTreeContentProvider(final Predicate<FBTypeEntry> filter) {

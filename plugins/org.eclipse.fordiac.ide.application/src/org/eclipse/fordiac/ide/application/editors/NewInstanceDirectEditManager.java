@@ -103,7 +103,7 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 
 	@Override
 	protected void initCellEditor() {
-		getCellEditor().getMenuButton().addListener(SWT.Selection, event -> showFBInsertPopUpMenu());
+		getCellEditor().getMenuButton().addListener(SWT.Selection, _ -> showFBInsertPopUpMenu());
 		getCellEditor().setTypeLibrary(typeLib, getEditPart().getModel() instanceof final FBNetwork fbn ? fbn : null);
 
 		super.initCellEditor();

@@ -81,7 +81,7 @@ public class DeSelectAllWidget {
 
 	private Listener createDeSelectAllListener(final Button checkbox, final TableViewer withEventsViewer,
 			final AdapterInterfaceElementSection executor) {
-		return ev -> {
+		return _ -> {
 			final CompoundCommand ccmd = new CompoundCommand();
 			final EObject type = executor.getType();
 			if (checkbox.getSelection()) {

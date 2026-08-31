@@ -28,7 +28,7 @@ public class AttributeTypeEntryDataHandler extends AbstractTypeEntryDataHandler<
 	@Override
 	protected Map<EObject, AttributeTypeEntry> createInputSet(final AttributeTypeEntry inputTypeEntry) {
 		final AttributeTypeInstanceSearch search = new AttributeTypeInstanceSearch(inputTypeEntry);
-		return search.performSearch().stream().collect(Collectors.toMap(el -> el, el -> inputTypeEntry));
+		return search.performSearch().stream().collect(Collectors.toMap(el -> el, _ -> inputTypeEntry));
 	}
 
 }

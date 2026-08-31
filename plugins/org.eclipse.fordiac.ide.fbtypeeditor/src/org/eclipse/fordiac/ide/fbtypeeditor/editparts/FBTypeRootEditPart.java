@@ -75,15 +75,15 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	private IFigure getPinPropTargetFigure(final PinProperty pinProp) {
 		if (pinProp.isInput()) {
 			return switch (pinProp) {
-			case final TypePinProperty typProp -> getFigure().getInputTypesColumn();
-			case final CommentPinProperty commentProp -> getFigure().getInputCommentsColumn();
-			case final WithPinProperty withProp -> getFigure().getInputWithColumn();
+			case final TypePinProperty _ -> getFigure().getInputTypesColumn();
+			case final CommentPinProperty _ -> getFigure().getInputCommentsColumn();
+			case final WithPinProperty _ -> getFigure().getInputWithColumn();
 			};
 		}
 		return switch (pinProp) {
-		case final TypePinProperty typProp -> getFigure().getOutputTypesColumn();
-		case final CommentPinProperty commentProp -> getFigure().getOutputCommentsColumn();
-		case final WithPinProperty withProp -> getFigure().getOutputWithColumn();
+		case final TypePinProperty _ -> getFigure().getOutputTypesColumn();
+		case final CommentPinProperty _ -> getFigure().getOutputCommentsColumn();
+		case final WithPinProperty _ -> getFigure().getOutputWithColumn();
 		};
 	}
 

@@ -124,7 +124,7 @@ public class QueryPlaceholderNodeFigure extends QueryNodeFigure {
 			}
 		};
 
-		textWidget.addListener(SWT.FocusOut, e -> commit.run());
+		textWidget.addListener(SWT.FocusOut, _ -> commit.run());
 		textWidget.addListener(SWT.KeyDown, e -> {
 			if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
 				commit.run();

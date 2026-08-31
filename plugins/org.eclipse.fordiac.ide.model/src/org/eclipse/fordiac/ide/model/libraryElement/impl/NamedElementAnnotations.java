@@ -253,7 +253,7 @@ public final class NamedElementAnnotations {
 
 	@SuppressWarnings("unchecked")
 	private static Map<String, INamedElement> getNamedContents(final Map<Object, Object> context, final String key) {
-		return (Map<String, INamedElement>) context.computeIfAbsent(key, k -> new HashMap<>());
+		return (Map<String, INamedElement>) context.computeIfAbsent(key, _ -> new HashMap<>());
 	}
 
 	private static class NullNamedElement extends EObjectImpl implements INamedElement {

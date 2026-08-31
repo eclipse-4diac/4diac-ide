@@ -33,11 +33,11 @@ public class ECCEditPartFactory extends Abstract4diacEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		return switch (modelElement) {
-		case final ECC ecc -> new ECCEditPart();
-		case final ECState state -> new ECStateEditPart();
-		case final ECTransition trans -> new ECTransitionEditPart();
-		case final ECActionAlgorithm alg -> new ECActionAlgorithmEditPart();
-		case final ECActionOutputEvent eo -> new ECActionOutputEventEditPart();
+		case final ECC _ -> new ECCEditPart();
+		case final ECState _ -> new ECStateEditPart();
+		case final ECTransition _ -> new ECTransitionEditPart();
+		case final ECActionAlgorithm _ -> new ECActionAlgorithmEditPart();
+		case final ECActionOutputEvent _ -> new ECActionOutputEventEditPart();
 		default -> throw createEditpartCreationException(context, modelElement);
 		};
 	}

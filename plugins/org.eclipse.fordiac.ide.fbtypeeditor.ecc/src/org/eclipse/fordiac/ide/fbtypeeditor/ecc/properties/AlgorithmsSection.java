@@ -53,7 +53,7 @@ public class AlgorithmsSection extends AbstractSection {
 		view.setLayout(new FillLayout());
 		algorithmList = new AlgorithmList(view, getWidgetFactory());
 
-		getAlgorithmList().getViewer().addSelectionChangedListener(event -> {
+		getAlgorithmList().getViewer().addSelectionChangedListener(_ -> {
 			final Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection())
 					.getFirstElement();
 			algorithmGroup.setAlgorithm((selection instanceof final Algorithm alg) ? alg : null);

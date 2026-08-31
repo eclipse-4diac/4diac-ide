@@ -59,7 +59,7 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 
 	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider,
 			final IStyledLabelProvider labelProvider) {
-		this(parent, contentProvider, labelProvider, libElement -> true);
+		this(parent, contentProvider, labelProvider, _ -> true);
 	}
 
 	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider,
@@ -78,7 +78,7 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 	private void createContextMenu(final Control control) {
 		final Menu openEditorMenu = new Menu(control);
 		final MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
-		openItem.addListener(SWT.Selection, e -> {
+		openItem.addListener(SWT.Selection, _ -> {
 			final StructuredType sel = getSelectedStructuredType();
 			if (sel != null) {
 				handleShellCloseEvent();

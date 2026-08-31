@@ -120,7 +120,7 @@ public final class FordiacGraphBuilder {
 
 	private void processChild(final Object child) {
 		switch (child) {
-		case final GroupEditPart group -> {
+		case final GroupEditPart _ -> {
 			// TODO
 		}
 		case final CommentEditPart commentEp -> processComment(commentEp);
@@ -243,7 +243,7 @@ public final class FordiacGraphBuilder {
 
 	private ElkPort getPort(final InterfaceEditPart interfaceEditPart) {
 		return (ElkPort) mapping.getReverseMapping().computeIfAbsent(interfaceEditPart,
-				ie -> createPort(interfaceEditPart));
+				_ -> createPort(interfaceEditPart));
 	}
 
 	private ElkPort createPort(final InterfaceEditPart interfaceEditPart) {

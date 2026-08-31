@@ -50,11 +50,11 @@ public class AddElementsToGroup extends Command implements ScopedCommand {
 		final Map<Group, List<FBNetworkElement>> groupMap = new HashMap<>();
 		// collect all entries that are in a group and store them by group
 		elementsToAdd.stream().filter(FBNetworkElement::isInGroup).forEach(el -> {
-			final List<FBNetworkElement> entry = groupMap.computeIfAbsent(el.getGroup(), group -> new ArrayList<>());
+			final List<FBNetworkElement> entry = groupMap.computeIfAbsent(el.getGroup(), _ -> new ArrayList<>());
 			entry.add(el);
 		});
 		// for each entry in the map create one RemoveFromGroupCommand
-		groupMap.forEach((group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
+		groupMap.forEach((_, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
 	}
 
 	public List<FBNetworkElement> getElementsToAdd() {

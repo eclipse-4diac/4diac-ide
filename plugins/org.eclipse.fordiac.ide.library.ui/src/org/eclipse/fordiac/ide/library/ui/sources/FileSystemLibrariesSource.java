@@ -58,7 +58,7 @@ public final class FileSystemLibrariesSource implements ILibrarySource {
 
 		final Button browse = new Button(grid, SWT.PUSH);
 		browse.setText("Browse…"); //$NON-NLS-1$
-		browse.addListener(SWT.Selection, ev -> {
+		browse.addListener(SWT.Selection, _ -> {
 			final DirectoryDialog dlg = new DirectoryDialog(parent.getShell());
 			dlg.setText("Select library root folder"); //$NON-NLS-1$
 			final String sel = dlg.open();

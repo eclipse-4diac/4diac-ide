@@ -382,14 +382,14 @@ class ValueOperationsTest {
 				final Value defaultValue = defaultValue(type);
 				final Value defaultCastValue = defaultValue(castType);
 				switch (type) {
-				case final BoolType unused -> {
+				case final BoolType _ -> {
 					if (castType instanceof AnyBitType) {
 						assertEquals(defaultCastValue, castValue(defaultValue, castType));
 					} else {
 						assertThrows(ClassCastException.class, () -> castValue(defaultValue, castType));
 					}
 				}
-				case final AnyMagnitudeType unused -> {
+				case final AnyMagnitudeType _ -> {
 					if (castType instanceof AnyMagnitudeType
 							|| (castType instanceof AnyBitType && !(castType instanceof BoolType))) {
 						assertEquals(defaultCastValue, castValue(defaultValue, castType));
@@ -397,14 +397,14 @@ class ValueOperationsTest {
 						assertThrows(ClassCastException.class, () -> castValue(defaultValue, castType));
 					}
 				}
-				case final AnyBitType unused -> {
+				case final AnyBitType _ -> {
 					if (castType instanceof AnyNumType || castType instanceof AnyBitType) {
 						assertEquals(defaultCastValue, castValue(defaultValue, castType));
 					} else {
 						assertThrows(ClassCastException.class, () -> castValue(defaultValue, castType));
 					}
 				}
-				case final AnyCharType unused -> {
+				case final AnyCharType _ -> {
 					if (castType instanceof AnyCharType) {
 						assertEquals(defaultCastValue, castValue(defaultValue, castType));
 					} else if (castType instanceof AnyStringType) {
@@ -413,7 +413,7 @@ class ValueOperationsTest {
 						assertThrows(ClassCastException.class, () -> castValue(defaultValue, castType));
 					}
 				}
-				case final AnyStringType unused -> {
+				case final AnyStringType _ -> {
 					if (castType instanceof AnyStringType) {
 						assertEquals(defaultCastValue, castValue(defaultValue, castType));
 					} else if ((castType instanceof AnyCharType)) {
@@ -422,7 +422,7 @@ class ValueOperationsTest {
 						assertThrows(ClassCastException.class, () -> castValue(defaultValue, castType));
 					}
 				}
-				case final AnyDateType unused -> {
+				case final AnyDateType _ -> {
 					if (castType instanceof AnyDateType) {
 						assertEquals(defaultCastValue, castValue(defaultValue, castType));
 					} else {
@@ -472,17 +472,17 @@ class ValueOperationsTest {
 		for (final DataType type : DataTypeLibrary.getNonUserDefinedDataTypes()) {
 			final Value defaultValue = defaultValue(type);
 			switch (type) {
-			case final AnyNumType unused -> assertEquals(defaultValue, parseValue("0", type));
-			case final AnyBitType unused -> assertEquals(defaultValue, parseValue("0", type));
-			case final TimeType unused -> assertEquals(defaultValue, parseValue("T#0s", type));
-			case final LtimeType unused -> assertEquals(defaultValue, parseValue("LT#0s", type));
-			case final AnyCharsType unused -> assertEquals(defaultValue, parseValue("", type));
-			case final DateType unused -> assertEquals(defaultValue, parseValue("D#1970-01-01", type));
-			case final LdateType unused -> assertEquals(defaultValue, parseValue("LD#1970-01-01", type));
-			case final TimeOfDayType unused -> assertEquals(defaultValue, parseValue("TOD#00:00:00", type));
-			case final LtodType unused -> assertEquals(defaultValue, parseValue("LTOD#00:00:00", type));
-			case final DateAndTimeType unused -> assertEquals(defaultValue, parseValue("DT#1970-01-01-00:00:00", type));
-			case final LdtType unused -> assertEquals(defaultValue, parseValue("LDT#1970-01-01-00:00:00", type));
+			case final AnyNumType _ -> assertEquals(defaultValue, parseValue("0", type));
+			case final AnyBitType _ -> assertEquals(defaultValue, parseValue("0", type));
+			case final TimeType _ -> assertEquals(defaultValue, parseValue("T#0s", type));
+			case final LtimeType _ -> assertEquals(defaultValue, parseValue("LT#0s", type));
+			case final AnyCharsType _ -> assertEquals(defaultValue, parseValue("", type));
+			case final DateType _ -> assertEquals(defaultValue, parseValue("D#1970-01-01", type));
+			case final LdateType _ -> assertEquals(defaultValue, parseValue("LD#1970-01-01", type));
+			case final TimeOfDayType _ -> assertEquals(defaultValue, parseValue("TOD#00:00:00", type));
+			case final LtodType _ -> assertEquals(defaultValue, parseValue("LTOD#00:00:00", type));
+			case final DateAndTimeType _ -> assertEquals(defaultValue, parseValue("DT#1970-01-01-00:00:00", type));
+			case final LdtType _ -> assertEquals(defaultValue, parseValue("LDT#1970-01-01-00:00:00", type));
 			default -> assertThrows(UnsupportedOperationException.class, () -> parseValue("0", type));
 			}
 		}

@@ -40,16 +40,16 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		return switch (modelElement) {
-		case final FBType type when context == null -> new FBTypeRootEditPart();
-		case final FBType type when context instanceof FBTypeRootEditPart -> new FBTypeEditPart();
-		case final AbstractContainerElement ac -> new InterfaceContainerEditPart();
-		case final Event ev -> new InterfaceEditPart();
+		case final FBType _ when context == null -> new FBTypeRootEditPart();
+		case final FBType _ when context instanceof FBTypeRootEditPart -> new FBTypeEditPart();
+		case final AbstractContainerElement _ -> new InterfaceContainerEditPart();
+		case final Event _ -> new InterfaceEditPart();
 		case final VarDeclaration varDecl -> createInterfaceEditPart(varDecl);
-		case final AdapterDeclaration adp -> new AdapterInterfaceEditPart();
-		case final With with -> new WithEditPart();
-		case final CommentPinProperty df -> new CommentEditPart();
-		case final TypePinProperty typeProp -> new TypeEditPart(typeLib);
-		case final WithPinProperty withProp -> new WithEndPointEditPart();
+		case final AdapterDeclaration _ -> new AdapterInterfaceEditPart();
+		case final With _ -> new WithEditPart();
+		case final CommentPinProperty _ -> new CommentEditPart();
+		case final TypePinProperty _ -> new TypeEditPart(typeLib);
+		case final WithPinProperty _ -> new WithEndPointEditPart();
 		default -> throw createEditpartCreationException(context, modelElement);
 		};
 	}

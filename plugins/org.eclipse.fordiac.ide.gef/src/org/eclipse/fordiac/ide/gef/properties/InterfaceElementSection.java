@@ -59,7 +59,7 @@ public class InterfaceElementSection extends AbstractSection {
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);
-		nameText.addModifyListener(e -> {
+		nameText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
@@ -67,7 +67,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createGroupText(composite, true);
-		commentText.addModifyListener(e -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
@@ -79,7 +79,7 @@ public class InterfaceElementSection extends AbstractSection {
 		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
 		typeCombo.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		typeCombo.addListener(SWT.Selection, event -> {
+		typeCombo.addListener(SWT.Selection, _ -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
 				final DataType newType = getTypeLibrary().getAdapterTypeEntry(typeCombo.getText()).getType();
@@ -91,7 +91,7 @@ public class InterfaceElementSection extends AbstractSection {
 		});
 		valueCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, true);
-		parameterText.addModifyListener(e -> {
+		parameterText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeValueCommand((VarDeclaration) getType(), parameterText.getText()));
 			addContentAdapter();

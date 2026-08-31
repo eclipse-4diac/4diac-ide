@@ -310,8 +310,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		}
 
 		final Stream<? extends IInterfaceElement> pinStream = switch (ie) {
-		case final Event e when isRightPath -> outerFB.getInterface().getEventInputs().stream();
-		case final Event e -> outerFB.getInterface().getEventOutputs().stream();
+		case final Event _ when isRightPath -> outerFB.getInterface().getEventInputs().stream();
+		case final Event _ -> outerFB.getInterface().getEventOutputs().stream();
 
 		case final VarDeclaration v when isRightPath && v.isInOutVar() ->
 			outerFB.getInterface().getInOutVars().stream();
@@ -392,7 +392,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 			// check if import is required by trying to resolve the type
 			final var resolvedEntry = ImportHelper.resolveImport(entry.getTypeName(), root,
-					dataTypeLib::getTypeIfExists, name -> null);
+					dataTypeLib::getTypeIfExists, _ -> null);
 			if (resolvedEntry == null) {
 				final var importCommand = new AddNewImportCommand(root, entry.getFullTypeName());
 				importCommand.execute();
@@ -415,7 +415,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 				continue;
 			}
 			final var resolvedEntry = ImportHelper.resolveImport(constEntry.getTypeName(), root,
-					typeLibrary::getGlobalConstantsEntry, name -> null);
+					typeLibrary::getGlobalConstantsEntry, _ -> null);
 
 			if (resolvedEntry == null) {
 				final var importCommand = new AddNewImportCommand(root, namespace);

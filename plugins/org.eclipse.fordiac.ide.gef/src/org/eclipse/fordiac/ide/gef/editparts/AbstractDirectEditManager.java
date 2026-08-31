@@ -55,9 +55,9 @@ public abstract class AbstractDirectEditManager<T> extends TextDirectEditManager
 		if (null != element) {
 			getCellEditor().setValue(element);
 			final CCombo combo = getComboBox();
-			combo.addModifyListener(e -> setDirty(true));
+			combo.addModifyListener(_ -> setDirty(true));
 			final Text text = getText();
-			text.addModifyListener(e -> setDirty(true));
+			text.addModifyListener(_ -> setDirty(true));
 		}
 
 	}

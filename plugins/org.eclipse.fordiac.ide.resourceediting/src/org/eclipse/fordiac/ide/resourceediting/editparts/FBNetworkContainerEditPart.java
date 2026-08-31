@@ -84,7 +84,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 							: ie.getOutputConnections();
 
 					connections.stream().filter(Connection::isBrokenConnection)
-							.map(con -> createVirtualIOElement(fbNetworkelement, ie.getName())).filter(Objects::nonNull)
+							.map(_ -> createVirtualIOElement(fbNetworkelement, ie.getName())).filter(Objects::nonNull)
 							.forEach(interfaceElements::add);
 				});
 			}

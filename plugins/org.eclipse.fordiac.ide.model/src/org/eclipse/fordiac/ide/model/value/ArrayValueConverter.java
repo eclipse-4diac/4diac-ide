@@ -83,7 +83,7 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 		if (scanner.findWithinHorizon(ARRAY_REPEAT_END_PATTERN, 0) == null) {
 			throw new IllegalArgumentException(Messages.ArrayValueConverter_InvalidRepeatSyntax);
 		}
-		return IntStream.range(0, count).mapToObj(unused -> result).flatMap(List::stream).toList();
+		return IntStream.range(0, count).mapToObj(_ -> result).flatMap(List::stream).toList();
 	}
 
 	private T parseValue(final Scanner scanner, final int index) {

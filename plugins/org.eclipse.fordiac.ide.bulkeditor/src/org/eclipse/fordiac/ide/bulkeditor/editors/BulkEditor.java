@@ -278,7 +278,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 		if (controls.getModeSelection() == 1) {
 			natTable.changeNatTable(modeSelection, simpleAttribute,
-					refElement -> handleAddAttribute(attributeTypeEntry), this::handleDeleteAttribute);
+					_ -> handleAddAttribute(attributeTypeEntry), this::handleDeleteAttribute);
 		} else {
 			natTable.changeNatTable(modeSelection, simpleAttribute);
 		}

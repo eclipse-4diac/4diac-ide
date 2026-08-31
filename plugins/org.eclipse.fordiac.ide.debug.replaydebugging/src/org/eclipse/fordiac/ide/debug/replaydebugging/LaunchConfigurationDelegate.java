@@ -93,10 +93,10 @@ public class LaunchConfigurationDelegate extends DeploymentLaunchConfigurationDe
 		final Map<Device, Set<Resource>> resourcesByDevice = new LinkedHashMap<>();
 		for (final INamedElement element : selection) {
 			if (element instanceof final Device device) {
-				resourcesByDevice.computeIfAbsent(device, d -> new LinkedHashSet<>());
+				resourcesByDevice.computeIfAbsent(device, _ -> new LinkedHashSet<>());
 			} else if (element instanceof final Resource resource
 					&& resource.eContainer() instanceof final Device device) {
-				resourcesByDevice.computeIfAbsent(device, d -> new LinkedHashSet<>()).add(resource);
+				resourcesByDevice.computeIfAbsent(device, _ -> new LinkedHashSet<>()).add(resource);
 			}
 		}
 

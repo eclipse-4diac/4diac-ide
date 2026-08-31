@@ -196,7 +196,7 @@ public final class FBShapeHelper {
 
 					final double symbolSize = switch (ie) {
 					case final VarDeclaration v when v.isInOutVar() -> WIDTH_ADJUST_INTERFACE_INOUT;
-					case final AdapterDeclaration a -> WIDTH_ADJUST_INTERFACE_ADAPTER;
+					case final AdapterDeclaration _ -> WIDTH_ADJUST_INTERFACE_ADAPTER;
 					default -> WIDTH_ADJUST_INTERFACE;
 					};
 

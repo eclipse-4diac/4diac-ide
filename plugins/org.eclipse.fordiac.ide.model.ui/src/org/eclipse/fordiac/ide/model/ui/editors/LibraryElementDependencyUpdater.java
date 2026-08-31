@@ -81,8 +81,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void updateTypeLibraryDependency(final Notification notification) {
 		switch (notification.getEventType()) {
-		case Notification.REMOVE ->
-			updateRemovedTypeEntryNameReference(notification.getOldValue());
+		case Notification.REMOVE -> updateRemovedTypeEntryNameReference(notification.getOldValue());
 		case Notification.REMOVE_MANY ->
 			((Collection<?>) notification.getOldValue()).forEach(this::updateRemovedTypeEntryNameReference);
 		default -> {
@@ -206,8 +205,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	private void updateBlockDependency(final InterfaceTypeEntry dependency, final String fullTypeName,
 			final TypeLibrary typeLibrary) {
 		TypeEntry entry = switch (dependency) {
-		case final FBTypeEntry fb -> typeLibrary.getFBTypeEntry(fullTypeName);
-		case final SubAppTypeEntry subApp -> typeLibrary.getSubAppTypeEntry(fullTypeName);
+		case final FBTypeEntry _ -> typeLibrary.getFBTypeEntry(fullTypeName);
+		case final SubAppTypeEntry _ -> typeLibrary.getSubAppTypeEntry(fullTypeName);
 		default -> typeLibrary.find(fullTypeName);
 		};
 		if (entry == null) {
@@ -296,7 +295,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void removeTypeLibraryAdapter(final TypeEntry typeEntry) {
 		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
-		if (typeLibrary != null && getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
+		if (typeLibrary != null
+				&& getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
 			typeLibrary.eAdapters().remove(this);
 		}
 	}

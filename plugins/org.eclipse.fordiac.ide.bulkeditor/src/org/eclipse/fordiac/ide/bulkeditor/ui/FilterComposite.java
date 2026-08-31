@@ -154,7 +154,7 @@ public class FilterComposite extends Composite {
 					FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(REGULAR_EXPRESSION_IMAGE)));
 			regularExpression = createImageButton(descriptor, Messages.RegularExpression);
 
-			selected.addListener(SWT.Selection, event -> {
+			selected.addListener(SWT.Selection, _ -> {
 				textField.setEnabled(selected.getSelection());
 				caseSensitive.setEnabled(selected.getSelection());
 				wholeWord.setEnabled(
@@ -167,7 +167,7 @@ public class FilterComposite extends Composite {
 		private Button createImageButton(final ImageDescriptor descriptor, final String tooltip) {
 			final Image image = descriptor.createImage();
 			final Button button = WidgetFactory.button(SWT.TOGGLE).image(image).tooltip(tooltip).create(this);
-			button.addDisposeListener(e -> image.dispose());
+			button.addDisposeListener(_ -> image.dispose());
 			return button;
 		}
 
@@ -175,27 +175,27 @@ public class FilterComposite extends Composite {
 			this.subSetting = subSetting;
 			final boolean isSelected = subSetting.selected;
 			selected.setSelection(isSelected);
-			selected.addListener(SWT.Selection, event -> {
+			selected.addListener(SWT.Selection, _ -> {
 				this.subSetting.selected = selected.getSelection();
 				fireTextChanged();
 				fireFilterChanged();
 			});
 
 			textField.setText(subSetting.textField);
-			textField.addModifyListener(event -> {
+			textField.addModifyListener(_ -> {
 				this.subSetting.textField = textField.getText();
 				fireTextChanged();
 				fireFilterChanged();
 			});
 
 			caseSensitive.setSelection(subSetting.caseSensitive);
-			caseSensitive.addListener(SWT.Selection, event -> {
+			caseSensitive.addListener(SWT.Selection, _ -> {
 				subSetting.caseSensitive = caseSensitive.getSelection();
 				fireFilterChanged();
 			});
 
 			wholeWord.setSelection(subSetting.wholeWord);
-			wholeWord.addListener(SWT.Selection, event -> {
+			wholeWord.addListener(SWT.Selection, _ -> {
 				this.subSetting.wholeWord = wholeWord.getSelection();
 				exactMatch.setEnabled(!wholeWord.getSelection());
 				regularExpression.setEnabled(!wholeWord.getSelection());
@@ -203,14 +203,14 @@ public class FilterComposite extends Composite {
 			});
 
 			exactMatch.setSelection(subSetting.exactMatch);
-			exactMatch.addListener(SWT.Selection, event -> {
+			exactMatch.addListener(SWT.Selection, _ -> {
 				this.subSetting.exactMatch = exactMatch.getSelection();
 				wholeWord.setEnabled(!exactMatch.getSelection() && !regularExpression.getSelection());
 				fireFilterChanged();
 			});
 
 			regularExpression.setSelection(subSetting.regularExpression);
-			regularExpression.addListener(SWT.Selection, event -> {
+			regularExpression.addListener(SWT.Selection, _ -> {
 				this.subSetting.regularExpression = regularExpression.getSelection();
 				wholeWord.setEnabled(!exactMatch.getSelection() && !regularExpression.getSelection());
 				fireFilterChanged();

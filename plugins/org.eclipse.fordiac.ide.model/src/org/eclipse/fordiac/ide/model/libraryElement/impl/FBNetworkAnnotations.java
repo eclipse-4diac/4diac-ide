@@ -80,7 +80,7 @@ final class FBNetworkAnnotations {
 
 	static boolean validateCollisions(final Group group, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		return validateCollisions(Optional.of(group), group.getGroupElements(), unused -> true, diagnostics, context,
+		return validateCollisions(Optional.of(group), group.getGroupElements(), _ -> true, diagnostics, context,
 				getRootProject(group));
 	}
 

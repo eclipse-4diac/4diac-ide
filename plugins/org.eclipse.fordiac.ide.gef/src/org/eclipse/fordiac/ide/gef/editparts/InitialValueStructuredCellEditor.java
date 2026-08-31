@@ -49,12 +49,12 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
 		textControl = super.createControl(composite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(textControl);
-		textControl.addFocusListener(FocusListener.focusGainedAdapter(event -> hasFocus = true));
+		textControl.addFocusListener(FocusListener.focusGainedAdapter(_ -> hasFocus = true));
 		final Button dialogButton = new Button(composite, SWT.FLAT);
 		dialogButton.setText("\u2026"); //$NON-NLS-1$
-		dialogButton.addFocusListener(FocusListener.focusGainedAdapter(event -> hasFocus = true));
-		dialogButton.addFocusListener(FocusListener.focusLostAdapter(event -> focusLost()));
-		dialogButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> openDialog()));
+		dialogButton.addFocusListener(FocusListener.focusGainedAdapter(_ -> hasFocus = true));
+		dialogButton.addFocusListener(FocusListener.focusLostAdapter(_ -> focusLost()));
+		dialogButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> openDialog()));
 		GridDataFactory.swtDefaults().applyTo(dialogButton);
 		return composite;
 	}

@@ -46,7 +46,7 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 				if (project == null) {
 					return;
 				}
-				projectMap.computeIfAbsent(project, key -> new ArrayList<URI>());
+				projectMap.computeIfAbsent(project, _ -> new ArrayList<URI>());
 
 				if (treePath.getLastSegment() instanceof final UntypedSubApp untypedSubapp) {
 					projectMap.get(project).add(EcoreUtil.getURI(untypedSubapp));

@@ -70,25 +70,25 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 
 	private static BiFunction<TypeLibrary, String, TypeEntry> getTypeResolver(final NatTableColumn column) {
 		return switch (column) {
-		case final AttributeTableColumn col -> (typeLib, name) -> {
+		case final AttributeTableColumn _ -> (typeLib, name) -> {
 			final AttributeTypeEntry attributeEntry = typeLib.getAttributeTypeEntry(name);
 			if (attributeEntry != null) {
 				return attributeEntry;
 			}
 			return typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
 		};
-		case final VarDeclarationTableColumn col ->
+		case final VarDeclarationTableColumn _ ->
 			(typeLib, name) -> typeLib.getDataTypeLibrary().getDerivedTypeEntry(name);
-		case final TypedElementTableColumn col -> TypeLibrary::find;
+		case final TypedElementTableColumn _ -> TypeLibrary::find;
 		default -> throw new IllegalArgumentException(UNEXPECTED_VALUE + column);
 		};
 	}
 
 	private static List<? extends NatTableColumn> getPasteableColumnList(final NatTableColumn column) {
 		return switch (column) {
-		case final AttributeTableColumn col -> List.of(AttributeTableColumn.NAME, AttributeTableColumn.TYPE);
-		case final VarDeclarationTableColumn col -> List.of(VarDeclarationTableColumn.TYPE);
-		case final TypedElementTableColumn col -> List.of(TypedElementTableColumn.TYPE);
+		case final AttributeTableColumn _ -> List.of(AttributeTableColumn.NAME, AttributeTableColumn.TYPE);
+		case final VarDeclarationTableColumn _ -> List.of(VarDeclarationTableColumn.TYPE);
+		case final TypedElementTableColumn _ -> List.of(TypedElementTableColumn.TYPE);
 		default -> throw new IllegalArgumentException(UNEXPECTED_VALUE + column);
 		};
 	}
@@ -96,12 +96,12 @@ public class DefaultImportCopyPasteLayerConfiguration extends AbstractLayerConfi
 	private static Map<? extends NatTableColumn, Function<EObject, LibraryElement>> getMappersForColumn(
 			final NatTableColumn column) {
 		return switch (column) {
-		case final AttributeTableColumn col ->
+		case final AttributeTableColumn _ ->
 			Map.of(AttributeTableColumn.NAME, eObject -> ((Attribute) eObject).getAttributeDeclaration(),
 					AttributeTableColumn.TYPE, eObject -> ((Attribute) eObject).getType());
-		case final VarDeclarationTableColumn col ->
+		case final VarDeclarationTableColumn _ ->
 			Map.of(VarDeclarationTableColumn.TYPE, eObject -> ((VarDeclaration) eObject).getType());
-		case final TypedElementTableColumn col -> Map.of(TypedElementTableColumn.TYPE, eObject -> (switch (eObject) {
+		case final TypedElementTableColumn _ -> Map.of(TypedElementTableColumn.TYPE, eObject -> (switch (eObject) {
 		case final TypedConfigureableObject tco -> tco.getType();
 		case final AdapterDeclaration adapterDecl -> adapterDecl.getType();
 		case final Event event -> event.getType();

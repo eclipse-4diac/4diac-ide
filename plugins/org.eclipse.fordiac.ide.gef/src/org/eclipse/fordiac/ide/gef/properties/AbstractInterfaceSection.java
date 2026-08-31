@@ -93,7 +93,7 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 		container.setLayout(new GridLayout(2, false));
 		getWidgetFactory().createCLabel(container, FordiacMessages.InstanceName + ":"); //$NON-NLS-1$
 		nameText = createGroupText(container, true);
-		nameText.addModifyListener(event -> {
+		nameText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
@@ -105,7 +105,7 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 		final GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false);
 		gridData.heightHint = 3 * commentText.getLineHeight();
 		commentText.setLayoutData(gridData);
-		commentText.addModifyListener(event -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();

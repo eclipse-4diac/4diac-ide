@@ -57,7 +57,7 @@ public class QueryOccurrenceNodeFigure extends QueryNodeFigure {
 			final EEnumLiteral literal, final List<?> selectedValues) {
 		final var button = new ToggleButton(literal.getName());
 		button.setSelected(selectedValues.contains(literal.getInstance()));
-		button.addActionListener(event -> {
+		button.addActionListener(_ -> {
 			final Object raw = instance.eGet(occFeature);
 			if (raw instanceof final List<?> list) {
 				final List<Object> updatedList = new ArrayList<>(list);

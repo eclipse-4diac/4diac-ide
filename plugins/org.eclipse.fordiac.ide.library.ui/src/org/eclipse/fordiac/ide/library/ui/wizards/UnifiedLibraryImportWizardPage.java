@@ -184,7 +184,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		showLatestVersionsOnlyButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		showLatestVersionsOnlyButton.setText(Messages.UnifiedLibraryImportWizardPage_show_latest);
 		showLatestVersionsOnlyButton.setSelection(showLatestOnly);
-		showLatestVersionsOnlyButton.addListener(SWT.Selection, e -> {
+		showLatestVersionsOnlyButton.addListener(SWT.Selection, _ -> {
 			showLatestOnly = showLatestVersionsOnlyButton.getSelection();
 			applyViewerFilters();
 		});
@@ -193,7 +193,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		hideEmptyProjectsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		hideEmptyProjectsButton.setText(Messages.UnifiedLibraryImportWizardPage_hide_non_valid);
 		hideEmptyProjectsButton.setSelection(hideEmptyProjects);
-		hideEmptyProjectsButton.addListener(SWT.Selection, e -> {
+		hideEmptyProjectsButton.addListener(SWT.Selection, _ -> {
 			hideEmptyProjects = hideEmptyProjectsButton.getSelection();
 			applyViewerFilters();
 		});
@@ -233,7 +233,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		final Button manageButton = new Button(top, SWT.PUSH);
 		manageButton.setText(Messages.UnifiedLibraryImportWizardPage_manage);
 		manageButton.setToolTipText(Messages.UnifiedLibraryImportWizardPage_config);
-		manageButton.addListener(SWT.Selection, e -> {
+		manageButton.addListener(SWT.Selection, _ -> {
 			openGitLabPreferences();
 			rebuildSourcesKeepingSelection();
 		});
@@ -244,7 +244,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			scheduleRefresh();
 		});
 
-		refreshButton.addListener(SWT.Selection, ev -> scheduleRefresh());
+		refreshButton.addListener(SWT.Selection, _ -> scheduleRefresh());
 	}
 
 	private void createProjectSelectionRow(final Composite parent) {
@@ -360,7 +360,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 		final ICheckStateListener checkListener = this::handleTreeCheckBoxes;
 		viewer.addCheckStateListener(checkListener);
-		viewer.addSelectionChangedListener(e -> updateDetails());
+		viewer.addSelectionChangedListener(_ -> updateDetails());
 
 		detailsText = new Text(sash, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
 		detailsText.setText(Messages.UnifiedLibraryImportWizardPage_sel_lib);

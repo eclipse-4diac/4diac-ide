@@ -28,7 +28,7 @@ public class FBTypeSelectionContentProvider implements ITypeSelectionContentProv
 	private final Predicate<FBTypeEntry> filter;
 
 	protected FBTypeSelectionContentProvider() {
-		this(unused -> true);
+		this(_ -> true);
 	}
 
 	public FBTypeSelectionContentProvider(final Predicate<FBTypeEntry> filter) {

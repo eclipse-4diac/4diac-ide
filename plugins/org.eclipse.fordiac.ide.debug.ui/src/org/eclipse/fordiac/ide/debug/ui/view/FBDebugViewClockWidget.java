@@ -69,7 +69,7 @@ public class FBDebugViewClockWidget extends DebugClockWidget {
 		applyButton = new Button(composite, SWT.PUSH);
 		applyButton.setText(Messages.FBDebugViewClockWidget_Apply);
 		applyButton.setEnabled(false);
-		applyButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> performApply()));
+		applyButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> performApply()));
 		GridDataFactory.swtDefaults().applyTo(applyButton);
 		return composite;
 	}
@@ -107,7 +107,7 @@ public class FBDebugViewClockWidget extends DebugClockWidget {
 			setRealtimeClockValue(realtimeClock.instant());
 			setMonotonicClockValue(monotonicClock.instant());
 			switch (monotonicClock) {
-			case final AbstractEvaluator.MonotonicClock unused -> setSelectedClockMode(FBDebugClockMode.SYSTEM);
+			case final AbstractEvaluator.MonotonicClock _ -> setSelectedClockMode(FBDebugClockMode.SYSTEM);
 			case final AbstractEvaluator.IntervalClock intervalClock -> {
 				setClockInterval(intervalClock.getInterval());
 				setSelectedClockMode(FBDebugClockMode.INTERVAL);

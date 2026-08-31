@@ -102,7 +102,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 		});
 	}
 
-	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifyRefresh();
+	private final GraphicalAnnotationModelListener annotationModelListener = _ -> notifyRefresh();
 
 	public StructEditingComposite(final Composite parent, final CommandStack cmdStack, final StructuredType structType,
 			final GraphicalAnnotationModel annotationModel, final IWorkbenchSite site) {
@@ -133,7 +133,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 		createNatTable();
 
 		buttons.bindToTableViewer(natTable, this,
-				ref -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType()),
+				_ -> new CreateMemberVariableCommand(getType(), getInsertionIndex(), getVarName(), getDataType()),
 				ref -> new DeleteMemberVariableCommand(getType(), (VarDeclaration) ref),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, true),
 				ref -> new ChangeVariableOrderCommand(getType().getMemberVariables(), (VarDeclaration) ref, false));

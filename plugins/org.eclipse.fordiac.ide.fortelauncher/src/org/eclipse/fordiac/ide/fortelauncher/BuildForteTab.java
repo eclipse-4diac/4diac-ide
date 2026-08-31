@@ -49,10 +49,10 @@ public class BuildForteTab extends AbstractLaunchConfigurationTab {
 		setControl(comp);
 
 		cmakeChooser = new FileChooserControl(comp, SWT.NONE, Messages.BuildForteTab_CMakeLocation, true);
-		cmakeChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
+		cmakeChooser.addChooserValueChangedListener(_ -> scheduleUpdateJob());
 
 		buildLocationChooser = new DirectoryChooserControl(comp, SWT.NONE, Messages.BuildForteTab_BuildDirectory, true);
-		buildLocationChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
+		buildLocationChooser.addChooserValueChangedListener(_ -> scheduleUpdateJob());
 
 		createArguments(comp);
 	}
@@ -62,7 +62,7 @@ public class BuildForteTab extends AbstractLaunchConfigurationTab {
 		label.setText(Messages.FortePreferencePage_Arguments);
 		argumentsField = new Text(parent, SWT.BORDER);
 		GridDataFactory.fillDefaults().align(GridData.FILL, GridData.CENTER).applyTo(argumentsField);
-		argumentsField.addModifyListener(ev -> scheduleUpdateJob());
+		argumentsField.addModifyListener(_ -> scheduleUpdateJob());
 	}
 
 	@Override

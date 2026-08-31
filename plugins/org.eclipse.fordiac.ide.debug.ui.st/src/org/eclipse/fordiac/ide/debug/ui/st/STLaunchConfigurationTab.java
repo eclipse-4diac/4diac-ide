@@ -66,7 +66,7 @@ public class STLaunchConfigurationTab extends MainLaunchConfigurationTab {
 		functionCombo = new ComboViewer(comp, SWT.DROP_DOWN | SWT.READ_ONLY);
 		functionCombo.setContentProvider(ArrayContentProvider.getInstance());
 		functionCombo.setLabelProvider(new FunctionsLabelProvider());
-		functionCombo.addSelectionChangedListener(e -> handleFunctionUpdated());
+		functionCombo.addSelectionChangedListener(_ -> handleFunctionUpdated());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(functionCombo.getCombo());
 
 		return group;

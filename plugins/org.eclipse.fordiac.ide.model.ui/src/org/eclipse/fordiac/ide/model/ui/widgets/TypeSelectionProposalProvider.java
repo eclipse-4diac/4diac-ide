@@ -33,7 +33,7 @@ public class TypeSelectionProposalProvider implements IContentProposalProvider {
 
 	public TypeSelectionProposalProvider(final Supplier<TypeLibrary> supplier,
 			final ITypeSelectionContentProvider contentProvider) {
-		this(supplier, contentProvider, entry -> true);
+		this(supplier, contentProvider, _ -> true);
 	}
 
 	public TypeSelectionProposalProvider(final Supplier<TypeLibrary> supplier,

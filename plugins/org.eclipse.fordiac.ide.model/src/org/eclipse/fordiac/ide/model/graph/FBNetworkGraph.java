@@ -160,7 +160,7 @@ public abstract class FBNetworkGraph<N extends FBNetworkGraph<N>.Node> {
 
 	private static <N extends FBNetworkGraph<N>.Node> Collector<N, ?, SequencedMap<BlockFBNetworkElement, N>> toNodeMap() {
 		return Collectors.collectingAndThen(
-				Collectors.toMap(N::getElement, Objects::requireNonNull, (a, b) -> a, LinkedHashMap::new),
+				Collectors.toMap(N::getElement, Objects::requireNonNull, (a, _) -> a, LinkedHashMap::new),
 				Collections::unmodifiableSequencedMap);
 	}
 

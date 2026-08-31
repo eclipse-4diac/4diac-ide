@@ -40,7 +40,7 @@ public class StopForteTab extends AbstractLaunchConfigurationTab {
 		setControl(comp);
 
 		forteChooser = new FileChooserControl(comp, SWT.NONE, Messages.FortePreferencePage_FORTELocation, true);
-		forteChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
+		forteChooser.addChooserValueChangedListener(_ -> scheduleUpdateJob());
 
 	}
 

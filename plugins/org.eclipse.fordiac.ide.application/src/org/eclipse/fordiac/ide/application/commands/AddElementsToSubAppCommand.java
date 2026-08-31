@@ -300,14 +300,14 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 			} else {
 				// pin has been created in the course of this command or is not present at all
 				// and needs to be created
-				subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie, source.getName()));
+				subAppIE = sourceToSubAppPin.computeIfAbsent(source, _ -> createInterfaceElement(ie, source.getName()));
 			}
 			sourceToSubAppPin.putIfAbsent(destVar, subAppIE);
 
 		} else {
 			// pin has been created in the course of this command or is not present at all
 			// and needs to be created
-			subAppIE = sourceToSubAppPin.computeIfAbsent(source, k -> createInterfaceElement(ie, source.getName()));
+			subAppIE = sourceToSubAppPin.computeIfAbsent(source, _ -> createInterfaceElement(ie, source.getName()));
 		}
 		createConnModificationCommands(con, subAppIE, isNewPin);
 	}
@@ -364,11 +364,11 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 		final Map<Group, List<FBNetworkElement>> groupMap = new HashMap<>();
 		// collect all entries that are in a group and store them by group
 		elementsToAdd.stream().filter(FBNetworkElement::isInGroup).forEach(el -> {
-			final List<FBNetworkElement> entry = groupMap.computeIfAbsent(el.getGroup(), group -> new ArrayList<>());
+			final List<FBNetworkElement> entry = groupMap.computeIfAbsent(el.getGroup(), _ -> new ArrayList<>());
 			entry.add(el);
 		});
 		// for each entry in the map create one RemoveFromGroupCommand
-		groupMap.forEach((group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
+		groupMap.forEach((_, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
 	}
 
 	@Override

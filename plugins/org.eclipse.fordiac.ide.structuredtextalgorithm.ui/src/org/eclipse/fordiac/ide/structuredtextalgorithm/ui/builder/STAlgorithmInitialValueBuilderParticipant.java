@@ -157,7 +157,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				throw new OperationCanceledException();
 			}
 			switch (allContents.next()) {
-			case final SystemConfiguration configuration -> allContents.prune();
+			case final SystemConfiguration _ -> allContents.prune();
 			case final Attribute attribute -> {
 				validateType(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
 				validateValue(attribute, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings, context,

@@ -56,7 +56,7 @@ public class EventActionsSection extends AbstractSection {
 		eventInputs.setLinesVisible(true);
 		eventInputs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		eventInputs.setHeaderVisible(false);
-		eventInputs.addListener(SWT.Selection, event -> selectEventInput(eventInputs.getSelectionIndex()));
+		eventInputs.addListener(SWT.Selection, _ -> selectEventInput(eventInputs.getSelectionIndex()));
 
 		final TableColumnLayout tableColumnLayout = new TableColumnLayout();
 		tableColumnLayout.setColumnData(new TableColumn(eventInputs, SWT.NONE), new ColumnWeightData(100));

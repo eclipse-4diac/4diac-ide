@@ -147,13 +147,13 @@ public class ValidationJob extends UIJob {
 	public void reset() {
 		clear();
 		runInBackground(MessageFormat.format(Messages.ValidationJob_RefreshJobName, getName()),
-				unused -> annotationModel.refresh());
+				_ -> annotationModel.refresh());
 	}
 
 	public void reload() {
 		clear();
 		runInBackground(MessageFormat.format(Messages.ValidationJob_ReloadJobName, getName()),
-				unused -> annotationModel.reload());
+				_ -> annotationModel.reload());
 	}
 
 	public void dispose() {

@@ -201,10 +201,10 @@ public class LibraryPlanningPage extends WizardPage {
 	private Map<String, List<LibraryDescriptor>> getAvailableLibraries() {
 		final Map<String, List<LibraryDescriptor>> availableLibraries = new HashMap<>();
 		offlineLibraryProvider.getAll().forEach((symbolicName, libraries) -> availableLibraries
-				.computeIfAbsent(symbolicName, k -> new ArrayList<>()).addAll(libraries));
+				.computeIfAbsent(symbolicName, _ -> new ArrayList<>()).addAll(libraries));
 		onlineLibraryProvider.getAll().forEach((symbolicName, libraries) -> availableLibraries
-				.computeIfAbsent(symbolicName, k -> new ArrayList<>()).addAll(libraries));
-		availableLibraries.replaceAll((k, v) -> v.stream().distinct().toList());
+				.computeIfAbsent(symbolicName, _ -> new ArrayList<>()).addAll(libraries));
+		availableLibraries.replaceAll((_, v) -> v.stream().distinct().toList());
 		return availableLibraries;
 	}
 

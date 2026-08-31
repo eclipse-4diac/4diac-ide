@@ -78,7 +78,7 @@ public class FBPaletteViewer extends PaletteViewer {
 			}
 
 		});
-		text.addModifyListener(e -> setSearchFilter(text.getText()));
+		text.addModifyListener(_ -> setSearchFilter(text.getText()));
 
 		createCommonViewer(container, project);
 

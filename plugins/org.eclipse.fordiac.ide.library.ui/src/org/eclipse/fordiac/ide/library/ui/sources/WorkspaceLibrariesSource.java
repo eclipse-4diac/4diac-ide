@@ -57,13 +57,13 @@ public class WorkspaceLibrariesSource implements ILibrarySource {
 
 		final List<LibGroupNode> standardGroups = new ArrayList<>();
 		LibraryManager.INSTANCE.getStandardLibraries()
-				.forEach((symbolicName, recs) -> standardGroups.add(new LibGroupNode(recs)));
+				.forEach((_, recs) -> standardGroups.add(new LibGroupNode(recs)));
 		standardGroups.sort(Comparator.comparing(LibGroupNode::getSymbolicName));
 		root.add(createSectionNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, standardGroups));
 
 		final List<LibGroupNode> extractedGroups = new ArrayList<>();
 		LibraryManager.INSTANCE.getExtractedLibraries()
-				.forEach((symbolicName, recs) -> extractedGroups.add(new LibGroupNode(recs)));
+				.forEach((_, recs) -> extractedGroups.add(new LibGroupNode(recs)));
 		extractedGroups.sort(Comparator.comparing(LibGroupNode::getSymbolicName));
 		root.add(createSectionNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, extractedGroups));
 

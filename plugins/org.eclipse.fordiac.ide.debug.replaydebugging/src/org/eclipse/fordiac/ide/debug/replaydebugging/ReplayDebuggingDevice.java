@@ -141,7 +141,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 		// make sure the device management executor obtains this instance
 		try {
 			getDeviceManagementExecutorService().connect();
-			try (EvaluatorCache cache = EvaluatorCache.open()) {
+			try (EvaluatorCache _ = EvaluatorCache.open()) {
 				Stream.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints())
 						.forEachOrdered(this::breakpointAdded);
 			}

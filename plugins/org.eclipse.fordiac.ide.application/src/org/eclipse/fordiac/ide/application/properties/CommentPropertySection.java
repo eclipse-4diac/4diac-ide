@@ -49,7 +49,7 @@ public class CommentPropertySection extends AbstractSection {
 	private void createCommentEntry(final Composite parent) {
 		commentText = createGroupText(parent, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(commentText);
-		commentText.addModifyListener(e -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();

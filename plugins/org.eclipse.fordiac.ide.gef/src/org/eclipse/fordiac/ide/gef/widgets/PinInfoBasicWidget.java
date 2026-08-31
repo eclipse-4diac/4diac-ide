@@ -56,11 +56,11 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createText(parent);
-		nameText.addModifyListener(e -> onNameChange(nameText));
+		nameText.addModifyListener(_ -> onNameChange(nameText));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createText(parent);
-		commentText.addModifyListener(e -> executeCommand(new ChangeCommentCommand(type, commentText.getText())));
+		commentText.addModifyListener(_ -> executeCommand(new ChangeCommentCommand(type, commentText.getText())));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeSelectionWidget = new TypeSelectionWidget(widgetFactory, this::handleTypeSelectionChanged);

@@ -54,8 +54,8 @@ public final class MappingTargetCreator {
 	private static BlockFBNetworkElement createFBNetworkElement(final BlockFBNetworkElement srcElement) {
 		return switch (srcElement) {
 		case final FB fb -> BlockInstanceFactory.createFBInstanceForTypeEntry((FBTypeEntry) fb.getTypeEntry());
-		case final TypedSubApp typedSubapp -> LibraryElementFactory.eINSTANCE.createTypedSubApp();
-		case final UntypedSubApp untypedSubapp -> LibraryElementFactory.eINSTANCE.createUntypedSubApp();
+		case final TypedSubApp _ -> LibraryElementFactory.eINSTANCE.createTypedSubApp();
+		case final UntypedSubApp _ -> LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		default -> null;
 		};
 	}

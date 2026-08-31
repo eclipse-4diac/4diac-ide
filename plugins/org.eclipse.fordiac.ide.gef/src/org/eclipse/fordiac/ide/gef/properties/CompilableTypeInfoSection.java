@@ -178,7 +178,7 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 		compilerViewer.setColumnProperties(
 				new String[] { COMPILER_LANGUAGE, COMPILER_VENDOR, COMPILER_PRODUCT, COMPILER_VERSION });
 
-		buttons.bindToTableViewer(compilerViewer, this, ref -> new AddNewCompilerCommand((FBType) type),
+		buttons.bindToTableViewer(compilerViewer, this, _ -> new AddNewCompilerCommand((FBType) type),
 				ref -> new DeleteCompilerCommand(((FBType) type).getCompilerInfo(), (Compiler) ref));
 
 		compilerViewer.setCellModifier(new CompilerCellModifier());

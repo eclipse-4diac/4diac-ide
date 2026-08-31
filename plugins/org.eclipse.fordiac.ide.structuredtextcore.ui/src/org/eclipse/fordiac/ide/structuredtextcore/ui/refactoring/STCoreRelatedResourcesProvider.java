@@ -44,7 +44,7 @@ public class STCoreRelatedResourcesProvider extends RelatedResourcesProvider {
 	@Override
 	public List<RelatedResource> getRelatedResources(final Collection<IResourceSnapshot> snapshots) {
 		final Map<URI, RelatedResource> result = super.getRelatedResources(snapshots).stream().collect(
-				Collectors.toMap(RelatedResource::getUri, Function.identity(), (a, b) -> a, LinkedHashMap::new));
+				Collectors.toMap(RelatedResource::getUri, Function.identity(), (a, _) -> a, LinkedHashMap::new));
 		for (final ResourceSet resourceSet : getDistinctResourceSets(snapshots)) {
 			final IResourceDescriptions resourceDescriptions = resourceDescriptionsProvider
 					.getResourceDescriptions(resourceSet);

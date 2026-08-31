@@ -105,7 +105,7 @@ public class PasteDataImportFromClipboardCommandHandler extends PasteDataFromCli
 			return null;
 		}
 		final TypeEntry resolvedType = ImportHelper.resolveImport(PackageNameHelper.extractPlainTypeName(imp),
-				rootElement, name -> typeResolver.apply(rootElement.getTypeLibrary(), name), name -> null);
+				rootElement, name -> typeResolver.apply(rootElement.getTypeLibrary(), name), _ -> null);
 
 		if (resolvedType == null) {
 			return imp;

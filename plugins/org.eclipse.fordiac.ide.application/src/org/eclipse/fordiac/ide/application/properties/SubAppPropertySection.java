@@ -60,7 +60,7 @@ public class SubAppPropertySection extends AbstractInstanceSection {
 
 	private void createLockSizeCheckbox(final Composite parent) {
 		lockCheckbox = getWidgetFactory().createButton(parent, null, SWT.CHECK);
-		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
 			if (getType() != null) {
 				removeContentAdapter();
 				executeCommand(new ChangeSubAppSizeLockCommand(getType(), lockCheckbox.getSelection()));
@@ -77,7 +77,7 @@ public class SubAppPropertySection extends AbstractInstanceSection {
 		getWidgetFactory().createLabel(fbSizeContainer, FordiacMessages.Height + ":"); //$NON-NLS-1$
 		heightText = createGroupText(fbSizeContainer, true);
 		heightText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
-		heightText.addModifyListener(e -> {
+		heightText.addModifyListener(_ -> {
 			if (getType() != null) {
 				final double newHeight;
 				try {
@@ -98,7 +98,7 @@ public class SubAppPropertySection extends AbstractInstanceSection {
 		getWidgetFactory().createLabel(fbSizeContainer, FordiacMessages.Width + ":"); //$NON-NLS-1$
 		widthText = createGroupText(fbSizeContainer, true);
 		widthText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
-		widthText.addModifyListener(e -> {
+		widthText.addModifyListener(_ -> {
 			if (getType() != null) {
 				final double newWidth;
 				try {

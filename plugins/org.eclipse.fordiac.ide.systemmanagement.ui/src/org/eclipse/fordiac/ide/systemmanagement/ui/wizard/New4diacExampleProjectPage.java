@@ -107,7 +107,7 @@ public final class New4diacExampleProjectPage extends WizardNewProjectCreationPa
 		exampleListViewer.setLabelProvider(new ExamplesLabelProvider());
 		exampleListViewer.setInput(getExamples());
 
-		exampleListViewer.addSelectionChangedListener(ev -> handleExampleListSelection());
+		exampleListViewer.addSelectionChangedListener(_ -> handleExampleListSelection());
 	}
 
 	private void handleExampleListSelection() {

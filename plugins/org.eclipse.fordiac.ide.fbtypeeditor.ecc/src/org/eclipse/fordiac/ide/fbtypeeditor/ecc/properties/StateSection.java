@@ -73,7 +73,7 @@ public class StateSection extends AbstractSection {
 		nameComposite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(nameComposite, Messages.StateSection_Name);
 		stateNameText = createGroupText(nameComposite, true);
-		stateNameText.addListener(SWT.Modify, e -> {
+		stateNameText.addListener(SWT.Modify, _ -> {
 			removeContentAdapter();
 			executeCommand(ChangeNameCommand.forName(getType(), stateNameText.getText()));
 			addContentAdapter();
@@ -86,7 +86,7 @@ public class StateSection extends AbstractSection {
 		commentComposite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(commentComposite, Messages.StateSection_Comment);
 		stateCommentText = createGroupText(commentComposite, true);
-		stateCommentText.addListener(SWT.Modify, e -> {
+		stateCommentText.addListener(SWT.Modify, _ -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), stateCommentText.getText()));
 			addContentAdapter();

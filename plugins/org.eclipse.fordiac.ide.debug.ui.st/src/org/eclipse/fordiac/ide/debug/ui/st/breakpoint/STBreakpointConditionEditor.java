@@ -63,7 +63,7 @@ public class STBreakpointConditionEditor {
 		conditional = new Button(comp, SWT.CHECK);
 		conditional.setText(Messages.STBreakpointConditionEditor_Conditional);
 		conditional.setEnabled(false);
-		conditional.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+		conditional.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
 			if (conditionEditor != null) {
 				conditionEditor.getViewer().setEditable(input != null && conditional.getSelection());
 			}

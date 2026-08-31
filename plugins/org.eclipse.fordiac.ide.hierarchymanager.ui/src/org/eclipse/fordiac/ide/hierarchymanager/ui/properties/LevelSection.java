@@ -93,7 +93,7 @@ public class LevelSection extends AbstractPropertySection {
 
 		nameText = createGroupText(parent, true, SWT.BORDER | SWT.SINGLE);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, false).applyTo(nameText);
-		nameText.addModifyListener(e -> {
+		nameText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				removeContentAdapter();
 				AbstractHierarchyHandler.executeOperation(new RenameLevelOperation(type, nameText.getText()));
@@ -109,7 +109,7 @@ public class LevelSection extends AbstractPropertySection {
 		commentText = createGroupText(parent, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).hint(SWT.DEFAULT, 6 * commentText.getLineHeight())
 		.grab(true, false).applyTo(commentText);
-		commentText.addModifyListener(e -> {
+		commentText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				removeContentAdapter();
 				AbstractHierarchyHandler.executeOperation(new ChangeLevelCommentOperation(type, commentText.getText()));

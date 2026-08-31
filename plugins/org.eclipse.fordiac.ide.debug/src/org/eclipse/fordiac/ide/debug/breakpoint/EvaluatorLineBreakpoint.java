@@ -38,7 +38,7 @@ public abstract class EvaluatorLineBreakpoint extends LineBreakpoint implements 
 	}
 
 	protected EvaluatorLineBreakpoint(final IResource resource, final int lineNumber) throws CoreException {
-		run(getMarkerRule(resource), monitor -> createMarker(resource, lineNumber));
+		run(getMarkerRule(resource), _ -> createMarker(resource, lineNumber));
 	}
 
 	protected IMarker createMarker(final IResource resource, final int lineNumber) throws CoreException {

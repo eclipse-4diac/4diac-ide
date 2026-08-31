@@ -72,7 +72,7 @@ public class TracesReader {
 				final IEventDefinition event = reader.getCurrentEventDef();
 				final String resourceName = getResourceName(reader.getTopStream().getFilename());
 				final List<SendOutputEvent> resourceEvents = events.computeIfAbsent(resourceName,
-						k -> new java.util.ArrayList<>());
+						_ -> new java.util.ArrayList<>());
 
 				reader.advance();
 

@@ -104,7 +104,7 @@ public class FilterFigure extends Figure {
 						FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(REGULAR_EXPRESSION_IMAGE))),
 				gl, initial.regex());
 
-		final ActionListener onToggleChanged = event -> {
+		final ActionListener onToggleChanged = _ -> {
 			updateEnablement();
 			fireFilterChanged();
 		};
@@ -157,7 +157,7 @@ public class FilterFigure extends Figure {
 			}
 		};
 
-		textWidget.addListener(SWT.FocusOut, e -> commit.run());
+		textWidget.addListener(SWT.FocusOut, _ -> commit.run());
 		textWidget.addListener(SWT.KeyDown, e -> {
 			if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
 				commit.run();

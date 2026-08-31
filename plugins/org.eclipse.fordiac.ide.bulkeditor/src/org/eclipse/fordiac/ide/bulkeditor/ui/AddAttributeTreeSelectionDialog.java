@@ -177,12 +177,12 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 			WidgetFactory.label(0).text(FordiacMessages.Name).create(attributeComposite);
 			nameText = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.CENTER, true, true))
 					.create(attributeComposite);
-			nameText.addModifyListener(e -> updateOKStatus());
+			nameText.addModifyListener(_ -> updateOKStatus());
 
 			WidgetFactory.label(0).text(FordiacMessages.Type).create(attributeComposite);
 			typeText = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.CENTER, true, true))
 					.create(attributeComposite);
-			typeText.addModifyListener(e -> updateOKStatus());
+			typeText.addModifyListener(_ -> updateOKStatus());
 
 			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(
 					() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
@@ -243,22 +243,22 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 		@Override
 		public Image getImage(final Object element) {
 			return switch (element) {
-			case final UntypedSubApp o -> FordiacImage.ICON_SUB_APP.getImage();
-			case final TypedSubApp o -> FordiacImage.ICON_SUB_APP_TYPE.getImage();
-			case final SubAppType o -> FordiacImage.ICON_SUB_APP_TYPE.getImage();
-			case final FunctionFBType o -> FordiacImage.ICON_FUNCTION.getImage();
-			case final StructManipulator o -> FordiacImage.ICON_SIFB.getImage();
-			case final IInterfaceElement o -> FordiacImage.ICON_INTERFACE_LIST.getImage();
-			case final Connection o -> FordiacImage.ICON_HIDE_DATA.getImage();
-			case final AutomationSystem o -> FordiacImage.ICON_SYSTEM.getImage();
-			case final Application o -> FordiacImage.ICON_APPLICATION.getImage();
-			case final CFBInstance o -> FordiacImage.ICON_COMPOSITE_FB.getImage();
-			case final FB o -> FordiacImage.ICON_FB.getImage();
-			case final SimpleFBType o -> FordiacImage.ICON_SIMPLE_FB.getImage();
-			case final BasicFBType o -> FordiacImage.ICON_BASIC_FB.getImage();
-			case final FBType o -> FordiacImage.ICON_FB_TYPE.getImage();
-			case final AttributeDeclaration o -> FordiacImage.ICON_ATTRIBUTE_DECLARATION.getImage();
-			case final DataType o -> FordiacImage.ICON_DATA_TYPE.getImage();
+			case final UntypedSubApp _ -> FordiacImage.ICON_SUB_APP.getImage();
+			case final TypedSubApp _ -> FordiacImage.ICON_SUB_APP_TYPE.getImage();
+			case final SubAppType _ -> FordiacImage.ICON_SUB_APP_TYPE.getImage();
+			case final FunctionFBType _ -> FordiacImage.ICON_FUNCTION.getImage();
+			case final StructManipulator _ -> FordiacImage.ICON_SIFB.getImage();
+			case final IInterfaceElement _ -> FordiacImage.ICON_INTERFACE_LIST.getImage();
+			case final Connection _ -> FordiacImage.ICON_HIDE_DATA.getImage();
+			case final AutomationSystem _ -> FordiacImage.ICON_SYSTEM.getImage();
+			case final Application _ -> FordiacImage.ICON_APPLICATION.getImage();
+			case final CFBInstance _ -> FordiacImage.ICON_COMPOSITE_FB.getImage();
+			case final FB _ -> FordiacImage.ICON_FB.getImage();
+			case final SimpleFBType _ -> FordiacImage.ICON_SIMPLE_FB.getImage();
+			case final BasicFBType _ -> FordiacImage.ICON_BASIC_FB.getImage();
+			case final FBType _ -> FordiacImage.ICON_FB_TYPE.getImage();
+			case final AttributeDeclaration _ -> FordiacImage.ICON_ATTRIBUTE_DECLARATION.getImage();
+			case final DataType _ -> FordiacImage.ICON_DATA_TYPE.getImage();
 			default -> super.getImage(element);
 			};
 		}

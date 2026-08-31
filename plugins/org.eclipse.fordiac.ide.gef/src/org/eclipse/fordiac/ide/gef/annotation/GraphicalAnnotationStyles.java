@@ -96,14 +96,14 @@ public final class GraphicalAnnotationStyles {
 
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
 			final GraphicalAnnotationModelEvent event) {
-		updateAnnotationFeedback(annonFigure, target, event, annotation -> true);
+		updateAnnotationFeedback(annonFigure, target, event, _ -> true);
 	}
 
 	@SafeVarargs
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
 			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation>... filters) {
 		updateAnnotationFeedback(annonFigure, target, event,
-				Stream.of(filters).reduce(Predicate::or).orElse(annotation -> true));
+				Stream.of(filters).reduce(Predicate::or).orElse(_ -> true));
 	}
 
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,

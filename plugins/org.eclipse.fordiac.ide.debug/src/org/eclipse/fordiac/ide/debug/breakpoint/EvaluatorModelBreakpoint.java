@@ -34,7 +34,7 @@ public class EvaluatorModelBreakpoint extends Breakpoint implements IEvaluatorBr
 	}
 
 	public EvaluatorModelBreakpoint(final IResource resource, final INamedElement element) throws CoreException {
-		run(getMarkerRule(resource), monitor -> createMarker(resource, element));
+		run(getMarkerRule(resource), _ -> createMarker(resource, element));
 	}
 
 	private IMarker createMarker(final IResource resource, final INamedElement element) throws CoreException {

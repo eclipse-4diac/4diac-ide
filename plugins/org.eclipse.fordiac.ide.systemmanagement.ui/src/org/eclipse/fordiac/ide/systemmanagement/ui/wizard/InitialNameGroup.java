@@ -55,7 +55,7 @@ public class InitialNameGroup extends Composite {
 		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		name.setLayoutData(data);
 		name.setFont(parent.getFont());
-		name.addListener(SWT.Modify, e -> {
+		name.addListener(SWT.Modify, _ -> {
 			if (!blockListeners) {
 				nameManuallyChanged = true;
 			}

@@ -71,7 +71,7 @@ public class Session {
 		// notify only if a new device was added
 		final boolean shouldNotify = !devices.containsKey(deviceName);
 
-		final var device = devices.computeIfAbsent(deviceName, arg -> new Device(deviceName));
+		final var device = devices.computeIfAbsent(deviceName, _ -> new Device(deviceName));
 		device.addReplayNavigator(navigator);
 		if (shouldNotify) {
 			propertyChangeSupport.firePropertyChange(PROPERTY_SESSION_CHANGED, null, null);

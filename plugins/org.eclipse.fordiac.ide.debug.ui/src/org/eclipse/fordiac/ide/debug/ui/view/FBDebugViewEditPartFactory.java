@@ -47,8 +47,8 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 		}
 
 		return switch (modelElement) {
-		case final EvaluatorProcess ep -> new FBDebugViewRootEditPart();
-		case final FBType fbType ->
+		case final EvaluatorProcess _ -> new FBDebugViewRootEditPart();
+		case final FBType _ ->
 			// we can not use the version of parent as this expects a FBTypeRootEditPart as
 			// context which we don't have here
 			new FBTypeEditPart() {
@@ -60,12 +60,12 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 							new Rectangle(0, 0, -1, -1));
 				}
 			};
-		case final InnerValueEntity innerValue -> new InnerValueEditPart();
-		case final InterfaceValueEntity interfaceValue -> new InterfaceValueEditPart();
+		case final InnerValueEntity _ -> new InnerValueEditPart();
+		case final InterfaceValueEntity _ -> new InterfaceValueEditPart();
 		case final EventValueEntity ev ->
 			ev.getEvent().isIsInput() ? new InputEventValueEditPart() : new EventValueEditPart();
-		case final With with -> new DebugViewWithEditPart();
-		case final AbstractContainerElement container -> new InterfaceContainerEditPart() {
+		case final With _ -> new DebugViewWithEditPart();
+		case final AbstractContainerElement _ -> new InterfaceContainerEditPart() {
 			@Override
 			protected void createEditPolicies() {
 				// we don't want dedicated editpolicies

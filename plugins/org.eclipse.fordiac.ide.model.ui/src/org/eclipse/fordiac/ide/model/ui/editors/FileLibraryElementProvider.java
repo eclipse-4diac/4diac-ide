@@ -238,7 +238,7 @@ public class FileLibraryElementProvider
 				if (info != null && (IResourceDelta.CONTENT & delta.getFlags()) != 0) {
 					final UIJob job = UIJob.create(
 							MessageFormat.format(Messages.FileLibraryElementProvider_RefreshJobName, file.getName()),
-							(ICoreRunnable) monitor -> handleLibraryElementContentChanged(info));
+							(ICoreRunnable) _ -> handleLibraryElementContentChanged(info));
 					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 					job.setPriority(Job.INTERACTIVE);
 					job.schedule();
@@ -254,7 +254,7 @@ public class FileLibraryElementProvider
 						final IFile newFile = file.getWorkspace().getRoot().getFile(delta.getMovedToPath());
 						final UIJob job = UIJob.create(
 								MessageFormat.format(Messages.FileLibraryElementProvider_MoveJobName, file.getName()),
-								(ICoreRunnable) monitor -> handleLibraryElementMoved(info,
+								(ICoreRunnable) _ -> handleLibraryElementMoved(info,
 										new FileEditorInput(newFile)));
 						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 						job.setPriority(Job.INTERACTIVE);
@@ -262,7 +262,7 @@ public class FileLibraryElementProvider
 					} else {
 						final UIJob job = UIJob.create(
 								MessageFormat.format(Messages.FileLibraryElementProvider_DeleteJobName, file.getName()),
-								(ICoreRunnable) monitor -> handleLibraryElementDeleted(info));
+								(ICoreRunnable) _ -> handleLibraryElementDeleted(info));
 						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 						job.setPriority(Job.INTERACTIVE);
 						job.schedule();

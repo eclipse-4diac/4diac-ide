@@ -86,7 +86,7 @@ public class FBLaunchEventQueue implements FBEvaluatorCountingEventQueue, FBEval
 
 	@Override
 	public AtomicInteger getCount(final Event ev) {
-		return eventCounts.computeIfAbsent(ev, e -> new AtomicInteger());
+		return eventCounts.computeIfAbsent(ev, _ -> new AtomicInteger());
 	}
 
 	@Override

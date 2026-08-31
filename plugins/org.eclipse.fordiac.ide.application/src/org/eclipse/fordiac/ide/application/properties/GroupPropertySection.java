@@ -101,7 +101,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 	private void createNameEntry(final Composite fbInfoGroup) {
 		getWidgetFactory().createCLabel(fbInfoGroup, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(fbInfoGroup, true);
-		nameText.addModifyListener(e -> {
+		nameText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
@@ -113,7 +113,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		heightText = createGroupText(parent, true);
 		heightText.setTextLimit(MAX_INPUT_LENGTH);
 		heightText.addVerifyListener(GroupPropertySection::ensureTextContainsOnlyDigits);
-		heightText.addModifyListener(e -> {
+		heightText.addModifyListener(_ -> {
 			if (getType() != null) {
 				final double newHeight;
 				try {
@@ -134,7 +134,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		widthText = createGroupText(parent, true);
 		widthText.setTextLimit(MAX_INPUT_LENGTH);
 		widthText.addVerifyListener(GroupPropertySection::ensureTextContainsOnlyDigits);
-		widthText.addModifyListener(e -> {
+		widthText.addModifyListener(_ -> {
 			if (getType() != null) {
 				final double newWidth;
 				try {
@@ -154,7 +154,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		getWidgetFactory().createCLabel(parent, FordiacMessages.Group_LABEL_DisableAutoResize);
 		lockCheckbox = getWidgetFactory().createButton(parent, null, SWT.CHECK);
 		lockCheckbox.setToolTipText(FordiacMessages.Group_TOOLTIP_DisableAutoResize);
-		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+		lockCheckbox.addSelectionListener(SelectionListener.widgetSelectedAdapter(_ -> {
 			if (getType() != null) {
 				removeContentAdapter();
 				executeCommand(new ChangeGroupSizeLockCommand(getType(), lockCheckbox.getSelection()));
@@ -173,7 +173,7 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 
 		commentText = createGroupText(parent, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(commentText);
-		commentText.addModifyListener(e -> {
+		commentText.addModifyListener(_ -> {
 			removeContentAdapter();
 
 			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() != null) {

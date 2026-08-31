@@ -79,14 +79,14 @@ public class VariableWidget {
 		expandAllButton.setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
 		expandAllButton.setToolTipText(Messages.VariableWidget_ExpandAll);
 		expandAllButton
-				.addSelectionListener(widgetSelectedAdapter(event -> table.doCommand(new TreeExpandAllCommand())));
+				.addSelectionListener(widgetSelectedAdapter(_ -> table.doCommand(new TreeExpandAllCommand())));
 
 		final Button collapseAllButton = new Button(buttonPanel, SWT.PUSH);
 		collapseAllButton
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL));
 		collapseAllButton.setToolTipText(Messages.VariableWidget_CollapseAll);
 		collapseAllButton
-				.addSelectionListener(widgetSelectedAdapter(event -> table.doCommand(new TreeCollapseAllCommand())));
+				.addSelectionListener(widgetSelectedAdapter(_ -> table.doCommand(new TreeCollapseAllCommand())));
 		return composite;
 	}
 

@@ -35,7 +35,7 @@ public class EvaluatorFactoryRegistryImpl implements EvaluatorFactory.Registry {
 			final EvaluatorFactory factory) {
 		return this.variantClassToFactoryMap
 				.computeIfAbsent(Objects.requireNonNullElse(variant, EvaluatorFactory.DEFAULT_VARIANT),
-						unused -> new ConcurrentHashMap<>())
+						_ -> new ConcurrentHashMap<>())
 				.put(sourceClass, factory);
 	}
 

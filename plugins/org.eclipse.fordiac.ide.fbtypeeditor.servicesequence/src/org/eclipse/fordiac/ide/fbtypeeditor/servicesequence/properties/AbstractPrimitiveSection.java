@@ -84,7 +84,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 
 		eventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), eventComposite);
 		eventCombo.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		eventCombo.addListener(SWT.Selection, event -> {
+		eventCombo.addListener(SWT.Selection, _ -> {
 			final String newEventName = eventCombo.getText() + dataQualifyingCombo.getText();
 			executeCommand(new ChangePrimitiveEventCommand(getType(), newEventName));
 			refresh();
@@ -98,7 +98,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 
 		dataQualifyingCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), dataQualifyingComposite);
 		dataQualifyingCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
-		dataQualifyingCombo.addListener(SWT.Selection, event -> {
+		dataQualifyingCombo.addListener(SWT.Selection, _ -> {
 			final String newEventName = eventCombo.getText() + dataQualifyingCombo.getText();
 			executeCommand(new ChangePrimitiveEventCommand(getType(), newEventName));
 			refresh();
@@ -133,7 +133,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 			}
 		});
 
-		customEventText.addModifyListener(e -> {
+		customEventText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangePrimitiveEventCommand(getType(), customEventText.getText()));
 			addContentAdapter();
@@ -165,7 +165,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 
 		getWidgetFactory().createCLabel(composite, Messages.TransactionSection_Parameter);
 		parametersText = createGroupText(composite, true, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		parametersText.addModifyListener(e -> {
+		parametersText.addModifyListener(_ -> {
 			removeContentAdapter();
 			executeCommand(new ChangePrimitiveParameterCommand(getType(), parametersText.getText()));
 			addContentAdapter();

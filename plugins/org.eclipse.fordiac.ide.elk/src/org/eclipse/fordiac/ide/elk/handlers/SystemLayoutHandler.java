@@ -264,7 +264,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 				handleSubappType(multiPageEditor, subappType);
 				editors.add(multiPageEditor);
 			}
-			case final CompositeFBType cFBType -> {
+			case final CompositeFBType _ -> {
 				handleCompositeType(multiPageEditor);
 				editors.add(multiPageEditor);
 			}

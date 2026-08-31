@@ -39,8 +39,8 @@ public class STAlgorithmLabelProvider extends STCoreLabelProvider {
 	public ImageDescriptor image(final STAlgorithmSource element) {
 		if (element.eResource() instanceof final STAlgorithmResource algorithmResource) {
 			return switch (algorithmResource.getInternalLibraryElement()) {
-			case final BasicFBType unused -> FordiacImage.ICON_BASIC_FB.getImageDescriptor();
-			case final SimpleFBType unused -> FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
+			case final BasicFBType _ -> FordiacImage.ICON_BASIC_FB.getImageDescriptor();
+			case final SimpleFBType _ -> FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
 			case null, default -> FordiacImage.ICON_FB_TYPE.getImageDescriptor();
 			};
 		}

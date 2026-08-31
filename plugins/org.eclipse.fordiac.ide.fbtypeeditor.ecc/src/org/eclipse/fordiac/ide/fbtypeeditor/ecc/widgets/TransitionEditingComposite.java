@@ -225,7 +225,7 @@ public class TransitionEditingComposite {
 		transitionsOutViewer.setLabelProvider(new TransitionListLabelProvider());
 
 		transitionMgmButtons.bindToTableViewer(transitionsOutViewer, commandExecutor,
-				ref -> new CreateTransitionCommand(type, getBasicFBType().getECC().getStart(), null),
+				_ -> new CreateTransitionCommand(type, getBasicFBType().getECC().getStart(), null),
 				ref -> new DeleteTransitionCommand((ECTransition) ref),
 				ref -> new ChangeTransitionPriorityCommand(type, (ECTransition) ref, true),
 				ref -> new ChangeTransitionPriorityCommand(type, (ECTransition) ref, false));

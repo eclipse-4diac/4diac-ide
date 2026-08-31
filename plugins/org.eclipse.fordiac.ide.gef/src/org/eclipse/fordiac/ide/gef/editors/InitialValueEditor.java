@@ -51,7 +51,7 @@ public class InitialValueEditor extends XtextEmbeddedFieldEditor {
 						InitialValueHelper.getForegroundColor(interfaceElement), getControl().getBackground()));
 			}
 		});
-		viewer.getControl().addDisposeListener(event -> refreshJob.cancel());
+		viewer.getControl().addDisposeListener(_ -> refreshJob.cancel());
 	}
 
 	@Override
