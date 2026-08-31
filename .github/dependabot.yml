@@ -11,12 +11,8 @@ updates:
         patterns:
           - "github/codeql-action*"
   - package-ecosystem: maven
-    directory: /
+    directory: "/"
     schedule:
-      interval: daily
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
+      interval: "daily"
     labels:
       - dependencies
