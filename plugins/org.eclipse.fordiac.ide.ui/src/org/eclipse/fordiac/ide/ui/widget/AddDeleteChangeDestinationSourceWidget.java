@@ -113,6 +113,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 		};
 	}
 
+	@Override
 	public void bindToTableViewer(final TableViewer viewer, final Listener changeListener) {
 
 		changeDestinationSourceButton.addListener(SWT.Selection, changeListener);
@@ -120,6 +121,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 		viewer.addSelectionChangedListener(_ -> setButtonEnablement(!viewer.getSelection().isEmpty()));
 	}
 
+	@Override
 	public void bindToTableViewer(final NatTable table, final Listener changeListener) {
 		changeDestinationSourceButton.addListener(SWT.Selection, changeListener);
 
