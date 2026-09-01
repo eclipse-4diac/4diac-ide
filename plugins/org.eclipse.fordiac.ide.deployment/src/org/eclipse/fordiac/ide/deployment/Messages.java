@@ -52,6 +52,8 @@ public final class Messages extends NLS {
 
 	public static String DeploymentHelper_VariableValueError;
 
+	public static String ForteTypeNameCreator_InvalidForteTypeOverride;
+
 	public static String DownloadRunnable_DownloadErrorDetails;
 
 	public static String DownloadRunnable_MajorDownloadError;

@@ -420,7 +420,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		}
 	}
 
-	private String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+	private String getTypeNameWithHash(final TypeEntry entry)
+			throws LibraryElementHashException, DeploymentException {
 		final String hash = entry.getTypeHash();
 		if (hash.isEmpty()) {
 			return getTypeNameCreator().getTypeName(entry);

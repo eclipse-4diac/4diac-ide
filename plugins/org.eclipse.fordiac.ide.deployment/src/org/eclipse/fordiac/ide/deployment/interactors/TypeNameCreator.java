@@ -9,19 +9,21 @@
  *
  * Contributors:
  *  Alois Zoitl - initial API and implementation and/or initial documentation
+ *  Zijun Tang - allow DeploymentException from type name resolution
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 
 public interface TypeNameCreator {
 
-	String getTypeName(TypeEntry entry);
+	String getTypeName(TypeEntry entry) throws DeploymentException;
 
-	String getTypeName(FBNetworkElement fb);
+	String getTypeName(FBNetworkElement fb) throws DeploymentException;
 
-	String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException;
+	String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException, DeploymentException;
 
 }
