@@ -222,6 +222,10 @@
 								<property name="format" value="(?s:(\r\n|\r).*)"/>
 								<property name="message" value="Windows (CRLF) or Mac (CR) line endings detected, must use Unix (LF) line endings."/>
 							</module>
+							<module name="NewlineAtEndOfFile">
+								<property name="lineSeparator" value="lf"/>
+								<property name="fileExtensions" value="java, xtend, md, properties, xml, MF"/>
+							</module>
 						</module>
 					</checkstyleRules>
 				</configuration>
