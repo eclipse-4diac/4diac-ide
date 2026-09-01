@@ -38,17 +38,18 @@ public class FDBK2DevMgmInteractorProvider extends DefaultDevMgmInteractorProvid
 	private static final TypeNameCreator FBDK_TYPE_NAME_CREATOR = new TypeNameCreator() {
 
 		@Override
-		public String getTypeName(final FBNetworkElement fb) {
+		public String getTypeName(final FBNetworkElement fb) throws DeploymentException {
 			return getTypeName(fb.getTypeEntry());
 		}
 
 		@Override
-		public String getTypeName(final TypeEntry entry) {
+		public String getTypeName(final TypeEntry entry) throws DeploymentException {
 			return entry.getTypeName();
 		}
 
 		@Override
-		public String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+		public String getTypeNameWithHash(final TypeEntry entry)
+				throws LibraryElementHashException, DeploymentException {
 			// FBRT does not support type hashing so provide the normal name
 			return getTypeName(entry);
 		}
