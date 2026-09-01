@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
@@ -239,7 +240,15 @@ public class ReorderEventSequenceCommand extends Command implements ScopedComman
 		final EventConnectionCreateCommand command = new EventConnectionCreateCommand(network);
 		command.setSource(source);
 		command.setDestination(destination);
+		command.setVisible(shouldCreateVisibleConnection(source, destination));
 		createCommands.add(command);
+	}
+
+	private static boolean shouldCreateVisibleConnection(final Event source, final Event destination) {
+		return !(isUnfoldedSubAppInterface(source) && !source.isIsInput()
+				&& !hasVisibleConnection(source.getOutputConnections()))
+				&& !(isUnfoldedSubAppInterface(destination) && destination.isIsInput()
+						&& !hasVisibleConnection(destination.getInputConnections()));
 	}
 
 	private Event deleteInputConnection(final Event event) {
@@ -324,6 +333,15 @@ public class ReorderEventSequenceCommand extends Command implements ScopedComman
 	private static boolean hasMultipleOutputConnections(final BlockFBNetworkElement element) {
 		return element.getInterface().getEventOutputs().stream().map(Event::getOutputConnections).mapToInt(List::size)
 				.sum() > 1;
+	}
+
+	private static boolean isUnfoldedSubAppInterface(final Event event) {
+		return event.getBlockFBNetworkElement() instanceof final UntypedSubApp sourceSubApp
+				&& sourceSubApp.isUnfolded();
+	}
+
+	private static boolean hasVisibleConnection(final Collection<? extends Connection> connections) {
+		return connections.stream().anyMatch(Connection::isVisible);
 	}
 
 	@Override
