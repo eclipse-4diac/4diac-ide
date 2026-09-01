@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="PackageRenameTest" Comment="">
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-07-29">
+	</VersionInfo>
+	<Application Name="App" Comment="">
+		<SubAppNetwork>
+			<FB Name="Producer" Type="mypackage::Producer" Comment="" x="500.0" y="500.0">
+			</FB>
+			<FB Name="Consumer" Type="mypackage::Consumer" Comment="" x="1500.0" y="500.0">
+			</FB>
+			<EventConnections>
+				<Connection Source="Producer.CNF" Destination="Consumer.REQ" Comment=""/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="Producer.OUT" Destination="Consumer.DI" Comment=""/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+</System>
