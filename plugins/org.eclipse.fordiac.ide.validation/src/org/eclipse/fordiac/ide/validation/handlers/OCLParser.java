@@ -31,13 +31,13 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
-import org.eclipse.fordiac.ide.validation.Activator;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
 import org.eclipse.ocl.OCLInput;
 import org.eclipse.ocl.ParserException;
 import org.eclipse.ocl.ecore.Constraint;
 import org.eclipse.ocl.ecore.OCL;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 public final class OCLParser {
 	private static final String CONSTRAINT_DIRECTORY = "constraints"; //$NON-NLS-1$
@@ -63,7 +63,7 @@ public final class OCLParser {
 	// Deprecated: retained for legacy ECC constraints until they are transformed to
 	// model invariants
 	private static List<LoadedConstraint> loadBundledOCLConstraints(final String constraintFile, final OCL ocl) {
-		final Bundle bundle = Activator.getDefault().getBundle();
+		final Bundle bundle = FrameworkUtil.getBundle(OCLParser.class);
 		final URL url = FileLocator.find(bundle, new Path(CONSTRAINT_DIRECTORY + IPath.SEPARATOR + constraintFile));
 		if (url == null) {
 			return List.of();

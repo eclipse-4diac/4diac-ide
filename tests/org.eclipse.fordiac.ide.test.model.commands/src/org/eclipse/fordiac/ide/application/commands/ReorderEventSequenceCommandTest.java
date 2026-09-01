@@ -22,13 +22,17 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.graph.FBNetworkEventTopologyGraph;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.test.model.graph.FBNetworkGraphTest;
 import org.junit.jupiter.api.Test;
@@ -499,6 +503,89 @@ class ReorderEventSequenceCommandTest extends FBNetworkGraphTest {
 	}
 
 	@Test
+	void reorderVisibleConnections() {
+		/*-
+		 * A -> B -> C -> SubApp -> D
+		 *                ( -> E -> F ->)
+		 */
+		final FB fbA = newFB("A");
+		final FB fbB = newFB("B");
+		final FB fbC = newFB("C");
+		final FB fbD = newFB("D");
+
+		final UntypedSubApp subApp = newUntypedSubApp("SubApp");
+		subApp.setAttribute(InternalAttributeDeclarations.UNFOLDED, "true", "");
+		final FB fbE = newFB(subApp.getSubAppNetwork(), "E");
+		final FB fbF = newFB(subApp.getSubAppNetwork(), "F");
+		newEventConnection(fbA, "CNF", fbB, "REQ");
+		newEventConnection(fbB, "CNF", fbC, "REQ");
+		newEventConnection(fbC, "CNF", subApp, "REQ");
+		newEventConnection(subApp, "CNF", fbD, "REQ");
+		newEventConnection(subApp.getSubAppNetwork(), subApp, "REQ", fbE, "REQ");
+		newEventConnection(subApp.getSubAppNetwork(), fbE, "CNF", fbF, "REQ");
+		newEventConnection(subApp.getSubAppNetwork(), fbF, "CNF", subApp, "CNF");
+
+		ReorderEventSequenceCommand command = createCommand("B", false, "A");
+
+		assertTrue(command.canExecute());
+		command.execute();
+		assertVisible(fbB, "CNF", fbA, "REQ", true);
+		assertVisible(fbA, "CNF", fbC, "REQ", true);
+		assertVisible(fbC, "CNF", subApp, "REQ", true);
+		assertVisible(subApp, "CNF", fbD, "REQ", true);
+
+		command = createCommand("B", false, "SubApp");
+
+		assertTrue(command.canExecute());
+		command.execute();
+		assertVisible(fbB, "CNF", subApp, "REQ", true);
+		assertVisible(subApp, "CNF", fbA, "REQ", true);
+		assertVisible(fbA, "CNF", fbC, "REQ", true);
+		assertVisible(fbC, "CNF", fbD, "REQ", true);
+
+		command = createCommand(subApp.getSubAppNetwork(), "F", false, "E");
+
+		assertTrue(command.canExecute());
+		command.execute();
+		assertVisible(subApp.getSubAppNetwork(), subApp, "REQ", fbF, "REQ", true);
+		assertVisible(subApp.getSubAppNetwork(), fbF, "CNF", fbE, "REQ", true);
+		assertVisible(subApp.getSubAppNetwork(), fbE, "CNF", subApp, "CNF", true);
+	}
+
+	@Test
+	void reorderInvisibleConnections() {
+		/*-
+		 * A -> B -> C -> SubApp -> D
+		 *                ( -> E -> F ->)
+		 */
+		final FB fbA = newFB("A");
+		final FB fbB = newFB("B");
+		final FB fbC = newFB("C");
+		final FB fbD = newFB("D");
+
+		final UntypedSubApp subApp = newUntypedSubApp("SubApp");
+		subApp.setAttribute(InternalAttributeDeclarations.UNFOLDED, "true", "");
+		final FB fbE = newFB(subApp.getSubAppNetwork(), "E");
+		final FB fbF = newFB(subApp.getSubAppNetwork(), "F");
+		newEventConnection(fbA, "CNF", fbB, "REQ");
+		newEventConnection(fbB, "CNF", fbC, "REQ");
+		newEventConnection(fbC, "CNF", subApp, "REQ").setVisible(false);
+		newEventConnection(subApp, "CNF", fbD, "REQ").setVisible(false);
+		newEventConnection(subApp.getSubAppNetwork(), subApp, "REQ", fbE, "REQ");
+		newEventConnection(subApp.getSubAppNetwork(), fbE, "CNF", fbF, "REQ");
+		newEventConnection(subApp.getSubAppNetwork(), fbF, "CNF", subApp, "CNF");
+
+		final ReorderEventSequenceCommand command = createCommand("B", false, "SubApp");
+
+		assertTrue(command.canExecute());
+		command.execute();
+		assertVisible(fbA, "CNF", fbB, "REQ", true);
+		assertVisible(fbB, "CNF", subApp, "REQ", false);
+		assertVisible(subApp, "CNF", fbC, "REQ", false);
+		assertVisible(fbC, "CNF", fbD, "REQ", true);
+	}
+
+	@Test
 	void rejectEmpty() {
 		setupLongChain();
 		final ReorderEventSequenceCommand command = createCommand("A", false);
@@ -613,7 +700,13 @@ class ReorderEventSequenceCommandTest extends FBNetworkGraphTest {
 
 	private ReorderEventSequenceCommand createCommand(final String target, final boolean insertBefore,
 			final String... sources) {
-		return new ReorderEventSequenceCommand(Stream.of(sources).map(network::getFBNamed).toList(),
+		return createCommand(network, target, insertBefore, sources);
+	}
+
+	private static ReorderEventSequenceCommand createCommand(final FBNetwork network, final String target,
+			final boolean insertBefore, final String... sources) {
+		return new ReorderEventSequenceCommand(
+				Stream.of(sources).map(network::getElementNamed).map(BlockFBNetworkElement.class::cast).toList(),
 				network.getFBNamed(target), insertBefore);
 	}
 
@@ -646,6 +739,27 @@ class ReorderEventSequenceCommandTest extends FBNetworkGraphTest {
 		final Event destination = network.getFBNamed(destinationElementName).getInterface().getEvent(destinationName);
 		assertTrue(LinkConstraints.duplicateConnection(source, destination),
 				"connection " + source.getQualifiedName() + " -> " + destination.getQualifiedName() + " exists");
+	}
+
+	private void assertVisible(final BlockFBNetworkElement sourceElement, final String sourceEventName,
+			final BlockFBNetworkElement destinationElement, final String destinationEventName, final boolean visible) {
+		assertVisible(network, sourceElement, sourceEventName, destinationElement, destinationEventName, visible);
+	}
+
+	private static void assertVisible(final FBNetwork network, final BlockFBNetworkElement sourceElement,
+			final String sourceEventName, final BlockFBNetworkElement destinationElement,
+			final String destinationEventName, final boolean visible) {
+		final EventConnection connection = network.getEventConnections().stream()
+				.filter(conn -> conn.getSourceElement() == sourceElement
+						&& conn.getSource().getName().equals(sourceEventName)
+						&& conn.getDestinationElement() == destinationElement
+						&& conn.getDestination().getName().equals(destinationEventName))
+				.findAny().orElseThrow();
+		if (visible) {
+			assertTrue(connection.isVisible());
+		} else {
+			assertFalse(connection.isVisible());
+		}
 	}
 
 	private void sanityCheckConnections() {

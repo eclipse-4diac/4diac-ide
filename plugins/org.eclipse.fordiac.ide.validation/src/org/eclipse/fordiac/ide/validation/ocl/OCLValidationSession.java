@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
-import org.eclipse.fordiac.ide.validation.handlers.IValidationMarker;
+import org.eclipse.fordiac.ide.validation.handlers.ValidationMarkerConstants;
 import org.eclipse.fordiac.ide.validation.handlers.OCLParser;
 import org.eclipse.fordiac.ide.validation.handlers.ValidationHelper;
 import org.eclipse.ocl.ecore.EcoreEnvironmentFactory;
@@ -145,7 +145,7 @@ public final class OCLValidationSession implements AutoCloseable {
 	private void addSourceMarker(final IFile source, final String message) {
 		if (source != null) {
 			markers.add(new OCLMarker(source,
-					ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE)
+					ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(ValidationMarkerConstants.TYPE)
 							.setSeverity(IMarker.SEVERITY_ERROR)
 							.setLocation(source.getProjectRelativePath().toString())));
 		}

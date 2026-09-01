@@ -82,7 +82,6 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		this.pollingInterval = pollingInterval;
 		this.launchWatches = launchWatches;
 
-		debugTarget.getLaunch().addDebugTarget(this);
 		deviceManagementExecutor = IDeviceManagementExecutorService.of(new SharedWatchDeviceManagementInteractor(
 				DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device, null, profile)));
 
