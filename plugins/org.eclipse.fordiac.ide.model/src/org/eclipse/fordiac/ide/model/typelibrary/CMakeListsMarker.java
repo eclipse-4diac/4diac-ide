@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
+ *               2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,11 +11,13 @@
  * Contributors:
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - support additional CMake source directories
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -36,10 +39,17 @@ public class CMakeListsMarker implements INamedElement {
 
 	private final IProject project;
 	private final Path output;
+	private final List<Path> additionalSubdirectories;
 
 	public CMakeListsMarker(final IProject project, final Path output) {
+		this(project, output, List.of());
+	}
+
+	public CMakeListsMarker(final IProject project, final Path output,
+			final List<Path> additionalSubdirectories) {
 		this.project = project;
 		this.output = output;
+		this.additionalSubdirectories = List.copyOf(additionalSubdirectories);
 	}
 
 	public IProject getProject() {
@@ -48,6 +58,10 @@ public class CMakeListsMarker implements INamedElement {
 
 	public Path getOutput() {
 		return output;
+	}
+
+	public List<Path> getAdditionalSubdirectories() {
+		return additionalSubdirectories;
 	}
 
 	@Override

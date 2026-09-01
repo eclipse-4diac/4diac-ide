@@ -69,7 +69,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING);
 
 	private static record BuildContext(IPath outputDirectory, List<IPath> additionalSourceDirectories,
-			IExportFilter filter, MultiStatus status) {
+			String exportFilterId, IExportFilter filter, MultiStatus status) {
 	}
 
 	@Override
@@ -177,7 +177,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		final IExportFilter filter = filterConfig.isPresent() ? ExportFilterUtil.createExportFilter(filterConfig)
 				: null;
 		final MultiStatus status = new MultiStatus(getClass(), IStatus.OK, "Export Builder Status"); //$NON-NLS-1$
-		return new BuildContext(outputDirectory, additionalSourceDirectories, filter, status);
+		return new BuildContext(outputDirectory, additionalSourceDirectories, exportFilterID, filter, status);
 	}
 
 	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor,
@@ -288,9 +288,10 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			throw new OperationCanceledException();
 		}
 
-		if (getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, "").equals(FORTE_NG_FILTER_ID)) { //$NON-NLS-1$
+		if (FORTE_NG_FILTER_ID.equals(context.exportFilterId)) {
 			final IPath location = getProject().getLocation().append(context.outputDirectory);
-			final CMakeListsMarker marker = new CMakeListsMarker(getProject(), location.toPath());
+			final CMakeListsMarker marker = new CMakeListsMarker(getProject(), location.toPath(),
+					getAdditionalCMakeSubdirectories(context));
 			monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, marker.getName()));
 			try {
 				context.filter.export(null, location.toString(), true, marker);
@@ -300,6 +301,15 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 						MessageFormat.format(Messages.ExportBuilder_CMakeListExportFailed, location.toOSString()), e));
 			}
 		}
+	}
+
+	private List<java.nio.file.Path> getAdditionalCMakeSubdirectories(final BuildContext context) {
+		if (!AdditionalSourceDirectories.validatePaths(getProject(), context.outputDirectory,
+				context.additionalSourceDirectories, false)) {
+			return List.of();
+		}
+		return context.additionalSourceDirectories.stream().map(path -> path.makeRelativeTo(context.outputDirectory))
+				.map(IPath::toPortableString).map(java.nio.file.Path::of).toList();
 	}
 
 	private static boolean hasRelevantErrorMarker(final IResource resource) throws CoreException {
