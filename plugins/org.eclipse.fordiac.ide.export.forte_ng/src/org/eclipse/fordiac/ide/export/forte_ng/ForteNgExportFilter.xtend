@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2019, 2025 fortiss GmbH, Johannes Kepler University Linz
  *                          Martin Erich Jobst
+ *               2026 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *                - added support for global constants
  *   Alois Zoitl  - added support for structured types
  *   Ernst Blecha - added support for exporting CMakeLists.txt
+ *   Michael Oberlehner - support additional CMake source directories
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
@@ -143,7 +145,7 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				}
 			CMakeListsMarker:
 				(#{
-					new ProjectCMakeListsTemplate(source.project, source.output),
+					new ProjectCMakeListsTemplate(source.project, source.output, source.additionalSubdirectories),
 					new IncludeCMakeListsTemplate(source.project, source.output, Path.of("include")),
 					new SourceCMakeListsTemplate(source.project, source.output, Path.of("src")),
 					new CMakeConfigTemplate(source.project)
