@@ -2,6 +2,8 @@
 <FBType Name="GPIOChip" Comment="Service Interface Function Block Type">
 	<Identification Description="Copyright (c) 2023 OFFIS e.V.&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-09-04" Remarks="changed INIT/INITO event type to EInit">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Organization="OFFIS e.V." Version="1.0" Author="Jörg Walter" Date="2023-11-10">
@@ -10,7 +12,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
 				<With Var="QI"/>
 				<With Var="VALUE"/>
 				<With Var="ChipNumber"/>
@@ -21,7 +23,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>

@@ -2,13 +2,15 @@
 <FBType Name="CLIENT_0" Comment="Connect to a SERVER_0 Block">
 	<Identification Standard="61499-2" Description="Copyright (c) 2025 Monika Wenger&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-09-04" Remarks="changed INIT/INITO event type to EInit">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2025-12-05" Remarks="created from existing">
 	</VersionInfo>
 	<CompilerInfo packageName="iec61499::net">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event">
+			<Event Name="INIT" Type="EInit">
 				<With Var="QI"/>
 				<With Var="ID"/>
 			</Event>
@@ -17,7 +19,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event">
+			<Event Name="INITO" Type="EInit">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
