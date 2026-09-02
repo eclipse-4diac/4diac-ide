@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class AdapterTypeResourceImpl extends AbstractLibraryElementResource<AdapterType> {
@@ -38,4 +40,10 @@ public class AdapterTypeResourceImpl extends AbstractLibraryElementResource<Adap
 		return new AdapterExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorAdapterType createErrorLibraryElement() {
+		final ErrorAdapterType type = LibraryElementFactory.eINSTANCE.createErrorAdapterType();
+		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		return type;
+	}
 }
