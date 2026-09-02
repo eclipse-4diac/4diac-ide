@@ -16,6 +16,8 @@ import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
@@ -38,4 +40,8 @@ public class DataTypeResourceImpl extends AbstractLibraryElementResource<AnyDeri
 		return new DataTypeExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorDataType createErrorLibraryElement() {
+		return DataFactory.eINSTANCE.createErrorDataType();
+	}
 }

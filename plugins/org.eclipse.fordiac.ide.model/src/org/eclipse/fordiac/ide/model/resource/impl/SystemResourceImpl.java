@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class SystemResourceImpl extends AbstractLibraryElementResource<AutomationSystem> {
@@ -38,4 +40,10 @@ public class SystemResourceImpl extends AbstractLibraryElementResource<Automatio
 		return new SystemExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorAutomationSystem createErrorLibraryElement() {
+		final ErrorAutomationSystem errorSystem = LibraryElementFactory.eINSTANCE.createErrorAutomationSystem();
+		errorSystem.setSystemConfiguration(LibraryElementFactory.eINSTANCE.createSystemConfiguration());
+		return errorSystem;
+	}
 }
