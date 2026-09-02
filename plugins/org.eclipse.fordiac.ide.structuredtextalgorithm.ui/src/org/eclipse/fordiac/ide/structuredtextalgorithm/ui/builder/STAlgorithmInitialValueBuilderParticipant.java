@@ -9,6 +9,8 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Franz Höpfinger - fix false unused-import warnings for values used only
+ *                      in System Configuration
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder;
 
@@ -41,10 +43,10 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
@@ -157,7 +159,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				throw new OperationCanceledException();
 			}
 			switch (allContents.next()) {
-			case final SystemConfiguration _ -> allContents.prune();
+			case final FBNetworkElement fbNetworkElement when fbNetworkElement.isMapped()
+					&& fbNetworkElement.getMapping().getTo() == fbNetworkElement -> allContents.prune();
 			case final Attribute attribute -> {
 				validateType(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
 				validateValue(attribute, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings, context,
