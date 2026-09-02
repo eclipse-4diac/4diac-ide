@@ -21,12 +21,16 @@ import java.util.stream.StreamSupport;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
+import org.osgi.service.prefs.BackingStoreException;
 
 public final class AdditionalSourceDirectories {
 
@@ -45,6 +49,34 @@ public final class AdditionalSourceDirectories {
 
 	public static String formatPaths(final Collection<IPath> paths) {
 		return String.join(SERIALIZED_PATH_SEPARATOR, paths.stream().map(IPath::toPortableString).toList());
+	}
+
+	public static List<IPath> getSourceDirectories(final IProject project) {
+		return parsePaths(getPreferences(project).get(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, "")); //$NON-NLS-1$
+	}
+
+	public static IPath getOutputDirectory(final IProject project) {
+		return new Path(getPreferences(project).get(PreferenceConstants.OUTPUT_FOLDER,
+				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME));
+	}
+
+	public static void setSourceDirectories(final IProject project, final Collection<IPath> sourceDirectories)
+			throws BackingStoreException {
+		final IEclipsePreferences preferences = getPreferences(project);
+		preferences.put(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, formatPaths(sourceDirectories));
+		preferences.flush();
+	}
+
+	public static void setExportDirectories(final IProject project, final IPath outputDirectory,
+			final Collection<IPath> sourceDirectories) throws BackingStoreException {
+		final IEclipsePreferences preferences = getPreferences(project);
+		preferences.put(PreferenceConstants.OUTPUT_FOLDER, outputDirectory.toPortableString());
+		preferences.put(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, formatPaths(sourceDirectories));
+		preferences.flush();
+	}
+
+	private static IEclipsePreferences getPreferences(final IProject project) {
+		return new ProjectScope(project).getNode(PreferenceConstants.EXPORT_PREFERENCES_ID);
 	}
 
 	public static boolean validatePaths(final IProject project, final IPath outputDirectory,
@@ -118,7 +150,12 @@ public final class AdditionalSourceDirectories {
 	public static boolean isValidRelativeDirectory(final java.nio.file.Path directory) {
 		return directory != null && !directory.isAbsolute() && directory.getNameCount() > 0
 				&& StreamSupport.stream(directory.spliterator(), false).map(Object::toString)
-						.allMatch(segment -> isValidSegment(segment) && VALID_SEGMENT.matcher(segment).matches());
+						.allMatch(AdditionalSourceDirectories::isValidDirectoryName);
+	}
+
+	/** @see #isValidRelativeDirectory(java.nio.file.Path) */
+	public static boolean isValidDirectoryName(final String name) {
+		return isValidSegment(name) && VALID_SEGMENT.matcher(name).matches();
 	}
 
 	/** the output directory itself is not written to generated build files */

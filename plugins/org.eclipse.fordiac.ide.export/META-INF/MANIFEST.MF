@@ -7,7 +7,8 @@ Export-Package: org.eclipse.fordiac.ide.export,
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.eclipse.ltk.core.refactoring
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.2.200.qualifier
@@ -15,6 +16,7 @@ Bundle-Name: Export Utils
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-25
+Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.export
 Bundle-Activator: org.eclipse.fordiac.ide.export.plugin.ExportPlugin
 Import-Package: org.eclipse.fordiac.ide.util
