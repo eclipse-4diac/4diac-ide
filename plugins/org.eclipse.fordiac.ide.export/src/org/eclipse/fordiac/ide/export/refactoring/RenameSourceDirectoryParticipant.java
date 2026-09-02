@@ -1,0 +1,79 @@
+/*******************************************************************************
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * https://www.eclipse.org/legal/epl-2.0/.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.export.refactoring;
+
+import java.text.MessageFormat;
+import java.util.function.UnaryOperator;
+
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.export.Messages;
+import org.eclipse.fordiac.ide.export.utils.AdditionalSourceDirectories;
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
+import org.eclipse.ltk.core.refactoring.participants.RenameParticipant;
+
+/**
+ * A participant that keeps the output and additional source directories of the
+ * type export in sync when a referred folder is renamed.
+ */
+public class RenameSourceDirectoryParticipant extends RenameParticipant {
+
+	private IFolder folder;
+
+	@Override
+	protected boolean initialize(final Object element) {
+		if (element instanceof final IFolder renamedFolder && renamedFolder.getProject().isAccessible()
+				&& (UpdateSourceDirectoriesChange.isReferenced(renamedFolder)
+						|| containsOutputDirectory(renamedFolder))) {
+			folder = renamedFolder;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return Messages.Refactoring_RenameSourceDirectoryParticipant;
+	}
+
+	@Override
+	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context) {
+		final String newName = getArguments().getNewName();
+		if (!containsOutputDirectory(folder) && !AdditionalSourceDirectories.isValidDirectoryName(newName)) {
+			return RefactoringStatus.createWarningStatus(
+					MessageFormat.format(Messages.Refactoring_InvalidSourceDirectoryName, newName));
+		}
+		return new RefactoringStatus();
+	}
+
+	@Override
+	public Change createChange(final IProgressMonitor pm) {
+		final IPath oldPath = folder.getProjectRelativePath();
+		final String newName = getArguments().getNewName();
+		final IPath newPath = oldPath.removeLastSegments(1).append(newName);
+		final UnaryOperator<IPath> relocate = directory -> newPath
+				.append(directory.removeFirstSegments(oldPath.segmentCount()));
+		final boolean keepSourceDirectories = containsOutputDirectory(folder)
+				|| AdditionalSourceDirectories.isValidDirectoryName(newName);
+		return UpdateSourceDirectoriesChange.create(folder, keepSourceDirectories ? relocate : directory -> null,
+				relocate);
+	}
+
+	private static boolean containsOutputDirectory(final IFolder folder) {
+		return folder.getProjectRelativePath()
+				.isPrefixOf(AdditionalSourceDirectories.getOutputDirectory(folder.getProject()));
+	}
+}
