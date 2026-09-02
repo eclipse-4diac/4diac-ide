@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Function Name="SCALE" Comment="Scaling Function Block">
-	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;was inspired by this Video: &#10;EP2 - CODESYS: Create Scaling Function Block&#10;https://www.youtube.com/watch?v=Ir6QAxxDarI">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;was inspired by this Video: &#10;EP2 - CODESYS: Create Scaling Function Block&#10;https://www.youtube.com/watch?v=Ir6QAxxDarI">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0.1" Author="Franz Höpfinger" Date="2026-08-27" Remarks="updated description and cleaned up formatting">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-09-19">
@@ -10,7 +12,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="">
+			<Event Name="REQ" Type="Event">
 				<With Var="IN"/>
 				<With Var="MAX_IN"/>
 				<With Var="MIN_IN"/>
@@ -19,7 +21,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="">
+			<Event Name="CNF" Type="Event">
 				<With Var=""/>
 			</Event>
 		</EventOutputs>
@@ -27,11 +29,11 @@
 			<VarDeclaration Name="IN" Type="REAL" Comment="Input to be Scaled"/>
 			<VarDeclaration Name="MAX_IN" Type="REAL" Comment="Maximum Input"/>
 			<VarDeclaration Name="MIN_IN" Type="REAL" Comment="Minimum Input"/>
-			<VarDeclaration Name="MAX_OUT" Type="REAL" Comment="Maximum Ouput"/>
+			<VarDeclaration Name="MAX_OUT" Type="REAL" Comment="Maximum Output"/>
 			<VarDeclaration Name="MIN_OUT" Type="REAL" Comment="Minimum Output"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="" Type="REAL" Comment=""/>
+			<VarDeclaration Name="" Type="REAL"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
@@ -40,11 +42,11 @@
 (* Scaling Function Block *)
 FUNCTION SCALE : REAL
 VAR_INPUT
-	IN : REAL;    // Input to be Scaled
-	MAX_IN : REAL;    // Maximum Input
-	MIN_IN : REAL;    // Minimum Input
-	MAX_OUT : REAL;    // Maximum Ouput
-	MIN_OUT : REAL;    // Minimum Output
+	IN : REAL; // Input to be Scaled
+	MAX_IN : REAL; // Maximum Input
+	MIN_IN : REAL; // Minimum Input
+	MAX_OUT : REAL; // Maximum Output
+	MIN_OUT : REAL; // Minimum Output
 END_VAR
 
 SCALE := (IN - MIN_IN) * (MAX_OUT - MIN_OUT) / (MAX_IN - MIN_IN) + MIN_OUT;
