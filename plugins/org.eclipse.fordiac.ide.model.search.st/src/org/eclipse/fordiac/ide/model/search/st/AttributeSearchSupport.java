@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Franz Höpfinger - exclude TypeHash attribute from imported namespaces
  */
 package org.eclipse.fordiac.ide.model.search.st;
 
@@ -20,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmParseUtil;
 import org.eclipse.xtext.parser.IParseResult;
 
@@ -35,7 +37,8 @@ public class AttributeSearchSupport extends StructuredTextSearchSupport {
 	public Set<String> getImportedNamespaces() {
 		final Set<String> result = super.getImportedNamespaces();
 		if (attribute.getAttributeDeclaration() != null) {
-			if (!PackageNameHelper.getPackageName(attribute.getAttributeDeclaration()).isEmpty()) {
+			if (!TypeLibraryTags.TYPE_HASH_ATTRIBUTE_FULL_NAME.equalsIgnoreCase(attribute.getName())
+					&& !PackageNameHelper.getPackageName(attribute.getAttributeDeclaration()).isEmpty()) {
 				result.add(PackageNameHelper.getFullTypeName(attribute.getAttributeDeclaration()));
 			}
 		} else if (!PackageNameHelper.getPackageName(attribute.getType()).isEmpty()) {
