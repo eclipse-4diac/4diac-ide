@@ -85,6 +85,8 @@ public final class Messages extends NLS {
 
 	public static String TypeExport_FileDialogMessage;
 
+	public static String TypeExport_GeneratedSourceDirectory;
+
 	public static String TypeExport_InvalidPath;
 
 	public static String TypeExport_InvalidSourceDirectories;
