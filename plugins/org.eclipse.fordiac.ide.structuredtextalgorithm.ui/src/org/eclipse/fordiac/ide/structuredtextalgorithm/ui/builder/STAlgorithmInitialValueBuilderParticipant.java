@@ -31,8 +31,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyType;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
@@ -218,16 +220,25 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final STCoreVariableUsageValidator variableUsageValidator, final boolean ignoreWarnings,
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
-		final List<Issue> issues = new ArrayList<>();
 		// do not parse value if blank or variable has invalid type
-		if (!value.isBlank() && varDeclaration.getType() instanceof AnyType) {
-			final LibraryElement featureType = STCoreUtil.getFeatureType(varDeclaration);
-			try {
-				new TypedValueConverter((DataType) featureType, true).toValue(value);
-			} catch (final Exception e) {
-				validate(varDeclaration.getValue(), delta, typeUsageCollector, variableUsageValidator, issues, context);
-				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
-			}
+		if (value.isBlank() || !(varDeclaration.getType() instanceof AnyType)) {
+			return;
+		}
+		// only track usage if the type is an error type; it is already reported
+		// elsewhere, so parsing the value against it would only add a misleading marker
+		if (isErrorType((DataType) varDeclaration.getType())) {
+			validate(varDeclaration.getValue(), delta, typeUsageCollector, variableUsageValidator, new ArrayList<>(),
+					context);
+			return;
+		}
+
+		final List<Issue> issues = new ArrayList<>();
+		final LibraryElement featureType = STCoreUtil.getFeatureType(varDeclaration);
+		try {
+			new TypedValueConverter((DataType) featureType, true).toValue(value);
+		} catch (final Exception e) {
+			validate(varDeclaration.getValue(), delta, typeUsageCollector, variableUsageValidator, issues, context);
+			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, varDeclaration.getValue()));
 		}
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
@@ -256,17 +267,25 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final STCoreVariableUsageValidator variableUsageValidator, final boolean ignoreWarnings,
 			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(attribute);
+		if (value.isBlank() || !(attribute.getType() instanceof AnyType)
+				|| InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration())) {
+			return;
+		}
+		final DataType featureType = getActualType(attribute);
+		// only track usage if the type is an error type; it is already reported
+		// elsewhere, so parsing the value against it would only add a misleading marker
+		if (isErrorType(featureType)) {
+			validate(attribute, delta, typeUsageCollector, variableUsageValidator, new ArrayList<>(), context);
+			return;
+		}
+
 		final List<Issue> issues = new ArrayList<>();
-		if (!value.isBlank() && attribute.getType() instanceof AnyType
-				&& !InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration())) {
-			final DataType featureType = getActualType(attribute);
-			try {
-				new TypedValueConverter(featureType, attribute.getAttributeDeclaration() != null).toValue(value);
-			} catch (final Exception e) {
-				validate(attribute, delta, typeUsageCollector, variableUsageValidator, issues, context);
-				issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, attribute,
-						LibraryElementPackage.Literals.ATTRIBUTE__VALUE));
-			}
+		try {
+			new TypedValueConverter(featureType, attribute.getAttributeDeclaration() != null).toValue(value);
+		} catch (final Exception e) {
+			validate(attribute, delta, typeUsageCollector, variableUsageValidator, issues, context);
+			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, attribute,
+					LibraryElementPackage.Literals.ATTRIBUTE__VALUE));
 		}
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
@@ -393,6 +412,16 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			return directlyDerivedType.getBaseType();
 		}
 		return attribute.getType();
+	}
+
+	protected static boolean isErrorType(final DataType type) {
+		if (type instanceof final DirectlyDerivedType directlyDerivedType) {
+			return isErrorType(directlyDerivedType.getBaseType());
+		}
+		if (type instanceof final ArrayType arrayType) {
+			return isErrorType(arrayType.getBaseType());
+		}
+		return type instanceof ErrorDataType;
 	}
 
 	protected List<IResourceDescription.Delta> getRelevantDeltas(final IBuildContext context) {
