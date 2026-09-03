@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -163,6 +164,38 @@ public class OtherAlgorithmImpl extends TextAlgorithmImpl implements OtherAlgori
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == OtherSourceElement.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE: return LibraryElementPackage.OTHER_SOURCE_ELEMENT__LANGUAGE;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == OtherSourceElement.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.OTHER_SOURCE_ELEMENT__LANGUAGE: return LibraryElementPackage.OTHER_ALGORITHM__LANGUAGE;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**

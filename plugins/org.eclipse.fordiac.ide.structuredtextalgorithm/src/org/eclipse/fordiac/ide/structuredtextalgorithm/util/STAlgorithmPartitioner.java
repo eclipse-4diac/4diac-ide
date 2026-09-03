@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,11 +20,13 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STComment;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.lexer.InternalSTAlgorithmLexer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
@@ -37,7 +39,7 @@ import org.eclipse.xtext.resource.XtextResource;
 
 import com.google.inject.Inject;
 
-public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmSourceElement, ICallable> {
+public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmSourceElement> {
 
 	@Inject
 	private STAlgorithmGrammarAccess grammarAccess;
@@ -51,18 +53,19 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 	}
 
 	public String combine(final BaseFBType baseFBType) {
-		return combine(baseFBType.getCallables());
+		return combine(baseFBType.getSourceElements());
 	}
 
-	public String combine(final List<? extends ICallable> callables) {
-		return callables.stream().map(this::toSTText).collect(Collectors.joining(
+	public String combine(final List<? extends SourceElement> sourceElements) {
+		return sourceElements.stream().map(this::toSTText).collect(Collectors.joining(
 				CommonElementExporter.LINE_END + CommonElementExporter.LINE_END, "", CommonElementExporter.LINE_END)); //$NON-NLS-1$
 	}
 
-	public String toSTText(final ICallable callable) {
-		return switch (callable) {
+	public String toSTText(final SourceElement element) {
+		return switch (element) {
 		case final STAlgorithm algorithm -> toSTText(algorithm);
 		case final STMethod method -> toSTText(method);
+		case final STComment comment -> toSTText(comment);
 		default -> ""; //$NON-NLS-1$
 		};
 	}
@@ -93,6 +96,10 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 			return text.trim();
 		}
 		return generateMethodDefinition(method);
+	}
+
+	private static String toSTText(final STComment comment) {
+		return comment.getText().trim();
 	}
 
 	protected static String generateMethodDefinition(final STMethod method) {
@@ -132,7 +139,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 	}
 
 	@Override
-	protected ICallable convertSourceElement(final STAlgorithmSourceElement element) {
+	protected STSourceElement convertSourceElement(final STAlgorithmSourceElement element) {
 		return switch (element) {
 		case final org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm algorithm ->
 			convertSourceElement(algorithm);
@@ -142,7 +149,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 		};
 	}
 
-	protected ICallable convertSourceElement(
+	protected STSourceElement convertSourceElement(
 			final org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm algorithm) {
 		final var node = NodeModelUtils.getNode(algorithm.getBody());
 		if (node == null || algorithm.getName() == null) {
@@ -158,7 +165,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 		return result;
 	}
 
-	protected ICallable convertSourceElement(
+	protected STSourceElement convertSourceElement(
 			final org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod method) {
 		final var node = NodeModelUtils.getNode(method.getBody());
 		if (node == null || method.getName() == null) {
@@ -187,29 +194,6 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 	@Override
 	protected STCorePartition createEmergencyPartition(final String originalSource) {
 		return new STAlgorithmPartition(null, Collections.emptyList(), originalSource,
-				List.of(createLostAndFound(originalSource, 0)));
-	}
-
-	@Override
-	protected STMethod createLostAndFound(final String content, final int index) {
-		final STMethod method = LibraryElementFactory.eINSTANCE.createSTMethod();
-		method.setName(generateLostAndFoundName(index));
-		method.setComment(generateLostAndFoundComment(index));
-		method.setText(content);
-		return method;
-	}
-
-	@Override
-	protected void appendText(final ICallable callable, final String text) {
-		switch (callable) {
-		case final STAlgorithm algorithm:
-			algorithm.setText(algorithm.getText() + text);
-			break;
-		case final STMethod method:
-			method.setText(method.getText() + text);
-			break;
-		default:
-			break;
-		}
+				List.of(createLostAndFound(originalSource)));
 	}
 }

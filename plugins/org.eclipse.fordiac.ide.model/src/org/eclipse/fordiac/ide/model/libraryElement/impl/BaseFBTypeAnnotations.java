@@ -47,14 +47,14 @@ final class BaseFBTypeAnnotations {
 
 	static EList<Algorithm> getAlgorithm(final BaseFBType fbType) {
 		return new DelegatingEcoreEList.UnmodifiableEList<>((InternalEObject) fbType,
-				LibraryElementPackage.eINSTANCE.getBaseFBType_Algorithm(),
-				fbType.getCallables().stream().filter(Algorithm.class::isInstance).map(Algorithm.class::cast).toList());
+				LibraryElementPackage.eINSTANCE.getBaseFBType_Algorithm(), fbType.getSourceElements().stream()
+						.filter(Algorithm.class::isInstance).map(Algorithm.class::cast).toList());
 	}
 
 	static EList<Method> getMethods(final BaseFBType fbType) {
 		return new DelegatingEcoreEList.UnmodifiableEList<>((InternalEObject) fbType,
 				LibraryElementPackage.eINSTANCE.getBaseFBType_Methods(),
-				fbType.getCallables().stream().filter(Method.class::isInstance).map(Method.class::cast).toList());
+				fbType.getSourceElements().stream().filter(Method.class::isInstance).map(Method.class::cast).toList());
 	}
 
 	static boolean validateInternalFBs(final BaseFBType fbType, final DiagnosticChain diagnostics,

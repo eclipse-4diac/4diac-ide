@@ -520,7 +520,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
 	 * @generated
 	 */
-	int TYPED_CONFIGUREABLE_OBJECT = 113;
+	int TYPED_CONFIGUREABLE_OBJECT = 121;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1845,13 +1845,13 @@ public interface LibraryElementPackage extends EPackage {
 	int BASE_FB_TYPE__METHODS = FB_TYPE_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Callables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Source Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FB_TYPE__CALLABLES = FB_TYPE_FEATURE_COUNT + 5;
+	int BASE_FB_TYPE__SOURCE_ELEMENTS = FB_TYPE_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Base FB Type</em>' class.
@@ -1999,13 +1999,13 @@ public interface LibraryElementPackage extends EPackage {
 	int BASIC_FB_TYPE__METHODS = BASE_FB_TYPE__METHODS;
 
 	/**
-	 * The feature id for the '<em><b>Callables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Source Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_FB_TYPE__CALLABLES = BASE_FB_TYPE__CALLABLES;
+	int BASIC_FB_TYPE__SOURCE_ELEMENTS = BASE_FB_TYPE__SOURCE_ELEMENTS;
 
 	/**
 	 * The feature id for the '<em><b>ECC</b></em>' containment reference.
@@ -2983,7 +2983,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
 	 * @generated
 	 */
-	int VAR_DECLARATION = 118;
+	int VAR_DECLARATION = 126;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3292,7 +3292,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
 	 * @generated
 	 */
-	int STRUCT_MANIPULATOR = 105;
+	int STRUCT_MANIPULATOR = 111;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3920,7 +3920,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
 	 * @generated
 	 */
-	int POSITIONABLE_ELEMENT = 85;
+	int POSITIONABLE_ELEMENT = 87;
 
 	/**
 	 * The feature id for the '<em><b>Position</b></em>' containment reference.
@@ -5266,7 +5266,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceType()
 	 * @generated
 	 */
-	int RESOURCE_TYPE = 89;
+	int RESOURCE_TYPE = 91;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5484,7 +5484,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
 	 * @generated
 	 */
-	int SEGMENT_TYPE = 92;
+	int SEGMENT_TYPE = 94;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5666,7 +5666,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubAppType()
 	 * @generated
 	 */
-	int SUB_APP_TYPE = 107;
+	int SUB_APP_TYPE = 113;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6415,7 +6415,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
 	 * @generated
 	 */
-	int PRIMITIVE = 86;
+	int PRIMITIVE = 88;
 
 	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
@@ -7046,7 +7046,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextAlgorithm()
 	 * @generated
 	 */
-	int TEXT_ALGORITHM = 109;
+	int TEXT_ALGORITHM = 115;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7140,6 +7140,109 @@ public interface LibraryElementPackage extends EPackage {
 	int OTHER_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceElement <em>Source Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceElement
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSourceElement()
+	 * @generated
+	 */
+	int SOURCE_ELEMENT = 104;
+
+	/**
+	 * The number of structural features of the '<em>Source Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_ELEMENT_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceComment <em>Source Comment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceComment
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSourceComment()
+	 * @generated
+	 */
+	int SOURCE_COMMENT = 103;
+
+	/**
+	 * The number of structural features of the '<em>Source Comment</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SOURCE_COMMENT_FEATURE_COUNT = SOURCE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextCommentImpl <em>Text Comment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextCommentImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextComment()
+	 * @generated
+	 */
+	int TEXT_COMMENT = 116;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_COMMENT__TEXT = SOURCE_COMMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Text Comment</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_COMMENT_FEATURE_COUNT = SOURCE_COMMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherCommentImpl <em>Other Comment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherCommentImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherComment()
+	 * @generated
+	 */
+	int OTHER_COMMENT = 82;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_COMMENT__TEXT = TEXT_COMMENT__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Language</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_COMMENT__LANGUAGE = TEXT_COMMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Other Comment</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_COMMENT_FEATURE_COUNT = TEXT_COMMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl <em>Text Method</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7147,7 +7250,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextMethod()
 	 * @generated
 	 */
-	int TEXT_METHOD = 112;
+	int TEXT_METHOD = 119;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7168,13 +7271,22 @@ public interface LibraryElementPackage extends EPackage {
 	int TEXT_METHOD__COMMENT = METHOD__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Input Parameters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__INPUT_PARAMETERS = METHOD_FEATURE_COUNT + 0;
+	int TEXT_METHOD__INPUT_PARAMETERS = METHOD_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Output Parameters</b></em>' containment reference list.
@@ -7183,7 +7295,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__OUTPUT_PARAMETERS = METHOD_FEATURE_COUNT + 1;
+	int TEXT_METHOD__OUTPUT_PARAMETERS = METHOD_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>In Out Parameters</b></em>' containment reference list.
@@ -7192,7 +7304,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__IN_OUT_PARAMETERS = METHOD_FEATURE_COUNT + 2;
+	int TEXT_METHOD__IN_OUT_PARAMETERS = METHOD_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Return Type</b></em>' reference.
@@ -7201,7 +7313,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__RETURN_TYPE = METHOD_FEATURE_COUNT + 3;
+	int TEXT_METHOD__RETURN_TYPE = METHOD_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
@@ -7210,16 +7322,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__VARARGS = METHOD_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 5;
+	int TEXT_METHOD__VARARGS = METHOD_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Text Method</em>' class.
@@ -7238,7 +7341,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherMethod()
 	 * @generated
 	 */
-	int OTHER_METHOD = 82;
+	int OTHER_METHOD = 83;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7257,6 +7360,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int OTHER_METHOD__COMMENT = TEXT_METHOD__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_METHOD__TEXT = TEXT_METHOD__TEXT;
 
 	/**
 	 * The feature id for the '<em><b>Input Parameters</b></em>' containment reference list.
@@ -7304,15 +7416,6 @@ public interface LibraryElementPackage extends EPackage {
 	int OTHER_METHOD__VARARGS = TEXT_METHOD__VARARGS;
 
 	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OTHER_METHOD__TEXT = TEXT_METHOD__TEXT;
-
-	/**
 	 * The feature id for the '<em><b>Language</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7331,6 +7434,71 @@ public interface LibraryElementPackage extends EPackage {
 	int OTHER_METHOD_FEATURE_COUNT = TEXT_METHOD_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextSourceElementImpl <em>Text Source Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextSourceElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextSourceElement()
+	 * @generated
+	 */
+	int TEXT_SOURCE_ELEMENT = 120;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_SOURCE_ELEMENT__TEXT = SOURCE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Text Source Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_SOURCE_ELEMENT_FEATURE_COUNT = SOURCE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherSourceElementImpl <em>Other Source Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherSourceElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherSourceElement()
+	 * @generated
+	 */
+	int OTHER_SOURCE_ELEMENT = 84;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_SOURCE_ELEMENT__TEXT = TEXT_SOURCE_ELEMENT__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Language</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_SOURCE_ELEMENT__LANGUAGE = TEXT_SOURCE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Other Source Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_SOURCE_ELEMENT_FEATURE_COUNT = TEXT_SOURCE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl <em>Output Primitive</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7338,7 +7506,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOutputPrimitive()
 	 * @generated
 	 */
-	int OUTPUT_PRIMITIVE = 83;
+	int OUTPUT_PRIMITIVE = 85;
 
 	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
@@ -7384,7 +7552,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPosition()
 	 * @generated
 	 */
-	int POSITION = 84;
+	int POSITION = 86;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -7421,7 +7589,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 87;
+	int RESOURCE = 89;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7530,7 +7698,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeName()
 	 * @generated
 	 */
-	int RESOURCE_TYPE_NAME = 88;
+	int RESOURCE_TYPE_NAME = 90;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7558,7 +7726,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeFB()
 	 * @generated
 	 */
-	int RESOURCE_TYPE_FB = 90;
+	int RESOURCE_TYPE_FB = 92;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7649,7 +7817,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegment()
 	 * @generated
 	 */
-	int SEGMENT = 91;
+	int SEGMENT = 93;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7758,7 +7926,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 93;
+	int SERVICE = 95;
 
 	/**
 	 * The feature id for the '<em><b>Right Interface</b></em>' containment reference.
@@ -7813,7 +7981,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceSequence()
 	 * @generated
 	 */
-	int SERVICE_SEQUENCE = 94;
+	int SERVICE_SEQUENCE = 96;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7895,7 +8063,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceTransaction()
 	 * @generated
 	 */
-	int SERVICE_TRANSACTION = 95;
+	int SERVICE_TRANSACTION = 97;
 
 	/**
 	 * The feature id for the '<em><b>Input Primitive</b></em>' containment reference.
@@ -7932,7 +8100,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterface()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE = 96;
+	int SERVICE_INTERFACE = 98;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7969,7 +8137,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterfaceFBType()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE_FB_TYPE = 97;
+	int SERVICE_INTERFACE_FB_TYPE = 99;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8069,7 +8237,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleECAction()
 	 * @generated
 	 */
-	int SIMPLE_EC_ACTION = 98;
+	int SIMPLE_EC_ACTION = 100;
 
 	/**
 	 * The feature id for the '<em><b>Output</b></em>' reference.
@@ -8115,7 +8283,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleECState()
 	 * @generated
 	 */
-	int SIMPLE_EC_STATE = 99;
+	int SIMPLE_EC_STATE = 101;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8179,7 +8347,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
 	 * @generated
 	 */
-	int SIMPLE_FB_TYPE = 100;
+	int SIMPLE_FB_TYPE = 102;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8308,13 +8476,13 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE__METHODS = BASE_FB_TYPE__METHODS;
 
 	/**
-	 * The feature id for the '<em><b>Callables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Source Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SIMPLE_FB_TYPE__CALLABLES = BASE_FB_TYPE__CALLABLES;
+	int SIMPLE_FB_TYPE__SOURCE_ELEMENTS = BASE_FB_TYPE__SOURCE_ELEMENTS;
 
 	/**
 	 * The feature id for the '<em><b>Simple EC States</b></em>' containment reference list.
@@ -8342,7 +8510,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTAlgorithm()
 	 * @generated
 	 */
-	int ST_ALGORITHM = 101;
+	int ST_ALGORITHM = 105;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8381,6 +8549,34 @@ public interface LibraryElementPackage extends EPackage {
 	int ST_ALGORITHM_FEATURE_COUNT = TEXT_ALGORITHM_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STCommentImpl <em>ST Comment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STCommentImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTComment()
+	 * @generated
+	 */
+	int ST_COMMENT = 106;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_COMMENT__TEXT = TEXT_COMMENT__TEXT;
+
+	/**
+	 * The number of structural features of the '<em>ST Comment</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_COMMENT_FEATURE_COUNT = TEXT_COMMENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl <em>Text Function</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8388,7 +8584,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextFunction()
 	 * @generated
 	 */
-	int TEXT_FUNCTION = 110;
+	int TEXT_FUNCTION = 117;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8409,13 +8605,22 @@ public interface LibraryElementPackage extends EPackage {
 	int TEXT_FUNCTION__COMMENT = FUNCTION__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_FUNCTION__TEXT = FUNCTION_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Input Parameters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_FUNCTION__INPUT_PARAMETERS = FUNCTION_FEATURE_COUNT + 0;
+	int TEXT_FUNCTION__INPUT_PARAMETERS = FUNCTION_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Output Parameters</b></em>' containment reference list.
@@ -8424,7 +8629,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_FUNCTION__OUTPUT_PARAMETERS = FUNCTION_FEATURE_COUNT + 1;
+	int TEXT_FUNCTION__OUTPUT_PARAMETERS = FUNCTION_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>In Out Parameters</b></em>' containment reference list.
@@ -8433,7 +8638,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_FUNCTION__IN_OUT_PARAMETERS = FUNCTION_FEATURE_COUNT + 2;
+	int TEXT_FUNCTION__IN_OUT_PARAMETERS = FUNCTION_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Return Type</b></em>' reference.
@@ -8442,7 +8647,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_FUNCTION__RETURN_TYPE = FUNCTION_FEATURE_COUNT + 3;
+	int TEXT_FUNCTION__RETURN_TYPE = FUNCTION_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Varargs</b></em>' attribute.
@@ -8451,16 +8656,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_FUNCTION__VARARGS = FUNCTION_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEXT_FUNCTION__TEXT = FUNCTION_FEATURE_COUNT + 5;
+	int TEXT_FUNCTION__VARARGS = FUNCTION_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Text Function</em>' class.
@@ -8479,7 +8675,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTFunction()
 	 * @generated
 	 */
-	int ST_FUNCTION = 102;
+	int ST_FUNCTION = 107;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8498,6 +8694,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ST_FUNCTION__COMMENT = TEXT_FUNCTION__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_FUNCTION__TEXT = TEXT_FUNCTION__TEXT;
 
 	/**
 	 * The feature id for the '<em><b>Input Parameters</b></em>' containment reference list.
@@ -8545,15 +8750,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ST_FUNCTION__VARARGS = TEXT_FUNCTION__VARARGS;
 
 	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_FUNCTION__TEXT = TEXT_FUNCTION__TEXT;
-
-	/**
 	 * The number of structural features of the '<em>ST Function</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8570,7 +8766,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextFunctionBody()
 	 * @generated
 	 */
-	int TEXT_FUNCTION_BODY = 111;
+	int TEXT_FUNCTION_BODY = 118;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -8598,7 +8794,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTFunctionBody()
 	 * @generated
 	 */
-	int ST_FUNCTION_BODY = 103;
+	int ST_FUNCTION_BODY = 108;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -8626,7 +8822,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTMethod()
 	 * @generated
 	 */
-	int ST_METHOD = 104;
+	int ST_METHOD = 109;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8645,6 +8841,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ST_METHOD__COMMENT = TEXT_METHOD__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_METHOD__TEXT = TEXT_METHOD__TEXT;
 
 	/**
 	 * The feature id for the '<em><b>Input Parameters</b></em>' containment reference list.
@@ -8692,15 +8897,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ST_METHOD__VARARGS = TEXT_METHOD__VARARGS;
 
 	/**
-	 * The feature id for the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_METHOD__TEXT = TEXT_METHOD__TEXT;
-
-	/**
 	 * The number of structural features of the '<em>ST Method</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8710,6 +8906,34 @@ public interface LibraryElementPackage extends EPackage {
 	int ST_METHOD_FEATURE_COUNT = TEXT_METHOD_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STSourceElementImpl <em>ST Source Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STSourceElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTSourceElement()
+	 * @generated
+	 */
+	int ST_SOURCE_ELEMENT = 110;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_SOURCE_ELEMENT__TEXT = TEXT_SOURCE_ELEMENT__TEXT;
+
+	/**
+	 * The number of structural features of the '<em>ST Source Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_SOURCE_ELEMENT_FEATURE_COUNT = TEXT_SOURCE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl <em>Sub App</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8717,7 +8941,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubApp()
 	 * @generated
 	 */
-	int SUB_APP = 106;
+	int SUB_APP = 112;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8835,7 +9059,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSystemConfiguration()
 	 * @generated
 	 */
-	int SYSTEM_CONFIGURATION = 108;
+	int SYSTEM_CONFIGURATION = 114;
 
 	/**
 	 * The feature id for the '<em><b>Devices</b></em>' containment reference list.
@@ -8881,7 +9105,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedSubApp()
 	 * @generated
 	 */
-	int TYPED_SUB_APP = 114;
+	int TYPED_SUB_APP = 122;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -9017,7 +9241,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getUntypedSubApp()
 	 * @generated
 	 */
-	int UNTYPED_SUB_APP = 115;
+	int UNTYPED_SUB_APP = 123;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -9144,7 +9368,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 116;
+	int VALUE = 124;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -9172,7 +9396,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarConfigInstance()
 	 * @generated
 	 */
-	int VAR_CONFIG_INSTANCE = 117;
+	int VAR_CONFIG_INSTANCE = 125;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -9281,7 +9505,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
 	 * @generated
 	 */
-	int VERSION_INFO = 119;
+	int VERSION_INFO = 127;
 
 	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute.
@@ -9345,7 +9569,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
 	 * @generated
 	 */
-	int WITH = 120;
+	int WITH = 128;
 
 	/**
 	 * The feature id for the '<em><b>Variables</b></em>' reference.
@@ -9373,7 +9597,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 121;
+	int LANGUAGE = 129;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -9383,7 +9607,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 122;
+	int IFILE = 130;
 
 	/**
 	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
@@ -9393,7 +9617,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
 	 * @generated
 	 */
-	int INTERFACE_ELEMENT_STREAM = 123;
+	int INTERFACE_ELEMENT_STREAM = 131;
 
 	/**
 	 * The meta object id for the '<em>Named Element Stream</em>' data type.
@@ -9403,7 +9627,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getNamedElementStream()
 	 * @generated
 	 */
-	int NAMED_ELEMENT_STREAM = 124;
+	int NAMED_ELEMENT_STREAM = 132;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -9413,7 +9637,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 125;
+	int TYPE_ENTRY = 133;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -9423,7 +9647,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 126;
+	int TYPE_LIBRARY = 134;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -9433,7 +9657,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 127;
+	int VAR_DECL_LIST = 135;
 
 	/**
 	 * The meta object id for the '<em>Interface Type Entry</em>' data type.
@@ -9443,7 +9667,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceTypeEntry()
 	 * @generated
 	 */
-	int INTERFACE_TYPE_ENTRY = 128;
+	int INTERFACE_TYPE_ENTRY = 136;
 
 	/**
 	 * The meta object id for the '<em>Block FBNW Element Stream</em>' data type.
@@ -9453,7 +9677,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBlockFBNWElementStream()
 	 * @generated
 	 */
-	int BLOCK_FBNW_ELEMENT_STREAM = 129;
+	int BLOCK_FBNW_ELEMENT_STREAM = 137;
 
 	/**
 	 * The meta object id for the '<em>String Array</em>' data type.
@@ -9462,7 +9686,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringArray()
 	 * @generated
 	 */
-	int STRING_ARRAY = 130;
+	int STRING_ARRAY = 138;
 
 	/**
 	 * The meta object id for the '<em>String List</em>' data type.
@@ -9472,7 +9696,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringList()
 	 * @generated
 	 */
-	int STRING_LIST = 131;
+	int STRING_LIST = 139;
 
 
 	/**
@@ -9848,15 +10072,15 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBaseFBType_Methods();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getCallables <em>Callables</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getSourceElements <em>Source Elements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Callables</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getCallables()
+	 * @return the meta object for the containment reference list '<em>Source Elements</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getSourceElements()
 	 * @see #getBaseFBType()
 	 * @generated
 	 */
-	EReference getBaseFBType_Callables();
+	EReference getBaseFBType_SourceElements();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.BasicFBType <em>Basic FB Type</em>}'.
@@ -11781,15 +12005,14 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getOtherAlgorithm();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage <em>Language</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherComment <em>Other Comment</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Language</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm#getLanguage()
-	 * @see #getOtherAlgorithm()
+	 * @return the meta object for class '<em>Other Comment</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherComment
 	 * @generated
 	 */
-	EAttribute getOtherAlgorithm_Language();
+	EClass getOtherComment();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod <em>Other Method</em>}'.
@@ -11802,15 +12025,25 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getOtherMethod();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod#getLanguage <em>Language</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement <em>Other Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Other Source Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement
+	 * @generated
+	 */
+	EClass getOtherSourceElement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement#getLanguage <em>Language</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Language</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherMethod#getLanguage()
-	 * @see #getOtherMethod()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement#getLanguage()
+	 * @see #getOtherSourceElement()
 	 * @generated
 	 */
-	EAttribute getOtherMethod_Language();
+	EAttribute getOtherSourceElement_Language();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive <em>Output Primitive</em>}'.
@@ -12367,6 +12600,26 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSimpleFBType_SimpleECStates();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceComment <em>Source Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Source Comment</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceComment
+	 * @generated
+	 */
+	EClass getSourceComment();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceElement <em>Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Source Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceElement
+	 * @generated
+	 */
+	EClass getSourceElement();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm <em>ST Algorithm</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12375,6 +12628,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSTAlgorithm();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.STComment <em>ST Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Comment</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.STComment
+	 * @generated
+	 */
+	EClass getSTComment();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.STFunction <em>ST Function</em>}'.
@@ -12405,6 +12668,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSTMethod();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.STSourceElement <em>ST Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Source Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.STSourceElement
+	 * @generated
+	 */
+	EClass getSTSourceElement();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator <em>Struct Manipulator</em>}'.
@@ -12523,15 +12796,14 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getTextAlgorithm();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm#getText <em>Text</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextComment <em>Text Comment</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Text</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm#getText()
-	 * @see #getTextAlgorithm()
+	 * @return the meta object for class '<em>Text Comment</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextComment
 	 * @generated
 	 */
-	EAttribute getTextAlgorithm_Text();
+	EClass getTextComment();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction <em>Text Function</em>}'.
@@ -12599,17 +12871,6 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getTextFunction_Varargs();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction#getText <em>Text</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Text</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextFunction#getText()
-	 * @see #getTextFunction()
-	 * @generated
-	 */
-	EAttribute getTextFunction_Text();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody <em>Text Function Body</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12618,17 +12879,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getTextFunctionBody();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody#getText <em>Text</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Text</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody#getText()
-	 * @see #getTextFunctionBody()
-	 * @generated
-	 */
-	EAttribute getTextFunctionBody_Text();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod <em>Text Method</em>}'.
@@ -12696,15 +12946,25 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getTextMethod_Varargs();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText <em>Text</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement <em>Text Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Text Source Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement
+	 * @generated
+	 */
+	EClass getTextSourceElement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement#getText <em>Text</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Text</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText()
-	 * @see #getTextMethod()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement#getText()
+	 * @see #getTextSourceElement()
 	 * @generated
 	 */
-	EAttribute getTextMethod_Text();
+	EAttribute getTextSourceElement_Text();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject <em>Typed Configureable Object</em>}'.
@@ -13388,12 +13648,12 @@ public interface LibraryElementPackage extends EPackage {
 		EReference BASE_FB_TYPE__METHODS = eINSTANCE.getBaseFBType_Methods();
 
 		/**
-		 * The meta object literal for the '<em><b>Callables</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Source Elements</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BASE_FB_TYPE__CALLABLES = eINSTANCE.getBaseFBType_Callables();
+		EReference BASE_FB_TYPE__SOURCE_ELEMENTS = eINSTANCE.getBaseFBType_SourceElements();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
@@ -14982,12 +15242,14 @@ public interface LibraryElementPackage extends EPackage {
 		EClass OTHER_ALGORITHM = eINSTANCE.getOtherAlgorithm();
 
 		/**
-		 * The meta object literal for the '<em><b>Language</b></em>' attribute feature.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherCommentImpl <em>Other Comment</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherCommentImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherComment()
 		 * @generated
 		 */
-		EAttribute OTHER_ALGORITHM__LANGUAGE = eINSTANCE.getOtherAlgorithm_Language();
+		EClass OTHER_COMMENT = eINSTANCE.getOtherComment();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherMethodImpl <em>Other Method</em>}' class.
@@ -15000,12 +15262,22 @@ public interface LibraryElementPackage extends EPackage {
 		EClass OTHER_METHOD = eINSTANCE.getOtherMethod();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherSourceElementImpl <em>Other Source Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.OtherSourceElementImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherSourceElement()
+		 * @generated
+		 */
+		EClass OTHER_SOURCE_ELEMENT = eINSTANCE.getOtherSourceElement();
+
+		/**
 		 * The meta object literal for the '<em><b>Language</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute OTHER_METHOD__LANGUAGE = eINSTANCE.getOtherMethod_Language();
+		EAttribute OTHER_SOURCE_ELEMENT__LANGUAGE = eINSTANCE.getOtherSourceElement_Language();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OutputPrimitiveImpl <em>Output Primitive</em>}' class.
@@ -15460,6 +15732,26 @@ public interface LibraryElementPackage extends EPackage {
 		EReference SIMPLE_FB_TYPE__SIMPLE_EC_STATES = eINSTANCE.getSimpleFBType_SimpleECStates();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceComment <em>Source Comment</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceComment
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSourceComment()
+		 * @generated
+		 */
+		EClass SOURCE_COMMENT = eINSTANCE.getSourceComment();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceElement <em>Source Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceElement
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSourceElement()
+		 * @generated
+		 */
+		EClass SOURCE_ELEMENT = eINSTANCE.getSourceElement();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STAlgorithmImpl <em>ST Algorithm</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -15468,6 +15760,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_ALGORITHM = eINSTANCE.getSTAlgorithm();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STCommentImpl <em>ST Comment</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STCommentImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTComment()
+		 * @generated
+		 */
+		EClass ST_COMMENT = eINSTANCE.getSTComment();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STFunctionImpl <em>ST Function</em>}' class.
@@ -15498,6 +15800,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_METHOD = eINSTANCE.getSTMethod();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.STSourceElementImpl <em>ST Source Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.STSourceElementImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTSourceElement()
+		 * @generated
+		 */
+		EClass ST_SOURCE_ELEMENT = eINSTANCE.getSTSourceElement();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.StructManipulatorImpl <em>Struct Manipulator</em>}' class.
@@ -15598,12 +15910,14 @@ public interface LibraryElementPackage extends EPackage {
 		EClass TEXT_ALGORITHM = eINSTANCE.getTextAlgorithm();
 
 		/**
-		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextCommentImpl <em>Text Comment</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextCommentImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextComment()
 		 * @generated
 		 */
-		EAttribute TEXT_ALGORITHM__TEXT = eINSTANCE.getTextAlgorithm_Text();
+		EClass TEXT_COMMENT = eINSTANCE.getTextComment();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionImpl <em>Text Function</em>}' class.
@@ -15656,14 +15970,6 @@ public interface LibraryElementPackage extends EPackage {
 		EAttribute TEXT_FUNCTION__VARARGS = eINSTANCE.getTextFunction_Varargs();
 
 		/**
-		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TEXT_FUNCTION__TEXT = eINSTANCE.getTextFunction_Text();
-
-		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextFunctionBodyImpl <em>Text Function Body</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -15672,14 +15978,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass TEXT_FUNCTION_BODY = eINSTANCE.getTextFunctionBody();
-
-		/**
-		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TEXT_FUNCTION_BODY__TEXT = eINSTANCE.getTextFunctionBody_Text();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl <em>Text Method</em>}' class.
@@ -15732,12 +16030,22 @@ public interface LibraryElementPackage extends EPackage {
 		EAttribute TEXT_METHOD__VARARGS = eINSTANCE.getTextMethod_Varargs();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextSourceElementImpl <em>Text Source Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.TextSourceElementImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextSourceElement()
+		 * @generated
+		 */
+		EClass TEXT_SOURCE_ELEMENT = eINSTANCE.getTextSourceElement();
+
+		/**
 		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TEXT_METHOD__TEXT = eINSTANCE.getTextMethod_Text();
+		EAttribute TEXT_SOURCE_ELEMENT__TEXT = eINSTANCE.getTextSourceElement_Text();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl <em>Typed Configureable Object</em>}' class.

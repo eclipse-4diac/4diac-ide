@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -72,7 +72,7 @@ class STAlgorithmPartitionerTest {
 				// content
 				END_ALGORITHM
 				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", "// content"));
+		fbType.getSourceElements().add(createSTAlgorithm("REQ", "// content"));
 		assertEquals(text, partitioner.combine(fbType));
 	}
 
@@ -89,7 +89,7 @@ class STAlgorithmPartitionerTest {
 				OUT := "ALGORITHM";
 				END_ALGORITHM
 				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", algorithm));
+		fbType.getSourceElements().add(createSTAlgorithm("REQ", algorithm));
 		assertEquals(text, partitioner.combine(fbType));
 	}
 
@@ -100,7 +100,7 @@ class STAlgorithmPartitionerTest {
 				ALGORITHM REQ
 				END_ALGORITHM
 				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", text));
+		fbType.getSourceElements().add(createSTAlgorithm("REQ", text));
 		assertEquals(text, partitioner.combine(fbType));
 	}
 
@@ -111,12 +111,12 @@ class STAlgorithmPartitionerTest {
 				ALGORITHM REQ
 				END_ALGORITHM
 				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", ""));
+		fbType.getSourceElements().add(createSTAlgorithm("REQ", ""));
 		final String method = """
 				METHOD TEST
 				END_METHOD
 				""";
-		fbType.getCallables().add(createSTMethod("TEST", ""));
+		fbType.getSourceElements().add(createSTMethod("TEST", ""));
 		assertEquals(algorithm + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
 	}
 
@@ -127,12 +127,12 @@ class STAlgorithmPartitionerTest {
 				ALGORITHM REQ
 				END_ALGORITHM
 				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", algorithm));
+		fbType.getSourceElements().add(createSTAlgorithm("REQ", algorithm));
 		final String method = """
 				METHOD TEST
 				END_METHOD
 				""";
-		fbType.getCallables().add(createSTMethod("TEST", method));
+		fbType.getSourceElements().add(createSTMethod("TEST", method));
 		assertEquals(algorithm + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
 	}
 
@@ -207,14 +207,6 @@ class STAlgorithmPartitionerTest {
 
 	private static void assertCallablesEquals(final List<String> expected, final STAlgorithmPartition actual) {
 		assertIterableEquals(expected.stream().map(String::trim).toList(),
-				actual.getCallables().stream().map(STAlgorithmPartitionerTest::getText).map(String::trim).toList());
-	}
-
-	protected static String getText(final ICallable callable) {
-		return switch (callable) {
-		case final STAlgorithm algorithm -> algorithm.getText();
-		case final STMethod method -> method.getText();
-		default -> "";
-		};
+				actual.getSourceElements().stream().map(STSourceElement::getText).map(String::trim).toList());
 	}
 }

@@ -646,6 +646,11 @@ public class ServiceSequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createOtherComment()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 LibraryElementFactory.eINSTANCE.createOtherMethod()));
 
 		newChildDescriptors.add
@@ -722,6 +727,11 @@ public class ServiceSequenceItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
 				 LibraryElementFactory.eINSTANCE.createSTAlgorithm()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.SERVICE_SEQUENCE__EVENT_MANAGER,
+				 LibraryElementFactory.eINSTANCE.createSTComment()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -19,6 +19,7 @@
  *  Martin Melik Merkumians - added import of internal FBs
  *  Martin Jobst - refactor marker handling
  *  Alois Zoitl  - updated for new adapter FB handling
+ *  Martin Erich Jobst - rework source element import
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -54,15 +55,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceComment;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -261,13 +261,19 @@ public class FBTImporter extends BlockTypeImporter {
 		case LibraryElementTags.ALGORITHM_ELEMENT:
 			final Algorithm alg = parseAlgorithm();
 			if (alg != null) {
-				type.getCallables().add(alg);
+				type.getSourceElements().add(alg);
 			}
 			break;
 		case LibraryElementTags.METHOD_ELEMENT:
 			final Method method = parseMethod();
 			if (method != null) {
-				type.getCallables().add(method);
+				type.getSourceElements().add(method);
+			}
+			break;
+		case LibraryElementTags.COMMENT_ELEMENT:
+			final SourceComment comment = parseComment();
+			if (comment != null) {
+				type.getSourceElements().add(comment);
 			}
 			break;
 		case LibraryElementTags.ATTRIBUTE_ELEMENT:
@@ -294,21 +300,15 @@ public class FBTImporter extends BlockTypeImporter {
 		while (getReader().hasNext()) {
 			final int event = getReader().next();
 			if (XMLStreamConstants.START_ELEMENT == event) {
-
 				switch (getReader().getLocalName()) {
 				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT ->
 					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!"); //$NON-NLS-1$
-				case LibraryElementTags.ST_ELEMENT -> {
-					retVal = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
-					parseST((STAlgorithm) retVal);
-				}
-				case LibraryElementTags.OTHER_ELEMENT -> {
-					retVal = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
-					parseOtherAlg((OtherAlgorithm) retVal);
-				}
+				case LibraryElementTags.ST_ELEMENT ->
+					retVal = parseSTSourceElement(LibraryElementFactory.eINSTANCE.createSTAlgorithm());
+				case LibraryElementTags.OTHER_ELEMENT ->
+					retVal = parseOtherSourceElement(LibraryElementFactory.eINSTANCE.createOtherAlgorithm());
 				default -> throw unknownXMLChildException();
 				}
-
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
 				if (!getReader().getLocalName().equals(LibraryElementTags.ALGORITHM_ELEMENT)) {
 					throw new XMLStreamException("Unexpected xml end tag found in " //$NON-NLS-1$
@@ -324,47 +324,6 @@ public class FBTImporter extends BlockTypeImporter {
 			retVal.setComment(comment);
 		}
 		return retVal;
-	}
-
-	/**
-	 * Parses the other alg.
-	 *
-	 * @param alg the other
-	 *
-	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
-	private void parseOtherAlg(final OtherAlgorithm alg) throws TypeImportException, XMLStreamException {
-		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
-		if (language == null) {
-			throw new TypeImportException(Messages.FBTImporter_OTHER_ALG_MISSING_LANG_EXCEPTION);
-		}
-		alg.setLanguage(language);
-
-		parseAlgorithmText(alg);
-		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
-	}
-
-	/**
-	 * This method parses a STAlgorithm.
-	 *
-	 * @param st - the STAlgorithm being parsed
-	 *
-	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
-	private void parseST(final STAlgorithm st) throws XMLStreamException {
-		parseAlgorithmText(st);
-		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
-	}
-
-	private void parseAlgorithmText(final TextAlgorithm alg) throws XMLStreamException {
-		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
-		if (text != null) {
-			alg.setText(text);
-		} else {
-			alg.setText(readCDataSection());
-		}
 	}
 
 	/**
@@ -387,17 +346,14 @@ public class FBTImporter extends BlockTypeImporter {
 		while (getReader().hasNext()) {
 			final int event = getReader().next();
 			if (XMLStreamConstants.START_ELEMENT == event) {
-
 				switch (getReader().getLocalName()) {
 				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT:
 					throw new TypeImportException("Method: Unsupported type (only ST and Other possible)!"); //$NON-NLS-1$
 				case LibraryElementTags.ST_ELEMENT:
-					retVal = LibraryElementFactory.eINSTANCE.createSTMethod();
-					parseSTMethod((STMethod) retVal);
+					retVal = parseSTSourceElement(LibraryElementFactory.eINSTANCE.createSTMethod());
 					break;
 				case LibraryElementTags.OTHER_ELEMENT:
-					retVal = LibraryElementFactory.eINSTANCE.createOtherMethod();
-					parseOtherMethod((OtherMethod) retVal);
+					retVal = parseOtherSourceElement(LibraryElementFactory.eINSTANCE.createOtherMethod());
 					break;
 				case LibraryElementTags.INPUT_VARS_ELEMENT:
 					if (retVal == null) {
@@ -428,7 +384,6 @@ public class FBTImporter extends BlockTypeImporter {
 				default:
 					throw unknownXMLChildException();
 				}
-
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
 				if (!getReader().getLocalName().equals(LibraryElementTags.METHOD_ELEMENT)) {
 					throw new XMLStreamException("Unexpected xml end tag found in " //$NON-NLS-1$
@@ -462,48 +417,61 @@ public class FBTImporter extends BlockTypeImporter {
 		});
 	}
 
+	private SourceComment parseComment() throws TypeImportException, XMLStreamException {
+		SourceComment retVal = null;
+		while (getReader().hasNext()) {
+			final int event = getReader().next();
+			if (XMLStreamConstants.START_ELEMENT == event) {
+				switch (getReader().getLocalName()) {
+				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT ->
+					throw new TypeImportException("Comment: Unsupported Commenttype (only ST and Other possible)!"); //$NON-NLS-1$
+				case LibraryElementTags.ST_ELEMENT ->
+					retVal = parseSTSourceElement(LibraryElementFactory.eINSTANCE.createSTComment());
+				case LibraryElementTags.OTHER_ELEMENT ->
+					retVal = parseOtherSourceElement(LibraryElementFactory.eINSTANCE.createOtherComment());
+				default -> throw unknownXMLChildException();
+				}
+			} else if (XMLStreamConstants.END_ELEMENT == event) {
+				if (!getReader().getLocalName().equals(LibraryElementTags.COMMENT_ELEMENT)) {
+					throw new XMLStreamException("Unexpected xml end tag found in " //$NON-NLS-1$
+							+ LibraryElementTags.COMMENT_ELEMENT + ": " + getReader().getLocalName()); //$NON-NLS-1$
+				}
+				// we came to the end
+				break;
+			}
+		}
+		return retVal;
+	}
+
 	protected XMLStreamException unknownXMLChildException() {
 		return new XMLStreamException("Unexpected xml child (" + getReader().getLocalName() + ") found!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/**
-	 * Parses the other method.
-	 *
-	 * @param method the other
-	 *
-	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
-	private void parseOtherMethod(final OtherMethod method) throws TypeImportException, XMLStreamException {
+	private <T extends OtherSourceElement> T parseOtherSourceElement(final T element)
+			throws TypeImportException, XMLStreamException {
 		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
 		if (language == null) {
 			throw new TypeImportException(Messages.FBTImporter_OTHER_METHOD_MISSING_LANG_EXCEPTION);
 		}
-		method.setLanguage(language);
+		element.setLanguage(language);
 
-		parseMethodText(method);
+		parseText(element);
 		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
+		return element;
 	}
 
-	/**
-	 * This method parses a STMethod.
-	 *
-	 * @param st - the STMethod being parsed
-	 *
-	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
-	private void parseSTMethod(final STMethod method) throws XMLStreamException {
-		parseMethodText(method);
+	private <T extends STSourceElement> T parseSTSourceElement(final T element) throws XMLStreamException {
+		parseText(element);
 		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
+		return element;
 	}
 
-	private void parseMethodText(final TextMethod method) throws XMLStreamException {
+	private void parseText(final TextSourceElement element) throws XMLStreamException {
 		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
 		if (text != null) {
-			method.setText(text);
+			element.setText(text);
 		} else {
-			method.setText(readCDataSection());
+			element.setText(readCDataSection());
 		}
 	}
 

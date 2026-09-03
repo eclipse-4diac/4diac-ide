@@ -127,7 +127,7 @@ public class TestEccGenerator {
 		sb.append("\n"); //$NON-NLS-1$
 		sb.append(algText);
 		alg.setText(sb.toString());
-		fb.getCallables().add(alg);
+		fb.getSourceElements().add(alg);
 		return alg;
 
 	}
@@ -145,7 +145,7 @@ public class TestEccGenerator {
 		sb.append(algText);
 		sb.append("\n***END_ALGORITHM*** \n\n"); //$NON-NLS-1$
 		alg.setText(sb.toString());
-		fb.getCallables().add(alg);
+		fb.getSourceElements().add(alg);
 		return alg;
 
 	}

@@ -411,8 +411,16 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createOtherAlgorithmAdapter();
 			}
 			@Override
+			public Adapter caseOtherComment(OtherComment object) {
+				return createOtherCommentAdapter();
+			}
+			@Override
 			public Adapter caseOtherMethod(OtherMethod object) {
 				return createOtherMethodAdapter();
+			}
+			@Override
+			public Adapter caseOtherSourceElement(OtherSourceElement object) {
+				return createOtherSourceElementAdapter();
 			}
 			@Override
 			public Adapter caseOutputPrimitive(OutputPrimitive object) {
@@ -487,8 +495,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createSimpleFBTypeAdapter();
 			}
 			@Override
+			public Adapter caseSourceComment(SourceComment object) {
+				return createSourceCommentAdapter();
+			}
+			@Override
+			public Adapter caseSourceElement(SourceElement object) {
+				return createSourceElementAdapter();
+			}
+			@Override
 			public Adapter caseSTAlgorithm(STAlgorithm object) {
 				return createSTAlgorithmAdapter();
+			}
+			@Override
+			public Adapter caseSTComment(STComment object) {
+				return createSTCommentAdapter();
 			}
 			@Override
 			public Adapter caseSTFunction(STFunction object) {
@@ -501,6 +521,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSTMethod(STMethod object) {
 				return createSTMethodAdapter();
+			}
+			@Override
+			public Adapter caseSTSourceElement(STSourceElement object) {
+				return createSTSourceElementAdapter();
 			}
 			@Override
 			public Adapter caseStructManipulator(StructManipulator object) {
@@ -523,6 +547,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createTextAlgorithmAdapter();
 			}
 			@Override
+			public Adapter caseTextComment(TextComment object) {
+				return createTextCommentAdapter();
+			}
+			@Override
 			public Adapter caseTextFunction(TextFunction object) {
 				return createTextFunctionAdapter();
 			}
@@ -533,6 +561,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseTextMethod(TextMethod object) {
 				return createTextMethodAdapter();
+			}
+			@Override
+			public Adapter caseTextSourceElement(TextSourceElement object) {
+				return createTextSourceElementAdapter();
 			}
 			@Override
 			public Adapter caseTypedConfigureableObject(TypedConfigureableObject object) {
@@ -1739,6 +1771,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherComment <em>Other Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherComment
+	 * @generated
+	 */
+	public Adapter createOtherCommentAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherMethod <em>Other Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -1749,6 +1795,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOtherMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement <em>Other Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.OtherSourceElement
+	 * @generated
+	 */
+	public Adapter createOtherSourceElementAdapter() {
 		return null;
 	}
 
@@ -2005,6 +2065,34 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceComment <em>Source Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceComment
+	 * @generated
+	 */
+	public Adapter createSourceCommentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.SourceElement <em>Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SourceElement
+	 * @generated
+	 */
+	public Adapter createSourceElementAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm <em>ST Algorithm</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -2015,6 +2103,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTAlgorithmAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.STComment <em>ST Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.STComment
+	 * @generated
+	 */
+	public Adapter createSTCommentAdapter() {
 		return null;
 	}
 
@@ -2057,6 +2159,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.STSourceElement <em>ST Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.STSourceElement
+	 * @generated
+	 */
+	public Adapter createSTSourceElementAdapter() {
 		return null;
 	}
 
@@ -2131,6 +2247,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextComment <em>Text Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextComment
+	 * @generated
+	 */
+	public Adapter createTextCommentAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextFunction <em>Text Function</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -2169,6 +2299,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTextMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement <em>Text Source Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextSourceElement
+	 * @generated
+	 */
+	public Adapter createTextSourceElementAdapter() {
 		return null;
 	}
 

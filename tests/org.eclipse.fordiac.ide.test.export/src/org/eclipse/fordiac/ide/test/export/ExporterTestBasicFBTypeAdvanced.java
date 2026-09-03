@@ -39,7 +39,7 @@ public class ExporterTestBasicFBTypeAdvanced extends ExporterTestBasicFBTypeBase
 		action.setAlgorithm(algorithm.getName());
 		state.getECAction().add(action);
 		functionBlock.getECC().getECState().add(state);
-		functionBlock.getCallables().add(algorithm);
+		functionBlock.getSourceElements().add(algorithm);
 
 		final ECTransition fwdTransition = LibraryElementFactory.eINSTANCE.createECTransition();
 		fwdTransition.setSource(startState);
