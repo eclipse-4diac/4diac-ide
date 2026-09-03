@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.util.function.UnaryOperator;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.export.Messages;
@@ -91,8 +92,9 @@ public class RenameSourceDirectoryParticipant extends RenameParticipant {
 	 * therefore source directories moved into them can no longer be preserved.
 	 */
 	private boolean isGeneratedDirectory(final IPath newPath) {
-		return AdditionalSourceDirectories
-				.isGeneratedDirectory(AdditionalSourceDirectories.getOutputDirectory(folder.getProject()), newPath);
+		final IProject project = folder.getProject();
+		return AdditionalSourceDirectories.isGeneratedDirectory(project,
+				AdditionalSourceDirectories.getOutputDirectory(project), newPath);
 	}
 
 	private static boolean containsOutputDirectory(final IFolder folder) {

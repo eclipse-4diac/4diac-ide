@@ -37,4 +37,7 @@ public final class PreferenceConstants {
 
 	public static final String DEFAULT_OUTPUT_FOLDER_NAME = "out"; //$NON-NLS-1$
 
+	/** The id of the export filter generating the FORTE NG build files. */
+	public static final String FORTE_NG_FILTER_ID = "org.eclipse.fordiac.ide.export.exportFilter.forteNg"; //$NON-NLS-1$
+
 }

@@ -38,6 +38,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringButtonFieldEditor;
@@ -67,6 +68,8 @@ public class TypeExportPropertyPage extends PropertyPage {
 	private Composite outputDirectoryEditorContainer;
 	private Composite exporterEditorContainer;
 
+	private String exportFilterId = ""; //$NON-NLS-1$
+
 	@Override
 	protected Control createContents(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
@@ -92,6 +95,18 @@ public class TypeExportPropertyPage extends PropertyPage {
 		exporterEditor = new ComboFieldEditor(PreferenceConstants.EXPORT_FILTER_ID, Messages.TypeExport_Exporter,
 				getExportFilterNames(), exporterEditorContainer);
 		exporterEditor.setPreferenceStore(getPreferenceStore());
+		exporterEditor.setPropertyChangeListener(event -> {
+			if (FieldEditor.VALUE.equals(event.getProperty())
+					&& event.getNewValue() instanceof final String newExportFilterId) {
+				setExportFilterId(newExportFilterId);
+			}
+		});
+	}
+
+	private void setExportFilterId(final String exportFilterId) {
+		this.exportFilterId = exportFilterId;
+		additionalSourceDirectoriesSection.setExportFilterId(exportFilterId);
+		validatePage();
 	}
 
 	private void createEnableCheckbox(final Composite parent) {
@@ -110,6 +125,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 		outputDirectoryEditor.loadDefault();
 		enableExportEditor.loadDefault();
 		exporterEditor.loadDefault();
+		setExportFilterId(getPreferenceStore().getDefaultString(PreferenceConstants.EXPORT_FILTER_ID));
 		additionalSourceDirectoriesSection.setDirectories(List.of());
 		updateAdditionalSourceDirectoryOutput();
 		setSettingsEnabled(enableExportEditor.getBooleanValue());
@@ -198,6 +214,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 		enableExportEditor.load();
 		outputDirectoryEditor.load();
 		exporterEditor.load();
+		setExportFilterId(getPreferenceStore().getString(PreferenceConstants.EXPORT_FILTER_ID));
 		additionalSourceDirectoriesSection.setDirectories(AdditionalSourceDirectories
 				.parsePaths(getPreferenceStore().getString(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES)));
 		updateAdditionalSourceDirectoryOutput();
@@ -223,8 +240,8 @@ public class TypeExportPropertyPage extends PropertyPage {
 	}
 
 	private boolean isValidOutputDirectory(final String outputDirectory) {
-		return ExportFilterUtil.validateExportPath(outputDirectory, getProject())
-				&& AdditionalSourceDirectories.validatePaths(getProject(), new Path(outputDirectory), List.of(), false);
+		return ExportFilterUtil.validateExportPath(outputDirectory, getProject()) && AdditionalSourceDirectories
+				.validatePaths(getProject(), exportFilterId, new Path(outputDirectory), List.of(), false);
 	}
 
 	private boolean validatePage() {
@@ -238,7 +255,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 			setValid(false);
 			return false;
 		}
-		if (!AdditionalSourceDirectories.validatePaths(getProject(),
+		if (!AdditionalSourceDirectories.validatePaths(getProject(), exportFilterId,
 				new Path(outputDirectoryEditor.getStringValue().trim()),
 				additionalSourceDirectoriesSection.getDirectories(), true)) {
 			setErrorMessage(Messages.TypeExport_InvalidSourceDirectories);

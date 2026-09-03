@@ -60,7 +60,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 public class ExportBuilder extends IncrementalProjectBuilder {
 
 	public static final String BUILDER_ID = "org.eclipse.fordiac.ide.export.builder"; //$NON-NLS-1$
-	private static final String FORTE_NG_FILTER_ID = "org.eclipse.fordiac.ide.export.exportFilter.forteNg"; //$NON-NLS-1$
 
 	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "eclipse4diac::core::GenericClassName"; //$NON-NLS-1$
 
@@ -288,7 +287,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			throw new OperationCanceledException();
 		}
 
-		if (FORTE_NG_FILTER_ID.equals(context.exportFilterId)) {
+		if (PreferenceConstants.FORTE_NG_FILTER_ID.equals(context.exportFilterId)) {
 			final IPath location = getProject().getLocation().append(context.outputDirectory);
 			final CMakeListsMarker marker = new CMakeListsMarker(getProject(), location.toPath(),
 					getAdditionalCMakeSubdirectories(context));
