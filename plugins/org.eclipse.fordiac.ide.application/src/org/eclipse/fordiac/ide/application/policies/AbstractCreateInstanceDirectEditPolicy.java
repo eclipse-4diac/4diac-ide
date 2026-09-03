@@ -34,9 +34,34 @@ public abstract class AbstractCreateInstanceDirectEditPolicy extends DirectEditP
 		final Object value = request.getCellEditor().getValue();
 		final Point refPoint = getInsertionPoint(request);
 		if (value instanceof final TypeEntry typeEntry) {
-			return getElementCreateCommand(typeEntry, refPoint);
+			final Command createCommand = getElementCreateCommand(typeEntry, refPoint);
+			return createCommand == null ? null : createCommand.chain(recordUsageCommand(typeEntry));
 		}
 		return null;
+	}
+
+	/**
+	 * Feeds the per-project MRU history (the popup's "Recent" section) and the
+	 * per-project usage counts (the usage-ranked part of "Frequent"). It only runs
+	 * when the creation actually executes (a rejected creation never records), and
+	 * avoids double-counting on redo.
+	 */
+	private Command recordUsageCommand(final TypeEntry typeEntry) {
+		final TypeLibrary typeLibrary = getTypeLibrary();
+		return new Command() {
+			@Override
+			public void execute() {
+				if (typeLibrary != null && typeLibrary.getProject() != null) {
+					typeLibrary.getMostRecentlyUsedTracker().recordUsage(typeEntry);
+					typeLibrary.getTypeUsageTracker().recordUsage(typeEntry);
+				}
+			}
+
+			@Override
+			public void redo() {
+				// record only on the first execution, not on redo
+			}
+		};
 	}
 
 	protected abstract Command getElementCreateCommand(TypeEntry value, Point refPoint);
