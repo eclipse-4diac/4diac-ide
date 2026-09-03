@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.cmake;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -26,7 +27,7 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 
 public class ProjectCMakeListsTemplate extends CMakeListsTemplate {
 
-	private static final List<String> SUBDIRS = List.of("include", "src"); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final List<String> SUBDIRS = AdditionalSourceDirectories.getGeneratedDirectories();
 	private static final String CMAKE_LISTS_FILE = "CMakeLists.txt"; //$NON-NLS-1$
 
 	private final List<Path> additionalSubdirectories;
@@ -71,18 +72,22 @@ public class ProjectCMakeListsTemplate extends CMakeListsTemplate {
 		return builder;
 	}
 
+	/**
+	 * Returns the subdirectories to be added to the project build file.
+	 *
+	 * Additional source directories inside a generated directory are rejected by
+	 * {@link AdditionalSourceDirectories#validatePaths} because their build files
+	 * would be overwritten by the export. They are skipped here as well to keep the
+	 * generated build file consistent with a stale configuration.
+	 */
 	private List<String> getProjectSubdirectories() {
 		final List<Path> candidates = additionalSubdirectories.stream().map(Path::normalize)
 				.filter(AdditionalSourceDirectories::isValidRelativeDirectory)
-				.filter(directory -> !isGeneratedSubdirectory(directory))
+				.filter(Predicate.not(AdditionalSourceDirectories::isGeneratedDirectory))
 				.filter(directory -> Files.isRegularFile(getOutput().resolve(directory).resolve(CMAKE_LISTS_FILE)))
 				.distinct().sorted().toList();
 		return Stream.concat(SUBDIRS.stream(),
 				candidates.stream().map(ProjectCMakeListsTemplate::toCMakePath)).toList();
-	}
-
-	private static boolean isGeneratedSubdirectory(final Path directory) {
-		return SUBDIRS.stream().map(Path::of).anyMatch(directory::startsWith);
 	}
 
 	/**

@@ -46,6 +46,8 @@ public final class Messages extends NLS {
 
 	public static String Refactoring_DeleteSourceDirectoryParticipant;
 
+	public static String Refactoring_GeneratedSourceDirectoryName;
+
 	public static String Refactoring_InvalidSourceDirectoryName;
 
 	public static String Refactoring_RenameSourceDirectoryParticipant;
