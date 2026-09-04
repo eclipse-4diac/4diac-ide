@@ -58,7 +58,6 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class StructRenameSystemCascadeTest {
@@ -164,8 +163,6 @@ class StructRenameSystemCascadeTest {
 	}
 
 	@Test
-	@Disabled("Custom attributes on expanded struct member pins are lost when the member is renamed, re-enable " //$NON-NLS-1$
-			+ "when https://github.com/eclipse-4diac/4diac-ide/issues/2646 is fixed")
 	void renameStructMember_preservesCustomPinAttribute() throws Exception {
 		assertEquals(CUSTOM_ATTRIBUTE_VALUE, producerOutMemberAttribute(MEMBER));
 

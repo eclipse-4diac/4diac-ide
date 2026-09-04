@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="NestedStructRenameTest" Comment="">
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-07-21">
+	</VersionInfo>
+	<Application Name="App" Comment="">
+		<SubAppNetwork>
+			<FB Name="Producer" Type="RootProducer" Comment="" x="500.0" y="500.0">
+				<Parameter Name="OUT.middle.leaf.A" Value="">
+					<Attribute Name="Visible" Value="true"/>
+					<Attribute Name="TestAttribute" Type="STRING" Value="42"/>
+				</Parameter>
+			</FB>
+			<FB Name="Consumer" Type="RootConsumer" Comment="" x="2500.0" y="500.0">
+				<Parameter Name="DI.middle.leaf.A" Value="">
+					<Attribute Name="Visible" Value="true"/>
+				</Parameter>
+			</FB>
+			<EventConnections>
+				<Connection Source="Producer.CNF" Destination="Consumer.REQ" Comment=""/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="Producer.OUT.middle.leaf.A" Destination="Consumer.DI.middle.leaf.A" Comment=""/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+</System>
