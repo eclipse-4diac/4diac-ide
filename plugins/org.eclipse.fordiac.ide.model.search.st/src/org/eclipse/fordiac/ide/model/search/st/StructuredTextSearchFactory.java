@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,15 +9,18 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Franz Höpfinger - register VarDeclaration subtypes for search support
  */
 package org.eclipse.fordiac.ide.model.search.st;
 
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.search.ISearchSupport;
@@ -57,6 +60,8 @@ public class StructuredTextSearchFactory implements ISearchFactory {
 		ISearchFactory.Registry.INSTANCE.registerFactory(STMethod.class, factory);
 		ISearchFactory.Registry.INSTANCE.registerFactory(STFunctionBody.class, factory);
 		ISearchFactory.Registry.INSTANCE.registerFactory(VarDeclaration.class, factory);
+		ISearchFactory.Registry.INSTANCE.registerFactory(ContainerVarDeclaration.class, factory);
+		ISearchFactory.Registry.INSTANCE.registerFactory(VarConfigInstance.class, factory);
 		ISearchFactory.Registry.INSTANCE.registerFactory(Attribute.class, factory);
 		ISearchFactory.Registry.INSTANCE.registerFactory(DirectlyDerivedType.class, factory);
 	}
