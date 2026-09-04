@@ -29,110 +29,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.Color;
-import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Comment;
-import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
-import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
-import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECC;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
-import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Identification;
-import org.eclipse.fordiac.ide.model.libraryElement.Import;
-import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.Language;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Link;
-import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
-import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
-import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
-import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
-import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
-import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.Segment;
-import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.libraryElement.*;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -241,7 +137,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.INTERFACE_LIST: return createInterfaceList();
 			case LibraryElementPackage.LIBRARY_ELEMENT: return createLibraryElement();
 			case LibraryElementPackage.LINK: return createLink();
-			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
 			case LibraryElementPackage.MAPPING: return createMapping();
 			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
@@ -1003,17 +898,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public Link createLink() {
 		LinkImpl link = new LinkImpl();
 		return link;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalVariable createLocalVariable() {
-		LocalVariableImpl localVariable = new LocalVariableImpl();
-		return localVariable;
 	}
 
 	/**

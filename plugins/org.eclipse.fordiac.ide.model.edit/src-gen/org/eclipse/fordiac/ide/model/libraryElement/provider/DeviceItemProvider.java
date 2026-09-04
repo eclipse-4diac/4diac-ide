@@ -178,9 +178,6 @@ public class DeviceItemProvider extends TypedConfigureableObjectItemProvider {
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
-
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE__RESOURCE,
 				LibraryElementFactory.eINSTANCE.createResource()));
 	}

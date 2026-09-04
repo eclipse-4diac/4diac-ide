@@ -758,12 +758,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/device"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//LocalVariable">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
-      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySizeAsInt"
-          body="return arrayStop-arrayStart+1;"/>
-    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Mapping">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//Mapping/from"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//Mapping/to"/>

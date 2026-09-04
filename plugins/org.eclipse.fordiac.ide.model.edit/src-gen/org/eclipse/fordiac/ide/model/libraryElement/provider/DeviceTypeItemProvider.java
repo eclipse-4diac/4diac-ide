@@ -154,9 +154,6 @@ public class DeviceTypeItemProvider extends LibraryElementItemProvider {
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
-
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE_TYPE_NAME,
 				LibraryElementFactory.eINSTANCE.createResourceTypeName()));
 

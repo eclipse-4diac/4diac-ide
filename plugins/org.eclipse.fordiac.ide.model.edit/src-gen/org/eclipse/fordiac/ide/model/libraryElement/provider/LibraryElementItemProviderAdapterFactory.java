@@ -1440,29 +1440,6 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected LocalVariableItemProvider localVariableItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createLocalVariableAdapter() {
-		if (localVariableItemProvider == null) {
-			localVariableItemProvider = new LocalVariableItemProvider(this);
-		}
-
-		return localVariableItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.Mapping} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

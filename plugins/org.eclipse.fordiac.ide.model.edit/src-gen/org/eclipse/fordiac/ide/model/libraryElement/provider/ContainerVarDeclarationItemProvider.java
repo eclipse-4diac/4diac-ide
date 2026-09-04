@@ -151,11 +151,6 @@ public class ContainerVarDeclarationItemProvider extends VarDeclarationItemProvi
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS,
-				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS,
 				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
 	}
 

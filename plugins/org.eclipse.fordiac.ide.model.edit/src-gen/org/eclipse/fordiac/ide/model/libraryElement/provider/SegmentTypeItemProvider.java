@@ -128,9 +128,6 @@ public class SegmentTypeItemProvider extends LibraryElementItemProvider {
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SEGMENT_TYPE__VAR_DECLARATION,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
-
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SEGMENT_TYPE__VAR_DECLARATION,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 }

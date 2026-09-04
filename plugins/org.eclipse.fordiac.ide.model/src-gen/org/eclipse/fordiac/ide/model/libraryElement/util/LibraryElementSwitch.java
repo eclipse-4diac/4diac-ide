@@ -803,18 +803,6 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.LOCAL_VARIABLE: {
-				LocalVariable localVariable = (LocalVariable)theEObject;
-				T1 result = caseLocalVariable(localVariable);
-				if (result == null) result = caseVarDeclaration(localVariable);
-				if (result == null) result = caseIInterfaceElement(localVariable);
-				if (result == null) result = caseITypedElement(localVariable);
-				if (result == null) result = caseHiddenElement(localVariable);
-				if (result == null) result = caseINamedElement(localVariable);
-				if (result == null) result = caseConfigurableObject(localVariable);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case LibraryElementPackage.MAPPING: {
 				Mapping mapping = (Mapping)theEObject;
 				T1 result = caseMapping(mapping);
@@ -2356,21 +2344,6 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseLink(Link object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Local Variable</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Local Variable</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseLocalVariable(LocalVariable object) {
 		return null;
 	}
 
