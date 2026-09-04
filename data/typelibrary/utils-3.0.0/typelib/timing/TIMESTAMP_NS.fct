@@ -2,6 +2,8 @@
 <Function Name="TIMESTAMP_NS" Comment="creates default a Unix-Epoch-Timestamp in nanoseconds use other start dates for other timestamp types">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0.1" Author="Franz Höpfinger" Date="2026-09-02" Remarks="add missing PACKAGE statement">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Version="1.0" Author="Monika Wenger" Date="2024-10-14">
@@ -27,7 +29,9 @@
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[FUNCTION TIMESTAMP_NS : ULINT
+		<ST><![CDATA[PACKAGE eclipse4diac::utils::timing;
+
+FUNCTION TIMESTAMP_NS : ULINT
 VAR_INPUT
 	startDate : DT := DT#1970-01-01-00:00:00;
 END_VAR
