@@ -20,6 +20,7 @@
  *  Martin Jobst - refactor marker handling
  *  Alois Zoitl  - updated for new adapter FB handling
  *  Martin Jobst - extract interface importer
+ *  Franz Höpfinger - fix Service comment being read onto the wrong element
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -122,7 +123,7 @@ public abstract class BlockTypeImporter extends TypeImporter {
 		final ServiceInterface leftInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
 		leftInter.setName(leftInterface);
 		type.getService().setLeftInterface(leftInter);
-		readCommentAttribute(type);
+		readCommentAttribute().ifPresent(type.getService()::setComment);
 
 		processChildren(LibraryElementTags.SERVICE_ELEMENT, name -> {
 			if (LibraryElementTags.SERVICE_SEQUENCE_ELEMENT.equals(name)) {
