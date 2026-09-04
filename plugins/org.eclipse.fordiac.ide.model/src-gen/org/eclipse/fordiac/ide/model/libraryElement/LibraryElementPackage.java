@@ -520,7 +520,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedConfigureableObject()
 	 * @generated
 	 */
-	int TYPED_CONFIGUREABLE_OBJECT = 113;
+	int TYPED_CONFIGUREABLE_OBJECT = 112;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2417,7 +2417,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMappingTarget()
 	 * @generated
 	 */
-	int MAPPING_TARGET = 77;
+	int MAPPING_TARGET = 76;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2983,7 +2983,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
 	 * @generated
 	 */
-	int VAR_DECLARATION = 118;
+	int VAR_DECLARATION = 117;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3292,7 +3292,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStructManipulator()
 	 * @generated
 	 */
-	int STRUCT_MANIPULATOR = 105;
+	int STRUCT_MANIPULATOR = 104;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3920,7 +3920,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPositionableElement()
 	 * @generated
 	 */
-	int POSITIONABLE_ELEMENT = 85;
+	int POSITIONABLE_ELEMENT = 84;
 
 	/**
 	 * The feature id for the '<em><b>Position</b></em>' containment reference.
@@ -5266,7 +5266,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceType()
 	 * @generated
 	 */
-	int RESOURCE_TYPE = 89;
+	int RESOURCE_TYPE = 88;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5484,7 +5484,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegmentType()
 	 * @generated
 	 */
-	int SEGMENT_TYPE = 92;
+	int SEGMENT_TYPE = 91;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -5666,7 +5666,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubAppType()
 	 * @generated
 	 */
-	int SUB_APP_TYPE = 107;
+	int SUB_APP_TYPE = 106;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6415,7 +6415,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPrimitive()
 	 * @generated
 	 */
-	int PRIMITIVE = 86;
+	int PRIMITIVE = 85;
 
 	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
@@ -6710,133 +6710,6 @@ public interface LibraryElementPackage extends EPackage {
 	int LINK_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
-	 * @generated
-	 */
-	int LOCAL_VARIABLE = 75;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__NAME = VAR_DECLARATION__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__COMMENT = VAR_DECLARATION__COMMENT;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
-
-	/**
-	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__IS_INPUT = VAR_DECLARATION__IS_INPUT;
-
-	/**
-	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__INPUT_CONNECTIONS = VAR_DECLARATION__INPUT_CONNECTIONS;
-
-	/**
-	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
-
-	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__TYPE = VAR_DECLARATION__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Array Size</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
-
-	/**
-	 * The feature id for the '<em><b>Withs</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__WITHS = VAR_DECLARATION__WITHS;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__VALUE = VAR_DECLARATION__VALUE;
-
-	/**
-	 * The feature id for the '<em><b>Array Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__ARRAY_START = VAR_DECLARATION_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Array Stop</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__ARRAY_STOP = VAR_DECLARATION_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Local Variable</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl <em>Mapping</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6844,7 +6717,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMapping()
 	 * @generated
 	 */
-	int MAPPING = 76;
+	int MAPPING = 75;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' reference.
@@ -6881,7 +6754,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMethod()
 	 * @generated
 	 */
-	int METHOD = 78;
+	int METHOD = 77;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -6918,7 +6791,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getMultiplexer()
 	 * @generated
 	 */
-	int MULTIPLEXER = 79;
+	int MULTIPLEXER = 78;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7018,7 +6891,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOriginalSource()
 	 * @generated
 	 */
-	int ORIGINAL_SOURCE = 80;
+	int ORIGINAL_SOURCE = 79;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -7046,7 +6919,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextAlgorithm()
 	 * @generated
 	 */
-	int TEXT_ALGORITHM = 109;
+	int TEXT_ALGORITHM = 108;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7092,7 +6965,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherAlgorithm()
 	 * @generated
 	 */
-	int OTHER_ALGORITHM = 81;
+	int OTHER_ALGORITHM = 80;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7147,7 +7020,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextMethod()
 	 * @generated
 	 */
-	int TEXT_METHOD = 112;
+	int TEXT_METHOD = 111;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7238,7 +7111,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOtherMethod()
 	 * @generated
 	 */
-	int OTHER_METHOD = 82;
+	int OTHER_METHOD = 81;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7338,7 +7211,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getOutputPrimitive()
 	 * @generated
 	 */
-	int OUTPUT_PRIMITIVE = 83;
+	int OUTPUT_PRIMITIVE = 82;
 
 	/**
 	 * The feature id for the '<em><b>Event</b></em>' attribute.
@@ -7384,7 +7257,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPosition()
 	 * @generated
 	 */
-	int POSITION = 84;
+	int POSITION = 83;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -7421,7 +7294,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 87;
+	int RESOURCE = 86;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7530,7 +7403,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeName()
 	 * @generated
 	 */
-	int RESOURCE_TYPE_NAME = 88;
+	int RESOURCE_TYPE_NAME = 87;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7558,7 +7431,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getResourceTypeFB()
 	 * @generated
 	 */
-	int RESOURCE_TYPE_FB = 90;
+	int RESOURCE_TYPE_FB = 89;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7649,7 +7522,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSegment()
 	 * @generated
 	 */
-	int SEGMENT = 91;
+	int SEGMENT = 90;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7758,7 +7631,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 93;
+	int SERVICE = 92;
 
 	/**
 	 * The feature id for the '<em><b>Right Interface</b></em>' containment reference.
@@ -7813,7 +7686,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceSequence()
 	 * @generated
 	 */
-	int SERVICE_SEQUENCE = 94;
+	int SERVICE_SEQUENCE = 93;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7895,7 +7768,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceTransaction()
 	 * @generated
 	 */
-	int SERVICE_TRANSACTION = 95;
+	int SERVICE_TRANSACTION = 94;
 
 	/**
 	 * The feature id for the '<em><b>Input Primitive</b></em>' containment reference.
@@ -7932,7 +7805,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterface()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE = 96;
+	int SERVICE_INTERFACE = 95;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -7969,7 +7842,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getServiceInterfaceFBType()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE_FB_TYPE = 97;
+	int SERVICE_INTERFACE_FB_TYPE = 96;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8069,7 +7942,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleECAction()
 	 * @generated
 	 */
-	int SIMPLE_EC_ACTION = 98;
+	int SIMPLE_EC_ACTION = 97;
 
 	/**
 	 * The feature id for the '<em><b>Output</b></em>' reference.
@@ -8115,7 +7988,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleECState()
 	 * @generated
 	 */
-	int SIMPLE_EC_STATE = 99;
+	int SIMPLE_EC_STATE = 98;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8179,7 +8052,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSimpleFBType()
 	 * @generated
 	 */
-	int SIMPLE_FB_TYPE = 100;
+	int SIMPLE_FB_TYPE = 99;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8342,7 +8215,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTAlgorithm()
 	 * @generated
 	 */
-	int ST_ALGORITHM = 101;
+	int ST_ALGORITHM = 100;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8388,7 +8261,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextFunction()
 	 * @generated
 	 */
-	int TEXT_FUNCTION = 110;
+	int TEXT_FUNCTION = 109;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8479,7 +8352,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTFunction()
 	 * @generated
 	 */
-	int ST_FUNCTION = 102;
+	int ST_FUNCTION = 101;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8570,7 +8443,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTextFunctionBody()
 	 * @generated
 	 */
-	int TEXT_FUNCTION_BODY = 111;
+	int TEXT_FUNCTION_BODY = 110;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -8598,7 +8471,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTFunctionBody()
 	 * @generated
 	 */
-	int ST_FUNCTION_BODY = 103;
+	int ST_FUNCTION_BODY = 102;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -8626,7 +8499,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSTMethod()
 	 * @generated
 	 */
-	int ST_METHOD = 104;
+	int ST_METHOD = 103;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8717,7 +8590,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSubApp()
 	 * @generated
 	 */
-	int SUB_APP = 106;
+	int SUB_APP = 105;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8835,7 +8708,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getSystemConfiguration()
 	 * @generated
 	 */
-	int SYSTEM_CONFIGURATION = 108;
+	int SYSTEM_CONFIGURATION = 107;
 
 	/**
 	 * The feature id for the '<em><b>Devices</b></em>' containment reference list.
@@ -8881,7 +8754,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypedSubApp()
 	 * @generated
 	 */
-	int TYPED_SUB_APP = 114;
+	int TYPED_SUB_APP = 113;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -9017,7 +8890,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getUntypedSubApp()
 	 * @generated
 	 */
-	int UNTYPED_SUB_APP = 115;
+	int UNTYPED_SUB_APP = 114;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -9144,7 +9017,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 116;
+	int VALUE = 115;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -9172,7 +9045,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarConfigInstance()
 	 * @generated
 	 */
-	int VAR_CONFIG_INSTANCE = 117;
+	int VAR_CONFIG_INSTANCE = 116;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -9281,7 +9154,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVersionInfo()
 	 * @generated
 	 */
-	int VERSION_INFO = 119;
+	int VERSION_INFO = 118;
 
 	/**
 	 * The feature id for the '<em><b>Author</b></em>' attribute.
@@ -9345,7 +9218,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getWith()
 	 * @generated
 	 */
-	int WITH = 120;
+	int WITH = 119;
 
 	/**
 	 * The feature id for the '<em><b>Variables</b></em>' reference.
@@ -9373,7 +9246,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 121;
+	int LANGUAGE = 120;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -9383,7 +9256,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 122;
+	int IFILE = 121;
 
 	/**
 	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
@@ -9393,7 +9266,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
 	 * @generated
 	 */
-	int INTERFACE_ELEMENT_STREAM = 123;
+	int INTERFACE_ELEMENT_STREAM = 122;
 
 	/**
 	 * The meta object id for the '<em>Named Element Stream</em>' data type.
@@ -9403,7 +9276,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getNamedElementStream()
 	 * @generated
 	 */
-	int NAMED_ELEMENT_STREAM = 124;
+	int NAMED_ELEMENT_STREAM = 123;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -9413,7 +9286,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 125;
+	int TYPE_ENTRY = 124;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -9423,7 +9296,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 126;
+	int TYPE_LIBRARY = 125;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -9433,7 +9306,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 127;
+	int VAR_DECL_LIST = 126;
 
 	/**
 	 * The meta object id for the '<em>Interface Type Entry</em>' data type.
@@ -9443,7 +9316,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceTypeEntry()
 	 * @generated
 	 */
-	int INTERFACE_TYPE_ENTRY = 128;
+	int INTERFACE_TYPE_ENTRY = 127;
 
 	/**
 	 * The meta object id for the '<em>Block FBNW Element Stream</em>' data type.
@@ -9453,7 +9326,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBlockFBNWElementStream()
 	 * @generated
 	 */
-	int BLOCK_FBNW_ELEMENT_STREAM = 129;
+	int BLOCK_FBNW_ELEMENT_STREAM = 128;
 
 	/**
 	 * The meta object id for the '<em>String Array</em>' data type.
@@ -9462,7 +9335,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringArray()
 	 * @generated
 	 */
-	int STRING_ARRAY = 130;
+	int STRING_ARRAY = 129;
 
 	/**
 	 * The meta object id for the '<em>String List</em>' data type.
@@ -9472,7 +9345,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringList()
 	 * @generated
 	 */
-	int STRING_LIST = 131;
+	int STRING_LIST = 130;
 
 
 	/**
@@ -11654,38 +11527,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLink_Device();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local Variable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Local Variable</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable
-	 * @generated
-	 */
-	EClass getLocalVariable();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart <em>Array Start</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Array Start</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStart()
-	 * @see #getLocalVariable()
-	 * @generated
-	 */
-	EAttribute getLocalVariable_ArrayStart();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop <em>Array Stop</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Array Stop</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable#getArrayStop()
-	 * @see #getLocalVariable()
-	 * @generated
-	 */
-	EAttribute getLocalVariable_ArrayStop();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Mapping <em>Mapping</em>}'.
@@ -14870,32 +14711,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference LINK__DEVICE = eINSTANCE.getLink_Device();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl <em>Local Variable</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLocalVariable()
-		 * @generated
-		 */
-		EClass LOCAL_VARIABLE = eINSTANCE.getLocalVariable();
-
-		/**
-		 * The meta object literal for the '<em><b>Array Start</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LOCAL_VARIABLE__ARRAY_START = eINSTANCE.getLocalVariable_ArrayStart();
-
-		/**
-		 * The meta object literal for the '<em><b>Array Stop</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LOCAL_VARIABLE__ARRAY_STOP = eINSTANCE.getLocalVariable_ArrayStop();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl <em>Mapping</em>}' class.

@@ -127,9 +127,6 @@ public class StructuredTypeItemProvider extends AnyDerivedTypeItemProvider {
 
 		newChildDescriptors.add(createChildParameter(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
-
-		newChildDescriptors.add(createChildParameter(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 }

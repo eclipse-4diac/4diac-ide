@@ -148,9 +148,6 @@ public class ResourceItemProvider extends TypedConfigureableObjectItemProvider {
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.IVAR_ELEMENT__VAR_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
-
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.RESOURCE__FB_NETWORK,
 				LibraryElementFactory.eINSTANCE.createFBNetwork()));
 	}

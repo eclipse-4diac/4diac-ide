@@ -145,9 +145,6 @@ public class ResourceTypeItemProvider extends LibraryElementItemProvider {
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.RESOURCE_TYPE__VAR_DECLARATION,
 				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.RESOURCE_TYPE__VAR_DECLARATION,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
-
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.RESOURCE_TYPE__FB_NETWORK,
 				LibraryElementFactory.eINSTANCE.createFBNetwork()));
 	}

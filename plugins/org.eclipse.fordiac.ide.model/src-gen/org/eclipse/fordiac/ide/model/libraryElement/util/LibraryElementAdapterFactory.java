@@ -383,10 +383,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createLinkAdapter();
 			}
 			@Override
-			public Adapter caseLocalVariable(LocalVariable object) {
-				return createLocalVariableAdapter();
-			}
-			@Override
 			public Adapter caseMapping(Mapping object) {
 				return createMappingAdapter();
 			}
@@ -1637,20 +1633,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createLinkAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.LocalVariable <em>Local Variable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LocalVariable
-	 * @generated
-	 */
-	public Adapter createLocalVariableAdapter() {
 		return null;
 	}
 
