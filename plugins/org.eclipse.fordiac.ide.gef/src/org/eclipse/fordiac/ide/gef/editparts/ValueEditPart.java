@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added preference driven max width for value edit parts
+ *   Franz Höpfinger - grow the value direct-edit box to fit its content
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -56,7 +57,13 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ICellEditorListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart, AnnotableGraphicalEditPart {
@@ -367,18 +374,91 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return new ValueFigure(isInput());
 	}
 
-	/**
-	 * Gets the manager.
-	 *
-	 * @return the manager
-	 */
 	public DirectEditManager createDirectEditManager() {
 		final IInterfaceElement interfaceElement = getIInterfaceElement();
 		if (interfaceElement instanceof final VarDeclaration varDecl) {
-			return new InitialValueVariableDirectEditManager(this, new FigureCellEditorLocator(getFigure()), varDecl,
-					getDirectEditInitialValue());
+			return new InitialValueVariableDirectEditManager(this,
+					new ValueCellEditorLocator(this, getFigure(), isInput()), varDecl, getDirectEditInitialValue());
 		}
 		return new LabelDirectEditManager(this, getFigure());
+	}
+
+	/**
+	 * Grows the direct-edit control to fit its own current content (measured via
+	 * the control's own {@code computeSize}, so a struct/array's dialog button is
+	 * included automatically), re-growing on every keystroke, capped at the
+	 * preference-driven max value label width. For an input parameter the value
+	 * sits left of the block, so growth is added on the left to keep the right
+	 * edge anchored to the block border.
+	 */
+	private static final class ValueCellEditorLocator extends FigureCellEditorLocator {
+		private static final int MIN_EDIT_CHARS = 5;
+
+		private final ValueEditPart editPart;
+		private final boolean input;
+		private boolean listening;
+
+		ValueCellEditorLocator(final ValueEditPart editPart, final IFigure figure, final boolean input) {
+			super(figure);
+			this.editPart = editPart;
+			this.input = input;
+		}
+
+		@Override
+		public void relocate(final CellEditor celleditor) {
+			super.relocate(celleditor);
+			ensureGrowsWithContent(celleditor);
+			resizeToContent(celleditor.getControl());
+		}
+
+		private void ensureGrowsWithContent(final CellEditor celleditor) {
+			if (!listening) {
+				listening = true;
+				celleditor.addListener(new ICellEditorListener() {
+					@Override
+					public void editorValueChanged(final boolean oldValidState, final boolean newValidState) {
+						relocate(celleditor);
+					}
+
+					@Override
+					public void cancelEditor() {
+						// nothing to do
+					}
+
+					@Override
+					public void applyEditorValue() {
+						// nothing to do
+					}
+				});
+			}
+		}
+
+		private void resizeToContent(final Control control) {
+			final int width = computeWidth(control);
+			final int extraWidth = width - control.getSize().x;
+			if (extraWidth > 0) {
+				final int x = input ? control.getLocation().x - extraWidth : control.getLocation().x;
+				control.setBounds(x, control.getLocation().y, width, control.getSize().y);
+				if (control instanceof final Composite composite) {
+					composite.layout(true);
+				}
+			}
+		}
+
+		private int computeWidth(final Control control) {
+			final int minContentWidth = (int) Math.ceil(MIN_EDIT_CHARS * getAverageCharWidth(control));
+			final int preferredWidth = control.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+			return Math.min(Math.max(preferredWidth, minContentWidth), editPart.getMaxWidth());
+		}
+
+		private static double getAverageCharWidth(final Control control) {
+			final GC gc = new GC(control);
+			try {
+				return gc.getFontMetrics().getAverageCharacterWidth();
+			} finally {
+				gc.dispose();
+			}
+		}
 	}
 
 	protected String getDirectEditInitialValue() {
