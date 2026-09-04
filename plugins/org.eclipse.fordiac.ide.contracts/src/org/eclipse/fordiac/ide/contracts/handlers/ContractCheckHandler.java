@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -35,12 +34,15 @@ public abstract class ContractCheckHandler extends AbstractHandler {
 
 	protected Set<SubApp> getSubAppsToCheck(final ExecutionEvent event) {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
+		if (selection == null) {
+			return Set.of();
+		}
 
 		// using a set for "toCheck" avoids adding the same SubApp multiple times
 		// e.g. by selecting the SubApp but also its contract or pin
 		final Set<SubApp> toCheck = new HashSet<>();
 		final FBNetwork network = selection.size() == 1
-				&& selection.getFirstElement() instanceof final AbstractEditPart editPart
+				&& selection.getFirstElement() instanceof final EditPart editPart
 				&& editPart.getModel() instanceof final FBNetwork nw ? nw : null;
 
 		isNetwork = network != null;
