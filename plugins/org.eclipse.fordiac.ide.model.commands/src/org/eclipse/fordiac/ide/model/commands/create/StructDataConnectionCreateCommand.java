@@ -12,18 +12,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public class StructDataConnectionCreateCommand extends DataConnectionCreateCommand {
-	private ChangeStructCommand changeStructCommand;
+	private ConfigureFBCommand changeStructCommand;
 
 	public StructDataConnectionCreateCommand(final FBNetwork parent) {
 		super(parent);
@@ -52,28 +52,17 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 		if (shouldChangeStruct(source, target)) {
 			if (isUnconfiguredStructManipulatorDefPin(source)
 					&& target.getType() instanceof final StructuredType targetVar) {
-				changeStructCommand = (source.getBlockFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
-						? new ChangeStructCommand(cmfb, targetVar)
-						: new ChangeStructCommand((StructManipulator) source.getBlockFBNetworkElement(), targetVar);
+				changeStructCommand = new ConfigureFBCommand((ConfigurableFB) source.getBlockFBNetworkElement(),
+						targetVar);
 				changeStructCommand.execute();
-				if (source.getBlockFBNetworkElement() instanceof ConfigurableMoveFB) {
-					setSource(changeStructCommand.getNewElement().getInterface().getInterfaceElement(getSource()));
-				} else {
-					setSource(changeStructCommand.getNewMux().getInterface().getInterfaceElement(getSource()));
-				}
+				setSource(changeStructCommand.getNewElement().getInterface().getInterfaceElement(getSource()));
 			} else if (isUnconfiguredStructManipulatorDefPin(target)
 					&& source.getType() instanceof final StructuredType sourceVar) {
-				changeStructCommand = (target.getBlockFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
-						? new ChangeStructCommand(cmfb, sourceVar)
-						: new ChangeStructCommand((StructManipulator) target.getBlockFBNetworkElement(), sourceVar);
+				changeStructCommand = new ConfigureFBCommand((ConfigurableFB) target.getBlockFBNetworkElement(),
+						sourceVar);
 				changeStructCommand.execute();
-				if (target.getBlockFBNetworkElement() instanceof ConfigurableMoveFB) {
-					setDestination(
-							changeStructCommand.getNewElement().getInterface().getInterfaceElement(getDestination()));
-				} else {
-					setDestination(
-							changeStructCommand.getNewMux().getInterface().getInterfaceElement(getDestination()));
-				}
+				setDestination(
+						changeStructCommand.getNewElement().getInterface().getInterfaceElement(getDestination()));
 			}
 		}
 		super.execute();
@@ -95,12 +84,8 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 			return true;
 		}
 
-		if (targetType instanceof StructuredType && sourceParent instanceof ConfigurableMoveFB
-				&& !target.getName().equals(source.getName())) {
-			return true;
-		}
-
-		return false;
+		return (targetType instanceof StructuredType && sourceParent instanceof ConfigurableMoveFB
+				&& !target.getName().equals(source.getName()));
 	}
 
 	@Override

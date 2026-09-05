@@ -20,10 +20,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -43,7 +41,7 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 		final CommandStack stack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
 
 		for (final BlockFBNetworkElement element : selectedNetworkElements) {
-			final Command updateFBTypeCmd = getUpdateCommand(element);
+			final Command updateFBTypeCmd = new UpdateFBTypeCommand(element);
 			if (updateFBTypeCmd.canExecute()) {
 				cmd.add(updateFBTypeCmd);
 			}
@@ -52,13 +50,6 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 			stack.execute(cmd);
 		}
 		return Status.OK_STATUS;
-	}
-
-	public static Command getUpdateCommand(final BlockFBNetworkElement element) {
-		if (element instanceof final StructManipulator muxer) {
-			return new ChangeStructCommand(muxer);
-		}
-		return new UpdateFBTypeCommand(element);
 	}
 
 	@Override
