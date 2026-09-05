@@ -15,19 +15,24 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class AdapterTypeResourceImpl extends AbstractLibraryElementResource<AdapterType> {
 
 	public AdapterTypeResourceImpl(final URI uri) {
 		super(uri, AdapterType.class);
+	}
+
+	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.ADAPTER_TYPE;
 	}
 
 	@Override
@@ -38,12 +43,5 @@ public class AdapterTypeResourceImpl extends AbstractLibraryElementResource<Adap
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final AdapterType contentToSave) {
 		return new AdapterExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorAdapterType createErrorLibraryElement() {
-		final ErrorAdapterType type = LibraryElementFactory.eINSTANCE.createErrorAdapterType();
-		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		return type;
 	}
 }

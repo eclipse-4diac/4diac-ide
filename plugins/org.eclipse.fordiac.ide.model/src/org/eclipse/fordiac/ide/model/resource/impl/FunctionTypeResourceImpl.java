@@ -15,19 +15,24 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FCTExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class FunctionTypeResourceImpl extends AbstractLibraryElementResource<FunctionFBType> {
 
 	public FunctionTypeResourceImpl(final URI uri) {
 		super(uri, FunctionFBType.class);
+	}
+
+	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.FUNCTION_FB_TYPE;
 	}
 
 	@Override
@@ -38,12 +43,5 @@ public class FunctionTypeResourceImpl extends AbstractLibraryElementResource<Fun
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final FunctionFBType contentToSave) {
 		return new FCTExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorFunctionFBType createErrorLibraryElement() {
-		final ErrorFunctionFBType type = LibraryElementFactory.eINSTANCE.createErrorFunctionFBType();
-		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		return type;
 	}
 }
