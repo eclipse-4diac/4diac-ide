@@ -15,19 +15,24 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.GlobalConstantsExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.GlobalConstantsImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class GlobalConstTypeResourceImpl extends AbstractLibraryElementResource<GlobalConstants> {
 
 	public GlobalConstTypeResourceImpl(final URI uri) {
 		super(uri, GlobalConstants.class);
+	}
+
+	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.GLOBAL_CONSTANTS;
 	}
 
 	@Override
@@ -38,10 +43,5 @@ public class GlobalConstTypeResourceImpl extends AbstractLibraryElementResource<
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final GlobalConstants contentToSave) {
 		return new GlobalConstantsExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorGlobalConstants createErrorLibraryElement() {
-		return LibraryElementFactory.eINSTANCE.createErrorGlobalConstants();
 	}
 }

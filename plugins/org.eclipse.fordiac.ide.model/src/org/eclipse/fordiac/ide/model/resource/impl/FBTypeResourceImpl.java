@@ -15,19 +15,24 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class FBTypeResourceImpl extends AbstractLibraryElementResource<FBType> {
 
 	public FBTypeResourceImpl(final URI uri) {
 		super(uri, FBType.class);
+	}
+
+	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.FB_TYPE;
 	}
 
 	@Override
@@ -38,12 +43,5 @@ public class FBTypeResourceImpl extends AbstractLibraryElementResource<FBType> {
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final FBType contentToSave) {
 		return new FbtExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorFBType createErrorLibraryElement() {
-		final ErrorFBType type = LibraryElementFactory.eINSTANCE.createErrorFBType();
-		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		return type;
 	}
 }

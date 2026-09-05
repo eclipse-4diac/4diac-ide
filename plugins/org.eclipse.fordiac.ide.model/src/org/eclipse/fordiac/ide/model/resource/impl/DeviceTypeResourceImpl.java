@@ -15,19 +15,24 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.DEVExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class DeviceTypeResourceImpl extends AbstractLibraryElementResource<DeviceType> {
 
 	public DeviceTypeResourceImpl(final URI uri) {
 		super(uri, DeviceType.class);
+	}
+
+	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.DEVICE_TYPE;
 	}
 
 	@Override
@@ -38,10 +43,5 @@ public class DeviceTypeResourceImpl extends AbstractLibraryElementResource<Devic
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final DeviceType contentToSave) {
 		return new DEVExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorDeviceType createErrorLibraryElement() {
-		return LibraryElementFactory.eINSTANCE.createErrorDeviceType();
 	}
 }

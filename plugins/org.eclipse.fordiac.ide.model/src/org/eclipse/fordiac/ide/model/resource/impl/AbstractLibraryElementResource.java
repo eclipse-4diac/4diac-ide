@@ -29,17 +29,14 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
@@ -59,22 +56,19 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
-		final IFile typeFile = getTypeFile();
-		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
+		final TypeLibrary typeLibrary = getTypeLibrary();
+		if (typeLibrary == null) {
+			throw new IOException(
+					MessageFormat.format(uri != null && uri.isFile() ? Messages.FordiacTypeResource_NotInWorkspace
+							: Messages.FordiacTypeResource_LoadFromUnsupportedURI, uri));
+		}
 
 		try {
-			final CommonElementImporter importer = getTypeImporter(inputStream,
-					TypeLibraryManager.INSTANCE.getTypeLibrary(typeFile.getProject()));
+			final CommonElementImporter importer = getTypeImporter(inputStream, typeLibrary);
 			importer.loadElement();
 			getErrors().addAll(importer.getErrors());
 			getWarnings().addAll(importer.getWarnings());
-			final LibraryElement element = importer.getElement();
-			if (element != null) {
-				if (typeEntryForFile != null) {
-					element.setTypeEntry(typeEntryForFile);
-				}
-				getContents().add(element);
-			}
+			addLibraryElement(importer.getElement());
 		} catch (final TypeImportException e) {
 			getErrors().add(new TypeImportDiagnostic(e.getMessage(), Messages.FordiacTypeResource_TypeImportError));
 		} catch (final XMLStreamException e) {
@@ -91,15 +85,30 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		}
 
 		if (getContents().isEmpty()) {
-			final ErrorLibraryElement errorElement = createErrorLibraryElement();
-			if (typeEntryForFile != null) {
-				PackageNameHelper.setFullTypeName(errorElement, typeEntryForFile.getFullTypeName());
-				errorElement.setTypeEntry(typeEntryForFile);
-			} else {
-				PackageNameHelper.setFullTypeName(errorElement, getURI().trimFileExtension().lastSegment());
-			}
-			getContents().add(errorElement);
+			addLibraryElement(ErrorLibraryElementFactory.INSTANCE.create(getFullTypeName(), getLibraryElementEClass()));
 		}
+	}
+
+	private void addLibraryElement(final LibraryElement element) {
+		if (element != null) {
+			final TypeEntry typeEntry = getTypeEntry();
+			if (typeEntry != null) {
+				element.setTypeEntry(typeEntry);
+			}
+			getContents().add(element);
+		}
+	}
+
+	private String getFullTypeName() {
+		final TypeEntry entry = getTypeEntry();
+		if (entry != null) {
+			return entry.getFullTypeName();
+		}
+
+		if (uri != null) {
+			return uri.trimFileExtension().lastSegment();
+		}
+		return ""; //$NON-NLS-1$
 	}
 
 	@Override
@@ -125,26 +134,17 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		return (typeClass.isInstance(content)) ? typeClass.cast(content) : null;
 	}
 
-	private IFile getTypeFile() throws IOException {
-		final IFile typeFile;
-		if (uri.isPlatformResource()) {
-			typeFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.uri.toPlatformString(true)));
-		} else if (uri.isFile()) {
-			typeFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
-			if (!typeFile.exists()) {
-				throw new IOException(
-						MessageFormat.format(Messages.FordiacTypeResource_NotInWorkspace, uri.toString()));
-			}
-		} else {
-			throw new IOException(
-					MessageFormat.format(Messages.FordiacTypeResource_LoadFromUnsupportedURI, uri.toString()));
-		}
-		return typeFile;
+	protected TypeEntry getTypeEntry() {
+		return TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
 	}
+
+	protected TypeLibrary getTypeLibrary() {
+		return TypeLibraryManager.INSTANCE.getTypeLibraryFromURI(uri);
+	}
+
+	protected abstract EClass getLibraryElementEClass();
 
 	protected abstract CommonElementImporter getTypeImporter(InputStream inputStream, TypeLibrary typeLib);
 
 	protected abstract AbstractTypeExporter getTypeExporter(T contentToSave);
-
-	protected abstract ErrorLibraryElement createErrorLibraryElement();
 }
