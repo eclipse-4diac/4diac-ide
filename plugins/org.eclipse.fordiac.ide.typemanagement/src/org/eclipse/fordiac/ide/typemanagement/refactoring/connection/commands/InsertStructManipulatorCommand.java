@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands;
 
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -39,7 +39,7 @@ public class InsertStructManipulatorCommand extends Command {
 	private final boolean isMUX;
 	private final IInterfaceElement port;
 	private FBCreateCommand muxcreate;
-	private ChangeStructCommand changeStruct;
+	private ConfigureFBCommand changeStruct;
 	private StructDataConnectionCreateCommand createCon;
 
 	/**
@@ -68,7 +68,7 @@ public class InsertStructManipulatorCommand extends Command {
 		muxcreate = new FBCreateCommand(getStructManipulatorTypeEntry(), element.getFbNetwork(), pos);
 		muxcreate.execute();
 
-		changeStruct = new ChangeStructCommand((StructManipulator) muxcreate.getElement(), structType);
+		changeStruct = new ConfigureFBCommand((StructManipulator) muxcreate.getElement(), structType);
 		changeStruct.execute();
 		createCon = new StructDataConnectionCreateCommand(element.getFbNetwork());
 
