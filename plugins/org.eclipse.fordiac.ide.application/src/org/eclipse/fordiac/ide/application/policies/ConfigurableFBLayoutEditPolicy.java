@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University, Linz
+ * Copyright (c) 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,13 +8,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Prankur Agarwal - initial API and implementation and/or initial documentation
+ *   Paul Stemmer - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -23,7 +23,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 
-public class StructuredManipulatorLayoutEditPolicy extends LayoutEditPolicy {
+public class ConfigurableFBLayoutEditPolicy extends LayoutEditPolicy {
 
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
@@ -32,11 +32,11 @@ public class StructuredManipulatorLayoutEditPolicy extends LayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		if (null != request) {
+		if (request != null) {
 			final Object childClass = request.getNewObjectType();
-			if ((getHost().getModel() instanceof final StructManipulator structManipulator)
+			if ((getHost().getModel() instanceof final ConfigurableFB cFB)
 					&& (childClass instanceof final DataTypeEntry dataTypeEntry)) {
-				return new ChangeStructCommand(structManipulator, dataTypeEntry.getType());
+				return new ConfigureFBCommand(cFB, dataTypeEntry.getType());
 			}
 		}
 		return null;
@@ -44,7 +44,6 @@ public class StructuredManipulatorLayoutEditPolicy extends LayoutEditPolicy {
 
 	@Override
 	protected Command getMoveChildrenCommand(final Request request) {
-		// children should not be moveable
 		return null;
 	}
 
