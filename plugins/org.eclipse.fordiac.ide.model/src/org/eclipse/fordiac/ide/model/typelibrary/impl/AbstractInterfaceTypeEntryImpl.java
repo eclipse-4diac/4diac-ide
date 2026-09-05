@@ -31,8 +31,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -135,8 +134,7 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 
 			// create error type if it could not be loaded (no file or error)
 			if (type == null) {
-				type = createErrorLibraryElement();
-				PackageNameHelper.setFullTypeName(type, getFullTypeName());
+				type = (FBType) ErrorLibraryElementFactory.INSTANCE.create(getFullTypeName(), getTypeEClass());
 			}
 
 			interfaceList = type.getInterfaceList();
@@ -184,9 +182,6 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 
 	@Override
 	protected abstract BlockTypeImporter getImporter();
-
-	@Override
-	protected abstract ErrorFBType createErrorLibraryElement();
 
 	@Override
 	public void notifyChanged(final Notification notification) {
