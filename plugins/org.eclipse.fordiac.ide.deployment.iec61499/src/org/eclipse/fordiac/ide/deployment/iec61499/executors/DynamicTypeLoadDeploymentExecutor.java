@@ -60,7 +60,7 @@ import org.eclipse.fordiac.ide.deployment.iec61499.handlers.QueryResponseHandler
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -427,7 +427,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 				if (fbcmd.getFB() instanceof final StructManipulator structMan
 						&& getStructFromMultiplexer(res, fbresult) != null) {
-					final ChangeStructCommand changeStructCmd = new ChangeStructCommand(structMan,
+					final ConfigureFBCommand changeStructCmd = new ConfigureFBCommand(structMan,
 							getStructFromMultiplexer(res, fbresult));
 					if (changeStructCmd.canExecute()) {
 						changeStructCmd.execute();
