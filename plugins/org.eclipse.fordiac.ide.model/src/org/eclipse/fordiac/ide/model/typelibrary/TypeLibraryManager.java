@@ -87,20 +87,11 @@ public enum TypeLibraryManager {
 	}
 
 	public TypeLibrary getTypeLibraryFromURI(final URI uri) {
-		if (uri != null) {
-			final IFile file;
-			if (uri.isPlatformResource()) {
-				file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
-			} else if (uri.isFile() && uri.segmentCount() >= 2) { // need at least two segments for a valid file path
-				file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
-			} else {
-				return null;
-			}
-			if (file.getProject() != null) {
-				return getTypeLibrary(file.getProject());
-			}
+		final IFile file = getFileFromURI(uri);
+		if (file == null || file.getProject() == null) {
+			return null;
 		}
-		return null;
+		return getTypeLibrary(file.getProject());
 	}
 
 	public boolean hasTypeLibrary(final IProject proj) {
@@ -135,14 +126,31 @@ public enum TypeLibraryManager {
 	}
 
 	public TypeEntry getTypeEntryForFile(final IFile typeFile) {
+		if (typeFile == null) {
+			return null;
+		}
+
 		final TypeLibrary typeLib = getTypeLibrary(typeFile.getProject());
 		return typeLib.getTypeEntry(typeFile);
 	}
 
 	public TypeEntry getTypeEntryForURI(final URI uri) {
+		return getTypeEntryForFile(getFileFromURI(uri));
+	}
+
+	private static IFile getFileFromURI(final URI uri) {
+		if (uri == null) {
+			return null;
+		}
 		if (uri.isPlatformResource()) {
-			return getTypeEntryForFile(
-					ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true))));
+			return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
+		}
+		if (uri.isFile() && uri.segmentCount() >= 2) { // need at least two segments for a valid file path
+			// interpret file URI relative to workspace because of EMF compare bug
+			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toFileString()));
+			if (file.exists()) {
+				return file;
+			}
 		}
 		return null;
 	}
