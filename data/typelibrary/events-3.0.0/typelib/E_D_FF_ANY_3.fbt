@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_D_FF_ANY_3" Comment="Data latch (d) flip flop for 3 ANY variables, EO only on change of at least one Q (generic FB)">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017, 2026 fortiss GmbH, HR Agrartechnik GmbH&#10;&#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2026-08-26" Remarks="E_D_FF_ANY extended to 3 variables - EO fires only if at least one Di differs from the latched Qi. Service Interface FB, native implementation GEN_E_D_FF_ANY (FORTE) required.">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CLK" Type="Event" Comment="Clock">
+				<With Var="D1"/>
+				<With Var="D2"/>
+				<With Var="D3"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Triggered if clock results in a change of at least one Q">
+				<With Var="Q1"/>
+				<With Var="Q2"/>
+				<With Var="Q3"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="D1" Type="ANY" Comment="Value 1 to latch"/>
+			<VarDeclaration Name="D2" Type="ANY" Comment="Value 2 to latch"/>
+			<VarDeclaration Name="D3" Type="ANY" Comment="Value 3 to latch"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q1" Type="ANY" Comment="Latched value 1"/>
+			<VarDeclaration Name="Q2" Type="ANY" Comment="Latched value 2"/>
+			<VarDeclaration Name="Q3" Type="ANY" Comment="Latched value 3"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_E_D_FF_ANY'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
