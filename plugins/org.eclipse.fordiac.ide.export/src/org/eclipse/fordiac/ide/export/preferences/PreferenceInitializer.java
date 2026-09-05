@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 Profactor GmbH
+ *               2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add support for additional source directories during type export
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.preferences;
 
@@ -37,6 +39,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		preferences.putBoolean(PreferenceConstants.ENABLE_TYPE_EXPORT, false);
 		preferences.put(PreferenceConstants.OUTPUT_FOLDER, ""); //$NON-NLS-1$
 		preferences.put(PreferenceConstants.EXPORT_FILTER_ID, ""); //$NON-NLS-1$
+		preferences.put(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, ""); //$NON-NLS-1$
 	}
 
 }
