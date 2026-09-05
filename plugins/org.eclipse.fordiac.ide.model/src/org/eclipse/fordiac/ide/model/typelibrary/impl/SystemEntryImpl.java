@@ -21,8 +21,6 @@ import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -36,13 +34,6 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new SystemImporter(getFile());
-	}
-
-	@Override
-	protected ErrorAutomationSystem createErrorLibraryElement() {
-		final ErrorAutomationSystem errorSystem = LibraryElementFactory.eINSTANCE.createErrorAutomationSystem();
-		errorSystem.setSystemConfiguration(LibraryElementFactory.eINSTANCE.createSystemConfiguration());
-		return errorSystem;
 	}
 
 	@Override

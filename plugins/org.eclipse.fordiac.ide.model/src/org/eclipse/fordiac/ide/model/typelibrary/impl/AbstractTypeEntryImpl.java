@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
@@ -280,8 +281,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 			// create error type if it could not be loaded (no file or error)
 			if (type == null) {
-				type = createErrorLibraryElement();
-				PackageNameHelper.setFullTypeName(type, getFullTypeName());
+				type = ErrorLibraryElementFactory.INSTANCE.create(getFullTypeName(), getTypeEClass());
 			}
 
 			// set type
@@ -476,8 +476,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	protected abstract CommonElementImporter getImporter();
-
-	protected abstract ErrorLibraryElement createErrorLibraryElement();
 
 	@Override
 	public TypeLibrary getTypeLibrary() {
