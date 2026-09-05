@@ -29,15 +29,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -83,8 +80,6 @@ public class CreateDataTypeMarkerResolution extends AbstractCommandMarkerResolut
 		return switch (element) {
 		case final IInterfaceElement interfaceElement ->
 			ChangeDataTypeCommand.forDataType(interfaceElement, newEntry.getType());
-		case final StructManipulator fb when newEntry.getType() instanceof StructuredType ->
-			new ChangeStructCommand(fb, newEntry.getType());
 		case final ConfigurableFB fb -> new ConfigureFBCommand(fb, newEntry.getType());
 		default -> null;
 		};

@@ -21,15 +21,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -57,8 +54,6 @@ public class BestFitDataTypeMarkerResolution extends AbstractCommandMarkerResolu
 		return switch (element) {
 		case final IInterfaceElement interfaceElement ->
 			ChangeDataTypeCommand.forDataType(interfaceElement, selectedType);
-		case final StructManipulator fb when selectedType instanceof StructuredType ->
-			new ChangeStructCommand(fb, selectedType);
 		case final ConfigurableFB fb -> new ConfigureFBCommand(fb, selectedType);
 		default -> null;
 		};
