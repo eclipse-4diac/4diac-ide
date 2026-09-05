@@ -24,7 +24,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
-import org.eclipse.fordiac.ide.application.policies.StructuredManipulatorLayoutEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.ConfigurableFBLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
@@ -33,9 +33,6 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class StructManipulatorEditPart extends AbstractBlockFBNElementEditPart {
-
-	public StructManipulatorEditPart() {
-	}
 
 	@Override
 	protected IFigure createFigure() {
@@ -99,6 +96,6 @@ public class StructManipulatorEditPart extends AbstractBlockFBNElementEditPart {
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new StructuredManipulatorLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ConfigurableFBLayoutEditPolicy());
 	}
 }
