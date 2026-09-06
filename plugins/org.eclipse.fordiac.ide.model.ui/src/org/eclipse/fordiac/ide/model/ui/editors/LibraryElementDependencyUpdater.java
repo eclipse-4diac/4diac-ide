@@ -56,8 +56,12 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 			if (getDependencies().contains(dependency)) {
 				// react to TYPE_ENTRY_FILE_CONTENT_FEATURE for changed dependencies
 				// react to TYPE_ENTRY_TYPE_LIBRARY_FEATURE for deleted dependencies
+				// react to TYPE_ENTRY_TYPE_FEATURE with new value == null for changed
+				// transitive dependencies
 				if (TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE.equals(notification.getFeature())
-						|| TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE.equals(notification.getFeature())) {
+						|| TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE.equals(notification.getFeature())
+						|| (TypeEntry.TYPE_ENTRY_TYPE_FEATURE.equals(notification.getFeature())
+								&& notification.getNewValue() == null)) {
 					Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
 				}
 				// react to TYPE_ENTRY_FULL_TYPE_NAME_FEATURE for renamed dependencies
