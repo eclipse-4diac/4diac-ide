@@ -58,8 +58,12 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 			if (getDependencies().contains(dependency)) {
 				// react to TYPE_ENTRY_FILE_CONTENT_FEATURE for changed dependencies
 				// react to TYPE_ENTRY_TYPE_LIBRARY_FEATURE for deleted dependencies
+				// react to TYPE_ENTRY_TYPE_FEATURE with new value == null for changed
+				// transitive dependencies
 				if (TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE.equals(notification.getFeature())
-						|| TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE.equals(notification.getFeature())) {
+						|| TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE.equals(notification.getFeature())
+						|| (TypeEntry.TYPE_ENTRY_TYPE_FEATURE.equals(notification.getFeature())
+								&& notification.getNewValue() == null)) {
 					Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
 				}
 				// react to TYPE_ENTRY_FULL_TYPE_NAME_FEATURE for renamed dependencies
@@ -81,8 +85,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void updateTypeLibraryDependency(final Notification notification) {
 		switch (notification.getEventType()) {
-		case Notification.REMOVE ->
-			updateRemovedTypeEntryNameReference(notification.getOldValue());
+		case Notification.REMOVE -> updateRemovedTypeEntryNameReference(notification.getOldValue());
 		case Notification.REMOVE_MANY ->
 			((Collection<?>) notification.getOldValue()).forEach(this::updateRemovedTypeEntryNameReference);
 		default -> {
@@ -296,7 +299,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void removeTypeLibraryAdapter(final TypeEntry typeEntry) {
 		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
-		if (typeLibrary != null && getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
+		if (typeLibrary != null
+				&& getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
 			typeLibrary.eAdapters().remove(this);
 		}
 	}
