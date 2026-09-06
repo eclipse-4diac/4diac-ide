@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -55,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -170,13 +172,31 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		// for the configurable fb we have to transfer the data type
 		if (newElement instanceof final ConfigurableFB configFb) {
 			if (oldElement instanceof final ConfigurableFB oldConfigFb) {
-				configFb.setDataType(oldConfigFb.getDataType());
+				configFb.setDataType(reloadDataType(oldConfigFb.getDataType()));
 				configFb.updateConfiguration();
 			} else {
 				// transfer data from error marker
 				handleConFBUpdateFromErrorMarker(configFb);
 			}
 		}
+	}
+
+	protected final DataType reloadDataType(final DataType dataType) {
+		if (dataType == null) {
+			return getAnyType();
+		}
+
+		if (dataType.getTypeEntry() != null) {
+			// if we are a user defined type ensure to get the latest version from the file
+			return (dataType.getTypeEntry().getType() instanceof final DataType dt) ? dt : getAnyType();
+
+		}
+		return dataType;
+	}
+
+	private DataType getAnyType() {
+		return (getOldElement() instanceof StructManipulator) ? IecTypes.GenericTypes.ANY_STRUCT
+				: IecTypes.GenericTypes.ANY;
 	}
 
 	private void handleConFBUpdateFromErrorMarker(final ConfigurableFB configFb) {
