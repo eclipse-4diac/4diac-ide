@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
@@ -55,8 +54,34 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 	}
 
 	public String combine(final List<? extends ICallable> callables) {
-		return callables.stream().map(this::toSTText).collect(Collectors.joining(
-				CommonElementExporter.LINE_END + CommonElementExporter.LINE_END, "", CommonElementExporter.LINE_END)); //$NON-NLS-1$
+		final StringBuilder builder = new StringBuilder();
+		ICallable last = null;
+		for (final ICallable callable : callables) {
+			final String text = toSTText(callable);
+			appendSeparator(builder, last, callable, text);
+			builder.append(text);
+			last = callable;
+		}
+		// ensure newline at the end
+		if (!builder.isEmpty() && !isLineDelimiter(builder.charAt(builder.length() - 1))) {
+			builder.append(CommonElementExporter.LINE_END);
+		}
+		return builder.toString();
+	}
+
+	private static void appendSeparator(final StringBuilder builder, final ICallable previous, final ICallable current,
+			final String text) {
+		if (builder.isEmpty() || text.isEmpty()) {
+			return;
+		}
+		if (!isLostAndFound(current) && !isLostAndFound(previous)) {
+			// add empty line, except around lost+found
+			builder.append(CommonElementExporter.LINE_END);
+			builder.append(CommonElementExporter.LINE_END);
+		} else if (isWordCharacter(builder.charAt(builder.length() - 1)) && isWordCharacter(text.charAt(0))) {
+			// add line separator if appended text has no word boundary
+			builder.append(CommonElementExporter.LINE_END);
+		}
 	}
 
 	public String toSTText(final ICallable callable) {
@@ -86,10 +111,11 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 	}
 
 	private String toSTText(final STMethod method) {
-		final String name = method.getName();
 		final String text = method.getText();
-		if ((name != null && name.startsWith(LOST_AND_FOUND_NAME))
-				|| containsToken(text, InternalSTAlgorithmLexer.METHOD)) {
+		if (isLostAndFound(method)) {
+			return text;
+		}
+		if (containsToken(text, InternalSTAlgorithmLexer.METHOD)) {
 			return text.trim();
 		}
 		return generateMethodDefinition(method);
@@ -211,5 +237,10 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 		default:
 			break;
 		}
+	}
+
+	private static boolean isLostAndFound(final ICallable callable) {
+		return callable instanceof STMethod && callable.getName() != null
+				&& callable.getName().startsWith(LOST_AND_FOUND_NAME);
 	}
 }
