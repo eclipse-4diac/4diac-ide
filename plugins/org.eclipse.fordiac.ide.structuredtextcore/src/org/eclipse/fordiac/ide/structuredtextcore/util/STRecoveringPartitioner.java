@@ -98,9 +98,20 @@ public abstract class STRecoveringPartitioner<S extends EObject, E extends IName
 	protected void handleLostAndFound(final ICompositeNode rootNode, final int start, final int end,
 			final List<E> result) {
 		final String text = rootNode.getText().substring(start, end);
-		if (!text.isBlank()) {
-			result.add(createLostAndFound(text.trim(), result.size()));
+		if (!text.isEmpty() && shouldPreserveText(rootNode, start, end, text)) {
+			result.add(createLostAndFound(text, result.size()));
 		}
+	}
+
+	private static boolean shouldPreserveText(final ICompositeNode rootNode, final int start, final int end,
+			final String text) {
+		// preserve text if it is non-blank, at the beginning, or a non-canonical
+		// separator before the end, ignore blank text at the end
+		return !text.isBlank() || start == 0 || (end < rootNode.getTotalEndOffset() && isNonCanonicalSeparator(text));
+	}
+
+	private static boolean isNonCanonicalSeparator(final String text) {
+		return !text.equals(CommonElementExporter.LINE_END + CommonElementExporter.LINE_END);
 	}
 
 	protected static String generateLostAndFoundName(final int index) {
@@ -127,13 +138,21 @@ public abstract class STRecoveringPartitioner<S extends EObject, E extends IName
 	}
 
 	protected static void appendText(final String text, final StringBuilder builder) {
-		if (!text.startsWith(CommonElementExporter.LINE_END)) {
+		if (text.isEmpty() || !Character.isWhitespace(text.charAt(0))) {
 			builder.append(CommonElementExporter.LINE_END);
 		}
 		builder.append(text);
-		if (!text.endsWith(CommonElementExporter.LINE_END) && !text.isEmpty()) {
+		if (!text.isEmpty() && !isLineDelimiter(text.charAt(text.length() - 1))) {
 			builder.append(CommonElementExporter.LINE_END);
 		}
+	}
+
+	protected static boolean isLineDelimiter(final char c) {
+		return c == '\n' || c == '\r';
+	}
+
+	protected static boolean isWordCharacter(final char c) {
+		return Character.isLetterOrDigit(c) || c == '_';
 	}
 
 	protected static String getText(final INode node) {
