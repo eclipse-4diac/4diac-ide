@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Iterator;
@@ -127,7 +128,7 @@ public final class ManifestHelper {
 			if (it.hasNext()) {
 				return getManifest(it.next());
 			}
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			// empty
 		}
 		return null;
@@ -185,7 +186,7 @@ public final class ManifestHelper {
 					return manifest;
 				}
 			}
-		} catch (final CoreException e) {
+		} catch (final CoreException _) {
 			// do nothing
 		}
 		return null;
@@ -233,7 +234,7 @@ public final class ManifestHelper {
 		}
 		try {
 			return new Version(manifest.getProduct().getVersionInfo().getVersion());
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException _) {
 			return defaultValue;
 		}
 	}
@@ -323,7 +324,7 @@ public final class ManifestHelper {
 		final VersionInfo versionInfo = factory.createVersionInfo();
 		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
 		versionInfo.setVersion(BASE_VERSION);
-		versionInfo.setDate(formatter.format(LocalDate.now()));
+		versionInfo.setDate(formatter.format(LocalDate.now(ZoneId.systemDefault())));
 
 		final Product product = factory.createProduct();
 		product.setVersionInfo(versionInfo);
@@ -473,7 +474,7 @@ public final class ManifestHelper {
 	public static boolean saveManifest(final Manifest manifest) {
 		try {
 			manifest.eResource().save(null);
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			return false;
 		}
 		return true;
@@ -520,7 +521,7 @@ public final class ManifestHelper {
 	private static boolean isFordiacProject(final IProject project) {
 		try {
 			return project.getNature(FORDIAC_PROJECT_NATURE_ID) != null;
-		} catch (final CoreException e) {
+		} catch (final CoreException _) {
 			// empty
 		}
 		return false;
