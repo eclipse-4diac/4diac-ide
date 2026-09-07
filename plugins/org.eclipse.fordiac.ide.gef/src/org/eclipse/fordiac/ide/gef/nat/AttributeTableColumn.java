@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,12 @@ public enum AttributeTableColumn implements NatTableColumn {
 
 	public static final Set<AttributeTableColumn> ALL_EDITABLE = Set.of(AttributeTableColumn.values());
 	public static final Set<AttributeTableColumn> EDITABLE_COMMENT_VALUE = Set.of(VALUE, COMMENT);
+
+	public static List<AttributeTableColumn> defaultColumnsWithPrepended(final AttributeTableColumn... extra) {
+		final List<AttributeTableColumn> columns = new ArrayList<>(List.of(extra));
+		columns.addAll(DEFAULT_COLUMNS);
+		return List.copyOf(columns);
+	}
 
 	private final String displayName;
 

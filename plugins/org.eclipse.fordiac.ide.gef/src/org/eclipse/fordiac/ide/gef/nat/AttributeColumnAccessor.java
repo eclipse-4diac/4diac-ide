@@ -12,10 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -27,7 +29,9 @@ import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 
 public class AttributeColumnAccessor extends AbstractCommandColumnAccessor<Attribute, AttributeTableColumn> {
 
@@ -67,11 +71,20 @@ public class AttributeColumnAccessor extends AbstractCommandColumnAccessor<Attri
 	@Override
 	public Command createCommand(final Attribute rowObject, final AttributeTableColumn column, final Object newValue) {
 		return switch (column) {
-		case NAME -> ChangeNameCommand.forName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+		case NAME -> createChangeNameCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case TYPE -> ChangeAttributeTypeCommand.forTypeName(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case VALUE -> new ChangeAttributeValueCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case COMMENT -> new ChangeCommentCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
+	}
+
+	private static Command createChangeNameCommand(final Attribute attribute, final String name) {
+		if (name.contains(".")) { //$NON-NLS-1$
+			ErrorMessenger
+					.popUpErrorMessage(MessageFormat.format(Messages.AttributeColumnAccessor_NameContainsDot, name));
+			return UnexecutableCommand.INSTANCE;
+		}
+		return ChangeNameCommand.forName(attribute, name);
 	}
 }

@@ -147,12 +147,18 @@
                indented="false"
                label="%propertyTab.attributes.label">
          </propertyTab>
-         <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+		 <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
        		   category="Application"
                id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
                indented="false"
                label="%propertyTab.varConfig.label">
       	</propertyTab>
+      	<propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+	    	   category="Application"
+			   id="org.eclipse.fordiac.ide.application.propertyInstanceAttributeTab"
+			   indented="false"
+			   label="%propertyTab.instanceAttribute.label">
+		 </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -262,6 +268,18 @@
               id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"
               tab="org.eclipse.fordiac.ide.application.propertyVarConfigTab">
         </propertySection>
+		<propertySection
+			  class="org.eclipse.fordiac.ide.gef.properties.TypedSubappAttributeSection"
+			  filter="org.eclipse.fordiac.ide.gef.filters.TypedSubappAttributeFilter"
+			  id="org.eclipse.fordiac.ide.application.properties.TypedSubappAttributeSection"
+			  tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
+		</propertySection>
+		<propertySection     
+			  class="org.eclipse.fordiac.ide.gef.properties.InstanceAttributeSection"
+              filter="org.eclipse.fordiac.ide.gef.filters.InstanceAttributeFilter"
+              id="org.eclipse.fordiac.ide.application.properties.InstanceAttributeSection"
+			  tab="org.eclipse.fordiac.ide.application.propertyInstanceAttributeTab">
+		</propertySection>    
       </propertySections>
    </extension>
    

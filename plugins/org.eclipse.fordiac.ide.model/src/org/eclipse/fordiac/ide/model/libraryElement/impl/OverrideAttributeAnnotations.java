@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute;
@@ -48,7 +49,8 @@ public class OverrideAttributeAnnotations {
 		Optional<String> err = Optional.empty();
 
 		if (attribute.eContainer() instanceof final TypedSubApp tsa) {
-			final Stream<INamedElement> element = tsa.findByQualifiedName(attribute.getLocation());
+			final Stream<INamedElement> element = tsa.findByQualifiedName(attribute.getLocation())
+					.filter(ConfigurableObject.class::isInstance);
 			if (element.toList().isEmpty()) {
 				err = Optional.of(MessageFormat.format(Messages.OverrideAttributeVerifier_InvalidPath,
 						attribute.getLocation(), attribute.getName()));
