@@ -1135,7 +1135,6 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="repairedElement" eType="#//FBNetworkElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement">
     <eOperations name="validateValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

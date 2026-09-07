@@ -20,10 +20,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement} object.
@@ -52,31 +50,8 @@ public class ErrorMarkerFBNElementItemProvider extends BlockFBNetworkElementItem
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addRepairedElementPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Repaired Element feature. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
-	protected void addRepairedElementPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ErrorMarkerFBNElement_repairedElement_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerFBNElement_repairedElement_feature", "_UI_ErrorMarkerFBNElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
