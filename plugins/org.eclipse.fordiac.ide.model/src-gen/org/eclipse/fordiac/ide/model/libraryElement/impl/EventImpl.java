@@ -535,6 +535,16 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
+	public boolean isMemberAccessPin() {
+		return this instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration && eContainer() instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
 	}
