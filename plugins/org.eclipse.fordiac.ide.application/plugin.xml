@@ -1120,8 +1120,7 @@
     </menuContribution>
     <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
       <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
-               label="%commands_newSubApp_label"
-               tooltip="Create a new subapplication">
+               tooltip="%menu.tooltip.newSubApp">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
@@ -1130,15 +1129,13 @@
                label="%jdt_ui_edit_text_java_correction_assist_proposals_label">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               label="%commands_newGroup_label"
-               tooltip="Create a new group">
+               tooltip="%menu.tooltip.newGroup">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
-               label="%commands_newComment_label"
-               tooltip="Create a new comment">
+               tooltip="%menu.tooltip.newComent">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
@@ -1239,23 +1236,84 @@
 	        </or>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" >
-        <visibleWhen>
-          <and>
-            <with variable="activeEditor">
-              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-            </with>
-            <with variable="selection">
-              <iterate ifEmpty="true">
-                <or>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
-                </or>
-              </iterate>
-            </with>
-          </and>
-        </visibleWhen>
-      </command>
+      <menu id="org.eclipse.fordiac.ide.application.menus.new"
+            label="%New_LABEL">
+		<command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" 
+					tooltip="%menu.tooltip.insertFB">
+			<visibleWhen>
+				<and>
+	            <with variable="activeEditor">
+	              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+	            </with>
+	            <with variable="selection">
+	              <iterate ifEmpty="true">
+	                <or>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
+	                </or>
+	              </iterate>
+	            </with>
+	          </and>
+	        </visibleWhen>
+		</command>
+		<command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
+	               tooltip="%menu.tooltip.newSubApp">
+			<visibleWhen checkEnabled="false">
+	          <and>
+	            <with variable="activeEditor">
+	              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+	            </with>
+	            <with variable="selection">
+	              <iterate ifEmpty="true">
+	                <or>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart" />
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupEditPart" />
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+	                  <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
+	                </or>
+	              </iterate>
+	            </with>
+	          </and>
+	        </visibleWhen>
+	      </command>
+	      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
+	               tooltip="%menu.tooltip.newComent">
+	        <visibleWhen checkEnabled="false">
+	          <and>
+	            <with variable="activeEditor">
+	              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+	            </with>
+	          </and>
+	        </visibleWhen>
+	      </command>
+	      <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
+	               tooltip="%menu.tooltip.newGroup">
+	        <visibleWhen checkEnabled="false">
+	          <and>
+	            <with variable="activeEditor">
+	              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+	            </with>
+	            <with variable="selection">
+	              <iterate ifEmpty="true">
+	                <or>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart" />
+	                  <and>
+	                  	<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+	                  	<not>
+	                  	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart"/>
+	                  	</not>
+	                  </and>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
+	                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+	                </or>
+	              </iterate>
+	            </with>
+	          </and>
+	        </visibleWhen>
+	      </command> 
+      </menu>     
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType">
         <visibleWhen>
           <and>
@@ -1313,29 +1371,6 @@
           </and>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
-               label="%commands_newSubApp_label"
-               tooltip="Create a new subapplication">
-        <visibleWhen checkEnabled="false">
-          <and>
-            <with variable="activeEditor">
-              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-            </with>
-            <with variable="selection">
-              <iterate ifEmpty="true">
-                <or>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart" />
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupEditPart" />
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
-                </or>
-              </iterate>
-            </with>
-          </and>
-        </visibleWhen>
-      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
         <visibleWhen checkEnabled="true">
           <with variable="selection">
@@ -1372,43 +1407,6 @@
                   </and>
               </iterate>
            </with>
-          </and>
-        </visibleWhen>
-      </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               label="%commands_newGroup_label"
-               tooltip="Create a new group">
-        <visibleWhen checkEnabled="false">
-          <and>
-            <with variable="activeEditor">
-              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-            </with>
-            <with variable="selection">
-              <iterate ifEmpty="true">
-                <or>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart" />
-                  <and>
-                  	<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
-                  	<not>
-                  	<instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart"/>
-                  	</not>
-                  </and>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
-                </or>
-              </iterate>
-            </with>
-          </and>
-        </visibleWhen>
-      </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
-               label="%commands_newComment_label"
-               tooltip="Create a new Comment">
-        <visibleWhen checkEnabled="false">
-          <and>
-            <with variable="activeEditor">
-              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-            </with>
           </and>
         </visibleWhen>
       </command>
