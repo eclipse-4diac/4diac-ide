@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -29,10 +30,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.WrappedException;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
@@ -58,7 +62,7 @@ public class FileLibraryElementProvider
 			throws CoreException {
 		fireLibraryElementStateChange(listener -> listener.elementContentAboutToBeReplaced(info.getEditorInput()));
 		info.getEditorInput().getFile().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		info.setLibraryElement(copyLibraryElement(info.getEditorInput().getFile()));
+		info.setLibraryElement(loadLibraryElement(info.getEditorInput().getFile()));
 		info.setSynchronizationStamp(info.getEditorInput().getFile().getModificationStamp());
 		info.markSaveLocation();
 		info.setDirty(false);
@@ -109,7 +113,7 @@ public class FileLibraryElementProvider
 	protected FileLibraryElementInfo createLibraryElementInfo(final IEditorInput input) throws CoreException {
 		if (input instanceof final IFileEditorInput fileEditorInput) {
 			fileEditorInput.getFile().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			return new FileLibraryElementInfo(fileEditorInput, copyLibraryElement(fileEditorInput.getFile()));
+			return new FileLibraryElementInfo(fileEditorInput, loadLibraryElement(fileEditorInput.getFile()));
 		}
 		return super.createLibraryElementInfo(input);
 	}
@@ -134,18 +138,34 @@ public class FileLibraryElementProvider
 		fireLibraryElementStateChange(listener -> listener.elementDeleted(info.getEditorInput()));
 	}
 
-	protected static LibraryElement copyLibraryElement(final IFile file) throws CoreException {
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (entry == null) {
+	protected static LibraryElement loadLibraryElement(final IFile file) throws CoreException {
+		if (!file.exists()) {
 			throw new CoreException(Status.error(MessageFormat
 					.format(Messages.FileLibraryElementProvider_LibraryElementDoesNotExist, file.getFullPath())));
 		}
-		final LibraryElement libraryElement = entry.copyType();
-		if (libraryElement == null) {
+		final Resource resource = loadResource(file);
+		final Optional<LibraryElement> libraryElement = resource.getContents().stream()
+				.filter(LibraryElement.class::isInstance).map(LibraryElement.class::cast).findFirst();
+		if (libraryElement.isEmpty()) {
 			throw new CoreException(Status.error(MessageFormat
 					.format(Messages.FileLibraryElementProvider_LibraryElementCannotBeLoaded, file.getFullPath())));
 		}
-		return libraryElement;
+		return libraryElement.get();
+	}
+
+	private static Resource loadResource(final IFile file) throws CoreException {
+		try {
+			final ResourceSet resourceSet = new ResourceSetImpl();
+			final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+			return resourceSet.getResource(uri, true);
+		} catch (final WrappedException e) {
+			throw new CoreException(
+					Status.error(MessageFormat.format(Messages.FileLibraryElementProvider_LibraryElementCannotBeLoaded,
+							file.getFullPath()), e.getCause()));
+		} catch (final Exception e) {
+			throw new CoreException(Status.error(MessageFormat
+					.format(Messages.FileLibraryElementProvider_LibraryElementCannotBeLoaded, file.getFullPath()), e));
+		}
 	}
 
 	@Override

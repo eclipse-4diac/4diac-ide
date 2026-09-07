@@ -18,12 +18,6 @@ import org.eclipse.ui.IEditorPart;
 public interface ITypeEntryEditor extends IEditorPart {
 
 	/**
-	 * Perform all steps to reload the type from the file and update the editor
-	 *
-	 */
-	void reloadType();
-
-	/**
 	 * Update the editor input to be used by this editor.
 	 *
 	 * This can occur if directories or projects are renamed or a file is moved to a

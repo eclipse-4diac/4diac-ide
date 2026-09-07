@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -82,13 +83,21 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 			final MultiStatus status) {
 		return versions.entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().map(version -> {
-					final Version parsedVersion = Version.valueOf(version);
+					final Version parsedVersion;
+					try {
+						parsedVersion = Version.valueOf(version);
+					} catch (final IllegalArgumentException e) {
+						status.add(Status.warning(MessageFormat.format(
+								"{0}: Ignoring library {1} with invalid version ''{2}'': {3}", //$NON-NLS-1$
+								downloader.getName(), entry.getKey(), version, e.getMessage())));
+						return null;
+					}
 					final Map<String, VersionRange> dependencies = fetchDependencies
 							? getDependencies(downloader, entry.getKey(), parsedVersion, monitor, status)
 							: Map.of();
 
 					return new LibraryDescriptor(entry.getKey(), parsedVersion, dependencies);
-				}).toList()));
+				}).filter(Objects::nonNull).toList()));
 	}
 
 	private static Map<String, VersionRange> getDependencies(final IArchiveDownloader downloader,

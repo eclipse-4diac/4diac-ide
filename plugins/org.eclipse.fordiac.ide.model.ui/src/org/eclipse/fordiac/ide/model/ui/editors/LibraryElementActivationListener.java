@@ -87,15 +87,17 @@ public class LibraryElementActivationListener implements IPartListener, IWindowL
 	}
 
 	protected void handleEditorInputChanged(final IEditorInput editorInput) {
-		final PlainMessageDialog replaceContentDialog = PlainMessageDialog
-				.getBuilder(getShell(), Messages.LibraryElementActivationListener_FileChangedTitle)
-				.message(MessageFormat.format(Messages.LibraryElementActivationListener_FileChangedMessage,
-						editorInput.getToolTipText()))
-				.buttonLabels(List.of(Messages.LibraryElementActivationListener_ReplaceContentButton,
-						Messages.LibraryElementActivationListener_IgnoreChangeButton))
-				.build();
-		if (replaceContentDialog.open() != 0) {
-			return;
+		if (LibraryElementProvider.INSTANCE.canSaveLibraryElement(editorInput)) {
+			final PlainMessageDialog replaceContentDialog = PlainMessageDialog
+					.getBuilder(getShell(), Messages.LibraryElementActivationListener_FileChangedTitle)
+					.message(MessageFormat.format(Messages.LibraryElementActivationListener_FileChangedMessage,
+							editorInput.getToolTipText()))
+					.buttonLabels(List.of(Messages.LibraryElementActivationListener_ReplaceContentButton,
+							Messages.LibraryElementActivationListener_IgnoreChangeButton))
+					.build();
+			if (replaceContentDialog.open() != 0) {
+				return;
+			}
 		}
 
 		try {

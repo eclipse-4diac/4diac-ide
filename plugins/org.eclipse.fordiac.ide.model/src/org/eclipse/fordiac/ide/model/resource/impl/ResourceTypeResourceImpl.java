@@ -19,6 +19,8 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.ResourceTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -38,4 +40,8 @@ public class ResourceTypeResourceImpl extends AbstractLibraryElementResource<Res
 		return new ResourceTypeExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorResourceType createErrorLibraryElement() {
+		return LibraryElementFactory.eINSTANCE.createErrorResourceType();
+	}
 }

@@ -9,17 +9,25 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="Opened" Type="Event" Comment="Confirms opening of register communication">
+				<With Var="STATUS"/>
 			</Event>
 			<Event Name="CNF" Type="Event" Comment="Confirms that the R/W command has been processed">
 				<With Var="counter"/>
-				<With Var="rREG_D0"/>
-				<With Var="rREG_D1"/>
+				<With Var="REG_D0"/>
+				<With Var="REG_D1"/>
+				<With Var="STATUS"/>
 			</Event>
 			<Event Name="Closed" Type="Event" Comment="Confirms closing of register communication">
+				<With Var="STATUS"/>
+				<With Var="counter"/>
+			</Event>
+			<Event Name="Error" Type="Event" Comment="Indicates errors">
+				<With Var="STATUS"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="Open" Type="Event" Comment="Open register communication">
+				<With Var="autoPsw"/>
 			</Event>
 			<Event Name="Read" Type="Event" Comment="Read register with RegNr">
 				<With Var="cmd"/>
@@ -31,12 +39,14 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Status message"/>
 			<VarDeclaration Name="counter" Type="USINT" Comment="Counts the commands processed"/>
-			<VarDeclaration Name="rREG_D0" Type="BYTE" Comment="LSB data read from the register RegNr"/>
-			<VarDeclaration Name="rREG_D1" Type="BYTE" Comment="MSB data read from the register RegNr"/>
+			<VarDeclaration Name="REG_D0" Type="BYTE" Comment="LSB data read from the register RegNr of the cmd"/>
+			<VarDeclaration Name="REG_D1" Type="BYTE" Comment="MSB data read from the register RegNr of the cmd"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="cmd" Type="eclipse4diac::io::wago::RegComCmd" Comment="Command for register communication"/>
+			<VarDeclaration Name="autoPsw" Type="BOOL" Comment="Automatically (re)sets password to write secured registers" InitialValue="TRUE"/>
+			<VarDeclaration Name="cmd" Type="eclipse4diac::io::wago::WagoRegComCmd" Comment="Command for register communication"/>
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>

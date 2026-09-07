@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -202,7 +203,8 @@ class STFunctionPartitionerTest {
 				FUNCTION TEST2
 				END_FUNCTION
 				""";
-		assertFunctionsEquals(List.of(function, function2), partition(function + function2));
+		assertFunctionsEquals(List.of(function, function2),
+				partition(function + CommonElementExporter.LINE_END + function2));
 	}
 
 	private static FunctionFBType createFunctionFBType() {

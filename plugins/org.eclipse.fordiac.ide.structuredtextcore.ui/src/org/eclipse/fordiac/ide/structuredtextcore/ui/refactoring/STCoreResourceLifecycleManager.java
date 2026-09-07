@@ -21,6 +21,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
@@ -52,17 +54,33 @@ public class STCoreResourceLifecycleManager extends ResourceLifecycleManager {
 
 	protected static <T extends LibraryElement> void updateType(final T type, final Consumer<? super T> consumer,
 			final ResourceSet resourceSet) {
-		if (type instanceof AnyDerivedType) {
-			final Class<? extends T> clazz = getClass(type);
-			if (type.eResource() != null && type.eResource().getResourceSet() != resourceSet) {
-				final EObject canonicalObject = resourceSet.getEObject(EcoreUtil.getURI(type), true);
-				if (clazz.isInstance(canonicalObject)) {
-					updateCrossReferences(canonicalObject.eResource(), resourceSet);
-					consumer.accept(clazz.cast(canonicalObject));
-				}
-			} else if (type instanceof final ArrayType arrayType) {
-				updateType(arrayType.getBaseType(), arrayType::setBaseType, resourceSet);
-			}
+		switch (type) {
+		case final ErrorLibraryElement unused -> {
+			// do not attempt to update error types
+		}
+		case final AnyDerivedType dataType when dataType.eResource() != null
+				&& dataType.eResource().getResourceSet() != resourceSet ->
+			// update references to types in another resource set
+			updateReference(type, consumer, resourceSet);
+		case final ArrayType arrayType ->
+			// update base type of array types
+			updateType(arrayType.getBaseType(), arrayType::setBaseType, resourceSet);
+		case final DirectlyDerivedType derivedType ->
+			// update base type of derived types
+			updateType(derivedType.getBaseType(), derivedType::setBaseType, resourceSet);
+		case null, default -> {
+			// do nothing
+		}
+		}
+	}
+
+	protected static <T extends LibraryElement> void updateReference(final T type, final Consumer<? super T> consumer,
+			final ResourceSet resourceSet) {
+		final Class<? extends T> clazz = getClass(type);
+		final EObject canonicalObject = resourceSet.getEObject(EcoreUtil.getURI(type), true);
+		if (clazz.isInstance(canonicalObject) && canonicalObject.eResource() != null) {
+			updateCrossReferences(canonicalObject.eResource(), resourceSet);
+			consumer.accept(clazz.cast(canonicalObject));
 		}
 	}
 

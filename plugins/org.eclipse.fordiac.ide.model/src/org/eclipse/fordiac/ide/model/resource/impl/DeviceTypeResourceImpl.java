@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.dataexport.DEVExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class DeviceTypeResourceImpl extends AbstractLibraryElementResource<DeviceType> {
@@ -38,4 +40,8 @@ public class DeviceTypeResourceImpl extends AbstractLibraryElementResource<Devic
 		return new DEVExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorDeviceType createErrorLibraryElement() {
+		return LibraryElementFactory.eINSTANCE.createErrorDeviceType();
+	}
 }

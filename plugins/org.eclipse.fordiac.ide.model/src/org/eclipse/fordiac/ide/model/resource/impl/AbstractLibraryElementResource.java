@@ -38,9 +38,12 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -57,6 +60,7 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
 		final IFile typeFile = getTypeFile();
+		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
 
 		try {
 			final CommonElementImporter importer = getTypeImporter(inputStream,
@@ -66,7 +70,6 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 			getWarnings().addAll(importer.getWarnings());
 			final LibraryElement element = importer.getElement();
 			if (element != null) {
-				final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
 				if (typeEntryForFile != null) {
 					element.setTypeEntry(typeEntryForFile);
 				}
@@ -85,6 +88,17 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 			throw e;
 		} catch (final Exception e) {
 			throw new IOWrappedException(e);
+		}
+
+		if (getContents().isEmpty()) {
+			final ErrorLibraryElement errorElement = createErrorLibraryElement();
+			if (typeEntryForFile != null) {
+				PackageNameHelper.setFullTypeName(errorElement, typeEntryForFile.getFullTypeName());
+				errorElement.setTypeEntry(typeEntryForFile);
+			} else {
+				PackageNameHelper.setFullTypeName(errorElement, getURI().trimFileExtension().lastSegment());
+			}
+			getContents().add(errorElement);
 		}
 	}
 
@@ -132,4 +146,5 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 
 	protected abstract AbstractTypeExporter getTypeExporter(T contentToSave);
 
+	protected abstract ErrorLibraryElement createErrorLibraryElement();
 }

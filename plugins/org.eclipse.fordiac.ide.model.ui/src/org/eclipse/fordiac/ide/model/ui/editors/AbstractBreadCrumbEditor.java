@@ -309,7 +309,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	private void gotoElement(final EObject element) {
 		final EObject toView = getFBNetworkContainer(element);
-		if (toView != null) {
+		if (toView != null && getBreadcrumb() != null) {
 			getBreadcrumb().setInput(toView);
 			selectElement(element);
 		}
@@ -460,4 +460,11 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	 * @return the model element for which the first editor should be shown.
 	 */
 	protected abstract Object getInitialModel(String itemPath);
+
+	protected void clearEditorContent() {
+		if (breadcrumb != null) {
+			breadcrumb.dispose();
+			breadcrumb = null;
+		}
+	}
 }

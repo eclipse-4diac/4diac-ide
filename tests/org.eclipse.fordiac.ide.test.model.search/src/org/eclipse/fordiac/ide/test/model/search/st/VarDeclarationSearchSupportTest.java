@@ -9,13 +9,21 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Franz Höpfinger - test search support registration for VarDeclaration subtypes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.search.st;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.CrossReferenceMatcher;
+import org.eclipse.fordiac.ide.model.search.ISearchFactory;
+import org.eclipse.fordiac.ide.model.search.st.VarDeclarationSearchSupport;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({ "nls", "static-method" })
@@ -33,5 +41,20 @@ class VarDeclarationSearchSupportTest extends StructuredTextSearchSupportTest {
 		assertNoMatch(type.getInterfaceList().getInputVars().getFirst(), new CrossReferenceMatcher(varDeclaration));
 		assertMatch(type.getInterfaceList().getInputVars().getFirst(), new CrossReferenceMatcher(varDeclarationConst),
 				0, 0, 14);
+	}
+
+	@Test
+	void testContainerVarDeclarationHasSearchSupport() {
+		final ContainerVarDeclaration containerVarDeclaration = LibraryElementFactory.eINSTANCE
+				.createContainerVarDeclaration();
+		assertInstanceOf(VarDeclarationSearchSupport.class, ISearchFactory.createSearchSupport(containerVarDeclaration,
+				containerVarDeclaration.eClass().getInstanceClass()));
+	}
+
+	@Test
+	void testVarConfigInstanceHasSearchSupport() {
+		final VarConfigInstance varConfigInstance = LibraryElementFactory.eINSTANCE.createVarConfigInstance();
+		assertInstanceOf(VarDeclarationSearchSupport.class, ISearchFactory.createSearchSupport(varConfigInstance,
+				varConfigInstance.eClass().getInstanceClass()));
 	}
 }
