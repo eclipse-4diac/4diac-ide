@@ -171,4 +171,12 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 */
 	List<String> getBlockRelativePath();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true"
+	 * @generated
+	 */
+	boolean isMemberAccessPin();
+
 } // IInterfaceElement

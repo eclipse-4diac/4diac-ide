@@ -649,6 +649,8 @@
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getBlockRelativePath"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/isMemberAccessPin"
+          body="return this instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration &amp;&amp; eContainer() instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Import">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Import/importedNamespace"/>
