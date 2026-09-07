@@ -537,6 +537,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		if (newElement instanceof final TypedSubApp newTsa && oldElement instanceof final TypedSubApp oldTsa
 				&& oldElement.getTypeEntry() == entry) {
 			newTsa.getVarConfigParams().addAll(EcoreUtil.copyAll(oldTsa.getVarConfigParams()));
+			newTsa.getOverrideAttributes().addAll(EcoreUtil.copyAll(oldTsa.getOverrideAttributes()));
 		}
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
 	}
