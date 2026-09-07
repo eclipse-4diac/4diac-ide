@@ -16,41 +16,18 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Error Marker FBN Element</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * The following features are implemented:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getRepairedElement <em>Repaired Element</em>}</li>
- * </ul>
  *
  * @generated
  */
 public class ErrorMarkerFBNElementImpl extends BlockFBNetworkElementImpl implements ErrorMarkerFBNElement {
-	/**
-	 * The cached value of the '{@link #getRepairedElement() <em>Repaired Element</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRepairedElement()
-	 * @generated
-	 * @ordered
-	 */
-	protected FBNetworkElement repairedElement;
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -76,46 +53,6 @@ public class ErrorMarkerFBNElementImpl extends BlockFBNetworkElementImpl impleme
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getRepairedElement() {
-		if (repairedElement != null && repairedElement.eIsProxy()) {
-			InternalEObject oldRepairedElement = (InternalEObject)repairedElement;
-			repairedElement = (FBNetworkElement)eResolveProxy(oldRepairedElement);
-			if (repairedElement != oldRepairedElement) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT, oldRepairedElement, repairedElement));
-			}
-		}
-		return repairedElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetworkElement basicGetRepairedElement() {
-		return repairedElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRepairedElement(FBNetworkElement newRepairedElement) {
-		FBNetworkElement oldRepairedElement = repairedElement;
-		repairedElement = newRepairedElement;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT, oldRepairedElement, repairedElement));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public double getWidth() {
 		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);
 	}
@@ -128,71 +65,6 @@ public class ErrorMarkerFBNElementImpl extends BlockFBNetworkElementImpl impleme
 	@Override
 	public double getHeight() {
 		return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
-				if (resolve) return getRepairedElement();
-				return basicGetRepairedElement();
-			default:
-				return super.eGet(featureID, resolve, coreType);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
-				setRepairedElement((FBNetworkElement)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
-				setRepairedElement((FBNetworkElement)null);
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
-				return repairedElement != null;
-			default:
-				return super.eIsSet(featureID);
-		}
 	}
 
 } //ErrorMarkerFBNElementImpl

@@ -26,7 +26,8 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.graph,
  org.eclipse.fordiac.ide.model.helpers,
  org.eclipse.fordiac.ide.model.libraryElement,
- org.eclipse.fordiac.ide.model.libraryElement.impl;x-friends:="org.eclipse.fordiac.ide.test.model",
+ org.eclipse.fordiac.ide.model.libraryElement.impl;
+  x-friends:="org.eclipse.fordiac.ide.test.model",
  org.eclipse.fordiac.ide.model.libraryElement.util,
  org.eclipse.fordiac.ide.model.preferences,
  org.eclipse.fordiac.ide.model.resource,
@@ -43,7 +44,7 @@ Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.model.ModelPlugin
 Bundle-ClassPath: .
-Bundle-Version: 3.3.100.qualifier
+Bundle-Version: 3.4.0.qualifier
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-ManifestVersion: 2
