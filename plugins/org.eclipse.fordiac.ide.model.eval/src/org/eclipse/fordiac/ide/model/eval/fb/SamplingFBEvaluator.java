@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
@@ -86,11 +85,6 @@ public class SamplingFBEvaluator extends FBEvaluator<FBType> {
 
 	private Variable<?> getDelegateVariable(final Variable<?> variable) {
 		return delegate.getContext().getValue().get(variable.getName());
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		return delegate.getDependencies();
 	}
 
 	@Override

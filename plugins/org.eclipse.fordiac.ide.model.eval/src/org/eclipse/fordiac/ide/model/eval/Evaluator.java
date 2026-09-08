@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.eval;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -86,11 +85,6 @@ public interface Evaluator {
 	 * Get the source element this evaluator is executing.
 	 */
 	Object getSourceElement();
-
-	/**
-	 * Get the dependencies of the source element
-	 */
-	Set<String> getDependencies();
 
 	/**
 	 * Get the variables this evaluator has in its scope.

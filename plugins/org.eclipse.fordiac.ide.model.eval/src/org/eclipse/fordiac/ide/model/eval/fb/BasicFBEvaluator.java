@@ -12,13 +12,10 @@
  */
 package org.eclipse.fordiac.ide.model.eval.fb;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
@@ -102,14 +99,6 @@ public class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 
 	public Map<ECTransition, Evaluator> getTransitionEvaluators() {
 		return transitionEvaluators;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		return Stream
-				.concat(Stream.of(super.getDependencies()),
-						transitionEvaluators.values().stream().map(Evaluator::getDependencies))
-				.flatMap(Collection::stream).collect(Collectors.toUnmodifiableSet());
 	}
 
 	protected static boolean hasConditionExpression(final ECTransition transition) {
