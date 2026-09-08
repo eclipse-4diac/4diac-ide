@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   			 - handle scrolling during connection creation
+ *   Michael Oberlehner - add injectable connection drag tool factory
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -36,7 +37,12 @@ public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 	private final SelectEditPartTracker editPartTracker;
 
 	public ConnCreateDirectEditDragTrackerProxy(final EditPart editPart) {
-		this.connectionTool = new FordiacConnectionDragCreationTool();
+		this(editPart, new FordiacConnectionDragCreationTool());
+	}
+
+	public ConnCreateDirectEditDragTrackerProxy(final EditPart editPart,
+			final ConnectionDragCreationTool connectionTool) {
+		this.connectionTool = connectionTool;
 		this.editPartTracker = new SelectEditPartTracker(editPart);
 	}
 
