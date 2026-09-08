@@ -183,6 +183,8 @@ public class GitLabDownloader implements IArchiveDownloader {
 		final HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
 		httpConn.setRequestMethod(Messages.GET);
 		httpConn.setRequestProperty(Messages.Private_Token, token);
+		httpConn.setConnectTimeout(10_000);
+		httpConn.setReadTimeout(30_000);
 		return httpConn;
 	}
 
@@ -429,11 +431,13 @@ public class GitLabDownloader implements IArchiveDownloader {
 	public DownloadResult<Path> downloadManifest(final String symbolicName, final Version version,
 			final IProgressMonitor monitor) throws OperationCanceledException {
 		final SubMonitor progress = SubMonitor.convert(monitor, "Downloading Manifest from Gitlab", 5); //$NON-NLS-1$
-		final var fetchResult = fetchProjectsAndPackages();
-		progress.worked(4);
-		if (fetchResult.status() != DownloadResult.Status.OK) {
-			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
+		if (packagesAndLeaves == null || projectAndPackageMap == null) {
+			final var fetchResult = fetchProjectsAndPackages();
+			if (fetchResult.status() != DownloadResult.Status.OK) {
+				return new DownloadResult<>(fetchResult.status(), fetchResult.message());
+			}
 		}
+		progress.worked(4);
 		if (!packagesAndLeaves.containsKey(symbolicName)) {
 			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
 		}
