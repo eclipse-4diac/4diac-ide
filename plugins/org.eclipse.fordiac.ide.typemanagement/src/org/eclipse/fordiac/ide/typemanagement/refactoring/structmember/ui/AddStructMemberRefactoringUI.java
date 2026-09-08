@@ -32,6 +32,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 public final class AddStructMemberRefactoringUI {
+	public static void openAsync(final Shell shell, final VarDeclaration structPin) {
+		final Optional<AddStructMemberContext> context = AddStructMemberContext.forStructPin(structPin);
+		if (context.isEmpty()) {
+			Display.getDefault().asyncExec(
+					() -> ErrorMessenger.popUpErrorMessage(Messages.AddStructMemberRefactoring_InvalidContext));
+			return;
+		}
+		Display.getDefault().asyncExec(() -> open(shell, context.orElseThrow()));
+	}
 
 	public static void openAsync(final Shell shell, final VarDeclaration connectionPin, final EObject target) {
 		final Optional<AddStructMemberContext> context = AddStructMemberContext.forTarget(connectionPin, target);
