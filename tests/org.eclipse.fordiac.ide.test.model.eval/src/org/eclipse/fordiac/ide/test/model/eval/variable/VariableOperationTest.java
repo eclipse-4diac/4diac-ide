@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
@@ -460,39 +459,6 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 		assertEquals(toDIntValue(21), VariableOperations.evaluateValue(ElementaryTypes.DINT, "17+4"));
 		assertEquals("The variable error is undefined", assertThrows(EvaluatorPrepareException.class,
 				() -> VariableOperations.evaluateValue(ElementaryTypes.DINT, "error")).getMessage());
-	}
-
-	@Test
-	void testGetDependenciesForVarDeclaration() {
-		assertEquals(Set.of("DINT"), VariableOperations
-				.getDependencies(newVarDeclaration("TestVarDeclaration", ElementaryTypes.DINT, false)));
-		assertEquals(Set.of("DINT"), VariableOperations
-				.getDependencies(newVarDeclaration("TestVarDeclaration", ElementaryTypes.DINT, false, "17")));
-		assertEquals(Set.of("DINT"), VariableOperations
-				.getDependencies(newVarDeclaration("TestVarDeclaration", ElementaryTypes.DINT, false, "17+4")));
-
-		final VarDeclaration arrayVarDeclaration = newVarDeclaration("TestVarDeclaration", ElementaryTypes.DINT, false);
-		ArraySizeHelper.setArraySize(arrayVarDeclaration, "0..1,-10..10");
-		assertEquals(Set.of("DINT"), VariableOperations.getDependencies(arrayVarDeclaration));
-
-		final VarDeclaration arrayVarDeclaration2 = newVarDeclaration("TestVarDeclaration", ElementaryTypes.DINT,
-				false);
-		ArraySizeHelper.setArraySize(arrayVarDeclaration2, "0..17+4,21..21*2");
-		assertEquals(Set.of("DINT"), VariableOperations.getDependencies(arrayVarDeclaration2));
-	}
-
-	@Test
-	void testGetDependenciesForAttribute() {
-		assertEquals(Set.of("TestStructAttribute"), VariableOperations.getDependencies(attribute1));
-		assertEquals(Set.of("TestStructAttribute"), VariableOperations.getDependencies(attribute2));
-		assertEquals(Set.of("TestDerivedAttribute"), VariableOperations.getDependencies(attribute3));
-		assertEquals(Set.of("TestDerivedAttribute"), VariableOperations.getDependencies(attribute4));
-	}
-
-	@Test
-	void testGetAllDependencies() {
-		assertEquals(Set.of("DINT"), VariableOperations.getAllDependencies(type));
-		assertEquals(Set.of("DINT"), VariableOperations.getAllDependencies(instance));
 	}
 
 	@Test

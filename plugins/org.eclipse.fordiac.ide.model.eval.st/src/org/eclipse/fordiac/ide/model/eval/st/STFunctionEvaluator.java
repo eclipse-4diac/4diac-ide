@@ -12,14 +12,11 @@
  */
 package org.eclipse.fordiac.ide.model.eval.st;
 
-import java.util.Set;
-
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParseUtil;
 
 public class STFunctionEvaluator extends STCallableEvaluator {
 	private final STFunction function;
@@ -64,10 +61,5 @@ public class STFunctionEvaluator extends STCallableEvaluator {
 	@Override
 	public STFunction getSourceElement() {
 		return function;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		return STFunctionParseUtil.collectUsedTypes(function);
 	}
 }

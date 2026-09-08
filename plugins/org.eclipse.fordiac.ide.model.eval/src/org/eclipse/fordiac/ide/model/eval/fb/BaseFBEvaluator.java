@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.eval.fb;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,16 +53,6 @@ public abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<
 	public void cleanup() {
 		algorithmEvaluators.values().forEach(Evaluator::cleanup);
 		internalFBEvaluators.values().forEach(Evaluator::cleanup);
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		return Stream
-				.concat(Stream.of(super.getDependencies()),
-						Stream.concat(algorithmEvaluators.values().stream(),
-								getType().getMethods().stream().map(this::createMethodEvaluator))
-								.map(Evaluator::getDependencies))
-				.flatMap(Collection::stream).collect(Collectors.toUnmodifiableSet());
 	}
 
 	@Override

@@ -13,9 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.st;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
@@ -95,14 +93,5 @@ public class STFunctionBodyEvaluator extends STCallableEvaluator {
 			return parseResult.getFunctions().getFirst();
 		}
 		return null;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		prepare();
-		if (parseResult != null) {
-			return STFunctionParseUtil.collectUsedTypes(parseResult);
-		}
-		return Collections.emptySet();
 	}
 }
