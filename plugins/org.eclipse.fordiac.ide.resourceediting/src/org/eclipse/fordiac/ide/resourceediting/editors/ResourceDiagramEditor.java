@@ -24,10 +24,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.resourceediting.editparts.ResourceDiagramEditPartFactory;
-import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IEditorInput;
 
 /**
@@ -106,8 +104,8 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 			if (null != layer) {
 				final Color devColor = getResource().getDevice().getColor();
 				if (null != devColor) {
-					final org.eclipse.swt.graphics.Color newColor = ColorManager
-							.getColor(new RGB(devColor.getRed(), devColor.getGreen(), devColor.getBlue()));
+					final org.eclipse.swt.graphics.Color newColor = new org.eclipse.swt.graphics.Color(
+							devColor.getRed(), devColor.getGreen(), devColor.getBlue());
 					layer.setForegroundColor(newColor);
 				}
 			}

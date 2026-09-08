@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.TransitionEditingComposi
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.SWT;
@@ -38,7 +39,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class StateSection extends AbstractSection {
 	private Text stateNameText;
 	private Text stateCommentText;
-	private ActionEditingComposite actionGroup;
+	private ActionEditingComposite<ECAction> actionGroup;
 	private TransitionEditingComposite transitionGroup;
 
 	@Override
@@ -62,7 +63,7 @@ public class StateSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, true));
 		createStateNameControls(parent);
 		createStateCommentControls(parent);
-		actionGroup = new ActionEditingComposite(parent, getWidgetFactory(), this);
+		actionGroup = new ActionEditingComposite<>(parent, getWidgetFactory(), this);
 		transitionGroup = new TransitionEditingComposite(parent, getWidgetFactory(), this);
 	}
 

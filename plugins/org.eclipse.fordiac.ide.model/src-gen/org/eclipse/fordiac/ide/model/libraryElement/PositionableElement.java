@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -59,21 +57,5 @@ public interface PositionableElement extends EObject {
 	 * @generated
 	 */
 	void setPosition(Position value);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model xDataType="org.eclipse.emf.ecore.xml.type.Int" xRequired="true" yDataType="org.eclipse.emf.ecore.xml.type.Int" yRequired="true"
-	 * @generated
-	 */
-	void updatePositionFromScreenCoordinates(int x, int y);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model newPosDataType="org.eclipse.fordiac.ide.model.libraryElement.Point" newPosRequired="true"
-	 * @generated
-	 */
-	void updatePositionFromScreenCoordinates(Point newPos);
 
 } // PositionableElement

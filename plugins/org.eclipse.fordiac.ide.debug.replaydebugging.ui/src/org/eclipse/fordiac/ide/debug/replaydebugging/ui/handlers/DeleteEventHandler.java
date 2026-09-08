@@ -35,7 +35,8 @@ public class DeleteEventHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
-			setBaseEnabled(!s.isEmpty() && s.getFirstElement() instanceof EventMarkerEditPart);
+			setBaseEnabled(!s.isEmpty() && s.getFirstElement() instanceof final EventMarkerEditPart ep
+					&& ep.getModel() != null && !ep.getModel().getIsReadOnly());
 		}
 	}
 }

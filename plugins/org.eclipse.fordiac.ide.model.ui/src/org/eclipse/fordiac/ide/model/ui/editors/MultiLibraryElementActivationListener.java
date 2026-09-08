@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025, 2026 Martin Erich Jobst
+ * Copyright (c) 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -58,7 +58,7 @@ public class MultiLibraryElementActivationListener extends LibraryElementActivat
 				.okButtonText(Messages.MultiLibraryElementActivationListener_ReplaceContentButton)
 				.okButtonTextWhenNoSelection(Messages.LibraryElementActivationListener_IgnoreChangeButton)
 				.labelProvider(new WorkbenchLabelProvider()).preselect(editorInputs.toArray()).canCancel(false)
-				.asSheet(true).create(getEditorPart().getSite().getShell());
+				.asSheet(true).create(getShell());
 		if (replaceContentDialog.open() != IDialogConstants.OK_ID) {
 			return;
 		}
@@ -75,8 +75,7 @@ public class MultiLibraryElementActivationListener extends LibraryElementActivat
 			}
 		}
 		if (!status.isOK()) {
-			ErrorDialog.openError(getEditorPart().getSite().getShell(),
-					Messages.LibraryElementActivationListener_SyncErrorTitle,
+			ErrorDialog.openError(getShell(), Messages.LibraryElementActivationListener_SyncErrorTitle,
 					Messages.MultiLibraryElementActivationListener_SyncErrorMessage, status);
 		}
 	}

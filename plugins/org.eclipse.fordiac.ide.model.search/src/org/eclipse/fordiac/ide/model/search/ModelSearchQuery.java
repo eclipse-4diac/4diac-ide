@@ -65,7 +65,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
 import org.eclipse.fordiac.ide.model.search.types.GlobalConstantsTypeInstanceSearch;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;

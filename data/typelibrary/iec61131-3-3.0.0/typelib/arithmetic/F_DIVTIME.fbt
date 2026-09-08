@@ -20,8 +20,8 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="time input to be devided" Name="IN1" Type="TIME"/>
-      <VarDeclaration Comment="divisosr" Name="IN2" Type="ANY_NUM"/>
+      <VarDeclaration Comment="time input to be divided" Name="IN1" Type="TIME"/>
+      <VarDeclaration Comment="divisor" Name="IN2" Type="ANY_NUM"/>
     </InputVars>
     <OutputVars>
       <VarDeclaration Comment="Function output" Name="OUT" Type="TIME"/>

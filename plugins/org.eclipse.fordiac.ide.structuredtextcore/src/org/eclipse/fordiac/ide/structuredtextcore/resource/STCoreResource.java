@@ -101,8 +101,11 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			addInternalLibraryElement(libraryElement);
 			// add errors and warnings from type resource
 			// has to be done _after_ super.doLoad, because that clears them
-			getErrors().addAll(typeResource.getErrors());
-			getWarnings().addAll(typeResource.getWarnings());
+			// skip if uri has query to avoid duplicate errors and warnings from type
+			if (!uri.hasQuery()) {
+				getErrors().addAll(typeResource.getErrors());
+				getWarnings().addAll(typeResource.getWarnings());
+			}
 		}
 	}
 

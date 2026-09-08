@@ -21,7 +21,7 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="Selelctor" InitialValue="" Name="G" Type="BOOL"/>
+      <VarDeclaration Comment="Selector" InitialValue="" Name="G" Type="BOOL"/>
       <VarDeclaration Comment="Selectable input variable" InitialValue="" Name="IN0" Type="ANY"/>
       <VarDeclaration Comment="Selectable input variable" InitialValue="" Name="IN1" Type="ANY"/>
     </InputVars>

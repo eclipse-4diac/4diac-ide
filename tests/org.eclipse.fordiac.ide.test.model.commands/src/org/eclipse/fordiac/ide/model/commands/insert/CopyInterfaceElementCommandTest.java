@@ -29,8 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 
 	private static final String INTERFACE_ELEMENT = "InterfaceElement"; //$NON-NLS-1$

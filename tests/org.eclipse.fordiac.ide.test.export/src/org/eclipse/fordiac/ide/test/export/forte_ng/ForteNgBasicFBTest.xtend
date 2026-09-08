@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.fail
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.getFORTEStringId
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
 	@Test

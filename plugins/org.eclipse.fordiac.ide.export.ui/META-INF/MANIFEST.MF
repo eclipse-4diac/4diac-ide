@@ -4,17 +4,17 @@ Export-Package: org.eclipse.fordiac.ide.export.ui,
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.ide,
- org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.core.resources,
  org.eclipse.fordiac.ide.export
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.1.200.qualifier
 Bundle-Name: Export UI
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.ui;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.ui
+Import-Package: org.eclipse.fordiac.ide.util

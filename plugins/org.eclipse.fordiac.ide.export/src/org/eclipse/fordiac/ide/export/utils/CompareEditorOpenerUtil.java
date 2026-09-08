@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /**
  * The Class CompareEditorOpenerUtil is a helper class to get the

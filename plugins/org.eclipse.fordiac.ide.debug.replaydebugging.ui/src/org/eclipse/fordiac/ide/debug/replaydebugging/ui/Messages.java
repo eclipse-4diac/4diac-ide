@@ -18,8 +18,21 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+	public static String AddEditEventCommentCommand_Text;
+	public static String AddEventCommentHandler_DialogTitle;
+	public static String AddEventCommentHandler_HintForTheUser;
 	public static String AddToComparisonCommand_Text;
+
+	public static String AddEditTimelineCommentCommand_Text;
+	public static String AddTimelineCommentHandler_DialogTitle;
+	public static String AddTimelineCommentHandler_HintForTheUser;
+	public static String RemoveTimelineCommentCommand_Text;
+
+	public static String RemoveEventCommentCommand_Text;
+	public static String RemoveFromComparisonCommand_Text;
+
 	public static String OpenStatesComparisonHandler_OpenTableViewError;
+	public static String SelectEventCommand_Text;
 	public static String StatesComparisonView_AlphabeticallyAscendingOrderLabel;
 	public static String StatesComparisonView_AlphabeticallyDescendingOrderLabel;
 	public static String StatesComparisonView_ColumnEnabledLabel;
@@ -28,21 +41,27 @@ public class Messages extends NLS {
 	public static String StatesComparisonView_RemoveColumnLabel;
 	public static String StatesComparisonView_ShowOnlyDiffLabel;
 	public static String StatesComparisonView_SortByDiffLabel;
+	public static String StatesComparisonView_HideColumnColor;
+	public static String StatesComparisonView_ShowColumnColor;
 	public static String DeleteEventsCommand_Label;
 	public static String DeleteTimelineCommand_Label;
 	public static String LaunchConfigurationTab_BrowseButtonText;
 	public static String LaunchConfigurationTab_ComponentsSelectionText;
 	public static String LaunchConfigurationTab_LaunchConfigurationTabName;
+	public static String LaunchConfigurationTab_NoDevicesSelected;
 	public static String LaunchConfigurationTab_RemoteText;
 	public static String LaunchConfigurationTab_ReplayerSectionText;
 	public static String LaunchConfigurationTab_SelectPathDialogText;
 	public static String LaunchConfigurationTab_SystemSelectionButtonText;
 	public static String LaunchConfigurationTab_TracePathSelectionText;
+
 	public static String MoveDownCommand_Label;
 	public static String MoveLeftCommand_Label;
 	public static String MoveRightCommand_Label;
 	public static String MoveUpCommand_Label;
 	public static String NavigationRequest_Type;
+	public static String JumpLeftCommand_Label;
+	public static String JumpRightCommand_Label;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -20,7 +20,7 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="First funtion input" Name="IN1" Type="DATE_AND_TIME"/>
+      <VarDeclaration Comment="First function input" Name="IN1" Type="DATE_AND_TIME"/>
       <VarDeclaration Comment="Second function input" Name="IN2" Type="TIME"/>
     </InputVars>
     <OutputVars>

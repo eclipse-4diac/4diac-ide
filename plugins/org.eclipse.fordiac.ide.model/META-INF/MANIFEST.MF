@@ -8,15 +8,14 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.e4.core.services,
  org.eclipse.e4.core.contexts,
- org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.ui.views.properties.tabbed
 Export-Package: org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.model.annotations,
+ org.eclipse.fordiac.ide.model.annotations;x-internal:=true,
  org.eclipse.fordiac.ide.model.buildpath,
- org.eclipse.fordiac.ide.model.buildpath.impl,
+ org.eclipse.fordiac.ide.model.buildpath.impl;x-internal:=true,
  org.eclipse.fordiac.ide.model.buildpath.util,
  org.eclipse.fordiac.ide.model.data,
- org.eclipse.fordiac.ide.model.data.impl,
+ org.eclipse.fordiac.ide.model.data.impl;x-internal:=true,
  org.eclipse.fordiac.ide.model.data.util,
  org.eclipse.fordiac.ide.model.dataexport,
  org.eclipse.fordiac.ide.model.dataimport,
@@ -24,25 +23,27 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.datatype.helper,
  org.eclipse.fordiac.ide.model.emf,
  org.eclipse.fordiac.ide.model.errormarker,
+ org.eclipse.fordiac.ide.model.graph,
  org.eclipse.fordiac.ide.model.helpers,
  org.eclipse.fordiac.ide.model.libraryElement,
- org.eclipse.fordiac.ide.model.libraryElement.impl,
+ org.eclipse.fordiac.ide.model.libraryElement.impl;x-friends:="org.eclipse.fordiac.ide.test.model",
  org.eclipse.fordiac.ide.model.libraryElement.util,
  org.eclipse.fordiac.ide.model.preferences,
  org.eclipse.fordiac.ide.model.resource,
  org.eclipse.fordiac.ide.model.systemconfiguration,
  org.eclipse.fordiac.ide.model.typelibrary,
- org.eclipse.fordiac.ide.model.typelibrary.impl,
+ org.eclipse.fordiac.ide.model.typelibrary.impl;x-internal:=true,
  org.eclipse.fordiac.ide.model.util,
  org.eclipse.fordiac.ide.model.validation,
  org.eclipse.fordiac.ide.model.value
 Import-Package: jakarta.annotation,
- jakarta.inject
+ jakarta.inject,
+ org.eclipse.fordiac.ide.util
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.model.ModelPlugin
 Bundle-ClassPath: .
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-ManifestVersion: 2

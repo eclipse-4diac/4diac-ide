@@ -40,8 +40,8 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	new(CompositeFBType type, String name, Path prefix, Map<?, ?> options) {
 		super(type, name, prefix, "CCompositeFB", options)
 		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
-		fbNetworkInitialVariableLanguageSupport = fbs.flatMap[interface.inputVars].filter[!value?.value.nullOrEmpty].
-			toInvertedMap [
+		fbNetworkInitialVariableLanguageSupport = type.FBNetwork.networkElements.filter(FB).
+			flatMap[interface.inputVars].filter[!value?.value.nullOrEmpty].toInvertedMap [
 				ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
 			]
 	}
@@ -144,9 +144,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	def private generateConnectionEndpointDeclaration(Iterable<String> path) '''
 		const auto «path.generateConnectionEndpointName» = std::array{«path.generateConnectionEndpointValue»};
 	'''
-	
+
 	def private generateConnectionEndpointReference(Iterable<String> path) {
-		if(path.size > 1)
+		if (path.size > 1)
 			path.generateConnectionEndpointName
 		else
 			path.head.FORTEStringId
@@ -188,9 +188,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	}
 
 	def generateSetFBNetworkInitialValuesDefinition() '''
-		«IF fbs.flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»
+		«IF type.FBNetwork.networkElements.filter(FB).flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»
 			void «FBClassName»::setFBNetworkInitialValues() {
-			  «FOR fb : fbs»
+			  «FOR fb : type.FBNetwork.networkElements.filter(FB)»
 			  	«FOR variable : fb.interface.inputVars.filter[!value?.value.nullOrEmpty]»
 			  		«IF fb.genericType»
 			  			if (auto v = «fb.generateName»->getDataInput(«variable.name.FORTEStringId»)) { v->setValue(«variable.generateFBNetworkInitialValue»); }

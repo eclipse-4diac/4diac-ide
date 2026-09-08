@@ -22,10 +22,10 @@
     </EventOutputs>
     <InputVars>
       <VarDeclaration Comment="Structure to look into" Name="in_struct" Type="ANY"/>
-      <VarDeclaration Comment="Member of the strucuture to retrieve. Inner members are access using the dot (.) operator" Name="member" Type="STRING"/>
+      <VarDeclaration Comment="Member of the structure to retrieve. Inner members are accessed using the dot (.) operator" Name="member" Type="STRING"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="TRUE if no errors ocurred, FALSE otherwise" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="TRUE if no errors occurred, FALSE otherwise" Name="QO" Type="BOOL"/>
       <VarDeclaration Comment="Selected member if QO = TRUE, remains unchanged otherwise" Name="output" Type="ANY"/>
     </OutputVars>
   </InterfaceList>

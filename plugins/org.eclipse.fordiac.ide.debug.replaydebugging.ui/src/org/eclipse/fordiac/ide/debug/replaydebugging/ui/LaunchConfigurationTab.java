@@ -13,6 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,6 +33,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.debug.replaydebugging.LaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -50,8 +57,6 @@ import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.TextStyle;
@@ -61,6 +66,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -73,12 +79,12 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  */
 public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
-	private static final String TRACE_PATH_SECTION_TEXT = Messages.LaunchConfigurationTab_TracePathSelectionText;
 	private static final String SELECT_PATH_DIALOG_TEXT = Messages.LaunchConfigurationTab_SelectPathDialogText;
 	private static final String BROWSE_BUTTON_TEXT = Messages.LaunchConfigurationTab_BrowseButtonText;
 
 	private static final String REPLAYER_SECTION_TEXT = Messages.LaunchConfigurationTab_ReplayerSectionText;
 	private static final String REMOTE_TEXT = Messages.LaunchConfigurationTab_RemoteText;
+	private static final String NO_DEVICES_SELECTED_TEXT = Messages.LaunchConfigurationTab_NoDevicesSelected;
 
 	private static final String COMPONENTS_SELECTION_SECTION_TEXT = Messages.LaunchConfigurationTab_ComponentsSelectionText;
 	private static final String SYSTEM_SELECTION_BUTTON_TEXT = Messages.LaunchConfigurationTab_SystemSelectionButtonText;
@@ -88,22 +94,27 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	private Text systemText;
 	private static final String SYSTEM_TEXT_DEFAULT = ""; //$NON-NLS-1$
 
-	private Button remoteCheckbox;
-
 	private CheckboxTreeViewer selectionTree;
 
 	private Composite component;
 
-	private Text tracerPathText;
+	private Composite deviceRowsContainer;
+	private Label noDevicesLabel;
+	private GridData noDevicesLabelData;
+
+	/**
+	 * Live per-device rows, keyed by the current tree's Device instances. Rebuilt
+	 * from scratch whenever the tree's model is replaced.
+	 */
+	private final Map<Device, DeviceReplayRow> deviceRows = new LinkedHashMap<>();
 
 	@Override
 	public void createControl(final Composite parent) {
 		component = new Composite(parent, SWT.FILL);
 		component.setLayout(new GridLayout(1, false));
 
-		createReplayerSection();
-		createPathSelectionComponent();
 		createSelectionComponent();
+		createReplayerSection();
 	}
 
 	private void createReplayerSection() {
@@ -112,45 +123,15 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(group);
 		group.setText(REPLAYER_SECTION_TEXT);
 
-		// Checkbox to indicate if the replay should use the remote replayer (forte)
-		remoteCheckbox = new Button(group, SWT.CHECK);
-		remoteCheckbox.setText(REMOTE_TEXT);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(remoteCheckbox);
-		remoteCheckbox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				updateLaunchConfigurationDialog();
-			}
-		});
-	}
+		deviceRowsContainer = new Composite(group, SWT.NONE);
+		deviceRowsContainer.setLayout(new GridLayout(1, false));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(deviceRowsContainer);
 
-	private void createPathSelectionComponent() {
-		final Group group = new Group(component, SWT.BORDER);
-		group.setLayout(new GridLayout(1, false));
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(group);
-		group.setText(TRACE_PATH_SECTION_TEXT);
-
-		final Composite pathSelectionComposite = new Composite(group, SWT.FILL);
-		pathSelectionComposite.setLayout(new GridLayout(3, false));
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(pathSelectionComposite);
-
-		final Button browseButton = new Button(pathSelectionComposite, SWT.PUSH);
-		browseButton.setText(BROWSE_BUTTON_TEXT);
-		browseButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				final DirectoryDialog dialog = new DirectoryDialog(pathSelectionComposite.getShell());
-				dialog.setText(SELECT_PATH_DIALOG_TEXT);
-				final String selected = dialog.open();
-				if (selected != null) {
-					tracerPathText.setText(selected);
-				}
-			}
-		});
-
-		tracerPathText = new Text(pathSelectionComposite, SWT.BORDER);
-		tracerPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		tracerPathText.addModifyListener(e -> updateLaunchConfigurationDialog());
+		noDevicesLabel = new Label(deviceRowsContainer, SWT.NONE);
+		noDevicesLabel.setText(NO_DEVICES_SELECTED_TEXT);
+		noDevicesLabel.setEnabled(false);
+		noDevicesLabelData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		noDevicesLabel.setLayoutData(noDevicesLabelData);
 	}
 
 	protected void createSelectionComponent() {
@@ -183,41 +164,69 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_TRACE_PATH,
-				LaunchConfigurationDelegate.ATTR_TRACE_PATH_DEFAULT);
 		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM);
 		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.SELECTION);
-		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_REMOTE,
-				LaunchConfigurationDelegate.ATTR_REMOTE_DEFAULT);
+		configuration.removeAttribute(LaunchConfigurationDelegate.ATTR_DEVICE_REMOTE_MAP);
+		configuration.removeAttribute(LaunchConfigurationDelegate.ATTR_DEVICE_TRACE_PATH_MAP);
 	}
 
 	@Override
 	public void initializeFrom(final ILaunchConfiguration configuration) {
 		try {
-			tracerPathText.setText(configuration.getAttribute(LaunchConfigurationDelegate.ATTR_TRACE_PATH,
-					LaunchConfigurationDelegate.ATTR_TRACE_PATH_DEFAULT));
 			systemText.setText(
 					configuration.getAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM, SYSTEM_TEXT_DEFAULT));
-			remoteCheckbox.setSelection(configuration.getAttribute(LaunchConfigurationDelegate.ATTR_REMOTE,
-					LaunchConfigurationDelegate.ATTR_REMOTE_DEFAULT));
+
+			// Hard reset: whatever rows/tree-state existed before this call are tied to a
+			// (possibly) different AutomationSystem instance and must not leak forward.
+			resetDeviceRows();
+			selectionTree.setInput(null);
+			selectionTree.setCheckedElements(new Object[0]);
+
 			final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
 			selectionTree.setInput(system);
 			selectionTree.setCheckedElements(
 					DeploymentLaunchConfigurationAttributes.getSelection(configuration, system).toArray());
+
+			if (system != null) {
+				system.getSystemConfiguration().getDevices().forEach(this::updateDeviceCheckState);
+			}
+
+			refreshDeviceRows();
+
+			final Map<String, String> remoteMap = configuration.getAttribute(
+					LaunchConfigurationDelegate.ATTR_DEVICE_REMOTE_MAP,
+					LaunchConfigurationDelegate.ATTR_DEVICE_MAP_DEFAULT);
+			final Map<String, String> pathMap = configuration.getAttribute(
+					LaunchConfigurationDelegate.ATTR_DEVICE_TRACE_PATH_MAP,
+					LaunchConfigurationDelegate.ATTR_DEVICE_MAP_DEFAULT);
+
+			deviceRows.forEach((device, row) -> {
+				row.remoteCheckbox.setSelection(Boolean.parseBoolean(remoteMap.get(device.getQualifiedName())));
+				row.tracePathText.setText(pathMap.getOrDefault(device.getQualifiedName(), "")); //$NON-NLS-1$
+			});
 		} catch (final CoreException e) {
 			systemText.setText(SYSTEM_TEXT_DEFAULT);
+			resetDeviceRows();
+			refreshDeviceRows();
 		}
 	}
 
 	@Override
 	public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_TRACE_PATH, tracerPathText.getText());
 		configuration.setAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM, systemText.getText());
 		configuration.setAttribute(DeploymentLaunchConfigurationAttributes.SELECTION,
 				Stream.of(selectionTree.getCheckedElements()).filter(INamedElement.class::isInstance)
 						.map(INamedElement.class::cast).map(INamedElement::getQualifiedName)
 						.collect(Collectors.toSet()));
-		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_REMOTE, remoteCheckbox.getSelection());
+
+		final Map<String, String> remoteMap = new HashMap<>();
+		final Map<String, String> pathMap = new HashMap<>();
+		deviceRows.forEach((device, row) -> {
+			remoteMap.put(device.getQualifiedName(), Boolean.toString(row.remoteCheckbox.getSelection()));
+			pathMap.put(device.getQualifiedName(), row.tracePathText.getText());
+		});
+		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_DEVICE_REMOTE_MAP, remoteMap);
+		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_DEVICE_TRACE_PATH_MAP, pathMap);
 	}
 
 	@Override
@@ -247,7 +256,7 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public boolean isValid(final ILaunchConfiguration launchConfig) {
-		return tracerPathText.getText() != null;
+		return !getActiveDevices().isEmpty();
 	}
 
 	@Override
@@ -313,14 +322,22 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 		return null;
 	}
 
+	/**
+	 * Called when loading a new AutomationSystem. Treats this as a full model
+	 * replacement: every Device/Resource previously in the tree is discarded, all
+	 * per-device rows are disposed, and the tree/rows are rebuilt from scratch
+	 * against the freshly loaded AutomationSystem.
+	 */
 	protected void handleSystemUpdated() {
-		updateLaunchConfigurationDialog();
+		resetDeviceRows();
+		selectionTree.setInput(null);
+		selectionTree.setCheckedElements(new Object[0]);
+
 		final AutomationSystem system = getSystem();
 		selectionTree.setInput(system);
-		if (system == null) {
-			return;
-		}
-		system.getSystemConfiguration().getDevices().forEach(device -> selectionTree.setSubtreeChecked(device, true));
+
+		updateLaunchConfigurationDialog();
+		refreshDeviceRows();
 	}
 
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
@@ -344,6 +361,138 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 			return systemEntry.getType();
 		}
 		return null;
+	}
+
+	/**
+	 * Recomputes a device's checked/grayed state from its resources' checked
+	 * states. 1. None checked -> plain unchecked. 2. All checked -> plain checked.
+	 * 3. Some checked -> grayed+checked, which SWT renders as the classic tri-state
+	 * "partial" box.
+	 */
+	private void updateDeviceCheckState(final Device device) {
+		final EList<Resource> resources = device.getResource();
+		if (resources.isEmpty()) {
+			selectionTree.setGrayChecked(device, false);
+			return;
+		}
+		final long checkedCount = resources.stream().filter(selectionTree::getChecked).count();
+		if (checkedCount == 0) {
+			selectionTree.setGrayChecked(device, false);
+		} else if (checkedCount == resources.size()) {
+			selectionTree.setChecked(device, true);
+			selectionTree.setGrayed(device, false);
+		} else {
+			selectionTree.setGrayChecked(device, true);
+		}
+	}
+
+	/**
+	 * Devices considered "active" for the purposes of showing a Remote/Trace Path
+	 * row: fully or partially checked.
+	 */
+	private Set<Device> getActiveDevices() {
+		if (selectionTree.getInput() instanceof final AutomationSystem system) {
+			return system.getSystemConfiguration().getDevices().stream().filter(selectionTree::getChecked)
+					.collect(Collectors.toCollection(LinkedHashSet::new));
+		}
+		return Collections.emptySet();
+	}
+
+	/**
+	 * Syncs deviceRows with the current active-device set: disposes rows for
+	 * devices no longer active, creates rows for newly active devices, and
+	 * preserves the widgets (and whatever the user already typed) for devices that
+	 * remain active.
+	 */
+	private void refreshDeviceRows() {
+		final Set<Device> active = getActiveDevices();
+
+		// hide (not dispose) rows for devices no longer active, so their data survives
+		// if the device gets re-checked later
+		deviceRows.forEach((device, row) -> row.setActive(active.contains(device)));
+
+		for (final Device device : active) {
+			deviceRows.computeIfAbsent(device, this::createDeviceRow);
+		}
+
+		final boolean noneActive = active.isEmpty();
+		noDevicesLabel.setVisible(noneActive);
+		noDevicesLabelData.exclude = !noneActive;
+
+		deviceRowsContainer.layout(true, true);
+		component.layout(true, true);
+		updateLaunchConfigurationDialog();
+	}
+
+	private DeviceReplayRow createDeviceRow(final Device device) {
+		final DeviceReplayRow row = new DeviceReplayRow(deviceRowsContainer, device);
+		row.remoteCheckbox
+				.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		row.tracePathText.addModifyListener(e -> updateLaunchConfigurationDialog());
+		return row;
+	}
+
+	/**
+	 * Unconditionally disposes every per-device row and clears the tracking map.
+	 * Must be called before the tree's input (AutomationSystem) is replaced, so no
+	 * widget or text state from the old model can leak into the new one.
+	 */
+	private void resetDeviceRows() {
+		deviceRows.values().forEach(DeviceReplayRow::dispose);
+		deviceRows.clear();
+	}
+
+	/**
+	 * One row of "Remote" checkbox + "Browse Path" text field for a single device.
+	 */
+	private static final class DeviceReplayRow {
+
+		public final Button remoteCheckbox;
+		public final Text tracePathText;
+
+		private final Composite composite;
+		private final GridData gridData;
+
+		DeviceReplayRow(final Composite parent, final Device device) {
+			composite = new Composite(parent, SWT.NONE);
+			composite.setLayout(new GridLayout(4, false));
+			gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+			composite.setLayoutData(gridData);
+
+			final Label nameLabel = new Label(composite, SWT.NONE);
+			nameLabel.setText(device.getName());
+			GridDataFactory.swtDefaults().hint(120, SWT.DEFAULT).applyTo(nameLabel);
+
+			remoteCheckbox = new Button(composite, SWT.CHECK);
+			remoteCheckbox.setText(REMOTE_TEXT);
+
+			final Button browseButton = new Button(composite, SWT.PUSH);
+			browseButton.setText(BROWSE_BUTTON_TEXT);
+
+			tracePathText = new Text(composite, SWT.BORDER);
+			GridDataFactory.fillDefaults().grab(true, false).applyTo(tracePathText);
+
+			browseButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
+				final DirectoryDialog dialog = new DirectoryDialog(composite.getShell());
+				dialog.setText(SELECT_PATH_DIALOG_TEXT);
+				final String selected = dialog.open();
+				if (selected != null) {
+					tracePathText.setText(selected);
+				}
+			}));
+		}
+
+		/**
+		 * Shows/hides the row without disposing it, preserving whatever the user typed.
+		 */
+		void setActive(final boolean active) {
+			composite.setVisible(active);
+			gridData.exclude = !active;
+		}
+
+		void dispose() {
+			composite.dispose();
+		}
 	}
 
 	public static class SelectionContentProvider implements ITreeContentProvider {
@@ -416,11 +565,15 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 		@Override
 		public void checkStateChanged(final CheckStateChangedEvent event) {
 			final Object element = event.getElement();
-			selectionTree.setSubtreeChecked(element, event.getChecked());
-			if (element instanceof final Resource resource && !event.getChecked()) {
-				selectionTree.setChecked(resource.eContainer(), false);
+			if (element instanceof final Device device) {
+				// user toggled the device row itself: propagate fully, no partial state
+				selectionTree.setSubtreeChecked(device, event.getChecked());
+				selectionTree.setGrayed(device, false);
+			} else if (element instanceof final Resource resource
+					&& resource.eContainer() instanceof final Device device) {
+				updateDeviceCheckState(device);
 			}
-			updateLaunchConfigurationDialog();
+			refreshDeviceRows();
 		}
 	}
 

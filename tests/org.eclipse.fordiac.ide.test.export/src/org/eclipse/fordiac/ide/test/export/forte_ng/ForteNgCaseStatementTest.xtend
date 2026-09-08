@@ -22,7 +22,6 @@ import static org.eclipse.fordiac.ide.model.FordiacKeywords.*
 
 import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteNgCaseStatementTest extends ExporterTestBasicFBTypeBase {
 
 	@Test

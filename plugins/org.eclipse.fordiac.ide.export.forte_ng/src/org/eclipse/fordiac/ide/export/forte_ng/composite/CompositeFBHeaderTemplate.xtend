@@ -31,7 +31,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	final List<FB> fbs
 
-	new(CompositeFBType type, String name, Path prefix, Map<?,?> options) {
+	new(CompositeFBType type, String name, Path prefix, Map<?, ?> options) {
 		super(type, name, prefix, "CCompositeFB", options)
 		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
 	}
@@ -66,9 +66,9 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateIncludeGuardEnd»
 		
 	'''
-	
+
 	def generateSetFBNetworkInitialValuesDeclaration() '''
-		«IF fbs.flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»
+		«IF type.FBNetwork.networkElements.filter(FB).flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»
 			void setFBNetworkInitialValues() override;
 		«ENDIF»
 	'''
@@ -91,7 +91,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«type.interfaceList.inputVars.generateDataConnectionDeclarations(false, true)»
 		«type.interfaceList.outMappedInOutVars.generateDataConnectionDeclarations(false, true)»
 	'''
-	
+
 	def private needsOutputVariable(VarDeclaration varDeclaration) {
 		varDeclaration.inputConnections.empty || varDeclaration.inputConnections.first.negated
 	}
@@ -103,7 +103,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 			«generateConnectionAccessorsDeclaration("getDIOOutConInternalUnchecked", "CInOutDataConnection *")»
 		«ENDIF»
 	'''
-	
+
 	override generateEventAccessorDefinitions() ''''''
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {

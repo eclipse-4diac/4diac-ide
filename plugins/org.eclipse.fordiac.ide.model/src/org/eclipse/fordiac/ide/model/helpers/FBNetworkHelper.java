@@ -60,7 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -465,14 +465,12 @@ public final class FBNetworkHelper {
 		EObject retVal = null;
 		for (final String element : path) {
 			retVal = network.getElementNamed(element);
-			if (retVal instanceof final SubApp subApp) {
-				network = subApp.loadSubAppNetwork();
-			} else if (retVal instanceof final CFBInstance cFB) {
-				network = cFB.loadCFBNetwork();
-			} else {
-				return null;
-			}
-			if (null == network) {
+			network = switch (retVal) {
+			case final SubApp subApp -> subApp.loadSubAppNetwork();
+			case final CFBInstance cFB -> cFB.loadCFBNetwork();
+			case null, default -> null;
+			};
+			if (network == null) {
 				// we couldn't load the network, memento seems to be broken
 				return null;
 			}

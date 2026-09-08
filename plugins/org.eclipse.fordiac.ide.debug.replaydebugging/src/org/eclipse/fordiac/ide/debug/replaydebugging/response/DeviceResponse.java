@@ -33,7 +33,7 @@ public class DeviceResponse {
 	public DeviceResponse(final List<ResourceResponse> resourceResponses) {
 		response.setWatches(DevResponseFactory.eINSTANCE.createWatches());
 
-		resourceResponses.stream()
+		resourceResponses
 				.forEach(resourceResponse -> response.getWatches().getResources().add(resourceResponse.getResponse()));
 	}
 

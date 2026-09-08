@@ -23,11 +23,11 @@
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="in_struct" Type="ANY" Comment="Structure to look into"/>
-			<VarDeclaration Name="member" Type="STRING" Comment="Member of the strucuture to retrieve. Inner members are access using the dot (.) operator"/>
+			<VarDeclaration Name="member" Type="STRING" Comment="Member of the structure to set. Inner members are accessed using the dot (.) operator"/>
 			<VarDeclaration Name="element_value" Type="ANY" Comment="new value for the element"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="out_struct" Type="ANY" Comment="TRUE if no errors ocurred, FALSE otherwise"/>
+			<VarDeclaration Name="out_struct" Type="ANY" Comment="Structure with the specified member set to element_value"/>
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

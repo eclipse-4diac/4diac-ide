@@ -70,4 +70,9 @@ public class NetworkRuntimeState {
 				.map(connectionValues::get).findFirst().orElse(null);
 	}
 
+	public Value getConnectionValue(final String sourceName, final String destinationName) {
+		final var connectionInfo = new ConnectionInfo(sourceName, destinationName);
+		return connectionValues.get(connectionInfo);
+	}
+
 }

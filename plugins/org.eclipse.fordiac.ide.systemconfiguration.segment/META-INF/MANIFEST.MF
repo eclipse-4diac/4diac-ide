@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.systemconfiguration.segment;singleton:=true
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.1.200.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -21,3 +21,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.systemconfiguration.segment
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.fordiac.ide.util

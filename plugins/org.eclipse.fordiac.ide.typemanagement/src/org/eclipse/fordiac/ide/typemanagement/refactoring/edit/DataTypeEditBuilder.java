@@ -53,6 +53,10 @@ public class DataTypeEditBuilder {
 
 	private static String getFullTypeName(final String packageName, final IPath newPath) {
 		final String typeName = TypeEntry.getTypeNameFromFileName(newPath.lastSegment());
+		return getFullTypeName(packageName, typeName);
+	}
+
+	public static String getFullTypeName(final String packageName, final String typeName) {
 		if (packageName.isEmpty()) {
 			return typeName;
 		}

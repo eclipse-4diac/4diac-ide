@@ -15,6 +15,9 @@
       <builder
             id="org.eclipse.fordiac.ide.export.builder">
       </builder>
+      <builder
+            id="org.eclipse.fordiac.ide.validation.oclbuilder">
+      </builder>
    </extension>
    <!-- old nature name so that old projects can still be loaded -->
    <extension

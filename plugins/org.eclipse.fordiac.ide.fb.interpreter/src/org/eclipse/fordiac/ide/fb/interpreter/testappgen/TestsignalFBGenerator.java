@@ -79,7 +79,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 					destinationFB.getInterfaceList().getEventInputs().get(eccGen.getCaseCount()));
 			final ECAction actToMatch = TestEccGenerator.createAction();
 			actToMatch.setOutput(getOutputEventForTestCase(testCase));
-			actToMatch.setAlgorithm(timeoutAlg);
+			actToMatch.setAlgorithm(timeoutAlg.getName());
 			eccGen.getLastState().getECAction().add(actToMatch);
 
 			for (int i = 0; i < testCase.getTestStates().size(); i++) {
@@ -90,7 +90,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 				final ECAction actToTest = TestEccGenerator.createAction();
 				actToTest.setOutput(ev);
 				final Algorithm alg = createValueSettingAlgorithm(destinationFB, testState);
-				actToTest.setAlgorithm(alg);
+				actToTest.setAlgorithm(alg.getName());
 				eccGen.getLastState().getECAction().add(actToTest);
 				if (i == 0) {
 					eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(), null);

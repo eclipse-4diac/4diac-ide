@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
-import org.eclipse.swt.internal.C;
 
 public abstract class AbstractColumnAccessor<T, C extends NatTableColumn> implements IColumnPropertyAccessor<T> {
 	private final List<C> columns;

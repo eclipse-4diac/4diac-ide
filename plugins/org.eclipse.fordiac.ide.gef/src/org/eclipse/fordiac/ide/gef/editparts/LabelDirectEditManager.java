@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.Label;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Text;

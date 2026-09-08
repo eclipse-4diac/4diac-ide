@@ -19,9 +19,11 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
@@ -37,6 +39,7 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -46,22 +49,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -128,12 +129,9 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		oldIndex = network.getNetworkElements().indexOf(oldElement);
 		network.getNetworkElements().add(oldIndex, newElement);
 
-		handleErrorMarker();
-		// Find connectionless pins which should be saved
-		handleParameters();
+		// handle data, attributes, and connections of all pins
+		oldElement.getInterface().getAllInterfaceElements().forEach(this::handlePin);
 
-		// Find connections which should be reconnected
-		handleConnections();
 		reconnCmds.execute();
 
 		// set Visible attribute after reconnect, to not hide connected In/Outputs
@@ -172,20 +170,31 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		// for the configurable fb we have to transfer the data type
 		if (newElement instanceof final ConfigurableFB configFb) {
 			if (oldElement instanceof final ConfigurableFB oldConfigFb) {
-				configFb.setDataType(oldConfigFb.getDataType());
-
-				if (configFb instanceof final Demultiplexer newDemux
-						&& oldConfigFb instanceof final Demultiplexer oldDemux && oldDemux.isIsConfigured()) {
-					newDemux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN,
-							ConfigurableFBManagement.buildVisibleChildrenString(oldDemux.getMemberVars()));
-				} else {
-					configFb.updateConfiguration();
-				}
+				configFb.setDataType(reloadDataType(oldConfigFb.getDataType()));
+				configFb.updateConfiguration();
 			} else {
 				// transfer data from error marker
 				handleConFBUpdateFromErrorMarker(configFb);
 			}
 		}
+	}
+
+	protected final DataType reloadDataType(final DataType dataType) {
+		if (dataType == null) {
+			return getAnyType();
+		}
+
+		if (dataType.getTypeEntry() != null) {
+			// if we are a user defined type ensure to get the latest version from the file
+			return (dataType.getTypeEntry().getType() instanceof final DataType dt) ? dt : getAnyType();
+
+		}
+		return dataType;
+	}
+
+	private DataType getAnyType() {
+		return (getOldElement() instanceof StructManipulator) ? IecTypes.GenericTypes.ANY_STRUCT
+				: IecTypes.GenericTypes.ANY;
 	}
 
 	private void handleConFBUpdateFromErrorMarker(final ConfigurableFB configFb) {
@@ -202,15 +211,6 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 			if (dataTypeName != null) {
 				configFb.loadConfiguration(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG, dataTypeName);
 				oldElement.deleteAttribute(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG);
-
-				if (configFb instanceof Demultiplexer) {
-					final String visibleChildren = oldElement
-							.getAttributeValue(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-					if (visibleChildren != null) {
-						configFb.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, visibleChildren);
-						oldElement.deleteAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
-					}
-				}
 			}
 		}
 	}
@@ -222,12 +222,14 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		}
 
 		final InterfaceList newInterface = getNewElement().getInterface();
-		// for each member access pin create the according pin in the new element,
-		// attributes for visibility values or command will be handled in the respective
+		// for each member access pin create the according pin in the new element and
+		// set it to visible, attributes for comments will be handled in the respective
 		// update methods
 		getOldElement().getInterface().getAllInterfaceElements()
-				.filter(ie -> ie.eContainer() instanceof IInterfaceElement) //
-				.forEach(ie -> newInterface.getInterfaceElement(ie.getBlockRelativePath(), true));
+				.filter(ie -> ie.isVisible() && ie.eContainer() instanceof IInterfaceElement)
+				.map(ie -> newInterface.getInterfaceElement(ie.getBlockRelativePath(), true))
+				.filter(ie -> ie != null && ie.eContainer() instanceof VarDeclaration)
+				.forEach(ie -> ie.setVisible(true));
 	}
 
 	@Override
@@ -331,7 +333,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		if ((oldInterface != null) && (oldInterface.getBlockFBNetworkElement() == oldElement)) {
 			// origView is an interface of the original FB => find same interface on copied
 			// FB
-			return updateSelectedInterface(oldInterface, newElement);
+			return getNewInterfaceElement(oldInterface, newElement);
 		}
 		return oldInterface;
 	}
@@ -343,30 +345,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	}
 
-	private void createValues() {
-		newElement.getInterface().getInputVars().stream().forEach(inVar -> {
-			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
-			checkSourceParam(inVar);
-		});
-	}
-
-	private void transferInstanceComments() {
-		oldElement.getInterface().getAllInterfaceElements().filter(ie -> !ie.getComment().isBlank()).forEach(ie -> {
-			final IInterfaceElement newIE = getNewInterfaceElementForPreservingInstanceData(ie);
-			if (newIE != null) {
-				newIE.setComment(ie.getComment());
-			}
-		});
-	}
-
-	private void checkSourceParam(final VarDeclaration variable) {
-		final VarDeclaration srcVar = oldElement.getInterface().getVariable(variable.getName());
-		if ((null != srcVar) && (null != srcVar.getValue())) {
-			variable.getValue().setValue(srcVar.getValue().getValue());
-		}
-	}
-
-	protected List<ConnData> getResourceCons() {
+	private List<ConnData> getResourceCons() {
 		final List<ConnData> retVal = new ArrayList<>();
 		final BlockFBNetworkElement resElement = oldElement.getOpposite();
 
@@ -389,97 +368,37 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		return retVal;
 	}
 
-	private void handleErrorMarker() {
-		if ((oldElement instanceof ErrorMarkerFBNElement) && (newElement instanceof ErrorMarkerFBNElement)) {
-			copyErrorMarkerRef();
+	private void handlePin(final IInterfaceElement oldPin) {
+		IInterfaceElement newPin = null;
+		// check attributes
+		if (!oldPin.getAttributes().isEmpty() && hasNonInternalAttr(oldPin)) {
+			newPin = getNewInterfaceElement(oldPin, newElement);
+			copyNonInternalAttributes(oldPin, newPin);
 		}
-	}
 
-	// Ensure that connectionless pins with a value are saved as well
-	protected void handleParameters() {
-		processVars(oldElement.getInterface());
-		processEvents(oldElement.getInterface());
-
-		checkErrorMarkerPinParameters();
-	}
-
-	private void processEvents(final InterfaceList interfaceList) {
-		for (final Event input : interfaceList.getEventInputs()) {
-			if (input.getInputConnections().isEmpty() && !input.getAttributes().isEmpty()) {
-				updateSelectedInterface(input, newElement);
+		// comment
+		if (!oldPin.getComment().isBlank()) {
+			if (newPin == null) {
+				newPin = getNewInterfaceElement(oldPin, newElement);
 			}
+			newPin.setComment(oldPin.getComment());
 		}
-		for (final Event output : interfaceList.getEventOutputs()) {
-			if (output.getOutputConnections().isEmpty() && !output.getAttributes().isEmpty()) {
-				updateSelectedInterface(output, newElement);
+
+		// values
+		final String value = getPinValue(oldPin);
+		if (value != null && !value.isBlank()) {
+			if (newPin == null) {
+				newPin = getNewInterfaceElement(oldPin, newElement);
 			}
+			setPinValue(newPin, value);
 		}
+
+		// check connections
+		getConnectionsFromPin(oldPin).forEach(this::handleConnection);
 	}
 
-	private void processVars(final InterfaceList interfaceList) {
-		final List<VarDeclaration> inputs = new ArrayList<>();
-		inputs.addAll(interfaceList.getInputVars());
-		inputs.addAll(interfaceList.getInOutVars());
-
-		final List<VarDeclaration> outputs = new ArrayList<>();
-		outputs.addAll(interfaceList.getOutputVars());
-		outputs.addAll(interfaceList.getOutMappedInOutVars());
-
-		for (final VarDeclaration input : inputs) {
-			// No outside connections to a pin in oldElement and it has an initial value
-			if (input.getInputConnections().isEmpty() && (hasValue(input.getValue())
-					|| (!input.getAttributes().isEmpty() && varDeclHasNonInternalAttr(input)))) {
-				updateSelectedInterface(input, newElement);
-			}
-		}
-		for (final VarDeclaration output : outputs) {
-			if (output.getOutputConnections().isEmpty() && (hasValue(output.getValue())
-					|| (!output.getAttributes().isEmpty() && varDeclHasNonInternalAttr(output)))) {
-				updateSelectedInterface(output, newElement);
-			}
-		}
-	}
-
-	private static boolean varDeclHasNonInternalAttr(final VarDeclaration vd) {
-		return !vd.getAttributes().stream().filter(attr -> !InternalAttributeDeclarations.isInternalAttribute(attr))
-				.toList().isEmpty();
-	}
-
-	private void checkErrorMarkerPinParameters() {
-		for (final ErrorMarkerInterface errorMarker : oldElement.getInterface().getErrorMarker()) {
-			if (hasData(errorMarker)) {
-				final IInterfaceElement newInterfaceElement = newElement.getInterface().getInterfaceElement(errorMarker);
-				if (newInterfaceElement != null) {
-					copyErrorMarkerData(errorMarker, newInterfaceElement);
-					if (newInterfaceElement instanceof final VarDeclaration varDeclaration
-							&& hasValue(errorMarker.getValue())) {
-						final Value value = LibraryElementFactory.eINSTANCE.createValue();
-						value.setValue(errorMarker.getValue().getValue());
-						varDeclaration.setValue(value);
-					}
-				} else if ((errorMarker.isIsInput() && errorMarker.getInputConnections().isEmpty())
-						|| (!errorMarker.isIsInput() && errorMarker.getOutputConnections().isEmpty())) {
-					// unconnected error pin create a new error pin
-					updateSelectedInterface(errorMarker, newElement);
-				}
-			}
-		}
-	}
-
-	private static boolean hasData(final ErrorMarkerInterface errorMarker) {
-		return hasValue(errorMarker.getValue()) || !errorMarker.getAttributes().isEmpty()
-				|| !errorMarker.getComment().isBlank();
-	}
-
-	private static void copyErrorMarkerData(final ErrorMarkerInterface source, final IInterfaceElement destination) {
-		copyAttributes(source, destination);
-		if (!source.getComment().isBlank()) {
-			destination.setComment(source.getComment());
-		}
-	}
-
-	private static void copyAttributes(final ConfigurableObject source, final ConfigurableObject destination) {
-		destination.getAttributes().addAll(EcoreUtil.copyAll(source.getAttributes()));
+	private static boolean hasNonInternalAttr(final IInterfaceElement ie) {
+		return ie.getAttributes().stream().anyMatch(Predicate.not(InternalAttributeDeclarations::isInternalAttribute));
 	}
 
 	private static void copyNonInternalAttributes(final ConfigurableObject source,
@@ -488,47 +407,80 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 				.filter(attribute -> !InternalAttributeDeclarations.isInternalAttribute(attribute)).toList()));
 	}
 
-	private static boolean hasValue(final Value value) {
-		return (value != null) && (value.getValue() != null) && !value.getValue().isBlank();
+	private static String getPinValue(final IInterfaceElement pin) {
+		final Value value = switch (pin) {
+		case final VarDeclaration varDecl -> varDecl.getValue();
+		case final ErrorMarkerInterface error -> error.getValue();
+		case null, default -> null;
+		};
+		return (value != null) ? value.getValue() : null;
 	}
 
-	private void copyErrorMarkerRef() {
-		final FBNetworkElement repairedElement = ((ErrorMarkerFBNElement) oldElement).getRepairedElement();
-		if (repairedElement != null) {
-			((ErrorMarkerFBNElement) newElement).setRepairedElement(repairedElement);
+	private static void setPinValue(final IInterfaceElement pin, final String newValue) {
+		final Value value = switch (pin) {
+		case final VarDeclaration varDecl -> {
+			Value v = varDecl.getValue();
+			if (v == null) {
+				v = LibraryElementFactory.eINSTANCE.createValue();
+				varDecl.setValue(v);
+			}
+			yield v;
+		}
+		case final ErrorMarkerInterface error -> {
+			Value v = error.getValue();
+			if (v == null) {
+				v = LibraryElementFactory.eINSTANCE.createValue();
+				error.setValue(v);
+			}
+			yield v;
+		}
+		case null, default -> {
+			FordiacLogHelper.logWarning("Update FB wants to set a value to a non value holding interface element!"); //$NON-NLS-1$
+			yield null;
+		}
+		};
+		if (value != null) {
+			value.setValue(newValue);
 		}
 	}
 
-	private static ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
-			final BlockFBNetworkElement element) {
-		final ErrorMarkerInterface interfaceElement = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterface(
-				oldInterface.getType(), oldInterface.getName(), oldInterface.isIsInput(), element.getInterface());
-
-		if (oldInterface instanceof final VarDeclaration oldVarDecl && oldVarDecl.getValue() != null
-				&& !oldVarDecl.getValue().getValue().isBlank()) {
-			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			value.setValue(oldVarDecl.getValue().getValue());
-			interfaceElement.setValue(value);
-		}
-
-		copyNonInternalAttributes(oldInterface, interfaceElement);
-
-		interfaceElement.setComment(oldInterface.getComment());
-
-		return interfaceElement;
+	private Stream<Connection> getConnectionsFromPin(final IInterfaceElement oldPin) {
+		return oldPin.isIsInput() ? oldPin.getInputConnections().stream()
+				// remove self loops from the input side to avoid handling a connection twice
+				: oldPin.getOutputConnections().stream().filter(con -> con.getDestinationElement() != oldElement);
 	}
 
-	private static IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
+	private static IInterfaceElement getNewInterfaceElement(final IInterfaceElement oldIE,
 			final BlockFBNetworkElement newElement) {
-		IInterfaceElement updatedSelected = newElement.getInterface().getInterfaceElement(oldInterface);
-		if ((updatedSelected == null) || (updatedSelected.isIsInput() != oldInterface.isIsInput())) {
-			updatedSelected = createMissingMarker(oldInterface, newElement);
+		final List<String> blockRelativePath = (oldIE instanceof ErrorMarkerInterface)
+				? Arrays.asList(oldIE.getName().split("\\.")) //$NON-NLS-1$
+				: oldIE.getBlockRelativePath();
+		IInterfaceElement updatedSelected = newElement.getInterface().getInterfaceElement(blockRelativePath, true);
+		if (updatedSelected instanceof final VarDeclaration varDecl && varDecl.isInOutVar()
+				&& updatedSelected.isIsInput() != oldIE.isIsInput()) {
+			updatedSelected = varDecl.getInOutVarOpposite();
+		}
+		if (updatedSelected == null || updatedSelected.isIsInput() != oldIE.isIsInput()) {
+			// check if we can get an error marker for the element with the full name
+			updatedSelected = newElement.getInterface()
+					.getInterfaceElement(List.of(oldIE.getRelativeName(oldIE.getBlockFBNetworkElement())));
+			if (updatedSelected == null || updatedSelected.isIsInput() != oldIE.isIsInput()) {
+				// create an error marker to serve as target
+				updatedSelected = createMissingMarker(oldIE, newElement);
+			}
+		}
+		if (updatedSelected instanceof VarDeclaration && updatedSelected.eContainer() instanceof VarDeclaration
+				&& !updatedSelected.isVisible() && oldIE.isVisible()) {
+			updatedSelected.setVisible(true);
 		}
 		return updatedSelected;
 	}
 
-	private void handleConnections() {
-		getAllConnections(oldElement).forEach(this::handleConnection);
+	private static ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
+			final BlockFBNetworkElement element) {
+		return FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterface(oldInterface.getType(),
+				oldInterface.getRelativeName(oldInterface.getBlockFBNetworkElement()), oldInterface.isIsInput(),
+				element.getInterface());
 	}
 
 	private void handleConnection(final Connection connection) {
@@ -537,10 +489,10 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 		// get or create pins for new element (source and/or destination)
 		if (connection.getSourceElement() == oldElement) {
-			source = updateSelectedInterface(source, newElement);
+			source = getNewInterfaceElement(source, newElement);
 		}
 		if (connection.getDestinationElement() == oldElement) {
-			destination = updateSelectedInterface(destination, newElement);
+			destination = getNewInterfaceElement(destination, newElement);
 		}
 
 		// reconnect/replace connection, we can not use AbstractReconnectCommand as
@@ -586,27 +538,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 				&& oldElement.getTypeEntry() == entry) {
 			newTsa.getVarConfigParams().addAll(EcoreUtil.copyAll(oldTsa.getVarConfigParams()));
 		}
-		copyAttributes();
-		createValues();
-		transferInstanceComments();
-	}
-
-	private void copyAttributes() {
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
-		oldElement.getInterface().getAllInterfaceElements().filter(ie -> !ie.getAttributes().isEmpty()).forEach(ie -> {
-			final IInterfaceElement newIE = getNewInterfaceElementForPreservingInstanceData(ie);
-			if (newIE != null) {
-				newIE.getAttributes().addAll(EcoreUtil.copyAll(ie.getAttributes()));
-			}
-		});
-	}
-
-	private IInterfaceElement getNewInterfaceElementForPreservingInstanceData(
-			final IInterfaceElement oldInterfaceElement) {
-		if (oldInterfaceElement.eContainer() instanceof IInterfaceElement) {
-			return newElement.getInterface().getInterfaceElement(oldInterfaceElement.getBlockRelativePath(), true);
-		}
-		return newElement.getInterface().getInterfaceElement(oldInterfaceElement);
 	}
 
 	protected abstract BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement);

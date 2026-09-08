@@ -90,10 +90,6 @@ public class BulkEditorControls {
 	private Label subappHierarchyScopeLabel;
 	private List<URI> selectedSubApps = Collections.emptyList();
 
-	// Footer
-	private Composite addDeleteComposite;
-	private Label searchInformation;
-
 	public BulkEditorControls(final BulkEditorSettings settings, final BulkEditor editor,
 			final List<URI> initialSelectedSubApps) {
 		this.settings = settings;
@@ -106,7 +102,8 @@ public class BulkEditorControls {
 		createSearchWhereGroup(parent);
 		createSearchInGroup(parent);
 		createScopeGroup(parent);
-		createSearchButtonRow(parent);
+		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> editor.onSearchRequested())
+				.create(parent);
 	}
 
 	private void createModeSelectionComposite(final Composite parent) {
@@ -137,9 +134,6 @@ public class BulkEditorControls {
 			changeSearchWhereGroupFilter(newMode);
 			parent.getParent().layout();
 			changedSearchParameter = false;
-			if (searchInformation != null) {
-				searchInformation.setText(""); //$NON-NLS-1$
-			}
 			editor.onModeChanged(newMode);
 		});
 
@@ -361,22 +355,6 @@ public class BulkEditorControls {
 		subappHierarchyScopeLabel.setText(text);
 	}
 
-	private void createSearchButtonRow(final Composite parent) {
-		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 0).generateLayout(composite);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> editor.onSearchRequested())
-				.create(composite);
-
-		addDeleteComposite = new Composite(composite, 0);
-		addDeleteComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		addDeleteComposite.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
-
-		searchInformation = WidgetFactory.label(SWT.NONE).create(composite);
-		searchInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-	}
-
 	public SearchParameters collectParameters() {
 		return new SearchParameters(modeSelectionDropDown.getSelectionIndex(), advancedButton.getSelection(),
 				searchText, searchFilter, fbSubappTypesFilter, settings.fbSubappTypes, fbTypedSubappInstanceFilter,
@@ -394,18 +372,8 @@ public class BulkEditorControls {
 		return advancedButton.getSelection();
 	}
 
-	public Composite getAddDeleteComposite() {
-		return addDeleteComposite;
-	}
-
 	public Text getSearchText() {
 		return searchText;
-	}
-
-	public void setSearchInformationText(final String text) {
-		if (searchInformation != null && !searchInformation.isDisposed()) {
-			searchInformation.setText(text);
-		}
 	}
 
 	public boolean hasChangedSearchParameter() {

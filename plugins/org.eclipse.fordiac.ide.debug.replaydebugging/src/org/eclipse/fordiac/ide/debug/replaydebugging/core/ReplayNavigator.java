@@ -110,6 +110,17 @@ public class ReplayNavigator implements Timeline.StructureListener {
 		moveToEvent(new EventPosition(timelineToAdd, timelineToAdd.getMaxEventNumber()));
 	}
 
+	public void markCurrentStateAsNotDeletable() {
+		markCurrentStateAsNotDeletable(rootTimeline);
+	}
+
+	private static void markCurrentStateAsNotDeletable(final Timeline timeline) {
+		timeline.setFirstDeletableEventIndex(timeline.getMaxEventNumber() + 1);
+		for (final Timeline spawnedTimeline : timeline.getSpawnedTimelines()) {
+			markCurrentStateAsNotDeletable(spawnedTimeline);
+		}
+	}
+
 	public Timeline getRootTimeline() {
 		return rootTimeline;
 	}
@@ -393,18 +404,25 @@ public class ReplayNavigator implements Timeline.StructureListener {
 			final var initialEventNumber = getCurrentEventPosition().eventNumber() - removedStartEventIndex;
 
 			final var changedValues = temp.getChangesFromTo(initialEventNumber, 0);
+			changedValues.putAll(temp.getInitialStateAtLeavingTimeline());
 
 			if (removedStartEventIndex == 0) {
-				changedValues.putAll(temp.getInitialStateAtLeavingTimeline());
 				currentEventPosition = new EventPosition(timeline.getParentTimeline(),
 						timeline.getParentTimeline().getSpawnedTimelineEventNumber(timeline));
-				timeline.getParentTimeline().removeSpawnedTimeline(timeline);
 			} else {
 				currentEventPosition = new EventPosition(timeline, removedStartEventIndex - 1);
 			}
 			updateCache(changedValues);
 		}
+		if (removedStartEventIndex == 0) {
+			timeline.getParentTimeline().removeSpawnedTimeline(timeline);
+		}
 		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
+	}
+
+	@Override
+	public void timelineStateChanged(final Timeline timeline) {
+		// nothing to do here
 	}
 
 }

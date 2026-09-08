@@ -22,14 +22,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typeeditor
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-Name: ECC Editor
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.ecc;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
-Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets
+Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc;x-internal:=true,
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;x-internal:=true,
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;x-internal:=true,
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;x-internal:=true,
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;x-internal:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.ecc

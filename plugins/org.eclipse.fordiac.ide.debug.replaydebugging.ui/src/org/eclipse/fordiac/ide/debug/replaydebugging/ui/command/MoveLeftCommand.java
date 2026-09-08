@@ -14,7 +14,10 @@
 
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.command;
 
+import java.util.Set;
+
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.gef.commands.Command;
 
@@ -25,16 +28,27 @@ public class MoveLeftCommand extends Command {
 
 	private final ReplayNavigator replayNavigator;
 	private ReplayNavigator.EventPosition eventPosition;
+	private final Set<Integer> highlighted;
+	private final boolean jump;
 
-	public MoveLeftCommand(final ReplayNavigator replayNavigator) {
+	public MoveLeftCommand(final ReplayNavigator replayNavigator, final boolean jump, final Set<Integer> highlighted) {
 		super(Messages.MoveLeftCommand_Label);
 		this.replayNavigator = replayNavigator;
+		this.highlighted = highlighted;
+		this.jump = jump;
 	}
 
 	@Override
 	public void execute() {
 		eventPosition = replayNavigator.getCurrentEventPosition();
-		replayNavigator.moveOneEventBackwards();
+		if (!jump) {
+			replayNavigator.moveOneEventBackwards();
+			return;
+		}
+
+		final var destinationIndex = NavigationHelper.getJumpDestination(eventPosition.eventNumber(),
+				eventPosition.timeline().getMaxEventNumber(), false, highlighted);
+		replayNavigator.moveToEvent(new EventPosition(eventPosition.timeline(), destinationIndex));
 	}
 
 	@Override
@@ -44,7 +58,14 @@ public class MoveLeftCommand extends Command {
 
 	@Override
 	public void redo() {
-		replayNavigator.moveOneEventBackwards();
+		if (!jump) {
+			replayNavigator.moveOneEventBackwards();
+			return;
+		}
+
+		final var destinationIndex = NavigationHelper.getJumpDestination(eventPosition.eventNumber(),
+				eventPosition.timeline().getMaxEventNumber(), false, highlighted);
+		replayNavigator.moveToEvent(new EventPosition(eventPosition.timeline(), destinationIndex));
 	}
 
 	@Override
@@ -56,4 +77,5 @@ public class MoveLeftCommand extends Command {
 	public boolean canUndo() {
 		return eventPosition != null;
 	}
+
 }

@@ -19,7 +19,9 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class FBTypeResourceImpl extends AbstractLibraryElementResource<FBType> {
@@ -38,4 +40,10 @@ public class FBTypeResourceImpl extends AbstractLibraryElementResource<FBType> {
 		return new FbtExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorFBType createErrorLibraryElement() {
+		final ErrorFBType type = LibraryElementFactory.eINSTANCE.createErrorFBType();
+		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		return type;
+	}
 }

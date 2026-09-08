@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructRefactoring;
 import org.eclipse.fordiac.ide.typemanagement.wizards.ConnectionsToStructWizardPage;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
@@ -49,7 +49,7 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 				final FBType sourceType = connections.get(0).getSourceElement().getType();
 				final FBType destinationType = connections.get(0).getDestinationElement().getType();
 				final Map<String, String> replacableConMap = new HashMap<>();
-				connections.stream().forEach(
+				connections.forEach(
 						con -> replacableConMap.put(con.getSource().getName(), con.getDestination().getName()));
 
 				final ConnectionsToStructRefactoring refactoring = new ConnectionsToStructRefactoring(sourceType,

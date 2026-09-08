@@ -34,12 +34,6 @@ public class DataTypeEditor extends AbstractTypeEditor {
 	}
 
 	@Override
-	protected boolean dependencyAffectingTypeChange() {
-		// For data types all changes are dependency affecting changes
-		return true;
-	}
-
-	@Override
 	public void doSaveAs() {
 		if (getType() instanceof final StructuredType structuredType) {
 			new WizardDialog(null, new SaveAsStructTypeWizard(structuredType, this)).open();

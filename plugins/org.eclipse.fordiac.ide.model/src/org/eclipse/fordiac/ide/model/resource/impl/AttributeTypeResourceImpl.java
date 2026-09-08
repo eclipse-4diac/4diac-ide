@@ -15,11 +15,16 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class AttributeTypeResourceImpl extends AbstractLibraryElementResource<AttributeDeclaration> {
@@ -38,4 +43,13 @@ public class AttributeTypeResourceImpl extends AbstractLibraryElementResource<At
 		return new AttributeTypeExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorAttributeDeclaration createErrorLibraryElement() {
+		final ErrorAttributeDeclaration type = LibraryElementFactory.eINSTANCE.createErrorAttributeDeclaration();
+		final DirectlyDerivedType dataType = DataFactory.eINSTANCE.createDirectlyDerivedType();
+		dataType.setName(getURI().trimFileExtension().lastSegment());
+		dataType.setBaseType(ElementaryTypes.STRING);
+		type.setType(dataType);
+		return type;
+	}
 }

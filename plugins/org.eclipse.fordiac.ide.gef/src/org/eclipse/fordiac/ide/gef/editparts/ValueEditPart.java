@@ -375,7 +375,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public DirectEditManager createDirectEditManager() {
 		final IInterfaceElement interfaceElement = getIInterfaceElement();
 		if (interfaceElement instanceof final VarDeclaration varDecl) {
-			return new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()), varDecl,
+			return new InitialValueVariableDirectEditManager(this, new FigureCellEditorLocator(getFigure()), varDecl,
 					getDirectEditInitialValue());
 		}
 		return new LabelDirectEditManager(this, getFigure());

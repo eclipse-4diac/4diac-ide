@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -40,9 +41,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class RuntimeFactory {
 
@@ -181,16 +181,15 @@ public final class RuntimeFactory {
 
 			// initialize internal data connections
 			final var map = containerRuntime.getTransferData();
-			networkElement.getInterface().getOutputVars()
-					.forEach(pin -> pin.getOutputConnections().stream().forEach(conn -> {
-						if (map.get(conn) != null) {
-							return;
-						}
-						final String val = InitialValueHelper.getInitialOrDefaultValue(pin);
-						final Value value = LibraryElementFactory.eINSTANCE.createValue();
-						value.setValue(val);
-						map.put(conn, value);
-					}));
+			networkElement.getInterface().getOutputVars().forEach(pin -> pin.getOutputConnections().forEach(conn -> {
+				if (map.get(conn) != null) {
+					return;
+				}
+				final String val = InitialValueHelper.getDefaultValue(VariableUtils.getNonAnyValueFromConnection(conn));
+				final var value = LibraryElementFactory.eINSTANCE.createValue();
+				value.setValue(val);
+				map.put(conn, value);
+			}));
 
 			if (containerRuntime.getTypeRuntimes().get(networkElement) != null) {
 				return; // runtime already created
@@ -218,7 +217,9 @@ public final class RuntimeFactory {
 			}
 
 			final FBType copiedType = EcoreUtil.copy(networkElement.getType());
-			VariableUtils.initializeFbType(copiedType);
+			VariableUtils.initializeFbType(copiedType,
+					varDeclaration -> getDefaultValueFromNetworkElement(varDeclaration, networkElement));
+
 			final var fbRuntime = RuntimeFactory.createFrom(copiedType);
 			containerRuntime.getTypeRuntimes().put(networkElement, fbRuntime);
 
@@ -234,6 +235,33 @@ public final class RuntimeFactory {
 			}
 
 		});
+	}
+
+	/**
+	 * Given a VarDeclaration from a type, this method looks for the corresponding
+	 * variable in the network element and returns its default value, looking for
+	 * non-Any var declarations on its connections. If no corresponding variable is
+	 * found, it returns the default value of the given VarDeclaration.
+	 */
+	private static String getDefaultValueFromNetworkElement(final VarDeclaration varDeclaration,
+			final BlockFBNetworkElement networkElement) {
+		// find the corresponding variable in the real FB
+		Optional<VarDeclaration> varDeclFromNetworkElement;
+		if (varDeclaration.isIsInput()) {
+			varDeclFromNetworkElement = networkElement.getInterface().getInputVars().stream()
+					.filter(v -> v.getName().equals(varDeclaration.getName())).findFirst();
+
+		} else {
+			varDeclFromNetworkElement = networkElement.getInterface().getOutputVars().stream()
+					.filter(v -> v.getName().equals(varDeclaration.getName())).findFirst();
+		}
+
+		if (!varDeclFromNetworkElement.isPresent()) {
+			return InitialValueHelper.getDefaultValue(varDeclaration);
+		}
+
+		return InitialValueHelper
+				.getDefaultValue(VariableUtils.getNonAnyVarDeclaration(varDeclFromNetworkElement.get()));
 	}
 
 	/**
@@ -257,7 +285,6 @@ public final class RuntimeFactory {
 				map.put(conn, EcoreUtil.copy(value));
 			}
 		});
-
 	}
 
 	public static void setStartState(final FBRuntimeAbstract fbRT, final String startStateName) {

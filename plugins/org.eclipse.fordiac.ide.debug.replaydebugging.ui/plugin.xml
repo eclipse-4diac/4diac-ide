@@ -31,9 +31,21 @@
       </launchConfigurationTypeImage>
    </extension>
 
+ 	<extension
+		point="org.eclipse.ui.contexts">
+		<context
+			description="%context.description"
+			id="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+			name="%context.name"
+			parentId="org.eclipse.ui.contexts.window">
+		</context>
+	</extension>
+
    <extension point="org.eclipse.ui.commands">
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"  name="Move Left"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight" name="Move Right"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"  name="Jump Left"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight" name="Jump Right"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"    name="Move Up"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"  name="Move Down"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
@@ -42,8 +54,16 @@
              name="Delete Timeline"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
              name="Add To Comparison"/>
-
-
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
+             name="Remove From Comparison"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+             name="Add/edit event comment"/>
+     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
+             name="Remove event comment"/>
+     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
+             name="Add/edit timeline comment"/>
+     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
+             name="Remove timeline comment"/>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
@@ -58,6 +78,24 @@
 
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight"
          class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.MoveRightHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpLeftHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpRightHandler">
         <activeWhen>
             <with variable="activePartId">
                 <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
@@ -82,7 +120,6 @@
             </with>
         </activeWhen>
     </handler>
-
 
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
              class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.DeleteEventHandler">
@@ -110,6 +147,52 @@
         </with>
       </activeWhen>
     </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveFromComparisonHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.AddEventCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveEventCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.AddTimelineCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveTimelineCommentHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
   </extension>
 
   <extension point="org.eclipse.ui.menus">
@@ -118,7 +201,7 @@
       <!-- Delete Event — only shown when an EventMarkerEditPart is selected -->
       <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
                label="%command.delete_event_label">
-        <visibleWhen checkEnabled="false">
+        <visibleWhen checkEnabled="true">
           <with variable="selection">
             <iterate ifEmpty="false">
               <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
@@ -130,7 +213,7 @@
     <!-- Delete Timeline — shown for both Timeline and Event selection -->
       <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteTimeline"
                label="%command.delete_timeline_label">
-        <visibleWhen checkEnabled="false">
+        <visibleWhen checkEnabled="true">
           <with variable="selection">
             <iterate ifEmpty="false">
               <or>
@@ -141,6 +224,8 @@
           </with>
         </visibleWhen>
       </command>
+
+      <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonSeparator" visible="true"/>
 
       <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
                label="%command.add_to_comparison_label">
@@ -156,7 +241,125 @@
         </visibleWhen>
       </command>
 
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
+               label="%command.remove_from_comparison_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.eventCommentsSeparator" visible="true"/>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+               label="%command.add_event_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
+               label="%command.remove_event_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+
+
+
+
+
+       <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.timelineCommentsSeparator" visible="true"/>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
+               label="%command.add_timeline_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+ 			    <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
+               label="%command.remove_timeline_comment_label">
+        <visibleWhen checkEnabled="true">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
     </menuContribution>
   </extension>
+
+  <extension point="org.eclipse.ui.themes">
+	<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDiffColor"
+			label="%comparisonDiffColor.label"
+			value="255,255,150"/>
+    <colorDefinition
+    		categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDisabledColor"
+			label="%comparisonDisabledColor.label"
+			value="150,150,150"/>
+  </extension>
+
+    <!-- Key bindings -->
+<extension point="org.eclipse.ui.bindings">
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_LEFT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_RIGHT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_LEFT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_RIGHT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_UP"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="ARROW_DOWN"/>
+</extension>
 
 </plugin>

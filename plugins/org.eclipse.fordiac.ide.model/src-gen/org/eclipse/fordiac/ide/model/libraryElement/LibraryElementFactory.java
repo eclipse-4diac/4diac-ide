@@ -117,15 +117,6 @@ public interface LibraryElementFactory extends EFactory {
 	AutomationSystem createAutomationSystem();
 
 	/**
-	 * Returns a new object of class '<em>Base FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Base FB Type</em>'.
-	 * @generated
-	 */
-	BaseFBType createBaseFBType();
-
-	/**
 	 * Returns a new object of class '<em>Basic FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -601,15 +592,6 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	MappingTarget createMappingTarget();
-
-	/**
-	 * Returns a new object of class '<em>Member Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Member Var Declaration</em>'.
-	 * @generated
-	 */
-	MemberVarDeclaration createMemberVarDeclaration();
 
 	/**
 	 * Returns a new object of class '<em>Multiplexer</em>'.

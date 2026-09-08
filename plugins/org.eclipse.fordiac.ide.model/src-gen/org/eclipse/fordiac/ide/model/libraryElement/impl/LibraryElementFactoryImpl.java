@@ -21,10 +21,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -42,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
@@ -101,7 +96,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -197,7 +191,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
 			case LibraryElementPackage.AUTOMATION_SYSTEM: return createAutomationSystem();
-			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
 			case LibraryElementPackage.BASIC_FB_TYPE: return createBasicFBType();
 			case LibraryElementPackage.CFB_INSTANCE: return createCFBInstance();
 			case LibraryElementPackage.COLOR: return createColor();
@@ -251,7 +244,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
 			case LibraryElementPackage.MAPPING: return createMapping();
 			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
-			case LibraryElementPackage.MEMBER_VAR_DECLARATION: return createMemberVarDeclaration();
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
 			case LibraryElementPackage.ORIGINAL_SOURCE: return createOriginalSource();
 			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
@@ -308,12 +300,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createIFileFromString(eDataType, initialValue);
 			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
 				return createInterfaceElementStreamFromString(eDataType, initialValue);
-			case LibraryElementPackage.IPROJECT:
-				return createIProjectFromString(eDataType, initialValue);
 			case LibraryElementPackage.NAMED_ELEMENT_STREAM:
 				return createNamedElementStreamFromString(eDataType, initialValue);
-			case LibraryElementPackage.POINT:
-				return createPointFromString(eDataType, initialValue);
 			case LibraryElementPackage.TYPE_ENTRY:
 				return createTypeEntryFromString(eDataType, initialValue);
 			case LibraryElementPackage.TYPE_LIBRARY:
@@ -347,12 +335,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertIFileToString(eDataType, instanceValue);
 			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
 				return convertInterfaceElementStreamToString(eDataType, instanceValue);
-			case LibraryElementPackage.IPROJECT:
-				return convertIProjectToString(eDataType, instanceValue);
 			case LibraryElementPackage.NAMED_ELEMENT_STREAM:
 				return convertNamedElementStreamToString(eDataType, instanceValue);
-			case LibraryElementPackage.POINT:
-				return convertPointToString(eDataType, instanceValue);
 			case LibraryElementPackage.TYPE_ENTRY:
 				return convertTypeEntryToString(eDataType, instanceValue);
 			case LibraryElementPackage.TYPE_LIBRARY:
@@ -469,17 +453,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public AutomationSystem createAutomationSystem() {
 		AutomationSystemImpl automationSystem = new AutomationSystemImpl();
 		return automationSystem;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public BaseFBType createBaseFBType() {
-		BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
-		return baseFBType;
 	}
 
 	/**
@@ -1071,17 +1044,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public MemberVarDeclaration createMemberVarDeclaration() {
-		MemberVarDeclarationImpl memberVarDeclaration = new MemberVarDeclarationImpl();
-		return memberVarDeclaration;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Multiplexer createMultiplexer() {
 		MultiplexerImpl multiplexer = new MultiplexerImpl();
 		return multiplexer;
@@ -1545,24 +1507,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
-		return (IProject)super.createFromString(eDataType, initialValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@SuppressWarnings("unchecked")
 	public Stream<INamedElement> createNamedElementStreamFromString(EDataType eDataType, String initialValue) {
 		return (Stream<INamedElement>)super.createFromString(initialValue);
@@ -1575,24 +1519,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 */
 	public String convertNamedElementStreamToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Point createPointFromString(EDataType eDataType, String initialValue) {
-		return (Point)super.createFromString(eDataType, initialValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertPointToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

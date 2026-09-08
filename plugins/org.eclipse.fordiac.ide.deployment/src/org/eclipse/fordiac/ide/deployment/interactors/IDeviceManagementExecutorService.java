@@ -222,9 +222,7 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 */
 	Future<Void> killDeviceAsync(Device dev);
 
-	/********************************************************************************************
-	 * Query Commands
-	 ********************************************************************************************/
+	// ************************** Query Commands **************************
 
 	/**
 	 * Query resources asynchronously
@@ -267,9 +265,7 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 			Consumer<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> consumer,
 			Consumer<DeploymentException> error, long period, TimeUnit unit);
 
-	/***********************
-	 * monitoring commands
-	 ****************************************************/
+	// ************************** monitoring commands **************************
 
 	/**
 	 * Read watches from device asynchronously
@@ -374,9 +370,7 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 */
 	boolean isTerminated();
 
-	/********************************************************************************************
-	 * Replay Commands
-	 ********************************************************************************************/
+	// ************************** Replay Commands **************************
 
 	/**
 	 * Read traces from a given path asynchronously

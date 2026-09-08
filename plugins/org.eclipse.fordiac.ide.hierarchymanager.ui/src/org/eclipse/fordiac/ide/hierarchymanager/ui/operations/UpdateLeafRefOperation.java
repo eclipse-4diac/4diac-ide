@@ -13,13 +13,15 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.operations;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.hierarchymanager.model.HierarchyManagerPersistenceHelper;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 
-public class UpdateLeafRefOperation extends AbstractChangeHierarchyOperation {
+public class UpdateLeafRefOperation extends AbstractOperation {
 
 	private final Leaf leaf;
 	private final String newRef;
@@ -35,21 +37,21 @@ public class UpdateLeafRefOperation extends AbstractChangeHierarchyOperation {
 	@Override
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		leaf.setRef(leaf.getRef().replace(oldRef, newRef));
-		saveHierarchy(leaf, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(leaf);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		leaf.setRef(leaf.getRef().replace(oldRef, newRef));
-		saveHierarchy(leaf, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(leaf);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		leaf.setRef(leaf.getRef().replace(newRef, oldRef));
-		saveHierarchy(leaf, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(leaf);
 		return Status.OK_STATUS;
 	}
 

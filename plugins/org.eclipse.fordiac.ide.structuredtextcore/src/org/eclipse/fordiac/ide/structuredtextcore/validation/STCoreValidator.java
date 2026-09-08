@@ -90,6 +90,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
@@ -227,14 +228,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
-			varDeclaration.getRanges().stream().forEach(this::checkRangeOnValidity);
+			varDeclaration.getRanges().forEach(this::checkRangeOnValidity);
 		}
 	}
 
 	@Check
 	public void checkIndexRangeValueType(final STTypeDeclaration typeDeclaration) {
 		if (typeDeclaration.isArray()) {
-			typeDeclaration.getRanges().stream().forEach(this::checkRangeOnValidity);
+			typeDeclaration.getRanges().forEach(this::checkRangeOnValidity);
 		}
 	}
 
@@ -612,6 +613,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (stmt.getCondition() != null) {
 			checkTypeCompatibility(ElementaryTypes.BOOL, stmt.getCondition().getResultType(),
 					STCorePackage.Literals.ST_IF_STATEMENT__CONDITION);
+		}
+	}
+
+	@Check
+	public void checkElseIfConditionType(final STElseIfPart stmt) {
+		if (stmt.getCondition() != null) {
+			checkTypeCompatibility(ElementaryTypes.BOOL, stmt.getCondition().getResultType(),
+					STCorePackage.Literals.ST_ELSE_IF_PART__CONDITION);
 		}
 	}
 

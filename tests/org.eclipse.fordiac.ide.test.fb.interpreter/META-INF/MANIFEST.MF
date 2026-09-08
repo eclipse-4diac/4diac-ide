@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FB Interpreter
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.fb.interpreter
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.2.100.qualifier
 Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
  org.junit.jupiter.params;version="[6.0.0,7.0.0)",
  org.junit.jupiter.params.provider;version="[6.0.0,7.0.0)"

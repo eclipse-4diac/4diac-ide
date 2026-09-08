@@ -58,7 +58,7 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final ECState state = newState("STATE", newAction(alg, outputEvent));
 		final ECC ecc = newECC(List.of(init, state), List.of(newTransition(init, state, inputEvent, null)));
 		assertTrace(toDIntValue(21), List.of(outputEvent), List.of(state),
-				evaluateBasicFB(ecc, List.of(inputEvent),
+				evaluateBasicFB(ecc, List.of(alg), List.of(inputEvent),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
@@ -74,7 +74,7 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final ECState state2 = newState("STATE2", newAction(alg2, outputEvent));
 		final ECC ecc = newECC(List.of(init, state, state2),
 				List.of(newTransition(init, state, inputEvent, null), newTransition(state, state2, inputEvent, null)));
-		final BasicFBType fb = newBasicFB(ecc,
+		final BasicFBType fb = newBasicFB(ecc, List.of(alg, alg2),
 				List.of(newVarDeclaration("DI1", ElementaryTypes.DINT, true),
 						newVarDeclaration("DI2", ElementaryTypes.DINT, true),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
@@ -98,7 +98,7 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final ECC ecc = newECC(List.of(init, state, state2),
 				List.of(newTransition(init, state, inputEvent, null), newTransition(state, state2, inputEvent2, null)));
 		assertTrace(toDIntValue(21), List.of(outputEvent, outputEvent), List.of(state, state2),
-				evaluateBasicFB(ecc, List.of(inputEvent, inputEvent2),
+				evaluateBasicFB(ecc, List.of(alg, alg2), List.of(inputEvent, inputEvent2),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
@@ -113,7 +113,7 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final ECState state = newState("STATE", newAction(alg, outputEvent), newAction(alg2, outputEvent));
 		final ECC ecc = newECC(List.of(init, state), List.of(newTransition(init, state, inputEvent, null)));
 		assertTrace(toDIntValue(21), List.of(outputEvent, outputEvent), List.of(state),
-				evaluateBasicFB(ecc, List.of(inputEvent),
+				evaluateBasicFB(ecc, List.of(alg, alg2), List.of(inputEvent),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
@@ -130,7 +130,7 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final ECC ecc = newECC(List.of(init, state), List.of(newTransition(init, state, inputEvent, "DO1 < DI1"),
 				newTransition(state, state, null, "DO1 < DI1")));
 		assertTrace(toDIntValue(17), repeatEvent(outputEvent, 17), repeatState(state, 17),
-				evaluateBasicFB(ecc, List.of(inputEvent),
+				evaluateBasicFB(ecc, List.of(alg), List.of(inputEvent),
 						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(1), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
@@ -148,17 +148,17 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 				List.of(newTransition(init, state, inputEvent, "DO1 < DI1"), newTransition(state, state2, null, null),
 						newTransition(state2, state, null, "DO1 < DI1")));
 		assertTrace(toDIntValue(60), repeatEvent(outputEvent, (4 * 2)), repeatStates(List.of(state, state2), 4),
-				evaluateBasicFB(ecc, List.of(inputEvent),
+				evaluateBasicFB(ecc, List.of(alg, alg2), List.of(inputEvent),
 						List.of(newVariable(toDIntValue(60), "DI1"), newVariable(toDIntValue(2), "DI2"),
 								newVariable(toDIntValue(2), "DI3")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
 
-	static TracingBasicFBEvaluator evaluateBasicFB(final ECC ecc, final List<Event> inputEvents,
-			final List<Variable<?>> variables, final VarDeclaration output)
+	static TracingBasicFBEvaluator evaluateBasicFB(final ECC ecc, final List<ICallable> callables,
+			final List<Event> inputEvents, final List<Variable<?>> variables, final VarDeclaration output)
 			throws EvaluatorException, InterruptedException {
 		return evaluateBasicFB(
-				newBasicFB(ecc,
+				newBasicFB(ecc, callables,
 						Stream.concat(variables.stream().map(
 								variable -> newVarDeclaration(variable.getName(), (DataType) variable.getType(), true)),
 								Stream.of(output)).toList()),
@@ -196,12 +196,13 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		return IntStream.range(0, repeat).mapToObj(unused -> state).flatMap(Collection::stream).toList();
 	}
 
-	static BasicFBType newBasicFB(final ECC ecc, final List<VarDeclaration> variables) {
+	static BasicFBType newBasicFB(final ECC ecc, final List<ICallable> callables,
+			final List<VarDeclaration> variables) {
 		final BasicFBType type = LibraryElementFactory.eINSTANCE.createBasicFBType();
 		type.setName("Test");
 		type.setInterfaceList(newInterfaceList(getContainedEvents(ecc), variables));
 		type.setECC(ecc);
-		type.getCallables().addAll(getContainedCallables(ecc));
+		type.getCallables().addAll(callables);
 		return type;
 	}
 
@@ -236,14 +237,9 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 
 	static ECAction newAction(final Algorithm actionAlgorithm, final Event actionEvent) {
 		final ECAction action = LibraryElementFactory.eINSTANCE.createECAction();
-		action.setAlgorithm(actionAlgorithm);
+		action.setAlgorithm(actionAlgorithm.getName());
 		action.setOutput(actionEvent);
 		return action;
-	}
-
-	static Set<? extends ICallable> getContainedCallables(final ECC ecc) {
-		return ecc.getECState().stream().map(ECState::getECAction).flatMap(List::stream).map(ECAction::getAlgorithm)
-				.filter(Objects::nonNull).collect(Collectors.toSet());
 	}
 
 	static Set<Event> getContainedEvents(final ECC ecc) {

@@ -107,7 +107,7 @@
     </eOperations>
     <eOperations name="getMemberVar" eType="ecore:EClass lib.ecore#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getMemberVariables().stream().filter(mv -> mv.getName().equals(name)).findAny().orElse(null);"/>
+        <details key="body" value="return getMemberVariables().stream().filter(mv -> mv.getName().equalsIgnoreCase(name)).findAny().orElse(null);"/>
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>

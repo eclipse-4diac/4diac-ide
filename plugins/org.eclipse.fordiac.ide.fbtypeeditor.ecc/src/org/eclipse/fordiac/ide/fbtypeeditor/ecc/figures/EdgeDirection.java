@@ -25,10 +25,8 @@ public enum EdgeDirection {
 		final int dx = reference.x - center.x;
 		final int dy = reference.y - center.y;
 		final boolean hasActions = state != null && !state.getECAction().isEmpty();
-
 		final long scaledDx = Math.abs((long) dx * bounds.height);
 		final long scaledDy = Math.abs((long) dy * bounds.width);
-
 		if (scaledDy > scaledDx) {
 			return (dy > 0) ? BOTTOM : TOP;
 		}
@@ -43,6 +41,20 @@ public enum EdgeDirection {
 
 	public static EdgeDirection of(final Point reference, final Rectangle bounds) {
 		return of(reference, bounds, null);
+	}
+
+	public static EdgeDirection selfLoopEdge(final Point bendPoint, final Rectangle bounds, final boolean sourceEnd) {
+		final EdgeDirection sourceEdge = (bendPoint.x < bounds.getCenter().x) ? BOTTOM : TOP;
+		return sourceEnd ? sourceEdge : sourceEdge.opposite();
+	}
+
+	public EdgeDirection opposite() {
+		return switch (this) {
+		case LEFT -> RIGHT;
+		case RIGHT -> LEFT;
+		case TOP -> BOTTOM;
+		case BOTTOM -> TOP;
+		};
 	}
 
 	public Vector toNormal() {

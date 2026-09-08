@@ -24,8 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class CreateInternalVariableCommandTest extends CreateInternalVariableCommandTestBase {
 
 	private static final String VARIABLE1_NAME = FordiacKeywords.VARIABLE_INTERNAL;
@@ -88,7 +86,8 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 		return commandExecution(state);
 	}
 
-	private static void verifyOrder(final State state, final TestFunction t, final String name1, final String name2, final String name3) {
+	private static void verifyOrder(final State state, final TestFunction t, final String name1, final String name2,
+			final String name3) {
 		final BaseFBType baseFBType = getBaseFBType(state, t);
 		t.test(baseFBType.getInternalVars().size(), 3);
 		t.test(baseFBType.getInternalVars().get(0).getName(), name1);
@@ -118,36 +117,40 @@ public class CreateInternalVariableCommandTest extends CreateInternalVariableCom
 				new ExecutionDescription<>("Add an internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar1, //
 						CreateInternalVariableCommandTest::verifyStateVar1 //
-						), //
+				), //
 				new ExecutionDescription<>("Add a second internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar2, //
 						CreateInternalVariableCommandTest::verifyStateVar2 //
-						), //
+				), //
 				new ExecutionDescription<>("Add a third internal variable", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeCommandVar3, //
 						CreateInternalVariableCommandTest::verifyStateVar3 //
-						), //
+				), //
 				new ExecutionDescription<>("move second algorithmn to third place", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 1, false), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE1_NAME, VARIABLE3_NAME, VARIABLE2_NAME)//
-						), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE1_NAME,
+								VARIABLE3_NAME, VARIABLE2_NAME)//
+				), //
 				new ExecutionDescription<>("move second algorithmn to first place", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 1, true), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
-						), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME,
+								VARIABLE1_NAME, VARIABLE2_NAME)//
+				), //
 				new ExecutionDescription<>("move first algorithmn past lower bound", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 0, true), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
-						), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME,
+								VARIABLE1_NAME, VARIABLE2_NAME)//
+				), //
 				new ExecutionDescription<>("move third algorithmn past upper bound", //$NON-NLS-1$
 						(final State s) -> executeReorder(s, 2, false), //
-						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME, VARIABLE1_NAME, VARIABLE2_NAME)//
-						), //
+						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, VARIABLE3_NAME,
+								VARIABLE1_NAME, VARIABLE2_NAME)//
+				), //
 				new ExecutionDescription<>("delete first entry", //$NON-NLS-1$
 						CreateInternalVariableCommandTest::executeDeleteVariable, //
 						CreateInternalVariableCommandTest::verifyDelete //
-						)//
-				);
+				)//
+		);
 
 		return createCommands(executionDescriptions);
 	}

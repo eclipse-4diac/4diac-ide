@@ -59,14 +59,14 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.bindings.keys.KeyStroke;

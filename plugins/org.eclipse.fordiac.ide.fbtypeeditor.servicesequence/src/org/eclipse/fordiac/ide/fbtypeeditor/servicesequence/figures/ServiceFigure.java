@@ -33,7 +33,6 @@ import org.eclipse.draw2d.StackLayout;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
@@ -89,11 +88,11 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		// final LineBorder middleLines = new LineBorder();
 		final LineBorder middleLines = leftMiddleLine;
 		middleLines.setWidth(MIDDLE_LINE_WIDTH);
-		middleLines.setColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
+		middleLines.setColor(ServiceConstants.TEXT_BLUE);
 
 		final Figure middleFigure = new Figure();
 		middleFigure.setBorder(middleLines);
-		middleFigure.setBackgroundColor(ColorManager.getColor(ServiceConstants.LIGHTER_GRAY));
+		middleFigure.setBackgroundColor(ServiceConstants.LIGHTER_GRAY);
 		middleFigure.setOpaque(true);
 		baseLayer.add(middleFigure);
 
@@ -125,7 +124,7 @@ public final class ServiceFigure extends FreeformLayeredPane {
 		final Layer interfaceLayer = new FreeformLayer();
 		interfaceLayer.setBorder(new MarginBorder(5, 0, 0, 0));
 		final GridLayout layout = new GridLayout(2, true);
-		interfaceLayer.setForegroundColor(ColorManager.getColor(ServiceConstants.TEXT_BLUE));
+		interfaceLayer.setForegroundColor(ServiceConstants.TEXT_BLUE);
 		layout.horizontalSpacing = 0;
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;

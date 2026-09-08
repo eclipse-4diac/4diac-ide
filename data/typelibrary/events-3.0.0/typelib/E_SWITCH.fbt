@@ -18,7 +18,7 @@
       <Event Comment="Output, switched from EI when G=1" Name="EO1" Type="Event"/>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="Switch EI to EI0 when G=0, to EI1 when G=1 " Name="G" Type="BOOL"/>
+      <VarDeclaration Comment="Switch EI to EO0 when G=0, to EO1 when G=1 " Name="G" Type="BOOL"/>
     </InputVars>
     <OutputVars/>
   </InterfaceList>

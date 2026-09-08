@@ -22,9 +22,14 @@ public abstract class AbstractNavigationHandler extends AbstractHandler {
 
 	protected abstract NavigationRequest.Direction getDirection();
 
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected boolean isJump() {
+		return false;
+	}
+
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		HandlerHelper.executeOrBubbleUp(event, new NavigationRequest(getDirection()));
+		HandlerHelper.executeOrBubbleUp(event, new NavigationRequest(getDirection(), isJump()));
 		return null;
 	}
 

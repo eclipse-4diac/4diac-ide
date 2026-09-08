@@ -24,6 +24,7 @@ public final class Messages extends NLS {
 	public static String FordiacNature_Location;
 	public static String FordiacNature_MissingExportBuilder;
 	public static String FordiacNature_MissingLibraryBuilder;
+	public static String FordiacNature_MissingOCLValidationBuilder;
 	public static String FordiacNature_MissingXtextNature;
 	public static String FordiacResourceChangeListener_4;
 	public static String FordiacResourceChangeListener_7;

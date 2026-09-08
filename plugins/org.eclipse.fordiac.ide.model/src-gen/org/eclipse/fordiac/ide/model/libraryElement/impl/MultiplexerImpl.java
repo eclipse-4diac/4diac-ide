@@ -16,13 +16,10 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
@@ -57,8 +54,8 @@ public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexe
 	 * @generated
 	 */
 	@Override
-	public EList<VarDeclaration> getMemberVars() {
-		return getInterface().getInputVars();
+	public void updateConfiguration() {
+		ConfigurableFBManagement.updateConfiguration(this);
 	}
 
 } //MultiplexerImpl

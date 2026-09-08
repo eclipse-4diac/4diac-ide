@@ -97,7 +97,7 @@ public class ContainerVarDeclarationImpl extends VarDeclarationImpl implements C
 	 */
 	@Override
 	public VarDeclaration getCachedMember(final String name) {
-		return getCachedMembers().stream().filter(vm -> vm.getName().equals(name)).findAny().orElse(null);
+		return getCachedMembers().stream().filter(vm -> vm.getName().equalsIgnoreCase(name)).findAny().orElse(null);
 	}
 
 	/**

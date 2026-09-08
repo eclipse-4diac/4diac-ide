@@ -28,7 +28,6 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.ui,
@@ -43,7 +42,6 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.jface.text,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.model.eval,
- org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.nebula.widgets.nattable.core,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.structuredtextcore.ui,
@@ -51,10 +49,11 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.xtext.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-Name: Graphical Utilites
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.gef
+Import-Package: org.eclipse.fordiac.ide.util

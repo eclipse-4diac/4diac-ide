@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Debug UI
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.debug.ui;singleton:=true
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.2.100.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.debug.ui
 Bundle-ActivationPolicy: lazy
@@ -35,7 +35,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.fordiac.ide.fbtypeeditor.network
 Export-Package: org.eclipse.fordiac.ide.deployment.debug.ui,
+ org.eclipse.fordiac.ide.deployment.debug.ui.annotation,
  org.eclipse.fordiac.ide.deployment.debug.ui.actions,
  org.eclipse.fordiac.ide.deployment.debug.ui.fb,
  org.eclipse.fordiac.ide.deployment.debug.ui.handler,
  org.eclipse.fordiac.ide.deployment.debug.ui.runtime
+Import-Package: org.eclipse.fordiac.ide.util

@@ -81,7 +81,7 @@ public abstract class XtextEmbeddedFieldEditor {
 
 			@Override
 			public void focusLost(final FocusEvent e) {
-				if (!isProposalPopupOpen()) {
+				if (!isProposalPopupOpen() && isEditable()) {
 					commit();
 				}
 			}

@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -292,10 +291,16 @@ public class ResourceDeploymentData {
 	}
 
 	private static IInterfaceElement getSubAppExternalElement(final IInterfaceElement element, final SubApp subApp) {
-		if (subApp instanceof UntypedSubApp) {
+		final InterfaceList interfaceList;
+		if (subApp instanceof TypedSubApp) {
+			interfaceList = subApp.getInterface();
+		} else if (subApp.isMapped() && subApp.getMapping().getTo() instanceof final SubApp subAppOpposite) {
+			// go back to mapped untyped subapp
+			interfaceList = subAppOpposite.getInterface();
+		} else {
 			return element;
 		}
-		return subApp.getInterface().getInterfaceElement(element);
+		return interfaceList.getInterfaceElement(element);
 	}
 
 	private static FBNetwork getFBNetworkForSubApp(final SubApp subApp) {

@@ -65,6 +65,11 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
+	void testCombineEmpty() {
+		assertEquals("", partitioner.combine(createSimpleFBType()));
+	}
+
+	@Test
 	void testCombine() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String text = """
@@ -137,6 +142,68 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
+	void testCombineLostAndFound() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String algorithm = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", ""));
+		final String lostAndFound = """
+
+
+				""";
+		fbType.getCallables().add(createSTMethod("LOST_AND_FOUND_1", "\n\n\n"));
+		final String method = """
+				METHOD TEST
+				END_METHOD
+				""";
+		fbType.getCallables().add(createSTMethod("TEST", ""));
+		assertEquals(algorithm + lostAndFound + method, partitioner.combine(fbType));
+	}
+
+	@Test
+	void testCombineLostAndFoundLegacy() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String algorithm = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				""".stripTrailing();
+		fbType.getCallables().add(createSTAlgorithm("REQ", algorithm));
+		final String lostAndFound = "// comment\n";
+		fbType.getCallables().add(createSTMethod("LOST_AND_FOUND_1", lostAndFound));
+		final String method = """
+				METHOD TEST
+				END_METHOD
+				""";
+		fbType.getCallables().add(createSTMethod("TEST", method));
+		assertEquals(algorithm + lostAndFound + method, partitioner.combine(fbType));
+	}
+
+	@Test
+	void testCombineTrailingBodyWhitespace() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String text = """
+				ALGORITHM REQ
+				OUT := TRUE;\s
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", "OUT := TRUE; "));
+		assertEquals(text, partitioner.combine(fbType));
+	}
+
+	@Test
+	void testCombineLeadingBodyWhitespace() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String text = """
+				ALGORITHM REQ OUT := TRUE;
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", " OUT := TRUE;"));
+		assertEquals(text, partitioner.combine(fbType));
+	}
+
+	@Test
 	void testPartition() throws Exception {
 		assertCallablesEquals(List.of(), partition(""));
 		assertCallablesEquals(List.of("error"), partition("error"));
@@ -149,7 +216,7 @@ class STAlgorithmPartitionerTest {
 				METHOD TEST
 				END_METHOD
 				""";
-		assertCallablesEquals(List.of("", ""), partition(algorithm + method));
+		assertCallablesEquals(List.of("", ""), partition(algorithm + CommonElementExporter.LINE_END + method));
 	}
 
 	@Test
@@ -172,6 +239,98 @@ class STAlgorithmPartitionerTest {
 				END_METHOD
 				""";
 		assertCallablesEquals(List.of("// inner comment 1", "// outer comment", "// inner comment 2"), partition(text));
+	}
+
+	@Test
+	void testPartitionCombine() throws Exception {
+		final String text = """
+				ALGORITHM REQ
+				END_ALGORITHM
+
+				METHOD TEST
+				// inner comment
+				END_METHOD
+
+
+				METHOD TEST2
+				// inner comment
+				END_METHOD
+				METHOD TEST3
+				// inner comment
+				END_METHOD
+				""";
+		assertPartitionCombine(text);
+	}
+
+	@Test
+	void testPartitionCombineComment() throws Exception {
+		final String text = """
+				// outer leading comment
+				ALGORITHM REQ
+				END_ALGORITHM
+
+				// outer comment
+				METHOD TEST // inner comment
+				END_METHOD // end-of-line comment
+
+				// outer comment 2
+
+				METHOD TEST2
+				 // inner comment with leading space
+				END_METHOD// end-of-line comment w/o space
+
+				METHOD TEST3
+
+				// inner comment
+
+				END_METHOD
+				// last comment
+				""";
+		assertPartitionCombine(text);
+	}
+
+	@Test
+	void testPartitionCombineLeadingWhitespace() throws Exception {
+		final String text = """
+
+				ALGORITHM REQ
+				END_ALGORITHM
+				""";
+		assertPartitionCombine(text);
+	}
+
+	@Test
+	void testPartitionCombineTrailingWhitespace() throws Exception {
+		final String text = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				\s
+				""";
+		final String expected = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				""";
+		assertPartitionCombine(expected, text);
+	}
+
+	@Test
+	void testPartitionCombineWhitespaceInSeparator() throws Exception {
+		final String text = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				\s
+				METHOD TEST
+				END_METHOD
+				""";
+		assertPartitionCombine(text);
+	}
+
+	@Test
+	void testPartitionCombineWhitespaceOnly() throws Exception {
+		final String text = """
+
+				""";
+		assertPartitionCombine(text);
 	}
 
 	private static SimpleFBType createSimpleFBType() {
@@ -203,6 +362,16 @@ class STAlgorithmPartitionerTest {
 		assertTrue(partition.get() instanceof STAlgorithmPartition);
 		assertEquals(text, partition.get().getOriginalSource());
 		return (STAlgorithmPartition) partition.get();
+	}
+
+	private void assertPartitionCombine(final String text) throws Exception {
+		assertPartitionCombine(text, text);
+	}
+
+	private void assertPartitionCombine(final String expected, final String original) throws Exception {
+		final SimpleFBType fbType = createSimpleFBType();
+		fbType.getCallables().addAll(partition(original).getCallables());
+		assertEquals(expected, partitioner.combine(fbType));
 	}
 
 	private static void assertCallablesEquals(final List<String> expected, final STAlgorithmPartition actual) {

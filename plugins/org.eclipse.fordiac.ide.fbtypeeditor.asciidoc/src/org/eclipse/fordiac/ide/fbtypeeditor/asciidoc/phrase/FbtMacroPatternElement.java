@@ -16,7 +16,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.mylyn.wikitext.parser.markup.PatternBasedElement;
 import org.eclipse.mylyn.wikitext.parser.markup.PatternBasedElementProcessor;
 
-@SuppressWarnings("restriction")
 public class FbtMacroPatternElement extends PatternBasedElement {
 
 	private final LibraryElement target;

@@ -19,7 +19,7 @@ import java.net.URLConnection;
 import java.util.Dictionary;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;

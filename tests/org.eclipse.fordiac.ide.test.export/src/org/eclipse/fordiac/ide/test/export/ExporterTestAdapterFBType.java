@@ -28,8 +28,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.AdapterTypeEntryImpl;
 import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class ExporterTestAdapterFBType extends ExporterTestBase<AdapterType> {
 
 	@Override

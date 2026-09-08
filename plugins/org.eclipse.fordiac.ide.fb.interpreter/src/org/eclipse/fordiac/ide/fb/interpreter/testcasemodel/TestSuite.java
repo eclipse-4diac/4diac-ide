@@ -29,12 +29,12 @@ public class TestSuite {
 			throw new IllegalArgumentException("Test suites must be defined as service model"); //$NON-NLS-1$
 		}
 		dataSource = type.getService();
-		type.getService().getServiceSequence().stream().forEach(n -> testCases.add(TestCase.createTestCase(n)));
+		type.getService().getServiceSequence().forEach(n -> testCases.add(TestCase.createTestCase(n)));
 
 	}
 
 	public TestSuite(final List<ServiceSequence> sequences) {
-		sequences.stream().forEach(n -> testCases.add(TestCase.createTestCase(n)));
+		sequences.forEach(n -> testCases.add(TestCase.createTestCase(n)));
 	}
 
 	public Service getDataSource() {
@@ -43,8 +43,7 @@ public class TestSuite {
 
 	public static TestSuite createTestSuite(final FBType type) {
 		final TestSuite testSuite = new TestSuite(type);
-		type.getService().getServiceSequence().stream()
-				.forEach(n -> testSuite.testCases.add(TestCase.createTestCase(n)));
+		type.getService().getServiceSequence().forEach(n -> testSuite.testCases.add(TestCase.createTestCase(n)));
 		return testSuite;
 	}
 

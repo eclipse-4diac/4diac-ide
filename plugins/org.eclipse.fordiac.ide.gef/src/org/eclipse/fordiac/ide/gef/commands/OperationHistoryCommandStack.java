@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.ScopedOperation;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -69,10 +69,15 @@ public class OperationHistoryCommandStack extends CommandStack {
 
 	/**
 	 * As deprecated in #{@link org.eclipse.gef.commands.CommandStack} this method
-	 * is not implemented. Use
-	 * {@link #addCommandStackEventListener(CommandStackEventListener)} instead.
+	 * is not implemented.
+	 *
+	 * @deprecated Use
+	 *             {@link #addCommandStackEventListener(CommandStackEventListener)}
+	 *             instead.
 	 **/
 	@Override
+	@Deprecated(forRemoval = true)
+	@SuppressWarnings("removal")
 	public void addCommandStackListener(final CommandStackListener listener) {
 		throw new UnsupportedOperationException(
 				"addCommandStackListener shall not be used anymore. Use addCommandStackEventListener instead!"); //$NON-NLS-1$
@@ -187,10 +192,15 @@ public class OperationHistoryCommandStack extends CommandStack {
 
 	/**
 	 * As deprecated in #{@link org.eclipse.gef.commands.CommandStack} this method
-	 * is not implemented. Use
-	 * {@link #removeCommandStackEventListener(CommandStackEventListener)} instead.
+	 * is not implemented.
+	 *
+	 * @deprecated Use
+	 *             {@link #removeCommandStackEventListener(CommandStackEventListener)}
+	 *             instead.
 	 **/
 	@Override
+	@Deprecated(forRemoval = true)
+	@SuppressWarnings("removal")
 	public void removeCommandStackListener(final CommandStackListener listener) {
 		throw new UnsupportedOperationException(
 				"removeCommandStackListener shall not be used anymore. Use removeCommandStackEventListener instead!"); //$NON-NLS-1$

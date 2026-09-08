@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.draw2d.FigureUtilities;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
@@ -119,5 +120,11 @@ public enum CoordinateConverter {
 		pos.setX(screenToIEC61499(x));
 		pos.setY(screenToIEC61499(y));
 		return pos;
+	}
+
+	public Point toScreenPoint(final Position pos) {
+		final int x = iec61499ToScreen(pos.getX());
+		final int y = iec61499ToScreen(pos.getY());
+		return new Point(x, y);
 	}
 }

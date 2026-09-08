@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
@@ -52,5 +52,10 @@ public class DefaultCellUpdateDataCommandHandler extends UpdateDataCommandHandle
 			FordiacLogHelper.logError(MessageFormat.format(Messages.NatTable_Update_Failed, command.getNewValue()), e);
 			return false;
 		}
+	}
+
+	public static void register(final DataLayer dataLayer) {
+		dataLayer.unregisterCommandHandler(UpdateDataCommand.class);
+		dataLayer.registerCommandHandler(new DefaultCellUpdateDataCommandHandler(dataLayer));
 	}
 }

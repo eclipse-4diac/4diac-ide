@@ -116,10 +116,21 @@ public class VarDeclarationEvaluator extends StructuredTextEvaluator implements 
 
 	@Override
 	public Variable<?> evaluateVariable() throws EvaluatorException, InterruptedException {
+		return doEvaluateVariable(null);
+	}
+
+	@Override
+	public Variable<?> evaluateVariable(final Set<Variable<?>> explicitlyInitialized)
+			throws EvaluatorException, InterruptedException {
+		return doEvaluateVariable(explicitlyInitialized);
+	}
+
+	private Variable<?> doEvaluateVariable(final Set<Variable<?>> explicitlyInitialized)
+			throws EvaluatorException, InterruptedException {
 		prepareInitialValue();
-		final Variable<?> result = VariableOperations.newVariable(varDeclaration.getName(), evaluateResultType());
+		final Variable<?> result = VariableOperations.newVariableWithoutDeclaredInitialValue(varDeclaration);
 		if (parseResult != null && parseResult.getInitializerExpression() != null) {
-			evaluateInitializerExpression(result, trap(parseResult).getInitializerExpression());
+			evaluateInitializerExpression(result, trap(parseResult).getInitializerExpression(), explicitlyInitialized);
 		}
 		return result;
 	}

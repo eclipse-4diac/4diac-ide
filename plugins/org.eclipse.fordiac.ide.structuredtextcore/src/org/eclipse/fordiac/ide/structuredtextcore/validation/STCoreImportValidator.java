@@ -54,7 +54,7 @@ public class STCoreImportValidator {
 		final IScope scope = globalScopeProvider.getScope(imports.get(0).eResource(),
 				STCorePackage.eINSTANCE.getSTFeatureExpression_Feature(), null);
 
-		imports.stream().forEach(imp -> validateImport(imp, packageQualifiedName, usedTypes, scope, acceptor));
+		imports.forEach(imp -> validateImport(imp, packageQualifiedName, usedTypes, scope, acceptor));
 	}
 
 	protected void validateImport(final Import imp, final QualifiedName packageName, final Set<QualifiedName> usedTypes,

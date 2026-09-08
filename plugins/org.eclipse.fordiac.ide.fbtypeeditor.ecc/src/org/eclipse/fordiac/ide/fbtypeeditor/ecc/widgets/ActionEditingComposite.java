@@ -32,11 +32,10 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ActionContentPro
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeActionOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -61,7 +60,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class ActionEditingComposite {
+public class ActionEditingComposite<T extends BaseECAction> {
 	private static class ActionListLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public Image getColumnImage(final Object element, final int columnIndex) {
@@ -70,10 +69,10 @@ public class ActionEditingComposite {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof final ECAction ecAction) {
+			if (element instanceof final BaseECAction ecAction) {
 				switch (columnIndex) {
 				case ACTION_COLUMN_ALGORITHM:
-					return (ecAction.getAlgorithm() != null) ? ecAction.getAlgorithm().getName()
+					return (ecAction.getAlgorithm() != null) ? ecAction.getAlgorithm()
 							: ECCContentAndLabelProvider.EMPTY_FIELD;
 				case ACTION_COLUMN_EVENT:
 					return (ecAction.getOutput() != null)
@@ -95,15 +94,15 @@ public class ActionEditingComposite {
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			final ECAction selectedAction = (ECAction) element;
+			final BaseECAction selectedAction = (BaseECAction) element;
 			return switch (property) {
 			case ACTION_ALGORITHM -> {
-				final List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(getBasicFBType());
-				final Algorithm alg = selectedAction.getAlgorithm();
+				final List<String> algorithms = ECCContentAndLabelProvider.getAlgorithmNames(getBaseFBType());
+				final String alg = selectedAction.getAlgorithm();
 				yield Integer.valueOf((alg != null) ? algorithms.indexOf(alg) : algorithms.size());
 			}
 			case ACTION_EVENT -> {
-				final List<String> events = ECCContentAndLabelProvider.getOutputEventNames(getBasicFBType());
+				final List<String> events = ECCContentAndLabelProvider.getOutputEventNames(getBaseFBType());
 				final Event oe = selectedAction.getOutput();
 				yield Integer.valueOf(
 						(oe != null) ? events.indexOf(ECCContentAndLabelProvider.getEventName(oe)) : events.size());
@@ -115,18 +114,18 @@ public class ActionEditingComposite {
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
 			final TableItem tableItem = (TableItem) element;
-			final ECAction selectedAction = (ECAction) tableItem.getData();
+			final BaseECAction selectedAction = (BaseECAction) tableItem.getData();
 			final int selected = ((Integer) value).intValue();
 			Command cmd = null;
 
 			switch (property) {
 			case ACTION_ALGORITHM:
-				final List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(getBasicFBType());
+				final List<Algorithm> algorithms = ECCContentAndLabelProvider.getAlgorithms(getBaseFBType());
 				final Algorithm alg = (selected < algorithms.size()) ? algorithms.get(selected) : null;
 				cmd = new ChangeAlgorithmCommand(selectedAction, alg);
 				break;
 			case ACTION_EVENT:
-				final List<Event> events = ECCContentAndLabelProvider.getOutputEvents(getBasicFBType());
+				final List<Event> events = ECCContentAndLabelProvider.getOutputEvents(getBaseFBType());
 				final Event ev = ((0 <= selected) && (selected < events.size())) ? events.get(selected) : null;
 				cmd = new ChangeOutputCommand(selectedAction, ev);
 				break;
@@ -153,7 +152,8 @@ public class ActionEditingComposite {
 
 	private CommandStack commandStack;
 	private final CommandExecutor commandExecutor; // the parent section
-	private ECState type;
+
+	private BaseECState<T> type;
 
 	public ActionEditingComposite(final Composite parent, final TabbedPropertySheetWidgetFactory actionWidgetFactory,
 			final CommandExecutor commandExecutor) {
@@ -163,9 +163,9 @@ public class ActionEditingComposite {
 		commandStack = null;
 		type = null;
 		createGroupLayout();
-
 	}
 
+	@SuppressWarnings("unchecked") // we need to cast to (T)
 	private void createGroupLayout() {
 		actionGroup.setLayout(new GridLayout(2, false));
 		actionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -178,10 +178,10 @@ public class ActionEditingComposite {
 		actionViewer.setLabelProvider(new ActionListLabelProvider());
 
 		actionMgmButtons.bindToTableViewer(actionViewer, commandExecutor,
-				ref -> new CreateECActionCommand(LibraryElementFactory.eINSTANCE.createECAction(), type),
-				ref -> new DeleteECActionCommand((ECAction) ref),
-				ref -> new ChangeActionOrderCommand(type, (ECAction) ref, true),
-				ref -> new ChangeActionOrderCommand(type, (ECAction) ref, false));
+				ref -> new CreateECActionCommand<>(type.createNewAction(), type),
+				ref -> new DeleteECActionCommand<>((T) ref, type),
+				ref -> new ChangeActionOrderCommand<>(type, (T) ref, true),
+				ref -> new ChangeActionOrderCommand<>(type, (T) ref, false));
 	}
 
 	private void configureActionTableLayout(final Table table) {
@@ -197,7 +197,7 @@ public class ActionEditingComposite {
 	}
 
 	private CellEditor[] createActionViewerCellEditors(final Table table) {
-		final BasicFBType fbType = getBasicFBType();
+		final BaseFBType fbType = getBaseFBType();
 		return new CellEditor[] {
 				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
 						ECCContentAndLabelProvider.getAlgorithmNames(fbType).toArray(new String[0]), SWT.READ_ONLY),
@@ -205,8 +205,8 @@ public class ActionEditingComposite {
 						ECCContentAndLabelProvider.getOutputEventNames(fbType).toArray(new String[0]), SWT.READ_ONLY) };
 	}
 
-	private BasicFBType getBasicFBType() {
-		return type.getECC().getBasicFBType();
+	private BaseFBType getBaseFBType() {
+		return type.getBaseFBType();
 	}
 
 	public void refresh() {
@@ -218,7 +218,7 @@ public class ActionEditingComposite {
 		commandStack = commandStackBuffer;
 	}
 
-	public void setTypeAndCommandStack(final ECState type, final CommandStack commandStack) {
+	public void setTypeAndCommandStack(final BaseECState<T> type, final CommandStack commandStack) {
 		this.type = type;
 		this.commandStack = commandStack;
 
@@ -228,5 +228,9 @@ public class ActionEditingComposite {
 		// have to do that here, because now we have a valid type
 		actionViewer.setCellEditors(createActionViewerCellEditors(actionViewer.getTable()));
 		actionViewer.setCellModifier(new ActionViewerCellModifier());
+	}
+
+	public Group getGroupContainer() {
+		return actionGroup;
 	}
 }

@@ -17,6 +17,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
@@ -46,7 +47,8 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 	protected void refreshPosition() {
 		if (getParent() != null) {
 			final Position position = getPositionableElement().getPosition();
-			final Rectangle bounds = new Rectangle(position.toScreenPoint(), new Dimension(-1, -1));
+			final Rectangle bounds = new Rectangle(CoordinateConverter.INSTANCE.toScreenPoint(position),
+					new Dimension(-1, -1));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}

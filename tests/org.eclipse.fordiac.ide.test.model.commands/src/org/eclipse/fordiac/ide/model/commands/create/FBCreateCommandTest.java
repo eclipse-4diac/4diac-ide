@@ -20,8 +20,6 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class FBCreateCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommand(final State state) {

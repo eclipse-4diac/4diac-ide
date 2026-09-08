@@ -82,12 +82,12 @@ final class InterfaceListAnnotations {
 
 	public static Event getEvent(final InterfaceList il, final String name) {
 		for (final Event event : il.getEventInputs()) {
-			if (event.getName().equals(name)) {
+			if (event.getName().equalsIgnoreCase(name)) {
 				return event;
 			}
 		}
 		for (final Event event : il.getEventOutputs()) {
-			if (event.getName().equals(name)) {
+			if (event.getName().equalsIgnoreCase(name)) {
 				return event;
 			}
 		}
@@ -96,17 +96,17 @@ final class InterfaceListAnnotations {
 
 	public static VarDeclaration getVariable(final InterfaceList il, final String name) {
 		for (final VarDeclaration inVar : il.getInputVars()) {
-			if (inVar.getName().equals(name)) {
+			if (inVar.getName().equalsIgnoreCase(name)) {
 				return inVar;
 			}
 		}
 		for (final VarDeclaration outVar : il.getOutputVars()) {
-			if (outVar.getName().equals(name)) {
+			if (outVar.getName().equalsIgnoreCase(name)) {
 				return outVar;
 			}
 		}
 		for (final VarDeclaration inOutVar : il.getInOutVars()) {
-			if (inOutVar.getName().equals(name)) {
+			if (inOutVar.getName().equalsIgnoreCase(name)) {
 				return inOutVar;
 			}
 		}
@@ -171,12 +171,12 @@ final class InterfaceListAnnotations {
 
 	public static AdapterDeclaration getAdapter(final InterfaceList il, final String name) {
 		for (final AdapterDeclaration adapt : il.getPlugs()) {
-			if (adapt.getName().equals(name)) {
+			if (adapt.getName().equalsIgnoreCase(name)) {
 				return adapt;
 			}
 		}
 		for (final AdapterDeclaration adapt : il.getSockets()) {
-			if (adapt.getName().equals(name)) {
+			if (adapt.getName().equalsIgnoreCase(name)) {
 				return adapt;
 			}
 		}
@@ -202,15 +202,15 @@ final class InterfaceListAnnotations {
 	}
 
 	private static IInterfaceElement getRootInput(final InterfaceList il, final String name) {
-		return getRootInputs(il).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+		return getRootInputs(il).filter(ie -> ie.getName().equalsIgnoreCase(name)).findAny().orElse(null);
 	}
 
 	private static IInterfaceElement getRootOutput(final InterfaceList il, final String name) {
-		return getRootOutputs(il).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+		return getRootOutputs(il).filter(ie -> ie.getName().equalsIgnoreCase(name)).findAny().orElse(null);
 	}
 
 	private static IInterfaceElement getRootIInterfaceElement(final InterfaceList il, final String name) {
-		return getRootInterfaceElements(il).filter(ie -> ie.getName().equals(name)).findFirst().orElse(null);
+		return getRootInterfaceElements(il).filter(ie -> ie.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
 
 	private InterfaceListAnnotations() {

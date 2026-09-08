@@ -58,7 +58,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class DeploymentDebugDevice extends DeploymentDebugElement implements IDeploymentDebugTarget {
 
@@ -82,7 +82,6 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		this.pollingInterval = pollingInterval;
 		this.launchWatches = launchWatches;
 
-		debugTarget.getLaunch().addDebugTarget(this);
 		deviceManagementExecutor = IDeviceManagementExecutorService.of(new SharedWatchDeviceManagementInteractor(
 				DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device, null, profile)));
 

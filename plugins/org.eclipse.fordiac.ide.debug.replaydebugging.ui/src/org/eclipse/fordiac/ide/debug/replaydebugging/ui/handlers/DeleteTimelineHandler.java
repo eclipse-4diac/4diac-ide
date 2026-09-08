@@ -29,6 +29,7 @@ import org.eclipse.core.commands.AbstractHandler;
  *******************************************************************************/
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart;
@@ -49,8 +50,22 @@ public class DeleteTimelineHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
-			final Object first = s.getFirstElement();
-			setBaseEnabled(first instanceof TimelineEditPart || first instanceof EventMarkerEditPart);
+			if (s.isEmpty()) {
+				setBaseEnabled(false);
+				return;
+			}
+			Timeline parentTimeline = null;
+			switch (s.getFirstElement()) {
+			case final EventMarkerEditPart eventMarkerEditPart ->
+				parentTimeline = eventMarkerEditPart.getModel().getParentTimeline().getTimeline().getParentTimeline();
+			case final TimelineEditPart timelineEditPart -> parentTimeline = timelineEditPart.getModel().getTimeline();
+			default -> {
+				// parentTimeline already set to null
+			}
+			}
+
+			setBaseEnabled(parentTimeline != null);
+
 		}
 	}
 }

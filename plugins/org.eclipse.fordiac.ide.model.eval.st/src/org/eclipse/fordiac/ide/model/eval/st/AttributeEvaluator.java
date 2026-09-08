@@ -84,12 +84,26 @@ public class AttributeEvaluator extends StructuredTextEvaluator implements Varia
 
 	@Override
 	public Variable<?> evaluateVariable() throws EvaluatorException, InterruptedException {
+		return doEvaluateVariable(null);
+	}
+
+	@Override
+	public Variable<?> evaluateVariable(final Set<Variable<?>> explicitlyInitialized)
+			throws EvaluatorException, InterruptedException {
+		return doEvaluateVariable(explicitlyInitialized);
+	}
+
+	private Variable<?> doEvaluateVariable(final Set<Variable<?>> explicitlyInitialized)
+			throws EvaluatorException, InterruptedException {
 		prepare();
 		final Variable<?> result = VariableOperations.newVariable(attribute.getName(), evaluateResultType());
 		if (parseResult != null && parseResult.getInitializerExpression() != null) {
-			evaluateInitializerExpression(result, trap(parseResult).getInitializerExpression());
+			evaluateInitializerExpression(result, trap(parseResult).getInitializerExpression(), explicitlyInitialized);
 		} else if (attribute.getType() instanceof InternalDataType && attribute.getValue() != null) {
 			result.setValue(ValueOperations.wrapValue(attribute.getValue(), result.getType()));
+			if (explicitlyInitialized != null) {
+				explicitlyInitialized.add(result);
+			}
 		}
 		return result;
 	}

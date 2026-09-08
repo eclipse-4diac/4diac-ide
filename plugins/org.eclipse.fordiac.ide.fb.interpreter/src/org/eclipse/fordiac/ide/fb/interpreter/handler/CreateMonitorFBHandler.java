@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestCase;
 import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -86,7 +86,7 @@ public class CreateMonitorFBHandler extends AbstractHandler {
 		// if a service sequence is selected only the monitorFB for this sequence is
 		// generated
 		if (((EditPart) selection.getFirstElement() != null)
-				&& (((EditPart) selection.getFirstElement()).getModel() instanceof final ServiceSequenceImpl s)) {
+				&& (((EditPart) selection.getFirstElement()).getModel() instanceof final ServiceSequence s)) {
 			TestCase testCase = null;
 			for (final TestCase testC : testSuite.getTestCases()) {
 				if (testC.getName().equals(s.getName())

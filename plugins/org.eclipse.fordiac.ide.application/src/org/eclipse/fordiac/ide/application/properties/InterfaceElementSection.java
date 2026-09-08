@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -259,8 +258,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	private String getPinName() {
-		final String pinName = (getType() instanceof final MemberVarDeclaration memVar) ? memVar.getDisplayName()
-				: getType().getName();
+		final String pinName = getType().getRelativeName(getType().getBlockFBNetworkElement());
 		return pinName != null ? pinName : ""; //$NON-NLS-1$
 	}
 

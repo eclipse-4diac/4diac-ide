@@ -8,7 +8,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.fbtypeeditor,
  org.eclipse.fordiac.ide.typeeditor,
  org.eclipse.fordiac.ide.typemanagement,
- org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.model.edit,
@@ -19,7 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.1.200.qualifier
 Bundle-Name: Composite FB Network
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.network;singleton:=true

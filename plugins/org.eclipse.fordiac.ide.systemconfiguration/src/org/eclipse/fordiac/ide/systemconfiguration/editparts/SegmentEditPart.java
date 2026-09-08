@@ -174,7 +174,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	protected void refreshPosition() {
-		final Point position = getModel().getPosition().toScreenPoint();
+		final Point position = CoordinateConverter.INSTANCE.toScreenPoint(getModel().getPosition());
 		final Rectangle bounds = new Rectangle(position.x, position.y,
 				CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()), -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);

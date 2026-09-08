@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextcore.model
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.structuredtextcore.model
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextcore.model; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext.xbase.lib,
@@ -16,5 +16,5 @@ Require-Bundle: org.eclipse.xtext.xbase.lib,
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: 
  org.eclipse.fordiac.ide.structuredtextcore.stcore,
- org.eclipse.fordiac.ide.structuredtextcore.stcore.impl,
+ org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;x-internal:=true,
  org.eclipse.fordiac.ide.structuredtextcore.stcore.util

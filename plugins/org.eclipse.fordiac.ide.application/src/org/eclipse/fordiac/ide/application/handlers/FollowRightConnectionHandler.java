@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.GraphicalViewer;
@@ -48,8 +48,8 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		editor.getSite().getPage().getNavigationHistory().markLocation(editor);
 
 		// Jump-mode, jump over Struct
-		if (!stepMode && originPin instanceof final MemberVarDeclaration memberVarDecl && memberVarDecl.isIsInput()) {
-			selectOpposites(event, viewer, originPin, jumpOverStruct(memberVarDecl, true), editor);
+		if (!stepMode && isStructManipulatorMember(originPin) && originPin.isIsInput()) {
+			selectOpposites(event, viewer, originPin, jumpOverStruct((VarDeclaration) originPin, true), editor);
 			return null;
 		}
 

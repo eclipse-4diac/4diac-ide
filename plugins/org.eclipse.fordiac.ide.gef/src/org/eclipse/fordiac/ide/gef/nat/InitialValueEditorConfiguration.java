@@ -20,4 +20,9 @@ public class InitialValueEditorConfiguration extends InitialValueGenericEditorCo
 	public InitialValueEditorConfiguration(final IRowDataProvider<? extends ITypedElement> dataProvider) {
 		super(dataProvider, InitialValueTypedElementAccessor.INSTANCE);
 	}
+
+	@Override
+	protected InitialValueStructuredCellEditor<ITypedElement> createStructuredCellEditor() {
+		return new InitialValueVariableStructuredCellEditor<>(getDataProvider(), getElementAccessor());
+	}
 }

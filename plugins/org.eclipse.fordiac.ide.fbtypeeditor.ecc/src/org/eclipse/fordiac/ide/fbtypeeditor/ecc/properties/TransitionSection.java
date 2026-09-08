@@ -209,7 +209,7 @@ public class TransitionSection extends AbstractSection {
 
 	public void fillEventConditionDropdown() {
 		eventCombo.removeAll();
-		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
+		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType())
 				.forEach(name -> eventCombo.add(name));
 	}
 }

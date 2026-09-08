@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.data,
  org.eclipse.fordiac.ide.deployment.devResponse,
- org.eclipse.fordiac.ide.deployment.devResponse.impl,
+ org.eclipse.fordiac.ide.deployment.devResponse.impl;x-internal:=true,
  org.eclipse.fordiac.ide.deployment.devResponse.util,
  org.eclipse.fordiac.ide.deployment.exceptions,
  org.eclipse.fordiac.ide.deployment.interactors,
@@ -13,15 +13,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.gef
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment
 Bundle-RequiredExecutionEnvironment: JavaSE-21
+Import-Package: org.eclipse.fordiac.ide.util

@@ -18,7 +18,7 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 	public static String RecordExecutionTraceHandler_Incorrect_Selection;
-	public static String RecordExecutionTraceHandler_Select_FB_input_event;
+	public static String RecordExecutionTraceHandler_Select_FB_event;
 	public static String CreateRuntimeTestFunctionBlockHandler_Select_Service_Model;
 	public static String SelectAdapterEventDialog_Select_Event_Contained_In_Selected_Adapter;
 	public static String SelectAdapterEventDialog_Choose_Event_From_List;

@@ -46,6 +46,7 @@ public class Perspective implements IPerspectiveFactory {
 
 		final IFolderLayout bottomLeft = layout.createFolder("bottomLeft", IPageLayout.BOTTOM, 0.7f, "left"); //$NON-NLS-1$ //$NON-NLS-2$
 		bottomLeft.addView(IPageLayout.ID_OUTLINE);
+		bottomLeft.addView("org.eclipse.fordiac.ide.application.eventSequence"); //$NON-NLS-1$
 
 		createBottomEntries(layout);
 

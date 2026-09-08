@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGenerator {
 	private static final String PALETTE_ENTRY_SOURCE_LOCAL = "iec61499::net::PUBL_"; //$NON-NLS-1$

@@ -93,6 +93,12 @@ public class ECTransitionEvaluator extends StructuredTextEvaluator implements Va
 	}
 
 	@Override
+	public Variable<?> evaluateVariable(final Set<Variable<?>> explicitlyInitialized)
+			throws EvaluatorException, InterruptedException {
+		return evaluateVariable();
+	}
+
+	@Override
 	public boolean validateVariable(final List<String> errors, final List<String> warnings, final List<String> infos)
 			throws EvaluatorException, InterruptedException {
 		if (VariableOperations.hasConditionExpression(transition)) {

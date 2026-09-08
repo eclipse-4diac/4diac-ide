@@ -13,28 +13,36 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.model;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.SelectionService;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonColumn;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
 
-public class TimelineModel implements Timeline.StructureListener {
+public class TimelineModel implements Timeline.StructureListener, ComparisonService.Listener, CommentsHandler.Listener,
+		PropertyChangeListener {
 
 	private final Timeline timeline;
 	private TimelineConnection connectionToParentTimelineModel;
 
 	private final List<TimelineConnection> spawnedConnections = new ArrayList<>();
 	private final List<EventMarker> eventMarkers = new ArrayList<>();
-	private final BiConsumer<Timeline, Integer> eventSelected;
+	private String comment = null;
+	private Set<Integer> highlightedEvents = new HashSet<>();
 
 	private int firstInvalid = -1;
 
@@ -46,23 +54,34 @@ public class TimelineModel implements Timeline.StructureListener {
 
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public TimelineModel(final Timeline timeline, final BiConsumer<Timeline, Integer> eventSelected) {
+	public TimelineModel(final Timeline timeline) {
 		this.timeline = timeline;
-		this.eventSelected = eventSelected;
 
 		for (var i = 0; i <= timeline.getMaxEventNumber(); i++) {
-			eventMarkers.add(new EventMarker(i, this, this::eventSelected));
+			eventMarkers.add(new EventMarker(i, this));
 		}
 
 		for (final var spawnedTimeline : timeline.getSpawnedTimelines()) {
 			addNewSpawnedTimeline(spawnedTimeline);
 		}
+		updateReadOnlyMarkers();
+		setHighlighted(SelectionService.getDefault().getSelectedElements());
 
 		timeline.addStructureListener(this);
+		ComparisonService.getInstance().addListener(this);
+		CommentsHandler.getInstance().addListener(this);
+		SelectionService.getDefault().addPropertyChangeListener(this);
+	}
+
+	public void dispose() {
+		timeline.removeStructureListener(this);
+		ComparisonService.getInstance().removeListener(this);
+		CommentsHandler.getInstance().removeListener(this);
+		SelectionService.getDefault().removePropertyChangeListener(this);
 	}
 
 	public List<EventMarker> getEventMarkers() {
-		return eventMarkers;
+		return List.copyOf(eventMarkers);
 	}
 
 	public int getFirstInvalid() {
@@ -75,6 +94,10 @@ public class TimelineModel implements Timeline.StructureListener {
 
 	public Timeline getTimeline() {
 		return timeline;
+	}
+
+	public String getComment() {
+		return comment;
 	}
 
 	public List<TimelineModel> getSpawnedTimelineModels() {
@@ -93,7 +116,7 @@ public class TimelineModel implements Timeline.StructureListener {
 	}
 
 	private void addNewSpawnedTimeline(final Timeline spawnedTimeline) {
-		final var spawnedModel = new TimelineModel(spawnedTimeline, eventSelected);
+		final var spawnedModel = new TimelineModel(spawnedTimeline);
 		final var connectionToChild = new TimelineConnection(this, spawnedModel,
 				timeline.getSpawnedTimelineEventNumber(spawnedTimeline));
 		spawnedModel.connectionToParentTimelineModel = connectionToChild;
@@ -133,14 +156,6 @@ public class TimelineModel implements Timeline.StructureListener {
 		}
 	}
 
-	public void dispose() {
-		timeline.removeStructureListener(this);
-	}
-
-	private void eventSelected(final Integer index) {
-		eventSelected.accept(timeline, index);
-	}
-
 	public List<TimelineConnection> getSources() {
 		return spawnedConnections;
 	}
@@ -149,11 +164,16 @@ public class TimelineModel implements Timeline.StructureListener {
 		return connectionToParentTimelineModel == null ? List.of() : List.of(connectionToParentTimelineModel);
 	}
 
+	public Set<Integer> getHighlighted() {
+		return highlightedEvents;
+	}
+
 	// Callbacks from the timeline
 
 	@Override
 	public void eventAdded(final Timeline timeline) {
-		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this, this::eventSelected));
+		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this));
+		setHighlighted(SelectionService.getDefault().getSelectedElements());
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_ADDED, null, null);
 	}
 
@@ -177,6 +197,69 @@ public class TimelineModel implements Timeline.StructureListener {
 			final int spawnedAtEventNumber) {
 		spawnedConnections.removeIf(timelineConnection -> timelineConnection.child().timeline == removedTimeline);
 		propertyChangeSupport.firePropertyChange(PROPERTY_TIMELINE_DELETED, null, null);
+	}
+
+	private void updateReadOnlyMarkers() {
+		final var firstDeletableEventIndex = timeline.getFirstDeletableEventIndex();
+		for (var i = 0; i < eventMarkers.size(); i++) {
+			eventMarkers.get(i).setIsReadOnly(i < firstDeletableEventIndex);
+		}
+	}
+
+	@Override
+	public void timelineStateChanged(final Timeline timeline) {
+		updateReadOnlyMarkers();
+	}
+
+	@Override
+	public void columnsChanged(final List<ComparisonColumn> columns) {
+		for (final var eventMarker : eventMarkers) {
+			eventMarker.setComparisonColor(null);
+		}
+		for (final var column : columns) {
+			if (column.getEventPosition().timeline() == timeline) {
+				eventMarkers.get(column.getEventPosition().eventNumber()).setComparisonColor(column.getColor());
+			}
+		}
+	}
+
+	@Override
+	public void eventCommentChanged(final EventPosition position, final String comment) {
+		if (position.timeline() != timeline) {
+			return;
+		}
+		eventMarkers.get(position.eventNumber()).setComment(comment);
+		// update column header if it's present in the comparison table
+		for (final var column : ComparisonService.getInstance().getColumns()) {
+			if (column.getEventPosition().eventNumber() == position.eventNumber()) {
+				column.setLabel(comment);
+				ComparisonService.getInstance().replaceColumn(column);
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void timelineCommentChanged(final Timeline timeline, final String comment) {
+		if (timeline != this.timeline) {
+			return;
+		}
+		this.comment = comment;
+		propertyChangeSupport.firePropertyChange(PROPERTY_STATE_CHANGED, null, null);
+	}
+
+	@Override
+	public void propertyChange(final PropertyChangeEvent evt) {
+		if (SelectionService.PROPERTY_SELECTION.equals(evt.getPropertyName())) {
+			setHighlighted(SelectionService.getDefault().getSelectedElements());
+		}
+	}
+
+	private void setHighlighted(final List<String> selectedElements) {
+		highlightedEvents = timeline.getEventsThatTouch(selectedElements);
+		for (final var eventMarker : eventMarkers) {
+			eventMarker.setIsHighlighted(highlightedEvents.contains(Integer.valueOf(eventMarker.getIndex())));
+		}
 	}
 
 	// Listener to this

@@ -39,6 +39,8 @@ public class Timeline {
 		void timelineSpawned(Timeline spawnedTimeline);
 
 		void timelineRemoved(Timeline parentTimeline, Timeline removedTimeline, int spawnedAtEventNumber);
+
+		void timelineStateChanged(Timeline timeline);
 	}
 
 	private Timeline parentTimeline = null;
@@ -49,22 +51,62 @@ public class Timeline {
 
 	private final Set<StructureListener> structureListeners = new HashSet<>();
 
+	// map from datapoints to the event numbers where they are changed
+	private final HashMap<String, Set<Integer>> eventsWhereDatapointsChange = new HashMap<>();
+
+	private int firstDeletableEventIndex = 0;
+
+	public int getFirstDeletableEventIndex() {
+		return firstDeletableEventIndex;
+	}
+
+	public Set<Integer> getEventsThatTouch(final List<String> datapoints) {
+
+		final Set<Integer> result = new HashSet<>();
+		if (datapoints == null) {
+			return result;
+		}
+
+		for (final var datapoint : datapoints) {
+			if (!eventsWhereDatapointsChange.containsKey(datapoint)) {
+				continue;
+			}
+			for (final var eventIntex : eventsWhereDatapointsChange.get(datapoint)) {
+				result.add(eventIntex);
+			}
+		}
+		return result;
+	}
+
+	public void setFirstDeletableEventIndex(final int firstDeletableEventIndex) {
+		this.firstDeletableEventIndex = firstDeletableEventIndex;
+		notifyTimelineStateChanged();
+	}
+
 	public void addEventChange(final List<DataPointChange> newValues) {
 		eventChanges.add(new EventChange(eventChanges.size(), newValues));
+		// add mapping from datapoints to event numbers
+		for (final var newValue : newValues) {
+			eventsWhereDatapointsChange.computeIfAbsent(newValue.datapoint(), k -> new HashSet<>());
+			eventsWhereDatapointsChange.get(newValue.datapoint()).add(Integer.valueOf(eventChanges.size() - 1));
+		}
 		notifyNewEvent();
 	}
 
 	public void removeEventsFrom(final int eventNumber) {
-		if (eventNumber < 0 || eventNumber >= eventChanges.size()) {
+		if (eventNumber < 0 || eventNumber >= eventChanges.size() || eventNumber < firstDeletableEventIndex) {
 			return;
 		}
 
 		// a view to actual values
 		final var toRemove = eventChanges.subList(eventNumber, eventChanges.size());
 
-		// create a deep copy of toRemove
-		final var toRemoveCopy = new ArrayList<>(toRemove);
-		toRemove.clear();
+		// remove mapping from datapoints to event numbers
+		for (var i = 0; i < eventChanges.size() - eventNumber; i++) {
+			for (final var datapointChange : toRemove.get(i).newValues()) {
+				eventsWhereDatapointsChange.get(datapointChange.datapoint()).remove(Integer.valueOf(i + eventNumber));
+			}
+		}
 
 		// remove timelines which spawn from removed events
 		for (final var entry : spawnedTimelines.entrySet()) {
@@ -75,6 +117,9 @@ public class Timeline {
 			}
 		}
 
+		// create a deep copy of toRemove
+		final var toRemoveCopy = new ArrayList<>(toRemove);
+		toRemove.clear();
 		notifyRemoveEvents(eventNumber, toRemoveCopy);
 
 	}
@@ -238,13 +283,15 @@ public class Timeline {
 	}
 
 	private void notifyRemoveEvents(final int removedStartEventIndex, final List<EventChange> removedChanges) {
-		for (final var listener : structureListeners) {
+		// defense copy when removing events, as listeners might remove timelines and
+		// thus modify the list of listeners while we are notifying
+		for (final var listener : new HashSet<>(structureListeners)) {
 			listener.eventsRemoved(this, removedStartEventIndex, removedChanges);
 		}
 	}
 
 	private void notifyRemovedSpawnedTimeline(final Timeline removedTimeline, final int spawnedAtEventNumber) {
-		for (final var listener : structureListeners) {
+		for (final var listener : new HashSet<>(structureListeners)) {
 			listener.timelineRemoved(this, removedTimeline, spawnedAtEventNumber);
 		}
 	}
@@ -252,6 +299,12 @@ public class Timeline {
 	private void notifyNewSpawnedTimeline(final Timeline spawnedTimeline) {
 		for (final var listener : structureListeners) {
 			listener.timelineSpawned(spawnedTimeline);
+		}
+	}
+
+	private void notifyTimelineStateChanged() {
+		for (final var listener : structureListeners) {
+			listener.timelineStateChanged(this);
 		}
 	}
 

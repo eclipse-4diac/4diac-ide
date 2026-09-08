@@ -44,7 +44,6 @@ public class DeleteECStateCommand extends Command {
 	 * @param state the state
 	 */
 	public DeleteECStateCommand(final ECState state) {
-		super();
 		this.state = state;
 		parent = state.getECC();
 	}
@@ -64,7 +63,8 @@ public class DeleteECStateCommand extends Command {
 	public void execute() {
 
 		deleteActions = new CompoundCommand();
-		state.getECAction().forEach(action -> deleteActions.add(new DeleteECActionCommand(action)));
+		state.getECAction()
+				.forEach(action -> deleteActions.add(new DeleteECActionCommand<>(action, action.getECState())));
 		if (deleteActions.canExecute()) {
 			deleteActions.execute();
 		}

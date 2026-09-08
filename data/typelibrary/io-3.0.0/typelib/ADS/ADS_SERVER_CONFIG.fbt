@@ -25,7 +25,7 @@
 			<VarDeclaration Name="FRIENDLY_NAME" Type="WSTRING" Comment="User friendly server name to use in IO FBs" />
 			<VarDeclaration Name="SERVER_ADS_ADDRESS" Type="WSTRING" Comment="Server ADS address" />
 			<VarDeclaration Name="ADS_PORT" Type="UINT" Comment="Server ADS port" />
-			<VarDeclaration Name="SERVER_IPV4_OR_HOSTNAME" Type="WSTRING" Comment="ADS Server IPv4 address or hostame" />
+			<VarDeclaration Name="SERVER_IPV4_OR_HOSTNAME" Type="WSTRING" Comment="ADS Server IPv4 address or hostname" />
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />

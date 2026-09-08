@@ -107,7 +107,7 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	 */
 	@Override
 	public VarDeclaration getMemberVar(final String name) {
-		return getMemberVariables().stream().filter(mv -> mv.getName().equals(name)).findAny().orElse(null);
+		return getMemberVariables().stream().filter(mv -> mv.getName().equalsIgnoreCase(name)).findAny().orElse(null);
 	}
 
 	/**

@@ -39,4 +39,18 @@ public class ReconnectEventConnectionCommand extends AbstractReconnectConnection
 		return new EventConnectionCreateCommand(parent);
 	}
 
+	@Override
+	protected void reconnectRecursively(final Connection curr) {
+		final var nextConnections = isSourceReconnect ? curr.getDestination().getInputConnections()
+				: curr.getSource().getOutputConnections();
+
+		if (nextConnections.size() > 1) {
+			// special case for event having multiple inputs
+			final var lookupKey = isSourceReconnect ? curr.getSourceElement() : curr.getDestinationElement();
+			final var pin = usablePins.get(lookupKey);
+			reconnectConnection(curr, pin != null ? pin : newTarget, true);
+		} else {
+			super.reconnectRecursively(curr);
+		}
+	}
 }

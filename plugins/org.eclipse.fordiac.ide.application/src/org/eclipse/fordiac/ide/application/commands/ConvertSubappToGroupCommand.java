@@ -73,7 +73,7 @@ public class ConvertSubappToGroupCommand extends Command implements ScopedComman
 		// delete subapp, this absolutely has to be done first
 		convertToGroupCmd.add(new FlattenSubAppCommand(sourceSubapp, false));
 		// create new group from subapp network
-		final Rectangle bounds = new Rectangle(sourceSubapp.getPosition().toScreenPoint(),
+		final Rectangle bounds = new Rectangle(CoordinateConverter.INSTANCE.toScreenPoint(sourceSubapp.getPosition()),
 				new Dimension(CoordinateConverter.INSTANCE.iec61499ToScreen(sourceSubapp.getWidth()),
 						CoordinateConverter.INSTANCE.iec61499ToScreen(sourceSubapp.getHeight())));
 		createGroupCmd = new CreateGroupCommand(fbNetwork, subappContents, bounds);

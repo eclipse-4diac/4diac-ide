@@ -38,26 +38,25 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
-import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementActivationListener;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.typeeditor.internal.TypeEditorPageFactory;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.JFaceResources;
@@ -91,9 +90,6 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 		implements IGotoMarker, ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
 
-	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
-	private static final int CANCEL_BUTTON_INDEX = 1;
-
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();
 
 	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
@@ -124,7 +120,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 	}
 
 	private void createEditorContent() {
-		if (getType() != null) {
+		if (isValidLibraryElement(getType())) {
 			if (getTypeEntry() != null && getTypeEntry().getFile() != null && getTypeEntry().getFile().isReadOnly()) {
 				readOnly = true;
 				// create read only banner
@@ -160,14 +156,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 
 	protected abstract AbstractTypeEntryDataHandler<? extends TypeEntry> createTypeEntryDataHandler();
 
-	private MessageDialog createTypeUpdateDialog() {
-		final String[] labels = { Messages.TypeEditor_TypeUpdateDialog_SaveAndUpdate, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
-
-		return new FBTypeUpdateDialog<>(getSite().getShell(), Messages.TypeEditor_TypeUpdateDialog_Headline,
-				Messages.TypeEditor_TypeUpdateDialog_Description, labels, DEFAULT_BUTTON_INDEX,
-				createTypeEntryDataHandler());
-	}
-
 	@Override
 	public void dispose() {
 		if (null != getSite()) {
@@ -194,26 +182,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 				doSaveAs();
 				return;
 			}
-//			int result = DEFAULT_BUTTON_INDEX;
-//			try {
-//				if (dependencyAffectingTypeChange()) {
-//					result = createTypeUpdateDialog().open();
-//				}
-//			} catch (final Exception e) {
-//				FordiacLogHelper.logError(e.getMessage(), e);
-//			}
-//
-//			switch (result) {
-//			case DEFAULT_BUTTON_INDEX:
 			doSaveInternal(monitor);
-//				break;
-//			case CANCEL_BUTTON_INDEX:
-//				MessageDialog.openInformation(null, Messages.TypeEditor_WarningDialog_Headline,
-//						Messages.TypeEditor_WarningDialog_NotSaved);
-//				break;
-//			default:
-//				break;
-//			}
 		}
 	}
 
@@ -245,14 +214,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			Thread.currentThread().interrupt();
 		}
 	}
-
-	/**
-	 * Check if the current changes have an impact on any dependent types.
-	 *
-	 * @return true if the user shall be presented with a dialog with all affected
-	 *         dependent types
-	 */
-	protected abstract boolean dependencyAffectingTypeChange();
 
 	public CommandStack getCommandStack() {
 		return commandStack;
@@ -371,24 +332,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 	}
 
 	@Override
-	public void reloadType() {
-		try {
-			LibraryElementProvider.INSTANCE.resetLibraryElement(getEditorInput(), null);
-			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
-			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
-			getEditorPages().forEach(ITypeEditorPage::reloadType);
-			if (getActiveEditor() instanceof final ITypeEditorPage page) {
-				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-						page.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
-			}
-			setPartName(newType.getName());
-		} catch (final CoreException e) {
-			clearEditorContent();
-			createEditorContent();
-		}
-	}
-
-	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor()) && !(part instanceof PropertySheet)) {
 			if (selection instanceof final StructuredSelection structSel
@@ -423,18 +366,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 		setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 	}
 
-	private void clearEditorContent() {
-		for (int i = getPageCount() - 1; i >= 0; i--) {
-			removePage(i);
-		}
-		pages.clear();
-		editorPages = null;
-		for (final Control child : mainComposite.getChildren()) {
-			child.dispose();
-		}
-		mainComposite.layout(true, true);
-	}
-
 	public void showLoadErrorMessage(final Composite parent) {
 		final boolean fileExists = getTypeEntry() != null && getTypeEntry().getFile() != null
 				&& getTypeEntry().getFile().exists();
@@ -464,6 +395,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class) || (adapter == FBNetworkEditor.class);
 	}
 
+	private static boolean isValidLibraryElement(final LibraryElement libElem) {
+		return libElem != null && !(libElem instanceof ErrorLibraryElement);
+	}
+
 	protected class EditorStateListener implements LibraryElementStateListener {
 
 		@Override
@@ -480,14 +415,24 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			}
 			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
 			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
-			getEditorPages().forEach(ITypeEditorPage::reloadType);
-			setPartName(newType.getName());
 
-			final var active = getActiveEditor();
-			if (active instanceof final ITypeEditorPage page) {
-				Display.getDefault()
-						.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(AbstractTypeEditor.this,
-								active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
+			if (!isValidLibraryElement(newType) || getPageCount() == 0) {
+				// we have now an error type or had one before
+				clearEditorContent();
+				createEditorContent();
+				mainComposite.layout(true, true);
+			} else {
+				getEditorPages().forEach(ITypeEditorPage::reloadType);
+			}
+			setPartName(newType != null ? newType.getName() : input.getName());
+
+			if (isValidLibraryElement(newType)) {
+				final var active = getActiveEditor();
+				if (active instanceof final ITypeEditorPage page) {
+					Display.getDefault()
+							.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(AbstractTypeEditor.this,
+									active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
+				}
 			}
 		}
 
@@ -503,6 +448,20 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			if (originalInput.equals(getEditorInput())) {
 				setInput(movedInput);
 			}
+		}
+
+		private void clearEditorContent() {
+			readOnly = false;
+			for (int i = getPageCount() - 1; i >= 0; i--) {
+				removePage(i);
+			}
+			pages.clear();
+			editorPages = null;
+
+			for (final Control child : mainComposite.getChildren()) {
+				child.dispose();
+			}
+			mainComposite.layout(true, true);
 		}
 	}
 }

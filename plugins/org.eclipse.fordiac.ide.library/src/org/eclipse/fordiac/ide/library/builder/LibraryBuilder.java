@@ -76,24 +76,13 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 
 	@Override
 	protected void clean(final IProgressMonitor monitor) throws CoreException {
-		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary,
-				LibraryManager.LIBRARY_FOLDERS.size() + 1);
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary, 1);
 
-		// clean manifest library marker
-		final IFile manifestFile = getProject().getFile(LibraryManager.MANIFEST);
-		if (manifestFile.exists()) {
-			manifestFile.deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, true, IResource.DEPTH_ZERO);
-		}
+		// clean all library markers
+		getProject().deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, true, IResource.DEPTH_INFINITE);
 		progress.worked(1);
 
-		// clean broken link markers
-		for (final String name : LibraryManager.LIBRARY_FOLDERS) {
-			final IFolder folder = getProject().getFolder(name);
-			if (folder.exists()) {
-				folder.deleteMarkers(FordiacErrorMarker.LIBRARY_MARKER, true, IResource.DEPTH_ONE);
-			}
-			progress.worked(1);
-		}
+		SubMonitor.done(monitor);
 	}
 
 	@Override

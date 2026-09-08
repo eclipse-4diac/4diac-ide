@@ -17,7 +17,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FbtMacroProcessor;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
@@ -34,7 +34,12 @@ final class ModelLocationListener extends LocationAdapter {
 	@Override
 	public void changing(final LocationEvent event) {
 		if (event.location != null && event.location.startsWith(FbtMacroProcessor.FBT_TYPE_ENTRY_URI)) {
-			openFbtEntry(event.location.substring(FbtMacroProcessor.FBT_TYPE_ENTRY_URI.length()));
+			final String typeFileUri = event.location.substring(FbtMacroProcessor.FBT_TYPE_ENTRY_URI.length());
+			PlatformUI.getWorkbench().getDisplay().asyncExec(() -> {
+				if (PlatformUI.isWorkbenchRunning()) {
+					openFbtEntry(typeFileUri);
+				}
+			});
 			event.doit = false;
 		}
 	}

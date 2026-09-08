@@ -254,13 +254,22 @@ public interface LibraryPackage extends EPackage {
 	int LIBRARY__EXCLUDES = 1;
 
 	/**
+	 * The feature id for the '<em><b>Dependencies</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIBRARY__DEPENDENCIES = 2;
+
+	/**
 	 * The feature id for the '<em><b>Attribute</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY__ATTRIBUTE = 2;
+	int LIBRARY__ATTRIBUTE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -269,7 +278,7 @@ public interface LibraryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY__COMMENT = 3;
+	int LIBRARY__COMMENT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -278,7 +287,7 @@ public interface LibraryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY__NAME = 4;
+	int LIBRARY__NAME = 5;
 
 	/**
 	 * The feature id for the '<em><b>Symbolic Name</b></em>' attribute.
@@ -287,7 +296,7 @@ public interface LibraryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY__SYMBOLIC_NAME = 5;
+	int LIBRARY__SYMBOLIC_NAME = 6;
 
 	/**
 	 * The number of structural features of the '<em>Library</em>' class.
@@ -296,7 +305,7 @@ public interface LibraryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIBRARY_FEATURE_COUNT = 6;
+	int LIBRARY_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryElementImpl <em>Element</em>}' class.
@@ -783,6 +792,17 @@ public interface LibraryPackage extends EPackage {
 	EAttribute getLibrary_SymbolicName();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.library.model.library.Library#getDependencies <em>Dependencies</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Dependencies</em>'.
+	 * @see org.eclipse.fordiac.ide.library.model.library.Library#getDependencies()
+	 * @see #getLibrary()
+	 * @generated
+	 */
+	EReference getLibrary_Dependencies();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.library.model.library.LibraryElement <em>Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1239,6 +1259,14 @@ public interface LibraryPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LIBRARY__SYMBOLIC_NAME = eINSTANCE.getLibrary_SymbolicName();
+
+		/**
+		 * The meta object literal for the '<em><b>Dependencies</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LIBRARY__DEPENDENCIES = eINSTANCE.getLibrary_Dependencies();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.library.model.library.impl.LibraryElementImpl <em>Element</em>}' class.

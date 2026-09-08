@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.variable;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
@@ -27,6 +28,17 @@ public interface VariableEvaluator extends Evaluator {
 	 * @throws InterruptedException if the evaluation was interrupted
 	 */
 	Variable<?> evaluateVariable() throws EvaluatorException, InterruptedException;
+
+	/**
+	 * Evaluate a variable and collect the variables which are explicitly initialized.
+	 *
+	 * @param explicitlyInitialized The variables which are explicitly initialized
+	 * @return The resulting variable
+	 * @throws EvaluatorException   if an exception occurred during evaluation
+	 * @throws InterruptedException if the evaluation was interrupted
+	 */
+	Variable<?> evaluateVariable(Set<Variable<?>> explicitlyInitialized)
+			throws EvaluatorException, InterruptedException;
 
 	/**
 	 * Validate a variable

@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.replayer.forte;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IDeviceReplayer;
 import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IResourceReplayer;
@@ -24,19 +25,21 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class DeviceReplayer implements IDeviceReplayer {
 
 	private final Device device;
+	private final Set<String> resources;
 	private final String path;
 	private final IDeviceManagementExecutorService executorService;
 
 	public DeviceReplayer(final IDeviceManagementExecutorService executorService, final Device device,
-			final String path) {
+			final Set<String> resources, final String path) {
 		this.device = device;
 		this.path = path;
 		this.executorService = executorService;
+		this.resources = resources;
 	}
 
 	@Override
@@ -47,10 +50,13 @@ public class DeviceReplayer implements IDeviceReplayer {
 			executorService.readTraces(device, path);
 
 			for (final Resource resource : device.getResource()) {
+				if (!resources.contains(resource.getName())) {
+					continue;
+				}
 				result.put(resource, new ResourceReplayer(executorService, resource));
 			}
 		} catch (final DeploymentException e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError("Error in reading traces!", e); //$NON-NLS-1$
 		}
 		return result;
 	}

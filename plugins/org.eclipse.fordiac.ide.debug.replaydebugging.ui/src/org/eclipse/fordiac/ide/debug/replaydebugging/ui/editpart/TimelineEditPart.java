@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -92,6 +93,9 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		installEditPolicy(CommonConstants.NAVIGATION_POLICY, new AbstractEditPolicy() {
 			@Override
 			public Command getCommand(final Request request) {
+				if (request instanceof final NavigationRequest nav && nav.isJump()) {
+					nav.setHighlighted(getModel().getHighlighted());
+				}
 				return null; // bubble all navigation to parent
 			}
 		});
@@ -176,6 +180,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		super.refreshVisuals();
 		final var fig = getFigure();
 		fig.getLineFigure().setFirstInvalid(getModel().getFirstInvalid());
+		fig.setTooltipText(getModel().getComment());
 	}
 
 	@Override
@@ -231,13 +236,14 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		final TimelineConnection conn = (TimelineConnection) connection.getModel();
-		return new TimelineAnchor(getFigure().getLineFigure(), conn.spawnedIndex(), getModel().getEventMarkers().size(),
-				true);
+		return new TimelineAnchor(getFigure().getLineFigure(), conn.spawnedIndex(), true,
+				(IntSupplier) () -> getModel().getEventMarkers().size());
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		return new TimelineAnchor(getFigure().getLineFigure(), 0, getModel().getEventMarkers().size(), false);
+		return new TimelineAnchor(getFigure().getLineFigure(), 0, false,
+				(IntSupplier) () -> getModel().getEventMarkers().size());
 	}
 
 	@Override

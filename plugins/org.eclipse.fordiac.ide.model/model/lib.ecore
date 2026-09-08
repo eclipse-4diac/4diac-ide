@@ -201,7 +201,24 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="systemConfiguration" lowerBound="1"
         eType="#//SystemConfiguration" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" eSuperTypes="#//FBType">
+  <eClassifiers xsi:type="ecore:EClass" name="BaseECAction" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseECState" abstract="true" interface="true">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//BaseECAction"/>
+    </eTypeParameters>
+    <eOperations name="getECActions" upperBound="-1">
+      <eGenericType eTypeParameter="#//BaseECState/T"/>
+    </eOperations>
+    <eOperations name="getBaseFBType" eType="#//BaseFBType"/>
+    <eOperations name="isStartState" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+    <eOperations name="createNewAction">
+      <eGenericType eTypeParameter="#//BaseECState/T"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseFBType" abstract="true" eSuperTypes="#//FBType">
     <eOperations name="getAlgorithmNamed" lowerBound="1" eType="#//Algorithm">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);"/>
@@ -527,11 +544,7 @@
         eType="#//Attribute" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConfigurableFB" abstract="true" eSuperTypes="#//FB">
-    <eOperations name="updateConfiguration">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="ConfigurableFBManagement.updateFbConfiguration(this);"/>
-      </eAnnotations>
-    </eOperations>
+    <eOperations name="updateConfiguration"/>
     <eOperations name="loadConfiguration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="ConfigurableFBManagement.loadFbConfiguration(this, attributeName, typeName);"/>
@@ -561,7 +574,13 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="ecore:EClass data.ecore#//DataType"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableMoveFB" eSuperTypes="#//ConfigurableFB"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableMoveFB" eSuperTypes="#//ConfigurableFB">
+    <eOperations name="updateConfiguration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="ConfigurableFBManagement.updateConfiguration(this);"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//ConfigurableObject #//HiddenElement">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//BlockFBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -586,11 +605,6 @@
     <eOperations name="checkIfConnectionBroken" lowerBound="1">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.checkifConnectionBroken(this);"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="isInterfaceConnection" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="validateMissingSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -848,7 +862,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ContainerVarDeclaration" eSuperTypes="#//VarDeclaration">
     <eOperations name="getCachedMember" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getCachedMembers().stream().filter(vm -> vm.getName().equals(name)).findAny().orElse(null);"/>
+        <details key="body" value="return getCachedMembers().stream().filter(vm -> vm.getName().equalsIgnoreCase(name)).findAny().orElse(null);"/>
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
@@ -915,12 +929,11 @@
         eOpposite="#//FBNetwork/dataConnections"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Demultiplexer" eSuperTypes="#//StructManipulator">
-    <eOperations name="getMemberVars" upperBound="-1" eType="#//VarDeclaration">
+    <eOperations name="updateConfiguration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getInterface().getOutputVars();"/>
+        <details key="body" value="ConfigurableFBManagement.updateConfiguration(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isConfigured" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement #//IVarElement">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
@@ -993,9 +1006,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDeclarations"
         upperBound="-1" eType="#//AttributeDeclaration" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ECAction">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="algorithm" eType="#//Algorithm"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ECAction" eSuperTypes="#//BaseECAction">
+    <eOperations name="getAlgorithmModel" eType="#//Algorithm">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (getECState() == null) {return null;} return getECState().getECC().getBasicFBType().getAlgorithmNamed(getAlgorithm());"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCState" lowerBound="1"
         eType="#//ECState" eOpposite="#//ECState/eCAction"/>
   </eClassifiers>
@@ -1021,10 +1037,25 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicFBType" lowerBound="1"
         eType="#//BasicFBType" eOpposite="#//BasicFBType/eCC"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ECState" eSuperTypes="#//INamedElement #//PositionableElement">
+  <eClassifiers xsi:type="ecore:EClass" name="ECState">
+    <eOperations name="getECActions" upperBound="-1" eType="#//ECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getECAction();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getBaseFBType" eType="#//BaseFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getECC().getBasicFBType();"/>
+      </eAnnotations>
+    </eOperations>
     <eOperations name="isStartState" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.isStartState(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="createNewAction" eType="#//ECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return LibraryElementFactory.eINSTANCE.createECAction();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCAction" upperBound="-1"
@@ -1040,6 +1071,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inTransitions" upperBound="-1"
         eType="#//ECTransition" eOpposite="#//ECTransition/destination"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" eType="#//ECC" eOpposite="#//ECC/eCState"/>
+    <eGenericSuperTypes eClassifier="#//INamedElement"/>
+    <eGenericSuperTypes eClassifier="#//PositionableElement"/>
+    <eGenericSuperTypes eClassifier="#//BaseECState">
+      <eTypeArguments eClassifier="#//ECAction"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ECTransition" eSuperTypes="#//PositionableElement">
     <eOperations name="getConditionText" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
@@ -1676,6 +1712,21 @@
         </eGenericType>
       </eParameters>
     </eOperations>
+    <eOperations name="validateUnused" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateUnused(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eOperations name="findInTypeInterface" lowerBound="1" eType="#//IInterfaceElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);"/>
@@ -2015,36 +2066,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//FBNetworkElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
-  <eClassifiers xsi:type="ecore:EClass" name="MemberVarDeclaration" eSuperTypes="#//VarDeclaration">
-    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return ConfigurableFBManagement.getMemberVarName(this, ConfigurableFBManagement.MEMBER_VAR_SEPARATOR);"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getDisplayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return ConfigurableFBManagement.getMemberVarName(this, &quot;.&quot;);   //$NON-NLS-1$"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getVarName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return super.getName();"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="setName">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="// ensure that we are always only setting the last segment as name&#xA;final String[] subNames = ConfigurableFBManagement.splitMemberVarName(name);&#xA;super.setName(subNames[subNames.length - 1]);"/>
-      </eAnnotations>
-      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parentNames" unique="false"
-        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Method" abstract="true" eSuperTypes="#//ICallable"/>
   <eClassifiers xsi:type="ecore:EClass" name="Multiplexer" eSuperTypes="#//StructManipulator">
-    <eOperations name="getMemberVars" upperBound="-1" eType="#//VarDeclaration">
+    <eOperations name="updateConfiguration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getInterface().getInputVars();"/>
+        <details key="body" value="ConfigurableFBManagement.updateConfiguration(this);"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
@@ -2075,30 +2101,12 @@
     <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
       <details key="ignored" value="true"/>
     </eAnnotations>
-    <eOperations name="toScreenPoint" lowerBound="1" eType="#//Point">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return PositionAnnotation.toScreenPoint(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
         defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
         defaultValueLiteral="0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PositionableElement">
-    <eOperations name="updatePositionFromScreenCoordinates" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);"/>
-      </eAnnotations>
-      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-      <eParameters name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-    </eOperations>
-    <eOperations name="updatePositionFromScreenCoordinates" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="updatePositionFromScreenCoordinates(newPos.x, newPos.y);"/>
-      </eAnnotations>
-      <eParameters name="newPos" lowerBound="1" eType="#//Point"/>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//Position"
         containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -2306,13 +2314,46 @@
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBType" eSuperTypes="#//FBType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleECAction">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithm" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="output" eType="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleECAction" eSuperTypes="#//BaseECAction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleECState" lowerBound="1"
         eType="#//SimpleECState" eOpposite="#//SimpleECState/simpleECActions"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleECState" eSuperTypes="#//INamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleECState">
+    <eOperations name="validateActionsNonEmpty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleECStateAnnotations.validateActionsNonEmpty(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getECActions" upperBound="-1" eType="#//SimpleECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getSimpleECActions();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getBaseFBType" eType="#//BaseFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getSimpleFBType();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isStartState" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return false;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="createNewAction" eType="#//SimpleECAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return LibraryElementFactory.eINSTANCE.createSimpleECAction();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleECActions" upperBound="-1"
         eType="#//SimpleECAction" containment="true" resolveProxies="false" eOpposite="#//SimpleECAction/simpleECState">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -2325,6 +2366,10 @@
         eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFBType" lowerBound="1"
         eType="#//SimpleFBType" eOpposite="#//SimpleFBType/simpleECStates"/>
+    <eGenericSuperTypes eClassifier="#//INamedElement"/>
+    <eGenericSuperTypes eClassifier="#//BaseECState">
+      <eTypeArguments eClassifier="#//SimpleECAction"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleFBType" eSuperTypes="#//BaseFBType">
     <eOperations name="validateEventUsage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -2355,10 +2400,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="STFunction" eSuperTypes="#//TextFunction"/>
   <eClassifiers xsi:type="ecore:EClass" name="STFunctionBody" eSuperTypes="#//TextFunctionBody"/>
   <eClassifiers xsi:type="ecore:EClass" name="STMethod" eSuperTypes="#//TextMethod"/>
-  <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" eSuperTypes="#//ConfigurableFB">
-    <eOperations name="updateConfiguration"/>
-    <eOperations name="getMemberVars" upperBound="-1" eType="#//VarDeclaration"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructManipulator" eSuperTypes="#//ConfigurableFB"/>
   <eClassifiers xsi:type="ecore:EClass" name="SubApp" abstract="true" eSuperTypes="#//BlockFBNetworkElement">
     <eOperations name="getType" lowerBound="1" eType="#//SubAppType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -2912,9 +2954,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
   <eClassifiers xsi:type="ecore:EDataType" name="InterfaceElementStream" instanceTypeName="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement>"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EDataType" name="NamedElementStream" instanceTypeName="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.INamedElement>"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeEntry" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeEntry"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeLibrary" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary"/>
   <eClassifiers xsi:type="ecore:EDataType" name="VarDeclList" instanceTypeName="java.util.List&lt;org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration>"/>

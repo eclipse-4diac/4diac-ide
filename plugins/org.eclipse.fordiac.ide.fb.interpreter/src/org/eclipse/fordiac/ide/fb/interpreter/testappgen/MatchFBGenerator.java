@@ -102,7 +102,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				eccGen.createState("timeout"); //$NON-NLS-1$
 				final ECAction act = TestEccGenerator.createAction();
 				eccGen.createTransitionFromTo(comFrom, eccGen.getLastState(), getEventInput("expected")); //$NON-NLS-1$
-				act.setAlgorithm(createTimeOutAlgMatchFB(destinationFB, 1000));
+				act.setAlgorithm(createTimeOutAlgMatchFB(destinationFB, 1000).getName());
 				act.setOutput(getStartTimeoutEvent());
 				eccGen.getLastState().getECAction().add(act);
 				comFrom = eccGen.getLastState();
@@ -112,7 +112,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 				// start state from the test case
 				eccGen.createStateWithIncomingConnection(eccGen.getEcc().getStart(), event, null, event.getName());
 				final ECAction a = TestEccGenerator.createAction(getStartTimeoutEvent());
-				a.setAlgorithm(timeout);
+				a.setAlgorithm(timeout.getName());
 				eccGen.getLastState().getECAction().add(a);
 				comFrom = eccGen.getLastState();
 
@@ -203,7 +203,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), name + "_WAIT_1")); //$NON-NLS-1$
 		final ECAction at = TestEccGenerator.createAction(getStartTimeoutEvent());
 
-		at.setAlgorithm(createTimeOutAlgMatchFB(destinationFB, 1000));
+		at.setAlgorithm(createTimeOutAlgMatchFB(destinationFB, 1000).getName());
 		eccGen.getLastState().getECAction().add(at);
 		createErrorTransitions(eccGen.getLastState(), errState, false, ""); //$NON-NLS-1$
 	}
@@ -256,7 +256,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 		if (destinationFB.getInterfaceList().getInputVars().size() > 1) {
 			final Algorithm alg = createMatchAlgorithm(destinationFB, destinationFB.getInterfaceList().getInputVars(),
 					destinationFB.getInterfaceList().getOutputVars().get(0).getName());
-			sucAct.setAlgorithm(alg);
+			sucAct.setAlgorithm(alg.getName());
 
 			eccGen.createTransitionFromTo(eccGen.getLastState(), sucState, null);
 			eccGen.getEcc().getECTransition().getLast().setConditionExpression("matchData"); //$NON-NLS-1$

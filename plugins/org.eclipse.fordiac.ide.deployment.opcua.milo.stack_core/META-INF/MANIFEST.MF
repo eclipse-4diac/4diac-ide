@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Milo Stack Core Export Patch
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.opcua.milo.stack_core
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.2.100.qualifier
 Fragment-Host: org.eclipse.milo.stack-core
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.opcua.milo.stack.core
 Bundle-RequiredExecutionEnvironment: JavaSE-21

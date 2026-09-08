@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Structured Text FB Editor
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.st;singleton:=true
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.2.100.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.views.properties.tabbed,
@@ -20,9 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.edit,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.model.commands,
- org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ui,

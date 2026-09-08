@@ -76,7 +76,7 @@ final class LibraryElementAnnotations {
 					diagnostics.add(new BasicDiagnostic(severity, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 							LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE,
 							Messages.IdentifierVerifier_PackageNameMismatch, FordiacMarkerHelper.getDiagnosticData(
-									element, LibraryElementPackage.Literals.COMPILER_INFO__PACKAGE_NAME)));
+									element.getCompilerInfo(), LibraryElementPackage.Literals.COMPILER_INFO__PACKAGE_NAME)));
 				}
 				return false;
 			}

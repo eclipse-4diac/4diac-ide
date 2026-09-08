@@ -12,7 +12,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.util,
  org.eclipse.swt,
  org.eclipse.jface,
  org.eclipse.fordiac.ide.model.edit,
@@ -21,10 +20,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typeeditor
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-Name: Service Sequence Editor
 Bundle-Activator: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.servicesequence
+Import-Package: org.eclipse.fordiac.ide.util

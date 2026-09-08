@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -31,6 +32,8 @@ public class ComparisonService {
 		void columnsChanged(List<ComparisonColumn> columns);
 	}
 
+	private long id = 0; // for generating unique column IDs
+
 	private static final ComparisonService INSTANCE = new ComparisonService();
 
 	public static ComparisonService getInstance() {
@@ -42,6 +45,10 @@ public class ComparisonService {
 	private final List<Listener> listeners = new CopyOnWriteArrayList<>();
 
 	private ComparisonService() {
+	}
+
+	public String generateUniqueColumnId() {
+		return Long.toString(id++);
 	}
 
 	public synchronized void addColumn(final ComparisonColumn column) {
@@ -63,12 +70,24 @@ public class ComparisonService {
 		notifyListeners();
 	}
 
+	public synchronized void updateColumnLabel(final EventPosition eventPosition, final String newLabel) {
+		for (final var column : columns.values()) {
+			if (column.getEventPosition().equals(eventPosition)) {
+				column.setLabel(newLabel);
+				notifyListeners();
+				break;
+			}
+		}
+	}
+
 	public synchronized List<ComparisonColumn> getColumns() {
 		return List.copyOf(columns.values());
 	}
 
 	public void addListener(final Listener l) {
+		final List<ComparisonColumn> snapshot = List.copyOf(columns.values());
 		listeners.add(l);
+		l.columnsChanged(snapshot); // initial notification with current state
 	}
 
 	public void removeListener(final Listener l) {

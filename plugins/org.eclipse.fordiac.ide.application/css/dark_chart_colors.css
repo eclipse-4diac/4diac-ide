@@ -1,0 +1,39 @@
+/*******************************************************************************
+ * Copyright (c) 2026 Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+IEclipsePreferences#org-eclipse-ui-workbench:org-eclipse-fordiac-ide-application {
+	preferences:
+		'org.eclipse.fordiac.ide.application.chart.series.1=86,180,233'
+		'org.eclipse.fordiac.ide.application.chart.series.2=255,127,14'
+		'org.eclipse.fordiac.ide.application.chart.series.3=0,200,170'
+		'org.eclipse.fordiac.ide.application.chart.series.4=202,178,214'
+		'org.eclipse.fordiac.ide.application.chart.series.5=178,223,138'
+		'org.eclipse.fordiac.ide.application.chart.series.6=251,154,153'
+		'org.eclipse.fordiac.ide.application.chart.series.7=255,199,0'
+		'org.eclipse.fordiac.ide.application.chart.series.8=141,211,199'
+		'org.eclipse.fordiac.ide.application.chart.series.9=255,255,153'
+		'org.eclipse.fordiac.ide.application.chart.series.10=166,206,227'
+		'org.eclipse.fordiac.ide.application.chart.series.11=190,186,218'
+		'org.eclipse.fordiac.ide.application.chart.series.12=217,217,217'
+		'org.eclipse.fordiac.ide.application.chart.series.13=253,191,111'
+		'org.eclipse.fordiac.ide.application.chart.series.14=204,121,167'
+		'org.eclipse.fordiac.ide.application.chart.series.15=110,161,31'
+		'org.eclipse.fordiac.ide.application.chart.series.16=0,114,178'
+		'org.eclipse.fordiac.ide.application.chart.series.17=214,39,40'
+		'org.eclipse.fordiac.ide.application.chart.series.18=117,112,179'
+		'org.eclipse.fordiac.ide.application.chart.series.19=0,158,115'
+		'org.eclipse.fordiac.ide.application.chart.series.20=230,159,0'
+		'org.eclipse.fordiac.ide.application.chart.series.21=199,134,57'
+		'org.eclipse.fordiac.ide.application.chart.series.22=83,92,145'
+		'org.eclipse.fordiac.ide.application.chart.series.23=255,255,255'
+		'org.eclipse.fordiac.ide.application.chart.series.24=127,127,127'
+}

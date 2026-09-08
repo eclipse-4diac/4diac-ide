@@ -19,7 +19,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
@@ -35,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -58,8 +56,12 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 			if (getDependencies().contains(dependency)) {
 				// react to TYPE_ENTRY_FILE_CONTENT_FEATURE for changed dependencies
 				// react to TYPE_ENTRY_TYPE_LIBRARY_FEATURE for deleted dependencies
+				// react to TYPE_ENTRY_TYPE_FEATURE with new value == null for changed
+				// transitive dependencies
 				if (TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE.equals(notification.getFeature())
-						|| TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE.equals(notification.getFeature())) {
+						|| TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE.equals(notification.getFeature())
+						|| (TypeEntry.TYPE_ENTRY_TYPE_FEATURE.equals(notification.getFeature())
+								&& notification.getNewValue() == null)) {
 					Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
 				}
 				// react to TYPE_ENTRY_FULL_TYPE_NAME_FEATURE for renamed dependencies
@@ -81,8 +83,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void updateTypeLibraryDependency(final Notification notification) {
 		switch (notification.getEventType()) {
-		case Notification.REMOVE ->
-			updateRemovedTypeEntryNameReference(notification.getOldValue());
+		case Notification.REMOVE -> updateRemovedTypeEntryNameReference(notification.getOldValue());
 		case Notification.REMOVE_MANY ->
 			((Collection<?>) notification.getOldValue()).forEach(this::updateRemovedTypeEntryNameReference);
 		default -> {
@@ -165,11 +166,6 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 				attributeDeclaration.setType(derivedType);
 			case final IInterfaceElement interfaceElement when matches(interfaceElement.getType(), dependency) ->
 				interfaceElement.setType(dataType);
-			case final StructManipulator structManipulator when matches(structManipulator.getDataType(),
-					dependency) -> {
-				executeCommand(new ChangeStructCommand(structManipulator, dataType));
-				contents.prune(); // contents handled by command
-			}
 			case final ConfigurableFB configurableFB when matches(configurableFB.getDataType(), dependency) -> {
 				executeCommand(new ConfigureFBCommand(configurableFB, dataType));
 				contents.prune(); // contents handled by command
@@ -296,7 +292,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void removeTypeLibraryAdapter(final TypeEntry typeEntry) {
 		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
-		if (typeLibrary != null && getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
+		if (typeLibrary != null
+				&& getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
 			typeLibrary.eAdapters().remove(this);
 		}
 	}

@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizardPage;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
@@ -33,7 +32,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
-import org.osgi.framework.VersionRange;
 
 public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
@@ -64,13 +62,6 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 			setPageComplete(validatePage());
 		}
 	};
-
-	private UnifiedLibraryImportWizardPage libPage;
-
-	private static final String[] comboLabels = { "current", "old", "none" };
-	@SuppressWarnings("nls")
-	private static final VersionRange[] comboValues = { new VersionRange("3.0.0"), new VersionRange("[1.0.0,1.0.0]"),
-			new VersionRange("(0.0.0,0.0.0)") };
 
 	/**
 	 * Creates a new project creation wizard page.

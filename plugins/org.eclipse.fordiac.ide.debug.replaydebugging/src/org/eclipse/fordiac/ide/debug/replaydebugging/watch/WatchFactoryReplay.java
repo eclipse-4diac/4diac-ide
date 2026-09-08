@@ -35,8 +35,10 @@ import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.SubAppEventWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.SubAppVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.VarDeclarationWatch;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -146,7 +148,9 @@ public class WatchFactoryReplay {
 	private static class VarDeclarationWatchReplay extends VarDeclarationWatch implements IWatchWithPublicError {
 		public VarDeclarationWatchReplay(final String name, final VarDeclaration varDeclaration,
 				final DeploymentDebugDevice debugTarget) {
-			super(name, varDeclaration, debugTarget);
+			super(VariableOperations.newVariable(name,
+					DeploymentDebugWatchUtils.evaluateWatchType(VariableUtils.getNonAnyVarDeclaration(varDeclaration))),
+					varDeclaration, debugTarget);
 		}
 
 		public VarDeclarationWatchReplay(final String name, final VarDeclaration varDeclaration,

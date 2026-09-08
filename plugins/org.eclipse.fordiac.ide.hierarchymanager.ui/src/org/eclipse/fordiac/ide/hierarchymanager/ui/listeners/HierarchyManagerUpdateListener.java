@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Leaf;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.AbstractHierarchyHandler;
-import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AbstractChangeHierarchyOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.AddLeafOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.DeleteNodeOperation;
 import org.eclipse.fordiac.ide.hierarchymanager.ui.operations.UpdateLeafRefOperation;
@@ -98,7 +97,7 @@ public class HierarchyManagerUpdateListener extends QualNameChangeListener {
 
 	@Override
 	protected void executeOperation(final AbstractOperation op) {
-		AbstractHierarchyHandler.executeOperation((AbstractChangeHierarchyOperation) op);
+		AbstractHierarchyHandler.executeOperation(op);
 	}
 
 	@Override

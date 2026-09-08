@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="RampLimitFS" Comment="Setpoint Ramp: Step up and down Values with Fast and Slow mode">
-	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Setpoint Ramp: Step up and down Values, like well-known for the cruise control in your Car. Long press increase or decrease by 10, short press increase or decrease at 1. &#10;&#10;this FB adds Maximum and Minimum Value and also Inputs to set them. &#10;For some Applications it is neccessary to store the setpoint in Non-Volatile Storage, e.g. with a ini File, for this we have here a LOAD event input which loads value from the PV input">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Setpoint Ramp: Step up and down Values, like well-known for the cruise control in your Car. Long press increase or decrease by 10, short press increase or decrease at 1. &#10;&#10;this FB adds Maximum and Minimum Value and also Inputs to set them. &#10;For some Applications it is neccessary to store the setpoint in Non-Volatile Storage, e.g. with a ini File, for this we have here a LOAD event input which loads value from the PV input">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-08-12" Remarks="add init and correct WITH, add upper and lower limit reached indicators">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-10-02" Remarks="Rename to RampLimitFS">
@@ -12,31 +14,57 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Initialize all data inputs (PV, VAL_ZERO, SLOW, FAST, VAL_FULL) - without this, e.g. VAL_FULL is never read until FULL is fired once, breaking the UP_FAST/UP_SLOW clamp against it">
+				<With Var="PV"/>
+				<With Var="VAL_ZERO"/>
+				<With Var="SLOW"/>
+				<With Var="FAST"/>
+				<With Var="VAL_FULL"/>
+			</Event>
 			<Event Name="ZERO" Type="Event" Comment="Set OUT to VAL_ZERO">
 				<With Var="VAL_ZERO"/>
+				<With Var="VAL_FULL"/>
 			</Event>
-			<Event Name="UP_SLOW" Type="Event" Comment="Increase OUT by SLOW">
+			<Event Name="UP_SLOW" Type="Event" Comment="Increase OUT by SLOW, clamped to VAL_FULL">
 				<With Var="SLOW"/>
+				<With Var="VAL_ZERO"/>
+				<With Var="VAL_FULL"/>
 			</Event>
-			<Event Name="UP_FAST" Type="Event" Comment="Increase OUT by FAST">
+			<Event Name="UP_FAST" Type="Event" Comment="Increase OUT by FAST, clamped to VAL_FULL">
 				<With Var="FAST"/>
+				<With Var="VAL_ZERO"/>
+				<With Var="VAL_FULL"/>
 			</Event>
-			<Event Name="DOWN_SLOW" Type="Event" Comment="Decrease OUT by SLOW">
+			<Event Name="DOWN_SLOW" Type="Event" Comment="Decrease OUT by SLOW, clamped to VAL_ZERO">
 				<With Var="SLOW"/>
+				<With Var="VAL_ZERO"/>
+				<With Var="VAL_FULL"/>
 			</Event>
-			<Event Name="DOWN_FAST" Type="Event" Comment="Decrease OUT by FAST">
+			<Event Name="DOWN_FAST" Type="Event" Comment="Decrease OUT by FAST, clamped to VAL_ZERO">
 				<With Var="FAST"/>
+				<With Var="VAL_ZERO"/>
+				<With Var="VAL_FULL"/>
 			</Event>
 			<Event Name="FULL" Type="Event" Comment="Set OUT to VAL_FULL">
+				<With Var="VAL_ZERO"/>
 				<With Var="VAL_FULL"/>
 			</Event>
 			<Event Name="LOAD" Type="Event" Comment="Load PV into OUT">
 				<With Var="PV"/>
+				<With Var="VAL_ZERO"/>
+				<With Var="VAL_FULL"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirmation">
+				<With Var="OUT"/>
+				<With Var="qAtZero"/>
+				<With Var="qAtFull"/>
+			</Event>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
 				<With Var="OUT"/>
+				<With Var="qAtZero"/>
+				<With Var="qAtFull"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
@@ -48,68 +76,101 @@
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT" Type="DINT" Comment="Output"/>
+			<VarDeclaration Name="qAtZero" Type="BOOL" Comment="TRUE if OUT is at or below VAL_ZERO (lower limit reached)"/>
+			<VarDeclaration Name="qAtFull" Type="BOOL" Comment="TRUE if OUT is at or above VAL_FULL (upper limit reached)"/>
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
-		<Algorithm Name="ZERO" Comment="">
-			<ST><![CDATA[ALGORITHM ZERO
-OUT := VAL_ZERO;
-END_ALGORITHM]]></ST>
-		</Algorithm>
-		<Algorithm Name="UP_SLOW" Comment="">
+		<ECState Name="INIT">
+			<ECAction Algorithm="INIT" Output="INITO"/>
+		</ECState>
+		<ECState Name="ZERO">
+			<ECAction Algorithm="ZERO" Output="CNF"/>
+		</ECState>
+		<ECState Name="UP_SLOW">
+			<ECAction Algorithm="UP_SLOW" Output="CNF"/>
+		</ECState>
+		<ECState Name="UP_FAST">
+			<ECAction Algorithm="UP_FAST" Output="CNF"/>
+		</ECState>
+		<ECState Name="DOWN_SLOW">
+			<ECAction Algorithm="DOWN_SLOW" Output="CNF"/>
+		</ECState>
+		<ECState Name="DOWN_FAST">
+			<ECAction Algorithm="DOWN_FAST" Output="CNF"/>
+		</ECState>
+		<ECState Name="FULL">
+			<ECAction Algorithm="FULL" Output="CNF"/>
+		</ECState>
+		<ECState Name="LOAD">
+			<ECAction Algorithm="LOAD" Output="CNF"/>
+		</ECState>
+		<Algorithm Name="INIT" Comment="Reset OUT to VAL_ZERO. Runs once at INIT, after VAL_ZERO/VAL_FULL/SLOW/FAST/PV have all been&#10;latched (see INIT event&apos;s With-list) - gives a deterministic starting OUT and guarantees&#10;VAL_FULL/VAL_ZERO are available for the first UP/DOWN clamp, instead of their DINT default of 0.">
 			<ST><![CDATA[
-
-ALGORITHM UP_SLOW
+OUT := VAL_ZERO;
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="ZERO" Comment="Jump straight to the lower limit: OUT := VAL_ZERO. No clamping needed, VAL_ZERO is the limit&#10;itself.">
+			<ST><![CDATA[
+OUT := VAL_ZERO;
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="UP_SLOW" Comment="Small step up: OUT += SLOW, then clamp down to VAL_FULL if it overshot. VAL_FULL must be latched&#10;(see this event&apos;s With-list) or the clamp uses a stale/zero value.">
+			<ST><![CDATA[
 OUT := ADD(OUT, SLOW);
 IF GT(OUT, VAL_FULL) THEN
 	OUT := VAL_FULL;
 END_IF;
-END_ALGORITHM]]></ST>
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
+]]></ST>
 		</Algorithm>
-		<Algorithm Name="UP_FAST" Comment="">
+		<Algorithm Name="UP_FAST" Comment="Big step up: OUT += FAST, then clamp down to VAL_FULL if it overshot. VAL_FULL must be latched&#10;(see this event&apos;s With-list) or the clamp uses a stale/zero value.">
 			<ST><![CDATA[
-
-ALGORITHM UP_FAST
 OUT := ADD(OUT, FAST);
 IF GT(OUT, VAL_FULL) THEN
 	OUT := VAL_FULL;
 END_IF;
-END_ALGORITHM]]></ST>
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
+]]></ST>
 		</Algorithm>
-		<Algorithm Name="DOWN_SLOW" Comment="">
+		<Algorithm Name="DOWN_SLOW" Comment="Small step down: OUT -= SLOW, then clamp up to VAL_ZERO if it undershot. VAL_ZERO must be latched&#10;(see this event&apos;s With-list) or the clamp uses a stale/zero value.">
 			<ST><![CDATA[
-
-ALGORITHM DOWN_SLOW
 OUT := SUB(OUT, SLOW);
 IF LT(OUT, VAL_ZERO) THEN
 	OUT := VAL_ZERO;
 END_IF;
-END_ALGORITHM]]></ST>
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
+]]></ST>
 		</Algorithm>
-		<Algorithm Name="DOWN_FAST" Comment="">
+		<Algorithm Name="DOWN_FAST" Comment="Big step down: OUT -= FAST, then clamp up to VAL_ZERO if it undershot. VAL_ZERO must be latched&#10;(see this event&apos;s With-list) or the clamp uses a stale/zero value.">
 			<ST><![CDATA[
-
-ALGORITHM DOWN_FAST
 OUT := SUB(OUT, FAST);
 IF LT(OUT, VAL_ZERO) THEN
 	OUT := VAL_ZERO;
 END_IF;
-END_ALGORITHM]]></ST>
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
+]]></ST>
 		</Algorithm>
-		<Algorithm Name="FULL" Comment="">
+		<Algorithm Name="FULL" Comment="Jump straight to the upper limit: OUT := VAL_FULL. No clamping needed, VAL_FULL is the limit&#10;itself.">
 			<ST><![CDATA[
-
-ALGORITHM FULL
 OUT := VAL_FULL;
-END_ALGORITHM]]></ST>
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
+]]></ST>
 		</Algorithm>
-		<Algorithm Name="LOAD" Comment="">
+		<Algorithm Name="LOAD" Comment="Load an externally supplied preset directly into OUT: OUT := PV. Not clamped to VAL_ZERO/VAL_FULL&#10;- caller is expected to pass an already-valid value (e.g. a persisted setpoint restored from&#10;non-volatile storage), but qAtZero/qAtFull still reflect where it landed relative to the limits.">
 			<ST><![CDATA[
-
-ALGORITHM LOAD
 OUT := PV;
-END_ALGORITHM
-
+qAtZero := LE(OUT, VAL_ZERO);
+qAtFull := GE(OUT, VAL_FULL);
 ]]></ST>
 		</Algorithm>
 	</SimpleFB>

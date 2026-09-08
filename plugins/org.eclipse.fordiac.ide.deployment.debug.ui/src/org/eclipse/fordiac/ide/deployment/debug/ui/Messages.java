@@ -101,6 +101,8 @@ public class Messages extends NLS {
 	public static String TogglePinnedHandler_UnpinWatch;
 	public static String ToggleWatchSubElementsHandler_RemoveSubElementWatches;
 	public static String ToggleWatchSubElementsHandler_WatchSubElements;
+	public static String ToggleDeploymentBreakpoint_Name;
+	public static String ToggleDeploymentBreakpoint_Description;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

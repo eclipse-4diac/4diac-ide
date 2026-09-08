@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.tracecompass.ctf.core.CTFException;
 
 /**
@@ -45,10 +45,12 @@ public class DeviceReplayer implements IDeviceReplayer {
 
 	private final String path;
 	private final Device device;
+	private final Set<String> resources;
 
-	public DeviceReplayer(final Device device, final String path) {
+	public DeviceReplayer(final Device device, final Set<String> resources, final String path) {
 		this.path = path;
 		this.device = device;
+		this.resources = resources;
 	}
 
 	@Override
@@ -67,6 +69,9 @@ public class DeviceReplayer implements IDeviceReplayer {
 		}
 
 		for (final var resource : device.getResource()) {
+			if (!resources.contains(resource.getName())) {
+				continue;
+			}
 			// filter sifb events as we still get all events from forte
 			final var sifbEvents = externalEvents.getOrDefault(resource.getName(), List.of()).stream()
 					.map(externalEvent -> Map.entry(externalEvent,

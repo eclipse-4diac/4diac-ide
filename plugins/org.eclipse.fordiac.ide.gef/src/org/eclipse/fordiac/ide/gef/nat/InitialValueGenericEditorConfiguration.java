@@ -35,8 +35,19 @@ public class InitialValueGenericEditorConfiguration<T> extends AbstractRegistryC
 	public void configureRegistry(final IConfigRegistry configRegistry) {
 		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
 				new InitialValueCellEditor<>(dataProvider, elementAccessor), DisplayMode.EDIT, INITIAL_VALUE_CELL);
-		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-				new InitialValueStructuredCellEditor<>(dataProvider, elementAccessor), DisplayMode.EDIT,
-				INITIAL_VALUE_STRUCTURED_CELL);
+		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, createStructuredCellEditor(),
+				DisplayMode.EDIT, INITIAL_VALUE_STRUCTURED_CELL);
+	}
+
+	protected InitialValueStructuredCellEditor<T> createStructuredCellEditor() {
+		return new InitialValueStructuredCellEditor<>(dataProvider, elementAccessor);
+	}
+
+	protected IRowDataProvider<? extends T> getDataProvider() {
+		return dataProvider;
+	}
+
+	protected InitialValueStructuredElementAccessor<T> getElementAccessor() {
+		return elementAccessor;
 	}
 }

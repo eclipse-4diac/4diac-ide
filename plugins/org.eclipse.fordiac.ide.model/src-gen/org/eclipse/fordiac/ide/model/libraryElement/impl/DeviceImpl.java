@@ -17,9 +17,6 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
-
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -398,26 +395,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	@Override
 	public Resource getResourceNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getResourceNamed(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final int x, final int y) {
-		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void updatePositionFromScreenCoordinates(final Point newPos) {
-		updatePositionFromScreenCoordinates(newPos.x, newPos.y);
 	}
 
 	/**

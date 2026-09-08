@@ -23,10 +23,10 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN1" Type="ANY_MAGNITUDE" Comment="ADD input 1"/>
-			<VarDeclaration Name="IN2" Type="ANY_MAGNITUDE" Comment="ADD input 2"/>
-			<VarDeclaration Name="IN3" Type="ANY_MAGNITUDE" Comment="ADD input 3"/>
-			<VarDeclaration Name="IN4" Type="ANY_MAGNITUDE" Comment="ADD input 4"/>
+			<VarDeclaration Name="IN1" Type="ANY_MAGNITUDE" Comment="first summand"/>
+			<VarDeclaration Name="IN2" Type="ANY_MAGNITUDE" Comment="second summand"/>
+			<VarDeclaration Name="IN3" Type="ANY_MAGNITUDE" Comment="third summand"/>
+			<VarDeclaration Name="IN4" Type="ANY_MAGNITUDE" Comment="fourth summand"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT" Type="ANY_MAGNITUDE" Comment="ADD result"/>

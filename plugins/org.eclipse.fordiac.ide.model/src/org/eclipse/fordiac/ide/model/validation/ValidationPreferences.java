@@ -37,6 +37,7 @@ public final class ValidationPreferences {
 	public static final String VALUE_FOR_GENERIC_INSTANCE_VARIABLE = "valueForGenericInstanceVariable"; //$NON-NLS-1$
 	public static final String EVENT_MULTIPLE_OUTPUT_CONNECTIONS = "eventMultipleOutputConnections"; //$NON-NLS-1$
 	public static final String UNUSED_INSTANCE = "unusedInstance"; //$NON-NLS-1$
+	public static final String UNUSED_INTERFACE_ELEMENT = "unusedInterfaceElement"; //$NON-NLS-1$
 
 	public static int getDiagnosticSeverity(final String key, final int defaultValue, final EObject context) {
 		final Resource resource = context != null ? context.eResource() : null;

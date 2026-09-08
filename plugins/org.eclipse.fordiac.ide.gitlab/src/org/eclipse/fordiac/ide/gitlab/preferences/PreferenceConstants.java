@@ -32,14 +32,6 @@ public final class PreferenceConstants {
 
 	public static final String GITLAB_ENDPOINTS_PREF_PAGE_ID = "org.eclipse.fordiac.ide.gitlab.preferences.gitlabEndpoints"; //$NON-NLS-1$
 
-	/**
-	 * Encoded list of endpoints (name|url|token), one per line. Tokens are stored
-	 * here for backwards compatibility with the existing preference system.
-	 *
-	 * New code should use {@link GitLabEndpointsStore}.
-	 */
-	public static final String P_GITLAB_ENDPOINTS = "gitLabEndpoints"; //$NON-NLS-1$
-
 	public static final String P_GITLAB_PREFERENCE_ID = "org.eclipse.fordiac.ide.gitlab"; //$NON-NLS-1$
 
 	public static String getURL() {

@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -153,7 +154,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 					&& gEP.getModel() instanceof final FBNetworkElement fbnEl) {
 				// only consider the selected FBNetworkElements
 				final Rectangle fbBounds = gEP.getFigure().getBounds();
-				final Point position = fbnEl.getPosition().toScreenPoint();
+				final Point position = CoordinateConverter.INSTANCE.toScreenPoint(fbnEl.getPosition());
 				fbBounds.x = position.x;
 				fbBounds.y = position.y;
 				if (selectionExtend == null) {

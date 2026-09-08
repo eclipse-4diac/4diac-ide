@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -83,13 +81,5 @@ public interface Position extends EObject {
 	 * @generated
 	 */
 	void setY(double value);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.Point" required="true"
-	 * @generated
-	 */
-	Point toScreenPoint();
 
 } // Position

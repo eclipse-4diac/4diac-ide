@@ -368,6 +368,23 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testInvalidElseIfConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			IF TRUE THEN
+				int1 := 17;
+			ELSIF int1 THEN
+				int1 := 15;
+			END_IF;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElseIfPart, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
 	def void testInvalidWhileConditionType() {
 		'''
 			FUNCTION hubert

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.library.download;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -45,6 +46,16 @@ public interface IArchiveDownloader {
 	 *         library is not available
 	 */
 	DownloadResult<List<String>> availableVersions(String symbolicName, IProgressMonitor monitor)
+			throws OperationCanceledException;
+
+	/**
+	 * Retrieves available libraries and their versions.
+	 *
+	 * @param monitor the progress monitor, or {@code null}
+	 * @return a {@link DownloadResult} containing a map where the key is the
+	 *         library identifier and the value is a list of available versions
+	 */
+	DownloadResult<Map<String, List<String>>> availableLibrariesAndVersions(final IProgressMonitor monitor)
 			throws OperationCanceledException;
 
 	/**

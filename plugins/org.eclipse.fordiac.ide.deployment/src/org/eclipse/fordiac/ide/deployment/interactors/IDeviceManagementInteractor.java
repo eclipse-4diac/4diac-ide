@@ -48,7 +48,7 @@ public interface IDeviceManagementInteractor {
 		void close() throws DeploymentException;
 	}
 
-	/*************** Communication commands **************************/
+	// ************************** Communication commands **************************
 
 	/**
 	 * Check if this interactor is currently connected with its device
@@ -61,21 +61,13 @@ public interface IDeviceManagementInteractor {
 
 	void disconnect() throws DeploymentException;
 
-	/**** Listener commands ***/
+	// ************************** Listener commands **************************
 
 	void addDeploymentListener(final IDeploymentListener listener);
 
 	void removeDeploymentListener(final IDeploymentListener listener);
 
-	/*** Management Commands ***/
-
-	/**
-	 * Provide for the given device the address needed for the commhandler to
-	 * connect to it
-	 *
-	 * @param device the dvice to connect to
-	 * @return the device's address
-	 */
+	// ************************** Management Commands *************************
 
 	/**
 	 * Creates the resource.
@@ -245,9 +237,7 @@ public interface IDeviceManagementInteractor {
 	 */
 	void killDevice(Device dev) throws DeploymentException;
 
-	/********************************************************************************************
-	 * Query Commands
-	 ********************************************************************************************/
+	// ************************** Query Commands **************************
 
 	/**
 	 * query the list of currently instantiated resources within the device
@@ -262,9 +252,7 @@ public interface IDeviceManagementInteractor {
 
 	Response queryGlobalConstType(GlobalConstantsEntry entry) throws DeploymentException;
 
-	/***********************
-	 * monitoring commands
-	 ****************************************************/
+	// ************************** monitoring commands **************************
 
 	/**
 	 * Read watches from device
@@ -322,9 +310,7 @@ public interface IDeviceManagementInteractor {
 	 */
 	void clearForce(Resource resource, String name) throws DeploymentException;
 
-	/********************************************************************************************
-	 * Replay Commands
-	 ********************************************************************************************/
+	// ************************** Replay Commands **************************
 
 	/**
 	 * Read traces from a given path

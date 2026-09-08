@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.helpers.InterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public class ChangePinVisibilityCommand extends Command implements ScopedCommand {

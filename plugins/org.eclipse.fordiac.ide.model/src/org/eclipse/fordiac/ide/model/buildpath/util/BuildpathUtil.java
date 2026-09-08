@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.model.buildpath.BuildpathFactory;
 import org.eclipse.fordiac.ide.model.buildpath.DocumentRoot;
 import org.eclipse.fordiac.ide.model.buildpath.Pattern;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class BuildpathUtil {
 
@@ -318,6 +318,7 @@ public final class BuildpathUtil {
 		final SourceFolder sourceFolder = createSourceFolder(name);
 		sourceFolder.getAttributes().add(createAttribute(BuildpathAttributes.IGNORE_WARNINGS, String.valueOf(true)));
 		sourceFolder.getAttributes().add(createAttribute(BuildpathAttributes.EXPORT, String.valueOf(false)));
+		sourceFolder.getAttributes().add(createAttribute(BuildpathAttributes.OCL_TARGET, String.valueOf(false)));
 		return sourceFolder;
 	}
 

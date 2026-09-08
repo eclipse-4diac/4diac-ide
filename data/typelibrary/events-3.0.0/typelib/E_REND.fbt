@@ -14,11 +14,11 @@
 			</Event>
 			<Event Name="EI2" Type="Event" Comment="second event to wait for">
 			</Event>
-			<Event Name="R" Type="Event" Comment="reset the FB to inital state (i.e., wait again for both events)">
+			<Event Name="R" Type="Event" Comment="reset the FB to initial state (i.e., wait again for both events)">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="EO" Type="Event" Comment="triggered when both EI1 and EI2 occured at least once">
+			<Event Name="EO" Type="Event" Comment="triggered when both EI1 and EI2 occurred at least once">
 			</Event>
 		</EventOutputs>
 	</InterfaceList>
@@ -26,12 +26,12 @@
 		<ECC>
 			<ECState Name="START" Comment="Initial State" x="400" y="1000">
 			</ECState>
-			<ECState Name="EI1" Comment="EI1 occured at least once" x="1155" y="340">
+			<ECState Name="EI1" Comment="EI1 occurred at least once" x="1155" y="340">
 			</ECState>
-			<ECState Name="EO" Comment="Both input events occured at least once send output event" x="1685" y="1010">
+			<ECState Name="EO" Comment="Send the output event after both input events have occurred at least once" x="1685" y="1010">
 				<ECAction Output="EO"/>
 			</ECState>
-			<ECState Name="EI2" Comment="EI2 occured at least once" x="1145" y="1585">
+			<ECState Name="EI2" Comment="EI2 occurred at least once" x="1145" y="1585">
 			</ECState>
 			<ECTransition Source="START" Destination="EI2" Condition="EI2" Comment="" x="1020" y="1180"/>
 			<ECTransition Source="START" Destination="EI1" Condition="EI1" Comment="" x="1040" y="865"/>

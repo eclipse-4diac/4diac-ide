@@ -13,9 +13,7 @@
 
 package org.eclipse.fordiac.ide.debug.replaydebugging.replayer.interpreter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalLong;
 
@@ -107,18 +105,14 @@ public class ResourceInterpreterExecutor {
 	}
 
 	public void injectEventOutput(final String instanceName, final int eventId, final List<String> outputValues) {
-		final var fb = networkRuntimeInspector.getRealFB(instanceName);
-		final var event = fb.getInterface().getEventOutputs().get(eventId);
 
-		// set outputs
-		final var fbDataOutput = fb.getInterface().getOutputVars();
-		final var dataOutputValues = new HashMap<String, String>();
-		for (int i = 0; i < outputValues.size(); i++) {
-			dataOutputValues.put(fbDataOutput.get(i).getName(), outputValues.get(i));
-		}
+		final var realEvent = networkRuntimeInspector.getRealFB(instanceName).getInterface().getEventOutputs()
+				.get(eventId);
 
-		eventManagerProcessor.injectOutputEvent(fb, event, dataOutputValues);
-		lastInjectedEvent = event;
+		networkRuntimeInspector.applyOutputData(instanceName, outputValues);
+
+		eventManagerProcessor.injectOutputEvent(realEvent);
+		lastInjectedEvent = realEvent;
 	}
 
 	public void injectEvent(final String name) {
@@ -137,7 +131,7 @@ public class ResourceInterpreterExecutor {
 
 		for (final var inputEvent : fb.getInterface().getEventInputs()) {
 			if (inputEvent.getName().equals(eventName)) {
-				eventManagerProcessor.injectInputEvent(fb, inputEvent, Map.of());
+				eventManagerProcessor.injectInputEvent(inputEvent);
 				return;
 			}
 		}

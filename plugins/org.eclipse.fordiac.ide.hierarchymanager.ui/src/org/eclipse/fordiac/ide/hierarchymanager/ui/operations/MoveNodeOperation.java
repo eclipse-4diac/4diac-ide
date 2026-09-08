@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.operations;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -21,11 +22,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.hierarchymanager.model.HierarchyManagerPersistenceHelper;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Node;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 
-public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
+public class MoveNodeOperation extends AbstractOperation {
 
 	private final Node node;
 	private EObject parent;
@@ -64,7 +66,7 @@ public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
 		} else {
 			moveToContainer(newParent, node, targetIndex);
 		}
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 
@@ -75,7 +77,7 @@ public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
 		} else {
 			moveToContainer(parent, node, index);
 		}
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 

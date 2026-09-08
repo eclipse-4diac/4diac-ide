@@ -48,7 +48,7 @@ public class ECTransitionToolTipFigure extends ECCToolTip {
 	public void refreshAnotations(final ECTransition transition, final GraphicalAnnotationModel annotationModel) {
 		annotationContainer.removeAll();
 		if (transition != null && annotationModel != null) {
-			annotationModel.getAnnotations(transition).stream().forEach(annotation -> annotationContainer
+			annotationModel.getAnnotations(transition).forEach(annotation -> annotationContainer
 					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
 		}
 	}

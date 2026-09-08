@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.contentprovider;
 
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -33,7 +32,7 @@ public class VarDeclarationLabelProvider extends LabelProvider implements ITable
 			case 0:
 				return varDecl.getName();
 			case 1:
-				return InterfaceElementAnnotations.getFullTypeName(varDecl);
+				return varDecl.getFullTypeName();
 			case 2:
 				return varDecl.getComment();
 			default:

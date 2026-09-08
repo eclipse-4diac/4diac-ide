@@ -57,7 +57,6 @@ public class TypeSelectionWidget {
 
 	private ConfigurableObject configurableObject;
 	private ITypeSelectionContentProvider contentProvider;
-	private ITreeContentProvider treeContentProvider;
 
 	private Composite composite;
 	private TableViewer tableViewer;
@@ -85,7 +84,7 @@ public class TypeSelectionWidget {
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
 		composite.setLayout(gridLayout);
-		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		tableViewer = createTableViewer(composite);
 		tableViewer.setColumnProperties(new String[] { TYPE });
@@ -142,7 +141,6 @@ public class TypeSelectionWidget {
 			final ITreeContentProvider treeContentProvider) {
 		this.configurableObject = type;
 		this.contentProvider = contentProvider;
-		this.treeContentProvider = treeContentProvider;
 		tableViewer.setCellEditors(new CellEditor[] {
 				new DataTypeDropdown(this::getTypeLibrary, contentProvider, treeContentProvider, tableViewer) });
 	}
@@ -167,7 +165,7 @@ public class TypeSelectionWidget {
 		final TableLayout tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnWeightData(100));
 		table.setLayout(tableLayout);
-		table.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		table.setLinesVisible(false);
 		table.setHeaderVisible(false);
 		addTableColumn(table);
@@ -185,7 +183,7 @@ public class TypeSelectionWidget {
 		final Table table = tableViewer.getTable();
 		table.getColumn(0).dispose();
 		table.setLayout(new TableLayout());
-		table.setLayoutData(new GridData(SWT.FILL, 0, false, false));
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		final TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setWidth(getMinWidth(table));
@@ -210,7 +208,7 @@ public class TypeSelectionWidget {
 			gridLayout.marginWidth = 0;
 			gridLayout.marginHeight = 0;
 			typeComp.setLayout(gridLayout);
-			typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
+			typeComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			openEditorButton.dispose();
 		} else if (configurableObject instanceof final VarDeclaration varDecl) {
 			final DataType dtp = varDecl.getType();

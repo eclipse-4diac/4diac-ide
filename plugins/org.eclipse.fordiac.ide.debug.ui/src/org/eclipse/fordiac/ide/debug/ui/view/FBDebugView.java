@@ -237,6 +237,7 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 
 	@Override
 	public void dispose() {
+		clockWidget.setProcess(null);
 		DebugUITools.removePartDebugContextListener(getSite(), this);
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 	}

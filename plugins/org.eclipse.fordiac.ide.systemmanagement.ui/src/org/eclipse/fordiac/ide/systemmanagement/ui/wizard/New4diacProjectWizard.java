@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2010 - 2016  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,10 +25,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizardPage;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ProjectCreator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.SystemCreator;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -106,10 +106,6 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
-		if (libPage.getControl() != null) {
-			libPage.performImport(getContainer());
-		}
-
 		// everything worked fine
 		return true;
 	}
@@ -121,13 +117,13 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	 */
 	private void createProject(final IProgressMonitor monitor) {
 		try {
-
-			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
-					page.getLocationPath(), monitor);
-			libPage.setTargetProject(newProject);
+			final IProject newProject = ProjectCreator.of(page.getProjectName(), page.getLocationPath())
+					.withLibraries(libPage.getChosenLibraries().values()).create(monitor);
 			final SystemCreator systemCreator = new SystemCreator(newProject, page.getInitialSystemName(),
 					page.getInitialApplicationName());
+
 			systemCreator.createSystem(monitor);
+
 			if (page.getOpenApplication() && systemCreator.getApplication() != null) {
 				OpenListenerManager.openEditor(systemCreator.getApplication());
 			}

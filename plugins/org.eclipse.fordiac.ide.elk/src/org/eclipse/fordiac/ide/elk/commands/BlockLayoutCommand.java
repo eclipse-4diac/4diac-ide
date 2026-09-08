@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -63,16 +64,18 @@ public class BlockLayoutCommand extends Command {
 	}
 
 	private void updateModelElements() {
-		for (final var entry : data.getPositions().entrySet()) {
-			final var pos = entry.getValue();
-			entry.getKey().updatePositionFromScreenCoordinates((int) pos.getX(), (int) pos.getY());
-		}
+		data.getPositions().forEach(BlockLayoutCommand::updatePositionFromScreenCoordinates);
 		data.getGroups().forEach(BlockLayoutCommand::setGroupSize);
 	}
 
 	private static void setGroupSize(final Group group, final Entry<Double, Double> size) {
 		group.setHeight(size.getKey().intValue());
 		group.setWidth(size.getValue().intValue());
+	}
+
+	private static void updatePositionFromScreenCoordinates(final FBNetworkElement fbne, final Position newPos) {
+		final Position pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates((int) newPos.getX(), (int) newPos.getY());
+		fbne.setPosition(pos);
 	}
 
 }

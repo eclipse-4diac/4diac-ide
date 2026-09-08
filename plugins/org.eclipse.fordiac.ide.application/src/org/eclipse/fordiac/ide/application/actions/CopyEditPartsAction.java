@@ -39,10 +39,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-/** The Class CopyEditPartsAction. */
 public class CopyEditPartsAction extends SelectionAction {
-
-	/** The templates. */
 
 	/**
 	 * Instantiates a new copy edit parts action.

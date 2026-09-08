@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -43,12 +45,11 @@ import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpoint;
 import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsStore;
-import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
@@ -60,8 +61,9 @@ public class GitLabDownloader implements IArchiveDownloader {
 	private static final String PACKAGE_ID = "packageID"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "projectName"; //$NON-NLS-1$
 	private static final String PROJECT_ID = "projectID"; //$NON-NLS-1$
-	private static final String PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPortableString();
-	private static final String ROOT_DIRECTORY = ".download"; //$NON-NLS-1$
+	private static final String WORKSPACE_PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
+			.toPortableString();
+	private static final String ROOT_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
 	private static final String API_VERSION = "api/v4/projects"; //$NON-NLS-1$
 	private static final String PACKAGES = "/packages/"; //$NON-NLS-1$
 	private static final String PACKAGE_FILES = "/package_files"; //$NON-NLS-1$
@@ -98,8 +100,13 @@ public class GitLabDownloader implements IArchiveDownloader {
 	 * constructor to be used for Archive Downloader Extension
 	 */
 	public GitLabDownloader() {
-		this(PreferenceConstants.getToken(), PreferenceConstants.getURL());
-		this.endpoints = GitLabEndpointsStore.loadEndpoints();
+		this(GitLabEndpointsStore.loadEndpoints());
+	}
+
+	private GitLabDownloader(final List<GitLabEndpoint> endpoints) {
+		this(endpoints.isEmpty() ? "" : endpoints.get(0).token(), //$NON-NLS-1$
+				endpoints.isEmpty() ? "" : endpoints.get(0).url()); //$NON-NLS-1$
+		this.endpoints = endpoints;
 	}
 
 	@Override
@@ -160,15 +167,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 		return new DownloadResult<>(DownloadResult.Status.OK);
 	}
 
-	private static void createRootDir() throws IOException {
-		final Path path = Paths.get(PATH, ROOT_DIRECTORY);
-		if (!Files.exists(path)) {
-			Files.createDirectories(path);
-		}
-	}
-
-	private static void createPackageDir(final Package p) throws IOException {
-		final Path path = Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version()); //$NON-NLS-1$
+	private static void createDirectory(final Path path) throws IOException {
 		if (!Files.exists(path)) {
 			Files.createDirectories(path);
 		}
@@ -189,17 +188,50 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	public Path packageDownloader(final Project project, final Package p, final FileFilter filter) throws IOException {
 		for (final String filename : findFilenamesInPackage(p, project, filter)) {
+			final Path packageDirPath = Paths.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY, p.name() + "-" + p.version()) //$NON-NLS-1$
+					.toAbsolutePath().normalize();
+
+			final Path targetFile = resolveValidatedPackageFile(packageDirPath, filename);
+
 			final HttpURLConnection httpConn = createConnection(buildDownloadURL(p, project, filename));
-			try (InputStream responseStream = httpConn.getInputStream()) { // closed automatically
-				createRootDir();
-				createPackageDir(p);
-				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename), //$NON-NLS-1$
-						StandardCopyOption.REPLACE_EXISTING);
+			try (InputStream responseStream = httpConn.getInputStream()) {
+				createDirectory(Paths.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY));
+				createDirectory(packageDirPath);
+				Files.copy(responseStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+				return targetFile;
+			} finally {
 				httpConn.disconnect();
-				return Paths.get(PATH, ROOT_DIRECTORY, p.name() + "-" + p.version(), filename); //$NON-NLS-1$
 			}
 		}
 		return null;
+	}
+
+	private static boolean validateFileName(final String filename) {
+		if (filename == null || filename.isBlank()) {
+			return false;
+		}
+
+		try {
+			final Path path = Paths.get(filename);
+			return path.getNameCount() == 1 && !path.isAbsolute();
+		} catch (final InvalidPathException e) {
+			return false;
+		}
+	}
+
+	private static Path resolveValidatedPackageFile(final Path packageDir, final String filename) throws IOException {
+		if (!validateFileName(filename)) {
+			throw new IOException("Invalid package filename received from server"); //$NON-NLS-1$
+		}
+
+		final Path baseDir = packageDir.toAbsolutePath().normalize();
+		final Path resolved = baseDir.resolve(filename).normalize();
+
+		if (!resolved.startsWith(baseDir)) {
+			throw new IOException("Resolved package filename escapes target directory"); //$NON-NLS-1$
+		}
+
+		return resolved;
 	}
 
 	private List<String> findFilenamesInPackage(final Package pack, final Project project, final FileFilter filter)
@@ -250,9 +282,11 @@ public class GitLabDownloader implements IArchiveDownloader {
 					project = new Project(Long.valueOf(m.group(PROJECT_ID)), m.group(PROJECT_NAME));
 					projectAndPackageMap.put(project, new ArrayList<>());
 				}
+			} catch (final IOException e) {
+				throw new IOException(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()));
 			}
 		}
-
 	}
 
 	private void getPackages(final Project project) throws IOException {
@@ -329,6 +363,25 @@ public class GitLabDownloader implements IArchiveDownloader {
 			return new DownloadResult<>(leaves.stream().map(LeafNode::getVersion).toList());
 		}
 		return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
+	}
+
+	@Override
+	public DownloadResult<Map<String, List<String>>> availableLibrariesAndVersions(final IProgressMonitor monitor)
+			throws OperationCanceledException {
+		final SubMonitor progress = SubMonitor.convert(monitor, "Fetching available libraries and versions", 5); //$NON-NLS-1$
+		final var fetchResult = fetchProjectsAndPackages();
+		progress.worked(4);
+		if (fetchResult.status() != DownloadResult.Status.OK) {
+			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
+		}
+
+		final Map<String, List<String>> versionRegistry = packagesAndLeaves.entrySet().stream()
+				.filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey,
+						e -> e.getValue().stream().map(LeafNode::getVersion).toList()));
+
+		progress.worked(1);
+
+		return new DownloadResult<>(versionRegistry);
 	}
 
 	@Override

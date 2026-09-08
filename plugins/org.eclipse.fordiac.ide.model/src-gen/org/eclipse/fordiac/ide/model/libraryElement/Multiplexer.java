@@ -16,9 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.emf.common.util.EList;
-
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Multiplexer</b></em>'.
@@ -34,8 +31,8 @@ public interface Multiplexer extends StructManipulator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @model
 	 * @generated
 	 */
-	EList<VarDeclaration> getMemberVars();
+	void updateConfiguration();
 } // Multiplexer

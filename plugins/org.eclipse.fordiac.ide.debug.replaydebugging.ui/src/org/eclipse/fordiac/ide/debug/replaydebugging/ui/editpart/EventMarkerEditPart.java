@@ -18,11 +18,15 @@ import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteEventsCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.EventMarkerFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
+import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
@@ -33,6 +37,8 @@ import org.eclipse.gef.editpolicies.AbstractEditPolicy;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -51,6 +57,12 @@ import org.eclipse.swt.widgets.Display;
  */
 public class EventMarkerEditPart extends AbstractGraphicalEditPart
 		implements EventMarkerFigure.SelectedEventListener, PropertyChangeListener {
+
+	private static final Color CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
+			.get(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR);
+	private static final Color NOT_CURRENT_EVENT_COLOR = JFaceResources.getColorRegistry()
+			.get(DeploymentDebugModelPresentation.WATCH_COLOR);
+	private static final Color INVALID_COLOR = ColorConstants.gray;
 
 	@Override
 	protected IFigure createFigure() {
@@ -83,22 +95,46 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 			}
 		});
 
+		installEditPolicy(CommonConstants.COMPARISON_POLICY, new AbstractEditPolicy() {
+			@Override
+			public Command getCommand(final Request request) {
+				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())
+						|| CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())) {
+					request.getExtendedData().put(CommonConstants.SELECTED_EVENT_POSITION,
+							new EventPosition(getModel().getParentTimeline().getTimeline(), getModel().getIndex()));
+				}
+				return null;
+			}
+		});
+
 	}
 
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		final var figure = getFigure();
-		figure.setIsCurrentEvent(getModel().getIsCurrentEvent());
-		figure.setIsValid(getModel().getValid());
+		figure.setIsReadOnly(getModel().getIsReadOnly());
+		figure.setTooltipText(getModel().getComment());
+		figure.setIsHighlighted(getModel().getIsHighlighted());
+
+		if (!getModel().getValid()) {
+			figure.setBackgroundColor(INVALID_COLOR);
+		} else {
+			figure.setBackgroundColor(getModel().getIsCurrentEvent() ? CURRENT_EVENT_COLOR : NOT_CURRENT_EVENT_COLOR);
+		}
+
+		figure.setSecondColor(getModel().getComparisonColor());
 		figure.repaint();
 	}
 
-	private void safeRefresh() {
+	private void safeRefresh(final boolean reveal) {
 		final Display display = getViewer().getControl().getDisplay();
 		display.asyncExec(() -> {
 			if (isActive()) {
 				refreshVisuals();
+				if (getModel().getIsCurrentEvent() && reveal) {
+					getViewer().reveal(this);
+				}
 			}
 		});
 	}
@@ -137,7 +173,21 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 
 	@Override
 	public void eventSelected() {
-		getModel().eventSelected();
+		// Create the select event request
+		final var eventPosition = new EventPosition(getModel().getParentTimeline().getTimeline(),
+				getModel().getIndex());
+		final var request = new SelectEventRequest(eventPosition);
+
+		EditPart current = this;
+		while (current != null) {
+			final Command command = current.getCommand(request);
+			if (command != null && command.canExecute()) {
+				getViewer().getEditDomain().getCommandStack().execute(command);
+				return;
+			}
+			current = current.getParent();
+		}
+
 	}
 
 	// call from model
@@ -145,7 +195,9 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(EventMarker.PROPERTY_EVENT_CHANGED)) {
-			safeRefresh();
+			safeRefresh(false);
+		} else if (evt.getPropertyName().equals(EventMarker.PROPERTY_IS_CURRENT_CHANGED)) {
+			safeRefresh(true);
 		}
 	}
 

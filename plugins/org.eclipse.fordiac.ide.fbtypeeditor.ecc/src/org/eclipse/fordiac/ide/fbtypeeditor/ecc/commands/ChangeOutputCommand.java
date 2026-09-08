@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2015 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.commands.Command;
 
@@ -23,7 +23,7 @@ import org.eclipse.gef.commands.Command;
 public class ChangeOutputCommand extends Command {
 
 	/** The ec action. */
-	private final ECAction ecAction;
+	private final BaseECAction ecAction;
 
 	/** The event. */
 	private final Event event;
@@ -33,19 +33,18 @@ public class ChangeOutputCommand extends Command {
 
 	/**
 	 * Instantiates a new change output command.
-	 * 
+	 *
 	 * @param action      the action
 	 * @param outputEvent the output event
 	 */
-	public ChangeOutputCommand(final ECAction action, final Event outputEvent) {
-		super();
+	public ChangeOutputCommand(final BaseECAction action, final Event outputEvent) {
 		this.ecAction = action;
 		this.event = outputEvent;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -56,7 +55,7 @@ public class ChangeOutputCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -67,7 +66,7 @@ public class ChangeOutputCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

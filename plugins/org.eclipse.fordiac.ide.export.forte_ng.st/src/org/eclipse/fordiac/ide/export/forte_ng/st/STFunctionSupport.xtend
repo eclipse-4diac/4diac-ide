@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
@@ -28,7 +27,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType
 
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {

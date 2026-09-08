@@ -13,6 +13,7 @@
  *    - initial API and implementation and/or initial documentation
  *   Martin Erich Jobst
  *    - add resolutions for configurable FBs
+ *    - add resolution for unused interface elements
  *   Paul Stemmer
  *    - add resolutions for Attributes
  *******************************************************************************/
@@ -46,19 +47,24 @@ public class FordiacMarkerResolutionGenerator implements IMarkerResolutionGenera
 				new ChangeTypeNameMarkerResolution(marker), new ChangeFileNameMarkerResolution(marker) };
 		case LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE ->
 			new IMarkerResolution[] { new ChangePackageNameMarkerResolution(marker) };
+		case LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_UNUSED ->
+			new IMarkerResolution[] { new DeleteInterfaceMarkerResolution(marker) };
 		default -> new IMarkerResolution[0];
 		};
 	}
 
 	@Override
 	public boolean hasResolutions(final IMarker marker) {
-		final int code = FordiacErrorMarker.getCode(marker);
-		return LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(FordiacErrorMarker.getSource(marker))
-				&& (LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE == code
-						|| LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE == code
-						|| LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE == code
-						|| LibraryElementValidator.ATTRIBUTE__VALIDATE_ATTRIBUTE_DECLARATION == code
-						|| LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_NAME == code
-						|| LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE == code);
+		return switch (FordiacErrorMarker.getCode(marker)) {
+		case LibraryElementValidator.ATTRIBUTE__VALIDATE_ATTRIBUTE_DECLARATION,
+				LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE,
+				LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE,
+				LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE,
+				LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_NAME,
+				LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE,
+				LibraryElementValidator.IINTERFACE_ELEMENT__VALIDATE_UNUSED ->
+			true;
+		default -> false;
+		};
 	}
 }

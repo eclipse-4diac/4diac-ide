@@ -65,7 +65,7 @@ public class GlobalConstantsPartitioner extends STAbstractCorePartitioner<VarDec
 		builder.append(CommonElementExporter.LINE_END);
 		builder.append("    VAR_GLOBAL CONSTANT"); //$NON-NLS-1$
 		builder.append(CommonElementExporter.LINE_END);
-		globalConstants.getConstants().stream().forEach(constant -> {
+		globalConstants.getConstants().forEach(constant -> {
 			builder.append("        "); //$NON-NLS-1$
 			generateVariable(constant, builder);
 			builder.append(CommonElementExporter.LINE_END);

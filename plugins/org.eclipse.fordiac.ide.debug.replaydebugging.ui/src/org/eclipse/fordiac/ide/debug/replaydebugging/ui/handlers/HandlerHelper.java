@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -45,16 +46,19 @@ public class HandlerHelper {
 		}
 	}
 
-	public static void executeOrBubbleUp(final ExecutionEvent event, final Request request) {
+	public static boolean executeOrBubbleUp(final ExecutionEvent event, final Request request) {
 		final GraphicalViewer viewer = getViewer(event);
 		if (viewer == null) {
-			return;
+			return false;
 		}
 		final EditPart editPart = getSelectedEditPart(event);
 		final var command = bubbleForCommand(editPart, request);
 		if (command != null && command.canExecute()) {
 			viewer.getEditDomain().getCommandStack().execute(command);
+			return true;
 		}
+		return false;
+
 	}
 
 	private static GraphicalViewer getViewer(final ExecutionEvent event) {
@@ -62,7 +66,7 @@ public class HandlerHelper {
 		try {
 			part = HandlerUtil.getActivePartChecked(event);
 		} catch (final ExecutionException e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError("Can not get active part!", e); //$NON-NLS-1$
 			return null;
 		}
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
@@ -72,7 +76,7 @@ public class HandlerHelper {
 		return viewer;
 	}
 
-	private static EditPart getSelectedEditPart(final ExecutionEvent event) {
+	public static EditPart getSelectedEditPart(final ExecutionEvent event) {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 		if (selection.isEmpty()) {
 			return null;

@@ -19,7 +19,9 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.GlobalConstantsExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.GlobalConstantsImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class GlobalConstTypeResourceImpl extends AbstractLibraryElementResource<GlobalConstants> {
@@ -38,4 +40,8 @@ public class GlobalConstTypeResourceImpl extends AbstractLibraryElementResource<
 		return new GlobalConstantsExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorGlobalConstants createErrorLibraryElement() {
+		return LibraryElementFactory.eINSTANCE.createErrorGlobalConstants();
+	}
 }

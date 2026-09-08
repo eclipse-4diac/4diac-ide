@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.search.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class SearchFactoryRegistryReader {
 	private static final String FACTORY_ID = "factory"; //$NON-NLS-1$

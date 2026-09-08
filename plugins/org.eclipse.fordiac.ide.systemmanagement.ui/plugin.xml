@@ -369,8 +369,7 @@
       </commonWizard> 
       <actionProvider
             class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemExplorerEditActionProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.copy"
-            overrides="org.eclipse.ui.navigator.resources.actions.EditActions">
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.copy">
             <enablement></enablement>
       </actionProvider>
       <actionProvider

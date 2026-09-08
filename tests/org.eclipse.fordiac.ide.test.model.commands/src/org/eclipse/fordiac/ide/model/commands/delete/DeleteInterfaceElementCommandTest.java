@@ -25,8 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.junit.jupiter.params.provider.Arguments;
 
-//see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommandDeleteInput(final State state) {

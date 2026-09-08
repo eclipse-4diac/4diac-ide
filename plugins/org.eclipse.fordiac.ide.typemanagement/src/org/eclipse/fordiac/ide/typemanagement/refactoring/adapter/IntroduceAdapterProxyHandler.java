@@ -46,7 +46,7 @@ public class IntroduceAdapterProxyHandler extends AbstractHandler {
 		final IProject project = adpFile.getProject();
 
 		// prefer same folder as the .adp
-		final IFolder targetFolder = (adpFile.getParent() instanceof IFolder) ? (IFolder) adpFile.getParent()
+		final IFolder targetFolder = (adpFile.getParent() instanceof final IFolder folder) ? folder
 				: project.getFolder("Type Library");
 
 		final CreateAdapterProxyTypeChange change = new CreateAdapterProxyTypeChange(targetFolder, proxyName,
@@ -62,7 +62,7 @@ public class IntroduceAdapterProxyHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static AdapterTypeEntry resolveAdapterTypeEntry(final ISelection selection) throws ExecutionException {
+	private static AdapterTypeEntry resolveAdapterTypeEntry(final ISelection selection) {
 		if (!(selection instanceof final IStructuredSelection iss) || iss.isEmpty()) {
 			return null;
 		}

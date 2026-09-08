@@ -113,7 +113,7 @@ public class TestEccGenerator {
 
 	public static ECAction createAction(final Algorithm alg) {
 		final ECAction act = createAction();
-		act.setAlgorithm(alg);
+		act.setAlgorithm(alg.getName());
 		return act;
 	}
 

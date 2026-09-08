@@ -75,6 +75,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS);
+			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS);
 			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS);
 			childrenFeatures.add(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES);
 		}
@@ -171,11 +172,6 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
-				 LibraryElementFactory.eINSTANCE.createMemberVarDeclaration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
 				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
 
 		newChildDescriptors.add
@@ -192,11 +188,6 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
 				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
-				 LibraryElementFactory.eINSTANCE.createMemberVarDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -287,11 +278,6 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createFBType()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				 LibraryElementFactory.eINSTANCE.createBaseFBType()));
 
 		newChildDescriptors.add
 			(createChildParameter

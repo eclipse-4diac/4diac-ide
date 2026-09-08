@@ -23,10 +23,8 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamConstants;
@@ -72,9 +70,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 /** Managing class for importing *.fbt files */
 
 public class FBTImporter extends BlockTypeImporter {
-
-	/** The algorithm name ec action mapping. */
-	private final Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
 
 	/** The ec states. */
 	private final Map<String, ECState> ecStates = new HashMap<>();
@@ -265,19 +260,13 @@ public class FBTImporter extends BlockTypeImporter {
 			break;
 		case LibraryElementTags.ALGORITHM_ELEMENT:
 			final Algorithm alg = parseAlgorithm();
-			if (null != alg) {
+			if (alg != null) {
 				type.getCallables().add(alg);
-				final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
-				if (null != list) {
-					for (final ECAction action : list) {
-						action.setAlgorithm(alg);
-					}
-				}
 			}
 			break;
 		case LibraryElementTags.METHOD_ELEMENT:
 			final Method method = parseMethod();
-			if (null != method) {
+			if (method != null) {
 				type.getCallables().add(method);
 			}
 			break;
@@ -330,7 +319,7 @@ public class FBTImporter extends BlockTypeImporter {
 			}
 		}
 
-		if (null != retVal) {
+		if (retVal != null) {
 			retVal.setName(name);
 			retVal.setComment(comment);
 		}
@@ -347,7 +336,7 @@ public class FBTImporter extends BlockTypeImporter {
 	 */
 	private void parseOtherAlg(final OtherAlgorithm alg) throws TypeImportException, XMLStreamException {
 		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
-		if (null == language) {
+		if (language == null) {
 			throw new TypeImportException(Messages.FBTImporter_OTHER_ALG_MISSING_LANG_EXCEPTION);
 		}
 		alg.setLanguage(language);
@@ -371,7 +360,7 @@ public class FBTImporter extends BlockTypeImporter {
 
 	private void parseAlgorithmText(final TextAlgorithm alg) throws XMLStreamException {
 		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
-		if (null != text) {
+		if (text != null) {
 			alg.setText(text);
 		} else {
 			alg.setText(readCDataSection());
@@ -390,7 +379,7 @@ public class FBTImporter extends BlockTypeImporter {
 
 		DataType type = null;
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != typeName && !typeName.isEmpty()) {
+		if (typeName != null && !typeName.isEmpty()) {
 			type = getDataType(typeName);
 		}
 
@@ -450,7 +439,7 @@ public class FBTImporter extends BlockTypeImporter {
 			}
 		}
 
-		if (null != retVal) {
+		if (retVal != null) {
 			retVal.setName(name);
 			retVal.setComment(comment);
 		}
@@ -487,7 +476,7 @@ public class FBTImporter extends BlockTypeImporter {
 	 */
 	private void parseOtherMethod(final OtherMethod method) throws TypeImportException, XMLStreamException {
 		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
-		if (null == language) {
+		if (language == null) {
 			throw new TypeImportException(Messages.FBTImporter_OTHER_METHOD_MISSING_LANG_EXCEPTION);
 		}
 		method.setLanguage(language);
@@ -511,7 +500,7 @@ public class FBTImporter extends BlockTypeImporter {
 
 	private void parseMethodText(final TextMethod method) throws XMLStreamException {
 		final String text = getAttributeValue(LibraryElementTags.TEXT_ATTRIBUTE);
-		if (null != text) {
+		if (text != null) {
 			method.setText(text);
 		} else {
 			method.setText(readCDataSection());
@@ -554,7 +543,7 @@ public class FBTImporter extends BlockTypeImporter {
 	private void parseECTransition(final ECC ecc) throws TypeImportException, XMLStreamException {
 		final ECTransition ecTransition = LibraryElementFactory.eINSTANCE.createECTransition();
 		final String source = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
-		if (null != source) {
+		if (source != null) {
 			final ECState state = ecStates.get(source);
 			if (state != null) {
 				ecTransition.setSource(state);
@@ -563,7 +552,7 @@ public class FBTImporter extends BlockTypeImporter {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_SOURCE_EXCEPTION);
 		}
 		final String destination = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);
-		if (null == destination) {
+		if (destination == null) {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANSITION_DEST_EXCEPTION);
 		}
 		final ECState state = ecStates.get(destination);
@@ -571,7 +560,7 @@ public class FBTImporter extends BlockTypeImporter {
 			ecTransition.setDestination(state);
 		}
 		final String condition = getAttributeValue(LibraryElementTags.CONDITION_ATTRIBUTE);
-		if (null == condition) {
+		if (condition == null) {
 			throw new TypeImportException(Messages.FBTImporter_ECTRANASITION_CONDITION_EXCEPTION);
 		}
 		validateTransitionCondition(ecTransition, condition);
@@ -646,19 +635,13 @@ public class FBTImporter extends BlockTypeImporter {
 	private void parseECAction(final ECState type) throws XMLStreamException {
 		final ECAction ecAction = LibraryElementFactory.eINSTANCE.createECAction();
 		final String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
-		if (null != algorithm) {
-			if (algorithmNameECActionMapping.containsKey(algorithm)) {
-				algorithmNameECActionMapping.get(algorithm).add(ecAction);
-			} else {
-				final List<ECAction> temp = new ArrayList<>();
-				temp.add(ecAction);
-				algorithmNameECActionMapping.put(algorithm, temp);
-			}
+		if (algorithm != null) {
+			ecAction.setAlgorithm(algorithm);
 		}
 		final String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
-		if (null != output) {
+		if (output != null) {
 			final Event outp = getInterfaceListImporter().getOutputEvents().get(output);
-			if (null != outp) {
+			if (outp != null) {
 				ecAction.setOutput(outp);
 			}
 		}
@@ -701,9 +684,9 @@ public class FBTImporter extends BlockTypeImporter {
 		final SimpleECAction ecAction = LibraryElementFactory.eINSTANCE.createSimpleECAction();
 		ecAction.setAlgorithm(getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT));
 		final String output = getAttributeValue(LibraryElementTags.OUTPUT_ATTRIBUTE);
-		if (null != output) {
+		if (output != null) {
 			final Event outp = getInterfaceListImporter().getOutputEvents().get(output);
-			if (null != outp) {
+			if (outp != null) {
 				ecAction.setOutput(outp);
 			}
 		}

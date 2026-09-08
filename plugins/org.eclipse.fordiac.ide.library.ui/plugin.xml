@@ -89,32 +89,6 @@
    		</enabledWhen>
   	</activity>
    </extension>
-   <extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
-      <deleteParticipant
-            class="org.eclipse.fordiac.ide.library.ui.refactoring.DeleteLibraryRefactoringParticipant"
-            id="org.eclipse.fordiac.ide.library.ui.deleteLibrary"
-            name="Delete Library Folder Handler">
-         <enablement>
-            <and>
-               <instanceof
-                     value="org.eclipse.core.resources.IResource">
-               </instanceof>
-            </and>
-         </enablement>
-      </deleteParticipant>
-   </extension>
-   <extension
-         point="org.eclipse.ltk.ui.refactoring.changePreviewViewers">
-      <changePreviewViewer
-            class="org.eclipse.fordiac.ide.typemanagement.wizards.ChangeConfigurationViewer"
-            id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteLibraryChangeViewer">
-         <enablement>
-         <or>
-		 <instanceof value="org.eclipse.fordiac.ide.library.ui.refactoring.DeleteLibraryDependencyChange"/>
-         </or>
-         </enablement>
-      </changePreviewViewer>
-   </extension>
    
 	<extension point="org.eclipse.ui.commands">
   		<command
@@ -158,5 +132,31 @@
          </command>
       </menuContribution>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.library.ui.preferences.LibraryPreferencePage"
+            id="org.eclipse.fordiac.ide.library.preferences.LibraryPreferences"
+            name="Library">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            class="org.eclipse.fordiac.ide.library.ui.preferences.LibraryPreferencePage"
+            id="org.eclipse.fordiac.ide.library.properties.LibraryPreferences"
+            name="Library">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
 </plugin>

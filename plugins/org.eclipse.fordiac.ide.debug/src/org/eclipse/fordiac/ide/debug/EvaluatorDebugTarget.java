@@ -36,7 +36,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IThread;
-import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
+import org.eclipse.fordiac.ide.debug.breakpoint.IEvaluatorBreakpoint;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
@@ -127,22 +127,28 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IEval
 
 	@Override
 	public boolean supportsBreakpoint(final IBreakpoint breakpoint) {
-		return breakpoint instanceof EvaluatorLineBreakpoint;
+		return breakpoint instanceof IEvaluatorBreakpoint;
 	}
 
 	@Override
 	public void breakpointAdded(final IBreakpoint breakpoint) {
-		debugger.addBreakpoint(breakpoint);
+		if (breakpoint instanceof final IEvaluatorBreakpoint evaluatorBreakpoint) {
+			debugger.addBreakpoint(evaluatorBreakpoint);
+		}
 	}
 
 	@Override
 	public void breakpointRemoved(final IBreakpoint breakpoint, final IMarkerDelta delta) {
-		debugger.removeBreakpoint(breakpoint, delta);
+		if (breakpoint instanceof final IEvaluatorBreakpoint evaluatorBreakpoint) {
+			debugger.removeBreakpoint(evaluatorBreakpoint, delta);
+		}
 	}
 
 	@Override
 	public void breakpointChanged(final IBreakpoint breakpoint, final IMarkerDelta delta) {
-		debugger.updateBreakpoint(breakpoint, delta);
+		if (breakpoint instanceof final IEvaluatorBreakpoint evaluatorBreakpoint) {
+			debugger.updateBreakpoint(evaluatorBreakpoint, delta);
+		}
 	}
 
 	@Override

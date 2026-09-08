@@ -131,7 +131,7 @@ public class ContainerVarDeclarationAnnotations {
 
 	private static int findIndex(final EList<VarDeclaration> memberVars, final String varName) {
 		for (int i = 0; i < memberVars.size(); i++) {
-			if (memberVars.get(i).getName().equals(varName)) {
+			if (memberVars.get(i).getName().equalsIgnoreCase(varName)) {
 				return i;
 			}
 		}

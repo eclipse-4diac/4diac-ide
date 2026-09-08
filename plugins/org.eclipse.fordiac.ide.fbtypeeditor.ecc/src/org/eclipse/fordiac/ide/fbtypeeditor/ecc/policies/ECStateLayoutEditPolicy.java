@@ -35,16 +35,16 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class ECStateLayoutEditPolicy extends LayoutEditPolicy {
 	@Override
-	public Command getCommand(Request request) {
-		Object type = request.getType();
+	public Command getCommand(final Request request) {
+		final Object type = request.getType();
 		if (REQ_ALIGN.equals(type) && request instanceof AlignmentRequest) {
 			return getAlignCommand((AlignmentRequest) request);
 		}
 		return super.getCommand(request);
 	}
 
-	protected Command getAlignCommand(AlignmentRequest request) {
-		AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
+	protected Command getAlignCommand(final AlignmentRequest request) {
+		final AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
 		req.setEditParts(getHost());
 		req.setAlignment(request.getAlignment());
 		req.setAlignmentRectangle(request.getAlignmentRectangle());
@@ -54,20 +54,20 @@ public class ECStateLayoutEditPolicy extends LayoutEditPolicy {
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
 		if (request.getNewObjectType().equals(ECAction.class) && getHost().getModel() instanceof ECState) {
-			ECState state = (ECState) getHost().getModel();
+			final ECState state = (ECState) getHost().getModel();
 			if ((null != state) && (!state.isStartState())) {
 				// only create an action when the target is not the initial state
-				return new CreateECActionCommand((ECAction) request.getNewObject(), state);
+				return new CreateECActionCommand<>((ECAction) request.getNewObject(), state);
 			}
 		}
 		return null;
 	}
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
-		ModifiedNonResizeableEditPolicy editPolicy = new ModifiedNonResizeableEditPolicy(0, new Insets(0)) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
+		final ModifiedNonResizeableEditPolicy editPolicy = new ModifiedNonResizeableEditPolicy(0, new Insets(0)) {
 			@Override
-			protected Command getMoveCommand(ChangeBoundsRequest request) {
+			protected Command getMoveCommand(final ChangeBoundsRequest request) {
 				return getActionMoveCommand(request);
 			}
 		};
@@ -76,7 +76,7 @@ public class ECStateLayoutEditPolicy extends LayoutEditPolicy {
 	}
 
 	@Override
-	protected Command getAddCommand(Request generic) {
+	protected Command getAddCommand(final Request generic) {
 		// move actions between states
 		if (generic instanceof ChangeBoundsRequest) {
 			return getActionMoveCommand((ChangeBoundsRequest) generic);
@@ -84,9 +84,9 @@ public class ECStateLayoutEditPolicy extends LayoutEditPolicy {
 		return null;
 	}
 
-	private Command getActionMoveCommand(ChangeBoundsRequest request) {
+	private Command getActionMoveCommand(final ChangeBoundsRequest request) {
 		if (getHost().getModel() instanceof ECState) {
-			ECState targetState = (ECState) getHost().getModel();
+			final ECState targetState = (ECState) getHost().getModel();
 			ECAction action = null;
 			if (!request.getEditParts().isEmpty()) {
 				if (request.getEditParts().get(0) instanceof ECActionAlgorithmEditPart) {
@@ -102,7 +102,7 @@ public class ECStateLayoutEditPolicy extends LayoutEditPolicy {
 	}
 
 	@Override
-	protected Command getMoveChildrenCommand(Request request) {
+	protected Command getMoveChildrenCommand(final Request request) {
 		// we currently can not directly reorder actions of states in the graphics
 		// therefore null is fine here
 		return null;

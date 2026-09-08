@@ -85,5 +85,91 @@
              id="org.eclipse.fordiac.ide.bulkeditor.BulkEditorInputFactory">
     	</factory>
   	</extension>
+  	
+  	<extension point="org.eclipse.ui.themes">
+  	<fontDefinition
+                label="Diagram Font"
+                categoryId="org.eclipse.fordiac.ide.themeCategory"
+                id="org.eclipse.fordiac.ide.bulkeditor.query.headerFont">
+            <fontValue
+               	os="linux"
+               	value="Monospace-regular-10"
+               	ws="gtk">
+			</fontValue>
+	        <fontValue
+	        	os="win32"
+	        	value="Consolas-regular-10">
+	        </fontValue>
+	        <fontValue
+	        	os="macosx"
+	            value="Menlo-regular-12">
+	         </fontValue>
+        </fontDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.backgroundColor"
+			label="Query viewer default background color"
+			value="255, 255, 255"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.headerBackgroundColor"
+			label="Query viewer node header background color"
+			value="70, 130, 180"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.headerForegroundColor"
+			label="Query viewer node header foreground color"
+			value="255, 255, 255"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.valueBorderColor"
+			label="Query viewer textfield border color"
+			value="180, 180, 180"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.toggleButtonSelectedBackgroundColor"
+			label="Toggle button selected background color"
+			value="200, 220, 245"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.toggleButtonSelectedBorderColor"
+			label="Toggle button selected border color"
+			value="100, 150, 210"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.toggleButtonDefaultBorderColor"
+			label="Toggle button default border color"
+			value="190, 200, 210"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.toggleButtonDisabledBackgroundColor"
+			label="Toggle button disabled background color"
+			value="235, 235, 235"
+			isEditable="false">
+		</colorDefinition>
+    </extension>
+    
+	<extension point="org.eclipse.e4.ui.css.swt.theme">
+		<stylesheet
+			uri="css/dark_fordiac_bulkeditor.css">
+			<themeid
+				refid="org.eclipse.e4.ui.css.theme.e4_dark">
+			</themeid>
+		</stylesheet>
+	</extension>
 		
 </plugin>

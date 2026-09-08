@@ -37,12 +37,12 @@ import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.commands.CreateAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.commands.DeleteAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.nattable.BulkEditorNatTable;
+import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer;
 import org.eclipse.fordiac.ide.bulkeditor.search.EditorSearchExecutor;
 import org.eclipse.fordiac.ide.bulkeditor.search.SearchHelper;
 import org.eclipse.fordiac.ide.bulkeditor.search.SearchParameters;
 import org.eclipse.fordiac.ide.bulkeditor.ui.AddAttributeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.bulkeditor.ui.BulkEditorControls;
-import org.eclipse.fordiac.ide.bulkeditor.ui.BulkEditorWidgetUtils;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -56,9 +56,8 @@ import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.model.ui.editors.MultiLibraryElementActivationListener;
 import org.eclipse.fordiac.ide.model.ui.editors.MultiLibraryElementOperationContextUpdater;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -71,15 +70,11 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -87,13 +82,14 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.contexts.IContextService;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Twistie;
-import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
+public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, CommandStackEventListener {
 
 	private static final String CONTEXT_ID = "org.eclipse.fordiac.ide.bulkeditor"; //$NON-NLS-1$
+
+	private static final int RESULT_PAGE_INDEX = 1;
 
 	private IProject project;
 	private BulkEditorSettings settings;
@@ -109,6 +105,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	private BulkEditorControls controls;
 	private BulkEditorNatTable natTable;
+	private QueryViewer queryViewer;
 
 	// Latest successful search result (mapped to editable counterparts).
 	private List<EObject> editableSearchResult;
@@ -118,8 +115,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		registerActions(site);
-		setSite(site);
-		setInput(input);
+		super.init(site, input);
 		commandStack.addCommandStackEventListener(this);
 		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(operationContextUpdater);
 		LibraryElementProvider.INSTANCE.addLibraryElementStateListener(elementStateListener);
@@ -154,37 +150,55 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	@Override
-	public void createPartControl(final Composite parent) {
-		final ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL);
+	protected void createPages() {
+		createControlsPage();
+		createResultPage();
+		createQueryViewerPage();
+	}
+
+	private void createControlsPage() {
+		final ScrolledComposite scrolledComposite = new ScrolledComposite(getContainer(), SWT.V_SCROLL);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setBackground(parent.getBackground());
 		scrolledComposite.setBackgroundMode(SWT.INHERIT_DEFAULT);
 
 		final Composite pageComposite = new Composite(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(pageComposite);
 		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
 
-		final Composite pageHeaderComposite = new Composite(pageComposite, SWT.NONE);
-		pageHeaderComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		pageHeaderComposite.setLayout(new GridLayout(2, false));
-
-		final Composite pageBodyComposite = new Composite(pageComposite, SWT.NONE);
-		pageBodyComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		pageBodyComposite.setLayout(new GridLayout(1, false));
-
-		WidgetFactory.label(SWT.NONE).text(Messages.SearchFor).create(pageHeaderComposite);
-		final Twistie expandBodyCompositeTwistie = new Twistie(pageHeaderComposite, SWT.NONE);
-		expandBodyCompositeTwistie.setExpanded(true);
-		expandBodyCompositeTwistie.addListener(SWT.MouseUp, event -> BulkEditorWidgetUtils
-				.updateVisibility(expandBodyCompositeTwistie.isExpanded(), pageBodyComposite));
-
 		controls = new BulkEditorControls(settings, this, selectedSubApps);
-		controls.createControls(pageBodyComposite);
-		natTable = new BulkEditorNatTable(pageComposite, this, settings.modeSelection, getSite());
+		controls.createControls(pageComposite);
 
 		scrolledComposite.setMinSize(pageComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		pageComposite.layout();
+
+		final int index = addPage(scrolledComposite);
+		setPageText(index, Messages.Tab_Controls);
+	}
+
+	private void createResultPage() {
+		final Composite pageComposite = new Composite(getContainer(), SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
+
+		natTable = new BulkEditorNatTable(pageComposite, this, settings.modeSelection, getSite());
+		pageComposite.layout();
+
+		final int index = addPage(pageComposite);
+		setPageText(index, Messages.Tab_Result);
+	}
+
+	private void createQueryViewerPage() {
+		final Composite pageComposite = new Composite(getContainer(), SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
+		final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		pageComposite.setLayoutData(gd);
+
+		queryViewer = new QueryViewer(pageComposite, this.project);
+		getSite().setSelectionProvider(queryViewer.getSelectionProvider());
+		pageComposite.layout();
+
+		final int index = addPage(pageComposite);
+		setPageText(index, Messages.Tab_Query);
 	}
 
 	public IProject getProject() {
@@ -214,9 +228,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (!performSearch()) {
 			return;
 		}
-		if (controls.getModeSelection() == 1 && controls.getAddDeleteComposite().getChildren().length == 0) {
-			createAddDeleteButtons();
-		}
+
+		setActivePage(RESULT_PAGE_INDEX);
 	}
 
 	public void onModeChanged(final BulkEditorMode newMode) {
@@ -248,7 +261,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		controls.resetChangedSearchParameter();
 		final String infoText = result.searchResult().isEmpty() ? Messages.NoUsage : ""; //$NON-NLS-1$
-		controls.setSearchInformationText(infoText);
+		natTable.setSearchInformationText(infoText);
 		commandStack.flush();
 		firePropertyChange(PROP_DIRTY);
 		return true;
@@ -259,21 +272,16 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	private void changeNatTable(final BulkEditorMode modeSelection, final AttributeDeclaration simpleAttribute) {
-		Arrays.stream(controls.getAddDeleteComposite().getChildren()).forEach(Control::dispose);
-		controls.getAddDeleteComposite().getParent().layout();
-		natTable.changeNatTable(modeSelection, simpleAttribute);
-	}
-
-	private void createAddDeleteButtons() {
 		final AttributeTypeEntry attributeTypeEntry = controls.isAdvancedMode() ? null
 				: TypeLibraryManager.INSTANCE.getTypeLibrary(project)
 						.getAttributeTypeEntry(controls.getSearchText().getText());
 
-		final var addDeleteWidget = new AddDeleteWidget();
-		addDeleteWidget.createControls(controls.getAddDeleteComposite(), new FormToolkit(Display.getDefault()), true);
-		addDeleteWidget.bindToTableViewer(natTable.getCurrentTable(), this,
-				refElement -> handleAddAttribute(attributeTypeEntry), this::handleDeleteAttribute);
-		controls.getAddDeleteComposite().getParent().layout();
+		if (controls.getModeSelection() == 1) {
+			natTable.changeNatTable(modeSelection, simpleAttribute,
+					refElement -> handleAddAttribute(attributeTypeEntry), this::handleDeleteAttribute);
+		} else {
+			natTable.changeNatTable(modeSelection, simpleAttribute);
+		}
 	}
 
 	private Command handleAddAttribute(final AttributeTypeEntry attributeTypeEntry) {
@@ -421,6 +429,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (adapter == ActionRegistry.class) {
 			return adapter.cast(actionRegistry);
 		}
+		if (IPropertySheetPage.class.equals(adapter)) {
+			return adapter.cast(queryViewer.createPropertySheetPage());
+		}
 		return super.getAdapter(adapter);
 	}
 
@@ -430,7 +441,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			if (editorInputs.contains(input)) {
 				firePropertyChange(PROP_DIRTY);
 				if (!controls.hasChangedSearchParameter()) {
-					controls.setSearchInformationText(Messages.Search_Changes);
+					natTable.setSearchInformationText(Messages.Search_Changes);
 				}
 			}
 		}
@@ -441,7 +452,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				editableSearchResult = BulkEditorHelper.findEditableResults(editableSearchResult);
 				natTable.updateList(editableSearchResult);
 				if (!controls.hasChangedSearchParameter()) {
-					controls.setSearchInformationText(Messages.Search_Changes);
+					natTable.setSearchInformationText(Messages.Search_Changes);
 				}
 			}
 		}

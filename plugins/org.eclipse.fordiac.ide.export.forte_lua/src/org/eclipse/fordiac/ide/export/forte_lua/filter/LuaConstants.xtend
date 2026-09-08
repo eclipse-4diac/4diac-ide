@@ -82,6 +82,8 @@ class LuaConstants {
 
 	def static luaAlgorithmName(Algorithm alg) '''alg_«alg.name»'''
 
+	def static luaAlgorithmName(String alg) '''alg_«alg»'''
+
 	def static luaFBStateConstant() '''local «luaFBStateVarName» = «FB_STATE»'''
 
 	def static luaStateConstants(ECC ecc) '''

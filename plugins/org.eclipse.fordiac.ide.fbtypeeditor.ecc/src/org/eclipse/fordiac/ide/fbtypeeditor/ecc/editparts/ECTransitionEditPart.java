@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -231,7 +232,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 			}
 
 			private Command getTransitionMoveCommand(final ChangeBoundsRequest request) {
-				final Point p = getModel().getPosition().toScreenPoint();
+				final Point p = CoordinateConverter.INSTANCE.toScreenPoint(getModel().getPosition());
 				final double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
 				p.scale(scaleFactor);
 				p.x += request.getMoveDelta().x;
@@ -287,7 +288,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 	}
 
 	protected void refreshLocator() {
-		getManager().updateRefPosition(getModel().getPosition().toScreenPoint());
+		getManager().updateRefPosition(CoordinateConverter.INSTANCE.toScreenPoint(getModel().getPosition()));
 	}
 
 	@Override

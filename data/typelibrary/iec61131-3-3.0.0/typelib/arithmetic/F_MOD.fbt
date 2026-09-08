@@ -20,11 +20,11 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="divident input" Name="IN1" Type="ANY_INT"/>
+      <VarDeclaration Comment="dividend input" Name="IN1" Type="ANY_INT"/>
       <VarDeclaration Comment="divisor input" Name="IN2" Type="ANY_INT"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="rest of IN1 devided by IN2" Name="OUT" Type="ANY_NUM"/>
+      <VarDeclaration Comment="rest of IN1 divided by IN2" Name="OUT" Type="ANY_NUM"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

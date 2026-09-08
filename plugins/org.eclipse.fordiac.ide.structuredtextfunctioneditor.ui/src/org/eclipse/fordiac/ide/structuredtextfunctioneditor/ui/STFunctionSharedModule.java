@@ -12,15 +12,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui;
 
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.builder.STFunctionToBeBuiltComputerContribution;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.resource.STFunctionResourceSetInitializer;
+import org.eclipse.xtext.builder.impl.IToBeBuiltComputerContribution;
 import org.eclipse.xtext.ui.resource.IResourceSetInitializer;
 
 import com.google.inject.Binder;
 
+@SuppressWarnings("restriction")
 public class STFunctionSharedModule implements com.google.inject.Module {
 
 	@Override
 	public void configure(final Binder binder) {
 		binder.bind(IResourceSetInitializer.class).to(STFunctionResourceSetInitializer.class);
+		binder.bind(IToBeBuiltComputerContribution.class).to(STFunctionToBeBuiltComputerContribution.class);
 	}
 }

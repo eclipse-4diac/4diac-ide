@@ -10,7 +10,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="START" Type="Event" Comment="Start the perodic generation of events">
+			<Event Name="START" Type="Event" Comment="Start the periodic generation of events">
 				<With Var="TIMELOW"/>
 				<With Var="TIMEHIGH"/>
 				<With Var="N"/>

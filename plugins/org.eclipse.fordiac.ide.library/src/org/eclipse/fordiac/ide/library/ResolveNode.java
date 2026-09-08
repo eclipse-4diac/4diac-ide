@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.library;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -23,7 +22,7 @@ import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
-class ResolveNode {
+public class ResolveNode {
 	private final String symbolicName;
 	private final Version version;
 	private final java.net.URI uri;
@@ -64,9 +63,9 @@ class ResolveNode {
 		}
 	}
 
-	public boolean requireImport(final Map<String, IFolder> linked, final Map<String, Version> preferred) {
+	public boolean requireImport(final Map<String, LinkedLibrary> linked) {
 		return (!linked.containsKey(this.getSymbolicName())
-				|| !preferred.get(this.getSymbolicName()).equals(this.getVersion())) && !this.isReferenced();
+				|| !linked.get(this.getSymbolicName()).getVersion().equals(this.getVersion())) && !this.isReferenced();
 	}
 
 	public Version getVersion() {

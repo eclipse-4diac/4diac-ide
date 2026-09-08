@@ -13,32 +13,37 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 
 /**
  * Command for updating the data type of the F_MOVE
  */
 public class ConfigureFBCommand extends UpdateFBTypeCommand {
-	DataType configuration;
+	private final DataType configuration;
 
 	public ConfigureFBCommand(final ConfigurableFB fbnElement, final DataType config) {
 		super(fbnElement);
-		this.configuration = config;
+		configuration = config;
 	}
 
 	@Override
 	public boolean canExecute() {
-		return super.canExecute() && configuration != null;
+		if (getOldElement() instanceof StructManipulator //
+				&& configuration != null //
+				&& !(configuration instanceof StructuredType) && !(configuration instanceof ErrorDataType)) {
+			return false;
+		}
+		return super.canExecute();
 	}
 
 	@Override
 	protected void handleConfigurableFB() {
 		// for the configurable move fb we have to modify the data type
-		if (newElement instanceof final ConfigurableMoveFB fMove) {
-			fMove.setDataType(configuration);
-			fMove.updateConfiguration();
-		}
+		getNewElement().setDataType(reloadDataType(configuration));
+		getNewElement().updateConfiguration();
 	}
 
 	@Override
@@ -50,4 +55,5 @@ public class ConfigureFBCommand extends UpdateFBTypeCommand {
 	public ConfigurableFB getOldElement() {
 		return (ConfigurableFB) super.getOldElement();
 	}
+
 }

@@ -19,6 +19,8 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SEGExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -38,4 +40,8 @@ public class SegmentTypeResourceImpl extends AbstractLibraryElementResource<Segm
 		return new SEGExporter(contentToSave);
 	}
 
+	@Override
+	protected ErrorSegmentType createErrorLibraryElement() {
+		return LibraryElementFactory.eINSTANCE.createErrorSegmentType();
+	}
 }

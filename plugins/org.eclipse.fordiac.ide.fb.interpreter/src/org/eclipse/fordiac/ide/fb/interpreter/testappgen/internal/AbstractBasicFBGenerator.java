@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 
@@ -110,7 +110,7 @@ public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 
 	protected static String createEventName(final List<OutputPrimitive> testOutputs) {
 		final StringBuilder sb = new StringBuilder();
-		testOutputs.stream().forEach(n -> sb.append(n.getEvent() + "_")); //$NON-NLS-1$
+		testOutputs.forEach(n -> sb.append(n.getEvent() + "_")); //$NON-NLS-1$
 		sb.append("expected"); //$NON-NLS-1$
 		return sb.toString();
 	}

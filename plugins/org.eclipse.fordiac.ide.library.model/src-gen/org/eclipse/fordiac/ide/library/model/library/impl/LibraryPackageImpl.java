@@ -381,7 +381,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 */
 	@Override
 	public EReference getLibrary_Attribute() {
-		return (EReference)libraryEClass.getEStructuralFeatures().get(2);
+		return (EReference)libraryEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -391,16 +391,6 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 */
 	@Override
 	public EAttribute getLibrary_Comment() {
-		return (EAttribute)libraryEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getLibrary_Name() {
 		return (EAttribute)libraryEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -410,8 +400,28 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLibrary_SymbolicName() {
+	public EAttribute getLibrary_Name() {
 		return (EAttribute)libraryEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLibrary_SymbolicName() {
+		return (EAttribute)libraryEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getLibrary_Dependencies() {
+		return (EReference)libraryEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -704,6 +714,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		libraryEClass = createEClass(LIBRARY);
 		createEReference(libraryEClass, LIBRARY__INCLUDES);
 		createEReference(libraryEClass, LIBRARY__EXCLUDES);
+		createEReference(libraryEClass, LIBRARY__DEPENDENCIES);
 		createEReference(libraryEClass, LIBRARY__ATTRIBUTE);
 		createEAttribute(libraryEClass, LIBRARY__COMMENT);
 		createEAttribute(libraryEClass, LIBRARY__NAME);
@@ -795,6 +806,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		initEClass(libraryEClass, Library.class, "Library", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getLibrary_Includes(), this.getIncludes(), null, "includes", null, 0, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getLibrary_Excludes(), this.getExcludes(), null, "excludes", null, 0, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getLibrary_Dependencies(), this.getDependencies(), null, "dependencies", null, 0, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getLibrary_Attribute(), this.getAttribute(), null, "attribute", null, 0, -1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getLibrary_Comment(), theXMLTypePackage.getString(), "comment", null, 1, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getLibrary_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, Library.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -984,6 +996,14 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		   new String[] {
 			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "Excludes", //$NON-NLS-1$ //$NON-NLS-2$
+			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getLibrary_Dependencies(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "Dependencies", //$NON-NLS-1$ //$NON-NLS-2$
 			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation

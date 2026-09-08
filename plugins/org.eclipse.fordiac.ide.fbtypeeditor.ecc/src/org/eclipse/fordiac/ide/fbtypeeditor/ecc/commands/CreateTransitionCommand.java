@@ -49,10 +49,10 @@ public class CreateTransitionCommand extends CreationCommand {
 	private Event conditionEvent;
 
 	/** Offset used for the X-coordinate of the bend point in a self-transition. */
-	private static final int SELF_TRANSITION_X_OFFSET = 10;
+	private static final int SELF_TRANSITION_X_OFFSET = -50;
 
 	/** Offset used for the Y-coordinate of the bend point in a self-transition. */
-	private static final int SELF_TRANSITION_Y_OFFSET = 50;
+	private static final int SELF_TRANSITION_Y_OFFSET = 15;
 
 	public CreateTransitionCommand() {
 	}

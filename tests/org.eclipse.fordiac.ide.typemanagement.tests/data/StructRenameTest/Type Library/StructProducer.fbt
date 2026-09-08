@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="StructProducer" Comment="">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-05-31">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment=""/>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="mypackage::InnerStruct" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="">
+	</Service>
+</FBType>

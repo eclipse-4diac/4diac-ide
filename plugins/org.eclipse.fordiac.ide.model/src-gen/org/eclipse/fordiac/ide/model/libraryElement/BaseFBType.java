@@ -38,7 +38,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBaseFBType()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface BaseFBType extends FBType {

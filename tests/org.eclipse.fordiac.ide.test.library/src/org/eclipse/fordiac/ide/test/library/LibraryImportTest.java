@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.library;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -43,7 +44,7 @@ import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.ProjectCreator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,8 +76,9 @@ class LibraryImportTest {
 
 	@BeforeAll
 	static void setupBeforeClass() throws Exception {
-		final IProject proj = SystemManager.INSTANCE.createNew4diacProject(PROJECT,
-				ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT), new NullProgressMonitor());
+		final IProject proj = ProjectCreator
+				.of(PROJECT, ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT))
+				.create(new NullProgressMonitor());
 		proj.refreshLocal(IResource.DEPTH_INFINITE, null);
 
 		// extract test libraries
@@ -297,8 +299,11 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertEquals(2, markers.length);
+		assertEquals(1, markers.length);
 		assertEquals(TEST01, findFirstDependencyMarker(markers).orElse(null));
+
+		assertTrue(project.findMaxProblemSeverity(FordiacErrorMarker.LIBRARY_MARKER, false,
+				IResource.DEPTH_ZERO) >= IMarker.SEVERITY_ERROR);
 	}
 
 	@Test
@@ -336,8 +341,11 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertEquals(2, markers.length);
+		assertEquals(1, markers.length);
 		assertEquals(MATH, findFirstDependencyMarker(markers).orElse(null));
+
+		assertTrue(project.findMaxProblemSeverity(FordiacErrorMarker.LIBRARY_MARKER, false,
+				IResource.DEPTH_ZERO) >= IMarker.SEVERITY_ERROR);
 	}
 
 	static Optional<String> findFirstDependencyMarker(final IMarker[] markers) {

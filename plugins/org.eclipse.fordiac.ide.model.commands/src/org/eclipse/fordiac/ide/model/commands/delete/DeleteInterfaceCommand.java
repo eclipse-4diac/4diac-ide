@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.commands.Command;
@@ -59,6 +60,10 @@ public class DeleteInterfaceCommand extends Command implements ScopedCommand {
 		}
 		if (interfaceElement instanceof final AdapterDeclaration adp && parent.getFBType() instanceof CompositeFBType) {
 			cmds.add(new DeleteFBNetworkElementCommand(adp.getAdapterFB()));
+		}
+		if (interfaceElement instanceof final Event event && event.isIsInput()
+				&& parent.getFBType() instanceof final SimpleFBType simpleType) {
+			cmds.add(new DeleteSimpleECStateCommand(event, simpleType));
 		}
 		performDeletion();
 		if (cmds.canExecute()) {

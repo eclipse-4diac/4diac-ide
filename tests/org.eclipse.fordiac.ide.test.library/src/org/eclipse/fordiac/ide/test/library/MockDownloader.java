@@ -129,4 +129,10 @@ public class MockDownloader implements IArchiveDownloader {
 	public List<IArchiveDownloader> convertEndpointsToDownloader() {
 		return new ArrayList<>();
 	}
+
+	@Override
+	public DownloadResult<Map<String, List<String>>> availableLibrariesAndVersions(final IProgressMonitor monitor)
+			throws OperationCanceledException {
+		return new DownloadResult<>(archiveMap);
+	}
 }

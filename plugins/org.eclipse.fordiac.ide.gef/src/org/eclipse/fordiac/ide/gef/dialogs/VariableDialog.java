@@ -39,21 +39,30 @@ public class VariableDialog extends Dialog {
 
 	private final String title;
 	private final List<Variable<?>> variables;
-	private final VariableWidget variableWidget;
+	private VariableWidget variableWidget;
 
 	protected VariableDialog(final Shell shell, final String title, final List<Variable<?>> variables) {
 		super(shell);
 		this.title = title;
 		this.variables = variables;
-		variableWidget = new VariableWidget();
 	}
 
 	@Override
 	protected Control createDialogArea(final Composite parent) {
+		variableWidget = createVariableWidget();
 		final Composite control = variableWidget.createWidget(parent);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(control);
 		variableWidget.setInput(variables);
 		return control;
+	}
+
+	@SuppressWarnings("static-method")
+	protected VariableWidget createVariableWidget() {
+		return new VariableWidget();
+	}
+
+	protected VariableWidget getVariableWidget() {
+		return variableWidget;
 	}
 
 	@Override
@@ -135,7 +144,7 @@ public class VariableDialog extends Dialog {
 			throws InvocationTargetException, InterruptedException {
 		final Variable<?>[] result = new Variable[1];
 		PlatformUI.getWorkbench().getProgressService()
-				.busyCursorWhile(moniotr -> result[0] = VariableOperations.newVariable(element, initialValue));
+				.busyCursorWhile(monitor -> result[0] = VariableOperations.newVariable(element, initialValue));
 		return result[0];
 	}
 }

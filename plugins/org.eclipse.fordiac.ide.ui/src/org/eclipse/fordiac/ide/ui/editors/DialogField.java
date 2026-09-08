@@ -204,7 +204,7 @@ public class DialogField {
 	 * @return <code>true</code> if the control is not <code>null</code> and not
 	 *         disposed.
 	 */
-	protected final boolean isOkToUse(final Control control) {
+	protected final static boolean isOkToUse(final Control control) {
 		return (control != null) && (Display.getCurrent() != null) && !control.isDisposed();
 	}
 
@@ -249,7 +249,7 @@ public class DialogField {
 		return fEnabled;
 	}
 
-	protected final void assertCompositeNotNull(final Composite comp) {
+	protected static final void assertCompositeNotNull(final Composite comp) {
 		Assert.isNotNull(comp, "uncreated control requested with composite null"); //$NON-NLS-1$
 	}
 

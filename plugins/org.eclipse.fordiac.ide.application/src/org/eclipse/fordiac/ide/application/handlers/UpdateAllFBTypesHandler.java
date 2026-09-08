@@ -21,8 +21,9 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -43,7 +44,7 @@ public class UpdateAllFBTypesHandler extends AbstractHandler {
 
 		fbnetwork.getBlockFBNetworkElements().forEach(element -> {
 			if (element.getType() != null) {
-				final Command updateFBTypeCmd = UpdateFBTypeHandler.getUpdateCommand(element);
+				final Command updateFBTypeCmd = new UpdateFBTypeCommand(element);
 				if (updateFBTypeCmd.canExecute()) {
 					command.add(updateFBTypeCmd);
 				}

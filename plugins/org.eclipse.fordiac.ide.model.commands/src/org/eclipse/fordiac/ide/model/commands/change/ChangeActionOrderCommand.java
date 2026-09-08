@@ -15,13 +15,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
 
-public class ChangeActionOrderCommand extends AbstractChangeListElementOrderCommand<ECAction> {
+public class ChangeActionOrderCommand<T extends BaseECAction> extends AbstractChangeListElementOrderCommand<T> {
 
-	public ChangeActionOrderCommand(final ECState state, final ECAction action, final boolean up) {
-		super(action, up, state.getECAction());
+	public ChangeActionOrderCommand(final BaseECState<T> state, final T action, final boolean up) {
+		super(action, up, state.getECActions());
 	}
 
 }

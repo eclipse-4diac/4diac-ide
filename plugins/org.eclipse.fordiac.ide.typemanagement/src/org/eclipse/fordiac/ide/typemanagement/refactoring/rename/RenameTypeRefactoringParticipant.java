@@ -15,7 +15,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -38,7 +37,6 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.TypeRefactoringHelper;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.move.UpdateTypeEntryFileChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -108,9 +106,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			final String newPackageName = PackageNameHelper.getPackageNameFromFile(newFile);
 
-			modelEdits.add(new MoveTypeModelEdit(newPackageName,
-					MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName),
-					typeEntry.getURI()));
+			TypeRefactoringHelper.addPackageNameModelEdit(modelEdits, typeEntry, newPackageName);
 			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, newFile));
 		});
 		// add model edits before(!) UpdateTypeEntryFileChange

@@ -13,16 +13,18 @@
 package org.eclipse.fordiac.ide.hierarchymanager.ui.operations;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.hierarchymanager.model.HierarchyManagerPersistenceHelper;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyFactory;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 
-public class CreateLevelOperation extends AbstractChangeHierarchyOperation {
+public class CreateLevelOperation extends AbstractOperation {
 
 	private final EObject parent;
 	private final String name;
@@ -39,14 +41,14 @@ public class CreateLevelOperation extends AbstractChangeHierarchyOperation {
 		newLevel = HierarchyFactory.eINSTANCE.createLevel();
 		newLevel.setName(name);
 		insertNewLevel();
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		insertNewLevel();
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 
@@ -58,7 +60,7 @@ public class CreateLevelOperation extends AbstractChangeHierarchyOperation {
 		if (parent instanceof final Level level) {
 			level.getChildren().remove(newLevel);
 		}
-		saveHierarchy(parent, monitor);
+		HierarchyManagerPersistenceHelper.saveHierarchy(parent);
 		return Status.OK_STATUS;
 	}
 

@@ -56,6 +56,7 @@ public final class Messages extends NLS {
 	public static String TransitionEditingComposite_ConfigureTransitionTableLayout_Event;
 	public static String TransitionSection_Comment;
 	public static String TransitionSection_Condition;
+	public static String EventActionsSection_EventInputs;
 
 	static {
 		// initialize resource bundle

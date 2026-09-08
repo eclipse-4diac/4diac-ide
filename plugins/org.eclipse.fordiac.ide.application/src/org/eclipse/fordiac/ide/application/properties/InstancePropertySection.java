@@ -45,6 +45,7 @@ public class InstancePropertySection extends AbstractInstanceSection {
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(mainContainer);
 
 		createFBInfoGroup(mainContainer);
+		createCommentGroup(mainContainer);
 		createTableSection(mainContainer);
 	}
 
@@ -79,7 +80,9 @@ public class InstancePropertySection extends AbstractInstanceSection {
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(fbInfoGroup);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(fbInfoGroup);
 		createNameInput(fbInfoGroup);
+	}
 
+	protected void createCommentGroup(final Composite parent) {
 		final Composite fbCommentComp = getWidgetFactory().createComposite(parent);
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(fbCommentComp);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(fbCommentComp);
