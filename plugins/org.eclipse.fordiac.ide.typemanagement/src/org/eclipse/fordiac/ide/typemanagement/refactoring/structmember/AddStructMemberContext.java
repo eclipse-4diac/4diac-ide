@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -38,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 /**
  * Stable input for adding a struct member through a connection gesture.
@@ -125,6 +125,7 @@ public final class AddStructMemberContext {
 		if (connectionPin == null || structPin == null || structPin.isArray()
 				|| !(structPin.getType() instanceof final StructuredType structType)
 				|| structType == GenericTypes.ANY_STRUCT || structType.getTypeEntry() == null
+				|| !LinkConstraints.isWithConstraintOK(structPin)
 				|| !isSupportedConnection(connectionPin, structPin.getBlockFBNetworkElement(), structPin.isIsInput())
 				|| connectionPin.getBlockFBNetworkElement() == structPin.getBlockFBNetworkElement()) {
 			return Optional.empty();
@@ -259,6 +260,8 @@ public final class AddStructMemberContext {
 		if (target.kind() == StructMemberTargetKind.STRUCT_PIN) {
 			final VarDeclaration structPin = resolveStructPin(root, false);
 			return structPin != null && !structPin.isArray()
+					&& (!structPin.isIsInput() || structPin.getInputConnections().isEmpty())
+					&& LinkConstraints.isWithConstraintOK(structPin)
 					&& structPin.getType() instanceof final StructuredType structuredType
 					&& structTypeName.equals(PackageNameHelper.getFullTypeName(structuredType))
 					&& isSupportedConnection(resolvedConnectionPin, structPin.getBlockFBNetworkElement(),
@@ -303,7 +306,8 @@ public final class AddStructMemberContext {
 			final BlockFBNetworkElement targetBlock, final boolean memberIsInput) {
 		final BlockFBNetworkElement connectionBlock = connectionPin.getBlockFBNetworkElement();
 		if (connectionPin.getType() == null || connectionPin.getType() instanceof ErrorDataType || connectionBlock == null
-				|| targetBlock == null || connectionPin.isIsInput() == memberIsInput) {
+				|| targetBlock == null || connectionPin.isIsInput() == memberIsInput
+				|| (connectionPin.isIsInput() && !connectionPin.getInputConnections().isEmpty())) {
 			return false;
 		}
 		final FBNetwork network = connectionBlock.getFbNetwork();

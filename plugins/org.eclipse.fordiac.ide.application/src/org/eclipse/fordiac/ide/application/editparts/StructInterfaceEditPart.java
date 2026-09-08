@@ -10,18 +10,26 @@
  * Contributors:
  *   Bianca Wiesmayr
  *   - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - launch struct member refactoring from connection drag
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
+import org.eclipse.fordiac.ide.application.tools.StructMemberConnectionDragCreationTool;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
+import org.eclipse.gef.tools.ConnectionDragCreationTool;
 
 /**
  * The edit part for struct manipulator interface elements shown in FBNetwork
  * editors
  */
 public class StructInterfaceEditPart extends InterfaceEditPart {
+	@Override
+	protected ConnectionDragCreationTool createConnectionDragCreationTool() {
+		return new StructMemberConnectionDragCreationTool();
+	}
+
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
 		if (isVariable()) {

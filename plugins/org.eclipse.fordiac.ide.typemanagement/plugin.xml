@@ -132,6 +132,11 @@
            name="%command.RenameElement">
      </command>
      <command
+           categoryId="org.eclipse.ltk.ui.category.refactoring"
+           id="org.eclipse.fordiac.ide.typemanagement.addStructMember"
+           name="%command.AddStructMember">
+     </command>
+     <command
            id="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
            name="%command.ConnectionsToStruct">
      </command>
@@ -181,6 +186,16 @@
                  </test>
               </iterate>
            </with></enabledWhen>
+     </handler>
+     <handler
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.ui.AddStructMemberRefactoringHandler"
+           commandId="org.eclipse.fordiac.ide.typemanagement.addStructMember">
+        <enabledWhen>
+           <with variable="selection">
+              <test property="org.eclipse.fordiac.ide.typemanagement.addStructMemberSupported">
+              </test>
+           </with>
+        </enabledWhen>
      </handler>
      <handler
            class="org.eclipse.fordiac.ide.typemanagement.refactoring.handler.ConnectionsToStructHandler"
@@ -583,6 +598,13 @@
             properties="ConnectionsToStructSupported"
             type="java.lang.Object">
       </propertyTester>
+      <propertyTester
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.ui.AddStructMemberPropertyTester"
+            id="org.eclipse.fordiac.ide.typemanagement.addStructMemberTester"
+            namespace="org.eclipse.fordiac.ide.typemanagement"
+            properties="addStructMemberSupported"
+            type="java.lang.Object">
+      </propertyTester>
        <propertyTester
             class="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.InsertAdapterProxyPropertyTester"
             id="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxyTester"
@@ -668,6 +690,13 @@
                   style="push">
                <visibleWhen
                      checkEnabled="true">
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.fordiac.ide.typemanagement.addStructMember"
+                  label="%AddStructMember_label"
+                  style="push">
+               <visibleWhen checkEnabled="true">
                </visibleWhen>
             </command>
             <command
