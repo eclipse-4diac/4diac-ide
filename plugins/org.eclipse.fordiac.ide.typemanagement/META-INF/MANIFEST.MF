@@ -37,6 +37,7 @@ Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.refactoring.copy,
  org.eclipse.fordiac.ide.typemanagement.refactoring.edit,
  org.eclipse.fordiac.ide.typemanagement.refactoring.rename,
+ org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.ui,
  org.eclipse.fordiac.ide.typemanagement.util,
  org.eclipse.fordiac.ide.typemanagement.wizards
 Automatic-Module-Name: org.eclipse.fordiac.ide.typemanagement
