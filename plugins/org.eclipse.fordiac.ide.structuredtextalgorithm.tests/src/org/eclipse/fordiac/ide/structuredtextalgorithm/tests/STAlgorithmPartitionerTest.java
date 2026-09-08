@@ -181,6 +181,24 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
+	void testCombineLostAndFoundLegacy2() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String algorithm = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				""".stripTrailing();
+		fbType.getCallables().add(createSTAlgorithm("REQ", algorithm));
+		final String lostAndFound = "// ------";
+		fbType.getCallables().add(createSTMethod("LOST_AND_FOUND_1", lostAndFound));
+		final String method = """
+				METHOD TEST
+				END_METHOD
+				""";
+		fbType.getCallables().add(createSTMethod("TEST", method));
+		assertEquals(algorithm + lostAndFound + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
+	}
+
+	@Test
 	void testCombineTrailingBodyWhitespace() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String text = """
