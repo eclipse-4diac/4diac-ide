@@ -2,6 +2,7 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="search" nsURI="org.eclipse.fordiac.ide.model.search" nsPrefix="search">
   <eClassifiers xsi:type="ecore:EClass" name="Constraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//FieldConstraint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//FieldConstraint"
@@ -9,6 +10,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="comment" eType="#//FieldConstraint"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//FieldConstraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orConstraint" eType="#//Constraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="andConstraint" eType="#//Constraint"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FieldConstraint">
@@ -19,11 +24,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="regex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeConstraint" eSuperTypes="#//Constraint"/>
-  <eClassifiers xsi:type="ecore:EEnum" name="InstanceOccurrence">
-    <eLiterals name="Application"/>
-    <eLiterals name="CompositeFB"/>
-    <eLiterals name="TypedSubapp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Occurrence" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConstraint" eType="#//AttributeConstraint"
+        containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicationOccurrence" eSuperTypes="#//Occurrence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFBOccurrence" eSuperTypes="#//Occurrence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedSubappOccurrence" eSuperTypes="#//Occurrence"/>
   <eClassifiers xsi:type="ecore:EClass" name="Query">
     <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" upperBound="-1"
         eType="#//Placeholder" containment="true"/>
@@ -42,9 +51,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TargetOption" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Place">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignoreLinkedLibraries"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFB" eType="#//SimpleFB"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicFB" eType="#//BasicFB"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compositeFB" eType="#//CompositeFB"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="serviceInterfaceFB" eType="#//ServiceInterfaceFB"
         containment="true"/>
@@ -55,6 +68,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleType" eType="#//SimpleType"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicType" eType="#//BasicType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compositeType" eType="#//CompositeType"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="serviceInterfaceType" eType="#//ServiceInterfaceType"
         containment="true"/>
@@ -71,45 +86,36 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//SearchTarget"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//Type">
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//SearchTarget">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BasicType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SubappType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StructType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeType" eSuperTypes="#//Type">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubappType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeType" eSuperTypes="#//Type"/>
   <eClassifiers xsi:type="ecore:EClass" name="Instance" abstract="true" eSuperTypes="#//SearchTarget">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" upperBound="-1"
-        eType="#//InstanceOccurrence"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleFB" eSuperTypes="#//Instance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="applicationOccurrence"
+        eType="#//ApplicationOccurrence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compositeFBOccurrence"
+        eType="#//CompositeFBOccurrence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedSubappOccurrence"
+        eType="#//TypedSubappOccurrence" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BasicFB" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFB" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedSubapp" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UntypedSubapp" eSuperTypes="#//Instance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PIN" eSuperTypes="#//SearchTarget"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PinTarget" eSuperTypes="#//TargetOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFB" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TypedSubapp" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="UntypedSubapp" eSuperTypes="#//Instance">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pin" eType="#//PIN" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PIN" eSuperTypes="#//TargetOption #//SearchTarget"/>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//TargetOption">
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
         containment="true"/>
