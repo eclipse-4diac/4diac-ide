@@ -41,7 +41,6 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
-import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -97,7 +96,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
-public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements ITypeEntryEditor {
+public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 
 	private AutomationSystem system;
 	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
@@ -388,7 +387,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	public void setInput(final IEditorInput input) {
+	protected void setInput(final IEditorInput input) {
 		try {
 			LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
 			LibraryElementProvider.INSTANCE.connect(input);

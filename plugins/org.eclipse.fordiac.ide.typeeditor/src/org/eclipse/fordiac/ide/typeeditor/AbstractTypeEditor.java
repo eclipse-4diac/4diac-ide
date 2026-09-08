@@ -36,7 +36,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
-import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -88,7 +87,7 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
-		implements IGotoMarker, ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
+		implements IGotoMarker, ITabbedPropertySheetPageContributor, ISelectionListener {
 
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();
 
@@ -350,7 +349,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 	}
 
 	@Override
-	public void setInput(final IEditorInput input) {
+	protected void setInput(final IEditorInput input) {
 		try {
 			LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
 			LibraryElementProvider.INSTANCE.connect(input);
