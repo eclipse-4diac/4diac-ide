@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -177,11 +178,17 @@ public abstract class TemplateExportFilter extends ExportFilter {
 
 		} catch (final ExportException.UserInteraction e) {
 			throw (e);
-		} catch (final Exception t) {
-			FordiacLogHelper.logError(Messages.TemplateExportFilter_ErrorDuringTemplateGeneration, t);
-			this.getErrors().add(t.getMessage() != null ? t.getMessage()
-					: Messages.TemplateExportFilter_ErrorDuringTemplateGeneration);
+		} catch (final WrappedException e) {
+			handleExportException(e.getCause() != null ? e.getCause() : e);
+		} catch (final Exception e) {
+			handleExportException(e);
 		}
+	}
+
+	private void handleExportException(final Throwable throwable) {
+		FordiacLogHelper.logError(Messages.TemplateExportFilter_ErrorDuringTemplateGeneration, throwable);
+		this.getErrors().add(throwable.getMessage() != null ? throwable.getMessage()
+				: Messages.TemplateExportFilter_ErrorDuringTemplateGeneration);
 	}
 
 	private DelayedFiles generateFileContent(final String destination, final String name, final EObject source)
