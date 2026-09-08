@@ -78,6 +78,11 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 			// add empty line, except around lost+found
 			builder.append(CommonElementExporter.LINE_END);
 			builder.append(CommonElementExporter.LINE_END);
+		} else if (isLostAndFound(previous) && !isLostAndFound(current)
+				&& !isLineDelimiter(builder.charAt(builder.length() - 1))) {
+			// ensure line delimiter after previous lost+found element
+			// and before appending a regular ST element
+			builder.append(CommonElementExporter.LINE_END);
 		} else if (isWordCharacter(builder.charAt(builder.length() - 1)) && isWordCharacter(text.charAt(0))) {
 			// add line separator if appended text has no word boundary
 			builder.append(CommonElementExporter.LINE_END);
