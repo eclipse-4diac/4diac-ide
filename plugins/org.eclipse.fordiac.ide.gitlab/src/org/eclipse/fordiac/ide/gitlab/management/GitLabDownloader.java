@@ -137,11 +137,11 @@ public class GitLabDownloader implements IArchiveDownloader {
 	}
 
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
-		return packagesAndLeaves;
+		return packagesAndLeaves != null ? packagesAndLeaves : Map.of();
 	}
 
 	public Map<Project, List<Package>> getProjectsAndPackages() {
-		return projectAndPackageMap;
+		return projectAndPackageMap != null ? projectAndPackageMap : Map.of();
 	}
 
 	public DownloadResult<Void> fetchProjectsAndPackages() {
@@ -320,7 +320,10 @@ public class GitLabDownloader implements IArchiveDownloader {
 				}
 			} catch (final IOException e) {
 				httpConn.disconnect();
-				return;
+				// propagate so a failed package fetch invalidates the cache in
+				// fetchProjectsAndPackages() instead of being silently swallowed
+				throw new IOException(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
 			}
 			httpConn.disconnect();
 		}
