@@ -87,9 +87,6 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 					try {
 						parsedVersion = Version.valueOf(version);
 					} catch (final IllegalArgumentException e) {
-						status.add(Status.warning(MessageFormat.format(
-								"{0}: Ignoring library {1} with invalid version ''{2}'': {3}", //$NON-NLS-1$
-								downloader.getName(), entry.getKey(), version, e.getMessage())));
 						return null;
 					}
 					final Map<String, VersionRange> dependencies = fetchDependencies
