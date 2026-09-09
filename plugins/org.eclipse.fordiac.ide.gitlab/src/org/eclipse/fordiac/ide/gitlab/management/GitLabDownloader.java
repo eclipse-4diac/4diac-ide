@@ -161,6 +161,10 @@ public class GitLabDownloader implements IArchiveDownloader {
 				getPackages(project);
 			}
 		} catch (final IOException e) {
+			// clear the partially populated cache so a failed fetch is never mistaken
+			// for a valid (but empty) cache by later manifest/library requests
+			projectAndPackageMap = null;
+			packagesAndLeaves = null;
 			return new DownloadResult<>(DownloadResult.Status.ERROR,
 					MessageFormat.format(Messages.Download_Error, e.getMessage()));
 		}
@@ -267,7 +271,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	private void getProjects() throws IOException {
 		String page = "1"; //$NON-NLS-1$
-		final String regex = "\\{\\\"id\\\"\\s*:\\s*(?<projectID>\\d+)\\s*,\\s*\\\"description\\\".*?,\\s*\\\"name\\\"\\s*:\\s*\\\"(?<projectName>[\\w\\s\\-\\.]+)\\\"\\s*,\\s*\\\"name_with_namespace\\\"[^\\}]*+\\}"; //$NON-NLS-1$
+		final String regex = "\\{\\\"id\\\"\\s*:\\s*(?<projectID>\\d+)\\s*,\\s*\\\"description\\\".*?,\\s*\\\"name\\\"\\s*:\\s*\\\"(?<projectName>[\\w\\s\\-\\.]+)\\\"\\s*,\\s*\\\"name_with_namespace\\\"\\s*:\\s*\\\"[^\\\"]*\\\"[^}]*\\}"; //$NON-NLS-1$
 		final Pattern p = Pattern.compile(regex);
 
 		while (page != null && !"".equals(page)) { //$NON-NLS-1$
@@ -293,7 +297,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	private void getPackages(final Project project) throws IOException {
 		String page = "1"; //$NON-NLS-1$
-		final String regex = "(?<packageID>\\d+),\\\"name\\\":\\\"(?<packageName>[\\w\\s\\-\\.]*)\\\",\\\"version\\\":\\\"(?<packageVersion>[\\w\\s\\-\\.]*)\\\",\\\"package_type\\\":\\\"(?<packageType>[\\w\\s\\-\\.]*)"; //$NON-NLS-1$
+		final String regex = "(?<packageID>\\d+),\\\"name\\\":\\\"(?<packageName>[\\w\\s\\-\\.]*)\\\",\\\"version\\\":\\\"(?<packageVersion>[\\w\\s\\-\\.]*)\\\",\\\"package_type\\\":\\\"(?<packageType>[\\w\\s\\-\\.]*)\\\""; //$NON-NLS-1$
 		final Pattern p = Pattern.compile(regex);
 		while (page != null && !"".equals(page)) { //$NON-NLS-1$
 			final HttpURLConnection httpConn = createConnection(buildPackagesForProjectURL(project, page));
