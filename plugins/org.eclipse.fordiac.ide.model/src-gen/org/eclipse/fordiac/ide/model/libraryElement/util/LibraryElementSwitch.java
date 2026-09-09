@@ -1218,6 +1218,15 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.OVERRIDE_ATTRIBUTE: {
+				OverrideAttribute overrideAttribute = (OverrideAttribute)theEObject;
+				T1 result = caseOverrideAttribute(overrideAttribute);
+				if (result == null) result = caseAttribute(overrideAttribute);
+				if (result == null) result = caseITypedElement(overrideAttribute);
+				if (result == null) result = caseINamedElement(overrideAttribute);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -3019,6 +3028,21 @@ public class LibraryElementSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseVarConfigInstance(VarConfigInstance object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Override Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Override Attribute</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseOverrideAttribute(OverrideAttribute object) {
 		return null;
 	}
 

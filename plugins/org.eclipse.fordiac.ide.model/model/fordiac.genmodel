@@ -952,6 +952,7 @@
     <genClasses ecoreClass="lib.ecore#//TypedSubApp">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TypedSubApp/subAppNetwork"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TypedSubApp/varConfigParams"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TypedSubApp/overrideAttributes"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/isTyped" body="return true;"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedSubApp/findBySimpleName" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.findBySimpleName(this, name);">
@@ -1078,6 +1079,17 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//With">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//With/variables"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//OverrideAttribute">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OverrideAttribute/location"/>
+      <genOperations ecoreOperation="lib.ecore#//OverrideAttribute/getFullName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeAnnotations.getFullName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//OverrideAttribute/validateLocation"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeAnnotations.validateLocation(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//OverrideAttribute/validateLocation/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//OverrideAttribute/validateLocation/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//OverrideAttribute/getQualifiedName"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.OverrideAttributeAnnotations.getQualifiedName(this);"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

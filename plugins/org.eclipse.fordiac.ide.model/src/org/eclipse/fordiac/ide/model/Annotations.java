@@ -436,7 +436,7 @@ public final class Annotations {
 				&& adapter.eContainer().eContainer() instanceof FBNetworkElement ->
 			getValueFromTarget(target, AttributeTarget.InstanceAdapter);
 
-		default -> false;
+		case null, default -> false;
 		};
 	}
 

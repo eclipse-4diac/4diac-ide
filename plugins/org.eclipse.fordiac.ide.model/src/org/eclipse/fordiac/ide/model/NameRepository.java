@@ -240,7 +240,7 @@ public final class NameRepository {
 	 * @param nameProposal     a proposal for a name as starting point
 	 * @return a unique name
 	 */
-	private static String getUniqueName(final Set<String> existingNameList, final String nameProposal) {
+	public static String getUniqueName(final Set<String> existingNameList, final String nameProposal) {
 		String temp = nameProposal;
 		while (existingNameList.contains(temp)) {
 			temp = createUniqueName(nameProposal, temp);

@@ -82,6 +82,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.OverrideAttribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -440,8 +441,17 @@ public abstract class CommonElementImporter {
 			// AttributeDeclarations
 			// use element for resolving import since confObject may not have been added to
 			// enclosing type yet
-			final AttributeTypeEntry attributeTypeEntry = getTypeEntry(attribute.getName(),
-					getTypeLibrary()::getAttributeTypeEntry, LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION);
+			AttributeTypeEntry attributeTypeEntry;
+			if (attribute.getName().contains(".")) { //$NON-NLS-1$
+				final var lastDot = attribute.getName().lastIndexOf("."); //$NON-NLS-1$
+				final var shortName = attribute.getName().substring(lastDot + 1);
+				attributeTypeEntry = getTypeEntry(shortName, getTypeLibrary()::getAttributeTypeEntry,
+						LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION);
+			} else {
+				attributeTypeEntry = getTypeEntry(attribute.getName(), getTypeLibrary()::getAttributeTypeEntry,
+						LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION);
+			}
+
 			attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 			attribute.setType(attributeTypeEntry.getType().getType());
 		}
@@ -456,7 +466,19 @@ public abstract class CommonElementImporter {
 		}
 		attribute.setValue(value);
 
-		confObject.getAttributes().add(attribute);
+		if (confObject instanceof final TypedSubApp tsa && attribute.getName().contains(".")) { //$NON-NLS-1$
+			final OverrideAttribute overrideAtt = LibraryElementFactory.eINSTANCE.createOverrideAttribute();
+			final var lastDot = attribute.getName().lastIndexOf("."); //$NON-NLS-1$
+			overrideAtt.setLocation(attribute.getName().substring(0, lastDot));
+			overrideAtt.setName(attribute.getName().substring(lastDot + 1));
+			overrideAtt.setAttributeDeclaration(attribute.getAttributeDeclaration());
+			overrideAtt.setType(attribute.getType());
+			overrideAtt.setComment(attribute.getComment());
+			overrideAtt.setValue(attribute.getValue());
+			tsa.getOverrideAttributes().add(overrideAtt);
+		} else {
+			confObject.getAttributes().add(attribute);
+		}
 	}
 
 	protected VarDeclaration parseParameter() throws TypeImportException, XMLStreamException {
