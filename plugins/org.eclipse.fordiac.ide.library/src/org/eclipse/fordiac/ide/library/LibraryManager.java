@@ -666,8 +666,12 @@ public enum LibraryManager {
 		// import valid nodes
 		importDependencyNodes(project, libManagerData, projectManifest, markerList, progress.split(15));
 
-		// remove still linked libraries
-		cleanupLinks(libManagerData.linked(), progress.split(2));
+		// Preserve existing links when the dependency graph is incomplete.
+		if (queue.isEmpty()) {
+			cleanupLinks(libManagerData.linked(), progress.split(2));
+		} else {
+			progress.worked(2);
+		}
 
 		// check if imported library links are broken
 		checkLinkedLibraries(project, progress.split(1));
@@ -807,6 +811,12 @@ public enum LibraryManager {
 			if (dnode.isValid()) {
 				final var rnode = data.resolveNodes().get(dnode.getSymbolicName());
 
+				if (rnode == null) {
+					FordiacLogHelper.logWarning(MessageFormat.format(Messages.LibraryManager_UnresolvedDependency,
+							dnode.getSymbolicName(), project.getName()));
+					continue;
+				}
+
 				if (rnode.isValid()) {
 					if (rnode.requireImport(data.linked())) {
 						importLibrary(project, rnode.getUri(), false, false);
@@ -815,7 +825,9 @@ public enum LibraryManager {
 						data.linked().remove(rnode.getSymbolicName());
 					}
 				} else {
-					markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode));
+					final var marker = LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode);
+					markerList.add(marker);
+					FordiacLogHelper.logError(marker.getMessage());
 				}
 			} else if (dnode.isRangeEmpty()) {
 				markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, dnode));
