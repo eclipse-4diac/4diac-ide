@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.library;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -346,6 +347,35 @@ class LibraryImportTest {
 
 		assertTrue(project.findMaxProblemSeverity(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_ZERO) >= IMarker.SEVERITY_ERROR);
+	}
+
+	@Test
+	void testUnresolvedDependencyKeepsLinks() throws Exception {
+		// the unavailable dependency is resolved first and stops the resolution while
+		// test01 is still queued
+		var manifest = ManifestHelper.getContainerManifest(project);
+		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(MATH, "0.3.1415")); //$NON-NLS-1$
+		ManifestHelper.saveManifest(manifest);
+
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST01 + "-" + V1_0_0), //$NON-NLS-1$
+				true, false);
+
+		final Manifest projectManifest = ManifestHelper.getContainerManifest(project);
+		assertDoesNotThrow(() -> LibraryManager.INSTANCE.resolveDependencies(project, projectManifest, null));
+
+		waitForBuild();
+
+		manifest = ManifestHelper.getContainerManifest(project);
+		assertEquals(2, manifest.getDependencies().getRequired().size());
+		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_0_0, 1,
+				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+
+		final var manifestFile = project.getFile(LibraryManager.MANIFEST);
+		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
+				IResource.DEPTH_INFINITE);
+
+		assertEquals(1, markers.length);
+		assertEquals(MATH, findFirstDependencyMarker(markers).orElse(null));
 	}
 
 	static Optional<String> findFirstDependencyMarker(final IMarker[] markers) {
