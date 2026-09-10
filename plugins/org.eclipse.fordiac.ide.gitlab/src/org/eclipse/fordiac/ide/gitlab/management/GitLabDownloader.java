@@ -271,7 +271,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	private void getProjects() throws IOException {
 		String page = "1"; //$NON-NLS-1$
-		final String regex = "\\{\\\"id\\\"\\s*:\\s*(?<projectID>\\d+)\\s*,\\s*\\\"description\\\".*?,\\s*\\\"name\\\"\\s*:\\s*\\\"(?<projectName>[\\w\\s\\-\\.]+)\\\"\\s*,\\s*\\\"name_with_namespace\\\"\\s*:\\s*\\\"[^\\\"]*\\\"[^}]*\\}"; //$NON-NLS-1$
+		final String regex = "\\{\\\"id\\\"\\s*:\\s*(?<projectID>\\d+)\\s*,\\s*\\\"description\\\".*?,\\s*\\\"name\\\"\\s*:\\s*\\\"(?<projectName>[\\w\\s\\-\\.]+)\\\"\\s*,\\s*\\\"name_with_namespace\\\"[^\\}]*+\\}"; //$NON-NLS-1$
 		final Pattern p = Pattern.compile(regex);
 
 		while (page != null && !"".equals(page)) { //$NON-NLS-1$
@@ -300,7 +300,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	private void getPackages(final Project project) throws IOException {
 		String page = "1"; //$NON-NLS-1$
-		final String regex = "(?<packageID>\\d+),\\\"name\\\":\\\"(?<packageName>[\\w\\s\\-\\.]*)\\\",\\\"version\\\":\\\"(?<packageVersion>[\\w\\s\\-\\.]*)\\\",\\\"package_type\\\":\\\"(?<packageType>[\\w\\s\\-\\.]*)\\\""; //$NON-NLS-1$
+		final String regex = "(?<packageID>\\d+),\\\"name\\\":\\\"(?<packageName>[\\w\\s\\-\\.]*)\\\",\\\"version\\\":\\\"(?<packageVersion>[\\w\\s\\-\\.]*)\\\",\\\"package_type\\\":\\\"(?<packageType>[\\w\\s\\-\\.]*)"; //$NON-NLS-1$
 		final Pattern p = Pattern.compile(regex);
 		while (page != null && !"".equals(page)) { //$NON-NLS-1$
 			final HttpURLConnection httpConn = createConnection(buildPackagesForProjectURL(project, page));
