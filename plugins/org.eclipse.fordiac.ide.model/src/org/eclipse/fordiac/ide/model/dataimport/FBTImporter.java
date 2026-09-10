@@ -232,7 +232,8 @@ public class FBTImporter extends BlockTypeImporter {
 				state.setInputEvent(inEvent);
 				final var action = LibraryElementFactory.eINSTANCE.createSimpleECAction();
 				action.setAlgorithm(inEvent.getName());
-				action.setOutput(stdOutEvent);
+				action.setOutput(type.getInterfaceList().getEventOutputs().stream()
+						.filter(outEvent -> outEvent.getType() == inEvent.getType()).findFirst().orElse(stdOutEvent));
 				state.getSimpleECActions().add(action);
 				type.getSimpleECStates().add(state);
 			}
