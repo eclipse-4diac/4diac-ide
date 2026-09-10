@@ -289,8 +289,11 @@ public class GitLabDownloader implements IArchiveDownloader {
 					projectAndPackageMap.put(project, new ArrayList<>());
 				}
 			} catch (final IOException e) {
-				throw new IOException(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
-						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()));
+				FordiacLogHelper.logWarning(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
+				return;
+			} finally {
+				httpConn.disconnect();
 			}
 		}
 	}
@@ -301,31 +304,36 @@ public class GitLabDownloader implements IArchiveDownloader {
 		final Pattern p = Pattern.compile(regex);
 		while (page != null && !"".equals(page)) { //$NON-NLS-1$
 			final HttpURLConnection httpConn = createConnection(buildPackagesForProjectURL(project, page));
-			try (InputStream responseStream = httpConn.getInputStream()) {
-				String response = ""; //$NON-NLS-1$
-				try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
-					response = reader.readLine();
+			try {
+				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+					// Skip projects without package registry
+					return;
 				}
-				page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
-				final Matcher m = p.matcher(response);
-				Package pack;
-				while (m.find()) {
-					pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME),
-							m.group(PACKAGE_VERSION), m.group(PACKAGE_TYPE));
-					projectAndPackageMap.get(project).add(pack);
-					if (!packagesAndLeaves.containsKey(pack.name())) {
-						packagesAndLeaves.put(pack.name(), new ArrayList<>());
+				try (InputStream responseStream = httpConn.getInputStream()) {
+					String response = ""; //$NON-NLS-1$
+					try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
+						response = reader.readLine();
 					}
-					packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
+					page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
+					final Matcher m = p.matcher(response);
+					Package pack;
+					while (m.find()) {
+						pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME),
+								m.group(PACKAGE_VERSION), m.group(PACKAGE_TYPE));
+						projectAndPackageMap.get(project).add(pack);
+						if (!packagesAndLeaves.containsKey(pack.name())) {
+							packagesAndLeaves.put(pack.name(), new ArrayList<>());
+						}
+						packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
+					}
 				}
 			} catch (final IOException e) {
-				httpConn.disconnect();
-				// propagate so a failed package fetch invalidates the cache in
-				// fetchProjectsAndPackages() instead of being silently swallowed
-				throw new IOException(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+				FordiacLogHelper.logWarning(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
 						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
+				return;
+			} finally {
+				httpConn.disconnect();
 			}
-			httpConn.disconnect();
 		}
 	}
 
