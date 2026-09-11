@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,7 +18,8 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConst
 import com.google.inject.Injector;
 
 /**
- * Initialization support for running Xtext languages without Equinox extension registry.
+ * Initialization support for running Xtext languages without Equinox extension
+ * registry.
  */
 public class GlobalConstantsStandaloneSetup extends GlobalConstantsStandaloneSetupGenerated {
 

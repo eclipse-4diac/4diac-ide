@@ -62,7 +62,7 @@ public class HoloblocDeploymentPreferencePage extends FieldEditorPreferencePage 
 	 */
 	@Override
 	public void init(final IWorkbench workbench) {
-		// nothing todo here
+		// nothing to do here
 	}
 
 }

@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 
 public class ECTransitionFeedbackEditPolicy extends FeedbackConnectionEndpointEditPolicy {
 	@Override
-	protected IFigure createSelectionFeedbackFigure(PolylineConnection connFigure) {
-		SplineConnection figure = new SplineConnection();
+	protected IFigure createSelectionFeedbackFigure(final PolylineConnection connFigure) {
+		final SplineConnection figure = new SplineConnection();
 		figure.setLineWidth(connFigure.getLineWidth() + 5);
 		figure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		figure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());

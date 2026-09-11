@@ -108,7 +108,7 @@ public class LevelSection extends AbstractPropertySection {
 
 		commentText = createGroupText(parent, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).hint(SWT.DEFAULT, 6 * commentText.getLineHeight())
-		.grab(true, false).applyTo(commentText);
+				.grab(true, false).applyTo(commentText);
 		commentText.addModifyListener(_ -> {
 			if (!blockListeners) {
 				removeContentAdapter();

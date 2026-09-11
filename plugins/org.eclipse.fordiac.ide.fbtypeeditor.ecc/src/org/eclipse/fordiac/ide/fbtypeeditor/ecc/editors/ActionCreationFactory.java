@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,7 +24,7 @@ public class ActionCreationFactory implements CreationFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
 	 */
 	@Override
@@ -34,7 +34,7 @@ public class ActionCreationFactory implements CreationFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.requests.CreationFactory#getObjectType()
 	 */
 	@Override

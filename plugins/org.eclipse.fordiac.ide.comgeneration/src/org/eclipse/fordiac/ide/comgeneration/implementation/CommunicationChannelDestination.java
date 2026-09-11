@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 Luka Lednicki, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -35,8 +35,7 @@ public class CommunicationChannelDestination {
 	private String selectedProtocolId;
 	private CommunicationMediaInfo selectedMedia;
 
-	public CommunicationChannelDestination(CommunicationChannel communicationChannel) {
-		super();
+	public CommunicationChannelDestination(final CommunicationChannel communicationChannel) {
 		this.communicationChannel = communicationChannel;
 		separated = false;
 		selectedProtocolId = null;
@@ -47,7 +46,7 @@ public class CommunicationChannelDestination {
 		return destinationResource;
 	}
 
-	public void setDestinationResource(Resource destinationResource) {
+	public void setDestinationResource(final Resource destinationResource) {
 		this.destinationResource = destinationResource;
 	}
 
@@ -71,7 +70,7 @@ public class CommunicationChannelDestination {
 		return separated;
 	}
 
-	public void setSeparated(boolean separated) {
+	public void setSeparated(final boolean separated) {
 		this.separated = separated;
 	}
 
@@ -79,7 +78,7 @@ public class CommunicationChannelDestination {
 		return selectedProtocolId;
 	}
 
-	public void setSelectedProtocolId(String protocolId) {
+	public void setSelectedProtocolId(final String protocolId) {
 		this.selectedProtocolId = protocolId;
 	}
 
@@ -87,11 +86,11 @@ public class CommunicationChannelDestination {
 		return selectedMedia;
 	}
 
-	public void setSelectedMedia(CommunicationMediaInfo selectedMedia) {
+	public void setSelectedMedia(final CommunicationMediaInfo selectedMedia) {
 		this.selectedMedia = selectedMedia;
 	}
 
-	public void setSelectedMedia(CommunicationMediaInfo mediaInfo, String protocolId) {
+	public void setSelectedMedia(final CommunicationMediaInfo mediaInfo, final String protocolId) {
 		setSelectedMedia(mediaInfo);
 		setSelectedProtocolId(protocolId);
 	}

@@ -49,12 +49,12 @@ public class ChangeValueCommandTest extends ValueCommandTestBase {
 				new ExecutionDescription<>("Change Value", // //$NON-NLS-1$
 						ChangeValueCommandTest::executeCommand, //
 						ChangeValueCommandTest::verifyState //
-						), //
+				), //
 				new ExecutionDescription<>("Change Value to null", // //$NON-NLS-1$
 						ChangeValueCommandTest::executeCommandToNull, //
 						ChangeValueCommandTest::verifyStateNull //
-						) //
-				);
+				) //
+		);
 
 		return createCommands(executionDescriptions);
 	}

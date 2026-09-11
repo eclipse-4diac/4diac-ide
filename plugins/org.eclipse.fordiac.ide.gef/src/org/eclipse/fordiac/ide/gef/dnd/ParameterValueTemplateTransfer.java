@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -28,7 +28,7 @@ public final class ParameterValueTemplateTransfer extends SimpleObjectTransfer {
 
 	/**
 	 * Returns the singleton instance.
-	 * 
+	 *
 	 * @return the singleton
 	 */
 	public static ParameterValueTemplateTransfer getInstance() {
@@ -37,7 +37,7 @@ public final class ParameterValueTemplateTransfer extends SimpleObjectTransfer {
 
 	/**
 	 * Returns the <i>template</i> object.
-	 * 
+	 *
 	 * @return the template
 	 */
 	public Object getTemplate() {
@@ -62,7 +62,7 @@ public final class ParameterValueTemplateTransfer extends SimpleObjectTransfer {
 
 	/**
 	 * Sets the <i>template</i> Object.
-	 * 
+	 *
 	 * @param template the template
 	 */
 	public void setTemplate(final Object template) {

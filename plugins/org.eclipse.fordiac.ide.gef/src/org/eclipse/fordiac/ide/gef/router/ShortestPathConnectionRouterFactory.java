@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012, 2013 Uni Halle, Profactor GmbH, fortiss GmbH 
- * 
+ * Copyright (c) 2010, 2012, 2013 Uni Halle, Profactor GmbH, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -23,7 +23,7 @@ import org.eclipse.draw2d.ShortestPathConnectionRouter;
 public class ShortestPathConnectionRouterFactory extends AbstractConnectionRouterFactory {
 
 	@Override
-	public ConnectionRouter getConnectionRouter(IFigure container) {
+	public ConnectionRouter getConnectionRouter(final IFigure container) {
 		return new ShortestPathConnectionRouter(container);
 	}
 

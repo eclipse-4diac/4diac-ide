@@ -54,7 +54,8 @@ public abstract class TextDirectEditManager extends DirectEditManager {
 	private IAction find;
 	private IAction selectAll;
 	private IAction delete;
-	// we need to cash the zoom manager as some direct edit commands change the editpart and we loose connection to the
+	// we need to cash the zoom manager as some direct edit commands change the
+	// editpart and we loose connection to the
 	// viewer
 	private ZoomManager zoomMananger = null;
 

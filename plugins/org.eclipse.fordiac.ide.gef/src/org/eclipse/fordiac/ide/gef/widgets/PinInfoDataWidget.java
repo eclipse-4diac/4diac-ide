@@ -83,8 +83,8 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(initialValueEditor.getControl());
 		varConfigLabel = widgetFactory.createCLabel(parent, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
 		varConfigCheckBox = widgetFactory.createButton(parent, null, SWT.CHECK);
-		varConfigCheckBox.addListener(SWT.Selection, _ -> executeCommand(
-				new ChangeVarConfigurationCommand(getType(), varConfigCheckBox.getSelection())));
+		varConfigCheckBox.addListener(SWT.Selection,
+				_ -> executeCommand(new ChangeVarConfigurationCommand(getType(), varConfigCheckBox.getSelection())));
 	}
 
 	@Override

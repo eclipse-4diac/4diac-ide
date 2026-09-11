@@ -34,7 +34,6 @@ public class BootFileDeviceManagementCommunicationHandler extends AbstractFileMa
 	 * only the static function of this class should be able to create an instance
 	 */
 	private BootFileDeviceManagementCommunicationHandler() {
-		super();
 	}
 
 }
