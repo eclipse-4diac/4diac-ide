@@ -2,7 +2,7 @@
 <FBType Name="DualHysteresis" Comment="2-way conversion of Analog to Digital with Hysteresis (Switch-on = MI +/- (ABS(DEAD) + ABS(HYSTERESIS)), Switch-off = MI +/- ABS(DEAD))">
 	<Identification Standard="61499-2" Description="Copyright (c) 2023 HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0 ">
 	</Identification>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-09-11" Remarks="clarify description/comments and wrap DEAD/HYSTERESIS in ABS() so switch points stay correct for negative parameter values">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-09-11" Remarks="clarify description/comments and wrap DEAD/HYSTERESIS in ABS() so switch points stay correct for negative parameter values; add direct UP/DOWN transitions so INPUT crossing both switch-on thresholds within one REQ no longer causes a spurious one-cycle Neutral output">
 	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
@@ -70,6 +70,8 @@
 			<ECTransition Source="Neutral" Destination="UP" Condition="REQ[INPUT &gt;= MI + ABS(DEAD) + ABS(HYSTERESIS)]" Comment="Switch-on UP (inclusive)" x="5040" y="1173.33"/>
 			<ECTransition Source="DeInit" Destination="START" Condition="1" Comment="" x="1306.67" y="2780"/>
 			<ECTransition Source="Neutral" Destination="DOWN" Condition="REQ[INPUT &lt;= MI - ABS(DEAD) - ABS(HYSTERESIS)]" Comment="Switch-on DOWN (inclusive)" x="5513.33" y="3013.33"/>
+			<ECTransition Source="UP" Destination="DOWN" Condition="REQ[INPUT &lt;= MI - ABS(DEAD) - ABS(HYSTERESIS)]" Comment="Direct switch-on DOWN (inclusive)" x="6666.67" y="3013.33"/>
+			<ECTransition Source="DOWN" Destination="UP" Condition="REQ[INPUT &gt;= MI + ABS(DEAD) + ABS(HYSTERESIS)]" Comment="Direct switch-on UP (inclusive)" x="6666.67" y="1173.33"/>
 			<ECTransition Source="DOWN" Destination="Neutral" Condition="REQ[INPUT &gt; MI - ABS(DEAD)]" Comment="Switch-off DOWN (strict)" x="5173.33" y="3480"/>
 			<ECTransition Source="UP" Destination="Neutral" Condition="REQ[INPUT &lt; MI + ABS(DEAD)]" Comment="Switch-off UP (strict)" x="5173.33" y="2026.67"/>
 		</ECC>
