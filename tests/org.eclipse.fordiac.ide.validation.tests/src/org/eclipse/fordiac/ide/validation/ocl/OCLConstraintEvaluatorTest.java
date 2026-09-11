@@ -120,7 +120,7 @@ class OCLConstraintEvaluatorTest {
 	}
 
 	private OCLConstraintDefinition getDefinition(final String name) {
-		return definitions.stream().filter(definition -> name.equals(definition.constraint().getName()))
-				.findFirst().orElseThrow();
+		return definitions.stream().filter(definition -> name.equals(definition.constraint().getName())).findFirst()
+				.orElseThrow();
 	}
 }

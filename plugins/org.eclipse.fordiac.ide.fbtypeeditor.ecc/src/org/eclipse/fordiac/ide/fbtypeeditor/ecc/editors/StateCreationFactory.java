@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -24,19 +24,19 @@ public class StateCreationFactory implements CreationFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
 	 */
 	@Override
 	public Object getNewObject() {
-		ECState state = LibraryElementFactory.eINSTANCE.createECState();
+		final ECState state = LibraryElementFactory.eINSTANCE.createECState();
 		state.setName("State"); //$NON-NLS-1$
 		return state;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.requests.CreationFactory#getObjectType()
 	 */
 	@Override

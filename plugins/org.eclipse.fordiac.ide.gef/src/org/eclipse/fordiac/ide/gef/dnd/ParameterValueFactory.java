@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 Profactor GbmH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -29,7 +29,7 @@ public class ParameterValueFactory implements CreationFactory {
 		return String.class;
 	}
 
-	public void setText(String s) {
+	public void setText(final String s) {
 		text = s;
 	}
 }

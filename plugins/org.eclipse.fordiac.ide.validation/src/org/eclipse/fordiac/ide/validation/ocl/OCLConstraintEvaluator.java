@@ -34,8 +34,7 @@ public final class OCLConstraintEvaluator {
 
 	private final OCL ocl;
 	private final Consumer<ConstraintError> errorHandler;
-	private final Set<OCLConstraintDefinition> invalidConstraints = Collections
-			.newSetFromMap(new IdentityHashMap<>());
+	private final Set<OCLConstraintDefinition> invalidConstraints = Collections.newSetFromMap(new IdentityHashMap<>());
 
 	public OCLConstraintEvaluator(final OCL ocl, final Consumer<ConstraintError> errorHandler) {
 		this.ocl = ocl;
@@ -95,8 +94,7 @@ public final class OCLConstraintEvaluator {
 				definition.legacyDiagnostic().getMessage());
 	}
 
-	private static OptionalInt getMarkerSeverity(final Tuple<?, ?> tuple,
-			final OCLTupleDiagnostic tupleDiagnostic) {
+	private static OptionalInt getMarkerSeverity(final Tuple<?, ?> tuple, final OCLTupleDiagnostic tupleDiagnostic) {
 		final Number number = tupleDiagnostic.getOptionalField(tuple, SEVERITY_FIELD, Number.class, null);
 		if (number == null) {
 			return OptionalInt.of(IMarker.SEVERITY_ERROR);
@@ -108,8 +106,8 @@ public final class OCLConstraintEvaluator {
 		return severity > 0 ? OptionalInt.of(IMarker.SEVERITY_WARNING) : OptionalInt.empty();
 	}
 
-	private static EObject getMarkerTarget(final Tuple<?, ?> tuple,
-			final OCLTupleDiagnostic tupleDiagnostic, final EObject context) {
+	private static EObject getMarkerTarget(final Tuple<?, ?> tuple, final OCLTupleDiagnostic tupleDiagnostic,
+			final EObject context) {
 		final Object value = tupleDiagnostic.getOptionalValue(tuple, MARKER_TARGET_FIELD);
 		return switch (value) {
 		case null -> context;

@@ -45,7 +45,7 @@ public class ModelPreferences extends FieldEditorPreferencePage implements IWork
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		// nothing todo here
+		// nothing to do here
 	}
 
 }
