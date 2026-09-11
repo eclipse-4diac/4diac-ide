@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Dimitrios Kalligaridis - fix struct reference repointing on package folder rename
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
@@ -70,8 +71,10 @@ public final class TypeRefactoringHelper {
 	public static void addModelEditsForRenamedType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
 			final IPath newPath) {
 		if (typeEntry instanceof final DataTypeEntry dtEntry) {
+			// Derive the target name from the new path, so a package folder rename repoints struct
+			// references to the new package instead of the type entry's old package name.
 			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
-					DataTypeEditBuilder.getFullTypeName(typeEntry, newPath));
+					DataTypeEditBuilder.getFullTypeName(newPath));
 		} else {
 			addInstanceChanges(modelEdits, typeEntry);
 		}

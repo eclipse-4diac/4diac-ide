@@ -131,6 +131,13 @@ public final class RefactoringTestSupport {
 		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
 	}
 
+	public static Change performFolderRename(final IFolder folder, final String newName) throws CoreException {
+		final RenameResourceDescriptor descriptor = new RenameResourceDescriptor();
+		descriptor.setResourcePath(folder.getFullPath());
+		descriptor.setNewName(newName);
+		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
+	}
+
 	public static Change performDelete(final IFile file) throws CoreException {
 		final DeleteResourcesDescriptor descriptor = new DeleteResourcesDescriptor();
 		descriptor.setResourcePaths(new IPath[] { file.getFullPath() });
