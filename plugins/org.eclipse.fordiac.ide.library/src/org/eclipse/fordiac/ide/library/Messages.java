@@ -73,6 +73,8 @@ public class Messages extends NLS {
 
 	public static String LibraryManager_UnresolvableDependencies;
 
+	public static String LibraryManager_UnresolvedDependency;
+
 	public static String LibraryManager_UpdateLibraryPackage;
 
 	public static String DownloadNullResult;
