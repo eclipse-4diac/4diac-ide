@@ -20,7 +20,6 @@ import org.eclipse.gef.EditPolicy;
 public class FBEditPartRO extends FBEditPart {
 
 	FBEditPartRO() {
-		super();
 	}
 
 	@Override

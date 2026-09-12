@@ -25,7 +25,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.ReconnectRequest;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.SWT;
@@ -110,11 +109,11 @@ public class FBNScrollingConnectionEndpointTracker extends ScrollingConnectionEn
 			final Point location = getLocation();
 			final Point converted = new Point(initialViewer.getControl()
 					.toControl(getCurrentViewer().getControl().toDisplay(location.x, location.y)));
-			((ReconnectRequest) getTargetRequest()).setLocation(converted);
+			getTargetRequest().setLocation(converted);
 		}
 		super.showSourceFeedback();
 		if (differentTargetViewer()) {
-			((ReconnectRequest) getTargetRequest()).setLocation(getLocation());
+			getTargetRequest().setLocation(getLocation());
 		}
 	}
 
