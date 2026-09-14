@@ -1127,26 +1127,29 @@
       </command>
     </menuContribution>
     <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
-      <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
-               tooltip="%menu.tooltip.newSubApp">
-        <visibleWhen checkEnabled="true">
-          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
-        </visibleWhen>
-      </command>
+      <menu id="menu:org.eclipse.4diac.ide.source.menu.new"
+      		   label="%New_LABEL">
+			<command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
+					tooltip="%menu.tooltip.newSubApp">
+				<visibleWhen checkEnabled="true">
+					<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+		        </visibleWhen>
+			</command>
+			<command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
+					tooltip="%menu.tooltip.newComment">
+				<visibleWhen checkEnabled="true">
+					<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+				</visibleWhen>
+			</command>
+			<command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
+					tooltip="%menu.tooltip.newGroup">
+			<visibleWhen checkEnabled="true">
+					<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
+			</visibleWhen>
+		</command>
+      </menu>
       <command commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
                label="%jdt_ui_edit_text_java_correction_assist_proposals_label">
-      </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               tooltip="%menu.tooltip.newGroup">
-        <visibleWhen checkEnabled="true">
-          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
-        </visibleWhen>
-      </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
-               tooltip="%menu.tooltip.newComment">
-        <visibleWhen checkEnabled="true">
-          <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
-        </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="%commands_ungroup_label"
