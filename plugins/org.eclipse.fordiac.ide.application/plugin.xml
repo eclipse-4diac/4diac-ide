@@ -483,8 +483,7 @@
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.InsertFB"
              id="org.eclipse.fordiac.ide.application.commands.insertFB"
-             name="%commands_insertFB_name"
-             icon="fordiacimage://ICON_FB">
+             name="%commands_insertFB_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.ChangeType"
@@ -591,6 +590,14 @@
                icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_prev.png"/>
 		<image commandId="org.eclipse.fordiac.ide.application.commands.gotochild"
                icon="platform:/plugin/org.eclipse.search/icons/full/elcl16/search_next.png"/>
+        <image commandId="org.eclipse.fordiac.ide.application.commands.insertFB"
+               icon="fordiacimage://ICON_FB"/>
+		<image commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
+               icon="fordiacimage://ICON_SUB_APP"/>
+		<image commandId="org.eclipse.fordiac.ide.application.commands.newComment"
+               icon="fordiacimage://ICON_COMMENT"/>
+		<image commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
+			   icon="fordiacimage://ICON_GROUP"/>
   </extension>
   
   <extension point="org.eclipse.ui.handlers">
@@ -1121,8 +1128,7 @@
     </menuContribution>
     <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
       <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
-               tooltip="%menu.tooltip.newSubApp"
-               icon="fordiacimage://ICON_SUB_APP">
+               tooltip="%menu.tooltip.newSubApp">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
@@ -1131,15 +1137,13 @@
                label="%jdt_ui_edit_text_java_correction_assist_proposals_label">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               tooltip="%menu.tooltip.newGroup"
-               icon="fordiacimage://ICON_GROUP">
+               tooltip="%menu.tooltip.newGroup">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
-               tooltip="%menu.tooltip.newComment"
-               icon="fordiacimage://ICON_COMMENT">
+               tooltip="%menu.tooltip.newComment">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
@@ -1243,8 +1247,7 @@
       <menu id="org.eclipse.fordiac.ide.application.menus.new"
             label="%New_LABEL">
 		<command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" 
-					tooltip="%menu.tooltip.insertFB"
-					icon="fordiacimage://ICON_FB">
+					tooltip="%menu.tooltip.insertFB">
 			<visibleWhen>
 				<and>
 	            <with variable="activeEditor">
@@ -1262,8 +1265,7 @@
 	        </visibleWhen>
 		</command>
 		<command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
-	               tooltip="%menu.tooltip.newSubApp"
-	               icon="fordiacimage://ICON_SUB_APP">
+	               tooltip="%menu.tooltip.newSubApp">
 			<visibleWhen checkEnabled="false">
 	          <and>
 	            <with variable="activeEditor">
@@ -1285,8 +1287,7 @@
 	        </visibleWhen>
 	      </command>
 	      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
-					tooltip="%menu.tooltip.newComment"
-					icon="fordiacimage://ICON_COMMENT">
+					tooltip="%menu.tooltip.newComment">
 	        <visibleWhen checkEnabled="false">
 	          <and>
 	            <with variable="activeEditor">
@@ -1296,8 +1297,7 @@
 	        </visibleWhen>
 	      </command>
 	      <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-	               tooltip="%menu.tooltip.newGroup"
-	               icon="fordiacimage://ICON_GROUP">
+	               tooltip="%menu.tooltip.newGroup">
 	        <visibleWhen checkEnabled="false">
 	          <and>
 	            <with variable="activeEditor">
