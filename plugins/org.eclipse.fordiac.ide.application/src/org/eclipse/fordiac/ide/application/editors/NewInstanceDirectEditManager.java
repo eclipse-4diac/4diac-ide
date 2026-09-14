@@ -16,7 +16,9 @@ import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
+import org.eclipse.fordiac.ide.model.commands.create.CreateCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPartViewer;
@@ -104,6 +106,11 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		getCellEditor().getMenuButton().addListener(SWT.Selection, _ -> showFBInsertPopUpMenu());
+
+		getCellEditor().getSubAppButton().addListener(SWT.Selection, _ -> createNewSubAppCommand());
+
+		getCellEditor().getCommentButton().addListener(SWT.Selection, _ -> createNewCommentCommand());
+
 		getCellEditor().setTypeLibrary(typeLib, getEditPart().getModel() instanceof final FBNetwork fbn ? fbn : null);
 
 		super.initCellEditor();
@@ -152,4 +159,47 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		// get rid of the editor
 		getCellEditor().fireCancelEditor();
 	}
+
+	private void createNewSubAppCommand() {
+		final org.eclipse.draw2d.geometry.Point point = getPointLocation();
+		final FBNetwork fbNetwork = getFBNetwork();
+
+		if (fbNetwork != null) {
+			final NewSubAppCommand cmd = new NewSubAppCommand(fbNetwork, java.util.Collections.emptyList(), point.x,
+					point.y);
+			executeCommand(cmd);
+		}
+		getCellEditor().fireCancelEditor(); // Close the cell editor popup safely
+	}
+
+	private void createNewCommentCommand() {
+		final org.eclipse.draw2d.geometry.Point point = getPointLocation();
+		final FBNetwork fbNetwork = getFBNetwork();
+
+		if (fbNetwork != null) {
+			final CreateCommentCommand cmd = new CreateCommentCommand(fbNetwork, point);
+			executeCommand(cmd);
+		}
+		getCellEditor().fireCancelEditor(); // Close the cell editor popup safely
+	}
+
+	private org.eclipse.draw2d.geometry.Point getPointLocation() {
+		final org.eclipse.draw2d.geometry.Point point = new org.eclipse.draw2d.geometry.Point(
+				getLocator().getRefPoint());
+
+		getEditPart().getFigure().translateToRelative(point);
+		return point;
+	}
+
+	private FBNetwork getFBNetwork() {
+		if (getEditPart().getModel() instanceof final FBNetwork fbNetwork) {
+			return fbNetwork;
+		}
+		return null;
+	}
+
+	private void executeCommand(final org.eclipse.gef.commands.Command cmd) {
+		getEditPart().getViewer().getEditDomain().getCommandStack().execute(cmd);
+	}
+
 }
