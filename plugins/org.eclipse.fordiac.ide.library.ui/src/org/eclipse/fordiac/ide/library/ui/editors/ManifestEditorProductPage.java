@@ -15,15 +15,16 @@ package org.eclipse.fordiac.ide.library.ui.editors;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.function.Predicate;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.eclipse.fordiac.ide.library.model.library.Product;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.library.ui.Messages;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -112,7 +113,7 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 				versionInfo.getVersion() != null ? versionInfo.getVersion() : "", //$NON-NLS-1$
 				SWT.SINGLE | SWT.BORDER);
 		versionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		addValidation(versionText, INVALID_VERSION_KEY, Messages.ManifestEditor_InvalidVersion,
+		addControlValidation(versionText, INVALID_VERSION_KEY, Messages.ManifestEditor_InvalidVersion,
 				VersionComparator::isValidVersion);
 		bindText(versionText, versionInfo::getVersion, versionInfo::setVersion, Messages.ManifestEditor_Version);
 
@@ -122,7 +123,7 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 				SWT.SINGLE | SWT.BORDER);
 		dateText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		bindText(dateText, versionInfo::getDate, versionInfo::setDate, Messages.ManifestEditor_Date);
-		addValidation(dateText, INVALID_DATE_KEY, Messages.ManifestEditor_InvalidDate,
+		addControlValidation(dateText, INVALID_DATE_KEY, Messages.ManifestEditor_InvalidDate,
 				ManifestEditorProductPage::isValidDate);
 
 		toolkit.createLabel(client, Messages.ManifestEditor_Author);
@@ -147,20 +148,13 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		}
 	}
 
-	private void addValidation(final Text text, final String validationKey, final String message,
-			final Predicate<String> validator) {
+	private final ModifyListener bindText(final Text text, final Supplier<String> getter, final Consumer<String> setter,
+			final String label) {
 
-		final Runnable update = () -> {
-			if (validator.test(text.getText())) {
-				getManagedForm().getMessageManager().removeMessage(validationKey, text);
-			} else {
-				getManagedForm().getMessageManager().addMessage(validationKey, message, null, IMessageProvider.ERROR,
-						text);
-			}
-		};
+		final ModifyListener binding = _ -> setValue(label, getter, setter, text.getText());
+		text.addModifyListener(binding);
 
-		text.addModifyListener(_ -> update.run());
-		update.run();
+		return binding;
 	}
 
 }
