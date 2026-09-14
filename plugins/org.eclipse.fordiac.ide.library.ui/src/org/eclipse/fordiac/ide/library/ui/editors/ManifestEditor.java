@@ -48,6 +48,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -57,6 +58,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	private static final String DEPENDENCY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorDependencyPage"; //$NON-NLS-1$
 	private static final String PRODUCT_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorProductPage"; //$NON-NLS-1$
+	private static final String LIBRARY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorLibraryPage"; //$NON-NLS-1$
 
 	private Manifest manifest;
 	private IProject project;
@@ -69,20 +71,21 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 		savePosition = null;
 
-		final var dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"); //$NON-NLS-1$
-		final var productPage = new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, "Product"); //$NON-NLS-1$
-
 		try {
-			int index = addPage(productPage);
-			setPageText(index, productPage.getTitle());
-			setPageImage(index, productPage.getTitleImage());
-
-			index = addPage(dependencyPage);
-			setPageText(index, dependencyPage.getTitle());
-			setPageImage(index, dependencyPage.getTitleImage());
+			addPage(new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, "Product"));
+			addPage(new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"));
+			addPage(new ManifestEditorLibraryPage(this, LIBRARY_PAGE_ID, "Library"));
 		} catch (final PartInitException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public int addPage(final IFormPage page) throws PartInitException {
+		super.addPage(page);
+		final int index = getPageCount() - 1;
+		setPageImage(index, page.getTitleImage());
+		return index;
 	}
 
 	@Override
@@ -110,7 +113,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		return undoContext;
 	}
 
-	private Optional<ManifestEditorPage<EObject>> getInvalidPage() {
+	private Optional<ManifestEditorPage<?>> getInvalidPage() {
 		return getPages().filter(Predicate.not(ManifestEditorPage::isValid)).findFirst();
 	}
 
@@ -120,7 +123,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		}
 	}
 
-	private Stream<ManifestEditorPage<EObject>> getPages() {
+	private Stream<ManifestEditorPage<?>> getPages() {
 		return pages.stream().filter(ManifestEditorPage.class::isInstance).map(ManifestEditorPage.class::cast);
 	}
 

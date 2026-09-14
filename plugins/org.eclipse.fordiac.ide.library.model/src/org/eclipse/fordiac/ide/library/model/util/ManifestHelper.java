@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.library.model.util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +36,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.fordiac.ide.library.model.library.Attribute;
+import org.eclipse.fordiac.ide.library.model.library.Library;
+import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryFactory;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Product;
@@ -466,6 +470,35 @@ public final class ManifestHelper {
 		required.setSymbolicName(symbolicName);
 		required.setVersion(version);
 		return required;
+	}
+
+	public static Library createExportLibrary(final Manifest manifest) {
+		if (manifest.getExports() == null) {
+			manifest.setExports(factory.createExports());
+		}
+
+		final var lib = factory.createLibrary();
+		lib.setExcludes(factory.createExcludes());
+		lib.setIncludes(factory.createIncludes());
+		lib.setDependencies(factory.createDependencies());
+		lib.setSymbolicName(MessageFormat.format("lib{0}", Integer.valueOf(manifest.getExports().getLibrary().size()))); //$NON-NLS-1$
+
+		return lib;
+	}
+
+	public static LibraryElement createPattern(final String pattern) {
+		final var exclude = factory.createLibraryElement();
+		exclude.setValue(pattern);
+		return exclude;
+	}
+
+	public static Attribute createAttribute(final String name) {
+		final var attribute = factory.createAttribute();
+		attribute.setName(name);
+		attribute.setType(""); //$NON-NLS-1$
+		attribute.setValue(""); //$NON-NLS-1$
+		attribute.setComment(""); //$NON-NLS-1$
+		return attribute;
 	}
 
 	/**

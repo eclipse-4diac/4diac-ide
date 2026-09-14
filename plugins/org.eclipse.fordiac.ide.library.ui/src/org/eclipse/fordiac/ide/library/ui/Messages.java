@@ -128,23 +128,32 @@ public class Messages extends NLS {
 	public static String ManageLibraryWizard_PreviewPage_Description;
 
 	// Manifest Editor
+	public static String ManifestEditor_AddLibrary;
+	public static String ManifestEditor_Attributes;
 	public static String ManifestEditor_Author;
 	public static String ManifestEditor_Comment;
+	public static String ManifestEditor_Contents;
 	public static String ManifestEditor_ConfigureVersionRange;
 	public static String ManifestEditor_Date;
 	public static String ManifestEditor_Dependencies;
+	public static String ManifestEditor_Excludes;
 	public static String ManifestEditor_ImportLibraries;
+	public static String ManifestEditor_Includes;
 	public static String ManifestEditor_InvalidDate;
 	public static String ManifestEditor_InvalidVersion;
 	public static String ManifestEditor_LatestInRange;
 	public static String ManifestEditor_Latest;
 	public static String ManifestEditor_Name;
+	public static String ManifestEditor_Pattern;
 	public static String ManifestEditor_Product;
 	public static String ManifestEditor_ProductInformation;
 	public static String ManifestEditor_RefreshLibraries;
+	public static String ManifestEditor_RemoveLibrary;
 	public static String ManifestEditor_RequiredDependencies;
 	public static String ManifestEditor_SymbolicName;
+	public static String ManifestEditor_Type;
 	public static String ManifestEditor_Used;
+	public static String ManifestEditor_Value;
 	public static String ManifestEditor_Version;
 	public static String ManifestEditor_VersionInformation;
 	public static String ManifestEditor_VersionRange;
