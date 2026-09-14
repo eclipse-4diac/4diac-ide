@@ -15,11 +15,14 @@ package org.eclipse.fordiac.ide.library.ui.editors;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -27,7 +30,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-abstract class ManifestEditorPage<T extends EObject> extends FormPage {
+public abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 
 	protected ManifestEditorPage(final ManifestEditor editor, final String id, final String title) {
 		super(editor, id, title);
@@ -68,35 +71,30 @@ abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 		return (ManifestEditor) getEditor();
 	}
 
-	protected final void execute(final IUndoableOperation operation) {
+	public final void execute(final IUndoableOperation operation) {
 		getManifestEditor().execute(operation);
 	}
 
-	protected final <V> void setValue(final String label, final Supplier<V> getter, final Consumer<V> setter,
-			final V value) {
-		if (!Objects.equals(value, getter.get())) {
-			execute(new SetValueOperation<>(label, getter, setter, value));
-		}
-	}
+	protected void addControlValidation(final Text text, final String validationKey, final String message,
+			final Predicate<String> validator) {
 
-	protected final void bindText(final Text text, final Supplier<String> getter, final Consumer<String> setter,
-			final String label) {
-
-		final Consumer<String> boundSetter = value -> {
-			setter.accept(value);
-
-			final String textValue = value != null ? value : ""; //$NON-NLS-1$
-			if (!Objects.equals(text.getText(), textValue)) {
-				text.setText(textValue);
+		final Runnable update = () -> {
+			if (validator.test(text.getText())) {
+				getManagedForm().getMessageManager().removeMessage(validationKey, text);
+			} else {
+				getManagedForm().getMessageManager().addMessage(validationKey, message, null, IMessageProvider.ERROR,
+						text);
 			}
 		};
 
-		text.addModifyListener(_ -> {
-			final String value = text.getText();
+		text.addModifyListener(_ -> update.run());
+		update.run();
+	}
 
-			if (!Objects.equals(value, getter.get())) {
-				setValue(label, getter, boundSetter, value);
-			}
-		});
+	public final <V> void setValue(final String label, final Supplier<V> getter, final Consumer<V> setter,
+			final V value) {
+		if (!Objects.equals(value, getter.get())) {
+			execute(new SetValueOperation<>(label, getter, setter, value, null));
+		}
 	}
 }

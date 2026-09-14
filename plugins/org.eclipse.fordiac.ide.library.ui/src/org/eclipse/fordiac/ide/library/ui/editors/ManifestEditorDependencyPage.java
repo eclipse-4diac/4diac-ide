@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.library.provider.ILibraryProvider.LibraryDescript
 import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
 import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
+import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
 import org.eclipse.fordiac.ide.library.ui.wizards.ManageLibraryWizard;
 import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -288,20 +289,13 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 				if (element instanceof final Required required) {
 					final String version = value.toString();
 
-					if (version.equals(required.getVersion())) {
-						return;
-					}
-
-					final Consumer<String> setter = newValue -> {
-						required.setVersion(newValue);
-
-						if (!treeViewer.getControl().isDisposed()) {
-							treeViewer.refresh(required);
-						}
-					};
-
-					ManifestEditorDependencyPage.this.setValue(Messages.ManifestEditor_VersionRange,
-							required::getVersion, setter, version);
+					ManifestEditorDependencyPage.this
+							.execute(new SetValueOperation<>(Messages.ManifestEditor_VersionRange, required::getVersion,
+									required::setVersion, version, () -> {
+										if (!treeViewer.getControl().isDisposed()) {
+											treeViewer.refresh(required);
+										}
+									}));
 
 					getViewer().setSelection(StructuredSelection.EMPTY);
 				}

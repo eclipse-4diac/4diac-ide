@@ -125,7 +125,7 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 
 			includeMinVersion.setSelection(input.getLeftType() == VersionRange.LEFT_CLOSED);
 			includeMaxVersion.setSelection(input.getRightType() == VersionRange.RIGHT_CLOSED);
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException _) {
 			// ignore invalid initial value
 		}
 	}
