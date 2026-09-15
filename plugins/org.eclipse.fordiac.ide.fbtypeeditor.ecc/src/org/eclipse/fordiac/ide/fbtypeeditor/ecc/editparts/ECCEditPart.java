@@ -10,6 +10,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Vikash Kumar Sinha
+ *     - create a state via a direct edit policy on canvas double-click
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -23,12 +25,16 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECCTransitionRouter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECCCreateStateDirectEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECCXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.gef.requests.LocationRequest;
 
 public class ECCEditPart extends AbstractDiagramEditPart {
 
@@ -91,7 +97,18 @@ public class ECCEditPart extends AbstractDiagramEditPart {
 		// handles constraint changes of model elements and creation of new
 		// model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ECCXYLayoutEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ECCCreateStateDirectEditPolicy());
 
+	}
+
+	@Override
+	public void performRequest(final Request request) {
+		if (request.getType() == RequestConstants.REQ_OPEN && request instanceof final LocationRequest locationRequest
+				&& getEditPolicy(EditPolicy.DIRECT_EDIT_ROLE) instanceof final ECCCreateStateDirectEditPolicy policy) {
+			policy.performDirectEdit(locationRequest);
+		} else {
+			super.performRequest(request);
+		}
 	}
 
 	/**

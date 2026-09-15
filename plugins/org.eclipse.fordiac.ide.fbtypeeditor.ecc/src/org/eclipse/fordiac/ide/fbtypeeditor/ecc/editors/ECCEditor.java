@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - changed inheritence to DiagramEditorWithFlyoutPalette,
  *                 removed duplicated code
+ *   Vikash Kumar Sinha - forward the open request to the ECC edit part
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.DeleteECCAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.ECCSelectAllAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.NewStateAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithm;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
@@ -55,6 +57,7 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -88,6 +91,16 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 			final AdvancedMarqueeDragTracker dragTracker = new AdvancedMarqueeDragTracker();
 			dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 			return dragTracker;
+		}
+
+		@Override
+		public void performRequest(final Request request) {
+			if (request.getType() == RequestConstants.REQ_OPEN
+					&& getContents() instanceof final ECCEditPart eccEditPart) {
+				eccEditPart.performRequest(request);
+			} else {
+				super.performRequest(request);
+			}
 		}
 
 		@Override
