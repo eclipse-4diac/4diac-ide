@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public interface LibraryElementResource extends Resource {
 
+	String OPTION_TYPE_ENTRY = "org.eclipse.fordiac.ide.model.typelibrary.TypeEntry"; //$NON-NLS-1$
+
 	default LibraryElement getLibraryElement() {
 		return (!getContents().isEmpty() && getContents().get(0) instanceof final LibraryElement le) ? le : null;
 	}

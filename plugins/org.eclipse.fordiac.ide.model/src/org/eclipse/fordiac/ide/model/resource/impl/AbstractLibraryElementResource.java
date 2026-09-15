@@ -59,7 +59,7 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
-		final TypeLibrary typeLibrary = getTypeLibrary();
+		final TypeLibrary typeLibrary = getTypeLibrary(options);
 		if (typeLibrary == null) {
 			throw new IOException(
 					MessageFormat.format(uri != null && uri.isFile() ? Messages.FordiacTypeResource_NotInWorkspace
@@ -72,7 +72,7 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 			getErrors().addAll(importer.getErrors());
 			getWarnings().addAll(importer.getWarnings());
 			dependencies.addAll(importer.getDependencies());
-			addLibraryElement(importer.getElement());
+			addLibraryElement(importer.getElement(), options);
 		} catch (final TypeImportException e) {
 			getErrors().add(new TypeImportDiagnostic(e.getMessage(), Messages.FordiacTypeResource_TypeImportError));
 		} catch (final XMLStreamException e) {
@@ -89,13 +89,15 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		}
 
 		if (getContents().isEmpty()) {
-			addLibraryElement(ErrorLibraryElementFactory.INSTANCE.create(getFullTypeName(), getLibraryElementEClass()));
+			addLibraryElement(
+					ErrorLibraryElementFactory.INSTANCE.create(getFullTypeName(options), getLibraryElementEClass()),
+					options);
 		}
 	}
 
-	private void addLibraryElement(final LibraryElement element) {
+	private void addLibraryElement(final LibraryElement element, final Map<?, ?> options) {
 		if (element != null) {
-			final TypeEntry typeEntry = getTypeEntry();
+			final TypeEntry typeEntry = getTypeEntry(options);
 			if (typeEntry != null) {
 				element.setTypeEntry(typeEntry);
 			}
@@ -103,8 +105,8 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		}
 	}
 
-	private String getFullTypeName() {
-		final TypeEntry entry = getTypeEntry();
+	private String getFullTypeName(final Map<?, ?> options) {
+		final TypeEntry entry = getTypeEntry(options);
 		if (entry != null) {
 			return entry.getFullTypeName();
 		}
@@ -152,11 +154,19 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		return dependencies;
 	}
 
-	protected TypeEntry getTypeEntry() {
+	protected TypeEntry getTypeEntry(final Map<?, ?> options) {
+		if (options != null && options.get(OPTION_TYPE_ENTRY) instanceof final TypeEntry optionEntry) {
+			return optionEntry;
+		}
+
 		return TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
 	}
 
-	protected TypeLibrary getTypeLibrary() {
+	protected TypeLibrary getTypeLibrary(final Map<?, ?> options) {
+		if (options != null && options.get(OPTION_TYPE_ENTRY) instanceof final TypeEntry optionEntry) {
+			return optionEntry.getTypeLibrary();
+		}
+
 		return TypeLibraryManager.INSTANCE.getTypeLibraryFromURI(uri);
 	}
 
