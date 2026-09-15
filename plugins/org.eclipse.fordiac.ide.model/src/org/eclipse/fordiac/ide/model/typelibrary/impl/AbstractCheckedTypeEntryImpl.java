@@ -39,7 +39,7 @@ abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends Ab
 	@Override
 	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
 		if (typeClass.isInstance(toSave)) {
-			doSaveInternal(getTypeExporter(typeClass.cast(toSave)), monitor);
+			super.save(toSave, monitor);
 		} else {
 			FordiacLogHelper.logError("Tried to save wrong type entry for " + getClass().getName());//$NON-NLS-1$
 		}
