@@ -349,14 +349,8 @@ class ManifestEditorDependencyPage extends FormPage {
 						return;
 					}
 
-					if (status.isOK()) {
-						form.getForm().setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
-					} else {
-						final String combinedMessage = status.isMultiStatus() ? Arrays.stream(status.getChildren())
-								.map(IStatus::getMessage).collect(Collectors.joining(System.lineSeparator()))
-								: status.getMessage();
-						form.getForm().setMessage(combinedMessage, IMessageProvider.ERROR);
-					}
+					final String message = status.isOK() ? null : getMessage(status);
+					form.getForm().setMessage(message, toMessageProviderSeverity(status));
 
 					treeViewer.refresh();
 				});
@@ -366,6 +360,24 @@ class ManifestEditorDependencyPage extends FormPage {
 
 		job.setUser(false);
 		job.schedule();
+	}
+
+	private static String getMessage(final IStatus status) {
+		if (status.isMultiStatus()) {
+			final int severity = status.getSeverity();
+			return Arrays.stream(status.getChildren()).filter(child -> child.matches(severity)).map(IStatus::getMessage)
+					.collect(Collectors.joining(System.lineSeparator()));
+		}
+		return status.getMessage();
+	}
+
+	private static int toMessageProviderSeverity(final IStatus status) {
+		return switch (status.getSeverity()) {
+		case IStatus.ERROR -> IMessageProvider.ERROR;
+		case IStatus.WARNING -> IMessageProvider.WARNING;
+		case IStatus.INFO -> IMessageProvider.INFORMATION;
+		default -> IMessageProvider.NONE;
+		};
 	}
 
 	private static CellLabelProvider createLabelProvider(final Function<Required, String> textProvider,
