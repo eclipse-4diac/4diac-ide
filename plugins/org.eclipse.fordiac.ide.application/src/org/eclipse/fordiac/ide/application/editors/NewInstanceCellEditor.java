@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
- * 				 2022 Primetals Technologies Germany GmbH
+ * Copyright (c) 2019 Johannes Kepler University Linz, Primetals Technologies Germany GmbH,
+ * 					  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Fabio Gandolfi - insideCell parameter to use the CellEditor inside TableViewer cells
+ *   Andrea Zoitl - added subapp and comment buttons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -46,10 +47,12 @@ import org.eclipse.swt.widgets.Text;
 
 public class NewInstanceCellEditor extends TextCellEditor {
 
-	private static final int NUM_COLUMNS = 2;
+	private static final int NUM_COLUMNS = 4;
 
 	private Composite container;
 	private Button menuButton;
+	private Button subAppButton;
+	private Button commentButton;
 	protected Shell popupShell;
 	protected TableViewer tableViewer;
 	private PaletteFilter paletteFilter;
@@ -67,6 +70,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return menuButton;
 	}
 
+	public Button getSubAppButton() {
+		return subAppButton;
+	}
+
+	public Button getCommentButton() {
+		return commentButton;
+	}
+
 	public void setTypeLibrary(final TypeLibrary typeLib, final FBNetwork hostNetwork) {
 		paletteFilter = new PaletteFilter(typeLib, hostNetwork);
 	}
@@ -74,6 +85,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	@Override
 	protected Control createControl(final Composite parent) {
 		container = createContainer(parent);
+		createSubAppButton(container);
+		createCommentButton(container);
 		textControl = (Text) super.createControl(container);
 		configureTextControl();
 		createTypeMenuButton(container);
@@ -137,12 +150,29 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			public void setBounds(final int x, final int y, final int width, final int height) {
 				super.setBounds(x, y, width, height);
 
-				final Point screenPos = getParent().toDisplay(getLocation());
-				final Rectangle compositeBounds = getBounds();
-				popupShell.setBounds(screenPos.x, screenPos.y + compositeBounds.height, compositeBounds.width, 150);
-				if (!popupShell.isVisible()) {
-					popupShell.setVisible(true);
+				if (popupShell != null && !popupShell.isDisposed()) {
+					final Point screenPos = getParent().toDisplay(getLocation());
+					final Rectangle compositeBounds = getBounds();
+
+					int leftOffset = 0;
+					if (subAppButton != null && !subAppButton.isDisposed()) {
+						leftOffset += subAppButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+					}
+					if (commentButton != null && !commentButton.isDisposed()) {
+						leftOffset += commentButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+					}
+
+					final int popupX = screenPos.x + leftOffset;
+					final int popupWidth = compositeBounds.width - leftOffset;
+					final int popupY = screenPos.y + compositeBounds.height;
+
+					popupShell.setBounds(popupX, popupY, popupWidth, 150);
+
+					if (!popupShell.isVisible()) {
+						popupShell.setVisible(true);
+					}
 				}
+
 			}
 		};
 		newContainer.setBackground(parent.getBackground());
@@ -251,5 +281,17 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private void createTypeMenuButton(final Composite container) {
 		menuButton = new Button(container, SWT.FLAT);
 		menuButton.setImage(FordiacImage.ICON_TYPE_NAVIGATOR.getImage());
+	}
+
+	private void createSubAppButton(final Composite container) {
+		subAppButton = new Button(container, SWT.FLAT);
+		subAppButton.setImage(FordiacImage.ICON_SUB_APP.getImage());
+		subAppButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+	}
+
+	private void createCommentButton(final Composite container) {
+		commentButton = new Button(container, SWT.FLAT);
+		commentButton.setImage(FordiacImage.ICON_COMMENT.getImage());
+		commentButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 	}
 }
