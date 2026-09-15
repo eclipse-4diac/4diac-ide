@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import java.lang.ref.SoftReference;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterators;
@@ -35,6 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
+import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
@@ -170,10 +173,11 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 		}
 
 		try {
-			final BlockTypeImporter importer = getImporter();
-			final FBType interfaceType = importer.loadInterface();
-			updateInterfaceDependencies(importer.getDependencies());
-			return interfaceType;
+			final LibraryElementResource resource = FordiacTypeResourceFactory.INSTANCE.createResource(getURI());
+			resource.load(Map.of(LibraryElementResource.OPTION_TYPE_ENTRY, this,
+					LibraryElementResource.OPTION_INTERFACE_ONLY, Boolean.TRUE));
+			updateInterfaceDependencies(resource.getDependencies());
+			return (FBType) resource.getLibraryElement();
 		} catch (final Exception e) {
 			handleLoadException(e);
 			return null;
