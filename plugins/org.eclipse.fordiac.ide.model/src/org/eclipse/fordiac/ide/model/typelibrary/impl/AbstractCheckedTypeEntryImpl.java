@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
@@ -56,6 +55,4 @@ abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends Ab
 			}
 		}
 	}
-
-	protected abstract AbstractTypeExporter getTypeExporter(T type);
 }

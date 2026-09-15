@@ -16,10 +16,6 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.ResourceTypeExporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
@@ -29,16 +25,6 @@ public class ResourceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Resource
 
 	public ResourceTypeEntryImpl() {
 		super(ResourceType.class);
-	}
-
-	@Override
-	protected CommonElementImporter getImporter() {
-		return new RESImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final ResourceType type) {
-		return new ResourceTypeExporter(type);
 	}
 
 	@Override

@@ -478,8 +478,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		// do nothing
 	}
 
-	protected abstract CommonElementImporter getImporter();
-
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return typeLibrary;

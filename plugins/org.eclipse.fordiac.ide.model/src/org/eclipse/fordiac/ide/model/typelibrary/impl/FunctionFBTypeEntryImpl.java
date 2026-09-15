@@ -13,10 +13,6 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.FCTExporter;
-import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
-import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
@@ -27,16 +23,6 @@ public class FunctionFBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<Func
 
 	public FunctionFBTypeEntryImpl() {
 		super(FunctionFBType.class);
-	}
-
-	@Override
-	protected BlockTypeImporter getImporter() {
-		return new FCTImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final FunctionFBType type) {
-		return new FCTExporter(type);
 	}
 
 	@Override
