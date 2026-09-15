@@ -12,12 +12,17 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.resource;
 
+import java.util.Set;
+
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public interface LibraryElementResource extends Resource {
 
 	default LibraryElement getLibraryElement() {
 		return (!getContents().isEmpty() && getContents().get(0) instanceof final LibraryElement le) ? le : null;
 	}
+
+	Set<TypeEntry> getDependencies();
 }

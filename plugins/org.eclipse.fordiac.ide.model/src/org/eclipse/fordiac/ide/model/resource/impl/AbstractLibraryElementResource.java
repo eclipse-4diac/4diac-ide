@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -48,6 +50,7 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		implements LibraryElementResource {
 
 	private final Class<T> typeClass;
+	private final Set<TypeEntry> dependencies = new HashSet<>();
 
 	protected AbstractLibraryElementResource(final URI uri, final Class<T> typeClass) {
 		super(uri);
@@ -68,6 +71,7 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 			importer.loadElement();
 			getErrors().addAll(importer.getErrors());
 			getWarnings().addAll(importer.getWarnings());
+			dependencies.addAll(importer.getDependencies());
 			addLibraryElement(importer.getElement());
 		} catch (final TypeImportException e) {
 			getErrors().add(new TypeImportDiagnostic(e.getMessage(), Messages.FordiacTypeResource_TypeImportError));
@@ -126,12 +130,26 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		try (InputStream inputStream = exporter.getFileContent()) {
 			inputStream.transferTo(outputStream);
 		}
+
+		dependencies.clear();
+		dependencies.addAll(exporter.getDependencies());
+	}
+
+	@Override
+	protected void doUnload() {
+		dependencies.clear();
+		super.doUnload();
 	}
 
 	@Override
 	public T getLibraryElement() {
 		final LibraryElement content = LibraryElementResource.super.getLibraryElement();
 		return (typeClass.isInstance(content)) ? typeClass.cast(content) : null;
+	}
+
+	@Override
+	public Set<TypeEntry> getDependencies() {
+		return dependencies;
 	}
 
 	protected TypeEntry getTypeEntry() {
