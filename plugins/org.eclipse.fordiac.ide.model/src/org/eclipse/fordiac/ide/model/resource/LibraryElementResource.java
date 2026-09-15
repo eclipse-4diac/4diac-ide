@@ -22,6 +22,8 @@ public interface LibraryElementResource extends Resource {
 
 	String OPTION_TYPE_ENTRY = "org.eclipse.fordiac.ide.model.typelibrary.TypeEntry"; //$NON-NLS-1$
 
+	String OPTION_INTERFACE_ONLY = "org.eclipse.fordiac.ide.model.resource.LibraryElementResource.INTERFACE_ONLY"; //$NON-NLS-1$
+
 	default LibraryElement getLibraryElement() {
 		return (!getContents().isEmpty() && getContents().get(0) instanceof final LibraryElement le) ? le : null;
 	}

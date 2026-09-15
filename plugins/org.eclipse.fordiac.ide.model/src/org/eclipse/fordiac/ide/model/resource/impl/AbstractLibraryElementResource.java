@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
@@ -68,7 +69,11 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 
 		try {
 			final CommonElementImporter importer = getTypeImporter(inputStream, typeLibrary);
-			importer.loadElement();
+			if (isInterfaceOnly(options) && importer instanceof final BlockTypeImporter blockTypeImporter) {
+				blockTypeImporter.loadInterface();
+			} else {
+				importer.loadElement();
+			}
 			getErrors().addAll(importer.getErrors());
 			getWarnings().addAll(importer.getWarnings());
 			dependencies.addAll(importer.getDependencies());
@@ -168,6 +173,13 @@ public abstract class AbstractLibraryElementResource<T extends LibraryElement> e
 		}
 
 		return TypeLibraryManager.INSTANCE.getTypeLibraryFromURI(uri);
+	}
+
+	protected boolean isInterfaceOnly(final Map<?, ?> options) {
+		if (options != null && options.get(OPTION_INTERFACE_ONLY) instanceof final Boolean optionInterfaceOnly) {
+			return optionInterfaceOnly.booleanValue();
+		}
+		return false;
 	}
 
 	protected abstract EClass getLibraryElementEClass();
