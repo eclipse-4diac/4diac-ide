@@ -18,10 +18,6 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.SEGExporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
@@ -37,16 +33,6 @@ public class SegmentTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SegmentTy
 	@Override
 	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
 		// currently we can not save segments, but we also have no editor for it
-	}
-
-	@Override
-	protected CommonElementImporter getImporter() {
-		return new SEGImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final SegmentType type) {
-		return new SEGExporter(type);
 	}
 
 	@Override

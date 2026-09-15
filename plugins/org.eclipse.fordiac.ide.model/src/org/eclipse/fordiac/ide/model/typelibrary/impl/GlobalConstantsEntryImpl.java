@@ -13,10 +13,6 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.GlobalConstantsExporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.dataimport.GlobalConstantsImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
@@ -27,16 +23,6 @@ public class GlobalConstantsEntryImpl extends AbstractCheckedTypeEntryImpl<Globa
 
 	public GlobalConstantsEntryImpl() {
 		super(GlobalConstants.class);
-	}
-
-	@Override
-	protected CommonElementImporter getImporter() {
-		return new GlobalConstantsImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final GlobalConstants type) {
-		return new GlobalConstantsExporter(type);
 	}
 
 	@Override
