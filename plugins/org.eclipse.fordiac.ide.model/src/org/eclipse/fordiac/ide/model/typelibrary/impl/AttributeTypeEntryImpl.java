@@ -13,10 +13,6 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
-import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
@@ -27,16 +23,6 @@ public class AttributeTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Attribu
 
 	public AttributeTypeEntryImpl() {
 		super(AttributeDeclaration.class);
-	}
-
-	@Override
-	protected CommonElementImporter getImporter() {
-		return new AttributeTypeImporter(getFile());
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final AttributeDeclaration type) {
-		return new AttributeTypeExporter(type);
 	}
 
 	@Override
