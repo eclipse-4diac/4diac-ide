@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -32,10 +31,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class ADPImporter extends BlockTypeImporter {
 
-	public ADPImporter(final IFile typeFile) {
-		super(typeFile);
-	}
-
 	public ADPImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		super(inputStream, typeLibrary);
 	}
@@ -44,28 +39,19 @@ public class ADPImporter extends BlockTypeImporter {
 	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.INTERFACE_LIST_ELEMENT:
-				getElement().setInterfaceList(
-						getInterfaceListImporter().parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
-				break;
-			case LibraryElementTags.SERVICE_ELEMENT:
-				parseService(getElement());
-				break;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.INTERFACE_LIST_ELEMENT -> getElement().setInterfaceList(
+					getInterfaceListImporter().parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
+			case LibraryElementTags.SERVICE_ELEMENT -> parseService(getElement());
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		};

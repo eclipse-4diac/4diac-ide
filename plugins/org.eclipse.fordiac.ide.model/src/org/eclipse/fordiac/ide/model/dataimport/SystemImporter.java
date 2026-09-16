@@ -31,7 +31,6 @@ import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -74,10 +73,6 @@ public class SystemImporter extends CommonElementImporter {
 
 	public SystemImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		super(inputStream, typeLibrary);
-	}
-
-	public SystemImporter(final IFile systemfile) {
-		super(systemfile);
 	}
 
 	@Override

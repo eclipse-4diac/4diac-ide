@@ -16,7 +16,6 @@ import java.io.InputStream;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -34,10 +33,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  */
 
 public class AttributeTypeImporter extends TypeImporter {
-
-	public AttributeTypeImporter(final IFile typeFile) {
-		super(typeFile);
-	}
 
 	public AttributeTypeImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		super(inputStream, typeLibrary);
