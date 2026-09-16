@@ -18,10 +18,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.commands.create.CreateApplicationCommand;
-import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -54,7 +54,8 @@ public class SystemCreator {
 	public void createSystem(final IProgressMonitor monitor) throws CoreException {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
 		entry = (SystemEntry) typeLibrary.createTypeEntry(systemFile);
-		final AutomationSystem system = SystemImporter.createAutomationSystem();
+		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
+		system.setSystemConfiguration(LibraryElementFactory.eINSTANCE.createSystemConfiguration());
 		system.setName(TypeEntry.getTypeNameFromFile(systemFile));
 		PackageNameHelper.setPackageName(system, packageName);
 		TypeManagementPreferencesHelper.setupVersionInfo(system, systemFile.getProject());
