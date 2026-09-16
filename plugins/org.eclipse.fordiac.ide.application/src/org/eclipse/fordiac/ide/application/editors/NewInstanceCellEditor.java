@@ -149,20 +149,25 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		final Composite newContainer = new Composite(parent, SWT.NONE) {
 			@Override
 			public void setBounds(final int x, final int y, final int width, final int height) {
-				super.setBounds(x, y, width, height);
+
+				int leftOffset = 0;
+				if (subAppButton != null && !subAppButton.isDisposed()) {
+					leftOffset += subAppButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+				}
+				if (commentButton != null && !commentButton.isDisposed()) {
+					leftOffset += commentButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+				}
+
+				// Shift the container's starting horizontal position left. Ensures that the
+				// buttons are to the left of the click target and that the search bar begins
+				// exactly where the user double-clicked.
+				super.setBounds(x - leftOffset, y, width + leftOffset, height);
 
 				if (popupShell != null && !popupShell.isDisposed()) {
 					final Point screenPos = getParent().toDisplay(getLocation());
 					final Rectangle compositeBounds = getBounds();
 
-					int leftOffset = 0;
-					if (subAppButton != null && !subAppButton.isDisposed()) {
-						leftOffset += subAppButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-					}
-					if (commentButton != null && !commentButton.isDisposed()) {
-						leftOffset += commentButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-					}
-
+					// Correct the position so that the selection list is underneath the search bar
 					final int popupX = screenPos.x + leftOffset;
 					final int popupWidth = compositeBounds.width - leftOffset;
 					final int popupY = screenPos.y + compositeBounds.height;
