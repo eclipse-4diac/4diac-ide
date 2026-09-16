@@ -32,7 +32,6 @@ import java.util.List;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -51,10 +50,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 public abstract class BlockTypeImporter extends TypeImporter {
 
 	private InterfaceListImporter interfaceListImporter;
-
-	protected BlockTypeImporter(final IFile file) {
-		super(file);
-	}
 
 	protected BlockTypeImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		super(inputStream, typeLibrary);

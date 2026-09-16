@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -31,10 +30,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * @author Martijn Rooker (martijn.rooker@profactor.at)
  */
 public class SubAppTImporter extends BlockTypeImporter {
-
-	public SubAppTImporter(final IFile typeFile) {
-		super(typeFile);
-	}
 
 	public SubAppTImporter(final CommonElementImporter importer) {
 		super(importer);
@@ -65,34 +60,25 @@ public class SubAppTImporter extends BlockTypeImporter {
 	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
-				getElement().setInterfaceList(
-						getInterfaceListImporter().parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
-				break;
-			case LibraryElementTags.SERVICE_ELEMENT:
-				parseService(getElement());
-				break;
-			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT -> getElement().setInterfaceList(
+					getInterfaceListImporter().parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
+			case LibraryElementTags.SERVICE_ELEMENT -> parseService(getElement());
+			case LibraryElementTags.SUBAPPNETWORK_ELEMENT -> {
 				final SubAppNetworkImporter subAppImporter = new SubAppNetworkImporter(this,
 						getElement().getInterfaceList());
 				getElement().setFBNetwork(subAppImporter.getFbNetwork());
 				subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
-				break;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			}
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		};

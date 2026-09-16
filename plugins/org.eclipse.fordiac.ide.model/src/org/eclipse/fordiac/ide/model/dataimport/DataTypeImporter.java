@@ -13,15 +13,11 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
@@ -42,21 +38,8 @@ public class DataTypeImporter extends TypeImporter {
 		return (AnyDerivedType) super.getElement();
 	}
 
-	public DataTypeImporter(final IFile typeFile) {
-		super(typeFile);
-	}
-
 	public DataTypeImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		super(inputStream, typeLibrary);
-	}
-
-	@Override
-	public void loadElement() throws IOException, XMLStreamException, TypeImportException {
-		super.loadElement();
-		if (getElement() == null && getFile() != null) {
-			throw new TypeImportException(
-					MessageFormat.format(Messages.DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE, getFile().getName()));
-		}
 	}
 
 	@Override
@@ -73,33 +56,25 @@ public class DataTypeImporter extends TypeImporter {
 	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.ASN1_TAG:
-				parseASN1Tag();
-				break;
-			case LibraryElementTags.STRUCTURED_TYPE_ELEMENT:
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.ASN1_TAG -> parseASN1Tag();
+			case LibraryElementTags.STRUCTURED_TYPE_ELEMENT -> {
 				setElement(convertToStructuredType(getElement()));
 				parseStructuredType((StructuredType) getElement());
-				break;
-			case LibraryElementTags.ENUMERATED_TYPE_ELEMENT:
+			}
+			case LibraryElementTags.ENUMERATED_TYPE_ELEMENT -> {
 				setElement(convertToEnumeratedType(getElement()));
 				parseEnumeratedType((EnumeratedType) getElement());
-				break;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			}
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			// TODO support other AnyDerivedTypes such as ArrayType
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		};
