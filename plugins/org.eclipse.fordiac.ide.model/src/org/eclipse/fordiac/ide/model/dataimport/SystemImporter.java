@@ -96,21 +96,8 @@ public class SystemImporter extends CommonElementImporter {
 
 	@Override
 	protected LibraryElement createRootModelElement() {
-		return createAutomationSystem();
-	}
-
-	/**
-	 * Create an empty automation system model
-	 *
-	 * this can either be used for the importer or for creating a new system
-	 *
-	 * @return the automation system model with its basic setup
-	 */
-	public static AutomationSystem createAutomationSystem() {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		// create PhysicalConfiguration
-		final SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
-		system.setSystemConfiguration(sysConf);
+		system.setSystemConfiguration(LibraryElementFactory.eINSTANCE.createSystemConfiguration());
 		return system;
 	}
 
