@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -62,6 +63,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	protected Text textControl;
 
 	private ResultListLabelProvider resultListLabelProvider;
+	private Listener repositionListener;
 
 	public NewInstanceCellEditor(final Composite parent) {
 		super(parent, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
@@ -94,6 +96,12 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		createPopUpList(container);
 		// initial population of the selection list
 		updateSelectionList();
+
+		repositionListener = _ -> repositionPopup();
+		parent.addListener(SWT.Paint, repositionListener);
+		parent.getShell().addListener(SWT.Move, repositionListener);
+		parent.getShell().addListener(SWT.Resize, repositionListener);
+
 		return container;
 	}
 
@@ -150,35 +158,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			@Override
 			public void setBounds(final int x, final int y, final int width, final int height) {
 
-				int leftOffset = 0;
-				if (subAppButton != null && !subAppButton.isDisposed()) {
-					leftOffset += subAppButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-				}
-				if (commentButton != null && !commentButton.isDisposed()) {
-					leftOffset += commentButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-				}
+				final int leftOffset = getLeftOffset();
 
 				// Shift the container's starting horizontal position left. Ensures that the
 				// buttons are to the left of the click target and that the search bar begins
 				// exactly where the user double-clicked.
 				super.setBounds(x - leftOffset, y, width + leftOffset, height);
 
-				if (popupShell != null && !popupShell.isDisposed()) {
-					final Point screenPos = getParent().toDisplay(getLocation());
-					final Rectangle compositeBounds = getBounds();
-
-					// Correct the position so that the selection list is underneath the search bar
-					final int popupX = screenPos.x + leftOffset;
-					final int popupWidth = compositeBounds.width - leftOffset;
-					final int popupY = screenPos.y + compositeBounds.height;
-
-					popupShell.setBounds(popupX, popupY, popupWidth, 150);
-
-					if (!popupShell.isVisible()) {
-						popupShell.setVisible(true);
-					}
-				}
-
+				repositionPopup();
 			}
 		};
 		newContainer.setBackground(parent.getBackground());
@@ -188,6 +175,36 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 		newContainer.setLayout(CellEditorLayoutFactory.getNewGridZeroLayout(NUM_COLUMNS));
 		return newContainer;
+	}
+
+	private int getLeftOffset() {
+		int leftOffset = 0;
+		if (subAppButton != null && !subAppButton.isDisposed()) {
+			leftOffset += subAppButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		}
+		if (commentButton != null && !commentButton.isDisposed()) {
+			leftOffset += commentButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		}
+		return leftOffset;
+	}
+
+	private void repositionPopup() {
+		if (popupShell != null && !popupShell.isDisposed() && container != null && !container.isDisposed()) {
+
+			final Point screenPos = container.getParent().toDisplay(container.getLocation());
+			final Rectangle compositeBounds = container.getBounds();
+
+			// Correct the position so that the selection list is underneath the search bar
+			final int popupX = screenPos.x + getLeftOffset();
+			final int popupWidth = compositeBounds.width - getLeftOffset();
+			final int popupY = screenPos.y + compositeBounds.height;
+
+			popupShell.setBounds(popupX, popupY, popupWidth, 150);
+
+			if (!popupShell.isVisible()) {
+				popupShell.setVisible(true);
+			}
+		}
 	}
 
 	public void configureTextControl() {
