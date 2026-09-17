@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.provider;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -22,6 +23,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -101,15 +103,19 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 			final String symbolicName, final Version version, final IProgressMonitor monitor,
 			final MultiStatus status) {
 
-		final DownloadResult<Path> result = downloader.downloadManifest(symbolicName, version, monitor);
+		Path manifestPath = getCachedManifestPath(symbolicName, version);
+		if (manifestPath == null) {
+			final DownloadResult<Path> result = downloader.downloadManifest(symbolicName, version, monitor);
 
-		if (result.status() != DownloadResult.Status.OK) {
-			status.add(Status.error(MessageFormat.format("{0}: Failed to download manifest for {1} {2}: {3}", //$NON-NLS-1$
-					downloader.getName(), symbolicName, version, result.message())));
-			return Collections.emptyMap();
+			if (result.status() != DownloadResult.Status.OK) {
+				status.add(Status.error(MessageFormat.format("{0}: Failed to download manifest for {1} {2}: {3}", //$NON-NLS-1$
+						downloader.getName(), symbolicName, version, result.message())));
+				return Collections.emptyMap();
+			}
+			manifestPath = result.result();
 		}
 
-		final Manifest manifest = ManifestHelper.getFolderManifest(result.result());
+		final Manifest manifest = ManifestHelper.getManifest(manifestPath);
 
 		final Map<String, VersionRange> dependencies = new HashMap<>();
 		if (manifest != null && manifest.getDependencies() != null) {
@@ -118,6 +124,13 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 		}
 
 		return dependencies;
+	}
+
+	private static Path getCachedManifestPath(final String symbolicName, final Version version) {
+		final Path cachedManifest = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPath()
+				.resolve(LibraryManager.PACKAGE_DOWNLOAD_DIRECTORY).resolve(symbolicName + "-" + version) //$NON-NLS-1$
+				.resolve(LibraryManager.MANIFEST);
+		return Files.isRegularFile(cachedManifest) ? cachedManifest : null;
 	}
 
 	@Override
