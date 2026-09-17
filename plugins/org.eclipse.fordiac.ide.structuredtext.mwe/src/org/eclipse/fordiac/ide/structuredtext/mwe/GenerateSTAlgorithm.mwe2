@@ -97,7 +97,7 @@ Workflow {
 			}
 			fragment = ui.compare.CompareFragment2 {}
 			fragment = junit.JUnitFragment {
-				junitVersion = "5"
+				junitVersion = "6"
 			}
 			fragment = ui.codemining.CodeMiningFragment {
 				generateStub = true
