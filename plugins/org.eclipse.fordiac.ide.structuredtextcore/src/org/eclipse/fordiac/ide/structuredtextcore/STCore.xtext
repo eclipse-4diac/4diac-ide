@@ -388,7 +388,7 @@ SignedNumber hidden():
 	('+' | '-') INT ('.' (INT | DECIMAL))?;
 
 Time returns STTime hidden():
-	('+' | '-')? TIME_VALUE;
+	('+' | '-')? TIME_PART* (INT '.')? TIME_PART;
 
 Date returns STDate:
 	INT '-' INT '-' INT;
@@ -425,11 +425,11 @@ terminal INT returns ecore::EBigInteger:
 terminal DECIMAL:
 	INT (('e' | 'E') ('+' | '-')? INT)?;
 
-terminal TIME_VALUE:
-	(TIME_PART ('_')?)+;
+terminal TIME_PART:
+	INT TIME_UNIT '_'?;
 
-terminal fragment TIME_PART:
-	INT (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+terminal fragment TIME_UNIT:
+	TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS;
 
 terminal fragment TIME_DAYS:
 	'D' | 'd';

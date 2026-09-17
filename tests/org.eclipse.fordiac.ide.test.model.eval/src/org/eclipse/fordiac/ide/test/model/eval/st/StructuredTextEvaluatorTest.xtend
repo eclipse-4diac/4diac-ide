@@ -206,14 +206,22 @@ class StructuredTextEvaluatorTest {
 		0xffffffffffffffff#L.toLWordValue.assertEquals("LWORD#16#ffffffffffffffff".evaluateExpression)
 		// TIME
 		0.toTimeValue.assertEquals("TIME#0s".evaluateExpression)
+		0.toTimeValue.assertEquals("TIME#0.0s".evaluateExpression)
 		Duration.ofNanos(17).toTimeValue.assertEquals("TIME#17ns".evaluateExpression)
+		Duration.ofNanos(17).toTimeValue.assertEquals("TIME#17.0ns".evaluateExpression)
 		Duration.ofNanos(-4).toTimeValue.assertEquals("TIME#-4ns".evaluateExpression)
+		Duration.ofNanos(-4).toTimeValue.assertEquals("TIME#-4.0ns".evaluateExpression)
 		Duration.ofNanos(17004000000L).toTimeValue.assertEquals("TIME#17s4ms".evaluateExpression)
+		Duration.ofNanos(17004000000L).toTimeValue.assertEquals("TIME#17.004s".evaluateExpression)
 		// LTIME
 		0.toLTimeValue.assertEquals("LTIME#0s".evaluateExpression)
+		0.toLTimeValue.assertEquals("LTIME#0.0s".evaluateExpression)
 		Duration.ofNanos(17).toLTimeValue.assertEquals("LTIME#17ns".evaluateExpression)
+		Duration.ofNanos(17).toLTimeValue.assertEquals("LTIME#17.0ns".evaluateExpression)
 		Duration.ofNanos(-4).toLTimeValue.assertEquals("LTIME#-4ns".evaluateExpression)
+		Duration.ofNanos(-4).toLTimeValue.assertEquals("LTIME#-4.0ns".evaluateExpression)
 		Duration.ofNanos(17004000000L).toLTimeValue.assertEquals("LTIME#17s4ms".evaluateExpression)
+		Duration.ofNanos(17004000000L).toLTimeValue.assertEquals("LTIME#17.004s".evaluateExpression)
 		// DATE
 		0.toDateValue.assertEquals("DATE#1970-01-01".evaluateExpression)
 		LocalDate.of(1970, 1, 1).toDateValue.assertEquals("DATE#1970-01-01".evaluateExpression)
