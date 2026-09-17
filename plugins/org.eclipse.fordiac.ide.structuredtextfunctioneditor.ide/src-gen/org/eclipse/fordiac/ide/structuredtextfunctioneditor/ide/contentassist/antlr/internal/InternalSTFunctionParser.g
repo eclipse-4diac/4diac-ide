@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
- *                          Martin Erich Jobst
+ * Copyright (c) 2021 Primetals Technologies GmbH,
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13244,6 +13244,7 @@ rule__Time__Group__1
 	}
 :
 	rule__Time__Group__1__Impl
+	rule__Time__Group__2
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -13255,9 +13256,116 @@ rule__Time__Group__1__Impl
 	}
 :
 (
-	{ before(grammarAccess.getTimeAccess().getTIME_VALUETerminalRuleCall_1()); }
-	RULE_TIME_VALUE
-	{ after(grammarAccess.getTimeAccess().getTIME_VALUETerminalRuleCall_1()); }
+	{ before(grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_1()); }
+	(RULE_TIME_PART)*
+	{ after(grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_1()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Time__Group__2
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Time__Group__2__Impl
+	rule__Time__Group__3
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Time__Group__2__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getTimeAccess().getGroup_2()); }
+	(rule__Time__Group_2__0)?
+	{ after(grammarAccess.getTimeAccess().getGroup_2()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Time__Group__3
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Time__Group__3__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Time__Group__3__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_3()); }
+	RULE_TIME_PART
+	{ after(grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_3()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Time__Group_2__0
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Time__Group_2__0__Impl
+	rule__Time__Group_2__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Time__Group_2__0__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getTimeAccess().getINTTerminalRuleCall_2_0()); }
+	RULE_INT
+	{ after(grammarAccess.getTimeAccess().getINTTerminalRuleCall_2_0()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Time__Group_2__1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__Time__Group_2__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Time__Group_2__1__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getTimeAccess().getFullStopKeyword_2_1()); }
+	FullStop
+	{ after(grammarAccess.getTimeAccess().getFullStopKeyword_2_1()); }
 )
 ;
 finally {

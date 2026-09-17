@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
- *                          Martin Erich Jobst
+ * Copyright (c) 2021 Primetals Technologies GmbH,
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -5903,12 +5903,35 @@ ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 				newLeafNode(kw, grammarAccess.getTimeAccess().getHyphenMinusKeyword_0_1());
 			}
 		)?
-		this_TIME_VALUE_2=RULE_TIME_VALUE
+		(
+			this_TIME_PART_2=RULE_TIME_PART
+			{
+				$current.merge(this_TIME_PART_2);
+			}
+			{
+				newLeafNode(this_TIME_PART_2, grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_1());
+			}
+		)*
+		(
+			this_INT_3=RULE_INT
+			{
+				$current.merge(this_INT_3);
+			}
+			{
+				newLeafNode(this_INT_3, grammarAccess.getTimeAccess().getINTTerminalRuleCall_2_0());
+			}
+			kw=FullStop
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getTimeAccess().getFullStopKeyword_2_1());
+			}
+		)?
+		this_TIME_PART_5=RULE_TIME_PART
 		{
-			$current.merge(this_TIME_VALUE_2);
+			$current.merge(this_TIME_PART_5);
 		}
 		{
-			newLeafNode(this_TIME_VALUE_2, grammarAccess.getTimeAccess().getTIME_VALUETerminalRuleCall_1());
+			newLeafNode(this_TIME_PART_5, grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_3());
 		}
 	)
 ;
