@@ -86,7 +86,7 @@ Workflow {
 				generateStub = true
 			}
 			junitSupport = {
-				junitVersion = "5"
+				junitVersion = "6"
 			}
 			fragment = ui.codemining.CodeMiningFragment {
 				generateStub = true
