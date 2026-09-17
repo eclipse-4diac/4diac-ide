@@ -80,7 +80,53 @@ class TypedValueConverterTest {
 				arguments("WSTRING", NAME, "WSTRING#\"4diac IDE\""), //
 				arguments("BOOL", IllegalArgumentException.class, TEST_INT), //
 				arguments("TIME", Duration.ofSeconds(17), "T#17s"), //
+				arguments("TIME", Duration.ofSeconds(-17), "T#-17s"), //
+				arguments("TIME", Duration.ofMinutes(4).plusSeconds(17), "T#4m17s"), //
+				arguments("TIME", Duration.ofMinutes(-4).minusSeconds(17), "T#-4m17s"), //
+				arguments("TIME", Duration.ofMinutes(4).plusSeconds(17).plusMillis(500), "T#4m17.5s"), //
+				arguments("TIME", Duration.ofMinutes(4).plusSeconds(17).plusMillis(500), "T#4m_17.5s"), //
+				arguments("TIME", Duration.ofMinutes(-4).minusSeconds(17).minusMillis(500), "T#-4m17.5s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#4m-17.0s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#4m 17.0s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#4m__17.0s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#4.0m17.0s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#4m17s21"), //
+				arguments("TIME", IllegalArgumentException.class, "T#_4m17s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#17s4m"), //
+				arguments("TIME", IllegalArgumentException.class, "T#1ms2s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#1h2d"), //
+				arguments("TIME", IllegalArgumentException.class, "T#1s2s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#1ms2ms"), //
+				arguments("TIME", IllegalArgumentException.class, "T#4_m"), //
+				arguments("TIME", IllegalArgumentException.class, "T#17._5s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#17_.5s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#17.5_s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#0.0000000001s"), //
+				arguments("TIME", IllegalArgumentException.class, "T#999999999999999999999999d"), //
 				arguments("LTIME", Duration.ofSeconds(17), "LT#17s"), //
+				arguments("LTIME", Duration.ofSeconds(-17), "LT#-17s"), //
+				arguments("LTIME", Duration.ofMinutes(4).plusSeconds(17), "LT#4m17s"), //
+				arguments("LTIME", Duration.ofMinutes(-4).minusSeconds(17), "LT#-4m17s"), //
+				arguments("LTIME", Duration.ofMinutes(4).plusSeconds(17).plusMillis(500), "LT#4m17.5s"), //
+				arguments("LTIME", Duration.ofMinutes(4).plusSeconds(17).plusMillis(500), "LT#4m_17.5s"), //
+				arguments("LTIME", Duration.ofMinutes(-4).minusSeconds(17).minusMillis(500), "LT#-4m17.5s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#4m-17.0s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#4m 17.0s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#4m__17.0s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#4.0m17.0s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#4m17s21"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#_4m17s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#17s4m"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#1ms2s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#1h2d"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#1s2s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#1ms2ms"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#4_m"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#17._5s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#17_.5s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#17.5_s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#0.0000000001s"), //
+				arguments("LTIME", IllegalArgumentException.class, "LT#999999999999999999999999d"), //
 				arguments("DATE", LocalDate.of(2017, 04, 21), "D#2017-04-21"), //
 				arguments("LDATE", LocalDate.of(2017, 04, 21), "LD#2017-04-21"), //
 				arguments("TIME_OF_DAY", LocalTime.of(21, 04, 17), "TOD#21:04:17"), //
@@ -116,14 +162,23 @@ class TypedValueConverterTest {
 		if (expected instanceof final Class<?> expectedClass && Throwable.class.isAssignableFrom(expectedClass)) {
 			assertThrowsExactly(expectedClass.asSubclass(Throwable.class), () -> converter.toValue(string));
 			assertThrowsExactly(expectedClass.asSubclass(Throwable.class),
-					() -> converter.toValue(new Scanner(string)));
+					() -> toValueExact(converter, new Scanner(string)));
 		} else if (expected instanceof final Iterable<?> expectedIterable) {
 			assertIterableEquals(expectedIterable, (Iterable<?>) converter.toValue(string));
-			assertIterableEquals(expectedIterable, (Iterable<?>) converter.toValue(new Scanner(string)));
+			assertIterableEquals(expectedIterable, (Iterable<?>) toValueExact(converter, new Scanner(string)));
 		} else {
 			assertEquals(expected, converter.toValue(string));
-			assertEquals(expected, converter.toValue(new Scanner(string)));
+			assertEquals(expected, toValueExact(converter, new Scanner(string)));
 		}
+	}
+
+	Object toValueExact(final TypedValueConverter converter, final Scanner scanner) {
+		final Object result = converter.toValue(scanner);
+		// check if there is any remaining scanner input
+		if (scanner.findWithinHorizon("(?s).", 0) != null) {
+			throw new IllegalArgumentException();
+		}
+		return result;
 	}
 
 	@Test
