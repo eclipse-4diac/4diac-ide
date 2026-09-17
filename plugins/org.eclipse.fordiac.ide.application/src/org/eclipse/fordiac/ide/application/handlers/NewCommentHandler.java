@@ -38,11 +38,7 @@ public class NewCommentHandler extends AbstractContainerElementHandler {
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		boolean enabled = false;
 		if (sel instanceof final StructuredSelection selection) {
-			if (isOnlyOneConnectionSelected(selection)) {
-				enabled = false;
-			} else {
-				enabled = createNewEmptyContainerElement(selection);
-			}
+			enabled = isBackgroundSelected(selection);
 		}
 		setBaseEnabled(enabled);
 	}

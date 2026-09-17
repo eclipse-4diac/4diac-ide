@@ -253,4 +253,14 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		return false;
 	}
 
+	protected static boolean isBackgroundSelected(final StructuredSelection selection) {
+		if (selection.size() == 1 && selection.getFirstElement() instanceof final EditPart ep) {
+			final Object model = ep.getModel();
+			// The selection is the background canvas only if its model is the FBNetwork
+			// itself
+			return model instanceof FBNetwork;
+		}
+		return false;
+	}
+
 }
