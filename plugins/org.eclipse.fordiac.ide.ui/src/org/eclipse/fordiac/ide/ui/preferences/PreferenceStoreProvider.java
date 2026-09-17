@@ -139,9 +139,11 @@ public class PreferenceStoreProvider {
 	 *         activation of project-specific preferences
 	 */
 	public static IPreferenceStore getStore(final String qualifier, final IProject project) {
-		final var projectScope = new ScopedPreferenceStore(new ProjectScope(project), qualifier);
-		if (projectScope.getBoolean(PROJECT_STORE_ACTIVE)) {
-			return projectScope;
+		if (project != null) {
+			final var projectScope = new ScopedPreferenceStore(new ProjectScope(project), qualifier);
+			if (projectScope.getBoolean(PROJECT_STORE_ACTIVE)) {
+				return projectScope;
+			}
 		}
 		return new ScopedPreferenceStore(InstanceScope.INSTANCE, qualifier);
 	}
