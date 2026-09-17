@@ -27,7 +27,7 @@ Workflow {
 				baseName = "org.eclipse.fordiac.ide.structuredtextcore"
 				rootPath = rootPath
 				runtimeTest = {
-					enabled = false
+					enabled = true
 				}
 				eclipsePlugin = {
 					enabled = true
@@ -87,6 +87,7 @@ Workflow {
 			}
 			junitSupport = {
 				junitVersion = "6"
+				generateXtendStub = false
 			}
 			fragment = ui.codemining.CodeMiningFragment {
 				generateStub = true
