@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
- *                          Martin Erich Jobst
+ * Copyright (c) 2021 Primetals Technologies GmbH,
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -364,9 +364,9 @@ RULE_INT : '0'..'9' ('0'..'9'|'_')*;
 
 RULE_DECIMAL : RULE_INT (('e'|'E') ('+'|'-')? RULE_INT)?;
 
-RULE_TIME_VALUE : (RULE_TIME_PART '_'?)+;
+RULE_TIME_PART : RULE_INT RULE_TIME_UNIT '_'?;
 
-fragment RULE_TIME_PART : RULE_INT (RULE_TIME_DAYS|RULE_TIME_HOURS|RULE_TIME_MINUTES|RULE_TIME_SECONDS|RULE_TIME_MILLIS|RULE_TIME_MICROS|RULE_TIME_NANOS);
+fragment RULE_TIME_UNIT : (RULE_TIME_DAYS|RULE_TIME_HOURS|RULE_TIME_MINUTES|RULE_TIME_SECONDS|RULE_TIME_MILLIS|RULE_TIME_MICROS|RULE_TIME_NANOS);
 
 fragment RULE_TIME_DAYS : ('D'|'d');
 

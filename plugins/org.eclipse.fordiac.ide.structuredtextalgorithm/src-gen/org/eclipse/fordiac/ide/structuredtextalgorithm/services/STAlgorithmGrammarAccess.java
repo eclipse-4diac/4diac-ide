@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -1428,7 +1428,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//Time returns STTime hidden():
-	//    ('+' | '-')? TIME_VALUE;
+	//    ('+' | '-')? TIME_PART* (INT '.')? TIME_PART;
 	public STCoreGrammarAccess.TimeElements getTimeAccess() {
 		return gaSTCore.getTimeAccess();
 	}
@@ -1519,16 +1519,16 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return gaSTCore.getDECIMALRule();
 	}
 	
-	//terminal TIME_VALUE:
-	//    (TIME_PART ('_')?)+;
-	public TerminalRule getTIME_VALUERule() {
-		return gaSTCore.getTIME_VALUERule();
-	}
-	
-	//terminal fragment TIME_PART:
-	//    INT (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+	//terminal TIME_PART:
+	//    INT TIME_UNIT '_'?;
 	public TerminalRule getTIME_PARTRule() {
 		return gaSTCore.getTIME_PARTRule();
+	}
+	
+	//terminal fragment TIME_UNIT:
+	//    TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS;
+	public TerminalRule getTIME_UNITRule() {
+		return gaSTCore.getTIME_UNITRule();
 	}
 	
 	//terminal fragment TIME_DAYS:

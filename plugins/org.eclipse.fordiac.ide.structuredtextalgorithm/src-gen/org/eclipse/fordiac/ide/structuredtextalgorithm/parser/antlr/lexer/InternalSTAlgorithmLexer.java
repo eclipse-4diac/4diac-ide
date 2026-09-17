@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,6 +25,7 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalSTAlgorithmLexer extends Lexer {
     public static final int EqualsSignGreaterThanSign=139;
+    public static final int RULE_TIME_UNIT=177;
     public static final int LessThanSign=164;
     public static final int RULE_TIME_HOURS=180;
     public static final int INTERNAL=49;
@@ -61,7 +62,6 @@ public class InternalSTAlgorithmLexer extends Lexer {
     public static final int FullStop=160;
     public static final int RULE_TIME_SECONDS=182;
     public static final int INTERAL=58;
-    public static final int RULE_TIME_VALUE=178;
     public static final int CONTINUE=44;
     public static final int Semicolon=163;
     public static final int REF=124;
@@ -77,7 +77,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
     public static final int DT=144;
     public static final int END_VAR=56;
     public static final int END_STEP=46;
-    public static final int RULE_TIME_PART=177;
+    public static final int RULE_TIME_PART=178;
     public static final int FullStopFullStop=134;
     public static final int Ampersand=153;
     public static final int END_NAMESPACE=13;
@@ -11500,61 +11500,33 @@ public class InternalSTAlgorithmLexer extends Lexer {
     }
     // $ANTLR end "RULE_DECIMAL"
 
-    // $ANTLR start "RULE_TIME_VALUE"
-    public final void mRULE_TIME_VALUE() throws RecognitionException {
+    // $ANTLR start "RULE_TIME_PART"
+    public final void mRULE_TIME_PART() throws RecognitionException {
         try {
-            int _type = RULE_TIME_VALUE;
+            int _type = RULE_TIME_PART;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:369:17: ( ( RULE_TIME_PART ( '_' )? )+ )
-            // InternalSTAlgorithmLexer.g:369:19: ( RULE_TIME_PART ( '_' )? )+
+            // InternalSTAlgorithmLexer.g:369:16: ( RULE_INT RULE_TIME_UNIT ( '_' )? )
+            // InternalSTAlgorithmLexer.g:369:18: RULE_INT RULE_TIME_UNIT ( '_' )?
             {
-            // InternalSTAlgorithmLexer.g:369:19: ( RULE_TIME_PART ( '_' )? )+
-            int cnt7=0;
-            loop7:
-            do {
-                int alt7=2;
-                int LA7_0 = input.LA(1);
+            mRULE_INT(); 
+            mRULE_TIME_UNIT(); 
+            // InternalSTAlgorithmLexer.g:369:42: ( '_' )?
+            int alt6=2;
+            int LA6_0 = input.LA(1);
 
-                if ( ((LA7_0>='0' && LA7_0<='9')) ) {
-                    alt7=1;
-                }
+            if ( (LA6_0=='_') ) {
+                alt6=1;
+            }
+            switch (alt6) {
+                case 1 :
+                    // InternalSTAlgorithmLexer.g:369:42: '_'
+                    {
+                    match('_'); 
 
+                    }
+                    break;
 
-                switch (alt7) {
-            	case 1 :
-            	    // InternalSTAlgorithmLexer.g:369:20: RULE_TIME_PART ( '_' )?
-            	    {
-            	    mRULE_TIME_PART(); 
-            	    // InternalSTAlgorithmLexer.g:369:35: ( '_' )?
-            	    int alt6=2;
-            	    int LA6_0 = input.LA(1);
-
-            	    if ( (LA6_0=='_') ) {
-            	        alt6=1;
-            	    }
-            	    switch (alt6) {
-            	        case 1 :
-            	            // InternalSTAlgorithmLexer.g:369:35: '_'
-            	            {
-            	            match('_'); 
-
-            	            }
-            	            break;
-
-            	    }
-
-
-            	    }
-            	    break;
-
-            	default :
-            	    if ( cnt7 >= 1 ) break loop7;
-                        EarlyExitException eee =
-                            new EarlyExitException(7, input);
-                        throw eee;
-                }
-                cnt7++;
-            } while (true);
+            }
 
 
             }
@@ -11565,112 +11537,111 @@ public class InternalSTAlgorithmLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "RULE_TIME_VALUE"
+    // $ANTLR end "RULE_TIME_PART"
 
-    // $ANTLR start "RULE_TIME_PART"
-    public final void mRULE_TIME_PART() throws RecognitionException {
+    // $ANTLR start "RULE_TIME_UNIT"
+    public final void mRULE_TIME_UNIT() throws RecognitionException {
         try {
-            // InternalSTAlgorithmLexer.g:371:25: ( RULE_INT ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS ) )
-            // InternalSTAlgorithmLexer.g:371:27: RULE_INT ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
+            // InternalSTAlgorithmLexer.g:371:25: ( ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS ) )
+            // InternalSTAlgorithmLexer.g:371:27: ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
             {
-            mRULE_INT(); 
-            // InternalSTAlgorithmLexer.g:371:36: ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
-            int alt8=7;
+            // InternalSTAlgorithmLexer.g:371:27: ( RULE_TIME_DAYS | RULE_TIME_HOURS | RULE_TIME_MINUTES | RULE_TIME_SECONDS | RULE_TIME_MILLIS | RULE_TIME_MICROS | RULE_TIME_NANOS )
+            int alt7=7;
             switch ( input.LA(1) ) {
             case 'D':
             case 'd':
                 {
-                alt8=1;
+                alt7=1;
                 }
                 break;
             case 'H':
             case 'h':
                 {
-                alt8=2;
+                alt7=2;
                 }
                 break;
             case 'M':
             case 'm':
                 {
-                int LA8_3 = input.LA(2);
+                int LA7_3 = input.LA(2);
 
-                if ( (LA8_3=='S'||LA8_3=='s') ) {
-                    alt8=5;
+                if ( (LA7_3=='S'||LA7_3=='s') ) {
+                    alt7=5;
                 }
                 else {
-                    alt8=3;}
+                    alt7=3;}
                 }
                 break;
             case 'S':
             case 's':
                 {
-                alt8=4;
+                alt7=4;
                 }
                 break;
             case 'U':
             case 'u':
                 {
-                alt8=6;
+                alt7=6;
                 }
                 break;
             case 'N':
             case 'n':
                 {
-                alt8=7;
+                alt7=7;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 8, 0, input);
+                    new NoViableAltException("", 7, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt8) {
+            switch (alt7) {
                 case 1 :
-                    // InternalSTAlgorithmLexer.g:371:37: RULE_TIME_DAYS
+                    // InternalSTAlgorithmLexer.g:371:28: RULE_TIME_DAYS
                     {
                     mRULE_TIME_DAYS(); 
 
                     }
                     break;
                 case 2 :
-                    // InternalSTAlgorithmLexer.g:371:52: RULE_TIME_HOURS
+                    // InternalSTAlgorithmLexer.g:371:43: RULE_TIME_HOURS
                     {
                     mRULE_TIME_HOURS(); 
 
                     }
                     break;
                 case 3 :
-                    // InternalSTAlgorithmLexer.g:371:68: RULE_TIME_MINUTES
+                    // InternalSTAlgorithmLexer.g:371:59: RULE_TIME_MINUTES
                     {
                     mRULE_TIME_MINUTES(); 
 
                     }
                     break;
                 case 4 :
-                    // InternalSTAlgorithmLexer.g:371:86: RULE_TIME_SECONDS
+                    // InternalSTAlgorithmLexer.g:371:77: RULE_TIME_SECONDS
                     {
                     mRULE_TIME_SECONDS(); 
 
                     }
                     break;
                 case 5 :
-                    // InternalSTAlgorithmLexer.g:371:104: RULE_TIME_MILLIS
+                    // InternalSTAlgorithmLexer.g:371:95: RULE_TIME_MILLIS
                     {
                     mRULE_TIME_MILLIS(); 
 
                     }
                     break;
                 case 6 :
-                    // InternalSTAlgorithmLexer.g:371:121: RULE_TIME_MICROS
+                    // InternalSTAlgorithmLexer.g:371:112: RULE_TIME_MICROS
                     {
                     mRULE_TIME_MICROS(); 
 
                     }
                     break;
                 case 7 :
-                    // InternalSTAlgorithmLexer.g:371:138: RULE_TIME_NANOS
+                    // InternalSTAlgorithmLexer.g:371:129: RULE_TIME_NANOS
                     {
                     mRULE_TIME_NANOS(); 
 
@@ -11686,7 +11657,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "RULE_TIME_PART"
+    // $ANTLR end "RULE_TIME_UNIT"
 
     // $ANTLR start "RULE_TIME_DAYS"
     public final void mRULE_TIME_DAYS() throws RecognitionException {
@@ -11892,13 +11863,13 @@ public class InternalSTAlgorithmLexer extends Lexer {
             // InternalSTAlgorithmLexer.g:387:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             // InternalSTAlgorithmLexer.g:387:11: ( '^' )?
-            int alt9=2;
-            int LA9_0 = input.LA(1);
+            int alt8=2;
+            int LA8_0 = input.LA(1);
 
-            if ( (LA9_0=='^') ) {
-                alt9=1;
+            if ( (LA8_0=='^') ) {
+                alt8=1;
             }
-            switch (alt9) {
+            switch (alt8) {
                 case 1 :
                     // InternalSTAlgorithmLexer.g:387:11: '^'
                     {
@@ -11919,17 +11890,17 @@ public class InternalSTAlgorithmLexer extends Lexer {
                 throw mse;}
 
             // InternalSTAlgorithmLexer.g:387:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
-            loop10:
+            loop9:
             do {
-                int alt10=2;
-                int LA10_0 = input.LA(1);
+                int alt9=2;
+                int LA9_0 = input.LA(1);
 
-                if ( ((LA10_0>='0' && LA10_0<='9')||(LA10_0>='A' && LA10_0<='Z')||LA10_0=='_'||(LA10_0>='a' && LA10_0<='z')) ) {
-                    alt10=1;
+                if ( ((LA9_0>='0' && LA9_0<='9')||(LA9_0>='A' && LA9_0<='Z')||LA9_0=='_'||(LA9_0>='a' && LA9_0<='z')) ) {
+                    alt9=1;
                 }
 
 
-                switch (alt10) {
+                switch (alt9) {
             	case 1 :
             	    // InternalSTAlgorithmLexer.g:
             	    {
@@ -11947,7 +11918,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop10;
+            	    break loop9;
                 }
             } while (true);
 
@@ -11971,41 +11942,41 @@ public class InternalSTAlgorithmLexer extends Lexer {
             // InternalSTAlgorithmLexer.g:389:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
             {
             // InternalSTAlgorithmLexer.g:389:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
-            int alt13=2;
-            int LA13_0 = input.LA(1);
+            int alt12=2;
+            int LA12_0 = input.LA(1);
 
-            if ( (LA13_0=='\"') ) {
-                alt13=1;
+            if ( (LA12_0=='\"') ) {
+                alt12=1;
             }
-            else if ( (LA13_0=='\'') ) {
-                alt13=2;
+            else if ( (LA12_0=='\'') ) {
+                alt12=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 13, 0, input);
+                    new NoViableAltException("", 12, 0, input);
 
                 throw nvae;
             }
-            switch (alt13) {
+            switch (alt12) {
                 case 1 :
                     // InternalSTAlgorithmLexer.g:389:16: '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
                     // InternalSTAlgorithmLexer.g:389:20: ( '$' . | ~ ( ( '$' | '\"' ) ) )*
-                    loop11:
+                    loop10:
                     do {
-                        int alt11=3;
-                        int LA11_0 = input.LA(1);
+                        int alt10=3;
+                        int LA10_0 = input.LA(1);
 
-                        if ( (LA11_0=='$') ) {
-                            alt11=1;
+                        if ( (LA10_0=='$') ) {
+                            alt10=1;
                         }
-                        else if ( ((LA11_0>='\u0000' && LA11_0<='!')||LA11_0=='#'||(LA11_0>='%' && LA11_0<='\uFFFF')) ) {
-                            alt11=2;
+                        else if ( ((LA10_0>='\u0000' && LA10_0<='!')||LA10_0=='#'||(LA10_0>='%' && LA10_0<='\uFFFF')) ) {
+                            alt10=2;
                         }
 
 
-                        switch (alt11) {
+                        switch (alt10) {
                     	case 1 :
                     	    // InternalSTAlgorithmLexer.g:389:21: '$' .
                     	    {
@@ -12031,7 +12002,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop11;
+                    	    break loop10;
                         }
                     } while (true);
 
@@ -12044,20 +12015,20 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     {
                     match('\''); 
                     // InternalSTAlgorithmLexer.g:389:51: ( '$' . | ~ ( ( '$' | '\\'' ) ) )*
-                    loop12:
+                    loop11:
                     do {
-                        int alt12=3;
-                        int LA12_0 = input.LA(1);
+                        int alt11=3;
+                        int LA11_0 = input.LA(1);
 
-                        if ( (LA12_0=='$') ) {
-                            alt12=1;
+                        if ( (LA11_0=='$') ) {
+                            alt11=1;
                         }
-                        else if ( ((LA12_0>='\u0000' && LA12_0<='#')||(LA12_0>='%' && LA12_0<='&')||(LA12_0>='(' && LA12_0<='\uFFFF')) ) {
-                            alt12=2;
+                        else if ( ((LA11_0>='\u0000' && LA11_0<='#')||(LA11_0>='%' && LA11_0<='&')||(LA11_0>='(' && LA11_0<='\uFFFF')) ) {
+                            alt11=2;
                         }
 
 
-                        switch (alt12) {
+                        switch (alt11) {
                     	case 1 :
                     	    // InternalSTAlgorithmLexer.g:389:52: '$' .
                     	    {
@@ -12083,7 +12054,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop12;
+                    	    break loop11;
                         }
                     } while (true);
 
@@ -12114,51 +12085,51 @@ public class InternalSTAlgorithmLexer extends Lexer {
             // InternalSTAlgorithmLexer.g:391:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
             {
             // InternalSTAlgorithmLexer.g:391:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
-            int alt16=2;
-            int LA16_0 = input.LA(1);
+            int alt15=2;
+            int LA15_0 = input.LA(1);
 
-            if ( (LA16_0=='/') ) {
-                alt16=1;
+            if ( (LA15_0=='/') ) {
+                alt15=1;
             }
-            else if ( (LA16_0=='(') ) {
-                alt16=2;
+            else if ( (LA15_0=='(') ) {
+                alt15=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 16, 0, input);
+                    new NoViableAltException("", 15, 0, input);
 
                 throw nvae;
             }
-            switch (alt16) {
+            switch (alt15) {
                 case 1 :
                     // InternalSTAlgorithmLexer.g:391:20: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
                     // InternalSTAlgorithmLexer.g:391:25: ( options {greedy=false; } : . )*
-                    loop14:
+                    loop13:
                     do {
-                        int alt14=2;
-                        int LA14_0 = input.LA(1);
+                        int alt13=2;
+                        int LA13_0 = input.LA(1);
 
-                        if ( (LA14_0=='*') ) {
-                            int LA14_1 = input.LA(2);
+                        if ( (LA13_0=='*') ) {
+                            int LA13_1 = input.LA(2);
 
-                            if ( (LA14_1=='/') ) {
-                                alt14=2;
+                            if ( (LA13_1=='/') ) {
+                                alt13=2;
                             }
-                            else if ( ((LA14_1>='\u0000' && LA14_1<='.')||(LA14_1>='0' && LA14_1<='\uFFFF')) ) {
-                                alt14=1;
+                            else if ( ((LA13_1>='\u0000' && LA13_1<='.')||(LA13_1>='0' && LA13_1<='\uFFFF')) ) {
+                                alt13=1;
                             }
 
 
                         }
-                        else if ( ((LA14_0>='\u0000' && LA14_0<=')')||(LA14_0>='+' && LA14_0<='\uFFFF')) ) {
-                            alt14=1;
+                        else if ( ((LA13_0>='\u0000' && LA13_0<=')')||(LA13_0>='+' && LA13_0<='\uFFFF')) ) {
+                            alt13=1;
                         }
 
 
-                        switch (alt14) {
+                        switch (alt13) {
                     	case 1 :
                     	    // InternalSTAlgorithmLexer.g:391:53: .
                     	    {
@@ -12168,7 +12139,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop14;
+                    	    break loop13;
                         }
                     } while (true);
 
@@ -12183,29 +12154,29 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     match("(*"); 
 
                     // InternalSTAlgorithmLexer.g:391:67: ( options {greedy=false; } : . )*
-                    loop15:
+                    loop14:
                     do {
-                        int alt15=2;
-                        int LA15_0 = input.LA(1);
+                        int alt14=2;
+                        int LA14_0 = input.LA(1);
 
-                        if ( (LA15_0=='*') ) {
-                            int LA15_1 = input.LA(2);
+                        if ( (LA14_0=='*') ) {
+                            int LA14_1 = input.LA(2);
 
-                            if ( (LA15_1==')') ) {
-                                alt15=2;
+                            if ( (LA14_1==')') ) {
+                                alt14=2;
                             }
-                            else if ( ((LA15_1>='\u0000' && LA15_1<='(')||(LA15_1>='*' && LA15_1<='\uFFFF')) ) {
-                                alt15=1;
+                            else if ( ((LA14_1>='\u0000' && LA14_1<='(')||(LA14_1>='*' && LA14_1<='\uFFFF')) ) {
+                                alt14=1;
                             }
 
 
                         }
-                        else if ( ((LA15_0>='\u0000' && LA15_0<=')')||(LA15_0>='+' && LA15_0<='\uFFFF')) ) {
-                            alt15=1;
+                        else if ( ((LA14_0>='\u0000' && LA14_0<=')')||(LA14_0>='+' && LA14_0<='\uFFFF')) ) {
+                            alt14=1;
                         }
 
 
-                        switch (alt15) {
+                        switch (alt14) {
                     	case 1 :
                     	    // InternalSTAlgorithmLexer.g:391:95: .
                     	    {
@@ -12215,7 +12186,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     	    break;
 
                     	default :
-                    	    break loop15;
+                    	    break loop14;
                         }
                     } while (true);
 
@@ -12249,17 +12220,17 @@ public class InternalSTAlgorithmLexer extends Lexer {
             match("//"); 
 
             // InternalSTAlgorithmLexer.g:393:24: (~ ( ( '\\n' | '\\r' ) ) )*
-            loop17:
+            loop16:
             do {
-                int alt17=2;
-                int LA17_0 = input.LA(1);
+                int alt16=2;
+                int LA16_0 = input.LA(1);
 
-                if ( ((LA17_0>='\u0000' && LA17_0<='\t')||(LA17_0>='\u000B' && LA17_0<='\f')||(LA17_0>='\u000E' && LA17_0<='\uFFFF')) ) {
-                    alt17=1;
+                if ( ((LA16_0>='\u0000' && LA16_0<='\t')||(LA16_0>='\u000B' && LA16_0<='\f')||(LA16_0>='\u000E' && LA16_0<='\uFFFF')) ) {
+                    alt16=1;
                 }
 
 
-                switch (alt17) {
+                switch (alt16) {
             	case 1 :
             	    // InternalSTAlgorithmLexer.g:393:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
@@ -12277,29 +12248,29 @@ public class InternalSTAlgorithmLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop17;
+            	    break loop16;
                 }
             } while (true);
 
             // InternalSTAlgorithmLexer.g:393:40: ( ( '\\r' )? '\\n' )?
-            int alt19=2;
-            int LA19_0 = input.LA(1);
+            int alt18=2;
+            int LA18_0 = input.LA(1);
 
-            if ( (LA19_0=='\n'||LA19_0=='\r') ) {
-                alt19=1;
+            if ( (LA18_0=='\n'||LA18_0=='\r') ) {
+                alt18=1;
             }
-            switch (alt19) {
+            switch (alt18) {
                 case 1 :
                     // InternalSTAlgorithmLexer.g:393:41: ( '\\r' )? '\\n'
                     {
                     // InternalSTAlgorithmLexer.g:393:41: ( '\\r' )?
-                    int alt18=2;
-                    int LA18_0 = input.LA(1);
+                    int alt17=2;
+                    int LA17_0 = input.LA(1);
 
-                    if ( (LA18_0=='\r') ) {
-                        alt18=1;
+                    if ( (LA17_0=='\r') ) {
+                        alt17=1;
                     }
-                    switch (alt18) {
+                    switch (alt17) {
                         case 1 :
                             // InternalSTAlgorithmLexer.g:393:41: '\\r'
                             {
@@ -12337,18 +12308,18 @@ public class InternalSTAlgorithmLexer extends Lexer {
             // InternalSTAlgorithmLexer.g:395:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
             // InternalSTAlgorithmLexer.g:395:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
-            int cnt20=0;
-            loop20:
+            int cnt19=0;
+            loop19:
             do {
-                int alt20=2;
-                int LA20_0 = input.LA(1);
+                int alt19=2;
+                int LA19_0 = input.LA(1);
 
-                if ( ((LA20_0>='\t' && LA20_0<='\n')||LA20_0=='\r'||LA20_0==' ') ) {
-                    alt20=1;
+                if ( ((LA19_0>='\t' && LA19_0<='\n')||LA19_0=='\r'||LA19_0==' ') ) {
+                    alt19=1;
                 }
 
 
-                switch (alt20) {
+                switch (alt19) {
             	case 1 :
             	    // InternalSTAlgorithmLexer.g:
             	    {
@@ -12366,12 +12337,12 @@ public class InternalSTAlgorithmLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt20 >= 1 ) break loop20;
+            	    if ( cnt19 >= 1 ) break loop19;
                         EarlyExitException eee =
-                            new EarlyExitException(20, input);
+                            new EarlyExitException(19, input);
                         throw eee;
                 }
-                cnt20++;
+                cnt19++;
             } while (true);
 
 
@@ -12406,10 +12377,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
     // $ANTLR end "RULE_ANY_OTHER"
 
     public void mTokens() throws RecognitionException {
-        // InternalSTAlgorithmLexer.g:1:8: ( END_FUNCTION_BLOCK | END_CONFIGURATION | END_TRANSITION | FUNCTION_BLOCK | LDATE_AND_TIME | CONFIGURATION | DATE_AND_TIME | END_ALGORITHM | END_INTERFACE | END_NAMESPACE | END_FUNCTION | END_RESOURCE | INITIAL_STEP | LTIME_OF_DAY | VAR_EXTERNAL | END_PROGRAM | TIME_OF_DAY | END_ACTION | END_METHOD | END_REPEAT | END_STRUCT | IMPLEMENTS | NON_RETAIN | READ_WRITE | TRANSITION | VAR_ACCESS | VAR_CONFIG | VAR_GLOBAL | VAR_IN_OUT | VAR_OUTPUT | ALGORITHM | END_CLASS | END_WHILE | INTERFACE | NAMESPACE | PROTECTED | READ_ONLY | VAR_INPUT | ABSTRACT | CONSTANT | CONTINUE | END_CASE | END_STEP | END_TYPE | FUNCTION | INTERNAL | INTERVAL | OVERRIDE | PRIORITY | RESOURCE | VAR_TEMP | END_FOR | END_VAR | EXTENDS | INTERAL | OVERLAP | PRIVATE | PROGRAM | WSTRING | ACTION | END_IF | IMPORT | METHOD | PUBLIC | REF_TO | REPEAT | RETAIN | RETURN | SINGLE | STRING | STRUCT | ARRAY | CLASS | DWORD | ELSIF | FALSE | FINAL | LDATE | LREAL | LTIME | LWORD | SUPER | UDINT | ULINT | UNTIL | USING | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | FROM | LINT | LTOD | NULL | REAL | SINT | STEP | TASK | THEN | THIS | TIME | TRUE | TYPE | UINT | WITH | WORD | ColonColonAsterisk | AND | FOR | INT | LDT | MOD | NOT | REF | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonColon | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | OF | ON | OR | TO | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | T | LeftSquareBracket | RightSquareBracket | LeftCurlyBracket | RightCurlyBracket | RULE_NON_DECIMAL | RULE_INT | RULE_DECIMAL | RULE_TIME_VALUE | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
-        int alt21=179;
-        alt21 = dfa21.predict(input);
-        switch (alt21) {
+        // InternalSTAlgorithmLexer.g:1:8: ( END_FUNCTION_BLOCK | END_CONFIGURATION | END_TRANSITION | FUNCTION_BLOCK | LDATE_AND_TIME | CONFIGURATION | DATE_AND_TIME | END_ALGORITHM | END_INTERFACE | END_NAMESPACE | END_FUNCTION | END_RESOURCE | INITIAL_STEP | LTIME_OF_DAY | VAR_EXTERNAL | END_PROGRAM | TIME_OF_DAY | END_ACTION | END_METHOD | END_REPEAT | END_STRUCT | IMPLEMENTS | NON_RETAIN | READ_WRITE | TRANSITION | VAR_ACCESS | VAR_CONFIG | VAR_GLOBAL | VAR_IN_OUT | VAR_OUTPUT | ALGORITHM | END_CLASS | END_WHILE | INTERFACE | NAMESPACE | PROTECTED | READ_ONLY | VAR_INPUT | ABSTRACT | CONSTANT | CONTINUE | END_CASE | END_STEP | END_TYPE | FUNCTION | INTERNAL | INTERVAL | OVERRIDE | PRIORITY | RESOURCE | VAR_TEMP | END_FOR | END_VAR | EXTENDS | INTERAL | OVERLAP | PRIVATE | PROGRAM | WSTRING | ACTION | END_IF | IMPORT | METHOD | PUBLIC | REF_TO | REPEAT | RETAIN | RETURN | SINGLE | STRING | STRUCT | ARRAY | CLASS | DWORD | ELSIF | FALSE | FINAL | LDATE | LREAL | LTIME | LWORD | SUPER | UDINT | ULINT | UNTIL | USING | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | FROM | LINT | LTOD | NULL | REAL | SINT | STEP | TASK | THEN | THIS | TIME | TRUE | TYPE | UINT | WITH | WORD | ColonColonAsterisk | AND | FOR | INT | LDT | MOD | NOT | REF | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonColon | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | OF | ON | OR | TO | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | T | LeftSquareBracket | RightSquareBracket | LeftCurlyBracket | RightCurlyBracket | RULE_NON_DECIMAL | RULE_INT | RULE_DECIMAL | RULE_TIME_PART | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
+        int alt20=179;
+        alt20 = dfa20.predict(input);
+        switch (alt20) {
             case 1 :
                 // InternalSTAlgorithmLexer.g:1:10: END_FUNCTION_BLOCK
                 {
@@ -13615,49 +13586,49 @@ public class InternalSTAlgorithmLexer extends Lexer {
                 }
                 break;
             case 173 :
-                // InternalSTAlgorithmLexer.g:1:1513: RULE_TIME_VALUE
+                // InternalSTAlgorithmLexer.g:1:1513: RULE_TIME_PART
                 {
-                mRULE_TIME_VALUE(); 
+                mRULE_TIME_PART(); 
 
                 }
                 break;
             case 174 :
-                // InternalSTAlgorithmLexer.g:1:1529: RULE_ID
+                // InternalSTAlgorithmLexer.g:1:1528: RULE_ID
                 {
                 mRULE_ID(); 
 
                 }
                 break;
             case 175 :
-                // InternalSTAlgorithmLexer.g:1:1537: RULE_STRING
+                // InternalSTAlgorithmLexer.g:1:1536: RULE_STRING
                 {
                 mRULE_STRING(); 
 
                 }
                 break;
             case 176 :
-                // InternalSTAlgorithmLexer.g:1:1549: RULE_ML_COMMENT
+                // InternalSTAlgorithmLexer.g:1:1548: RULE_ML_COMMENT
                 {
                 mRULE_ML_COMMENT(); 
 
                 }
                 break;
             case 177 :
-                // InternalSTAlgorithmLexer.g:1:1565: RULE_SL_COMMENT
+                // InternalSTAlgorithmLexer.g:1:1564: RULE_SL_COMMENT
                 {
                 mRULE_SL_COMMENT(); 
 
                 }
                 break;
             case 178 :
-                // InternalSTAlgorithmLexer.g:1:1581: RULE_WS
+                // InternalSTAlgorithmLexer.g:1:1580: RULE_WS
                 {
                 mRULE_WS(); 
 
                 }
                 break;
             case 179 :
-                // InternalSTAlgorithmLexer.g:1:1589: RULE_ANY_OTHER
+                // InternalSTAlgorithmLexer.g:1:1588: RULE_ANY_OTHER
                 {
                 mRULE_ANY_OTHER(); 
 
@@ -13669,20 +13640,20 @@ public class InternalSTAlgorithmLexer extends Lexer {
     }
 
 
-    protected DFA21 dfa21 = new DFA21(this);
-    static final String DFA21_eotS =
+    protected DFA20 dfa20 = new DFA20(this);
+    static final String DFA20_eotS =
         "\1\uffff\4\65\1\111\2\65\1\124\12\65\1\170\1\65\1\61\1\u0080\1\u0082\1\u0085\1\u0087\1\u0089\2\uffff\1\u008d\4\uffff\1\u0093\5\uffff\4\u009b\1\61\1\uffff\2\61\2\uffff\3\65\1\uffff\5\65\1\u00ac\1\u00af\12\65\1\u00ba\1\u00bb\1\uffff\2\65\1\u00bf\6\65\1\u00c9\1\uffff\11\65\1\u00d8\3\65\1\u00dd\1\u00de\1\u00df\20\65\1\u00f2\1\u00f4\2\uffff\1\65\40\uffff\1\u009b\3\uffff\1\u009b\2\uffff\10\65\1\u00ff\1\65\1\u0101\1\uffff\2\65\1\uffff\12\65\2\uffff\1\65\1\u0112\1\65\1\uffff\1\u0116\7\65\1\u011e\1\uffff\1\65\1\u0120\4\65\1\u0127\6\65\1\u012f\1\uffff\4\65\3\uffff\6\65\1\u013c\13\65\3\uffff\1\u014a\2\65\1\u0158\1\65\1\u015a\3\65\1\u015e\1\uffff\1\65\1\uffff\1\65\1\u0161\2\65\1\u0164\4\65\1\u0169\1\u016a\1\u016c\1\65\1\u016e\2\65\1\uffff\3\65\1\uffff\1\u017b\1\65\1\u017d\1\u017e\1\u017f\1\u0180\1\u0181\1\uffff\1\65\1\uffff\1\65\1\u0184\1\65\1\u0186\2\65\1\uffff\7\65\1\uffff\11\65\1\u019a\1\u019b\1\65\1\uffff\1\65\1\u019e\2\65\1\u01a1\5\65\1\u01a8\1\u01a9\1\u01aa\1\uffff\15\65\1\uffff\1\u01be\1\uffff\1\65\1\u01c0\1\u01c1\1\uffff\1\u01c3\1\u01c5\1\uffff\1\u01c6\1\u01c7\1\uffff\3\65\1\u01cb\2\uffff\1\65\1\uffff\1\u01cd\1\uffff\14\65\1\uffff\1\65\5\uffff\2\65\1\uffff\1\65\1\uffff\10\65\1\u01ea\10\65\1\u01f3\1\u01f4\2\uffff\2\65\1\uffff\2\65\1\uffff\1\u01f9\1\u01fa\1\u01fb\1\u01fc\1\u01fd\1\u01fe\3\uffff\12\65\1\u0209\10\65\1\uffff\1\65\2\uffff\1\65\1\uffff\1\65\3\uffff\3\65\1\uffff\1\65\1\uffff\6\65\1\u0221\16\65\1\u0231\1\u0232\1\u0233\1\u0234\2\65\1\u0237\1\uffff\4\65\1\u023c\3\65\2\uffff\1\u0240\1\u0241\1\u0242\1\u0243\6\uffff\1\65\1\u0245\10\65\1\uffff\10\65\1\u0256\1\u0257\13\65\1\u0263\1\65\1\uffff\17\65\4\uffff\2\65\1\uffff\1\65\1\u0277\1\65\1\u0279\1\uffff\1\65\1\u027b\1\u027c\4\uffff\1\65\1\uffff\2\65\1\u0280\1\65\1\u0282\11\65\1\u028c\1\65\2\uffff\1\u028f\3\65\1\u0293\1\u0294\3\65\1\u0298\1\u0299\1\uffff\10\65\1\u02a2\6\65\1\u02a9\1\65\1\u02ab\1\65\1\uffff\1\u02ad\1\uffff\1\u02ae\2\uffff\2\65\1\u02b1\1\uffff\1\65\1\uffff\11\65\1\uffff\1\u02bc\1\65\1\uffff\3\65\2\uffff\2\65\1\u02c3\2\uffff\6\65\1\u02ca\1\65\1\uffff\3\65\1\u02cf\1\65\1\u02d1\1\uffff\1\u02d2\1\uffff\1\u02d3\2\uffff\2\65\1\uffff\2\65\1\u02d8\3\65\1\u02dc\1\65\1\u02de\1\u02df\1\uffff\6\65\1\uffff\1\u02e6\1\65\1\u02e8\1\u02e9\1\u02ea\1\u02eb\1\uffff\1\u02ec\1\65\1\u02ee\1\u02ef\1\uffff\1\u02f0\3\uffff\4\65\1\uffff\3\65\1\uffff\1\u02f8\2\uffff\6\65\1\uffff\1\65\5\uffff\1\u0300\3\uffff\1\u0302\5\65\1\u0308\1\uffff\2\65\1\u030b\2\65\1\u030e\1\u030f\1\uffff\1\65\1\uffff\2\65\1\u0313\1\u0314\1\u0315\1\uffff\2\65\1\uffff\1\u0318\1\u0319\2\uffff\2\65\1\u031c\3\uffff\1\u031d\1\u031e\2\uffff\2\65\3\uffff\3\65\1\u0324\1\u0325\2\uffff";
-    static final String DFA21_eofS =
+    static final String DFA20_eofS =
         "\u0326\uffff";
-    static final String DFA21_minS =
+    static final String DFA20_minS =
         "\1\0\1\114\1\101\1\104\1\101\1\60\1\106\1\101\1\60\1\101\1\105\1\102\1\122\1\106\1\103\1\105\1\111\1\104\1\117\1\72\1\117\1\102\1\52\1\56\1\75\1\76\1\75\2\uffff\1\52\4\uffff\1\52\5\uffff\2\43\2\60\1\101\1\uffff\2\0\2\uffff\1\104\1\111\1\123\1\uffff\1\116\1\114\1\116\1\117\1\122\2\60\1\105\1\117\2\116\1\101\1\123\1\101\1\124\1\117\1\116\2\60\1\uffff\1\111\1\120\1\60\1\122\1\115\1\101\1\123\1\105\1\120\1\60\1\uffff\1\116\1\115\1\114\1\101\1\107\1\123\1\124\1\122\1\104\1\60\1\111\1\102\1\105\3\60\1\124\1\110\1\111\1\124\1\122\1\124\1\104\1\116\1\105\1\120\2\111\1\124\1\111\1\116\1\117\1\60\1\52\2\uffff\1\122\40\uffff\1\60\3\uffff\1\43\2\uffff\1\137\1\105\1\124\1\105\1\103\1\123\1\101\1\115\1\60\1\124\1\60\1\uffff\1\115\1\104\1\uffff\1\101\1\122\1\124\1\106\1\123\1\105\1\122\1\105\1\122\1\124\2\uffff\1\124\1\60\1\114\1\uffff\1\60\1\105\1\116\1\105\1\113\1\116\1\123\1\105\1\60\1\uffff\1\137\1\60\1\105\1\114\1\104\1\117\1\60\1\105\1\101\1\117\1\124\1\111\1\101\1\60\1\uffff\1\107\1\117\1\114\1\122\3\uffff\1\122\1\101\1\114\1\110\1\104\1\110\1\60\1\107\1\111\1\120\1\105\2\116\1\111\1\116\1\124\1\114\1\105\3\uffff\1\60\1\101\1\116\1\60\1\106\1\60\1\124\1\105\1\114\1\60\1\uffff\1\105\1\uffff\1\105\1\60\1\114\1\104\1\60\1\111\1\124\1\111\1\123\3\60\1\104\1\60\1\111\1\122\1\uffff\1\105\1\122\1\101\1\uffff\1\60\1\123\5\60\1\uffff\1\122\1\uffff\1\123\1\60\1\137\1\60\1\125\1\124\1\uffff\1\101\1\111\3\122\1\117\1\131\1\uffff\1\105\2\122\1\101\1\111\1\114\1\111\1\122\1\105\2\60\1\117\1\uffff\1\114\1\60\1\116\1\103\1\60\1\122\2\124\1\114\1\107\3\60\1\uffff\1\117\1\101\1\122\1\103\1\106\1\101\1\105\1\122\1\105\1\124\1\110\1\101\1\104\1\uffff\1\60\1\uffff\1\111\2\60\1\uffff\2\60\1\uffff\2\60\1\uffff\1\107\1\101\1\116\1\60\2\uffff\1\101\1\uffff\1\60\1\uffff\2\101\1\115\1\124\1\130\1\103\1\117\1\114\1\116\1\125\1\105\1\117\1\uffff\1\111\5\uffff\1\105\1\120\1\uffff\1\117\1\uffff\1\122\1\117\1\124\2\116\1\111\1\101\1\116\1\60\1\103\1\101\1\111\1\124\1\103\1\111\1\101\1\116\2\60\2\uffff\1\104\1\105\1\uffff\1\107\1\124\1\uffff\6\60\3\uffff\1\116\1\122\1\116\1\101\1\123\1\101\1\120\1\107\2\124\1\60\1\115\1\120\1\117\1\124\1\105\1\111\1\122\1\123\1\uffff\1\117\2\uffff\1\101\1\uffff\1\117\3\uffff\1\125\1\116\1\125\1\uffff\1\116\1\uffff\1\114\3\101\1\114\1\105\1\60\1\124\1\103\1\116\1\117\1\120\1\124\1\115\1\106\2\124\1\101\1\122\1\116\1\103\4\60\1\124\1\103\1\60\1\uffff\1\124\1\115\1\124\1\105\1\60\1\104\1\120\1\107\2\uffff\4\60\6\uffff\1\103\1\60\1\106\1\123\1\105\1\116\1\105\1\117\1\111\1\105\1\uffff\1\105\1\117\1\105\1\107\1\110\1\125\1\120\1\114\2\60\2\116\1\106\1\122\1\124\1\105\1\104\1\137\1\103\2\114\1\60\1\116\1\uffff\2\105\1\106\1\102\1\117\1\125\2\120\1\137\1\111\1\101\1\103\1\111\1\114\1\105\4\uffff\1\110\1\124\1\uffff\1\105\1\60\1\131\1\60\1\uffff\1\105\2\60\4\uffff\1\124\1\uffff\1\111\1\123\1\60\1\123\1\60\1\122\1\117\1\122\1\123\1\125\1\101\1\122\1\117\1\103\1\60\1\105\2\uffff\1\60\1\104\1\137\1\101\2\60\1\137\1\123\1\105\2\60\1\uffff\1\124\1\122\1\123\1\111\1\101\1\125\1\124\1\125\1\60\1\104\1\117\1\111\1\105\1\124\1\131\1\60\1\115\1\60\1\104\1\uffff\1\60\1\uffff\1\60\2\uffff\1\111\1\107\1\60\1\uffff\1\111\1\uffff\1\111\1\116\1\106\1\120\1\122\1\124\1\101\1\104\1\124\1\uffff\1\60\1\102\1\uffff\1\137\1\104\1\124\2\uffff\2\124\1\60\2\uffff\1\123\1\116\1\123\1\107\1\114\1\124\1\60\1\124\1\uffff\1\101\2\116\1\60\1\105\1\60\1\uffff\1\60\1\uffff\1\60\2\uffff\1\117\1\125\1\uffff\2\124\1\60\2\101\1\103\1\60\1\115\2\60\1\uffff\1\114\1\124\1\101\2\111\1\105\1\uffff\1\60\1\101\4\60\1\uffff\1\60\1\131\2\60\1\uffff\1\60\3\uffff\1\116\1\122\1\111\1\110\1\uffff\2\103\1\105\1\uffff\1\60\2\uffff\1\117\1\111\1\131\1\117\1\115\1\120\1\uffff\1\114\5\uffff\1\60\3\uffff\1\60\1\101\1\117\1\115\2\105\1\60\1\uffff\1\103\1\115\1\60\1\116\1\105\2\60\1\uffff\1\102\1\uffff\1\124\1\116\3\60\1\uffff\1\113\1\105\1\uffff\2\60\2\uffff\1\114\1\111\1\60\3\uffff\2\60\2\uffff\2\117\3\uffff\1\103\1\116\1\113\2\60\2\uffff";
-    static final String DFA21_maxS =
+    static final String DFA20_maxS =
         "\1\uffff\1\170\1\165\1\167\1\157\1\172\1\156\1\141\1\172\1\165\1\145\1\164\1\165\1\166\1\163\1\157\1\165\1\163\1\171\1\75\1\157\1\170\1\52\1\56\2\76\1\75\2\uffff\1\52\4\uffff\1\57\5\uffff\4\165\1\172\1\uffff\2\uffff\2\uffff\1\144\1\164\1\163\1\uffff\1\156\1\154\1\156\1\157\1\162\2\172\1\145\1\157\2\156\1\141\1\163\1\141\1\164\1\157\1\156\2\172\1\uffff\1\164\1\160\1\172\1\162\1\155\1\165\1\163\1\151\1\160\1\172\1\uffff\1\164\1\155\1\154\1\164\1\147\1\163\1\164\1\162\1\144\1\172\1\157\1\142\1\145\3\172\1\164\1\150\1\151\1\164\1\162\1\164\1\144\1\156\1\162\1\160\2\151\1\164\1\151\1\156\1\157\1\172\1\52\2\uffff\1\162\40\uffff\1\165\3\uffff\1\165\2\uffff\1\137\1\145\1\164\1\151\1\143\1\163\1\141\1\155\1\172\1\164\1\172\1\uffff\1\155\1\144\1\uffff\1\141\1\162\2\164\1\163\1\145\1\162\1\145\1\162\1\164\2\uffff\1\164\1\172\1\157\1\uffff\1\172\1\145\1\156\1\145\1\153\1\156\1\163\1\145\1\172\1\uffff\1\137\1\172\1\145\2\154\1\157\1\172\1\145\1\165\1\157\1\164\1\151\1\141\1\172\1\uffff\1\164\1\166\1\154\1\162\3\uffff\1\162\1\141\1\154\1\150\1\144\1\150\1\172\1\164\1\165\1\160\1\145\2\156\1\151\1\156\1\164\1\154\1\145\3\uffff\1\172\1\167\1\156\1\172\1\146\1\172\1\164\1\145\1\154\1\172\1\uffff\1\145\1\uffff\1\145\1\172\1\154\1\144\1\172\1\151\1\164\1\151\1\163\3\172\1\144\1\172\1\151\1\162\1\uffff\1\145\1\162\1\164\1\uffff\1\172\1\163\5\172\1\uffff\1\162\1\uffff\1\163\1\172\1\137\1\172\1\165\1\164\1\uffff\1\141\1\151\3\162\1\157\1\171\1\uffff\1\145\2\162\1\141\1\151\1\162\1\151\1\162\1\145\2\172\1\157\1\uffff\1\154\1\172\1\156\1\143\1\172\1\162\2\164\1\154\1\164\3\172\1\uffff\1\165\1\157\1\171\1\154\1\156\1\141\1\145\1\162\1\145\1\164\1\150\1\141\1\144\1\uffff\1\172\1\uffff\1\151\2\172\1\uffff\2\172\1\uffff\2\172\1\uffff\1\147\1\141\1\156\1\172\2\uffff\1\141\1\uffff\1\172\1\uffff\1\141\1\166\1\155\1\164\1\170\1\143\1\157\1\154\1\156\1\165\1\145\1\157\1\uffff\1\151\5\uffff\1\145\1\160\1\uffff\1\167\1\uffff\1\162\1\157\1\164\2\156\1\151\1\141\1\156\1\172\1\143\1\141\1\151\1\164\1\143\1\151\1\141\1\156\2\172\2\uffff\1\144\1\145\1\uffff\1\147\1\164\1\uffff\6\172\3\uffff\1\156\1\162\1\156\1\141\1\163\1\141\1\160\1\147\2\164\1\172\1\155\1\163\1\157\1\164\1\162\1\151\1\162\1\163\1\uffff\1\157\2\uffff\1\141\1\uffff\1\157\3\uffff\1\165\1\156\1\165\1\uffff\1\156\1\uffff\1\154\3\141\1\154\1\145\1\172\1\164\1\143\1\156\1\157\1\160\1\164\1\155\1\146\2\164\1\141\1\162\1\156\1\143\4\172\1\164\1\143\1\172\1\uffff\1\164\1\155\1\164\1\145\1\172\1\144\1\160\1\147\2\uffff\4\172\6\uffff\1\143\1\172\1\146\1\163\1\145\1\156\1\145\1\157\1\151\1\145\1\uffff\1\145\1\157\1\145\1\147\1\150\1\165\1\160\1\154\2\172\2\156\1\146\1\162\1\164\1\145\1\144\1\137\1\143\2\154\1\172\1\156\1\uffff\2\145\1\146\1\142\1\157\1\165\2\160\1\137\1\151\1\141\1\143\1\151\1\154\1\145\4\uffff\1\150\1\164\1\uffff\1\145\1\172\1\171\1\172\1\uffff\1\145\2\172\4\uffff\1\164\1\uffff\1\151\1\163\1\172\1\163\1\172\1\162\1\157\1\162\1\163\1\165\1\141\1\162\1\157\1\143\1\172\1\145\2\uffff\1\172\1\144\1\137\1\141\2\172\1\137\1\163\1\145\2\172\1\uffff\1\164\1\162\1\163\1\151\1\141\1\165\1\164\1\165\1\172\1\144\1\157\1\151\1\145\1\164\1\171\1\172\1\155\1\172\1\144\1\uffff\1\172\1\uffff\1\172\2\uffff\1\151\1\147\1\172\1\uffff\1\151\1\uffff\1\151\1\156\1\146\1\160\1\162\1\164\1\141\1\144\1\164\1\uffff\1\172\1\142\1\uffff\1\137\1\144\1\164\2\uffff\2\164\1\172\2\uffff\1\163\1\156\1\163\1\147\1\154\1\164\1\172\1\164\1\uffff\1\141\2\156\1\172\1\145\1\172\1\uffff\1\172\1\uffff\1\172\2\uffff\1\157\1\165\1\uffff\2\164\1\172\2\141\1\143\1\172\1\155\2\172\1\uffff\1\154\1\164\1\141\2\151\1\145\1\uffff\1\172\1\141\4\172\1\uffff\1\172\1\171\2\172\1\uffff\1\172\3\uffff\1\156\1\162\1\151\1\150\1\uffff\2\143\1\145\1\uffff\1\172\2\uffff\1\157\1\151\1\171\1\157\1\155\1\160\1\uffff\1\154\5\uffff\1\172\3\uffff\1\172\1\141\1\157\1\155\2\145\1\172\1\uffff\1\143\1\155\1\172\1\156\1\145\2\172\1\uffff\1\142\1\uffff\1\164\1\156\3\172\1\uffff\1\153\1\145\1\uffff\2\172\2\uffff\1\154\1\151\1\172\3\uffff\2\172\2\uffff\2\157\3\uffff\1\143\1\156\1\153\2\172\2\uffff";
-    static final String DFA21_acceptS =
+    static final String DFA20_acceptS =
         "\33\uffff\1\u0095\1\u0096\1\uffff\1\u0098\1\u009a\1\u009b\1\u009c\1\uffff\1\u00a0\1\u00a6\1\u00a7\1\u00a8\1\u00a9\5\uffff\1\u00ae\2\uffff\1\u00b2\1\u00b3\3\uffff\1\u00ae\23\uffff\1\u00a4\12\uffff\1\u00a5\42\uffff\1\u0085\1\u009f\1\uffff\1\175\1\176\1\177\1\u0080\1\u0081\1\u0082\1\u0099\1\u0083\1\u009d\1\u0086\1\u0087\1\u00a1\1\u0088\1\u00a2\1\u0089\1\u00a3\1\u0095\1\u0096\1\u00b0\1\u0097\1\u0098\1\u009a\1\u009b\1\u009c\1\u00b1\1\u009e\1\u00a0\1\u00a6\1\u00a7\1\u00a8\1\u00a9\1\u00aa\1\uffff\1\u00ab\1\u00ac\1\u00ad\1\uffff\1\u00af\1\u00b2\13\uffff\1\u008f\2\uffff\1\u0090\12\uffff\1\u008c\1\u008d\3\uffff\1\u008e\11\uffff\1\u0094\16\uffff\1\u008a\4\uffff\1\u0091\1\u0092\1\u0093\22\uffff\1\u008b\1\162\1\u0084\12\uffff\1\164\1\uffff\1\166\20\uffff\1\165\3\uffff\1\173\7\uffff\1\172\1\uffff\1\170\6\uffff\1\171\7\uffff\1\163\14\uffff\1\167\15\uffff\1\174\15\uffff\1\141\1\uffff\1\140\3\uffff\1\142\2\uffff\1\144\2\uffff\1\143\4\uffff\1\134\1\135\1\uffff\1\136\1\uffff\1\137\14\uffff\1\154\1\uffff\1\155\1\151\1\152\1\153\1\156\2\uffff\1\145\1\uffff\1\146\23\uffff\1\160\1\161\2\uffff\1\147\2\uffff\1\150\6\uffff\1\157\1\132\1\133\23\uffff\1\113\1\uffff\1\114\1\115\1\uffff\1\116\1\uffff\1\120\1\117\1\121\3\uffff\1\111\1\uffff\1\112\34\uffff\1\110\10\uffff\1\130\1\131\4\uffff\1\122\1\123\1\124\1\125\1\126\1\127\12\uffff\1\75\27\uffff\1\76\17\uffff\1\101\1\102\1\103\1\104\2\uffff\1\74\4\uffff\1\100\3\uffff\1\77\1\105\1\106\1\107\1\uffff\1\64\20\uffff\1\65\1\66\13\uffff\1\67\23\uffff\1\72\1\uffff\1\71\1\uffff\1\70\1\73\3\uffff\1\52\1\uffff\1\54\11\uffff\1\53\2\uffff\1\55\3\uffff\1\50\1\51\3\uffff\1\56\1\57\10\uffff\1\63\6\uffff\1\62\1\uffff\1\47\1\uffff\1\61\1\60\2\uffff\1\40\12\uffff\1\41\6\uffff\1\42\6\uffff\1\46\4\uffff\1\43\1\uffff\1\45\1\37\1\44\4\uffff\1\22\3\uffff\1\24\1\uffff\1\23\1\25\6\uffff\1\26\1\uffff\1\32\1\33\1\34\1\35\1\36\1\uffff\1\31\1\27\1\30\7\uffff\1\20\7\uffff\1\21\1\uffff\1\13\5\uffff\1\14\2\uffff\1\16\2\uffff\1\15\1\17\3\uffff\1\10\1\11\1\12\2\uffff\1\6\1\7\2\uffff\1\3\1\4\1\5\5\uffff\1\2\1\1";
-    static final String DFA21_specialS =
+    static final String DFA20_specialS =
         "\1\0\55\uffff\1\1\1\2\u02f6\uffff}>";
-    static final String[] DFA21_transitionS = {
+    static final String[] DFA20_transitionS = {
             "\11\61\2\60\2\61\1\60\22\61\1\60\1\61\1\56\1\33\1\61\1\25\1\34\1\57\1\35\1\36\1\26\1\37\1\40\1\41\1\27\1\42\1\53\1\52\1\50\5\53\1\51\1\53\1\23\1\43\1\30\1\31\1\32\2\61\1\13\1\22\1\4\1\5\1\1\1\2\2\55\1\6\2\55\1\3\1\17\1\11\1\15\1\14\1\55\1\12\1\20\1\10\1\21\1\7\1\16\1\24\2\55\1\44\1\61\1\45\1\54\1\55\1\61\1\13\1\22\1\4\1\5\1\1\1\2\2\55\1\6\2\55\1\3\1\17\1\11\1\15\1\14\1\55\1\12\1\20\1\10\1\21\1\7\1\16\1\24\2\55\1\46\1\61\1\47\uff82\61",
             "\1\64\1\uffff\1\62\11\uffff\1\63\23\uffff\1\64\1\uffff\1\62\11\uffff\1\63",
             "\1\67\7\uffff\1\70\5\uffff\1\72\2\uffff\1\71\2\uffff\1\66\13\uffff\1\67\7\uffff\1\70\5\uffff\1\72\2\uffff\1\71\2\uffff\1\66",
@@ -14491,161 +14462,161 @@ public class InternalSTAlgorithmLexer extends Lexer {
             ""
     };
 
-    static final short[] DFA21_eot = DFA.unpackEncodedString(DFA21_eotS);
-    static final short[] DFA21_eof = DFA.unpackEncodedString(DFA21_eofS);
-    static final char[] DFA21_min = DFA.unpackEncodedStringToUnsignedChars(DFA21_minS);
-    static final char[] DFA21_max = DFA.unpackEncodedStringToUnsignedChars(DFA21_maxS);
-    static final short[] DFA21_accept = DFA.unpackEncodedString(DFA21_acceptS);
-    static final short[] DFA21_special = DFA.unpackEncodedString(DFA21_specialS);
-    static final short[][] DFA21_transition;
+    static final short[] DFA20_eot = DFA.unpackEncodedString(DFA20_eotS);
+    static final short[] DFA20_eof = DFA.unpackEncodedString(DFA20_eofS);
+    static final char[] DFA20_min = DFA.unpackEncodedStringToUnsignedChars(DFA20_minS);
+    static final char[] DFA20_max = DFA.unpackEncodedStringToUnsignedChars(DFA20_maxS);
+    static final short[] DFA20_accept = DFA.unpackEncodedString(DFA20_acceptS);
+    static final short[] DFA20_special = DFA.unpackEncodedString(DFA20_specialS);
+    static final short[][] DFA20_transition;
 
     static {
-        int numStates = DFA21_transitionS.length;
-        DFA21_transition = new short[numStates][];
+        int numStates = DFA20_transitionS.length;
+        DFA20_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA21_transition[i] = DFA.unpackEncodedString(DFA21_transitionS[i]);
+            DFA20_transition[i] = DFA.unpackEncodedString(DFA20_transitionS[i]);
         }
     }
 
-    class DFA21 extends DFA {
+    class DFA20 extends DFA {
 
-        public DFA21(BaseRecognizer recognizer) {
+        public DFA20(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 21;
-            this.eot = DFA21_eot;
-            this.eof = DFA21_eof;
-            this.min = DFA21_min;
-            this.max = DFA21_max;
-            this.accept = DFA21_accept;
-            this.special = DFA21_special;
-            this.transition = DFA21_transition;
+            this.decisionNumber = 20;
+            this.eot = DFA20_eot;
+            this.eof = DFA20_eof;
+            this.min = DFA20_min;
+            this.max = DFA20_max;
+            this.accept = DFA20_accept;
+            this.special = DFA20_special;
+            this.transition = DFA20_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( END_FUNCTION_BLOCK | END_CONFIGURATION | END_TRANSITION | FUNCTION_BLOCK | LDATE_AND_TIME | CONFIGURATION | DATE_AND_TIME | END_ALGORITHM | END_INTERFACE | END_NAMESPACE | END_FUNCTION | END_RESOURCE | INITIAL_STEP | LTIME_OF_DAY | VAR_EXTERNAL | END_PROGRAM | TIME_OF_DAY | END_ACTION | END_METHOD | END_REPEAT | END_STRUCT | IMPLEMENTS | NON_RETAIN | READ_WRITE | TRANSITION | VAR_ACCESS | VAR_CONFIG | VAR_GLOBAL | VAR_IN_OUT | VAR_OUTPUT | ALGORITHM | END_CLASS | END_WHILE | INTERFACE | NAMESPACE | PROTECTED | READ_ONLY | VAR_INPUT | ABSTRACT | CONSTANT | CONTINUE | END_CASE | END_STEP | END_TYPE | FUNCTION | INTERNAL | INTERVAL | OVERRIDE | PRIORITY | RESOURCE | VAR_TEMP | END_FOR | END_VAR | EXTENDS | INTERAL | OVERLAP | PRIVATE | PROGRAM | WSTRING | ACTION | END_IF | IMPORT | METHOD | PUBLIC | REF_TO | REPEAT | RETAIN | RETURN | SINGLE | STRING | STRUCT | ARRAY | CLASS | DWORD | ELSIF | FALSE | FINAL | LDATE | LREAL | LTIME | LWORD | SUPER | UDINT | ULINT | UNTIL | USING | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | FROM | LINT | LTOD | NULL | REAL | SINT | STEP | TASK | THEN | THIS | TIME | TRUE | TYPE | UINT | WITH | WORD | ColonColonAsterisk | AND | FOR | INT | LDT | MOD | NOT | REF | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonColon | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | OF | ON | OR | TO | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | T | LeftSquareBracket | RightSquareBracket | LeftCurlyBracket | RightCurlyBracket | RULE_NON_DECIMAL | RULE_INT | RULE_DECIMAL | RULE_TIME_VALUE | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
+            return "1:1: Tokens : ( END_FUNCTION_BLOCK | END_CONFIGURATION | END_TRANSITION | FUNCTION_BLOCK | LDATE_AND_TIME | CONFIGURATION | DATE_AND_TIME | END_ALGORITHM | END_INTERFACE | END_NAMESPACE | END_FUNCTION | END_RESOURCE | INITIAL_STEP | LTIME_OF_DAY | VAR_EXTERNAL | END_PROGRAM | TIME_OF_DAY | END_ACTION | END_METHOD | END_REPEAT | END_STRUCT | IMPLEMENTS | NON_RETAIN | READ_WRITE | TRANSITION | VAR_ACCESS | VAR_CONFIG | VAR_GLOBAL | VAR_IN_OUT | VAR_OUTPUT | ALGORITHM | END_CLASS | END_WHILE | INTERFACE | NAMESPACE | PROTECTED | READ_ONLY | VAR_INPUT | ABSTRACT | CONSTANT | CONTINUE | END_CASE | END_STEP | END_TYPE | FUNCTION | INTERNAL | INTERVAL | OVERRIDE | PRIORITY | RESOURCE | VAR_TEMP | END_FOR | END_VAR | EXTENDS | INTERAL | OVERLAP | PRIVATE | PROGRAM | WSTRING | ACTION | END_IF | IMPORT | METHOD | PUBLIC | REF_TO | REPEAT | RETAIN | RETURN | SINGLE | STRING | STRUCT | ARRAY | CLASS | DWORD | ELSIF | FALSE | FINAL | LDATE | LREAL | LTIME | LWORD | SUPER | UDINT | ULINT | UNTIL | USING | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | FROM | LINT | LTOD | NULL | REAL | SINT | STEP | TASK | THEN | THIS | TIME | TRUE | TYPE | UINT | WITH | WORD | ColonColonAsterisk | AND | FOR | INT | LDT | MOD | NOT | REF | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonColon | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | OF | ON | OR | TO | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | T | LeftSquareBracket | RightSquareBracket | LeftCurlyBracket | RightCurlyBracket | RULE_NON_DECIMAL | RULE_INT | RULE_DECIMAL | RULE_TIME_PART | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA21_0 = input.LA(1);
+                        int LA20_0 = input.LA(1);
 
                         s = -1;
-                        if ( (LA21_0=='E'||LA21_0=='e') ) {s = 1;}
+                        if ( (LA20_0=='E'||LA20_0=='e') ) {s = 1;}
 
-                        else if ( (LA21_0=='F'||LA21_0=='f') ) {s = 2;}
+                        else if ( (LA20_0=='F'||LA20_0=='f') ) {s = 2;}
 
-                        else if ( (LA21_0=='L'||LA21_0=='l') ) {s = 3;}
+                        else if ( (LA20_0=='L'||LA20_0=='l') ) {s = 3;}
 
-                        else if ( (LA21_0=='C'||LA21_0=='c') ) {s = 4;}
+                        else if ( (LA20_0=='C'||LA20_0=='c') ) {s = 4;}
 
-                        else if ( (LA21_0=='D'||LA21_0=='d') ) {s = 5;}
+                        else if ( (LA20_0=='D'||LA20_0=='d') ) {s = 5;}
 
-                        else if ( (LA21_0=='I'||LA21_0=='i') ) {s = 6;}
+                        else if ( (LA20_0=='I'||LA20_0=='i') ) {s = 6;}
 
-                        else if ( (LA21_0=='V'||LA21_0=='v') ) {s = 7;}
+                        else if ( (LA20_0=='V'||LA20_0=='v') ) {s = 7;}
 
-                        else if ( (LA21_0=='T'||LA21_0=='t') ) {s = 8;}
+                        else if ( (LA20_0=='T'||LA20_0=='t') ) {s = 8;}
 
-                        else if ( (LA21_0=='N'||LA21_0=='n') ) {s = 9;}
+                        else if ( (LA20_0=='N'||LA20_0=='n') ) {s = 9;}
 
-                        else if ( (LA21_0=='R'||LA21_0=='r') ) {s = 10;}
+                        else if ( (LA20_0=='R'||LA20_0=='r') ) {s = 10;}
 
-                        else if ( (LA21_0=='A'||LA21_0=='a') ) {s = 11;}
+                        else if ( (LA20_0=='A'||LA20_0=='a') ) {s = 11;}
 
-                        else if ( (LA21_0=='P'||LA21_0=='p') ) {s = 12;}
+                        else if ( (LA20_0=='P'||LA20_0=='p') ) {s = 12;}
 
-                        else if ( (LA21_0=='O'||LA21_0=='o') ) {s = 13;}
+                        else if ( (LA20_0=='O'||LA20_0=='o') ) {s = 13;}
 
-                        else if ( (LA21_0=='W'||LA21_0=='w') ) {s = 14;}
+                        else if ( (LA20_0=='W'||LA20_0=='w') ) {s = 14;}
 
-                        else if ( (LA21_0=='M'||LA21_0=='m') ) {s = 15;}
+                        else if ( (LA20_0=='M'||LA20_0=='m') ) {s = 15;}
 
-                        else if ( (LA21_0=='S'||LA21_0=='s') ) {s = 16;}
+                        else if ( (LA20_0=='S'||LA20_0=='s') ) {s = 16;}
 
-                        else if ( (LA21_0=='U'||LA21_0=='u') ) {s = 17;}
+                        else if ( (LA20_0=='U'||LA20_0=='u') ) {s = 17;}
 
-                        else if ( (LA21_0=='B'||LA21_0=='b') ) {s = 18;}
+                        else if ( (LA20_0=='B'||LA20_0=='b') ) {s = 18;}
 
-                        else if ( (LA21_0==':') ) {s = 19;}
+                        else if ( (LA20_0==':') ) {s = 19;}
 
-                        else if ( (LA21_0=='X'||LA21_0=='x') ) {s = 20;}
+                        else if ( (LA20_0=='X'||LA20_0=='x') ) {s = 20;}
 
-                        else if ( (LA21_0=='%') ) {s = 21;}
+                        else if ( (LA20_0=='%') ) {s = 21;}
 
-                        else if ( (LA21_0=='*') ) {s = 22;}
+                        else if ( (LA20_0=='*') ) {s = 22;}
 
-                        else if ( (LA21_0=='.') ) {s = 23;}
+                        else if ( (LA20_0=='.') ) {s = 23;}
 
-                        else if ( (LA21_0=='<') ) {s = 24;}
+                        else if ( (LA20_0=='<') ) {s = 24;}
 
-                        else if ( (LA21_0=='=') ) {s = 25;}
+                        else if ( (LA20_0=='=') ) {s = 25;}
 
-                        else if ( (LA21_0=='>') ) {s = 26;}
+                        else if ( (LA20_0=='>') ) {s = 26;}
 
-                        else if ( (LA21_0=='#') ) {s = 27;}
+                        else if ( (LA20_0=='#') ) {s = 27;}
 
-                        else if ( (LA21_0=='&') ) {s = 28;}
+                        else if ( (LA20_0=='&') ) {s = 28;}
 
-                        else if ( (LA21_0=='(') ) {s = 29;}
+                        else if ( (LA20_0=='(') ) {s = 29;}
 
-                        else if ( (LA21_0==')') ) {s = 30;}
+                        else if ( (LA20_0==')') ) {s = 30;}
 
-                        else if ( (LA21_0=='+') ) {s = 31;}
+                        else if ( (LA20_0=='+') ) {s = 31;}
 
-                        else if ( (LA21_0==',') ) {s = 32;}
+                        else if ( (LA20_0==',') ) {s = 32;}
 
-                        else if ( (LA21_0=='-') ) {s = 33;}
+                        else if ( (LA20_0=='-') ) {s = 33;}
 
-                        else if ( (LA21_0=='/') ) {s = 34;}
+                        else if ( (LA20_0=='/') ) {s = 34;}
 
-                        else if ( (LA21_0==';') ) {s = 35;}
+                        else if ( (LA20_0==';') ) {s = 35;}
 
-                        else if ( (LA21_0=='[') ) {s = 36;}
+                        else if ( (LA20_0=='[') ) {s = 36;}
 
-                        else if ( (LA21_0==']') ) {s = 37;}
+                        else if ( (LA20_0==']') ) {s = 37;}
 
-                        else if ( (LA21_0=='{') ) {s = 38;}
+                        else if ( (LA20_0=='{') ) {s = 38;}
 
-                        else if ( (LA21_0=='}') ) {s = 39;}
+                        else if ( (LA20_0=='}') ) {s = 39;}
 
-                        else if ( (LA21_0=='2') ) {s = 40;}
+                        else if ( (LA20_0=='2') ) {s = 40;}
 
-                        else if ( (LA21_0=='8') ) {s = 41;}
+                        else if ( (LA20_0=='8') ) {s = 41;}
 
-                        else if ( (LA21_0=='1') ) {s = 42;}
+                        else if ( (LA20_0=='1') ) {s = 42;}
 
-                        else if ( (LA21_0=='0'||(LA21_0>='3' && LA21_0<='7')||LA21_0=='9') ) {s = 43;}
+                        else if ( (LA20_0=='0'||(LA20_0>='3' && LA20_0<='7')||LA20_0=='9') ) {s = 43;}
 
-                        else if ( (LA21_0=='^') ) {s = 44;}
+                        else if ( (LA20_0=='^') ) {s = 44;}
 
-                        else if ( ((LA21_0>='G' && LA21_0<='H')||(LA21_0>='J' && LA21_0<='K')||LA21_0=='Q'||(LA21_0>='Y' && LA21_0<='Z')||LA21_0=='_'||(LA21_0>='g' && LA21_0<='h')||(LA21_0>='j' && LA21_0<='k')||LA21_0=='q'||(LA21_0>='y' && LA21_0<='z')) ) {s = 45;}
+                        else if ( ((LA20_0>='G' && LA20_0<='H')||(LA20_0>='J' && LA20_0<='K')||LA20_0=='Q'||(LA20_0>='Y' && LA20_0<='Z')||LA20_0=='_'||(LA20_0>='g' && LA20_0<='h')||(LA20_0>='j' && LA20_0<='k')||LA20_0=='q'||(LA20_0>='y' && LA20_0<='z')) ) {s = 45;}
 
-                        else if ( (LA21_0=='\"') ) {s = 46;}
+                        else if ( (LA20_0=='\"') ) {s = 46;}
 
-                        else if ( (LA21_0=='\'') ) {s = 47;}
+                        else if ( (LA20_0=='\'') ) {s = 47;}
 
-                        else if ( ((LA21_0>='\t' && LA21_0<='\n')||LA21_0=='\r'||LA21_0==' ') ) {s = 48;}
+                        else if ( ((LA20_0>='\t' && LA20_0<='\n')||LA20_0=='\r'||LA20_0==' ') ) {s = 48;}
 
-                        else if ( ((LA21_0>='\u0000' && LA21_0<='\b')||(LA21_0>='\u000B' && LA21_0<='\f')||(LA21_0>='\u000E' && LA21_0<='\u001F')||LA21_0=='!'||LA21_0=='$'||(LA21_0>='?' && LA21_0<='@')||LA21_0=='\\'||LA21_0=='`'||LA21_0=='|'||(LA21_0>='~' && LA21_0<='\uFFFF')) ) {s = 49;}
+                        else if ( ((LA20_0>='\u0000' && LA20_0<='\b')||(LA20_0>='\u000B' && LA20_0<='\f')||(LA20_0>='\u000E' && LA20_0<='\u001F')||LA20_0=='!'||LA20_0=='$'||(LA20_0>='?' && LA20_0<='@')||LA20_0=='\\'||LA20_0=='`'||LA20_0=='|'||(LA20_0>='~' && LA20_0<='\uFFFF')) ) {s = 49;}
 
                         if ( s>=0 ) return s;
                         break;
                     case 1 : 
-                        int LA21_46 = input.LA(1);
+                        int LA20_46 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA21_46>='\u0000' && LA21_46<='\uFFFF')) ) {s = 159;}
+                        if ( ((LA20_46>='\u0000' && LA20_46<='\uFFFF')) ) {s = 159;}
 
                         else s = 49;
 
                         if ( s>=0 ) return s;
                         break;
                     case 2 : 
-                        int LA21_47 = input.LA(1);
+                        int LA20_47 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA21_47>='\u0000' && LA21_47<='\uFFFF')) ) {s = 159;}
+                        if ( ((LA20_47>='\u0000' && LA20_47<='\uFFFF')) ) {s = 159;}
 
                         else s = 49;
 
@@ -14653,7 +14624,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                         break;
             }
             NoViableAltException nvae =
-                new NoViableAltException(getDescription(), 21, _s, input);
+                new NoViableAltException(getDescription(), 20, _s, input);
             error(nvae);
             throw nvae;
         }

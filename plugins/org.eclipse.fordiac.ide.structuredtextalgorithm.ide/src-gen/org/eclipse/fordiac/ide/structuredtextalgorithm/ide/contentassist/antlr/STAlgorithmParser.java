@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -206,6 +206,7 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSignedNumberAccess().getGroup(), "rule__SignedNumber__Group__0");
 			builder.put(grammarAccess.getSignedNumberAccess().getGroup_2(), "rule__SignedNumber__Group_2__0");
 			builder.put(grammarAccess.getTimeAccess().getGroup(), "rule__Time__Group__0");
+			builder.put(grammarAccess.getTimeAccess().getGroup_2(), "rule__Time__Group_2__0");
 			builder.put(grammarAccess.getDateAccess().getGroup(), "rule__Date__Group__0");
 			builder.put(grammarAccess.getDateAndTimeAccess().getGroup(), "rule__DateAndTime__Group__0");
 			builder.put(grammarAccess.getDateAndTimeAccess().getGroup_11(), "rule__DateAndTime__Group_11__0");
