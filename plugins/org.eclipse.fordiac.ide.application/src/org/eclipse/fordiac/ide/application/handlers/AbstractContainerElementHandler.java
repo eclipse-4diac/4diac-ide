@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
- * 							Primetals Technologies Austria GmbH
+ * Copyright (c) 2017 fortiss GmbH, Johannes Kepler University Linz,
+ * 					  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *   Bianca Wiesmayr, Alois Zoitl - make newsubapp available for breadcrumb editor
  *   Alois Zoitl - extracted common elements into base class for reuseing it for
  *                 the group creation handler
+ *   Andrea Zoitl - disable if only one connection is selected
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -239,6 +241,16 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			return ((GroupEditPart) editPartRegistry.get(group)).getContentEP();
 		}
 		return ((IContainerEditPart) editPartRegistry.get(network.eContainer())).getContentEP();
+	}
+
+	protected static boolean isOnlyOneConnectionSelected(final StructuredSelection selection) {
+		if (selection.size() == 1) {
+			final Object modelElement = getModelElement(selection.getFirstElement());
+			if (modelElement instanceof Connection) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

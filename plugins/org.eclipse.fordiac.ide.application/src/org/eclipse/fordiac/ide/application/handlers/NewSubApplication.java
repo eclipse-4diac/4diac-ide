@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
- * 							Primetals Technologies Austria GmbH
+ * Copyright (c) 2017 fortiss GmbH, Johannes Kepler University Linz,
+ * 					  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *   Bianca Wiesmayr, Alois Zoitl - make newsubapp available for breadcrumb editor
  *   Alois Zoitl - extracted common elements into base class for reuseing it for
  *                 the group creation handler
+ *   Andrea Zoitl - disable if only one connection is selected
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -45,11 +46,15 @@ public class NewSubApplication extends AbstractContainerElementHandler {
 		if (isEnabled()) {
 			final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
 					ISources.ACTIVE_CURRENT_SELECTION_NAME);
-			boolean maxInOneGroup = false;
+			boolean enabled = false;
 			if (sel instanceof final StructuredSelection selection) {
-				maxInOneGroup = isMaxInOneGroup(selection);
+				if (isOnlyOneConnectionSelected(selection)) {
+					enabled = false; // Explicitly disable if only 1 connection is selected
+				} else {
+					enabled = isMaxInOneGroup(selection);
+				}
 			}
-			setBaseEnabled(maxInOneGroup);
+			setBaseEnabled(enabled);
 		}
 	}
 
