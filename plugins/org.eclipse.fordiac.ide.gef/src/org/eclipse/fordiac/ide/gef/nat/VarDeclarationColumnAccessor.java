@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -106,8 +107,7 @@ public class VarDeclarationColumnAccessor
 			return value;
 		}
 		if (value.length() > PreferenceStoreProvider
-				.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID,
-						TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(rowObject).getProject())
+				.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, ModelHelper.getProjectFromContext(rowObject))
 				.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
 			return FordiacMessages.ValueTooLarge;
 		}
