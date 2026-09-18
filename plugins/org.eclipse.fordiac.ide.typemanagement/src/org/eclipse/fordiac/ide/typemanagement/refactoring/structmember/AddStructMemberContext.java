@@ -17,6 +17,7 @@ import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -38,6 +40,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
+import org.eclipse.gef.commands.Command;
 
 /**
  * Stable input for adding a struct member through a connection gesture.
@@ -56,9 +59,11 @@ public final class AddStructMemberContext {
 	private final TargetLocator target;
 	private final AddStructMemberConfiguration initialConfiguration;
 	private final boolean typeSelectionRequired;
+	private final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory;
 
 	private AddStructMemberContext(final StructuredType structType, final LibraryElement targetModel,
-			final VarDeclaration connectionPin, final TargetLocator target) {
+			final VarDeclaration connectionPin, final TargetLocator target,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		structTypeURI = EcoreUtil.getURI(structType);
 		targetModelURI = EcoreUtil.getURI(targetModel).trimFragment();
 		structTypeName = PackageNameHelper.getFullTypeName(structType);
@@ -66,6 +71,7 @@ public final class AddStructMemberContext {
 		connectionArraySize = getArraySize(connectionPin);
 		this.connectionPin = PinLocator.of(connectionPin);
 		this.target = target;
+		this.borderCrossingCommandFactory = borderCrossingCommandFactory;
 		typeSelectionRequired = GenericTypes.isAnyType(connectionPin.getType());
 		initialConfiguration = new AddStructMemberConfiguration(createMemberName(structType, connectionPin.getName()),
 				connectionPin.getComment(), typeSelectionRequired ? "" : connectionTypeName, connectionArraySize, //$NON-NLS-1$
@@ -74,11 +80,16 @@ public final class AddStructMemberContext {
 
 	public static Optional<AddStructMemberContext> forTarget(final VarDeclaration connectionPin,
 			final EObject target) {
+		return forTarget(connectionPin, target, null);
+	}
+
+	public static Optional<AddStructMemberContext> forTarget(final VarDeclaration connectionPin, final EObject target,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		if (target instanceof final StructManipulator manipulator) {
 			return forStructManipulator(connectionPin, manipulator);
 		}
 		if (target instanceof final VarDeclaration structPin) {
-			return forStructPin(connectionPin, structPin);
+			return forStructPin(connectionPin, structPin, borderCrossingCommandFactory);
 		}
 		return Optional.empty();
 	}
@@ -91,17 +102,24 @@ public final class AddStructMemberContext {
 	 */
 	public static Optional<AddStructMemberContext> forStructPin(final VarDeclaration connectionPin,
 			final VarDeclaration structPin) {
+		return forStructPin(connectionPin, structPin, null);
+	}
+
+	private static Optional<AddStructMemberContext> forStructPin(final VarDeclaration connectionPin,
+			final VarDeclaration structPin,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		if (connectionPin == null || structPin == null || structPin.isArray()
 				|| !(structPin.getType() instanceof final StructuredType structType)
 				|| structType == GenericTypes.ANY_STRUCT || structType.getTypeEntry() == null
 				|| !LinkConstraints.isWithConstraintOK(structPin)
-				|| !isSupportedConnection(connectionPin, structPin.getBlockFBNetworkElement(), structPin.isIsInput())
+				|| !isSupportedConnection(connectionPin, structPin.getBlockFBNetworkElement(), structPin.isIsInput(), structPin,
+						borderCrossingCommandFactory)
 				|| connectionPin.getBlockFBNetworkElement() == structPin.getBlockFBNetworkElement()) {
 			return Optional.empty();
 		}
 		return getRootLibraryElement(connectionPin)
 				.map(root -> new AddStructMemberContext(structType, root, connectionPin,
-						TargetLocator.forStructPin(PinLocator.of(structPin))));
+						TargetLocator.forStructPin(PinLocator.of(structPin)), borderCrossingCommandFactory));
 	}
 
 	/**
@@ -138,7 +156,7 @@ public final class AddStructMemberContext {
 		}
 		return getRootLibraryElement(connectionPin)
 				.map(root -> new AddStructMemberContext(structType, root, connectionPin,
-						TargetLocator.forManipulator(EcoreUtil.getURI(manipulator), kind)));
+						TargetLocator.forManipulator(EcoreUtil.getURI(manipulator), kind), null));
 	}
 
 	public AddStructMemberConfiguration getInitialConfiguration() {
@@ -209,6 +227,10 @@ public final class AddStructMemberContext {
 		return resolveBlock(root, target.blockURI()) instanceof final StructManipulator manipulator ? manipulator : null;
 	}
 
+	Command createBorderCrossingConnectionCommand(final IInterfaceElement source, final IInterfaceElement destination) {
+		return borderCrossingCommandFactory != null ? borderCrossingCommandFactory.apply(source, destination) : null;
+	}
+
 	boolean matches(final LibraryElement root) {
 		final VarDeclaration resolvedConnectionPin = resolveConnectionPin(root, false);
 		if (resolvedConnectionPin == null
@@ -225,7 +247,7 @@ public final class AddStructMemberContext {
 					&& structPin.getType() instanceof final StructuredType structuredType
 					&& structTypeName.equals(PackageNameHelper.getFullTypeName(structuredType))
 					&& isSupportedConnection(resolvedConnectionPin, structPin.getBlockFBNetworkElement(),
-							structPin.isIsInput())
+							structPin.isIsInput(), structPin, borderCrossingCommandFactory)
 					&& resolvedConnectionPin.getBlockFBNetworkElement() != structPin.getBlockFBNetworkElement();
 		}
 
@@ -264,6 +286,12 @@ public final class AddStructMemberContext {
 
 	private static boolean isSupportedConnection(final VarDeclaration connectionPin,
 			final BlockFBNetworkElement targetBlock, final boolean memberIsInput) {
+		return isSupportedConnection(connectionPin, targetBlock, memberIsInput, null, null);
+	}
+
+	private static boolean isSupportedConnection(final VarDeclaration connectionPin,
+			final BlockFBNetworkElement targetBlock, final boolean memberIsInput, final VarDeclaration borderTarget,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		final BlockFBNetworkElement connectionBlock = connectionPin.getBlockFBNetworkElement();
 		if (connectionPin.getType() == null || connectionPin.getType() instanceof ErrorDataType || connectionBlock == null
 				|| targetBlock == null || connectionPin.isIsInput() == memberIsInput
@@ -271,7 +299,9 @@ public final class AddStructMemberContext {
 			return false;
 		}
 		final FBNetwork network = connectionBlock.getFbNetwork();
-		return network != null && network == targetBlock.getFbNetwork();
+		return network != null && (network == targetBlock.getFbNetwork()
+				|| borderTarget != null && borderCrossingCommandFactory != null
+						&& borderCrossingCommandFactory.apply(connectionPin, borderTarget) != null);
 	}
 
 	private static String createMemberName(final StructuredType structType, final String proposal) {

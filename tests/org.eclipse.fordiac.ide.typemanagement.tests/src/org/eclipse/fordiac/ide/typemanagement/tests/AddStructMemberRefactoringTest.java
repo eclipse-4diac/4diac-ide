@@ -35,17 +35,20 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -67,6 +70,8 @@ class AddStructMemberRefactoringTest {
 	private static final String CONSUMER = "Consumer"; //$NON-NLS-1$
 	private static final String MUX = "Mux"; //$NON-NLS-1$
 	private static final String DEMUX = "Demux"; //$NON-NLS-1$
+	private static final String CONTAINER = "Container"; //$NON-NLS-1$
+	private static final String NESTED_CONSUMER = "NestedConsumer"; //$NON-NLS-1$
 	private static final String GENERIC_SELECTOR = "GenericSelector"; //$NON-NLS-1$
 	private static final String F_SEL = "F_SEL"; //$NON-NLS-1$
 
@@ -143,6 +148,37 @@ class AddStructMemberRefactoringTest {
 
 		RefactoringTestSupport.redoLastRefactoring();
 		assertAdded(memberName, connectionName);
+	}
+
+	@Test
+	void addAndConnectAcrossSubappBorder_undoRedoRoundTrip() throws Exception {
+		final SubApp container = assertInstanceOf(SubApp.class, block(CONTAINER));
+		final BlockFBNetworkElement nestedConsumer = container.getSubAppNetwork().getNetworkElements().stream()
+				.filter(element -> NESTED_CONSUMER.equals(element.getName())).findFirst().orElseThrow();
+		final VarDeclaration source = assertInstanceOf(VarDeclaration.class,
+				nestedConsumer.getInterface().getInterfaceElement(List.of("DO1", "A"), true)); //$NON-NLS-1$ //$NON-NLS-2$
+		final ContainerVarDeclaration target = assertInstanceOf(ContainerVarDeclaration.class, pin(CONSUMER, "DI")); //$NON-NLS-1$
+		final AddStructMemberContext context = AddStructMemberContext
+				.forTarget(source, target, CreateSubAppCrossingConnectionsCommand::createProcessBorderCrossingConnection)
+				.orElseThrow();
+		final AddStructMemberRefactoring refactoring = new AddStructMemberRefactoring(context);
+		final String memberName = refactoring.getConfiguration().memberName();
+
+		perform(refactoring);
+		assertNotNull(structuredType().getMemberVar(memberName));
+		VarDeclaration member = target.getCachedMember(List.of(memberName), false);
+		assertNotNull(member);
+		assertFalse(member.getInputConnections().isEmpty());
+
+		RefactoringTestSupport.undoLastRefactoring();
+		assertNull(structuredType().getMemberVar(memberName));
+		assertNull(target.getCachedMember(List.of(memberName), false));
+
+		RefactoringTestSupport.redoLastRefactoring();
+		assertNotNull(structuredType().getMemberVar(memberName));
+		member = target.getCachedMember(List.of(memberName), false);
+		assertNotNull(member);
+		assertFalse(member.getInputConnections().isEmpty());
 	}
 
 	@Test

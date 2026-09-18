@@ -36,7 +36,7 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 	private final AddStructMemberContext context;
 	private final String memberName;
 
-	private AbstractConnectionCreateCommand connectionCommand;
+	private Command connectionCommand;
 	private ChangePinVisibilityCommand visibilityCommand;
 	private ContainerVarDeclaration cachedMemberParent;
 	private VarDeclaration cachedMember;
@@ -83,7 +83,8 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 				|| !hasAvailableDestination(connectionPin, memberPin.isIsInput())) {
 			return false;
 		}
-		return createConnectionCommand(connectionPin, memberPin).canExecute();
+		final Command command = createConnectionCommand(connectionPin, memberPin);
+		return command != null && command.canExecute();
 	}
 
 	private static boolean hasAvailableDestination(final VarDeclaration connectionPin, final boolean memberIsInput) {
@@ -110,7 +111,7 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 		}
 
 		connectionCommand = createConnectionCommand(connectionPin, memberPin);
-		if (!connectionCommand.canExecute()) {
+		if (connectionCommand == null || !connectionCommand.canExecute()) {
 			rollbackPreparation();
 			throw new IllegalStateException(Messages.AddStructMemberRefactoring_CannotConnect);
 		}
@@ -144,16 +145,18 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 				: null;
 	}
 
-	private AbstractConnectionCreateCommand createConnectionCommand(final VarDeclaration connectionPin,
-			final VarDeclaration memberPin) {
-		final FBNetwork network = connectionPin.getBlockFBNetworkElement().getFbNetwork();
+	private Command createConnectionCommand(final VarDeclaration connectionPin, final VarDeclaration memberPin) {
 		final IInterfaceElement source = memberPin.isIsInput() ? connectionPin : memberPin;
 		final IInterfaceElement destination = memberPin.isIsInput() ? memberPin : connectionPin;
-		final AbstractConnectionCreateCommand command = AbstractConnectionCreateCommand.createCommand(network, source,
-				destination);
-		command.setSource(source);
-		command.setDestination(destination);
-		return command;
+		final FBNetwork sourceNetwork = source.getBlockFBNetworkElement().getFbNetwork();
+		if (sourceNetwork == destination.getBlockFBNetworkElement().getFbNetwork()) {
+			final AbstractConnectionCreateCommand command = AbstractConnectionCreateCommand.createCommand(sourceNetwork,
+					source, destination);
+			command.setSource(source);
+			command.setDestination(destination);
+			return command;
+		}
+		return context.createBorderCrossingConnectionCommand(source, destination);
 	}
 
 	private StructuredType resolveStructType() {

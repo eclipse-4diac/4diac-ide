@@ -110,6 +110,14 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 				match);
 	}
 
+	public static boolean hasCommonFBNetwork(final IInterfaceElement source, final IInterfaceElement destination) {
+		Objects.requireNonNull(source);
+		Objects.requireNonNull(destination);
+		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
+		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
+		return sourceNetworks.stream().anyMatch(destinationNetworks::contains);
+	}
+
 	@Override
 	public boolean canExecute() {
 		// as not all checks of the createconnection command are valid we need to do our
@@ -231,7 +239,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		}
 	}
 
-	private static List<FBNetwork> buildHierarchy(final IInterfaceElement source) {
+	public static List<FBNetwork> buildHierarchy(final IInterfaceElement source) {
 		final List<FBNetwork> list = new ArrayList<>();
 		EObject current = source.eContainer();
 		while (current != null) {

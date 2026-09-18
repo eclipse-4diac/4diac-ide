@@ -12,9 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.ui.AddStructMemberRefactoringUI;
 import org.eclipse.gef.EditPart;
@@ -42,7 +47,16 @@ public final class StructMemberConnectionDragCreationTool extends FordiacConnect
 		final EditPart editPartUnderMouse = getCurrentViewer().findObjectAt(getLocation());
 		final EObject target = StructMemberDropTargetResolver.resolve(editPartUnderMouse);
 		if (target != null) {
-			AddStructMemberRefactoringUI.openAsync(getCurrentViewer().getControl().getShell(), connectionPin, target);
+			AddStructMemberRefactoringUI.openAsync(getCurrentViewer().getControl().getShell(), connectionPin, target,
+					(source, destination) -> hasCommonFBNetwork(source, destination)
+							? CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, destination)
+							: null);
 		}
+	}
+
+	private static boolean hasCommonFBNetwork(final IInterfaceElement source, final IInterfaceElement destination) {
+		final List<FBNetwork> sourceNetworks = CreateSubAppCrossingConnectionsCommand.buildHierarchy(source);
+		final List<FBNetwork> destinationNetworks = CreateSubAppCrossingConnectionsCommand.buildHierarchy(destination);
+		return sourceNetworks.stream().anyMatch(destinationNetworks::contains);
 	}
 }
