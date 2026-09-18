@@ -168,7 +168,7 @@ public final class RefactoringTestSupport {
 		return check.getStatus();
 	}
 
-	private static Change performRefactoring(final Refactoring refactoring) throws CoreException {
+	public static Change performRefactoring(final Refactoring refactoring) throws CoreException {
 		final CreateChangeOperation create = new CreateChangeOperation(
 				new CheckConditionsOperation(refactoring, CheckConditionsOperation.ALL_CONDITIONS),
 				RefactoringStatus.FATAL);
