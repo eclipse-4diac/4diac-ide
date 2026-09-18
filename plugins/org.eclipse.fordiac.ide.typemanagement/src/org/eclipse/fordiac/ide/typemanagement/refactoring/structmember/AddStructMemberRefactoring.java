@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -152,8 +153,7 @@ public final class AddStructMemberRefactoring extends Refactoring {
 		}
 		final DataType connectionType = StructMemberRefactoringSupport.resolveDataType(context.getTypeLibrary(),
 				context.getConnectionTypeName());
-		return connectionType != null && (context.isTypeSelectionRequired()
-				? connectionType.isAssignableFrom(candidate)
+		return connectionType != null && (context.isTypeSelectionRequired() ? connectionType.isAssignableFrom(candidate)
 				: context.getConnectionTypeName().equals(PackageNameHelper.getFullTypeName(candidate)));
 	}
 
@@ -172,12 +172,13 @@ public final class AddStructMemberRefactoring extends Refactoring {
 	public List<String> getMemberNames() {
 		final StructuredType structType = StructMemberRefactoringSupport.getStructType(context.getStructTypeURI());
 		return structType == null ? List.of()
-				: structType.getMemberVariables().stream().map(member -> member.getName()).toList();
+				: structType.getMemberVariables().stream().map(VarDeclaration::getName).toList();
 	}
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final CommandCompositeChange result = new CommandCompositeChange(Messages.AddStructMemberRefactoring_ChangeName);
+		final CommandCompositeChange result = new CommandCompositeChange(
+				Messages.AddStructMemberRefactoring_ChangeName);
 		addChange(result, ModelEditChange.fromModelEdits(Messages.AddStructMemberRefactoring_ChangeName,
 				List.of(new AddStructMemberModelEdit(context.getStructTypeURI(), configuration))));
 		if (context.hasConnection()) {

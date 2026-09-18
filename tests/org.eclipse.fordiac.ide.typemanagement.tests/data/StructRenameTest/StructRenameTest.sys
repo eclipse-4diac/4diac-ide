@@ -39,6 +39,7 @@
 					</SubAppEventInputs>
 					<InputVars>
 						<VarDeclaration Name="DI" Type="mypackage::InnerStruct"/>
+						<VarDeclaration Name="B" Type="BOOL"/>
 					</InputVars>
 				</SubAppInterfaceList>
 				<SubAppNetwork>

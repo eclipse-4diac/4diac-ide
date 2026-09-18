@@ -35,17 +35,20 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -67,6 +70,8 @@ class AddStructMemberRefactoringTest {
 	private static final String CONSUMER = "Consumer"; //$NON-NLS-1$
 	private static final String MUX = "Mux"; //$NON-NLS-1$
 	private static final String DEMUX = "Demux"; //$NON-NLS-1$
+	private static final String CONTAINER = "Container"; //$NON-NLS-1$
+	private static final String NESTED_CONSUMER = "NestedConsumer"; //$NON-NLS-1$
 	private static final String GENERIC_SELECTOR = "GenericSelector"; //$NON-NLS-1$
 	private static final String F_SEL = "F_SEL"; //$NON-NLS-1$
 
@@ -167,6 +172,121 @@ class AddStructMemberRefactoringTest {
 
 		RefactoringTestSupport.redoLastRefactoring();
 		assertAdded(memberName, connectionName);
+	}
+
+	@Test
+	void addAndConnectAcrossSubappBorder_undoRedoRoundTrip() throws Exception {
+		final SubApp container = assertInstanceOf(SubApp.class, block(CONTAINER));
+		final BlockFBNetworkElement nestedConsumer = nestedConsumer(container);
+		final VarDeclaration source = assertInstanceOf(VarDeclaration.class,
+				nestedConsumer.getInterface().getInterfaceElement(List.of("DO1", "A"), true)); //$NON-NLS-1$ //$NON-NLS-2$
+		final ContainerVarDeclaration target = assertInstanceOf(ContainerVarDeclaration.class, pin(CONSUMER, "DI")); //$NON-NLS-1$
+		final AddStructMemberContext context = AddStructMemberContext
+				.forTarget(source, target, CreateSubAppCrossingConnectionsCommand::createProcessBorderCrossingConnection)
+				.orElseThrow();
+		final AddStructMemberRefactoring refactoring = new AddStructMemberRefactoring(context);
+		final String memberName = refactoring.getConfiguration().memberName();
+
+		perform(refactoring);
+		assertNotNull(structuredType().getMemberVar(memberName));
+		ContainerVarDeclaration currentTarget = assertInstanceOf(ContainerVarDeclaration.class,
+				pin(CONSUMER, "DI")); //$NON-NLS-1$
+		VarDeclaration member = currentTarget.getCachedMember(List.of(memberName), false);
+		assertNotNull(member);
+		assertFalse(member.getInputConnections().isEmpty());
+
+		RefactoringTestSupport.undoLastRefactoring();
+		assertNull(structuredType().getMemberVar(memberName));
+		currentTarget = assertInstanceOf(ContainerVarDeclaration.class, pin(CONSUMER, "DI")); //$NON-NLS-1$
+		assertNull(currentTarget.getCachedMember(List.of(memberName), false));
+
+		RefactoringTestSupport.redoLastRefactoring();
+		assertNotNull(structuredType().getMemberVar(memberName));
+		currentTarget = assertInstanceOf(ContainerVarDeclaration.class, pin(CONSUMER, "DI")); //$NON-NLS-1$
+		member = currentTarget.getCachedMember(List.of(memberName), false);
+		assertNotNull(member);
+		assertFalse(member.getInputConnections().isEmpty());
+	}
+
+	@Test
+	void addAndConnectMultiplexerAcrossSubappBorder() throws Exception {
+		final SubApp container = assertInstanceOf(SubApp.class, block(CONTAINER));
+		final VarDeclaration source = assertInstanceOf(VarDeclaration.class,
+				nestedConsumer(container).getInterface().getInterfaceElement(List.of("DO1", "A"), true)); //$NON-NLS-1$ //$NON-NLS-2$
+		final Multiplexer target = assertInstanceOf(Multiplexer.class, block(MUX));
+		final AddStructMemberContext context = AddStructMemberContext
+				.forTarget(source, target, CreateSubAppCrossingConnectionsCommand::createProcessBorderCrossingConnection)
+				.orElseThrow();
+		final AddStructMemberRefactoring refactoring = new AddStructMemberRefactoring(context);
+		final String memberName = refactoring.getConfiguration().memberName();
+
+		perform(refactoring);
+		assertNotNull(structuredType().getMemberVar(memberName));
+		final VarDeclaration member = assertInstanceOf(VarDeclaration.class,
+				block(MUX).getInterface().getInterfaceElement(List.of(memberName)));
+		assertFalse(member.getInputConnections().isEmpty());
+	}
+
+	@Test
+	void emptyMultiplexerRejectsUnavailableBorderCrossing() {
+		final SubApp container = assertInstanceOf(SubApp.class, block(CONTAINER));
+		final VarDeclaration source = assertInstanceOf(VarDeclaration.class,
+				nestedConsumer(container).getInterface().getInterfaceElement(List.of("DO1", "A"), true)); //$NON-NLS-1$ //$NON-NLS-2$
+		final Multiplexer target = assertInstanceOf(Multiplexer.class, block(MUX));
+		structuredType().getMemberVariables().clear();
+		target.getInterface().getInputVars().clear();
+
+		assertTrue(AddStructMemberContext.forTarget(source, target, (from, to) -> null).isEmpty());
+	}
+
+	@Test
+	void subappInputActsAsConnectionSourceInsideSubapp() throws Exception {
+		final SubApp container = assertInstanceOf(SubApp.class, block(CONTAINER));
+		final BlockFBNetworkElement nestedConsumer = nestedConsumer(container);
+		container.getSubAppNetwork().getDataConnections().forEach(connection -> {
+			connection.setSource(null);
+			connection.setDestination(null);
+		});
+		container.getSubAppNetwork().getDataConnections().clear();
+		typeLibrary.getTypeEntry(file(SYSTEM_FILE)).save(system());
+		final VarDeclaration source = assertInstanceOf(VarDeclaration.class,
+				container.getInterface().getInterfaceElement(List.of("B"))); //$NON-NLS-1$
+		final VarDeclaration target = assertInstanceOf(VarDeclaration.class,
+				nestedConsumer.getInterface().getInterfaceElement(List.of("DI"))); //$NON-NLS-1$
+		final AddStructMemberRefactoring refactoring = refactoring(source, target);
+		final String memberName = refactoring.getConfiguration().memberName();
+
+		perform(refactoring);
+		final SubApp currentContainer = assertInstanceOf(SubApp.class, block(CONTAINER));
+		final ContainerVarDeclaration currentTarget = assertInstanceOf(ContainerVarDeclaration.class,
+				nestedConsumer(currentContainer).getInterface().getInterfaceElement(List.of("DI"))); //$NON-NLS-1$
+		final VarDeclaration member = currentTarget.getCachedMember(List.of(memberName), false);
+		assertNotNull(member);
+		assertFalse(member.getInputConnections().isEmpty());
+	}
+
+	@Test
+	void missingSourceWithIsRejectedBeforeCreatingMember() throws Exception {
+		final VarDeclaration source = pin(PRODUCER, "OUT", "A"); //$NON-NLS-1$ //$NON-NLS-2$
+		pin(PRODUCER, "OUT").getWiths().clear(); //$NON-NLS-1$
+		final AddStructMemberRefactoring refactoring = refactoring(source, pin(CONSUMER, "DI")); //$NON-NLS-1$
+
+		assertTrue(refactoring.checkInitialConditions(new NullProgressMonitor()).hasFatalError());
+		assertNull(structuredType().getMemberVar(refactoring.getConfiguration().memberName()));
+	}
+
+	@Test
+	void multipleUsesWarningIsReportedOnlyByInitialConditions() throws Exception {
+		final AddStructMemberRefactoring refactoring = refactoring(pin(PRODUCER, "OUT", "A"), //$NON-NLS-1$ //$NON-NLS-2$
+				pin(CONSUMER, "DI")); //$NON-NLS-1$
+
+		final RefactoringStatus initialStatus = refactoring.checkInitialConditions(new NullProgressMonitor());
+		final RefactoringStatus finalStatus = refactoring.checkFinalConditions(new NullProgressMonitor());
+
+		assertEquals(1, Stream.of(initialStatus.getEntries())
+				.filter(entry -> entry.getSeverity() == RefactoringStatus.WARNING).count());
+		assertFalse(Stream.of(finalStatus.getEntries())
+				.anyMatch(entry -> entry.getSeverity() == RefactoringStatus.WARNING));
 	}
 
 	@Test
