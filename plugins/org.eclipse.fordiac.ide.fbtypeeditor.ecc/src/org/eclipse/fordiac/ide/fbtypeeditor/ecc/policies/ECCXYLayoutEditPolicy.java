@@ -10,8 +10,13 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Vikash Kumar Sinha
+ *     - adjust transition bendpoints when a state is moved
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
@@ -25,11 +30,13 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -50,7 +57,22 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Rectangle rectConstraint = (Rectangle) constraint;
 			final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(rectConstraint.x,
 					rectConstraint.y);
-			return new SetPositionCommand(state, newPos);
+
+			final Position oldPos = state.getPosition();
+			final double dx = newPos.getX() - oldPos.getX();
+			final double dy = newPos.getY() - oldPos.getY();
+
+			final CompoundCommand compound = new CompoundCommand();
+			compound.add(new SetPositionCommand(state, newPos));
+
+			final Set<ECTransition> connectedTransitions = new LinkedHashSet<>(state.getOutTransitions());
+			connectedTransitions.addAll(state.getInTransitions());
+
+			for (final ECTransition transition : connectedTransitions) {
+				compound.add(new SetPositionCommand(transition, dx, dy));
+			}
+
+			return compound;
 		}
 		return null;
 	}
