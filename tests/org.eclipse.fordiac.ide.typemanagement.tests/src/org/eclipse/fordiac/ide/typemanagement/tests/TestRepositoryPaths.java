@@ -9,10 +9,12 @@
  *
  * Contributors:
  *   Dimitrios Kalligaridis - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - make repository path resolution platform-independent
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.tests;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,8 +38,11 @@ public record TestRepositoryPaths(Path repositoryRoot, Path standardLibraries) {
 		final URL bundleRoot = FileLocator.toFileURL(bundle.getEntry("/")); //$NON-NLS-1$
 		// The test bundle lives at <repositoryRoot>/tests/<bundle>, so two parent
 		// segments from its root reach the repository root.
-		final Path repositoryRoot = Paths.get(bundleRoot.getPath()).getParent().getParent().toAbsolutePath()
-				.normalize();
-		return new TestRepositoryPaths(repositoryRoot, repositoryRoot.resolve(STANDARD_LIBRARIES_DIR));
+		try {
+			final Path repositoryRoot = Paths.get(bundleRoot.toURI()).getParent().getParent().toAbsolutePath().normalize();
+			return new TestRepositoryPaths(repositoryRoot, repositoryRoot.resolve(STANDARD_LIBRARIES_DIR));
+		} catch (final URISyntaxException e) {
+			throw new IOException("Could not resolve repository root", e); //$NON-NLS-1$
+		}
 	}
 }
