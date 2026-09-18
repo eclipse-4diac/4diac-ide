@@ -74,22 +74,12 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 	}
 
 	@Override
-	public boolean canUndo() {
-		return !changeContainerBoundsCommandList.isEmpty();
-	}
-
-	@Override
 	public void redo() {
 		for (final AbstractChangeContainerBoundsCommand changeBoundscmd : changeContainerBoundsCommandList) {
 			if (changeBoundscmd != null && changeBoundscmd.canRedo()) {
 				changeBoundscmd.redo();
 			}
 		}
-	}
-
-	@Override
-	public boolean canRedo() {
-		return !changeContainerBoundsCommandList.isEmpty();
 	}
 
 	private boolean isUnlockedGroup() {
