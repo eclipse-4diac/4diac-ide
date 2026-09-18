@@ -50,7 +50,7 @@ final class StructMemberRefactoringSupport {
 	}
 
 	static boolean containsMember(final StructuredType type, final String name) {
-		return type.getMemberVar(name) != null;
+		return type.getMemberVariables().stream().anyMatch(member -> member.getName().equalsIgnoreCase(name));
 	}
 
 	static int getInsertionIndex(final StructuredType type, final String insertBefore) {

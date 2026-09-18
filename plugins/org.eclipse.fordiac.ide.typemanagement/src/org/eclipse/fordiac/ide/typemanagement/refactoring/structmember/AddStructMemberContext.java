@@ -17,6 +17,7 @@ import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
@@ -28,8 +29,10 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -38,6 +41,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
+import org.eclipse.gef.commands.Command;
 
 /**
  * Stable input for adding a struct member through a connection gesture.
@@ -58,6 +62,7 @@ public final class AddStructMemberContext {
 	private final TargetLocator target;
 	private final AddStructMemberConfiguration initialConfiguration;
 	private final boolean typeSelectionRequired;
+	private final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory;
 
 	private AddStructMemberContext(final StructuredType structType) {
 		structTypeURI = EcoreUtil.getURI(structType);
@@ -67,13 +72,15 @@ public final class AddStructMemberContext {
 		connectionArraySize = ""; //$NON-NLS-1$
 		connectionPin = null;
 		target = null;
+		borderCrossingCommandFactory = null;
 		typeSelectionRequired = true;
 		initialConfiguration = new AddStructMemberConfiguration(
 				createMemberName(structType, DEFAULT_MEMBER_NAME), "", "", "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private AddStructMemberContext(final StructuredType structType, final LibraryElement targetModel,
-			final VarDeclaration connectionPin, final TargetLocator target) {
+			final VarDeclaration connectionPin, final TargetLocator target,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		structTypeURI = EcoreUtil.getURI(structType);
 		targetModelURI = EcoreUtil.getURI(targetModel).trimFragment();
 		structTypeName = PackageNameHelper.getFullTypeName(structType);
@@ -81,6 +88,7 @@ public final class AddStructMemberContext {
 		connectionArraySize = getArraySize(connectionPin);
 		this.connectionPin = PinLocator.of(connectionPin);
 		this.target = target;
+		this.borderCrossingCommandFactory = borderCrossingCommandFactory;
 		typeSelectionRequired = GenericTypes.isAnyType(connectionPin.getType());
 		initialConfiguration = new AddStructMemberConfiguration(createMemberName(structType, connectionPin.getName()),
 				connectionPin.getComment(), typeSelectionRequired ? "" : connectionTypeName, connectionArraySize, //$NON-NLS-1$
@@ -89,11 +97,16 @@ public final class AddStructMemberContext {
 
 	public static Optional<AddStructMemberContext> forTarget(final VarDeclaration connectionPin,
 			final EObject target) {
+		return forTarget(connectionPin, target, null);
+	}
+
+	public static Optional<AddStructMemberContext> forTarget(final VarDeclaration connectionPin, final EObject target,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		if (target instanceof final StructManipulator manipulator) {
-			return forStructManipulator(connectionPin, manipulator);
+			return forStructManipulator(connectionPin, manipulator, borderCrossingCommandFactory);
 		}
 		if (target instanceof final VarDeclaration structPin) {
-			return forStructPin(connectionPin, structPin);
+			return forStructPin(connectionPin, structPin, borderCrossingCommandFactory);
 		}
 		return Optional.empty();
 	}
@@ -122,17 +135,23 @@ public final class AddStructMemberContext {
 	 */
 	public static Optional<AddStructMemberContext> forStructPin(final VarDeclaration connectionPin,
 			final VarDeclaration structPin) {
+		return forStructPin(connectionPin, structPin, null);
+	}
+
+	private static Optional<AddStructMemberContext> forStructPin(final VarDeclaration connectionPin,
+			final VarDeclaration structPin,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		if (connectionPin == null || structPin == null || structPin.isArray()
 				|| !(structPin.getType() instanceof final StructuredType structType)
 				|| structType == GenericTypes.ANY_STRUCT || structType.getTypeEntry() == null
-				|| !LinkConstraints.isWithConstraintOK(structPin)
-				|| !isSupportedConnection(connectionPin, structPin.getBlockFBNetworkElement(), structPin.isIsInput())
+				|| !(structPin instanceof ContainerVarDeclaration) || !LinkConstraints.isWithConstraintOK(structPin)
+				|| !isSupportedStructPinConnection(connectionPin, structPin, borderCrossingCommandFactory)
 				|| connectionPin.getBlockFBNetworkElement() == structPin.getBlockFBNetworkElement()) {
 			return Optional.empty();
 		}
 		return getRootLibraryElement(connectionPin)
 				.map(root -> new AddStructMemberContext(structType, root, connectionPin,
-						TargetLocator.forStructPin(PinLocator.of(structPin))));
+						TargetLocator.forStructPin(PinLocator.of(structPin)), borderCrossingCommandFactory));
 	}
 
 	/**
@@ -144,6 +163,12 @@ public final class AddStructMemberContext {
 	 */
 	public static Optional<AddStructMemberContext> forStructManipulator(final VarDeclaration connectionPin,
 			final StructManipulator manipulator) {
+		return forStructManipulator(connectionPin, manipulator, null);
+	}
+
+	private static Optional<AddStructMemberContext> forStructManipulator(final VarDeclaration connectionPin,
+			final StructManipulator manipulator,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
 		if (connectionPin == null || manipulator == null
 				|| !(manipulator.getDataType() instanceof final StructuredType structType)
 				|| structType instanceof ErrorDataType || structType == GenericTypes.ANY_STRUCT
@@ -163,13 +188,14 @@ public final class AddStructMemberContext {
 			return Optional.empty();
 		}
 
-		if (!isSupportedConnection(connectionPin, manipulator, memberIsInput)
+		if (!isSupportedManipulatorConnection(connectionPin, manipulator, memberIsInput,
+				borderCrossingCommandFactory)
 				|| connectionPin.getBlockFBNetworkElement() == manipulator) {
 			return Optional.empty();
 		}
 		return getRootLibraryElement(connectionPin)
 				.map(root -> new AddStructMemberContext(structType, root, connectionPin,
-						TargetLocator.forManipulator(EcoreUtil.getURI(manipulator), kind)));
+						TargetLocator.forManipulator(EcoreUtil.getURI(manipulator), kind), borderCrossingCommandFactory));
 	}
 
 	public AddStructMemberConfiguration getInitialConfiguration() {
@@ -249,23 +275,31 @@ public final class AddStructMemberContext {
 		return resolveBlock(root, target.blockURI()) instanceof final StructManipulator manipulator ? manipulator : null;
 	}
 
+	Command createBorderCrossingConnectionCommand(final IInterfaceElement source, final IInterfaceElement destination) {
+		return borderCrossingCommandFactory != null ? borderCrossingCommandFactory.apply(source, destination) : null;
+	}
+
 	boolean matches(final LibraryElement root) {
-		final VarDeclaration resolvedConnectionPin = resolveConnectionPin(root, false);
+		return matches(root, false);
+	}
+
+	boolean matches(final LibraryElement root, final boolean demandCreateConnectionPin) {
+		final VarDeclaration resolvedConnectionPin = resolveConnectionPin(root, demandCreateConnectionPin);
 		if (resolvedConnectionPin == null
 				|| !connectionTypeName.equals(PackageNameHelper.getFullTypeName(resolvedConnectionPin.getType()))
-				|| !connectionArraySize.equals(getArraySize(resolvedConnectionPin))) {
+				|| !connectionArraySize.equals(getArraySize(resolvedConnectionPin))
+				|| !LinkConstraints.hasValidWithConstraint(resolvedConnectionPin)) {
 			return false;
 		}
 
 		if (target.kind() == StructMemberTargetKind.STRUCT_PIN) {
 			final VarDeclaration structPin = resolveStructPin(root, false);
-			return structPin != null && !structPin.isArray()
-					&& (!structPin.isIsInput() || structPin.getInputConnections().isEmpty())
-					&& LinkConstraints.isWithConstraintOK(structPin)
+			return structPin instanceof ContainerVarDeclaration && !structPin.isArray()
+					&& LinkConstraints.hasValidWithConstraint(structPin)
 					&& structPin.getType() instanceof final StructuredType structuredType
 					&& structTypeName.equals(PackageNameHelper.getFullTypeName(structuredType))
-					&& isSupportedConnection(resolvedConnectionPin, structPin.getBlockFBNetworkElement(),
-							structPin.isIsInput())
+					&& isSupportedStructPinConnection(resolvedConnectionPin, structPin,
+							borderCrossingCommandFactory)
 					&& resolvedConnectionPin.getBlockFBNetworkElement() != structPin.getBlockFBNetworkElement();
 		}
 
@@ -273,7 +307,8 @@ public final class AddStructMemberContext {
 		return manipulator != null && target.kind().matches(manipulator)
 				&& manipulator.getDataType() instanceof final StructuredType structuredType
 				&& structTypeName.equals(PackageNameHelper.getFullTypeName(structuredType))
-				&& isSupportedConnection(resolvedConnectionPin, manipulator, target.input())
+				&& isSupportedManipulatorConnection(resolvedConnectionPin, manipulator, target.input(),
+						borderCrossingCommandFactory)
 				&& resolvedConnectionPin.getBlockFBNetworkElement() != manipulator;
 	}
 
@@ -302,16 +337,85 @@ public final class AddStructMemberContext {
 				: Optional.empty();
 	}
 
-	private static boolean isSupportedConnection(final VarDeclaration connectionPin,
-			final BlockFBNetworkElement targetBlock, final boolean memberIsInput) {
-		final BlockFBNetworkElement connectionBlock = connectionPin.getBlockFBNetworkElement();
-		if (connectionPin.getType() == null || connectionPin.getType() instanceof ErrorDataType || connectionBlock == null
-				|| targetBlock == null || connectionPin.isIsInput() == memberIsInput
-				|| (connectionPin.isIsInput() && !connectionPin.getInputConnections().isEmpty())) {
+	private static boolean isSupportedStructPinConnection(final VarDeclaration connectionPin,
+			final VarDeclaration structPin,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
+		if (!hasValidConnectionPin(connectionPin) || structPin.getBlockFBNetworkElement() == null) {
 			return false;
 		}
-		final FBNetwork network = connectionBlock.getFbNetwork();
-		return network != null && network == targetBlock.getFbNetwork();
+		final ConnectionEndpoints endpoints = getDirectConnectionEndpoints(connectionPin, structPin);
+		if (endpoints != null) {
+			return endpoints.destination().getInputConnections().isEmpty();
+		}
+		return borderCrossingCommandFactory != null
+				&& borderCrossingCommandFactory.apply(connectionPin, structPin) != null;
+	}
+
+	private static boolean isSupportedManipulatorConnection(final VarDeclaration connectionPin,
+			final StructManipulator manipulator, final boolean memberIsInput,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
+		if (!hasValidConnectionPin(connectionPin) || manipulator.getFbNetwork() == null) {
+			return false;
+		}
+		final VarDeclaration representativeMember = getRepresentativeMember(manipulator, memberIsInput);
+		if (representativeMember != null) {
+			final ConnectionEndpoints endpoints = getDirectConnectionEndpoints(connectionPin, representativeMember);
+			if (endpoints != null) {
+				return endpoints.destination() != connectionPin || connectionPin.getInputConnections().isEmpty();
+			}
+			return borderCrossingCommandFactory != null
+					&& borderCrossingCommandFactory.apply(connectionPin, representativeMember) != null;
+		}
+		final FBNetwork network = manipulator.getFbNetwork();
+		final boolean directionValid = memberIsInput ? LinkConstraints.isValidConnSource(connectionPin, network)
+				: LinkConstraints.isValidConnDestination(connectionPin, network);
+		if (directionValid) {
+			return true;
+		}
+		final VarDeclaration structPin = memberIsInput ? manipulator.getInterface().getOutputVars().getFirst()
+				: manipulator.getInterface().getInputVars().getFirst();
+		return borderCrossingCommandFactory != null && borderCrossingCommandFactory.apply(
+				memberIsInput ? connectionPin : structPin, memberIsInput ? structPin : connectionPin) != null;
+	}
+
+	private static boolean hasValidConnectionPin(final VarDeclaration connectionPin) {
+		return connectionPin.getType() != null && !(connectionPin.getType() instanceof ErrorDataType)
+				&& connectionPin.getBlockFBNetworkElement() != null;
+	}
+
+	private static VarDeclaration getRepresentativeMember(final StructManipulator manipulator,
+			final boolean memberIsInput) {
+		return manipulator.getInterface().getAllInterfaceElements().filter(VarDeclaration.class::isInstance)
+				.map(VarDeclaration.class::cast).filter(pin -> pin.isIsInput() == memberIsInput).findFirst().orElse(null);
+	}
+
+	static ConnectionEndpoints getDirectConnectionEndpoints(final IInterfaceElement first,
+			final IInterfaceElement second) {
+		final BlockFBNetworkElement firstBlock = first.getBlockFBNetworkElement();
+		final BlockFBNetworkElement secondBlock = second.getBlockFBNetworkElement();
+		if (firstBlock == null || secondBlock == null) {
+			return null;
+		}
+		final FBNetwork firstNetwork = firstBlock.getFbNetwork();
+		final ConnectionEndpoints firstResult = getConnectionEndpoints(first, second, firstNetwork);
+		if (firstResult != null) {
+			return firstResult;
+		}
+		final FBNetwork secondNetwork = secondBlock.getFbNetwork();
+		return secondNetwork != firstNetwork ? getConnectionEndpoints(first, second, secondNetwork) : null;
+	}
+
+	private static ConnectionEndpoints getConnectionEndpoints(final IInterfaceElement first,
+			final IInterfaceElement second, final FBNetwork network) {
+		if (network != null && LinkConstraints.isValidConnSource(first, network)
+				&& LinkConstraints.isValidConnDestination(second, network)) {
+			return new ConnectionEndpoints(network, first, second);
+		}
+		if (network != null && LinkConstraints.isValidConnSource(second, network)
+				&& LinkConstraints.isValidConnDestination(first, network)) {
+			return new ConnectionEndpoints(network, second, first);
+		}
+		return null;
 	}
 
 	private static String createMemberName(final StructuredType structType, final String proposal) {
@@ -320,6 +424,14 @@ public final class AddStructMemberContext {
 			result = NameRepository.createUniqueName(proposal, result);
 		}
 		return result;
+	}
+
+	record ConnectionEndpoints(FBNetwork network, IInterfaceElement source, IInterfaceElement destination) {
+		ConnectionEndpoints {
+			Objects.requireNonNull(network);
+			Objects.requireNonNull(source);
+			Objects.requireNonNull(destination);
+		}
 	}
 
 	record PinLocator(URI blockURI, List<String> path, boolean input) {

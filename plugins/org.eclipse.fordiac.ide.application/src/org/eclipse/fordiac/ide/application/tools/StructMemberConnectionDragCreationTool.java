@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.application.tools;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -42,7 +43,10 @@ public final class StructMemberConnectionDragCreationTool extends FordiacConnect
 		final EditPart editPartUnderMouse = getCurrentViewer().findObjectAt(getLocation());
 		final EObject target = StructMemberDropTargetResolver.resolve(editPartUnderMouse);
 		if (target != null) {
-			AddStructMemberRefactoringUI.openAsync(getCurrentViewer().getControl().getShell(), connectionPin, target);
+			AddStructMemberRefactoringUI.openAsync(getCurrentViewer().getControl().getShell(), connectionPin, target,
+					(source, destination) -> CreateSubAppCrossingConnectionsCommand.hasCommonFBNetwork(source, destination)
+							? CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, destination)
+							: null);
 		}
 	}
 }

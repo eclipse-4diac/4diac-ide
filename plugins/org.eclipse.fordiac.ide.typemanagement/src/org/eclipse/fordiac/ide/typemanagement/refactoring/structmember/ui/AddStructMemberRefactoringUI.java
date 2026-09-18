@@ -14,10 +14,12 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.ui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
@@ -25,6 +27,7 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.AddStruct
 import org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.AddStructMemberRefactoring;
 import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.swt.widgets.Display;
@@ -43,7 +46,13 @@ public final class AddStructMemberRefactoringUI {
 	}
 
 	public static void openAsync(final Shell shell, final VarDeclaration connectionPin, final EObject target) {
-		final Optional<AddStructMemberContext> context = AddStructMemberContext.forTarget(connectionPin, target);
+		openAsync(shell, connectionPin, target, null);
+	}
+
+	public static void openAsync(final Shell shell, final VarDeclaration connectionPin, final EObject target,
+			final BiFunction<IInterfaceElement, IInterfaceElement, Command> borderCrossingCommandFactory) {
+		final Optional<AddStructMemberContext> context = AddStructMemberContext.forTarget(connectionPin, target,
+				borderCrossingCommandFactory);
 		if (context.isEmpty()) {
 			Display.getDefault().asyncExec(
 					() -> ErrorMessenger.popUpErrorMessage(Messages.AddStructMemberRefactoring_CannotConnect));

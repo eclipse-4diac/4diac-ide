@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,8 @@
  *     - implemented special cases, handle existing pins gracefully
  *   Fabio Gandolfi
  *     - reuse connections if already exists between fb and subapp
+ *   Michael Oberlehner
+ *     - support struct member connections across subapplications
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -109,6 +111,14 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		}
 		return new CreateSubAppCrossingConnectionsCommand(source, destination, sourceNetworks, destinationNetworks,
 				match);
+	}
+
+	public static boolean hasCommonFBNetwork(final IInterfaceElement source, final IInterfaceElement destination) {
+		Objects.requireNonNull(source);
+		Objects.requireNonNull(destination);
+		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
+		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
+		return sourceNetworks.stream().anyMatch(destinationNetworks::contains);
 	}
 
 	@Override

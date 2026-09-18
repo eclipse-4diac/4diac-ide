@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCom
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -36,7 +35,7 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 	private final AddStructMemberContext context;
 	private final String memberName;
 
-	private AbstractConnectionCreateCommand connectionCommand;
+	private Command connectionCommand;
 	private ChangePinVisibilityCommand visibilityCommand;
 	private ContainerVarDeclaration cachedMemberParent;
 	private VarDeclaration cachedMember;
@@ -50,7 +49,7 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 
 	@Override
 	public boolean canExecute() {
-		if (!context.matches(targetModel)) {
+		if (!context.matches(targetModel, true)) {
 			return false;
 		}
 		final VarDeclaration connectionPin = context.resolveConnectionPin(targetModel, false);
@@ -72,28 +71,31 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 				|| connectionPin.getBlockFBNetworkElement() == structPin.getBlockFBNetworkElement()) {
 			return false;
 		}
-		return hasAvailableDestination(connectionPin, structPin.isIsInput())
-				&& (!structPin.isIsInput() || structPin.getInputConnections().isEmpty());
+		return hasAvailableDestination(connectionPin, structPin);
 	}
 
 	private boolean canConnectToManipulator(final VarDeclaration connectionPin) {
 		final StructManipulator manipulator = context.resolveStructManipulator(targetModel);
 		final VarDeclaration memberPin = resolveManipulatorMemberPin(manipulator);
 		if (manipulator == null || memberPin == null || connectionPin.getBlockFBNetworkElement() == manipulator
-				|| !hasAvailableDestination(connectionPin, memberPin.isIsInput())) {
+				|| !hasAvailableDestination(connectionPin, memberPin)) {
 			return false;
 		}
-		return createConnectionCommand(connectionPin, memberPin).canExecute();
+		final Command command = createConnectionCommand(connectionPin, memberPin);
+		return command != null && command.canExecute();
 	}
 
-	private static boolean hasAvailableDestination(final VarDeclaration connectionPin, final boolean memberIsInput) {
-		return memberIsInput || connectionPin.getInputConnections().isEmpty();
+	private static boolean hasAvailableDestination(final VarDeclaration connectionPin,
+			final VarDeclaration memberPin) {
+		final AddStructMemberContext.ConnectionEndpoints endpoints = AddStructMemberContext
+				.getDirectConnectionEndpoints(connectionPin, memberPin);
+		return endpoints == null || endpoints.destination().getInputConnections().isEmpty();
 	}
 
 	@Override
 	public void execute() {
 		clearExecutionState();
-		final VarDeclaration connectionPin = context.resolveConnectionPin(targetModel, false);
+		final VarDeclaration connectionPin = context.resolveConnectionPin(targetModel, true);
 		final StructuredType structType = resolveStructType();
 		if (connectionPin == null || structType == null) {
 			throw new IllegalStateException(Messages.AddStructMemberRefactoring_InvalidContext);
@@ -110,7 +112,7 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 		}
 
 		connectionCommand = createConnectionCommand(connectionPin, memberPin);
-		if (!connectionCommand.canExecute()) {
+		if (connectionCommand == null || !connectionCommand.canExecute()) {
 			rollbackPreparation();
 			throw new IllegalStateException(Messages.AddStructMemberRefactoring_CannotConnect);
 		}
@@ -144,16 +146,19 @@ final class CreateStructMemberConnectionCommand extends Command implements Scope
 				: null;
 	}
 
-	private AbstractConnectionCreateCommand createConnectionCommand(final VarDeclaration connectionPin,
-			final VarDeclaration memberPin) {
-		final FBNetwork network = connectionPin.getBlockFBNetworkElement().getFbNetwork();
+	private Command createConnectionCommand(final VarDeclaration connectionPin, final VarDeclaration memberPin) {
+		final AddStructMemberContext.ConnectionEndpoints endpoints = AddStructMemberContext
+				.getDirectConnectionEndpoints(connectionPin, memberPin);
+		if (endpoints != null) {
+			final AbstractConnectionCreateCommand command = AbstractConnectionCreateCommand.createCommand(
+					endpoints.network(), endpoints.source(), endpoints.destination());
+			command.setSource(endpoints.source());
+			command.setDestination(endpoints.destination());
+			return command;
+		}
 		final IInterfaceElement source = memberPin.isIsInput() ? connectionPin : memberPin;
 		final IInterfaceElement destination = memberPin.isIsInput() ? memberPin : connectionPin;
-		final AbstractConnectionCreateCommand command = AbstractConnectionCreateCommand.createCommand(network, source,
-				destination);
-		command.setSource(source);
-		command.setDestination(destination);
-		return command;
+		return context.createBorderCrossingConnectionCommand(source, destination);
 	}
 
 	private StructuredType resolveStructType() {
