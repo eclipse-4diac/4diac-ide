@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.test.ui.fbtype;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -36,12 +36,8 @@ import org.eclipse.swtbot.swt.finder.results.Result;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ECCStateMoveTransitionTest extends Abstract4diacUITests {
 
 	private static final double POSITION_EPSILON = 0.01d;
@@ -72,112 +68,41 @@ public class ECCStateMoveTransitionTest extends Abstract4diacUITests {
 		bot.editorByTitle(PROJECT_NAME).show();
 	}
 
-	/**
-	 * Verifies that moving a state shifts an outgoing transition by the same delta
-	 * and that undo and redo restore and reapply both positions.
-	 */
-	@SuppressWarnings("static-method")
 	@Test
-	@Order(1)
 	public void moveECStateAdjustsOutgoingTransitionBendpoint() {
 		editor.clickContextMenu(UITestNamesHelper.ADD_STATE, 250, 150);
 
-		final SWTBotGefEditPart startPart = editor.getEditPart(UITestNamesHelper.START);
-		assertNotNull(startPart);
-
-		final ECState startState = ((ECStateEditPart) startPart.part()).getModel();
-
+		final SWTBotGefEditPart statePart = editor.getEditPart(UITestNamesHelper.START);
 		final SWTBotGefEditPart targetPart = editor.getEditPart(UITestNamesHelper.STATE);
+		assertNotNull(statePart);
 		assertNotNull(targetPart);
 
-		final SWTBotECC eccBot = new SWTBotECC();
+		final ECState state = ((ECStateEditPart) statePart.part()).getModel();
+		final ECState target = ((ECStateEditPart) targetPart.part()).getModel();
 		final SWTBot4diacGefViewer viewer = editor.getSWTBotGefViewer();
+		final ECTransition transition = createTransition(viewer, state, target);
 
-		final Point startPoint = eccBot.getPoint(startPart);
-		final Point targetPoint = eccBot.getPoint(targetPart);
-
-		viewer.drag(startPoint.x, startPoint.y, targetPoint.x, targetPoint.y);
-
-		assertFalse(startState.getOutTransitions().isEmpty());
-
-		final ECTransition transition = startState.getOutTransitions().get(0);
-		final Position originalStatePosition = EcoreUtil.copy(startState.getPosition());
-		final Position originalTransitionPosition = EcoreUtil.copy(transition.getPosition());
-
-		startPart.select();
-		viewer.drag(startPoint.x, startPoint.y, startPoint.x + MOVE_DELTA, startPoint.y + MOVE_DELTA);
-
-		assertMovedByDelta(startState, transition, originalStatePosition, originalTransitionPosition);
-
-		final CommandStack commandStack = getCommandStack(viewer);
-
-		commandStack.undo();
-
-		assertPositionEquals(originalStatePosition, startState.getPosition());
-		assertPositionEquals(originalTransitionPosition, transition.getPosition());
-
-		commandStack.redo();
-
-		assertMovedByDelta(startState, transition, originalStatePosition, originalTransitionPosition);
+		moveAndVerify(viewer, statePart, state, transition);
 	}
 
-	/**
-	 * Verifies that moving a state shifts an incoming transition by the same delta
-	 * and that undo and redo restore and reapply both positions.
-	 */
-	@SuppressWarnings("static-method")
 	@Test
-	@Order(2)
 	public void moveECStateAdjustsIncomingTransitionBendpoint() {
 		editor.clickContextMenu(UITestNamesHelper.ADD_STATE, 450, 350);
 
-		final SWTBotGefEditPart targetPart = editor.getEditPart(SECOND_STATE_NAME);
-		assertNotNull(targetPart);
+		final SWTBotGefEditPart sourcePart = editor.getEditPart(UITestNamesHelper.START);
+		final SWTBotGefEditPart statePart = editor.getEditPart(SECOND_STATE_NAME);
+		assertNotNull(sourcePart);
+		assertNotNull(statePart);
 
-		final ECState targetState = ((ECStateEditPart) targetPart.part()).getModel();
-
-		final SWTBotGefEditPart startPart = editor.getEditPart(UITestNamesHelper.START);
-		assertNotNull(startPart);
-
-		final SWTBotECC eccBot = new SWTBotECC();
+		final ECState source = ((ECStateEditPart) sourcePart.part()).getModel();
+		final ECState state = ((ECStateEditPart) statePart.part()).getModel();
 		final SWTBot4diacGefViewer viewer = editor.getSWTBotGefViewer();
+		final ECTransition transition = createTransition(viewer, source, state);
 
-		final Point startPoint = eccBot.getPoint(startPart);
-		final Point targetPoint = eccBot.getPoint(targetPart);
-
-		viewer.drag(startPoint.x, startPoint.y, targetPoint.x, targetPoint.y);
-
-		assertFalse(targetState.getInTransitions().isEmpty());
-
-		final ECTransition transition = targetState.getInTransitions().get(targetState.getInTransitions().size() - 1);
-
-		final Position originalStatePosition = EcoreUtil.copy(targetState.getPosition());
-		final Position originalTransitionPosition = EcoreUtil.copy(transition.getPosition());
-
-		targetPart.select();
-		viewer.drag(targetPoint.x, targetPoint.y, targetPoint.x + MOVE_DELTA, targetPoint.y + MOVE_DELTA);
-
-		assertMovedByDelta(targetState, transition, originalStatePosition, originalTransitionPosition);
-
-		final CommandStack commandStack = getCommandStack(viewer);
-
-		commandStack.undo();
-
-		assertPositionEquals(originalStatePosition, targetState.getPosition());
-		assertPositionEquals(originalTransitionPosition, transition.getPosition());
-
-		commandStack.redo();
-
-		assertMovedByDelta(targetState, transition, originalStatePosition, originalTransitionPosition);
+		moveAndVerify(viewer, statePart, state, transition);
 	}
 
-	/**
-	 * Verifies that a self-loop transition is shifted exactly once when its state
-	 * is moved. Undo and redo must restore and reapply both positions.
-	 */
-	@SuppressWarnings("static-method")
 	@Test
-	@Order(3)
 	public void moveECStateWithSelfLoopAdjustsBendpointOnce() {
 		editor.clickContextMenu(UITestNamesHelper.ADD_STATE, 550, 550);
 
@@ -185,51 +110,60 @@ public class ECCStateMoveTransitionTest extends Abstract4diacUITests {
 		assertNotNull(statePart);
 
 		final ECState state = ((ECStateEditPart) statePart.part()).getModel();
-
-		final SWTBotECC eccBot = new SWTBotECC();
 		final SWTBot4diacGefViewer viewer = editor.getSWTBotGefViewer();
-		final Point statePoint = eccBot.getPoint(statePart);
+		final ECTransition selfLoop = createTransition(viewer, state, state);
 
-		viewer.drag(statePoint.x, statePoint.y, statePoint.x + 5, statePoint.y + 5);
+		moveAndVerify(viewer, statePart, state, selfLoop);
+	}
 
-		final ECTransition selfLoop = state.getOutTransitions().stream()
-				.filter(transition -> transition.getSource() == state && transition.getDestination() == state)
-				.findFirst().orElse(null);
-
-		assertNotNull(selfLoop);
-		assertTrue(state.getInTransitions().contains(selfLoop));
-
+	private static void moveAndVerify(final SWTBot4diacGefViewer viewer, final SWTBotGefEditPart statePart,
+			final ECState state, final ECTransition transition) {
 		final Position originalStatePosition = EcoreUtil.copy(state.getPosition());
-		final Position originalTransitionPosition = EcoreUtil.copy(selfLoop.getPosition());
+		final Position originalTransitionPosition = EcoreUtil.copy(transition.getPosition());
+		final Point statePoint = new SWTBotECC().getPoint(statePart);
 
 		statePart.select();
 		viewer.drag(statePoint.x, statePoint.y, statePoint.x + MOVE_DELTA, statePoint.y + MOVE_DELTA);
 
-		assertMovedByDelta(state, selfLoop, originalStatePosition, originalTransitionPosition);
+		final double dx = state.getPosition().getX() - originalStatePosition.getX();
+		final double dy = state.getPosition().getY() - originalStatePosition.getY();
+		assertMovedByDelta(state, transition, originalStatePosition, originalTransitionPosition, dx, dy);
 
+		final Position movedStatePosition = EcoreUtil.copy(state.getPosition());
+		final Position movedTransitionPosition = EcoreUtil.copy(transition.getPosition());
 		final CommandStack commandStack = getCommandStack(viewer);
 
 		commandStack.undo();
-
 		assertPositionEquals(originalStatePosition, state.getPosition());
-		assertPositionEquals(originalTransitionPosition, selfLoop.getPosition());
+		assertPositionEquals(originalTransitionPosition, transition.getPosition());
 
 		commandStack.redo();
-
-		assertMovedByDelta(state, selfLoop, originalStatePosition, originalTransitionPosition);
+		assertPositionEquals(movedStatePosition, state.getPosition());
+		assertPositionEquals(movedTransitionPosition, transition.getPosition());
 	}
 
 	private static void assertMovedByDelta(final ECState state, final ECTransition transition,
-			final Position originalStatePosition, final Position originalTransitionPosition) {
-		assertEquals(originalStatePosition.getX() + MOVE_DELTA, state.getPosition().getX(), POSITION_EPSILON);
-		assertEquals(originalStatePosition.getY() + MOVE_DELTA, state.getPosition().getY(), POSITION_EPSILON);
-		assertEquals(originalTransitionPosition.getX() + MOVE_DELTA, transition.getPosition().getX(), POSITION_EPSILON);
-		assertEquals(originalTransitionPosition.getY() + MOVE_DELTA, transition.getPosition().getY(), POSITION_EPSILON);
+			final Position originalStatePosition, final Position originalTransitionPosition, final double dx,
+			final double dy) {
+		assertFalse(Math.abs(dx) < POSITION_EPSILON && Math.abs(dy) < POSITION_EPSILON);
+		assertEquals(originalStatePosition.getX() + dx, state.getPosition().getX(), POSITION_EPSILON);
+		assertEquals(originalStatePosition.getY() + dy, state.getPosition().getY(), POSITION_EPSILON);
+		assertEquals(originalTransitionPosition.getX() + dx, transition.getPosition().getX(), POSITION_EPSILON);
+		assertEquals(originalTransitionPosition.getY() + dy, transition.getPosition().getY(), POSITION_EPSILON);
 	}
 
 	private static void assertPositionEquals(final Position expected, final Position actual) {
 		assertEquals(expected.getX(), actual.getX(), POSITION_EPSILON);
 		assertEquals(expected.getY(), actual.getY(), POSITION_EPSILON);
+	}
+
+	private static ECTransition createTransition(final SWTBot4diacGefViewer viewer, final ECState source,
+			final ECState destination) {
+		final CreateTransitionCommand command = new CreateTransitionCommand(source, destination, null);
+		return UIThreadRunnable.syncExec((Result<ECTransition>) () -> {
+			getCommandStack(viewer).execute(command);
+			return (ECTransition) command.getCreatedElement();
+		});
 	}
 
 	private static CommandStack getCommandStack(final SWTBot4diacGefViewer viewer) {
