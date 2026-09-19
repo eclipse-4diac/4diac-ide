@@ -50,6 +50,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
+import org.eclipse.ltk.core.refactoring.resource.CopyResourcesDescriptor;
 import org.eclipse.ltk.core.refactoring.resource.DeleteResourcesDescriptor;
 import org.eclipse.ltk.core.refactoring.resource.MoveResourcesDescriptor;
 import org.eclipse.ltk.core.refactoring.resource.RenameResourceDescriptor;
@@ -141,6 +142,23 @@ public final class RefactoringTestSupport {
 		final MoveResourcesDescriptor descriptor = new MoveResourcesDescriptor();
 		descriptor.setResourcesToMove(new IResource[] { file });
 		descriptor.setDestination(destination);
+		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
+	}
+
+	/**
+	 * Copy the given resources into the destination container through the same LTK
+	 * copy refactoring the System Explorer paste uses, including CopyTypeParticipant
+	 * package updates. A copy into a fresh destination never asks how to resolve a
+	 * name clash.
+	 */
+	public static Change performCopy(final IResource[] files, final IContainer destination) throws CoreException {
+		final CopyResourcesDescriptor descriptor = new CopyResourcesDescriptor();
+		descriptor.setResources(files);
+		final IPath[] destinations = new IPath[files.length];
+		for (int i = 0; i < files.length; i++) {
+			destinations[i] = destination.getFullPath().append(files[i].getName());
+		}
+		descriptor.setDestinationPaths(destinations);
 		return performRefactoring(descriptor.createRefactoring(new RefactoringStatus()));
 	}
 
