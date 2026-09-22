@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueRefreshJob;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -248,7 +249,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	private void updateTypeInitialValue(final String value) {
 		if (!parameterText.isDisposed() && FordiacMessages.ComputingPlaceholderValue.equals(parameterText.getText())) {
 			if (value.length() <= PreferenceStoreProvider
-					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, getTypeLibrary().getProject())
+					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, ModelHelper.getProjectFromContext(getType()))
 					.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
 				parameterText.setText(value);
 			} else {
