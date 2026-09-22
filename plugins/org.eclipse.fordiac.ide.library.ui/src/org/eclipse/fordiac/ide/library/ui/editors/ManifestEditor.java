@@ -19,6 +19,13 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistoryListener;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryEvent;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -46,18 +53,22 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class ManifestEditor extends FormEditor implements IGotoMarker {
 
+	private final IUndoContext undoContext = new ObjectUndoContext(this);
+
 	private static final String DEPENDENCY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorDependencyPage"; //$NON-NLS-1$
 	private static final String PRODUCT_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorProductPage"; //$NON-NLS-1$
 
 	private Manifest manifest;
 	private IProject project;
-	private boolean isDirty;
+
+	private IUndoableOperation savePosition;
 
 	@Override
 	protected void addPages() {
 		loadManifest();
 
-		isDirty = false;
+		savePosition = null;
+
 		final var dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"); //$NON-NLS-1$
 		final var productPage = new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, "Product"); //$NON-NLS-1$
 
@@ -81,9 +92,22 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 			getActivePageInstance().getManagedForm().getMessageManager().update();
 			return;
 		}
-
 		ManifestHelper.saveManifest(manifest);
-		setDirty(false);
+		savePosition = OperationHistoryFactory.getOperationHistory().getUndoOperation(getUndoContext());
+		firePropertyChange(PROP_DIRTY);
+	}
+
+	public void execute(final IUndoableOperation operation) {
+		operation.addContext(getUndoContext());
+		try {
+			OperationHistoryFactory.getOperationHistory().execute(operation, null, null);
+		} catch (final ExecutionException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+	}
+
+	public IUndoContext getUndoContext() {
+		return undoContext;
 	}
 
 	private Optional<ManifestEditorPage<EObject>> getInvalidPage() {
@@ -106,18 +130,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	@Override
 	public boolean isDirty() {
-		return isDirty;
-	}
-
-	public void markDirty() {
-		setDirty(true);
-	}
-
-	private void setDirty(final boolean dirty) {
-		if (isDirty != dirty) {
-			isDirty = dirty;
-			firePropertyChange(PROP_DIRTY);
-		}
+		return OperationHistoryFactory.getOperationHistory().getUndoOperation(getUndoContext()) != savePosition;
 	}
 
 	@Override
@@ -159,10 +172,13 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(buildListener, IResourceChangeEvent.POST_BUILD);
+		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(operationHistoryListener);
 	}
 
 	@Override
 	public void dispose() {
+		OperationHistoryFactory.getOperationHistory().removeOperationHistoryListener(operationHistoryListener);
+		OperationHistoryFactory.getOperationHistory().dispose(getUndoContext(), true, true, true);
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(buildListener);
 		super.dispose();
 	}
@@ -181,6 +197,19 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 		return resource.getEObject(targetUri.fragment());
 	}
+
+	private final IOperationHistoryListener operationHistoryListener = event -> {
+		final IUndoableOperation operation = event.getOperation();
+
+		if (operation != null && operation.hasContext(undoContext) && switch (event.getEventType()) {
+		case OperationHistoryEvent.OPERATION_ADDED, OperationHistoryEvent.OPERATION_REMOVED,
+				OperationHistoryEvent.UNDONE, OperationHistoryEvent.REDONE ->
+			true;
+		default -> false;
+		}) {
+			firePropertyChange(PROP_DIRTY);
+		}
+	};
 
 	private final IResourceChangeListener buildListener = new IResourceChangeListener() {
 		private final IPath externalLibPath = new Path(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
