@@ -109,9 +109,8 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 
 	@Override
 	protected boolean isValid() {
-		final var manifest = getManifestEditor().getManifest();
-		return manifest != null && manifest.getDependencies() != null && manifest.getDependencies().getRequired()
-				.stream().map(Required::getVersion).allMatch(VersionComparator::isValidRange);
+		return getModel() != null && getModel().getRequired() != null && getModel().getRequired().stream()
+				.map(Required::getVersion).allMatch(VersionComparator::isValidRange);
 	}
 
 	@Override
@@ -134,31 +133,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 		treeViewer.getTree().setFocus();
 	}
 
-	private void createButtonBar(final Composite parent, final IManagedForm form) {
-		final Composite buttonBar = new Composite(parent, SWT.NONE);
-		buttonBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
-
-		final GridLayout layout = new GridLayout(3, false);
-		buttonBar.setLayout(layout);
-
-		final Button refreshButton = new Button(buttonBar, SWT.PUSH);
-		refreshButton.setText(Messages.ManifestEditor_RefreshLibraries);
-		refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		refreshButton.addListener(SWT.Selection, event -> refreshLibraries(form));
-
-		final Button manageLibrariesButton = new Button(buttonBar, SWT.PUSH);
-		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
-		manageLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		manageLibrariesButton.addListener(SWT.Selection, event -> ManageLibraryWizard
-				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
-
-		final Button importLibrariesButton = new Button(buttonBar, SWT.PUSH);
-		importLibrariesButton.setText(Messages.ManifestEditor_ImportLibraries);
-		importLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		importLibrariesButton.addListener(SWT.Selection, event -> UnifiedLibraryImportWizard
-				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
-	}
-
 	private List<LibContainer> createViewerInput() {
 		if (getModel() == null) {
 			return Collections.emptyList();
@@ -168,29 +142,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 
 		return List.of(new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, libraries.get(Boolean.TRUE)),
 				new LibContainer(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, libraries.get(Boolean.FALSE)));
-	}
-
-	private static boolean isStandardLib(final String symbolicName) {
-		return LibraryManager.INSTANCE.getStandardLibraries().containsKey(symbolicName);
-	}
-
-	private void collectLinkedLibraryVersions() {
-		linkedLibVersions.clear();
-		final IProject project = getManifestEditor().getProject();
-		if (project == null) {
-			return;
-		}
-		try {
-			LinkedLibrary.getAll(project, null)
-					.forEach(lib -> linkedLibVersions.putIfAbsent(lib.getSymbolicName(), lib.getVersion().toString()));
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-
-	}
-
-	private String getUsedVersion(final String symbolicName) {
-		return linkedLibVersions.getOrDefault(symbolicName, ""); //$NON-NLS-1$
 	}
 
 	private void createDependencySection(final Composite parent, final FormToolkit toolkit) {
@@ -266,24 +217,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 		treeViewer.expandAll();
 	}
 
-	public void refresh() {
-		if (treeViewer == null || treeViewer.getControl().isDisposed()) {
-			return;
-		}
-		collectLinkedLibraryVersions();
-		treeViewer.setInput(createViewerInput());
-		treeViewer.expandAll();
-	}
-
-	public void reveal(final Required required) {
-		if (treeViewer == null || treeViewer.getTree().isDisposed()) {
-			return;
-		}
-
-		treeViewer.setSelection(new StructuredSelection(required), true);
-		treeViewer.getTree().setFocus();
-	}
-
 	private void createButtonBar(final Composite parent, final IManagedForm form) {
 		final Composite buttonBar = new Composite(parent, SWT.NONE);
 		buttonBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
@@ -309,18 +242,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
 	}
 
-	private List<LibContainer> createViewerInput() {
-		final var manifest = getManifestEditor().getManifest();
-		if (manifest == null || manifest.getDependencies() == null) {
-			return Collections.emptyList();
-		}
-		final Map<Boolean, List<Required>> libraries = manifest.getDependencies().getRequired().stream()
-				.collect(Collectors.partitioningBy(r -> isStandardLib(r.getSymbolicName())));
-
-		return List.of(new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, libraries.get(Boolean.TRUE)),
-				new LibContainer(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, libraries.get(Boolean.FALSE)));
-	}
-
 	private static boolean isStandardLib(final String symbolicName) {
 		return LibraryManager.INSTANCE.getStandardLibraries().containsKey(symbolicName);
 	}
@@ -338,10 +259,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
-	}
-
-	private ManifestEditor getManifestEditor() {
-		return (ManifestEditor) getEditor();
 	}
 
 	private String getUsedVersion(final String symbolicName) {
@@ -369,15 +286,24 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 			@Override
 			protected void setValue(final Object element, final Object value) {
 				if (element instanceof final Required required) {
-
 					final String version = value.toString();
+
 					if (version.equals(required.getVersion())) {
 						return;
 					}
-					required.setVersion(version);
-					getViewer().refresh(required);
+
+					final Consumer<String> setter = newValue -> {
+						required.setVersion(newValue);
+
+						if (!treeViewer.getControl().isDisposed()) {
+							treeViewer.refresh(required);
+						}
+					};
+
+					ManifestEditorDependencyPage.this.setValue(Messages.ManifestEditor_VersionRange,
+							required::getVersion, setter, version);
+
 					getViewer().setSelection(StructuredSelection.EMPTY);
-					markDirty();
 				}
 			}
 

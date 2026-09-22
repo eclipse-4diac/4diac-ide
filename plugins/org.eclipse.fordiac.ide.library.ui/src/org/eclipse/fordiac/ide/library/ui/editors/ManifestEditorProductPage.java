@@ -78,20 +78,21 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		final Text nameText = toolkit.createText(nameComposite,
 				getModel().getName() != null ? getModel().getName() : "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
 		nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(nameText, getModel()::getName, getModel()::setName);
+		bindText(nameText, getModel()::getName, getModel()::setName, Messages.ManifestEditor_Name);
 
 		final Text symbolicNameText = toolkit.createText(nameComposite,
 				getModel().getSymbolicName() != null ? getModel().getSymbolicName() : "", //$NON-NLS-1$
 				SWT.SINGLE | SWT.BORDER);
 		symbolicNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(symbolicNameText, getModel()::getSymbolicName, getModel()::setSymbolicName);
+		bindText(symbolicNameText, getModel()::getSymbolicName, getModel()::setSymbolicName,
+				Messages.ManifestEditor_SymbolicName);
 
 		toolkit.createLabel(sectionClient, Messages.ManifestEditor_Comment);
 
 		final Text commentText = toolkit.createText(sectionClient,
 				getModel().getComment() != null ? getModel().getComment() : "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
 		commentText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(commentText, getModel()::getComment, getModel()::setComment);
+		bindText(commentText, getModel()::getComment, getModel()::setComment, Messages.ManifestEditor_Comment);
 	}
 
 	private void createVersionInformationSection(final Composite parent, final FormToolkit toolkit) {
@@ -113,14 +114,14 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		versionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		addValidation(versionText, INVALID_VERSION_KEY, Messages.ManifestEditor_InvalidVersion,
 				VersionComparator::isValidVersion);
-		bindText(versionText, versionInfo::getVersion, versionInfo::setVersion);
+		bindText(versionText, versionInfo::getVersion, versionInfo::setVersion, Messages.ManifestEditor_Version);
 
 		toolkit.createLabel(client, Messages.ManifestEditor_Date);
 
-		final Text dateText = toolkit.createText(client, versionInfo.getDate() != null ? versionInfo.getDate() : "",
+		final Text dateText = toolkit.createText(client, versionInfo.getDate() != null ? versionInfo.getDate() : "", //$NON-NLS-1$
 				SWT.SINGLE | SWT.BORDER);
 		dateText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(dateText, versionInfo::getDate, versionInfo::setDate);
+		bindText(dateText, versionInfo::getDate, versionInfo::setDate, Messages.ManifestEditor_Date);
 		addValidation(dateText, INVALID_DATE_KEY, Messages.ManifestEditor_InvalidDate,
 				ManifestEditorProductPage::isValidDate);
 
@@ -129,7 +130,7 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		final Text authorText = toolkit.createText(client,
 				versionInfo.getAuthor() != null ? versionInfo.getAuthor() : "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
 		authorText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(authorText, versionInfo::getAuthor, versionInfo::setAuthor);
+		bindText(authorText, versionInfo::getAuthor, versionInfo::setAuthor, Messages.ManifestEditor_Author);
 
 	}
 
@@ -141,7 +142,7 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		try {
 			LocalDate.parse(value);
 			return true;
-		} catch (final DateTimeParseException e) {
+		} catch (final DateTimeParseException _) {
 			return false;
 		}
 	}
@@ -158,7 +159,7 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 			}
 		};
 
-		text.addModifyListener(event -> update.run());
+		text.addModifyListener(_ -> update.run());
 		update.run();
 	}
 
