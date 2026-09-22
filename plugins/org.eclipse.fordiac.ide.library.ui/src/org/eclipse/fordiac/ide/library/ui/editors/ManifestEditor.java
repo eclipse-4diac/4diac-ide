@@ -15,6 +15,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -27,11 +31,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
-import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
@@ -46,7 +47,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	private static final String DEPENDENCY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorDependencyPage"; //$NON-NLS-1$
-	ManifestEditorDependencyPage dependencyPage;
+	private static final String PRODUCT_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorProductPage"; //$NON-NLS-1$
 
 	private Manifest manifest;
 	private IProject project;
@@ -55,11 +56,17 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	@Override
 	protected void addPages() {
 		loadManifest();
+
 		isDirty = false;
-		dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"); //$NON-NLS-1$
+		final var dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"); //$NON-NLS-1$
+		final var productPage = new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, "Product"); //$NON-NLS-1$
 
 		try {
-			final int index = addPage(dependencyPage);
+			int index = addPage(productPage);
+			setPageText(index, productPage.getTitle());
+			setPageImage(index, productPage.getTitleImage());
+
+			index = addPage(dependencyPage);
 			setPageText(index, dependencyPage.getTitle());
 			setPageImage(index, dependencyPage.getTitleImage());
 		} catch (final PartInitException e) {
@@ -69,10 +76,18 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if (isDirty() && canSave()) {
-			ManifestHelper.saveManifest(manifest);
-			setDirty(false);
+		if (!canSave()) {
+			getInvalidPage().ifPresent(p -> setActivePage(p.getId()));
+			getActivePageInstance().getManagedForm().getMessageManager().update();
+			return;
 		}
+
+		ManifestHelper.saveManifest(manifest);
+		setDirty(false);
+	}
+
+	private Optional<ManifestEditorPage<EObject>> getInvalidPage() {
+		return getPages().filter(Predicate.not(ManifestEditorPage::isValid)).findFirst();
 	}
 
 	private void loadManifest() {
@@ -81,9 +96,12 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		}
 	}
 
+	private Stream<ManifestEditorPage<EObject>> getPages() {
+		return pages.stream().filter(ManifestEditorPage.class::isInstance).map(ManifestEditorPage.class::cast);
+	}
+
 	private boolean canSave() {
-		return manifest != null && manifest.getDependencies() != null && manifest.getDependencies().getRequired()
-				.stream().map(Required::getVersion).allMatch(VersionComparator::isValidRange);
+		return getPages().allMatch(ManifestEditorPage::isValid);
 	}
 
 	@Override
@@ -91,7 +109,11 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		return isDirty;
 	}
 
-	public void setDirty(final boolean dirty) {
+	public void markDirty() {
+		setDirty(true);
+	}
+
+	private void setDirty(final boolean dirty) {
 		if (isDirty != dirty) {
 			isDirty = dirty;
 			firePropertyChange(PROP_DIRTY);
@@ -121,14 +143,16 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		if (!FordiacErrorMarker.isTargetOfType(marker, LibraryPackage.Literals.REQUIRED)) {
+		final EObject markerElement = resolveModelElement(marker);
+
+		if (markerElement == null) {
 			return;
 		}
 
-		if (resolveModelElement(marker) instanceof final Required required) {
-			setActivePage(DEPENDENCY_PAGE_ID);
-			dependencyPage.reveal(required);
-		}
+		getPages().filter(p -> p.containsElement(markerElement)).findFirst().ifPresent(p -> {
+			setActivePage(p.getId());
+			p.reveal(markerElement);
+		});
 	}
 
 	@Override
@@ -182,9 +206,11 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 			}
 
 			display.asyncExec(() -> {
-				if (dependencyPage != null) {
-					dependencyPage.refresh();
+				if (getContainer().isDisposed()) {
+					return;
 				}
+
+				getPages().forEach(ManifestEditorPage::refresh);
 			});
 		}
 	};

@@ -280,7 +280,7 @@ public final class ManifestHelper {
 
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //$NON-NLS-1$
 		final VersionInfo versionInfo = factory.createVersionInfo();
-		versionInfo.setAuthor(""); //$NON-NLS-1$
+		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
 		versionInfo.setVersion(BASE_VERSION);
 		versionInfo.setDate(formatter.format(LocalDate.now()));
 
