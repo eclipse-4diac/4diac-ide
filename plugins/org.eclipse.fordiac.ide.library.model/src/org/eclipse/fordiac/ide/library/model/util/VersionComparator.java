@@ -82,6 +82,27 @@ public class VersionComparator implements Comparator<String> {
 		return range.toString().replace(',', '-');
 	}
 
+	public static boolean isValidVersion(final String value) {
+		if (value == null || value.isBlank()) {
+			return false;
+		}
+
+		try {
+			final Version version = new Version(value);
+
+			if (!version.getQualifier().isEmpty()) {
+				return false; // $NON-NLS-1$
+			}
+
+			if (version.equals(Version.emptyVersion)) {
+				return false;
+			}
+		} catch (final IllegalArgumentException e) {
+			return false; // $NON-NLS-1$
+		}
+		return true;
+	}
+
 	/**
 	 * Checks if the input is a valid OSGi version range with the applied
 	 * restrictions.
