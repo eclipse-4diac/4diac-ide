@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -410,7 +411,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		}
 
 		for (final String namespace : searchSupport.getImportedNamespaces()) {
-			final var constEntry = typeLibrary.getGlobalConstantsEntry(namespace);
+
+			final var constEntry = Optional.ofNullable(typeLibrary.getGlobalConstantsEntry(namespace)).orElseGet(
+					() -> typeLibrary.getGlobalConstantsEntry(PackageNameHelper.extractPackageName(namespace)));
+
 			if (constEntry == null) {
 				continue;
 			}

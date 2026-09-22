@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gitlab.management;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -67,6 +68,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 	private static final String API_VERSION = "api/v4/projects"; //$NON-NLS-1$
 	private static final String PACKAGES = "/packages/"; //$NON-NLS-1$
 	private static final String PACKAGE_FILES = "/package_files"; //$NON-NLS-1$
+	private static final String MANIFEST_FILENAME = "MANIFEST.MF"; //$NON-NLS-1$
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private HashMap<String, List<LeafNode>> packagesAndLeaves;
 	private static final String URL_PARAMETERS = "?per_page=20"; //$NON-NLS-1$
@@ -194,22 +196,42 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	public Path packageDownloader(final Project project, final Package p, final FileFilter filter) throws IOException {
 		for (final String filename : findFilenamesInPackage(p, project, filter)) {
-			final Path packageDirPath = Paths.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY, p.name() + "-" + p.version()) //$NON-NLS-1$
-					.toAbsolutePath().normalize();
-
-			final Path targetFile = resolveValidatedPackageFile(packageDirPath, filename);
-
-			final HttpURLConnection httpConn = createConnection(buildDownloadURL(p, project, filename));
-			try (InputStream responseStream = httpConn.getInputStream()) {
-				createDirectory(Paths.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY));
-				createDirectory(packageDirPath);
-				Files.copy(responseStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
-				return targetFile;
-			} finally {
-				httpConn.disconnect();
-			}
+			return downloadPackageFile(project, p, filename);
 		}
 		return null;
+	}
+
+	private DownloadResult<Path> manifestDownloader(final Project project, final Package pack) {
+		final String manifestUrl = buildDownloadURL(pack, project, MANIFEST_FILENAME);
+		try {
+			return new DownloadResult<>(downloadPackageFile(project, pack, MANIFEST_FILENAME));
+		} catch (final FileNotFoundException e) {
+			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND,
+					MessageFormat.format(Messages.Manifest_Not_Found, manifestUrl));
+		} catch (final IOException e) {
+			final String errorMessage = MessageFormat.format(Messages.Manifest_Download_Failed, manifestUrl);
+			FordiacLogHelper.logError(errorMessage, e);
+			return new DownloadResult<>(DownloadResult.Status.ERROR,
+					MessageFormat.format(Messages.Download_Error, errorMessage));
+		}
+	}
+
+	private Path downloadPackageFile(final Project project, final Package pack, final String filename)
+			throws IOException {
+		final Path packageDirPath = Paths
+				.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY, pack.name() + "-" + pack.version()) //$NON-NLS-1$
+				.toAbsolutePath().normalize();
+		final Path targetFile = resolveValidatedPackageFile(packageDirPath, filename);
+
+		final HttpURLConnection httpConn = createConnection(buildDownloadURL(pack, project, filename));
+		try (InputStream responseStream = httpConn.getInputStream()) {
+			createDirectory(Paths.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY));
+			createDirectory(packageDirPath);
+			Files.copy(responseStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+			return targetFile;
+		} finally {
+			httpConn.disconnect();
+		}
 	}
 
 	private static boolean validateFileName(final String filename) {
@@ -289,8 +311,11 @@ public class GitLabDownloader implements IArchiveDownloader {
 					projectAndPackageMap.put(project, new ArrayList<>());
 				}
 			} catch (final IOException e) {
-				throw new IOException(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
-						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()));
+				FordiacLogHelper.logWarning(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
+				return;
+			} finally {
+				httpConn.disconnect();
 			}
 		}
 	}
@@ -301,31 +326,36 @@ public class GitLabDownloader implements IArchiveDownloader {
 		final Pattern p = Pattern.compile(regex);
 		while (page != null && !"".equals(page)) { //$NON-NLS-1$
 			final HttpURLConnection httpConn = createConnection(buildPackagesForProjectURL(project, page));
-			try (InputStream responseStream = httpConn.getInputStream()) {
-				String response = ""; //$NON-NLS-1$
-				try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
-					response = reader.readLine();
+			try {
+				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+					// Skip projects without package registry
+					return;
 				}
-				page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
-				final Matcher m = p.matcher(response);
-				Package pack;
-				while (m.find()) {
-					pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME),
-							m.group(PACKAGE_VERSION), m.group(PACKAGE_TYPE));
-					projectAndPackageMap.get(project).add(pack);
-					if (!packagesAndLeaves.containsKey(pack.name())) {
-						packagesAndLeaves.put(pack.name(), new ArrayList<>());
+				try (InputStream responseStream = httpConn.getInputStream()) {
+					String response = ""; //$NON-NLS-1$
+					try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
+						response = reader.readLine();
 					}
-					packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
+					page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
+					final Matcher m = p.matcher(response);
+					Package pack;
+					while (m.find()) {
+						pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME),
+								m.group(PACKAGE_VERSION), m.group(PACKAGE_TYPE));
+						projectAndPackageMap.get(project).add(pack);
+						if (!packagesAndLeaves.containsKey(pack.name())) {
+							packagesAndLeaves.put(pack.name(), new ArrayList<>());
+						}
+						packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
+					}
 				}
 			} catch (final IOException e) {
-				httpConn.disconnect();
-				// propagate so a failed package fetch invalidates the cache in
-				// fetchProjectsAndPackages() instead of being silently swallowed
-				throw new IOException(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+				FordiacLogHelper.logWarning(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
 						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
+				return;
+			} finally {
+				httpConn.disconnect();
 			}
-			httpConn.disconnect();
 		}
 	}
 
@@ -454,13 +484,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Version_Not_Found);
 		}
 
-		try {
-			return new DownloadResult<>(packageDownloader(node.getProject(), node.getPackage(), FileFilter.MANIFEST));
-		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-			return new DownloadResult<>(DownloadResult.Status.ERROR,
-					MessageFormat.format(Messages.Download_Error, e.getMessage()));
-		}
+		return manifestDownloader(node.getProject(), node.getPackage());
 	}
 
 	@Override
