@@ -19,12 +19,13 @@ import java.util.Map;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
+import org.eclipse.fordiac.ide.model.util.XMLResourceOptions;
 
 public class ResponseMapping {
-	private final Map<String, Object> loadOptions;
+	private final Map<Object, Object> loadOptions;
 
 	public ResponseMapping() {
-		loadOptions = new HashMap<>();
+		loadOptions = new HashMap<>(XMLResourceOptions.DEFAULT_LOAD_OPTIONS);
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 		loadOptions.put(XMLResource.OPTION_LAX_FEATURE_PROCESSING, Boolean.TRUE);
 
@@ -61,7 +62,7 @@ public class ResponseMapping {
 	 * name="REQ"> <Data value="0" time="0"></Data> </Port> </FB> </Resource>
 	 * </Watches> </Response>
 	 */
-	public Map<String, Object> getLoadOptions() {
+	public Map<Object, Object> getLoadOptions() {
 		return loadOptions;
 	}
 }

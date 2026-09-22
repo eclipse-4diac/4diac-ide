@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.buildpath.BuildpathFactory;
 import org.eclipse.fordiac.ide.model.buildpath.DocumentRoot;
 import org.eclipse.fordiac.ide.model.buildpath.Pattern;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
+import org.eclipse.fordiac.ide.model.util.XMLResourceOptions;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class BuildpathUtil {
@@ -83,6 +84,8 @@ public final class BuildpathUtil {
 		if (project != null && project.isAccessible() && getBuildpathFile(project).exists()) {
 			try {
 				final ResourceSet resourceSet = new ResourceSetImpl();
+				resourceSet.getLoadOptions().putAll(XMLResourceOptions.DEFAULT_LOAD_OPTIONS);
+
 				final Resource resource = resourceSet.getResource(getBuildpathURI(project), true);
 				if (!resource.getContents().isEmpty()
 						&& resource.getContents().get(0) instanceof final DocumentRoot documentRoot) {
