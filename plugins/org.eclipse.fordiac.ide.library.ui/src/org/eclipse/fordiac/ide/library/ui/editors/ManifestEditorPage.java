@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.swt.layout.GridLayout;
@@ -67,17 +68,34 @@ abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 		return (ManifestEditor) getEditor();
 	}
 
-	protected final void markDirty() {
-		getManifestEditor().markDirty();
+	protected final void execute(final IUndoableOperation operation) {
+		getManifestEditor().execute(operation);
 	}
 
-	protected final void bindText(final Text text, final Supplier<String> getter, final Consumer<String> setter) {
-		text.addModifyListener(event -> {
+	protected final <V> void setValue(final String label, final Supplier<V> getter, final Consumer<V> setter,
+			final V value) {
+		if (!Objects.equals(value, getter.get())) {
+			execute(new SetValueOperation<>(label, getter, setter, value));
+		}
+	}
+
+	protected final void bindText(final Text text, final Supplier<String> getter, final Consumer<String> setter,
+			final String label) {
+
+		final Consumer<String> boundSetter = value -> {
+			setter.accept(value);
+
+			final String textValue = value != null ? value : ""; //$NON-NLS-1$
+			if (!Objects.equals(text.getText(), textValue)) {
+				text.setText(textValue);
+			}
+		};
+
+		text.addModifyListener(_ -> {
 			final String value = text.getText();
 
 			if (!Objects.equals(value, getter.get())) {
-				setter.accept(value);
-				markDirty();
+				setValue(label, getter, boundSetter, value);
 			}
 		});
 	}
