@@ -1248,7 +1248,32 @@
         </visibleWhen>
       </command>
       <menu id="org.eclipse.fordiac.ide.application.menus.new"
-            label="%New_LABEL">
+        label="%New_LABEL">
+          <visibleWhen checkEnabled="false">
+            <and>
+              <with variable="activeEditor">
+                <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+              </with>
+              <with variable="selection">
+                <iterate operator="or" ifEmpty="true">
+                  <and>
+                    <not>
+                      <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>
+                    </not>
+                    <not>
+                      <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart"/>
+                    </not>
+                    <not>
+                      <instanceof value="org.eclipse.fordiac.ide.gef.editparts.ValueEditPart"/>
+                    </not>
+                    <not>
+                      <instanceof value="org.eclipse.fordiac.ide.application.editparts.InstanceNameEditPart"/>
+                    </not>
+                  </and>
+                </iterate>
+              </with>
+            </and>
+          </visibleWhen>
 		<command commandId="org.eclipse.fordiac.ide.application.commands.insertFB" 
 					tooltip="%menu.tooltip.insertFB">
 			<visibleWhen>
@@ -1291,7 +1316,7 @@
 	      </command>
 	      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
 					tooltip="%menu.tooltip.newComment">
-	        <visibleWhen checkEnabled="false">
+	        <visibleWhen checkEnabled="true">
 	          <and>
 	            <with variable="activeEditor">
 	              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />

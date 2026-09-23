@@ -15,7 +15,7 @@
  *   Bianca Wiesmayr, Alois Zoitl - make newsubapp available for breadcrumb editor
  *   Alois Zoitl - extracted common elements into base class for reuseing it for
  *                 the group creation handler
- *   Andrea Zoitl - disable if only one connection is selected
+ *   Andrea Zoitl - disable invalid options
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -121,8 +121,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		for (final Object o : selection) {
 			if ((o instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbnEl)) {
 				// we check already in the setEnabled() that we are in the same group and same
-				// network so we can
-				// stop at the first element
+				// network so we can stop at the first element
 				group = fbnEl.getGroup();
 				return fbnEl.getFbNetwork();
 			}
@@ -254,13 +253,8 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 	}
 
 	protected static boolean isBackgroundSelected(final StructuredSelection selection) {
-		if (selection.size() == 1 && selection.getFirstElement() instanceof final EditPart ep) {
-			final Object model = ep.getModel();
-			// The selection is the background canvas only if its model is the FBNetwork
-			// itself
-			return model instanceof FBNetwork;
-		}
-		return false;
+		return selection.size() == 1 && selection.getFirstElement() instanceof final EditPart ep
+				&& ep.getModel() instanceof FBNetwork;
 	}
 
 }
