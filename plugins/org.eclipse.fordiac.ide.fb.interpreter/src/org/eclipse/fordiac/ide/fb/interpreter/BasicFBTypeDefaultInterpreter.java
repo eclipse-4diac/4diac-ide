@@ -53,7 +53,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class BasicFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInterpreter {
 
 	public BasicFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence,
-			final Map<String, Evaluator> evaluatorCache) {
+			final Map<String, EvaluatorCacheEntry> evaluatorCache) {
 		super(eventOccurrence, evaluatorCache);
 	}
 

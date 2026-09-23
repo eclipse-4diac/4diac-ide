@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
@@ -47,10 +48,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class FBTypeWithEvaluatorDefaultInterpreter {
 
 	protected final EventOccurrence eventOccurrence;
-	protected final Map<String, Evaluator> evaluatorCache;
+	protected final Map<String, EvaluatorCacheEntry> evaluatorCache;
 
 	public FBTypeWithEvaluatorDefaultInterpreter(final EventOccurrence eventOccurrence,
-			final Map<String, Evaluator> evaluatorCache) {
+			final Map<String, EvaluatorCacheEntry> evaluatorCache) {
 		this.eventOccurrence = eventOccurrence;
 		this.evaluatorCache = evaluatorCache;
 	}
@@ -65,8 +66,9 @@ public class FBTypeWithEvaluatorDefaultInterpreter {
 		varDecls.addAll(basefbtype.getInternalVars());
 		varDecls.addAll(basefbtype.getInternalConstVars());
 
-		Evaluator eval = evaluatorCache.get(Utils.getCacheKey(eventOccurrence));
-		if (eval == null) {
+		final String cacheKey = Utils.getCacheKey(eventOccurrence);
+		EvaluatorCacheEntry cacheEntry = evaluatorCache.get(cacheKey);
+		if (cacheEntry == null) {
 			Class<? extends FBType> baseFBClass = null;
 			if (basefbtype instanceof BasicFBType) {
 				baseFBClass = BasicFBType.class;
@@ -74,28 +76,29 @@ public class FBTypeWithEvaluatorDefaultInterpreter {
 				baseFBClass = SimpleFBType.class;
 			}
 			final FBVariable fbVar = new FBVariable("THIS", basefbtype, Collections.emptyList()); //$NON-NLS-1$
-			eval = EvaluatorFactory.createEvaluator(basefbtype, baseFBClass, fbVar, List.of(), null);
-			evaluatorCache.put(Utils.getCacheKey(eventOccurrence), eval);
+			final Evaluator evaluator = EvaluatorFactory.createEvaluator(basefbtype, baseFBClass, fbVar, List.of(), null);
+			cacheEntry = new EvaluatorCacheEntry(evaluator, DefaultRunFBType.getEvaluatorExecutor());
+			evaluatorCache.put(cacheKey, cacheEntry);
 		}
-		final Optional<Evaluator> algoEval = eval.getChildren().entrySet().stream()
+		final Optional<Evaluator> algoEval = cacheEntry.evaluator().getChildren().entrySet().stream()
 				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue);
 		if (algoEval.isPresent()) {
-			executeEvaluator(algoEval.get(), varDecls, basefbtype, eventOccurrence, algorithm.getName());
+			executeEvaluator(algoEval.get(), varDecls, basefbtype, eventOccurrence, cacheEntry.executor());
 		}
 	}
 
 	protected static void executeEvaluator(final Evaluator eval, final List<VarDeclaration> varDecls, final FBType type,
-			final EventOccurrence eventOccurrence, final String name) {
+			final EventOccurrence eventOccurrence, final EvaluatorThreadPoolExecutor executor) {
 		setEvaluatorInputState(eval, type.getInterfaceList().getInputVars());
 
 		if (!(eventOccurrence.eContainer() instanceof final Transaction t)) {
 			throw new IllegalArgumentException("Container of EO was not a Transaction"); //$NON-NLS-1$
 		}
 
-		try (final EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(name)) {
-			final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
-			tpe.setMonotonicClock(clock);
-			tpe.execute(() -> {
+		final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
+		executor.setMonotonicClock(clock);
+		try {
+			executor.submit(() -> {
 				try {
 					eval.evaluate();
 					getEvaluatorOutputState(eval, varDecls);
@@ -105,7 +108,16 @@ public class FBTypeWithEvaluatorDefaultInterpreter {
 					t.getExceptions().add(e);
 					Thread.currentThread().interrupt();
 				}
-			});
+			}).get();
+		} catch (final InterruptedException e) {
+			t.getExceptions().add(e);
+			Thread.currentThread().interrupt();
+		} catch (final ExecutionException e) {
+			if (e.getCause() instanceof final Exception exception) {
+				t.getExceptions().add(exception);
+			} else {
+				throw new IllegalStateException("Exception executing evaluator", e.getCause()); //$NON-NLS-1$
+			}
 		}
 	}
 
