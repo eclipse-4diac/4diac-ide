@@ -30,15 +30,26 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntim
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.LambdaVisitor;
-import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private final EventOccurrence eventOccurrence;
-	private static final Map<String, Evaluator> evaluatorCache = new HashMap<>();
+	private static final Map<String, EvaluatorCacheEntry> evaluatorCache = new HashMap<>();
+	private static EvaluatorThreadPoolExecutor evaluatorExecutor = createEvaluatorExecutor();
 
 	public static void clearCaches() {
 		evaluatorCache.clear();
+		evaluatorExecutor.close();
+		evaluatorExecutor = createEvaluatorExecutor();
+	}
+
+	static EvaluatorThreadPoolExecutor getEvaluatorExecutor() {
+		return evaluatorExecutor;
+	}
+
+	private static EvaluatorThreadPoolExecutor createEvaluatorExecutor() {
+		return new EvaluatorThreadPoolExecutor(DefaultRunFBType.class.getSimpleName());
 	}
 
 	private DefaultRunFBType(final EventOccurrence eventOccurrence) {

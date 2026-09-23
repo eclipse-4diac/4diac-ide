@@ -9,7 +9,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
-import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
@@ -17,7 +16,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 public class SimpleFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInterpreter {
 
 	public SimpleFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence,
-			final Map<String, Evaluator> evaluatorCache) {
+			final Map<String, EvaluatorCacheEntry> evaluatorCache) {
 		super(eventOccurrence, evaluatorCache);
 	}
 
