@@ -29,9 +29,11 @@ import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -122,9 +124,12 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 				fbBounds.union(containerBounds);
 				final FBNetworkElement container = getContainer(containerEP);
 				if (container != null) {
-					return createChangeBoundsCommand(container,
-							((GraphicalEditPart) containerEP.getParent()).getFigure().getBounds(), containerBounds,
-							fbBounds);
+					final Rectangle curBounds = ((GraphicalEditPart) containerEP.getParent()).getFigure().getBounds();
+
+					if (containerEP.getParent().getModel() instanceof final PositionableElement posElem) {
+						curBounds.setLocation(CoordinateConverter.INSTANCE.toScreenPoint(posElem.getPosition()));
+					}
+					return createChangeBoundsCommand(container, curBounds, containerBounds, fbBounds);
 				}
 			}
 		}
