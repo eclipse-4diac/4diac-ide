@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.library.model.library.Product;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceFactoryImpl;
+import org.eclipse.fordiac.ide.model.util.XMLResourceOptions;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.framework.Version;
 
@@ -400,6 +401,7 @@ public final class ManifestHelper {
 		final XMLResource resource = (XMLResource) resourceFactory.createResource(uri);
 		resource.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, UTF_8);
 		resource.getDefaultLoadOptions().put(XMLResource.OPTION_ENCODING, UTF_8);
+		resource.getDefaultLoadOptions().putAll(XMLResourceOptions.DEFAULT_LOAD_OPTIONS);
 		return resource;
 	}
 
