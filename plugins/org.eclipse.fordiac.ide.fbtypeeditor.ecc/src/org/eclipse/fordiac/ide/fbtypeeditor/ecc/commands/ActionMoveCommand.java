@@ -15,13 +15,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.commands.Command;
 
 public class ActionMoveCommand extends Command {
-	private ECAction action;
+	private final ECAction action;
 	private ECState state;
-	private ECState targetState;
-	private int indexNew;
+	private final ECState targetState;
+	private final int indexNew;
 	private int indexOld;
 
-	public ActionMoveCommand(ECAction action, ECState targetState, int indexNew) {
+	public ActionMoveCommand(final ECAction action, final ECState targetState, final int indexNew) {
 		this.action = action;
 		this.indexNew = indexNew;
 		this.targetState = targetState;

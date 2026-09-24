@@ -14,6 +14,7 @@
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Code cleanup, fixed adapter connection creation issue
  *               - reworked and harmonized source/target checking 551042
+ *   Michael Oberlehner - extracted side-effect-free WITH constraint validation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.validation;
 
@@ -132,6 +133,21 @@ public final class LinkConstraints {
 	 * @return
 	 */
 	public static boolean isWithConstraintOK(final IInterfaceElement varDecl) {
+		if (!hasValidWithConstraint(varDecl)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct, varDecl.getName()));
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Checks the WITH constraint without reporting an error to the user.
+	 *
+	 * @param varDecl interface element to check
+	 * @return {@code true} if the interface element may be connected
+	 */
+	public static boolean hasValidWithConstraint(final IInterfaceElement varDecl) {
 		if ((!(varDecl instanceof ErrorMarkerInterface)) && (((VarDeclaration) varDecl).getWiths().isEmpty())) {
 			// data in or outputs which are not connect by withs are not allowed to be
 			// connected
@@ -139,7 +155,7 @@ public final class LinkConstraints {
 				if (varDecl.eContainer() instanceof final VarDeclaration parent) {
 					// member access pins are not in any with, connections should only be allowed if
 					// the root parent has a with
-					return isWithConstraintOK(getRootIE(parent));
+					return hasValidWithConstraint(getRootIE(parent));
 				}
 
 				final var obj = varDecl.eContainer().eContainer();
@@ -152,8 +168,6 @@ public final class LinkConstraints {
 				}
 			}
 
-			ErrorMessenger.popUpErrorMessage(MessageFormat
-					.format(Messages.LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct, varDecl.getName()));
 			return false;
 		}
 		return true;

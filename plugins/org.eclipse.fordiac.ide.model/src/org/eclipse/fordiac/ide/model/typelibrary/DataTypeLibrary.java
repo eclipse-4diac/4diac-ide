@@ -37,11 +37,12 @@ import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataTypeFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.DataTypeEntryImpl;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
@@ -208,9 +209,8 @@ public final class DataTypeLibrary {
 		return derivedTypes.computeIfAbsent(typeName.toUpperCase(), _ -> {
 			FordiacLogHelper.logInfo(message);
 			final DataTypeEntry entry = new DataTypeEntryImpl();
-			final DataType type = entry.getType();
-			PackageNameHelper.setFullTypeName(type, typeName);
-			entry.setType(type); // update type name in entry
+			final ErrorDataType type = ErrorDataTypeFactory.INSTANCE.createErrorDataType(typeName);
+			entry.setType(type);
 			entry.setTypeLibrary(typeLibrary);
 			return entry;
 		}).getType();

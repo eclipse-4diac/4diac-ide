@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.eval.st;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
@@ -113,14 +112,5 @@ public class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 	@Override
 	public String getSourceElement() {
 		return expression;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		prepare();
-		if (parseResult != null) {
-			return StructuredTextParseUtil.collectUsedTypes(parseResult);
-		}
-		return Collections.emptySet();
 	}
 }

@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
- *                          Martin Erich Jobst
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -37,9 +37,10 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "END_GLOBALCONSTANTS", "END_FUNCTION_BLOCK", "END_CONFIGURATION", "GLOBALCONSTANTS", "END_TRANSITION", "FUNCTION_BLOCK", "LDATE_AND_TIME", "CONFIGURATION", "DATE_AND_TIME", "END_INTERFACE", "END_NAMESPACE", "END_FUNCTION", "END_RESOURCE", "INITIAL_STEP", "LTIME_OF_DAY", "VAR_EXTERNAL", "END_PROGRAM", "TIME_OF_DAY", "END_ACTION", "END_METHOD", "END_REPEAT", "END_STRUCT", "IMPLEMENTS", "NON_RETAIN", "READ_WRITE", "TRANSITION", "VAR_ACCESS", "VAR_CONFIG", "VAR_GLOBAL", "VAR_IN_OUT", "VAR_OUTPUT", "END_CLASS", "END_WHILE", "INTERFACE", "NAMESPACE", "PROTECTED", "READ_ONLY", "VAR_INPUT", "ABSTRACT", "CONSTANT", "CONTINUE", "END_CASE", "END_STEP", "END_TYPE", "FUNCTION", "INTERNAL", "INTERVAL", "OVERRIDE", "PRIORITY", "RESOURCE", "VAR_TEMP", "END_FOR", "END_VAR", "EXTENDS", "INTERAL", "OVERLAP", "PACKAGE", "PRIVATE", "PROGRAM", "WSTRING", "ACTION", "END_IF", "IMPORT", "METHOD", "PUBLIC", "REF_TO", "REPEAT", "RETAIN", "RETURN", "SINGLE", "STRING", "STRUCT", "ARRAY", "CLASS", "DWORD", "ELSIF", "FALSE", "FINAL", "LDATE", "LREAL", "LTIME", "LWORD", "SUPER", "UDINT", "ULINT", "UNTIL", "USING", "USINT", "WCHAR", "WHILE", "BOOL", "BYTE", "CASE", "CHAR", "DATE", "DINT", "ELSE", "EXIT", "FROM", "LINT", "LTOD", "NULL", "REAL", "SINT", "STEP", "TASK", "THEN", "THIS", "TIME", "TRUE", "TYPE", "UINT", "WITH", "WORD", "ColonColonAsterisk", "AND", "FOR", "INT", "LDT", "MOD", "NOT", "REF", "TOD", "VAR", "XOR", "B", "D_1", "L", "W", "X", "AsteriskAsterisk", "FullStopFullStop", "ColonColon", "ColonEqualsSign", "LessThanSignEqualsSign", "LessThanSignGreaterThanSign", "EqualsSignGreaterThanSign", "GreaterThanSignEqualsSign", "AT", "BY", "DO", "DT", "IF", "LD", "LT", "OF", "ON", "OR", "TO", "NumberSign", "Ampersand", "LeftParenthesis", "RightParenthesis", "Asterisk", "PlusSign", "Comma", "HyphenMinus", "FullStop", "Solidus", "Colon", "Semicolon", "LessThanSign", "EqualsSign", "GreaterThanSign", "D", "T", "LeftSquareBracket", "RightSquareBracket", "LeftCurlyBracket", "RightCurlyBracket", "RULE_HEX_DIGIT", "RULE_NON_DECIMAL", "RULE_INT", "RULE_DECIMAL", "RULE_TIME_PART", "RULE_TIME_VALUE", "RULE_TIME_DAYS", "RULE_TIME_HOURS", "RULE_TIME_MINUTES", "RULE_TIME_SECONDS", "RULE_TIME_MILLIS", "RULE_TIME_MICROS", "RULE_TIME_NANOS", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "END_GLOBALCONSTANTS", "END_FUNCTION_BLOCK", "END_CONFIGURATION", "GLOBALCONSTANTS", "END_TRANSITION", "FUNCTION_BLOCK", "LDATE_AND_TIME", "CONFIGURATION", "DATE_AND_TIME", "END_INTERFACE", "END_NAMESPACE", "END_FUNCTION", "END_RESOURCE", "INITIAL_STEP", "LTIME_OF_DAY", "VAR_EXTERNAL", "END_PROGRAM", "TIME_OF_DAY", "END_ACTION", "END_METHOD", "END_REPEAT", "END_STRUCT", "IMPLEMENTS", "NON_RETAIN", "READ_WRITE", "TRANSITION", "VAR_ACCESS", "VAR_CONFIG", "VAR_GLOBAL", "VAR_IN_OUT", "VAR_OUTPUT", "END_CLASS", "END_WHILE", "INTERFACE", "NAMESPACE", "PROTECTED", "READ_ONLY", "VAR_INPUT", "ABSTRACT", "CONSTANT", "CONTINUE", "END_CASE", "END_STEP", "END_TYPE", "FUNCTION", "INTERNAL", "INTERVAL", "OVERRIDE", "PRIORITY", "RESOURCE", "VAR_TEMP", "END_FOR", "END_VAR", "EXTENDS", "INTERAL", "OVERLAP", "PACKAGE", "PRIVATE", "PROGRAM", "WSTRING", "ACTION", "END_IF", "IMPORT", "METHOD", "PUBLIC", "REF_TO", "REPEAT", "RETAIN", "RETURN", "SINGLE", "STRING", "STRUCT", "ARRAY", "CLASS", "DWORD", "ELSIF", "FALSE", "FINAL", "LDATE", "LREAL", "LTIME", "LWORD", "SUPER", "UDINT", "ULINT", "UNTIL", "USING", "USINT", "WCHAR", "WHILE", "BOOL", "BYTE", "CASE", "CHAR", "DATE", "DINT", "ELSE", "EXIT", "FROM", "LINT", "LTOD", "NULL", "REAL", "SINT", "STEP", "TASK", "THEN", "THIS", "TIME", "TRUE", "TYPE", "UINT", "WITH", "WORD", "ColonColonAsterisk", "AND", "FOR", "INT", "LDT", "MOD", "NOT", "REF", "TOD", "VAR", "XOR", "B", "D_1", "L", "W", "X", "AsteriskAsterisk", "FullStopFullStop", "ColonColon", "ColonEqualsSign", "LessThanSignEqualsSign", "LessThanSignGreaterThanSign", "EqualsSignGreaterThanSign", "GreaterThanSignEqualsSign", "AT", "BY", "DO", "DT", "IF", "LD", "LT", "OF", "ON", "OR", "TO", "NumberSign", "Ampersand", "LeftParenthesis", "RightParenthesis", "Asterisk", "PlusSign", "Comma", "HyphenMinus", "FullStop", "Solidus", "Colon", "Semicolon", "LessThanSign", "EqualsSign", "GreaterThanSign", "D", "T", "LeftSquareBracket", "RightSquareBracket", "LeftCurlyBracket", "RightCurlyBracket", "RULE_HEX_DIGIT", "RULE_NON_DECIMAL", "RULE_INT", "RULE_DECIMAL", "RULE_TIME_UNIT", "RULE_TIME_PART", "RULE_TIME_DAYS", "RULE_TIME_HOURS", "RULE_TIME_MINUTES", "RULE_TIME_SECONDS", "RULE_TIME_MILLIS", "RULE_TIME_MICROS", "RULE_TIME_NANOS", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
     };
     public static final int EqualsSignGreaterThanSign=140;
+    public static final int RULE_TIME_UNIT=178;
     public static final int LessThanSign=165;
     public static final int RULE_TIME_HOURS=181;
     public static final int INTERNAL=49;
@@ -77,7 +78,6 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
     public static final int FullStop=161;
     public static final int RULE_TIME_SECONDS=183;
     public static final int INTERAL=58;
-    public static final int RULE_TIME_VALUE=179;
     public static final int CONTINUE=44;
     public static final int Semicolon=164;
     public static final int REF=125;
@@ -93,7 +93,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
     public static final int DT=145;
     public static final int END_VAR=56;
     public static final int END_STEP=46;
-    public static final int RULE_TIME_PART=178;
+    public static final int RULE_TIME_PART=179;
     public static final int PACKAGE=60;
     public static final int FullStopFullStop=135;
     public static final int Ampersand=154;
@@ -16718,23 +16718,25 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTime"
-    // InternalGlobalConstantsParser.g:5509:1: ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= PlusSign | kw= HyphenMinus )? this_TIME_VALUE_2= RULE_TIME_VALUE ) ;
+    // InternalGlobalConstantsParser.g:5509:1: ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= PlusSign | kw= HyphenMinus )? (this_TIME_PART_2= RULE_TIME_PART )* (this_INT_3= RULE_INT kw= FullStop )? this_TIME_PART_5= RULE_TIME_PART ) ;
     public final AntlrDatatypeRuleToken ruleTime() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
         Token kw=null;
-        Token this_TIME_VALUE_2=null;
+        Token this_TIME_PART_2=null;
+        Token this_INT_3=null;
+        Token this_TIME_PART_5=null;
 
 
         	enterRule();
         	HiddenTokens myHiddenTokenState = ((XtextTokenStream)input).setHiddenTokens();
 
         try {
-            // InternalGlobalConstantsParser.g:5516:2: ( ( (kw= PlusSign | kw= HyphenMinus )? this_TIME_VALUE_2= RULE_TIME_VALUE ) )
-            // InternalGlobalConstantsParser.g:5517:2: ( (kw= PlusSign | kw= HyphenMinus )? this_TIME_VALUE_2= RULE_TIME_VALUE )
+            // InternalGlobalConstantsParser.g:5516:2: ( ( (kw= PlusSign | kw= HyphenMinus )? (this_TIME_PART_2= RULE_TIME_PART )* (this_INT_3= RULE_INT kw= FullStop )? this_TIME_PART_5= RULE_TIME_PART ) )
+            // InternalGlobalConstantsParser.g:5517:2: ( (kw= PlusSign | kw= HyphenMinus )? (this_TIME_PART_2= RULE_TIME_PART )* (this_INT_3= RULE_INT kw= FullStop )? this_TIME_PART_5= RULE_TIME_PART )
             {
-            // InternalGlobalConstantsParser.g:5517:2: ( (kw= PlusSign | kw= HyphenMinus )? this_TIME_VALUE_2= RULE_TIME_VALUE )
-            // InternalGlobalConstantsParser.g:5518:3: (kw= PlusSign | kw= HyphenMinus )? this_TIME_VALUE_2= RULE_TIME_VALUE
+            // InternalGlobalConstantsParser.g:5517:2: ( (kw= PlusSign | kw= HyphenMinus )? (this_TIME_PART_2= RULE_TIME_PART )* (this_INT_3= RULE_INT kw= FullStop )? this_TIME_PART_5= RULE_TIME_PART )
+            // InternalGlobalConstantsParser.g:5518:3: (kw= PlusSign | kw= HyphenMinus )? (this_TIME_PART_2= RULE_TIME_PART )* (this_INT_3= RULE_INT kw= FullStop )? this_TIME_PART_5= RULE_TIME_PART
             {
             // InternalGlobalConstantsParser.g:5518:3: (kw= PlusSign | kw= HyphenMinus )?
             int alt95=3;
@@ -16776,15 +16778,91 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
             }
 
-            this_TIME_VALUE_2=(Token)match(input,RULE_TIME_VALUE,FOLLOW_2); if (state.failed) return current;
+            // InternalGlobalConstantsParser.g:5531:3: (this_TIME_PART_2= RULE_TIME_PART )*
+            loop96:
+            do {
+                int alt96=2;
+                int LA96_0 = input.LA(1);
+
+                if ( (LA96_0==RULE_TIME_PART) ) {
+                    int LA96_2 = input.LA(2);
+
+                    if ( (LA96_2==RULE_INT||LA96_2==RULE_TIME_PART) ) {
+                        alt96=1;
+                    }
+
+
+                }
+
+
+                switch (alt96) {
+            	case 1 :
+            	    // InternalGlobalConstantsParser.g:5532:4: this_TIME_PART_2= RULE_TIME_PART
+            	    {
+            	    this_TIME_PART_2=(Token)match(input,RULE_TIME_PART,FOLLOW_70); if (state.failed) return current;
+            	    if ( state.backtracking==0 ) {
+
+            	      				current.merge(this_TIME_PART_2);
+            	      			
+            	    }
+            	    if ( state.backtracking==0 ) {
+
+            	      				newLeafNode(this_TIME_PART_2, grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_1());
+            	      			
+            	    }
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop96;
+                }
+            } while (true);
+
+            // InternalGlobalConstantsParser.g:5540:3: (this_INT_3= RULE_INT kw= FullStop )?
+            int alt97=2;
+            int LA97_0 = input.LA(1);
+
+            if ( (LA97_0==RULE_INT) ) {
+                alt97=1;
+            }
+            switch (alt97) {
+                case 1 :
+                    // InternalGlobalConstantsParser.g:5541:4: this_INT_3= RULE_INT kw= FullStop
+                    {
+                    this_INT_3=(Token)match(input,RULE_INT,FOLLOW_71); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      				current.merge(this_INT_3);
+                      			
+                    }
+                    if ( state.backtracking==0 ) {
+
+                      				newLeafNode(this_INT_3, grammarAccess.getTimeAccess().getINTTerminalRuleCall_2_0());
+                      			
+                    }
+                    kw=(Token)match(input,FullStop,FOLLOW_72); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      				current.merge(kw);
+                      				newLeafNode(kw, grammarAccess.getTimeAccess().getFullStopKeyword_2_1());
+                      			
+                    }
+
+                    }
+                    break;
+
+            }
+
+            this_TIME_PART_5=(Token)match(input,RULE_TIME_PART,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
-              			current.merge(this_TIME_VALUE_2);
+              			current.merge(this_TIME_PART_5);
               		
             }
             if ( state.backtracking==0 ) {
 
-              			newLeafNode(this_TIME_VALUE_2, grammarAccess.getTimeAccess().getTIME_VALUETerminalRuleCall_1());
+              			newLeafNode(this_TIME_PART_5, grammarAccess.getTimeAccess().getTIME_PARTTerminalRuleCall_3());
               		
             }
 
@@ -16815,7 +16893,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleDate"
-    // InternalGlobalConstantsParser.g:5545:1: entryRuleDate returns [String current=null] : iv_ruleDate= ruleDate EOF ;
+    // InternalGlobalConstantsParser.g:5568:1: entryRuleDate returns [String current=null] : iv_ruleDate= ruleDate EOF ;
     public final String entryRuleDate() throws RecognitionException {
         String current = null;
 
@@ -16823,8 +16901,8 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalGlobalConstantsParser.g:5545:44: (iv_ruleDate= ruleDate EOF )
-            // InternalGlobalConstantsParser.g:5546:2: iv_ruleDate= ruleDate EOF
+            // InternalGlobalConstantsParser.g:5568:44: (iv_ruleDate= ruleDate EOF )
+            // InternalGlobalConstantsParser.g:5569:2: iv_ruleDate= ruleDate EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getDateRule()); 
@@ -16855,7 +16933,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleDate"
-    // InternalGlobalConstantsParser.g:5552:1: ruleDate returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) ;
+    // InternalGlobalConstantsParser.g:5575:1: ruleDate returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) ;
     public final AntlrDatatypeRuleToken ruleDate() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -16868,13 +16946,13 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5558:2: ( (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) )
-            // InternalGlobalConstantsParser.g:5559:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
+            // InternalGlobalConstantsParser.g:5581:2: ( (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT ) )
+            // InternalGlobalConstantsParser.g:5582:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
             {
-            // InternalGlobalConstantsParser.g:5559:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
-            // InternalGlobalConstantsParser.g:5560:3: this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT
+            // InternalGlobalConstantsParser.g:5582:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT )
+            // InternalGlobalConstantsParser.g:5583:3: this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT
             {
-            this_INT_0=(Token)match(input,RULE_INT,FOLLOW_71); if (state.failed) return current;
+            this_INT_0=(Token)match(input,RULE_INT,FOLLOW_73); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_0);
@@ -16892,7 +16970,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
               			newLeafNode(kw, grammarAccess.getDateAccess().getHyphenMinusKeyword_1());
               		
             }
-            this_INT_2=(Token)match(input,RULE_INT,FOLLOW_71); if (state.failed) return current;
+            this_INT_2=(Token)match(input,RULE_INT,FOLLOW_73); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_2);
@@ -16946,7 +17024,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleDateAndTime"
-    // InternalGlobalConstantsParser.g:5595:1: entryRuleDateAndTime returns [String current=null] : iv_ruleDateAndTime= ruleDateAndTime EOF ;
+    // InternalGlobalConstantsParser.g:5618:1: entryRuleDateAndTime returns [String current=null] : iv_ruleDateAndTime= ruleDateAndTime EOF ;
     public final String entryRuleDateAndTime() throws RecognitionException {
         String current = null;
 
@@ -16954,8 +17032,8 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalGlobalConstantsParser.g:5595:51: (iv_ruleDateAndTime= ruleDateAndTime EOF )
-            // InternalGlobalConstantsParser.g:5596:2: iv_ruleDateAndTime= ruleDateAndTime EOF
+            // InternalGlobalConstantsParser.g:5618:51: (iv_ruleDateAndTime= ruleDateAndTime EOF )
+            // InternalGlobalConstantsParser.g:5619:2: iv_ruleDateAndTime= ruleDateAndTime EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getDateAndTimeRule()); 
@@ -16986,7 +17064,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleDateAndTime"
-    // InternalGlobalConstantsParser.g:5602:1: ruleDateAndTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? ) ;
+    // InternalGlobalConstantsParser.g:5625:1: ruleDateAndTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? ) ;
     public final AntlrDatatypeRuleToken ruleDateAndTime() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -17003,13 +17081,13 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5608:2: ( (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? ) )
-            // InternalGlobalConstantsParser.g:5609:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? )
+            // InternalGlobalConstantsParser.g:5631:2: ( (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? ) )
+            // InternalGlobalConstantsParser.g:5632:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? )
             {
-            // InternalGlobalConstantsParser.g:5609:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? )
-            // InternalGlobalConstantsParser.g:5610:3: this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )?
+            // InternalGlobalConstantsParser.g:5632:2: (this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )? )
+            // InternalGlobalConstantsParser.g:5633:3: this_INT_0= RULE_INT kw= HyphenMinus this_INT_2= RULE_INT kw= HyphenMinus this_INT_4= RULE_INT kw= HyphenMinus this_INT_6= RULE_INT kw= Colon this_INT_8= RULE_INT kw= Colon this_INT_10= RULE_INT (kw= FullStop this_INT_12= RULE_INT )?
             {
-            this_INT_0=(Token)match(input,RULE_INT,FOLLOW_71); if (state.failed) return current;
+            this_INT_0=(Token)match(input,RULE_INT,FOLLOW_73); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_0);
@@ -17027,7 +17105,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
               			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getHyphenMinusKeyword_1());
               		
             }
-            this_INT_2=(Token)match(input,RULE_INT,FOLLOW_71); if (state.failed) return current;
+            this_INT_2=(Token)match(input,RULE_INT,FOLLOW_73); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_2);
@@ -17045,7 +17123,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
               			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getHyphenMinusKeyword_3());
               		
             }
-            this_INT_4=(Token)match(input,RULE_INT,FOLLOW_71); if (state.failed) return current;
+            this_INT_4=(Token)match(input,RULE_INT,FOLLOW_73); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			current.merge(this_INT_4);
@@ -17110,16 +17188,16 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
               			newLeafNode(this_INT_10, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_10());
               		
             }
-            // InternalGlobalConstantsParser.g:5677:3: (kw= FullStop this_INT_12= RULE_INT )?
-            int alt96=2;
-            int LA96_0 = input.LA(1);
+            // InternalGlobalConstantsParser.g:5700:3: (kw= FullStop this_INT_12= RULE_INT )?
+            int alt98=2;
+            int LA98_0 = input.LA(1);
 
-            if ( (LA96_0==FullStop) ) {
-                alt96=1;
+            if ( (LA98_0==FullStop) ) {
+                alt98=1;
             }
-            switch (alt96) {
+            switch (alt98) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5678:4: kw= FullStop this_INT_12= RULE_INT
+                    // InternalGlobalConstantsParser.g:5701:4: kw= FullStop this_INT_12= RULE_INT
                     {
                     kw=(Token)match(input,FullStop,FOLLOW_63); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17170,7 +17248,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "entryRuleTimeOfDay"
-    // InternalGlobalConstantsParser.g:5695:1: entryRuleTimeOfDay returns [String current=null] : iv_ruleTimeOfDay= ruleTimeOfDay EOF ;
+    // InternalGlobalConstantsParser.g:5718:1: entryRuleTimeOfDay returns [String current=null] : iv_ruleTimeOfDay= ruleTimeOfDay EOF ;
     public final String entryRuleTimeOfDay() throws RecognitionException {
         String current = null;
 
@@ -17178,8 +17256,8 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
         try {
-            // InternalGlobalConstantsParser.g:5695:49: (iv_ruleTimeOfDay= ruleTimeOfDay EOF )
-            // InternalGlobalConstantsParser.g:5696:2: iv_ruleTimeOfDay= ruleTimeOfDay EOF
+            // InternalGlobalConstantsParser.g:5718:49: (iv_ruleTimeOfDay= ruleTimeOfDay EOF )
+            // InternalGlobalConstantsParser.g:5719:2: iv_ruleTimeOfDay= ruleTimeOfDay EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTimeOfDayRule()); 
@@ -17210,7 +17288,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleTimeOfDay"
-    // InternalGlobalConstantsParser.g:5702:1: ruleTimeOfDay returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) ;
+    // InternalGlobalConstantsParser.g:5725:1: ruleTimeOfDay returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) ;
     public final AntlrDatatypeRuleToken ruleTimeOfDay() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -17224,11 +17302,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5708:2: ( (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) )
-            // InternalGlobalConstantsParser.g:5709:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
+            // InternalGlobalConstantsParser.g:5731:2: ( (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? ) )
+            // InternalGlobalConstantsParser.g:5732:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
             {
-            // InternalGlobalConstantsParser.g:5709:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
-            // InternalGlobalConstantsParser.g:5710:3: this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )?
+            // InternalGlobalConstantsParser.g:5732:2: (this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )? )
+            // InternalGlobalConstantsParser.g:5733:3: this_INT_0= RULE_INT kw= Colon this_INT_2= RULE_INT kw= Colon this_INT_4= RULE_INT (kw= FullStop this_INT_6= RULE_INT )?
             {
             this_INT_0=(Token)match(input,RULE_INT,FOLLOW_10); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -17277,16 +17355,16 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
               			newLeafNode(this_INT_4, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_4());
               		
             }
-            // InternalGlobalConstantsParser.g:5741:3: (kw= FullStop this_INT_6= RULE_INT )?
-            int alt97=2;
-            int LA97_0 = input.LA(1);
+            // InternalGlobalConstantsParser.g:5764:3: (kw= FullStop this_INT_6= RULE_INT )?
+            int alt99=2;
+            int LA99_0 = input.LA(1);
 
-            if ( (LA97_0==FullStop) ) {
-                alt97=1;
+            if ( (LA99_0==FullStop) ) {
+                alt99=1;
             }
-            switch (alt97) {
+            switch (alt99) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5742:4: kw= FullStop this_INT_6= RULE_INT
+                    // InternalGlobalConstantsParser.g:5765:4: kw= FullStop this_INT_6= RULE_INT
                     {
                     kw=(Token)match(input,FullStop,FOLLOW_63); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17337,7 +17415,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSubrangeOperator"
-    // InternalGlobalConstantsParser.g:5759:1: ruleSubrangeOperator returns [Enumerator current=null] : (enumLiteral_0= FullStopFullStop ) ;
+    // InternalGlobalConstantsParser.g:5782:1: ruleSubrangeOperator returns [Enumerator current=null] : (enumLiteral_0= FullStopFullStop ) ;
     public final Enumerator ruleSubrangeOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17347,11 +17425,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5765:2: ( (enumLiteral_0= FullStopFullStop ) )
-            // InternalGlobalConstantsParser.g:5766:2: (enumLiteral_0= FullStopFullStop )
+            // InternalGlobalConstantsParser.g:5788:2: ( (enumLiteral_0= FullStopFullStop ) )
+            // InternalGlobalConstantsParser.g:5789:2: (enumLiteral_0= FullStopFullStop )
             {
-            // InternalGlobalConstantsParser.g:5766:2: (enumLiteral_0= FullStopFullStop )
-            // InternalGlobalConstantsParser.g:5767:3: enumLiteral_0= FullStopFullStop
+            // InternalGlobalConstantsParser.g:5789:2: (enumLiteral_0= FullStopFullStop )
+            // InternalGlobalConstantsParser.g:5790:3: enumLiteral_0= FullStopFullStop
             {
             enumLiteral_0=(Token)match(input,FullStopFullStop,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -17385,7 +17463,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleOrOperator"
-    // InternalGlobalConstantsParser.g:5776:1: ruleOrOperator returns [Enumerator current=null] : (enumLiteral_0= OR ) ;
+    // InternalGlobalConstantsParser.g:5799:1: ruleOrOperator returns [Enumerator current=null] : (enumLiteral_0= OR ) ;
     public final Enumerator ruleOrOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17395,11 +17473,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5782:2: ( (enumLiteral_0= OR ) )
-            // InternalGlobalConstantsParser.g:5783:2: (enumLiteral_0= OR )
+            // InternalGlobalConstantsParser.g:5805:2: ( (enumLiteral_0= OR ) )
+            // InternalGlobalConstantsParser.g:5806:2: (enumLiteral_0= OR )
             {
-            // InternalGlobalConstantsParser.g:5783:2: (enumLiteral_0= OR )
-            // InternalGlobalConstantsParser.g:5784:3: enumLiteral_0= OR
+            // InternalGlobalConstantsParser.g:5806:2: (enumLiteral_0= OR )
+            // InternalGlobalConstantsParser.g:5807:3: enumLiteral_0= OR
             {
             enumLiteral_0=(Token)match(input,OR,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -17433,7 +17511,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleXorOperator"
-    // InternalGlobalConstantsParser.g:5793:1: ruleXorOperator returns [Enumerator current=null] : (enumLiteral_0= XOR ) ;
+    // InternalGlobalConstantsParser.g:5816:1: ruleXorOperator returns [Enumerator current=null] : (enumLiteral_0= XOR ) ;
     public final Enumerator ruleXorOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17443,11 +17521,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5799:2: ( (enumLiteral_0= XOR ) )
-            // InternalGlobalConstantsParser.g:5800:2: (enumLiteral_0= XOR )
+            // InternalGlobalConstantsParser.g:5822:2: ( (enumLiteral_0= XOR ) )
+            // InternalGlobalConstantsParser.g:5823:2: (enumLiteral_0= XOR )
             {
-            // InternalGlobalConstantsParser.g:5800:2: (enumLiteral_0= XOR )
-            // InternalGlobalConstantsParser.g:5801:3: enumLiteral_0= XOR
+            // InternalGlobalConstantsParser.g:5823:2: (enumLiteral_0= XOR )
+            // InternalGlobalConstantsParser.g:5824:3: enumLiteral_0= XOR
             {
             enumLiteral_0=(Token)match(input,XOR,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -17481,7 +17559,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleAndOperator"
-    // InternalGlobalConstantsParser.g:5810:1: ruleAndOperator returns [Enumerator current=null] : ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) ;
+    // InternalGlobalConstantsParser.g:5833:1: ruleAndOperator returns [Enumerator current=null] : ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) ;
     public final Enumerator ruleAndOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17492,32 +17570,32 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5816:2: ( ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) )
-            // InternalGlobalConstantsParser.g:5817:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
+            // InternalGlobalConstantsParser.g:5839:2: ( ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) ) )
+            // InternalGlobalConstantsParser.g:5840:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
             {
-            // InternalGlobalConstantsParser.g:5817:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
-            int alt98=2;
-            int LA98_0 = input.LA(1);
+            // InternalGlobalConstantsParser.g:5840:2: ( (enumLiteral_0= AND ) | (enumLiteral_1= Ampersand ) )
+            int alt100=2;
+            int LA100_0 = input.LA(1);
 
-            if ( (LA98_0==AND) ) {
-                alt98=1;
+            if ( (LA100_0==AND) ) {
+                alt100=1;
             }
-            else if ( (LA98_0==Ampersand) ) {
-                alt98=2;
+            else if ( (LA100_0==Ampersand) ) {
+                alt100=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 98, 0, input);
+                    new NoViableAltException("", 100, 0, input);
 
                 throw nvae;
             }
-            switch (alt98) {
+            switch (alt100) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5818:3: (enumLiteral_0= AND )
+                    // InternalGlobalConstantsParser.g:5841:3: (enumLiteral_0= AND )
                     {
-                    // InternalGlobalConstantsParser.g:5818:3: (enumLiteral_0= AND )
-                    // InternalGlobalConstantsParser.g:5819:4: enumLiteral_0= AND
+                    // InternalGlobalConstantsParser.g:5841:3: (enumLiteral_0= AND )
+                    // InternalGlobalConstantsParser.g:5842:4: enumLiteral_0= AND
                     {
                     enumLiteral_0=(Token)match(input,AND,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17533,10 +17611,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsParser.g:5826:3: (enumLiteral_1= Ampersand )
+                    // InternalGlobalConstantsParser.g:5849:3: (enumLiteral_1= Ampersand )
                     {
-                    // InternalGlobalConstantsParser.g:5826:3: (enumLiteral_1= Ampersand )
-                    // InternalGlobalConstantsParser.g:5827:4: enumLiteral_1= Ampersand
+                    // InternalGlobalConstantsParser.g:5849:3: (enumLiteral_1= Ampersand )
+                    // InternalGlobalConstantsParser.g:5850:4: enumLiteral_1= Ampersand
                     {
                     enumLiteral_1=(Token)match(input,Ampersand,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17576,7 +17654,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleEqualityOperator"
-    // InternalGlobalConstantsParser.g:5837:1: ruleEqualityOperator returns [Enumerator current=null] : ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) ;
+    // InternalGlobalConstantsParser.g:5860:1: ruleEqualityOperator returns [Enumerator current=null] : ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) ;
     public final Enumerator ruleEqualityOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17587,32 +17665,32 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5843:2: ( ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) )
-            // InternalGlobalConstantsParser.g:5844:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
+            // InternalGlobalConstantsParser.g:5866:2: ( ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) ) )
+            // InternalGlobalConstantsParser.g:5867:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
             {
-            // InternalGlobalConstantsParser.g:5844:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
-            int alt99=2;
-            int LA99_0 = input.LA(1);
+            // InternalGlobalConstantsParser.g:5867:2: ( (enumLiteral_0= EqualsSign ) | (enumLiteral_1= LessThanSignGreaterThanSign ) )
+            int alt101=2;
+            int LA101_0 = input.LA(1);
 
-            if ( (LA99_0==EqualsSign) ) {
-                alt99=1;
+            if ( (LA101_0==EqualsSign) ) {
+                alt101=1;
             }
-            else if ( (LA99_0==LessThanSignGreaterThanSign) ) {
-                alt99=2;
+            else if ( (LA101_0==LessThanSignGreaterThanSign) ) {
+                alt101=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 99, 0, input);
+                    new NoViableAltException("", 101, 0, input);
 
                 throw nvae;
             }
-            switch (alt99) {
+            switch (alt101) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5845:3: (enumLiteral_0= EqualsSign )
+                    // InternalGlobalConstantsParser.g:5868:3: (enumLiteral_0= EqualsSign )
                     {
-                    // InternalGlobalConstantsParser.g:5845:3: (enumLiteral_0= EqualsSign )
-                    // InternalGlobalConstantsParser.g:5846:4: enumLiteral_0= EqualsSign
+                    // InternalGlobalConstantsParser.g:5868:3: (enumLiteral_0= EqualsSign )
+                    // InternalGlobalConstantsParser.g:5869:4: enumLiteral_0= EqualsSign
                     {
                     enumLiteral_0=(Token)match(input,EqualsSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17628,10 +17706,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsParser.g:5853:3: (enumLiteral_1= LessThanSignGreaterThanSign )
+                    // InternalGlobalConstantsParser.g:5876:3: (enumLiteral_1= LessThanSignGreaterThanSign )
                     {
-                    // InternalGlobalConstantsParser.g:5853:3: (enumLiteral_1= LessThanSignGreaterThanSign )
-                    // InternalGlobalConstantsParser.g:5854:4: enumLiteral_1= LessThanSignGreaterThanSign
+                    // InternalGlobalConstantsParser.g:5876:3: (enumLiteral_1= LessThanSignGreaterThanSign )
+                    // InternalGlobalConstantsParser.g:5877:4: enumLiteral_1= LessThanSignGreaterThanSign
                     {
                     enumLiteral_1=(Token)match(input,LessThanSignGreaterThanSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17671,7 +17749,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleCompareOperator"
-    // InternalGlobalConstantsParser.g:5864:1: ruleCompareOperator returns [Enumerator current=null] : ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) ;
+    // InternalGlobalConstantsParser.g:5887:1: ruleCompareOperator returns [Enumerator current=null] : ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) ;
     public final Enumerator ruleCompareOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17684,46 +17762,46 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5870:2: ( ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) )
-            // InternalGlobalConstantsParser.g:5871:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
+            // InternalGlobalConstantsParser.g:5893:2: ( ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) ) )
+            // InternalGlobalConstantsParser.g:5894:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
             {
-            // InternalGlobalConstantsParser.g:5871:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
-            int alt100=4;
+            // InternalGlobalConstantsParser.g:5894:2: ( (enumLiteral_0= LessThanSign ) | (enumLiteral_1= LessThanSignEqualsSign ) | (enumLiteral_2= GreaterThanSign ) | (enumLiteral_3= GreaterThanSignEqualsSign ) )
+            int alt102=4;
             switch ( input.LA(1) ) {
             case LessThanSign:
                 {
-                alt100=1;
+                alt102=1;
                 }
                 break;
             case LessThanSignEqualsSign:
                 {
-                alt100=2;
+                alt102=2;
                 }
                 break;
             case GreaterThanSign:
                 {
-                alt100=3;
+                alt102=3;
                 }
                 break;
             case GreaterThanSignEqualsSign:
                 {
-                alt100=4;
+                alt102=4;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 100, 0, input);
+                    new NoViableAltException("", 102, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt100) {
+            switch (alt102) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5872:3: (enumLiteral_0= LessThanSign )
+                    // InternalGlobalConstantsParser.g:5895:3: (enumLiteral_0= LessThanSign )
                     {
-                    // InternalGlobalConstantsParser.g:5872:3: (enumLiteral_0= LessThanSign )
-                    // InternalGlobalConstantsParser.g:5873:4: enumLiteral_0= LessThanSign
+                    // InternalGlobalConstantsParser.g:5895:3: (enumLiteral_0= LessThanSign )
+                    // InternalGlobalConstantsParser.g:5896:4: enumLiteral_0= LessThanSign
                     {
                     enumLiteral_0=(Token)match(input,LessThanSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17739,10 +17817,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsParser.g:5880:3: (enumLiteral_1= LessThanSignEqualsSign )
+                    // InternalGlobalConstantsParser.g:5903:3: (enumLiteral_1= LessThanSignEqualsSign )
                     {
-                    // InternalGlobalConstantsParser.g:5880:3: (enumLiteral_1= LessThanSignEqualsSign )
-                    // InternalGlobalConstantsParser.g:5881:4: enumLiteral_1= LessThanSignEqualsSign
+                    // InternalGlobalConstantsParser.g:5903:3: (enumLiteral_1= LessThanSignEqualsSign )
+                    // InternalGlobalConstantsParser.g:5904:4: enumLiteral_1= LessThanSignEqualsSign
                     {
                     enumLiteral_1=(Token)match(input,LessThanSignEqualsSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17758,10 +17836,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalGlobalConstantsParser.g:5888:3: (enumLiteral_2= GreaterThanSign )
+                    // InternalGlobalConstantsParser.g:5911:3: (enumLiteral_2= GreaterThanSign )
                     {
-                    // InternalGlobalConstantsParser.g:5888:3: (enumLiteral_2= GreaterThanSign )
-                    // InternalGlobalConstantsParser.g:5889:4: enumLiteral_2= GreaterThanSign
+                    // InternalGlobalConstantsParser.g:5911:3: (enumLiteral_2= GreaterThanSign )
+                    // InternalGlobalConstantsParser.g:5912:4: enumLiteral_2= GreaterThanSign
                     {
                     enumLiteral_2=(Token)match(input,GreaterThanSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17777,10 +17855,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalGlobalConstantsParser.g:5896:3: (enumLiteral_3= GreaterThanSignEqualsSign )
+                    // InternalGlobalConstantsParser.g:5919:3: (enumLiteral_3= GreaterThanSignEqualsSign )
                     {
-                    // InternalGlobalConstantsParser.g:5896:3: (enumLiteral_3= GreaterThanSignEqualsSign )
-                    // InternalGlobalConstantsParser.g:5897:4: enumLiteral_3= GreaterThanSignEqualsSign
+                    // InternalGlobalConstantsParser.g:5919:3: (enumLiteral_3= GreaterThanSignEqualsSign )
+                    // InternalGlobalConstantsParser.g:5920:4: enumLiteral_3= GreaterThanSignEqualsSign
                     {
                     enumLiteral_3=(Token)match(input,GreaterThanSignEqualsSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17820,7 +17898,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleAddSubOperator"
-    // InternalGlobalConstantsParser.g:5907:1: ruleAddSubOperator returns [Enumerator current=null] : ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) ;
+    // InternalGlobalConstantsParser.g:5930:1: ruleAddSubOperator returns [Enumerator current=null] : ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) ;
     public final Enumerator ruleAddSubOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17831,32 +17909,32 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5913:2: ( ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) )
-            // InternalGlobalConstantsParser.g:5914:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
+            // InternalGlobalConstantsParser.g:5936:2: ( ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) ) )
+            // InternalGlobalConstantsParser.g:5937:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
             {
-            // InternalGlobalConstantsParser.g:5914:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
-            int alt101=2;
-            int LA101_0 = input.LA(1);
+            // InternalGlobalConstantsParser.g:5937:2: ( (enumLiteral_0= PlusSign ) | (enumLiteral_1= HyphenMinus ) )
+            int alt103=2;
+            int LA103_0 = input.LA(1);
 
-            if ( (LA101_0==PlusSign) ) {
-                alt101=1;
+            if ( (LA103_0==PlusSign) ) {
+                alt103=1;
             }
-            else if ( (LA101_0==HyphenMinus) ) {
-                alt101=2;
+            else if ( (LA103_0==HyphenMinus) ) {
+                alt103=2;
             }
             else {
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 101, 0, input);
+                    new NoViableAltException("", 103, 0, input);
 
                 throw nvae;
             }
-            switch (alt101) {
+            switch (alt103) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5915:3: (enumLiteral_0= PlusSign )
+                    // InternalGlobalConstantsParser.g:5938:3: (enumLiteral_0= PlusSign )
                     {
-                    // InternalGlobalConstantsParser.g:5915:3: (enumLiteral_0= PlusSign )
-                    // InternalGlobalConstantsParser.g:5916:4: enumLiteral_0= PlusSign
+                    // InternalGlobalConstantsParser.g:5938:3: (enumLiteral_0= PlusSign )
+                    // InternalGlobalConstantsParser.g:5939:4: enumLiteral_0= PlusSign
                     {
                     enumLiteral_0=(Token)match(input,PlusSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17872,10 +17950,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsParser.g:5923:3: (enumLiteral_1= HyphenMinus )
+                    // InternalGlobalConstantsParser.g:5946:3: (enumLiteral_1= HyphenMinus )
                     {
-                    // InternalGlobalConstantsParser.g:5923:3: (enumLiteral_1= HyphenMinus )
-                    // InternalGlobalConstantsParser.g:5924:4: enumLiteral_1= HyphenMinus
+                    // InternalGlobalConstantsParser.g:5946:3: (enumLiteral_1= HyphenMinus )
+                    // InternalGlobalConstantsParser.g:5947:4: enumLiteral_1= HyphenMinus
                     {
                     enumLiteral_1=(Token)match(input,HyphenMinus,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17915,7 +17993,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMulDivModOperator"
-    // InternalGlobalConstantsParser.g:5934:1: ruleMulDivModOperator returns [Enumerator current=null] : ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) ;
+    // InternalGlobalConstantsParser.g:5957:1: ruleMulDivModOperator returns [Enumerator current=null] : ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) ;
     public final Enumerator ruleMulDivModOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -17927,41 +18005,41 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5940:2: ( ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) )
-            // InternalGlobalConstantsParser.g:5941:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
+            // InternalGlobalConstantsParser.g:5963:2: ( ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) ) )
+            // InternalGlobalConstantsParser.g:5964:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
             {
-            // InternalGlobalConstantsParser.g:5941:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
-            int alt102=3;
+            // InternalGlobalConstantsParser.g:5964:2: ( (enumLiteral_0= Asterisk ) | (enumLiteral_1= Solidus ) | (enumLiteral_2= MOD ) )
+            int alt104=3;
             switch ( input.LA(1) ) {
             case Asterisk:
                 {
-                alt102=1;
+                alt104=1;
                 }
                 break;
             case Solidus:
                 {
-                alt102=2;
+                alt104=2;
                 }
                 break;
             case MOD:
                 {
-                alt102=3;
+                alt104=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 102, 0, input);
+                    new NoViableAltException("", 104, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt102) {
+            switch (alt104) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5942:3: (enumLiteral_0= Asterisk )
+                    // InternalGlobalConstantsParser.g:5965:3: (enumLiteral_0= Asterisk )
                     {
-                    // InternalGlobalConstantsParser.g:5942:3: (enumLiteral_0= Asterisk )
-                    // InternalGlobalConstantsParser.g:5943:4: enumLiteral_0= Asterisk
+                    // InternalGlobalConstantsParser.g:5965:3: (enumLiteral_0= Asterisk )
+                    // InternalGlobalConstantsParser.g:5966:4: enumLiteral_0= Asterisk
                     {
                     enumLiteral_0=(Token)match(input,Asterisk,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17977,10 +18055,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsParser.g:5950:3: (enumLiteral_1= Solidus )
+                    // InternalGlobalConstantsParser.g:5973:3: (enumLiteral_1= Solidus )
                     {
-                    // InternalGlobalConstantsParser.g:5950:3: (enumLiteral_1= Solidus )
-                    // InternalGlobalConstantsParser.g:5951:4: enumLiteral_1= Solidus
+                    // InternalGlobalConstantsParser.g:5973:3: (enumLiteral_1= Solidus )
+                    // InternalGlobalConstantsParser.g:5974:4: enumLiteral_1= Solidus
                     {
                     enumLiteral_1=(Token)match(input,Solidus,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -17996,10 +18074,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalGlobalConstantsParser.g:5958:3: (enumLiteral_2= MOD )
+                    // InternalGlobalConstantsParser.g:5981:3: (enumLiteral_2= MOD )
                     {
-                    // InternalGlobalConstantsParser.g:5958:3: (enumLiteral_2= MOD )
-                    // InternalGlobalConstantsParser.g:5959:4: enumLiteral_2= MOD
+                    // InternalGlobalConstantsParser.g:5981:3: (enumLiteral_2= MOD )
+                    // InternalGlobalConstantsParser.g:5982:4: enumLiteral_2= MOD
                     {
                     enumLiteral_2=(Token)match(input,MOD,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18039,7 +18117,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePowerOperator"
-    // InternalGlobalConstantsParser.g:5969:1: rulePowerOperator returns [Enumerator current=null] : (enumLiteral_0= AsteriskAsterisk ) ;
+    // InternalGlobalConstantsParser.g:5992:1: rulePowerOperator returns [Enumerator current=null] : (enumLiteral_0= AsteriskAsterisk ) ;
     public final Enumerator rulePowerOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -18049,11 +18127,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5975:2: ( (enumLiteral_0= AsteriskAsterisk ) )
-            // InternalGlobalConstantsParser.g:5976:2: (enumLiteral_0= AsteriskAsterisk )
+            // InternalGlobalConstantsParser.g:5998:2: ( (enumLiteral_0= AsteriskAsterisk ) )
+            // InternalGlobalConstantsParser.g:5999:2: (enumLiteral_0= AsteriskAsterisk )
             {
-            // InternalGlobalConstantsParser.g:5976:2: (enumLiteral_0= AsteriskAsterisk )
-            // InternalGlobalConstantsParser.g:5977:3: enumLiteral_0= AsteriskAsterisk
+            // InternalGlobalConstantsParser.g:5999:2: (enumLiteral_0= AsteriskAsterisk )
+            // InternalGlobalConstantsParser.g:6000:3: enumLiteral_0= AsteriskAsterisk
             {
             enumLiteral_0=(Token)match(input,AsteriskAsterisk,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -18087,7 +18165,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleUnaryOperator"
-    // InternalGlobalConstantsParser.g:5986:1: ruleUnaryOperator returns [Enumerator current=null] : ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) ;
+    // InternalGlobalConstantsParser.g:6009:1: ruleUnaryOperator returns [Enumerator current=null] : ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) ;
     public final Enumerator ruleUnaryOperator() throws RecognitionException {
         Enumerator current = null;
 
@@ -18099,41 +18177,41 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:5992:2: ( ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) )
-            // InternalGlobalConstantsParser.g:5993:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
+            // InternalGlobalConstantsParser.g:6015:2: ( ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) ) )
+            // InternalGlobalConstantsParser.g:6016:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
             {
-            // InternalGlobalConstantsParser.g:5993:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
-            int alt103=3;
+            // InternalGlobalConstantsParser.g:6016:2: ( (enumLiteral_0= HyphenMinus ) | (enumLiteral_1= PlusSign ) | (enumLiteral_2= NOT ) )
+            int alt105=3;
             switch ( input.LA(1) ) {
             case HyphenMinus:
                 {
-                alt103=1;
+                alt105=1;
                 }
                 break;
             case PlusSign:
                 {
-                alt103=2;
+                alt105=2;
                 }
                 break;
             case NOT:
                 {
-                alt103=3;
+                alt105=3;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 103, 0, input);
+                    new NoViableAltException("", 105, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt103) {
+            switch (alt105) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:5994:3: (enumLiteral_0= HyphenMinus )
+                    // InternalGlobalConstantsParser.g:6017:3: (enumLiteral_0= HyphenMinus )
                     {
-                    // InternalGlobalConstantsParser.g:5994:3: (enumLiteral_0= HyphenMinus )
-                    // InternalGlobalConstantsParser.g:5995:4: enumLiteral_0= HyphenMinus
+                    // InternalGlobalConstantsParser.g:6017:3: (enumLiteral_0= HyphenMinus )
+                    // InternalGlobalConstantsParser.g:6018:4: enumLiteral_0= HyphenMinus
                     {
                     enumLiteral_0=(Token)match(input,HyphenMinus,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18149,10 +18227,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsParser.g:6002:3: (enumLiteral_1= PlusSign )
+                    // InternalGlobalConstantsParser.g:6025:3: (enumLiteral_1= PlusSign )
                     {
-                    // InternalGlobalConstantsParser.g:6002:3: (enumLiteral_1= PlusSign )
-                    // InternalGlobalConstantsParser.g:6003:4: enumLiteral_1= PlusSign
+                    // InternalGlobalConstantsParser.g:6025:3: (enumLiteral_1= PlusSign )
+                    // InternalGlobalConstantsParser.g:6026:4: enumLiteral_1= PlusSign
                     {
                     enumLiteral_1=(Token)match(input,PlusSign,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18168,10 +18246,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalGlobalConstantsParser.g:6010:3: (enumLiteral_2= NOT )
+                    // InternalGlobalConstantsParser.g:6033:3: (enumLiteral_2= NOT )
                     {
-                    // InternalGlobalConstantsParser.g:6010:3: (enumLiteral_2= NOT )
-                    // InternalGlobalConstantsParser.g:6011:4: enumLiteral_2= NOT
+                    // InternalGlobalConstantsParser.g:6033:3: (enumLiteral_2= NOT )
+                    // InternalGlobalConstantsParser.g:6034:4: enumLiteral_2= NOT
                     {
                     enumLiteral_2=(Token)match(input,NOT,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18211,7 +18289,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSTBuiltinFeature"
-    // InternalGlobalConstantsParser.g:6021:1: ruleSTBuiltinFeature returns [Enumerator current=null] : (enumLiteral_0= THIS ) ;
+    // InternalGlobalConstantsParser.g:6044:1: ruleSTBuiltinFeature returns [Enumerator current=null] : (enumLiteral_0= THIS ) ;
     public final Enumerator ruleSTBuiltinFeature() throws RecognitionException {
         Enumerator current = null;
 
@@ -18221,11 +18299,11 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:6027:2: ( (enumLiteral_0= THIS ) )
-            // InternalGlobalConstantsParser.g:6028:2: (enumLiteral_0= THIS )
+            // InternalGlobalConstantsParser.g:6050:2: ( (enumLiteral_0= THIS ) )
+            // InternalGlobalConstantsParser.g:6051:2: (enumLiteral_0= THIS )
             {
-            // InternalGlobalConstantsParser.g:6028:2: (enumLiteral_0= THIS )
-            // InternalGlobalConstantsParser.g:6029:3: enumLiteral_0= THIS
+            // InternalGlobalConstantsParser.g:6051:2: (enumLiteral_0= THIS )
+            // InternalGlobalConstantsParser.g:6052:3: enumLiteral_0= THIS
             {
             enumLiteral_0=(Token)match(input,THIS,FOLLOW_2); if (state.failed) return current;
             if ( state.backtracking==0 ) {
@@ -18259,7 +18337,7 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSTMultiBitAccessSpecifier"
-    // InternalGlobalConstantsParser.g:6038:1: ruleSTMultiBitAccessSpecifier returns [Enumerator current=null] : ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) ) ;
+    // InternalGlobalConstantsParser.g:6061:1: ruleSTMultiBitAccessSpecifier returns [Enumerator current=null] : ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) ) ;
     public final Enumerator ruleSTMultiBitAccessSpecifier() throws RecognitionException {
         Enumerator current = null;
 
@@ -18273,51 +18351,51 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalGlobalConstantsParser.g:6044:2: ( ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) ) )
-            // InternalGlobalConstantsParser.g:6045:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) )
+            // InternalGlobalConstantsParser.g:6067:2: ( ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) ) )
+            // InternalGlobalConstantsParser.g:6068:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) )
             {
-            // InternalGlobalConstantsParser.g:6045:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) )
-            int alt104=5;
+            // InternalGlobalConstantsParser.g:6068:2: ( (enumLiteral_0= L ) | (enumLiteral_1= D_1 ) | (enumLiteral_2= W ) | (enumLiteral_3= B ) | (enumLiteral_4= X ) )
+            int alt106=5;
             switch ( input.LA(1) ) {
             case L:
                 {
-                alt104=1;
+                alt106=1;
                 }
                 break;
             case D_1:
                 {
-                alt104=2;
+                alt106=2;
                 }
                 break;
             case W:
                 {
-                alt104=3;
+                alt106=3;
                 }
                 break;
             case B:
                 {
-                alt104=4;
+                alt106=4;
                 }
                 break;
             case X:
                 {
-                alt104=5;
+                alt106=5;
                 }
                 break;
             default:
                 if (state.backtracking>0) {state.failed=true; return current;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 104, 0, input);
+                    new NoViableAltException("", 106, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt104) {
+            switch (alt106) {
                 case 1 :
-                    // InternalGlobalConstantsParser.g:6046:3: (enumLiteral_0= L )
+                    // InternalGlobalConstantsParser.g:6069:3: (enumLiteral_0= L )
                     {
-                    // InternalGlobalConstantsParser.g:6046:3: (enumLiteral_0= L )
-                    // InternalGlobalConstantsParser.g:6047:4: enumLiteral_0= L
+                    // InternalGlobalConstantsParser.g:6069:3: (enumLiteral_0= L )
+                    // InternalGlobalConstantsParser.g:6070:4: enumLiteral_0= L
                     {
                     enumLiteral_0=(Token)match(input,L,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18333,10 +18411,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalGlobalConstantsParser.g:6054:3: (enumLiteral_1= D_1 )
+                    // InternalGlobalConstantsParser.g:6077:3: (enumLiteral_1= D_1 )
                     {
-                    // InternalGlobalConstantsParser.g:6054:3: (enumLiteral_1= D_1 )
-                    // InternalGlobalConstantsParser.g:6055:4: enumLiteral_1= D_1
+                    // InternalGlobalConstantsParser.g:6077:3: (enumLiteral_1= D_1 )
+                    // InternalGlobalConstantsParser.g:6078:4: enumLiteral_1= D_1
                     {
                     enumLiteral_1=(Token)match(input,D_1,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18352,10 +18430,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalGlobalConstantsParser.g:6062:3: (enumLiteral_2= W )
+                    // InternalGlobalConstantsParser.g:6085:3: (enumLiteral_2= W )
                     {
-                    // InternalGlobalConstantsParser.g:6062:3: (enumLiteral_2= W )
-                    // InternalGlobalConstantsParser.g:6063:4: enumLiteral_2= W
+                    // InternalGlobalConstantsParser.g:6085:3: (enumLiteral_2= W )
+                    // InternalGlobalConstantsParser.g:6086:4: enumLiteral_2= W
                     {
                     enumLiteral_2=(Token)match(input,W,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18371,10 +18449,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalGlobalConstantsParser.g:6070:3: (enumLiteral_3= B )
+                    // InternalGlobalConstantsParser.g:6093:3: (enumLiteral_3= B )
                     {
-                    // InternalGlobalConstantsParser.g:6070:3: (enumLiteral_3= B )
-                    // InternalGlobalConstantsParser.g:6071:4: enumLiteral_3= B
+                    // InternalGlobalConstantsParser.g:6093:3: (enumLiteral_3= B )
+                    // InternalGlobalConstantsParser.g:6094:4: enumLiteral_3= B
                     {
                     enumLiteral_3=(Token)match(input,B,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -18390,10 +18468,10 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalGlobalConstantsParser.g:6078:3: (enumLiteral_4= X )
+                    // InternalGlobalConstantsParser.g:6101:3: (enumLiteral_4= X )
                     {
-                    // InternalGlobalConstantsParser.g:6078:3: (enumLiteral_4= X )
-                    // InternalGlobalConstantsParser.g:6079:4: enumLiteral_4= X
+                    // InternalGlobalConstantsParser.g:6101:3: (enumLiteral_4= X )
+                    // InternalGlobalConstantsParser.g:6102:4: enumLiteral_4= X
                     {
                     enumLiteral_4=(Token)match(input,X,FOLLOW_2); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
@@ -19780,13 +19858,15 @@ public class InternalGlobalConstantsParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000140000000L});
     public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000000L,0x022A0C88C9A94000L,0x0001800000000000L});
     public static final BitSet FOLLOW_63 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0001000000000000L});
-    public static final BitSet FOLLOW_64 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0008000140000000L});
+    public static final BitSet FOLLOW_64 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0009000140000000L});
     public static final BitSet FOLLOW_65 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x1000000000000000L});
     public static final BitSet FOLLOW_66 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000000100L});
     public static final BitSet FOLLOW_67 = new BitSet(new long[]{0x0000000000000002L,0x0040000000000000L});
     public static final BitSet FOLLOW_68 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000200000000L});
     public static final BitSet FOLLOW_69 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0003000000000000L});
-    public static final BitSet FOLLOW_70 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0008000000000000L});
-    public static final BitSet FOLLOW_71 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000100000000L});
+    public static final BitSet FOLLOW_70 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0009000000000000L});
+    public static final BitSet FOLLOW_71 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000200000000L});
+    public static final BitSet FOLLOW_72 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0008000000000000L});
+    public static final BitSet FOLLOW_73 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000100000000L});
 
 }

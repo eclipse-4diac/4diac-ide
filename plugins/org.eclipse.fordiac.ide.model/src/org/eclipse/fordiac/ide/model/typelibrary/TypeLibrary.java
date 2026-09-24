@@ -67,7 +67,8 @@ import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
@@ -252,9 +253,8 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		if (entry == null) {
 			throw new IllegalArgumentException("Unknown type class " + typeClass.getName()); //$NON-NLS-1$
 		}
-		final LibraryElement libraryElement = entry.getType();
-		PackageNameHelper.setFullTypeName(libraryElement, typeName);
-		entry.setType(libraryElement); // update type name in entry
+		final ErrorLibraryElement libraryElement = ErrorLibraryElementFactory.INSTANCE.create(typeName, typeClass);
+		entry.setType(libraryElement);
 		entry.setTypeLibrary(this);
 		final TypeEntry oldEntry = putBlockTypeEntryIfAbsent(entry);
 		return oldEntry != null ? oldEntry : entry;

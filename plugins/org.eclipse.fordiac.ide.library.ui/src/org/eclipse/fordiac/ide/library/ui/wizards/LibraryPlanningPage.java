@@ -357,13 +357,8 @@ public class LibraryPlanningPage extends WizardPage {
 						return;
 					}
 
-					if (status.isOK()) {
-						setMessage(null);
-					} else {
-						final String combinedMessage = Arrays.stream(status.getChildren()).map(IStatus::getMessage)
-								.collect(Collectors.joining(System.lineSeparator()));
-						setMessage(combinedMessage, toMessageProviderSeverity(status));
-					}
+					final String message = status.isOK() ? null : getMessage(status);
+					setMessage(message, toMessageProviderSeverity(status));
 
 					treeViewer.refresh();
 				});
@@ -374,6 +369,15 @@ public class LibraryPlanningPage extends WizardPage {
 
 		job.setUser(false);
 		job.schedule();
+	}
+
+	private static String getMessage(final IStatus status) {
+		if (status.isMultiStatus()) {
+			final int severity = status.getSeverity();
+			return Arrays.stream(status.getChildren()).filter(child -> child.getSeverity() == severity)
+					.map(IStatus::getMessage).collect(Collectors.joining(System.lineSeparator()));
+		}
+		return status.getMessage();
 	}
 
 	private static int toMessageProviderSeverity(final IStatus status) {

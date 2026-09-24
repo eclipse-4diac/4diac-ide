@@ -30,7 +30,6 @@ import java.util.Map;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -73,10 +72,6 @@ public class FBTImporter extends BlockTypeImporter {
 
 	/** The ec states. */
 	private final Map<String, ECState> ecStates = new HashMap<>();
-
-	public FBTImporter(final IFile typeFile) {
-		super(typeFile);
-	}
 
 	public FBTImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
 		super(inputStream, typeLibrary);
@@ -232,7 +227,8 @@ public class FBTImporter extends BlockTypeImporter {
 				state.setInputEvent(inEvent);
 				final var action = LibraryElementFactory.eINSTANCE.createSimpleECAction();
 				action.setAlgorithm(inEvent.getName());
-				action.setOutput(stdOutEvent);
+				action.setOutput(type.getInterfaceList().getEventOutputs().stream()
+						.filter(outEvent -> outEvent.getType() == inEvent.getType()).findFirst().orElse(stdOutEvent));
 				state.getSimpleECActions().add(action);
 				type.getSimpleECStates().add(state);
 			}

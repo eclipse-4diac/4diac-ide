@@ -38,9 +38,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
@@ -99,7 +97,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 /** The Class CommonElementImporter. */
 public abstract class CommonElementImporter {
@@ -128,17 +125,12 @@ public abstract class CommonElementImporter {
 	}
 
 	private XMLStreamReader reader;
-	private IFile file = null;
-	private InputStream inputStream = null;
+	private final InputStream inputStream;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
 	private final List<Diagnostic> errors;
 	private final List<Diagnostic> warnings;
 	private final Set<TypeEntry> dependencies;
-
-	protected IFile getFile() {
-		return file;
-	}
 
 	TypeLibrary getTypeLibrary() {
 		return typeLibrary;
@@ -177,19 +169,10 @@ public abstract class CommonElementImporter {
 		dependencies = new HashSet<>();
 	}
 
-	protected CommonElementImporter(final IFile file) {
-		Assert.isNotNull(file);
-		this.file = file;
-		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
-		errors = new ArrayList<>();
-		warnings = new ArrayList<>();
-		dependencies = new HashSet<>();
-	}
-
 	protected CommonElementImporter(final CommonElementImporter importer) {
 		Assert.isNotNull(importer);
+		inputStream = importer.inputStream;
 		reader = importer.reader;
-		file = importer.file;
 		typeLibrary = importer.typeLibrary;
 		element = importer.element;
 		errors = importer.errors;
@@ -206,15 +189,8 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	protected InputStream getInputStream() throws IOException {
-		if (inputStream != null) {
-			return inputStream;
-		}
-		try {
-			return file.getContents();
-		} catch (final CoreException e) {
-			throw new IOException(e);
-		}
+	protected InputStream getInputStream() {
+		return inputStream;
 	}
 
 	protected abstract LibraryElement createRootModelElement();
@@ -293,7 +269,7 @@ public abstract class CommonElementImporter {
 	}
 
 	private String getParseLocation() {
-		return " in file: " + getFile() + " location: " + getReader().getLocation(); //$NON-NLS-1$ //$NON-NLS-2$
+		return " location: " + getReader().getLocation(); //$NON-NLS-1$
 	}
 
 	/**

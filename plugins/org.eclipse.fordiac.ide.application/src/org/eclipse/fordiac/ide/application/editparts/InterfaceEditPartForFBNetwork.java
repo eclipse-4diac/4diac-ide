@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Waldemar Eisenmenger, Monika Wenger
  *   - initial API and implementation and/or initial documentation
  *   Daniel Lindhuber, Bianca Wiesmayr - connection methods for unfolded subapp
+ *   Michael Oberlehner - launch struct member refactoring from connection drag
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -24,6 +25,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
+import org.eclipse.fordiac.ide.application.tools.StructMemberConnectionDragCreationTool;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -42,6 +44,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
+import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.ui.IEditorPart;
 
 /**
@@ -49,6 +52,11 @@ import org.eclipse.ui.IEditorPart;
  * editors
  */
 public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
+
+	@Override
+	protected ConnectionDragCreationTool createConnectionDragCreationTool() {
+		return new StructMemberConnectionDragCreationTool();
+	}
 
 	public static class VarInputConnAnchor extends FixedAnchor {
 

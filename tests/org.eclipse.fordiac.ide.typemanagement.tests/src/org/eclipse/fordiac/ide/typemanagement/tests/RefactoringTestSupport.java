@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Dimitrios Kalligaridis
+ * Copyright (c) 2026 Dimitrios Kalligaridis, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,11 +9,13 @@
  *
  * Contributors:
  *   Dimitrios Kalligaridis - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - added reusable struct refactoring test support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.tests;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -168,7 +170,7 @@ public final class RefactoringTestSupport {
 		return check.getStatus();
 	}
 
-	private static Change performRefactoring(final Refactoring refactoring) throws CoreException {
+	public static Change performRefactoring(final Refactoring refactoring) throws CoreException {
 		final CreateChangeOperation create = new CreateChangeOperation(
 				new CheckConditionsOperation(refactoring, CheckConditionsOperation.ALL_CONDITIONS),
 				RefactoringStatus.FATAL);
@@ -229,7 +231,11 @@ public final class RefactoringTestSupport {
 	private static java.nio.file.Path resolveBundleDirectory(final String bundleRelativePath) throws IOException {
 		final Bundle bundle = FrameworkUtil.getBundle(RefactoringTestSupport.class);
 		final var url = FileLocator.toFileURL(FileLocator.find(bundle, new Path(bundleRelativePath)));
-		return Paths.get(url.getPath());
+		try {
+			return Paths.get(url.toURI());
+		} catch (final URISyntaxException e) {
+			throw new IOException("Could not resolve bundle directory", e); //$NON-NLS-1$
+		}
 	}
 
 	private static void copyRecursively(final java.nio.file.Path source, final java.nio.file.Path destination)

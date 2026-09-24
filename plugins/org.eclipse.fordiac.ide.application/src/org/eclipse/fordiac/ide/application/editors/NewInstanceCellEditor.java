@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
- * 				 2022 Primetals Technologies Germany GmbH
+ * Copyright (c) 2019 Johannes Kepler University Linz,
+ * 					  Primetals Technologies Germany GmbH,
+ * 					  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +12,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Fabio Gandolfi - insideCell parameter to use the CellEditor inside TableViewer cells
+ *   Andrea Zoitl - added subapp and comment buttons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
@@ -41,15 +43,18 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class NewInstanceCellEditor extends TextCellEditor {
 
-	private static final int NUM_COLUMNS = 2;
+	private static final int NUM_COLUMNS = 4;
 
 	private Composite container;
 	private Button menuButton;
+	private Button subAppButton;
+	private Button commentButton;
 	protected Shell popupShell;
 	protected TableViewer tableViewer;
 	private PaletteFilter paletteFilter;
@@ -58,6 +63,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	protected Text textControl;
 
 	private ResultListLabelProvider resultListLabelProvider;
+	private Listener repositionListener;
 
 	public NewInstanceCellEditor(final Composite parent) {
 		super(parent, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
@@ -67,6 +73,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return menuButton;
 	}
 
+	public Button getSubAppButton() {
+		return subAppButton;
+	}
+
+	public Button getCommentButton() {
+		return commentButton;
+	}
+
 	public void setTypeLibrary(final TypeLibrary typeLib, final FBNetwork hostNetwork) {
 		paletteFilter = new PaletteFilter(typeLib, hostNetwork);
 	}
@@ -74,12 +88,20 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	@Override
 	protected Control createControl(final Composite parent) {
 		container = createContainer(parent);
+		subAppButton = createButton(container, FordiacImage.ICON_SUB_APP);
+		commentButton = createButton(container, FordiacImage.ICON_COMMENT);
 		textControl = (Text) super.createControl(container);
 		configureTextControl();
-		createTypeMenuButton(container);
+		menuButton = createButton(container, FordiacImage.ICON_TYPE_NAVIGATOR);
 		createPopUpList(container);
 		// initial population of the selection list
 		updateSelectionList();
+
+		repositionListener = _ -> repositionPopup();
+		parent.addListener(SWT.Paint, repositionListener);
+		parent.getShell().addListener(SWT.Move, repositionListener);
+		parent.getShell().addListener(SWT.Resize, repositionListener);
+
 		return container;
 	}
 
@@ -135,14 +157,15 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		final Composite newContainer = new Composite(parent, SWT.NONE) {
 			@Override
 			public void setBounds(final int x, final int y, final int width, final int height) {
-				super.setBounds(x, y, width, height);
 
-				final Point screenPos = getParent().toDisplay(getLocation());
-				final Rectangle compositeBounds = getBounds();
-				popupShell.setBounds(screenPos.x, screenPos.y + compositeBounds.height, compositeBounds.width, 150);
-				if (!popupShell.isVisible()) {
-					popupShell.setVisible(true);
-				}
+				final int leftOffset = getLeftOffset();
+
+				// Shift the container's starting horizontal position left. Ensures that the
+				// buttons are to the left of the click target and that the search bar begins
+				// exactly where the user double-clicked.
+				super.setBounds(x - leftOffset, y, width + leftOffset, height);
+
+				repositionPopup();
 			}
 		};
 		newContainer.setBackground(parent.getBackground());
@@ -152,6 +175,36 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 		newContainer.setLayout(CellEditorLayoutFactory.getNewGridZeroLayout(NUM_COLUMNS));
 		return newContainer;
+	}
+
+	private int getLeftOffset() {
+		int leftOffset = 0;
+		if (subAppButton != null && !subAppButton.isDisposed()) {
+			leftOffset += subAppButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		}
+		if (commentButton != null && !commentButton.isDisposed()) {
+			leftOffset += commentButton.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+		}
+		return leftOffset;
+	}
+
+	private void repositionPopup() {
+		if (popupShell != null && !popupShell.isDisposed() && container != null && !container.isDisposed()) {
+
+			final Point screenPos = container.getParent().toDisplay(container.getLocation());
+			final Rectangle compositeBounds = container.getBounds();
+
+			// Correct the position so that the selection list is underneath the search bar
+			final int popupX = screenPos.x + getLeftOffset();
+			final int popupWidth = compositeBounds.width - getLeftOffset();
+			final int popupY = screenPos.y + compositeBounds.height;
+
+			popupShell.setBounds(popupX, popupY, popupWidth, 150);
+
+			if (!popupShell.isVisible()) {
+				popupShell.setVisible(true);
+			}
+		}
 	}
 
 	public void configureTextControl() {
@@ -248,8 +301,11 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		});
 	}
 
-	private void createTypeMenuButton(final Composite container) {
-		menuButton = new Button(container, SWT.FLAT);
-		menuButton.setImage(FordiacImage.ICON_TYPE_NAVIGATOR.getImage());
+	private static Button createButton(final Composite container, final FordiacImage icon) {
+		final Button button = new Button(container, SWT.FLAT);
+		button.setImage(icon.getImage());
+		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+		return button;
 	}
+
 }

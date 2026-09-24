@@ -15,12 +15,12 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -31,6 +31,11 @@ public class SubappTypeResourceImpl extends AbstractLibraryElementResource<SubAp
 	}
 
 	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.SUB_APP_TYPE;
+	}
+
+	@Override
 	protected CommonElementImporter getTypeImporter(final InputStream inputStream, final TypeLibrary typeLib) {
 		return new SubAppTImporter(inputStream, typeLib);
 	}
@@ -38,13 +43,5 @@ public class SubappTypeResourceImpl extends AbstractLibraryElementResource<SubAp
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final SubAppType contentToSave) {
 		return new SubApplicationTypeExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorSubAppType createErrorLibraryElement() {
-		final ErrorSubAppType type = LibraryElementFactory.eINSTANCE.createErrorSubAppType();
-		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		type.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-		return type;
 	}
 }

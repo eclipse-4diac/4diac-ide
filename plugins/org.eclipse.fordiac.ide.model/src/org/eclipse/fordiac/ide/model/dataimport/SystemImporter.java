@@ -31,7 +31,6 @@ import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -76,10 +75,6 @@ public class SystemImporter extends CommonElementImporter {
 		super(inputStream, typeLibrary);
 	}
 
-	public SystemImporter(final IFile systemfile) {
-		super(systemfile);
-	}
-
 	@Override
 	public AutomationSystem getElement() {
 		return (AutomationSystem) super.getElement();
@@ -96,21 +91,8 @@ public class SystemImporter extends CommonElementImporter {
 
 	@Override
 	protected LibraryElement createRootModelElement() {
-		return createAutomationSystem();
-	}
-
-	/**
-	 * Create an empty automation system model
-	 *
-	 * this can either be used for the importer or for creating a new system
-	 *
-	 * @return the automation system model with its basic setup
-	 */
-	public static AutomationSystem createAutomationSystem() {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		// create PhysicalConfiguration
-		final SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
-		system.setSystemConfiguration(sysConf);
+		system.setSystemConfiguration(LibraryElementFactory.eINSTANCE.createSystemConfiguration());
 		return system;
 	}
 

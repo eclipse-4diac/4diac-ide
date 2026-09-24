@@ -17,9 +17,9 @@ Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.data,
  org.eclipse.fordiac.ide.model.data.impl;x-internal:=true,
  org.eclipse.fordiac.ide.model.data.util,
- org.eclipse.fordiac.ide.model.dataexport,
- org.eclipse.fordiac.ide.model.dataimport,
- org.eclipse.fordiac.ide.model.dataimport.exceptions,
+ org.eclipse.fordiac.ide.model.dataexport;x-friends:="org.eclipse.fordiac.ide.test.model",
+ org.eclipse.fordiac.ide.model.dataimport;x-friends:="org.eclipse.fordiac.ide.test.model",
+ org.eclipse.fordiac.ide.model.dataimport.exceptions;x-internal:=true,
  org.eclipse.fordiac.ide.model.datatype.helper,
  org.eclipse.fordiac.ide.model.emf,
  org.eclipse.fordiac.ide.model.errormarker,
@@ -43,7 +43,7 @@ Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.model.ModelPlugin
 Bundle-ClassPath: .
-Bundle-Version: 3.3.100.qualifier
+Bundle-Version: 3.4.0.qualifier
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-ManifestVersion: 2

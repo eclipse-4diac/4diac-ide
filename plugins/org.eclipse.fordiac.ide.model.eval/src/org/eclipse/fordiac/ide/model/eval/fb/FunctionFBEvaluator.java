@@ -12,12 +12,8 @@
  */
 package org.eclipse.fordiac.ide.model.eval.fb;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
@@ -63,12 +59,6 @@ public class FunctionFBEvaluator extends FBEvaluator<FunctionFBType> {
 		functionEvaluator.evaluate();
 		sendOutputEvents(getType().getInterfaceList().getEventOutputs());
 		update(getVariables().values());
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		return Stream.of(super.getDependencies(), functionEvaluator.getDependencies()).flatMap(Collection::stream)
-				.collect(Collectors.toUnmodifiableSet());
 	}
 
 	@Override

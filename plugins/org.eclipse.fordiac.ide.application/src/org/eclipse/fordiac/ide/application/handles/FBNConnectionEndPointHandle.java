@@ -88,7 +88,4 @@ public class FBNConnectionEndPointHandle extends ScrollingConnectionEndpointHand
 		return new FBNScrollingConnectionEndpointTracker(coSelectedConnections.get(0));
 	}
 
-
-
-
 }

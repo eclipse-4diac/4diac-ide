@@ -15,12 +15,12 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.ResourceTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -31,6 +31,11 @@ public class ResourceTypeResourceImpl extends AbstractLibraryElementResource<Res
 	}
 
 	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.RESOURCE_TYPE;
+	}
+
+	@Override
 	protected CommonElementImporter getTypeImporter(final InputStream inputStream, final TypeLibrary typeLib) {
 		return new RESImporter(inputStream, typeLib);
 	}
@@ -38,10 +43,5 @@ public class ResourceTypeResourceImpl extends AbstractLibraryElementResource<Res
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final ResourceType contentToSave) {
 		return new ResourceTypeExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorResourceType createErrorLibraryElement() {
-		return LibraryElementFactory.eINSTANCE.createErrorResourceType();
 	}
 }

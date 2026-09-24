@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.eval.st;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -121,14 +120,5 @@ public class ECTransitionEvaluator extends StructuredTextEvaluator implements Va
 	@Override
 	public ECTransition getSourceElement() {
 		return transition;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		prepare();
-		if (parseResult != null) {
-			return StructuredTextParseUtil.collectUsedTypes(parseResult);
-		}
-		return Collections.emptySet();
 	}
 }

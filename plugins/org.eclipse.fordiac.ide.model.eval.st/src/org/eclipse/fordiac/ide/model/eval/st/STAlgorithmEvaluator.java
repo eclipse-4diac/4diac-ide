@@ -13,9 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.st;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
@@ -78,14 +76,5 @@ public class STAlgorithmEvaluator extends STCallableEvaluator {
 	@Override
 	public STAlgorithm getSourceElement() {
 		return parseResult;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		prepare();
-		if (parseResult != null) {
-			return StructuredTextParseUtil.collectUsedTypes(parseResult);
-		}
-		return Collections.emptySet();
 	}
 }

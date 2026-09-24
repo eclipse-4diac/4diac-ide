@@ -25,8 +25,12 @@ import org.eclipse.fordiac.ide.model.Messages;
 public final class TimeValueConverter implements ValueConverter<Duration> {
 	public static final TimeValueConverter INSTANCE = new TimeValueConverter();
 
-	static final Pattern VALUE_PATTERN = Pattern.compile("([+-]?\\d++(?:\\.\\d++)?)\\s*([a-zA-Z]++)"); //$NON-NLS-1$
-	static final Pattern SCANNER_PATTERN = Pattern.compile("\\G[+-]?(?:\\d[_\\d]*+(?:\\.\\d[_\\d]*+)?\\s*\\w++)++"); //$NON-NLS-1$
+	private static final String NUMBER = "\\d++(?:_\\d++)*+(?:\\.\\d++(?:_\\d++)*+)?+"; //$NON-NLS-1$
+	private static final String TIME_UNIT = "[a-zA-Z]++"; //$NON-NLS-1$
+	private static final String TIME_PART = NUMBER + TIME_UNIT + "_?+"; //$NON-NLS-1$
+	static final Pattern SIGN_PATTERN = Pattern.compile("[+-]"); //$NON-NLS-1$
+	static final Pattern VALUE_PATTERN = Pattern.compile("\\G(" + NUMBER + ")(" + TIME_UNIT + ")_?+"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	static final Pattern SCANNER_PATTERN = Pattern.compile("\\G[+-]?+(?:" + TIME_PART + ")++"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private TimeValueConverter() {
 	}
@@ -71,18 +75,55 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 	@Override
 	public Duration toValue(final String string) throws IllegalArgumentException {
 		try {
-			final var matcher = VALUE_PATTERN.matcher(string.replace("_", "")); //$NON-NLS-1$ //$NON-NLS-2$
-			return matcher.results().map(result -> {
-				final var valueGroup = result.group(1);
-				final var unitGroup = result.group(2);
+			if (string.indexOf("__") != -1) { //$NON-NLS-1$
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE, string));
+			}
+			if (string.endsWith("_")) { //$NON-NLS-1$
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_INVALID_TIME_LITERAL, string));
+			}
+			int lastIndex = -1;
+			final boolean negative;
+			ChronoUnit previousUnit = null;
+			Duration result = Duration.ZERO;
+			final var matcher = SIGN_PATTERN.matcher(string);
+			if (matcher.lookingAt() && "-".equals(matcher.group())) { //$NON-NLS-1$
+				negative = true;
+			} else {
+				negative = false;
+			}
+			matcher.usePattern(VALUE_PATTERN);
+			while (matcher.find()) {
+				final var valueGroup = matcher.group(1).replace("_", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				final var unitGroup = matcher.group(2);
 				final var value = new BigDecimal(valueGroup);
 				final var unit = parseUnit(unitGroup);
-				return Duration.of(value.multiply(BigDecimal.valueOf(unit.getDuration().toNanos())).toBigIntegerExact()
-						.longValueExact(), ChronoUnit.NANOS);
-			}).reduce(Duration.ZERO, Duration::plus);
+				validateUnitOrder(string, previousUnit, unit);
+				result = result
+						.plusNanos(value.multiply(BigDecimal.valueOf(unit.getDuration().toNanos())).longValueExact());
+				lastIndex = matcher.end();
+				previousUnit = unit;
+				if (value.scale() > 0) {
+					break; // only last value may have a fractional part
+				}
+			}
+			if (lastIndex != string.length()) {
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_INVALID_TIME_LITERAL, string));
+			}
+			return negative ? result.negated() : result;
+		} catch (final IllegalArgumentException e) {
+			throw e;
 		} catch (final Exception e) {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_TIME_LITERAL, string),
 					e);
+		}
+	}
+
+	private static void validateUnitOrder(final String string, final ChronoUnit previousUnit, final ChronoUnit unit) {
+		if (previousUnit != null && previousUnit.getDuration().compareTo(unit.getDuration()) <= 0) {
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_TIME_LITERAL, string));
 		}
 	}
 

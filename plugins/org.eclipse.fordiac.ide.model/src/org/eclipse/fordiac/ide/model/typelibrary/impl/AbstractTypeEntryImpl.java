@@ -16,10 +16,9 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
@@ -41,15 +40,17 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
+import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -280,8 +281,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 			// create error type if it could not be loaded (no file or error)
 			if (type == null) {
-				type = createErrorLibraryElement();
-				PackageNameHelper.setFullTypeName(type, getFullTypeName());
+				type = ErrorLibraryElementFactory.INSTANCE.create(getFullTypeName(), getTypeEClass());
 			}
 
 			// set type
@@ -341,13 +341,18 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return notifications;
 	}
 
-	protected void encloseInResource(final LibraryElement newType) {
-		if (newType.eResource() == null) {
-			FordiacTypeResourceFactory.INSTANCE
-					.createResource(Objects.requireNonNullElseGet(getURI(),
-							() -> URI.createFileURI(newType.getName() + "." + getFileExtension()))) //$NON-NLS-1$
-					.getContents().add(newType);
+	protected LibraryElementResource encloseInResource(final LibraryElement newType) {
+		if (newType.eResource() instanceof final LibraryElementResource resource) {
+			if (!Objects.equals(resource.getURI(), getURI())) {
+				resource.setURI(getURI());
+			}
+			return resource;
 		}
+		final LibraryElementResource resource = FordiacTypeResourceFactory.INSTANCE
+				.createResource(Objects.requireNonNullElseGet(getURI(),
+						() -> URI.createFileURI(newType.getName() + "." + getFileExtension()))); //$NON-NLS-1$
+		resource.getContents().add(newType);
+		return resource;
 	}
 
 	private LibraryElement loadType() {
@@ -357,12 +362,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 		try {
 			loading = true;
-			final CommonElementImporter importer = getImporter();
-			importer.loadElement();
-			updateDependencies(importer.getDependencies());
-			final LibraryElement retval = importer.getElement();
-			retval.setTypeEntry(this);
-			return retval;
+			final LibraryElementResource resource = FordiacTypeResourceFactory.INSTANCE.createResource(getURI());
+			resource.load(Map.of(LibraryElementResource.OPTION_TYPE_ENTRY, this));
+			updateDependencies(resource.getDependencies());
+			return resource.getLibraryElement();
 		} catch (final Exception e) {
 			handleLoadException(e);
 			return null;
@@ -475,10 +478,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		// do nothing
 	}
 
-	protected abstract CommonElementImporter getImporter();
-
-	protected abstract ErrorLibraryElement createErrorLibraryElement();
-
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return typeLibrary;
@@ -491,20 +490,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		if (eNotificationRequired()) {
 			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE,
 					TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE_ID, oldTypeLibrary, newTypeLibrary));
-		}
-	}
-
-	protected void doSaveInternal(final AbstractTypeExporter exporter, final IProgressMonitor monitor)
-			throws CoreException {
-		if (null != exporter) {
-			final InputStream fileContent = exporter.getFileContent();
-			if (fileContent != null) {
-				try (fileContent) {
-					writeToFile(fileContent, exporter, monitor);
-				} catch (final IOException e) {
-					throw new CoreException(Status.error(e.getMessage(), e));
-				}
-			}
 		}
 	}
 
@@ -559,8 +544,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return result.toString();
 	}
 
-	private void writeToFile(final InputStream fileContent, final AbstractTypeExporter exporter,
-			final IProgressMonitor monitor) throws CoreException {
+	@Override
+	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
 		NotificationChain notifications = null;
 		synchronized (this) {
 			// get and check file
@@ -569,14 +554,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 				return; // no file, nothing to write
 			}
 
-			// write or create file
-			if (fileCached.exists()) {
-				fileCached.setContents(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
-			} else {
-				checkAndCreateFolderHierarchy(fileCached.getParent(), monitor);
-				fileCached.create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
-			}
-			updateDependencies(exporter.getDependencies());
+			// create parent folders (if necessary)
+			checkAndCreateFolderHierarchy(fileCached.getParent(), monitor);
+
+			// save type
+			saveType(toSave);
 
 			// get updated modification stamp
 			final long modificationStamp = fileCached.getModificationStamp();
@@ -585,7 +567,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			// to ensure readers see the new stamp only together with the new type editable
 			lastModificationTimestampEditable.set(modificationStamp);
 
-			notifications = updateTypeOnSave(exporter.getType(), notifications);
+			notifications = updateTypeOnSave(toSave, notifications);
 
 			// update the last modification stamp _after_ setting the type to ensure other
 			// readers see the new stamp only together with the new type
@@ -601,6 +583,16 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		// dispatch notifications
 		if (notifications != null) {
 			notifications.dispatch();
+		}
+	}
+
+	private void saveType(final LibraryElement toSave) throws CoreException {
+		try {
+			final LibraryElementResource resource = encloseInResource(toSave);
+			resource.save(Map.of(LibraryElementResource.OPTION_TYPE_ENTRY, this));
+			updateDependencies(resource.getDependencies());
+		} catch (final Exception e) {
+			handleSaveException(e);
 		}
 	}
 
@@ -672,6 +664,16 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			return;
 		}
 		FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	protected CoreException handleSaveException(final Throwable t) throws CoreException {
+		if (t instanceof final CoreException ce) {
+			throw ce;
+		}
+		if (t instanceof final WrappedException we) {
+			handleSaveException(we.getCause());
+		}
+		throw new CoreException(Status.error(t.getMessage(), t));
 	}
 
 	protected static NotificationChain chainNotification(final NotificationChain notifications,

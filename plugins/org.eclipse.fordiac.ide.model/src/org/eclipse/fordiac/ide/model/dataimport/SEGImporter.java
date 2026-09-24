@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -32,10 +31,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  */
 
 public class SEGImporter extends TypeImporter {
-
-	public SEGImporter(final IFile typeFile) {
-		super(typeFile);
-	}
 
 	public SEGImporter(final InputStream inputStream, final TypeLibrary typeLib) {
 		super(inputStream, typeLib);
@@ -60,22 +55,17 @@ public class SEGImporter extends TypeImporter {
 	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.VAR_DECLARATION_ELEMENT:
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.VAR_DECLARATION_ELEMENT -> {
 				final VarDeclaration v = parseVarDeclaration();
 				v.setIsInput(true);
 				getElement().getVarDeclaration().add(v);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		};

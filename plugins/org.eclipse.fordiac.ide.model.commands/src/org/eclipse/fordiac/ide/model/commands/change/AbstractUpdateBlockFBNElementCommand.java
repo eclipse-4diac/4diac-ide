@@ -225,10 +225,10 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		// for each member access pin create the according pin in the new element and
 		// set it to visible, attributes for comments will be handled in the respective
 		// update methods
-		getOldElement().getInterface().getAllInterfaceElements()
-				.filter(ie -> ie.isVisible() && ie.eContainer() instanceof IInterfaceElement)
+		getOldElement().getInterface().getAllInterfaceElements() //
+				.filter(ie -> ie.isVisible() && ie.isMemberAccessPin())
 				.map(ie -> newInterface.getInterfaceElement(ie.getBlockRelativePath(), true))
-				.filter(ie -> ie != null && ie.eContainer() instanceof VarDeclaration)
+				.filter(ie -> ie != null && ie.isMemberAccessPin()) //
 				.forEach(ie -> ie.setVisible(true));
 	}
 
@@ -469,7 +469,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 				updatedSelected = createMissingMarker(oldIE, newElement);
 			}
 		}
-		if (updatedSelected instanceof VarDeclaration && updatedSelected.eContainer() instanceof VarDeclaration
+		if (updatedSelected instanceof VarDeclaration && updatedSelected.isMemberAccessPin()
 				&& !updatedSelected.isVisible() && oldIE.isVisible()) {
 			updatedSelected.setVisible(true);
 		}

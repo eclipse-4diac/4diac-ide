@@ -5150,22 +5150,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_FBN_ELEMENT__INTERFACE = BLOCK_FB_NETWORK_ELEMENT__INTERFACE;
 
 	/**
-	 * The feature id for the '<em><b>Repaired Element</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = BLOCK_FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Error Marker FBN Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = BLOCK_FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = BLOCK_FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl <em>Error Marker Interface</em>}' class.
@@ -10709,17 +10700,6 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getErrorMarkerFBNElement();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement#getRepairedElement <em>Repaired Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Repaired Element</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement#getRepairedElement()
-	 * @see #getErrorMarkerFBNElement()
-	 * @generated
-	 */
-	EReference getErrorMarkerFBNElement_RepairedElement();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface <em>Error Marker Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -14041,14 +14021,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ERROR_MARKER_FBN_ELEMENT = eINSTANCE.getErrorMarkerFBNElement();
-
-		/**
-		 * The meta object literal for the '<em><b>Repaired Element</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = eINSTANCE.getErrorMarkerFBNElement_RepairedElement();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl <em>Error Marker Interface</em>}' class.

@@ -140,7 +140,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	}
 
 	@Override
-	public void setInput(final IEditorInput input) {
+	protected void setInput(final IEditorInput input) {
 		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
 				.forEach(e -> e.setInput(updateInput(e.getEditorInput(), input)));
 		super.setInputWithNotify(input);

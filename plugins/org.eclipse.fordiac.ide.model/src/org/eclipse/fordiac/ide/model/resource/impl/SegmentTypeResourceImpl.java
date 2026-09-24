@@ -15,12 +15,12 @@ package org.eclipse.fordiac.ide.model.resource.impl;
 import java.io.InputStream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SEGExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -31,6 +31,11 @@ public class SegmentTypeResourceImpl extends AbstractLibraryElementResource<Segm
 	}
 
 	@Override
+	protected EClass getLibraryElementEClass() {
+		return LibraryElementPackage.Literals.SEGMENT_TYPE;
+	}
+
+	@Override
 	protected CommonElementImporter getTypeImporter(final InputStream inputStream, final TypeLibrary typeLib) {
 		return new SEGImporter(inputStream, typeLib);
 	}
@@ -38,10 +43,5 @@ public class SegmentTypeResourceImpl extends AbstractLibraryElementResource<Segm
 	@Override
 	protected AbstractTypeExporter getTypeExporter(final SegmentType contentToSave) {
 		return new SEGExporter(contentToSave);
-	}
-
-	@Override
-	protected ErrorSegmentType createErrorLibraryElement() {
-		return LibraryElementFactory.eINSTANCE.createErrorSegmentType();
 	}
 }

@@ -12,13 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.eval.fb;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
-import java.util.Spliterators;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
@@ -26,12 +20,9 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	private final T type;
@@ -119,16 +110,6 @@ public abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	@Override
 	public Object getSourceElement() {
 		return type;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(type.eAllContents(), 0), false)
-				.map(content -> switch (content) {
-				case final Attribute attribute -> VariableOperations.getDependencies(attribute);
-				case final VarDeclaration varDeclaration -> VariableOperations.getDependencies(varDeclaration);
-				default -> Collections.<String>emptySet();
-				}).flatMap(Collection::stream).collect(Collectors.toUnmodifiableSet());
 	}
 
 	@Override

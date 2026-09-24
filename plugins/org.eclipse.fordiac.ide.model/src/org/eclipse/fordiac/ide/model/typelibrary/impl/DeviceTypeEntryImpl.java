@@ -18,14 +18,8 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.DEVExporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -39,21 +33,6 @@ public class DeviceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<DeviceType
 	@Override
 	public void save(final LibraryElement toSave, final IProgressMonitor monitor) throws CoreException {
 		// currently we can not save devices, but we also have no editor for it
-	}
-
-	@Override
-	protected CommonElementImporter getImporter() {
-		return new DEVImporter(getFile());
-	}
-
-	@Override
-	protected ErrorDeviceType createErrorLibraryElement() {
-		return LibraryElementFactory.eINSTANCE.createErrorDeviceType();
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final DeviceType type) {
-		return new DEVExporter(type);
 	}
 
 	@Override

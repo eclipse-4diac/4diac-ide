@@ -23,15 +23,15 @@ import org.eclipse.swt.dnd.DND;
 
 public class ParameterDropTargetListener extends AbstractTransferDropTargetListener {
 
-	private ParameterValueFactory factory = new ParameterValueFactory();
+	private final ParameterValueFactory factory = new ParameterValueFactory();
 
-	public ParameterDropTargetListener(EditPartViewer viewer) {
+	public ParameterDropTargetListener(final EditPartViewer viewer) {
 		super(viewer, ParameterValueTemplateTransfer.getInstance());
 	}
 
 	@Override
 	protected Request createTargetRequest() {
-		CreateRequest request = new CreateRequest();
+		final CreateRequest request = new CreateRequest();
 		request.setFactory(factory);
 		if (getCurrentEvent().data != null) {
 			factory.setText(getCurrentEvent().data.toString());
@@ -47,7 +47,7 @@ public class ParameterDropTargetListener extends AbstractTransferDropTargetListe
 	@Override
 	protected void handleDragOver() {
 		if (null != getTargetEditPart()) {
-			Object model = getTargetEditPart().getModel();
+			final Object model = getTargetEditPart().getModel();
 			if (model instanceof IInterfaceElement) {
 				if (((IInterfaceElement) model).isIsInput() && !(model instanceof Event)) {
 					getCurrentEvent().detail = DND.DROP_COPY;

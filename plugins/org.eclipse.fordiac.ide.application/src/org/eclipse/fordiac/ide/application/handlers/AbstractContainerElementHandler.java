@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
- * 							Primetals Technologies Austria GmbH
+ * Copyright (c) 2017 fortiss GmbH, Johannes Kepler University Linz,
+ * 					  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *   Bianca Wiesmayr, Alois Zoitl - make newsubapp available for breadcrumb editor
  *   Alois Zoitl - extracted common elements into base class for reuseing it for
  *                 the group creation handler
+ *   Andrea Zoitl - disable invalid options
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -119,8 +121,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		for (final Object o : selection) {
 			if ((o instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbnEl)) {
 				// we check already in the setEnabled() that we are in the same group and same
-				// network so we can
-				// stop at the first element
+				// network so we can stop at the first element
 				group = fbnEl.getGroup();
 				return fbnEl.getFbNetwork();
 			}
@@ -239,6 +240,21 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			return ((GroupEditPart) editPartRegistry.get(group)).getContentEP();
 		}
 		return ((IContainerEditPart) editPartRegistry.get(network.eContainer())).getContentEP();
+	}
+
+	protected static boolean isOnlyOneConnectionSelected(final StructuredSelection selection) {
+		if (selection.size() == 1) {
+			final Object modelElement = getModelElement(selection.getFirstElement());
+			if (modelElement instanceof Connection) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected static boolean isBackgroundSelected(final StructuredSelection selection) {
+		return selection.size() == 1 && selection.getFirstElement() instanceof final EditPart ep
+				&& ep.getModel() instanceof FBNetwork;
 	}
 
 }

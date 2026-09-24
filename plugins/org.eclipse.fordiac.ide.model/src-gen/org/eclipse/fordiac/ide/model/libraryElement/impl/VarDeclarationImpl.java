@@ -1,14 +1,14 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
- *
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -19,22 +19,27 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations;
+
 import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -51,8 +56,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 /**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Var
- * Declaration</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Var Declaration</b></em>'.
+ * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -73,9 +79,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
  */
 public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -83,9 +89,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -94,7 +100,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -103,7 +110,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -112,7 +120,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getAttributes()
 	 * @generated
 	 * @ordered
@@ -121,7 +130,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The default value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -130,7 +140,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The cached value of the '{@link #isIsInput() <em>Is Input</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #isIsInput()
 	 * @generated
 	 * @ordered
@@ -138,10 +149,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected boolean isInput = IS_INPUT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getInputConnections() <em>Input
-	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	 * The cached value of the '{@link #getInputConnections() <em>Input Connections</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getInputConnections()
 	 * @generated
 	 * @ordered
@@ -149,10 +159,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected EList<Connection> inputConnections;
 
 	/**
-	 * The cached value of the '{@link #getOutputConnections() <em>Output
-	 * Connections</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	 * The cached value of the '{@link #getOutputConnections() <em>Output Connections</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getOutputConnections()
 	 * @generated
 	 * @ordered
@@ -160,9 +169,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected EList<Connection> outputConnections;
 
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -171,7 +180,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The cached value of the '{@link #getArraySize() <em>Array Size</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getArraySize()
 	 * @generated
 	 * @ordered
@@ -180,7 +190,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The cached value of the '{@link #getWiths() <em>Withs</em>}' reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getWiths()
 	 * @generated
 	 * @ordered
@@ -189,7 +200,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -197,7 +209,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	protected Value value;
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected VarDeclarationImpl() {
@@ -205,7 +218,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -214,7 +228,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -223,7 +238,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -235,7 +251,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -244,7 +261,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -256,7 +274,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -268,7 +287,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -277,7 +297,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -289,7 +310,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -301,7 +323,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -313,7 +336,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -330,7 +354,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public DataType basicGetType() {
@@ -338,24 +363,32 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated NOT
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
 	 */
-	@Override
-	public void setType(final DataType newType) {
-		java.util.Objects.requireNonNull(newType,
-				"DataType of a VarDeclaration must not be null! " + getQualifiedName());
-		final DataType oldType = type;
+	public void setTypeGen(DataType newType) {
+		DataType oldType = type;
 		type = newType;
-		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType,
-					type));
-		}
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType, type));
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public void setType(DataType newType) {
+	  java.util.Objects.requireNonNull(newType,
+				"DataType of a VarDeclaration must not be null! " + getQualifiedName());
+		setTypeGen(newType);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -364,7 +397,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetArraySize(ArraySize newArraySize, NotificationChain msgs) {
@@ -378,7 +412,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -397,7 +432,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -409,7 +445,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -418,7 +455,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetValue(Value newValue, NotificationChain msgs) {
@@ -432,7 +470,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -451,7 +490,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -460,7 +500,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -469,7 +510,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -478,7 +520,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -487,7 +530,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -496,17 +540,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean validateVarInOutSourceTypeIsWellDefined(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -515,67 +550,78 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateMultipleInputConnections(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
+	public boolean validateMultipleInputConnections(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateMultipleInputConnections(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateNoValueForGenericTypeVariable(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
+	public boolean validateNoValueForGenericTypeVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForGenericTypeVariable(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateIllegalVariableLengthArrayVariable(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
+	public boolean validateIllegalVariableLengthArrayVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateIllegalVariableLengthArrayVariable(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateNoValueForVariableLengthArrayVariable(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
+	public boolean validateNoValueForVariableLengthArrayVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForVariableLengthArrayVariable(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateValueForGenericInstanceVariable(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
+	public boolean validateValueForGenericInstanceVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueForGenericInstanceVariable(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateValueOverriddenBySubAppInput(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
+	public boolean validateValueOverriddenBySubAppInput(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueOverriddenBySubAppInput(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateVarInOutSourceTypeIsWellDefined(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSourceTypeIsWellDefined(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -584,17 +630,18 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateVarInOutSubappInterface(final DiagnosticChain diagnostics,
-			final Map<Object, Object> context) {
+	public boolean validateVarInOutSubappInterface(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSubappInterface(this, diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -623,66 +670,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public FBType getFBType() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBType(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public InterfaceList getInterfaceList() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getInterfaceList(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getTypeName() {
-		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();
-		if(type != null){
-			return type.getName();
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
-	}
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean validateUnused(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateUnused(this, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public List<String> getBlockRelativePath() {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -775,7 +764,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -784,61 +774,88 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
-	}
-
-	public static void setVisible(final VarDeclaration varDecl, final boolean visible) {
-		if (varDecl.eContainer() instanceof VarDeclaration) {
-			// in difference to Hiddenelements for member access pins the visible attribute
-			// is used when the pin should be shown
-			if (visible) {
-				HiddenElementAnnotations.setVisible(varDecl, Boolean.toString(visible));
-			} else {
-				// if we are not visible the attribute can be removed
-				varDecl.deleteAttribute(LibraryElementTags.ELEMENT_VISIBLE);
-			}
-		} else {
-			HiddenElementAnnotations.setVisible(varDecl, visible);
-		}
-	}
-
-	public static boolean isVisible(final VarDeclaration varDecl) {
-		if (varDecl.eContainer() instanceof VarDeclaration) {
-			// in difference to HiddenElements for member access pins the visible attribute
-			// is used when the pin should be shown
-			final String visibleAttribute = varDecl.getAttributeValue(LibraryElementTags.ELEMENT_VISIBLE);
-			return "true".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
-		}
-		return HiddenElementAnnotations.isVisible(varDecl);
+	public FBType getFBType() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBType(this);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final String attributeName, final DataType type, final String value,
-			final String comment) {
+	public InterfaceList getInterfaceList() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getInterfaceList(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateUnused(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateUnused(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public List<String> getBlockRelativePath() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isMemberAccessPin() {
+		return this instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration && eContainer() instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAttribute(final String attributeName, final DataType type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void setAttribute(final AttributeDeclaration attributeDeclaration, final String value,
-			final String comment) {
+	public void setAttribute(final AttributeDeclaration attributeDeclaration, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeDeclaration, value, comment);
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -847,7 +864,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -856,7 +874,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -865,7 +884,32 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getTypeName() {
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();
+		if(type != null){
+			return type.getName();
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -874,7 +918,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -883,7 +928,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -892,7 +938,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -901,7 +948,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -924,7 +972,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -948,7 +997,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -981,7 +1031,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -1029,7 +1080,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1072,7 +1124,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1104,7 +1157,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1124,7 +1178,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1144,7 +1199,8 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1162,4 +1218,4 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 		return result.toString();
 	}
 
-} // VarDeclarationImpl
+} //VarDeclarationImpl

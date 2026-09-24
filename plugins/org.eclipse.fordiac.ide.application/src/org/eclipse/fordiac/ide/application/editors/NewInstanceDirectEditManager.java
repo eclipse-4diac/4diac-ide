@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019 Johannes Kepler University Linz,
+ * 					  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,18 +10,28 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - added subapp and comment buttons
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
+import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
+import org.eclipse.fordiac.ide.model.commands.create.CreateCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.jface.action.MenuManager;
@@ -104,7 +115,12 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		getCellEditor().getMenuButton().addListener(SWT.Selection, _ -> showFBInsertPopUpMenu());
-		getCellEditor().setTypeLibrary(typeLib, getEditPart().getModel() instanceof final FBNetwork fbn ? fbn : null);
+
+		getCellEditor().getSubAppButton().addListener(SWT.Selection, _ -> createNewSubAppCommand());
+
+		getCellEditor().getCommentButton().addListener(SWT.Selection, _ -> createNewCommentCommand());
+
+		getCellEditor().setTypeLibrary(typeLib, getFBNetwork());
 
 		super.initCellEditor();
 		if (null != initialValue) {
@@ -152,4 +168,76 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		// get rid of the editor
 		getCellEditor().fireCancelEditor();
 	}
+
+	private void createNewSubAppCommand() {
+		final org.eclipse.draw2d.geometry.Point point = getPointLocation();
+		final FBNetwork fbNetwork = getFBNetwork();
+
+		if (fbNetwork != null) {
+			final NewSubAppCommand cmd = new NewSubAppCommand(fbNetwork, java.util.Collections.emptyList(), point.x,
+					point.y);
+			executeCommand(cmd);
+		}
+		getCellEditor().fireCancelEditor(); // Close the cell editor popup safely
+	}
+
+	private void createNewCommentCommand() {
+		final org.eclipse.draw2d.geometry.Point point = getPointLocation();
+		final FBNetwork fbNetwork = getFBNetwork();
+
+		if (fbNetwork != null) {
+			final CreateCommentCommand cmd = new CreateCommentCommand(fbNetwork, point);
+			executeCommand(cmd);
+		}
+		getCellEditor().fireCancelEditor(); // Close the cell editor popup safely
+	}
+
+	private org.eclipse.draw2d.geometry.Point getPointLocation() {
+		final org.eclipse.draw2d.geometry.Point point = new org.eclipse.draw2d.geometry.Point(
+				getLocator().getRefPoint());
+
+		getEditPart().getContentPane().translateToRelative(point);
+
+		if (getEditPart() instanceof UnfoldedSubappContentEditPart) {
+			final org.eclipse.draw2d.geometry.Point topLeft = getEditPart().getFigure().getClientArea().getTopLeft();
+			point.translate(-topLeft.x(), -topLeft.y());
+		}
+
+		final SnapToHelper helper = getEditPart().getAdapter(SnapToHelper.class);
+		if (helper != null) {
+final IFigure contentPane = getEditPart().getContentPane();
+			contentPane.translateToAbsolute(point);
+			final PrecisionPoint preciseLocation = new PrecisionPoint(point);
+			final PrecisionPoint result = new PrecisionPoint(point);
+			helper.snapPoint(null, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation, result);
+			contentPane.translateToRelative(result);
+			return result;
+		}
+
+		return point;
+	}
+
+	private FBNetwork getFBNetwork() {
+		final Object model = getEditPart().getModel();
+
+		if (model instanceof final SubApp subApp) {
+			return subApp.getSubAppNetwork();
+		}
+		if ((model instanceof final GroupContentNetwork groupContentNetwork)
+				&& (groupContentNetwork.getGroup() != null)) {
+			return groupContentNetwork.getGroup().getFbNetwork();
+		}
+		if (model instanceof final Group group) {
+			return group.getFbNetwork();
+		}
+		if (model instanceof final FBNetwork fbNetwork) {
+			return fbNetwork;
+		}
+		return null;
+	}
+
+	private void executeCommand(final org.eclipse.gef.commands.Command cmd) {
+		getEditPart().getViewer().getEditDomain().getCommandStack().execute(cmd);
+	}
+
 }

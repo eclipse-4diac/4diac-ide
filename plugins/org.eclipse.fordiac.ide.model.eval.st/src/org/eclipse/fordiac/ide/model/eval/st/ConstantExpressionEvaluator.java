@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.eval.st;
 
 import java.util.Collections;
-import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
@@ -63,10 +62,5 @@ public final class ConstantExpressionEvaluator extends StructuredTextEvaluator {
 	@Override
 	public Object getSourceElement() {
 		return null;
-	}
-
-	@Override
-	public Set<String> getDependencies() {
-		return Collections.emptySet();
 	}
 }

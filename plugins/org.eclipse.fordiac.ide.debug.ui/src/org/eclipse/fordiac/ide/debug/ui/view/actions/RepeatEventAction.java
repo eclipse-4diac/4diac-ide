@@ -54,7 +54,7 @@ public final class RepeatEventAction extends Action {
 	}
 
 	private static FBLaunchEventQueue getEventQueue(final EvaluatorProcess evaluator) {
-		if(evaluator != null) {
+		if (evaluator != null) {
 			final var queue = ((FBEvaluator<?>) evaluator.getEvaluator()).getEventQueue();
 			if (queue instanceof FBLaunchEventQueue) {
 				return (FBLaunchEventQueue) queue;

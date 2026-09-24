@@ -74,7 +74,7 @@ public final class InitialValueHelper {
 			if ((matchingMember != null) && (matchingMember.getValue() != null)) {
 				return matchingMember.getValue().getValue();
 			}
-		} else if (v.eContainer() instanceof VarDeclaration) {
+		} else if (v.isMemberAccessPin()) {
 			return getMemberAccessDTInitialValue(v);
 		}
 

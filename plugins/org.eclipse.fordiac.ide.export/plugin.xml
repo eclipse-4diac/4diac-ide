@@ -21,4 +21,26 @@
             class="org.eclipse.fordiac.ide.export.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ltk.core.refactoring.renameParticipants">
+      <renameParticipant
+            class="org.eclipse.fordiac.ide.export.refactoring.RenameSourceDirectoryParticipant"
+            id="org.eclipse.fordiac.ide.export.renameSourceDirectory"
+            name="%RenameSourceDirectory_name">
+         <enablement>
+            <instanceof value="org.eclipse.core.resources.IFolder"/>
+         </enablement>
+      </renameParticipant>
+   </extension>
+   <extension
+         point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+      <deleteParticipant
+            class="org.eclipse.fordiac.ide.export.refactoring.DeleteSourceDirectoryParticipant"
+            id="org.eclipse.fordiac.ide.export.deleteSourceDirectory"
+            name="%DeleteSourceDirectory_name">
+         <enablement>
+            <instanceof value="org.eclipse.core.resources.IFolder"/>
+         </enablement>
+      </deleteParticipant>
+   </extension>
 </plugin>

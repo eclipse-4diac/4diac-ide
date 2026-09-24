@@ -44,6 +44,18 @@ public final class Messages extends NLS {
 
 	public static String FordiacExporter_ExportingType;
 
+	public static String Refactoring_DeleteSourceDirectoryParticipant;
+
+	public static String Refactoring_GeneratedSourceDirectoryName;
+
+	public static String Refactoring_InvalidSourceDirectoryName;
+
+	public static String Refactoring_RenameSourceDirectoryParticipant;
+
+	public static String Refactoring_UpdateSourceDirectories;
+
+	public static String Refactoring_UpdateSourceDirectoriesFailed;
+
 	public static String TemplateExportFilter_CANCEL_ALL_LABEL_STRING;
 
 	public static String TemplateExportFilter_ErrorDuringTemplateGeneration;

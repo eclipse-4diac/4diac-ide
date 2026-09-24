@@ -370,7 +370,7 @@ public class VarDeclarationAnnotations {
 	}
 
 	static void setVisible(final VarDeclaration varDecl, final boolean visible) {
-		if (varDecl.eContainer() instanceof VarDeclaration) {
+		if (varDecl.isMemberAccessPin()) {
 			// member access pins treat the visible attribute in opposite to HiddenElements
 			if (visible) {
 				HiddenElementAnnotations.setVisible(varDecl, Boolean.toString(visible));
@@ -397,7 +397,7 @@ public class VarDeclarationAnnotations {
 	}
 
 	public static boolean isVisible(final VarDeclaration varDecl) {
-		if (varDecl.eContainer() instanceof VarDeclaration) {
+		if (varDecl.isMemberAccessPin()) {
 			// member access pins treat the visible attribute in opposite to HiddenElements
 			final String visibleAttribute = varDecl.getAttributeValue(LibraryElementTags.ELEMENT_VISIBLE);
 			return "true".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$

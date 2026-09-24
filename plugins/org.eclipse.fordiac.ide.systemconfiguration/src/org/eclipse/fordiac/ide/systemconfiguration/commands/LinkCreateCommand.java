@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2016, 2017 Profactor GbmH, fortiss GmbH, 
+ * Copyright (c) 2008, 2009, 2016, 2017 Profactor GbmH, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
@@ -46,7 +46,7 @@ public class LinkCreateCommand extends Command {
 			return false;
 		}
 
-		for (Link con : source.getOutConnections()) {
+		for (final Link con : source.getOutConnections()) {
 			if (con.getDevice().equals(destination)) {
 				// the link is already existing
 				return false;

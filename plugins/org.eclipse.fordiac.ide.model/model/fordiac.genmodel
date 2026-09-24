@@ -449,7 +449,6 @@
     <genClasses ecoreClass="lib.ecore#//ErrorGlobalConstants"/>
     <genClasses ecoreClass="lib.ecore#//ErrorLibraryElement"/>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
       <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getWidth" body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
       <genOperations ecoreOperation="lib.ecore#//ErrorMarkerFBNElement/getHeight"
           body="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
@@ -650,6 +649,8 @@
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getBlockRelativePath"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/isMemberAccessPin"
+          body="return this instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration &amp;&amp; eContainer() instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Import">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Import/importedNamespace"/>

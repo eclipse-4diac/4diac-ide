@@ -36,6 +36,7 @@ public class STCoreAntlrTokenToAttributeIdMapper extends DefaultAntlrTokenToAttr
 	private static final Set<String> METHOD_BLOCK_KEYWORDS = Set.of("\'METHOD\'", "\'END_METHOD\'");
 	private static final Set<String> ALGORITHM_BLOCK_KEYWORDS = Set.of("\'ALGORITHM\'", "\'END_ALGORITHM\'");
 	private static final Set<String> BOOLEAN_KEYWORDS = Set.of("\'TRUE\'", "\'FALSE\'");
+	private static final String RULE_TIME_PART = "RULE_TIME_PART";
 
 	@Override
 	protected String calculateId(final String tokenName, final int tokenType) {
@@ -58,6 +59,9 @@ public class STCoreAntlrTokenToAttributeIdMapper extends DefaultAntlrTokenToAttr
 			return STCoreHighlightingStyles.FUNCTIONS_ID;
 		}
 		if (BOOLEAN_KEYWORDS.contains(tokenName)) {
+			return HighlightingStyles.NUMBER_ID;
+		}
+		if (RULE_TIME_PART.equals(tokenName)) {
 			return HighlightingStyles.NUMBER_ID;
 		}
 		return super.calculateId(tokenName, tokenType);

@@ -2343,16 +2343,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getErrorMarkerFBNElement_RepairedElement() {
-		return (EReference)errorMarkerFBNElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getErrorMarkerInterface() {
 		return errorMarkerInterfaceEClass;
 	}
@@ -4601,7 +4591,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		errorLibraryElementEClass = createEClass(ERROR_LIBRARY_ELEMENT);
 
 		errorMarkerFBNElementEClass = createEClass(ERROR_MARKER_FBN_ELEMENT);
-		createEReference(errorMarkerFBNElementEClass, ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT);
 
 		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
 		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__VALUE);
@@ -5591,7 +5580,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(errorLibraryElementEClass, ErrorLibraryElement.class, "ErrorLibraryElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getErrorMarkerFBNElement_RepairedElement(), this.getFBNetworkElement(), null, "repairedElement", null, 0, 1, ErrorMarkerFBNElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(errorMarkerFBNElementEClass, theXMLTypePackage.getDouble(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -5881,6 +5869,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(iInterfaceElementEClass, this.getIInterfaceElement(), "findInTypeInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(iInterfaceElementEClass, this.getStringList(), "getBlockRelativePath", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iInterfaceElementEClass, theXMLTypePackage.getBoolean(), "isMemberAccessPin", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(importEClass, Import.class, "Import", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getImport_ImportedNamespace(), theXMLTypePackage.getString(), "importedNamespace", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

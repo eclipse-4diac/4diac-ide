@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - disable if only one connection is selected
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -37,8 +38,9 @@ public class NewCommentHandler extends AbstractContainerElementHandler {
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		boolean enabled = false;
 		if (sel instanceof final StructuredSelection selection) {
-			enabled = createNewEmptyContainerElement(selection);
+			enabled = isBackgroundSelected(selection);
 		}
 		setBaseEnabled(enabled);
 	}
+
 }

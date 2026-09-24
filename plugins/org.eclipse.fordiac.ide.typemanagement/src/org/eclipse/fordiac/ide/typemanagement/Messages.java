@@ -14,6 +14,7 @@
  *     - Externalized all translatable strings
  *   Martin Jobst
  *     - add strings for Build Path property page
+ *   Michael Oberlehner - add struct member refactoring
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.typemanagement;
@@ -27,6 +28,34 @@ public final class Messages extends NLS {
 	public static String AbstractCommandChange_CannotExecuteCommand;
 
 	public static String AbstractCommandChange_NoSuchElement;
+	public static String AddStructMemberRefactoring_AddMemberChange;
+	public static String AddStructMemberRefactoring_CannotConnect;
+	public static String AddStructMemberRefactoring_ChangeName;
+	public static String AddStructMemberRefactoring_DuplicateName;
+	public static String AddStructMemberRefactoring_GenericType;
+	public static String AddStructMemberRefactoring_IncompatibleType;
+	public static String AddStructMemberRefactoring_InvalidContext;
+	public static String AddStructMemberRefactoring_InvalidName;
+	public static String AddStructMemberRefactoring_InvalidPosition;
+	public static String AddStructMemberRefactoring_MissingType;
+	public static String AddStructMemberRefactoring_ModelChanged;
+	public static String AddStructMemberRefactoring_MultipleUsesWarning;
+	public static String AddStructMemberRefactoring_Name;
+	public static String AddStructMemberRefactoring_RecursiveType;
+	public static String AddStructMemberRefactoring_StructReadOnly;
+	public static String AddStructMemberRefactoring_TargetReadOnly;
+	public static String AddStructMemberRefactoring_UIError;
+	public static String AddStructMemberWizardPage_Append;
+	public static String AddStructMemberWizardPage_Before;
+	public static String AddStructMemberWizardPage_Comment;
+	public static String AddStructMemberWizardPage_Description;
+	public static String AddStructMemberWizardPage_Name;
+	public static String AddStructMemberWizardPage_Position;
+	public static String AddStructMemberWizardPage_SelectType;
+	public static String AddStructMemberWizardPage_SelectTypeMessage;
+	public static String AddStructMemberWizardPage_SelectTypeTitle;
+	public static String AddStructMemberWizardPage_Title;
+	public static String AddStructMemberWizardPage_Type;
 
 	public static String AttributeValueChange_AttributeValueChanged;
 
@@ -219,6 +248,8 @@ public final class Messages extends NLS {
 	public static String PreviewChange_ReplaceWithMarker;
 
 	public static String SafeStructDeletionChange_RootNodeChangeText;
+
+	public static String TypeFromTemplateCreator_TemplateErrors;
 
 	public static String UpdateUntypedSubappPinChange_0;
 	public static String UpdateFBInstances;

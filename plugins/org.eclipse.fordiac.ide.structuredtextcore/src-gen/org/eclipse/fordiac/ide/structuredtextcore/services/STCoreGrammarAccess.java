@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
- *                          Martin Erich Jobst
+ * Copyright (c) 2021 Primetals Technologies GmbH,
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -3508,13 +3508,17 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
 		private final Keyword cPlusSignKeyword_0_0 = (Keyword)cAlternatives_0.eContents().get(0);
 		private final Keyword cHyphenMinusKeyword_0_1 = (Keyword)cAlternatives_0.eContents().get(1);
-		private final RuleCall cTIME_VALUETerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
+		private final RuleCall cTIME_PARTTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final RuleCall cINTTerminalRuleCall_2_0 = (RuleCall)cGroup_2.eContents().get(0);
+		private final Keyword cFullStopKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final RuleCall cTIME_PARTTerminalRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		
 		//Time returns STTime hidden():
-		//    ('+' | '-')? TIME_VALUE;
+		//    ('+' | '-')? TIME_PART* (INT '.')? TIME_PART;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//('+' | '-')? TIME_VALUE
+		//('+' | '-')? TIME_PART* (INT '.')? TIME_PART
 		public Group getGroup() { return cGroup; }
 		
 		//('+' | '-')?
@@ -3526,8 +3530,20 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'-'
 		public Keyword getHyphenMinusKeyword_0_1() { return cHyphenMinusKeyword_0_1; }
 		
-		//TIME_VALUE
-		public RuleCall getTIME_VALUETerminalRuleCall_1() { return cTIME_VALUETerminalRuleCall_1; }
+		//TIME_PART*
+		public RuleCall getTIME_PARTTerminalRuleCall_1() { return cTIME_PARTTerminalRuleCall_1; }
+		
+		//(INT '.')?
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_2_0() { return cINTTerminalRuleCall_2_0; }
+		
+		//'.'
+		public Keyword getFullStopKeyword_2_1() { return cFullStopKeyword_2_1; }
+		
+		//TIME_PART
+		public RuleCall getTIME_PARTTerminalRuleCall_3() { return cTIME_PARTTerminalRuleCall_3; }
 	}
 	public class DateElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Date");
@@ -4403,8 +4419,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final TerminalRule tNON_DECIMAL;
 	private final TerminalRule tINT;
 	private final TerminalRule tDECIMAL;
-	private final TerminalRule tTIME_VALUE;
 	private final TerminalRule tTIME_PART;
+	private final TerminalRule tTIME_UNIT;
 	private final TerminalRule tTIME_DAYS;
 	private final TerminalRule tTIME_HOURS;
 	private final TerminalRule tTIME_MINUTES;
@@ -4532,8 +4548,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.tNON_DECIMAL = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
 		this.tINT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.INT");
 		this.tDECIMAL = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.DECIMAL");
-		this.tTIME_VALUE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_VALUE");
 		this.tTIME_PART = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_PART");
+		this.tTIME_UNIT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_UNIT");
 		this.tTIME_DAYS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_DAYS");
 		this.tTIME_HOURS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_HOURS");
 		this.tTIME_MINUTES = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_MINUTES");
@@ -5619,7 +5635,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//Time returns STTime hidden():
-	//    ('+' | '-')? TIME_VALUE;
+	//    ('+' | '-')? TIME_PART* (INT '.')? TIME_PART;
 	public TimeElements getTimeAccess() {
 		return pTime;
 	}
@@ -5710,16 +5726,16 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return tDECIMAL;
 	}
 	
-	//terminal TIME_VALUE:
-	//    (TIME_PART ('_')?)+;
-	public TerminalRule getTIME_VALUERule() {
-		return tTIME_VALUE;
-	}
-	
-	//terminal fragment TIME_PART:
-	//    INT (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+	//terminal TIME_PART:
+	//    INT TIME_UNIT '_'?;
 	public TerminalRule getTIME_PARTRule() {
 		return tTIME_PART;
+	}
+	
+	//terminal fragment TIME_UNIT:
+	//    TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS;
+	public TerminalRule getTIME_UNITRule() {
+		return tTIME_UNIT;
 	}
 	
 	//terminal fragment TIME_DAYS:

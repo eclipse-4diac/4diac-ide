@@ -23,14 +23,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
-import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
-import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -47,23 +41,6 @@ public class FBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<FBType> impl
 
 	public FBTypeEntryImpl() {
 		super(FBType.class);
-	}
-
-	@Override
-	protected BlockTypeImporter getImporter() {
-		return new FBTImporter(getFile());
-	}
-
-	@Override
-	protected ErrorFBType createErrorLibraryElement() {
-		final ErrorFBType type = LibraryElementFactory.eINSTANCE.createErrorFBType();
-		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		return type;
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final FBType type) {
-		return new FbtExporter(type);
 	}
 
 	@Override

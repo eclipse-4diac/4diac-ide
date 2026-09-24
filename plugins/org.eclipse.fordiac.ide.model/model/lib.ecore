@@ -1135,7 +1135,6 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="repairedElement" eType="#//FBNetworkElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement">
     <eOperations name="validateValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -1735,6 +1734,11 @@
     <eOperations name="getBlockRelativePath" lowerBound="1" eType="#//StringList">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isMemberAccessPin" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return this instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration &amp;&amp; eContainer() instanceof org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInput" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>

@@ -23,15 +23,9 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
-import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
-import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -41,23 +35,6 @@ public class AdapterTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<Adapter
 
 	public AdapterTypeEntryImpl() {
 		super(AdapterType.class);
-	}
-
-	@Override
-	protected BlockTypeImporter getImporter() {
-		return new ADPImporter(getFile());
-	}
-
-	@Override
-	protected ErrorAdapterType createErrorLibraryElement() {
-		final ErrorAdapterType type = LibraryElementFactory.eINSTANCE.createErrorAdapterType();
-		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		return type;
-	}
-
-	@Override
-	protected AbstractTypeExporter getTypeExporter(final AdapterType type) {
-		return new AdapterExporter(type);
 	}
 
 	@Override
