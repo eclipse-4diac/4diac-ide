@@ -165,6 +165,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="SHIFT+ALT+R">
       </key>
+      <key
+            commandId="org.eclipse.fordiac.ide.typemanagement.addStructMember"
+            contextId="org.eclipse.fordiac.ide.gef"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="SHIFT+ALT+M">
+      </key>
    </extension>
    <extension point="org.eclipse.ui.handlers">
     	<handler
