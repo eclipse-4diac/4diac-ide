@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2014, 2026 fortiss GmbH, Aimirim STI
+ * Copyright (c) 2014 fortiss GmbH, Aimirim STI
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,7 +11,6 @@
  *  Waldemar Eisenmenger
  *    - initial API and implementation and/or initial documentation
  *  Daniel Lindhuber - Added system type file ending
- *  Zijun Tang - Added RevisionNo attribute tags
  *  Pedro Ricardo - Added SupportedProfiles attribute tags
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
@@ -88,9 +87,6 @@ public final class TypeLibraryTags {
 
 	public static final String SUPPORTED_PROFILES_ATTRIBUTE_NAME = "SupportedProfiles"; //$NON-NLS-1$
 	public static final String SUPPORTED_PROFILES_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::SupportedProfiles"; //$NON-NLS-1$
-
-	public static final String REVISION_NO_ATTRIBUTE_NAME = "RevisionNo"; //$NON-NLS-1$
-	public static final String REVISION_NO_ATTRIBUTE_FULL_NAME = "eclipse4diac::io::ethercat::RevisionNo"; //$NON-NLS-1$
 
 	private TypeLibraryTags() {
 		throw new UnsupportedOperationException("Helper class TypeLibraryTags can not be instantiated."); //$NON-NLS-1$
