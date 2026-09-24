@@ -16,7 +16,9 @@ package org.eclipse.fordiac.ide.library.model.util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Iterator;
@@ -34,6 +36,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.fordiac.ide.library.model.library.Attribute;
+import org.eclipse.fordiac.ide.library.model.library.Library;
+import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryFactory;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Product;
@@ -123,7 +128,7 @@ public final class ManifestHelper {
 			if (it.hasNext()) {
 				return getManifest(it.next());
 			}
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			// empty
 		}
 		return null;
@@ -181,7 +186,7 @@ public final class ManifestHelper {
 					return manifest;
 				}
 			}
-		} catch (final CoreException e) {
+		} catch (final CoreException _) {
 			// do nothing
 		}
 		return null;
@@ -229,7 +234,7 @@ public final class ManifestHelper {
 		}
 		try {
 			return new Version(manifest.getProduct().getVersionInfo().getVersion());
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException _) {
 			return defaultValue;
 		}
 	}
@@ -281,9 +286,9 @@ public final class ManifestHelper {
 
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //$NON-NLS-1$
 		final VersionInfo versionInfo = factory.createVersionInfo();
-		versionInfo.setAuthor(""); //$NON-NLS-1$
+		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
 		versionInfo.setVersion(BASE_VERSION);
-		versionInfo.setDate(formatter.format(LocalDate.now()));
+		versionInfo.setDate(formatter.format(LocalDate.now(ZoneId.systemDefault())));
 
 		final Product product = factory.createProduct();
 		product.setVersionInfo(versionInfo);
@@ -431,7 +436,7 @@ public final class ManifestHelper {
 	public static boolean saveManifest(final Manifest manifest) {
 		try {
 			manifest.eResource().save(null);
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			return false;
 		}
 		return true;
@@ -469,6 +474,35 @@ public final class ManifestHelper {
 		return required;
 	}
 
+	public static Library createExportLibrary(final Manifest manifest) {
+		if (manifest.getExports() == null) {
+			manifest.setExports(factory.createExports());
+		}
+
+		final var lib = factory.createLibrary();
+		lib.setExcludes(factory.createExcludes());
+		lib.setIncludes(factory.createIncludes());
+		lib.setDependencies(factory.createDependencies());
+		lib.setSymbolicName(MessageFormat.format("lib{0}", Integer.valueOf(manifest.getExports().getLibrary().size()))); //$NON-NLS-1$
+
+		return lib;
+	}
+
+	public static LibraryElement createPattern(final String pattern) {
+		final var exclude = factory.createLibraryElement();
+		exclude.setValue(pattern);
+		return exclude;
+	}
+
+	public static Attribute createAttribute(final String name) {
+		final var attribute = factory.createAttribute();
+		attribute.setName(name);
+		attribute.setType(""); //$NON-NLS-1$
+		attribute.setValue(""); //$NON-NLS-1$
+		attribute.setComment(""); //$NON-NLS-1$
+		return attribute;
+	}
+
 	/**
 	 * Checks if given project has the Fordiac project nature
 	 *
@@ -478,7 +512,7 @@ public final class ManifestHelper {
 	private static boolean isFordiacProject(final IProject project) {
 		try {
 			return project.getNature(FORDIAC_PROJECT_NATURE_ID) != null;
-		} catch (final CoreException e) {
+		} catch (final CoreException _) {
 			// empty
 		}
 		return false;
