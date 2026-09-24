@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DataType Name="ECModuleConfig" Comment="A Template for a Data Type">
+<DataType Name="ECModuleConfig" Comment="Identification of a module on a modular EtherCAT slave">
 	<Identification Description="Copyright (c) 2026 Sichuan Qunyuan Technology Co., Ltd.&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
 	<VersionInfo Version="1.0" Author="Zijun Tang" Date="2026-04-14">
@@ -7,7 +7,7 @@
 	<CompilerInfo packageName="eclipse4diac::io::ethercat">
 	</CompilerInfo>
 	<StructuredType>
-		<VarDeclaration Name="ModuleIdent" Type="UDINT"/>
-		<VarDeclaration Name="Slot" Type="UINT"/>
+		<VarDeclaration Name="ModuleIdent" Type="UDINT" Comment="ESI Modules/Module Type/@ModuleIdent"/>
+		<VarDeclaration Name="Slot" Type="UINT" Comment="Slot index on the modular device"/>
 	</StructuredType>
 </DataType>
