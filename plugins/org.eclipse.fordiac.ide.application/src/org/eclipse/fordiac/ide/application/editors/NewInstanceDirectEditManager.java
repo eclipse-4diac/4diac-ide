@@ -205,11 +205,12 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 
 		final SnapToHelper helper = getEditPart().getAdapter(SnapToHelper.class);
 		if (helper != null) {
-			getEditPart().getFigure().translateToAbsolute(point);
+final IFigure contentPane = getEditPart().getContentPane();
+			contentPane.translateToAbsolute(point);
 			final PrecisionPoint preciseLocation = new PrecisionPoint(point);
 			final PrecisionPoint result = new PrecisionPoint(point);
 			helper.snapPoint(null, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation, result);
-			getEditPart().getFigure().translateToRelative(result);
+			contentPane.translateToRelative(result);
 			return result;
 		}
 
