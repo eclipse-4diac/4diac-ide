@@ -28,7 +28,9 @@ import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -41,6 +43,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class TrimHandler extends AbstractHandler {
 
+	private static final int PADDING = 10;
+
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IContainerEditPart containerEditPart = getContainerEditPart(HandlerUtil.getCurrentSelection(event));
@@ -50,12 +54,28 @@ public class TrimHandler extends AbstractHandler {
 			final GraphicalEditPart contentEP = containerEditPart.getContentEP();
 
 			if (contentEP != null) {
-				final Rectangle groupContentBounds = containerEditPart.getMinContentBounds();
+				final Rectangle containerBounds = containerEditPart.getFigure().getBounds();
+				final Rectangle contentBounds = containerEditPart.getContentEP().getFigure().getBounds();
+				final Rectangle minContentBounds = containerEditPart.getMinContentBounds();
+
+				// consider nested container positions
+				if (containerEditPart.getModel() instanceof final PositionableElement posElem) {
+					containerBounds.setLocation(CoordinateConverter.INSTANCE.toScreenPoint(posElem.getPosition()));
+				}
+
+				// add container border & padding to min bounds
+				minContentBounds.x += containerBounds.x - contentBounds.x;
+				minContentBounds.y += containerBounds.y - contentBounds.y;
+				minContentBounds.width += containerBounds.width - contentBounds.width;
+				minContentBounds.height += containerBounds.height - contentBounds.height;
+				minContentBounds.expand(PADDING * 2, PADDING * 2);
+
 				final int adjustedCommentWidth = adjustCommentWidth(containerEditPart.getCommentWidth(),
 						containerEditPart.getChildren());
-				groupContentBounds.setWidth(Math.max(groupContentBounds.width, adjustedCommentWidth));
+				minContentBounds.setWidth(Math.max(minContentBounds.width, adjustedCommentWidth));
+
 				final Command cmd = FBNetworkXYLayoutEditPolicy
-						.createChangeBoundsCommand((FBNetworkElement) containerEditPart.getModel(), groupContentBounds);
+						.createChangeBoundsCommand((FBNetworkElement) containerEditPart.getModel(), minContentBounds);
 				getCommandStack(editor).execute(cmd);
 			}
 		}
