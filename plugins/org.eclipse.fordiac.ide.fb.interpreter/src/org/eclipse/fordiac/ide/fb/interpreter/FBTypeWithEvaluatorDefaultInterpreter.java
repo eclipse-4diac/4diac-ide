@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
@@ -97,19 +98,21 @@ public class FBTypeWithEvaluatorDefaultInterpreter {
 
 		final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
 		executor.setMonotonicClock(clock);
+		final Future<?> future = executor.submit(() -> {
+			try {
+				eval.evaluate();
+				getEvaluatorOutputState(eval, varDecls);
+			} catch (final EvaluatorException e) {
+				t.getExceptions().add(e);
+			} catch (final InterruptedException e) {
+				t.getExceptions().add(e);
+				Thread.currentThread().interrupt();
+			}
+		});
 		try {
-			executor.submit(() -> {
-				try {
-					eval.evaluate();
-					getEvaluatorOutputState(eval, varDecls);
-				} catch (final EvaluatorException e) {
-					t.getExceptions().add(e);
-				} catch (final InterruptedException e) {
-					t.getExceptions().add(e);
-					Thread.currentThread().interrupt();
-				}
-			}).get();
+			future.get();
 		} catch (final InterruptedException e) {
+			future.cancel(true);
 			t.getExceptions().add(e);
 			Thread.currentThread().interrupt();
 		} catch (final ExecutionException e) {
