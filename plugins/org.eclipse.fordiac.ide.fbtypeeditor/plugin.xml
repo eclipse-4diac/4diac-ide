@@ -18,7 +18,7 @@
             extensions="fbt, fct, adp"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor"
-            name="FBTypeEditor"
+            name="%editor.fbTypeEditor.name"
             default="true"
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy">
       </editor>
@@ -70,25 +70,25 @@
                category="fb"
                id="property.tab.fbtypeinfo"
                image="fordiacimage://ICON_FB_TYPE"
-               label="Type Info">
+               label="%propertyTab.fbTypeInfo.label">
          </propertyTab>
          <propertyTab
                category="interface"
                id="property.tab.adapter"
                image="fordiacimage://ICON_ADAPTER_LIST"
-               label="Adapter">
+               label="%propertyTab.adapter.label">
          </propertyTab>
          <propertyTab
                category="interface"
                id="property.tab.event"
                image="fordiacimage://ICON_EVENT"
-               label="Event">
+               label="%propertyTab.event.label">
          </propertyTab>
          <propertyTab
                category="interface"
                id="property.tab.data"
                image="fordiacimage://ICON_DATA"
-               label="Data">
+               label="%propertyTab.data.label">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.fbtypeinfo"
@@ -96,7 +96,7 @@
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents"
                image="fordiacimage://ICON_EVENT"
                indented="true"
-               label="Event In- &amp; Outputs">
+               label="%propertyTab.editEvents.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents"
@@ -104,14 +104,14 @@
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
                image="fordiacimage://ICON_DATA"
                indented="true"
-               label="Var In- &amp; Outputs">
+               label="%propertyTab.editData.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData"
                category="fb"
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditVarInOut"
                indented="true"
-               label="Var InOuts">
+               label="%propertyTab.editVarInOut.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditVarInOut"
@@ -119,7 +119,7 @@
                id="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditAdapters"
                image="fordiacimage://ICON_ADAPTER_LIST"
                indented="true"
-               label="Plugs &amp; Sockets">
+               label="%propertyTab.editAdapters.label">
          </propertyTab>
       </propertyTabs>
    </extension>
