@@ -72,7 +72,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	public void createPartControl(final Composite parent) {
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(parent);
 
-		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.VERTICAL);
+		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.HORIZONTAL);
 		final ToolBar toolbarControl = toolBarManager.createControl(parent);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarControl);
 		menuService = getSite().getService(IMenuService.class);
