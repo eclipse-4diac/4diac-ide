@@ -8,7 +8,7 @@
             class="org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor"
             icon="fordiacimage://ICON_BULK_EDITOR"
             id="org.eclipse.fordiac.ide.bulkeditor.BulkEditor"
-            name="Bulk Editor">
+            name="%BulkEditor">
       </editor>
 	</extension>
 	
@@ -55,11 +55,11 @@
 	
 	<extension point="org.eclipse.ui.commands">
 	    <command
-	    	name="OpenBulkEditorCommand"
+	    	name="%command.openBulkEditor.name"
 	        id="org.eclipse.fordiac.ide.bulkeditor.editors.openEditor"
 	        defaultHandler="org.eclipse.fordiac.ide.bulkeditor.handler.OpenBulkEditorHandler"/>
 	    <command
-	    	name="FindElementCommand"
+	    	name="%command.findElement.name"
 	        id="org.eclipse.fordiac.ide.bulkeditor.gotoElementCommand"/>
 	</extension>
 	
@@ -88,7 +88,7 @@
   	
   	<extension point="org.eclipse.ui.themes">
   	<fontDefinition
-                label="Diagram Font"
+                label="%font.queryHeader.label"
                 categoryId="org.eclipse.fordiac.ide.themeCategory"
                 id="org.eclipse.fordiac.ide.bulkeditor.query.headerFont">
             <fontValue
