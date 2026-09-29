@@ -25,3 +25,4 @@ Export-Package: org.eclipse.fordiac.ide.contractspec.ui.internal,
  org.eclipse.fordiac.ide.ui.quickfix,
  org.eclipse.fordiac.ide.ui.utils
 Bundle-Activator: org.eclipse.fordiac.ide.contractspec.ui.internal.ContractspecActivator
+Bundle-Localization: plugin
