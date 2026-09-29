@@ -6,6 +6,7 @@ Bundle-Version: 3.3.100.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.contracts
 Bundle-RequiredExecutionEnvironment: JavaSE-25
+Bundle-Localization: plugin
 Export-Package: org.eclipse.fordiac.ide.contracts
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model,
