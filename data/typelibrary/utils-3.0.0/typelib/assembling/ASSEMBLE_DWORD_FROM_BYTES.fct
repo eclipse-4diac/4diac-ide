@@ -2,6 +2,8 @@
 <Function Name="ASSEMBLE_DWORD_FROM_BYTES" Comment="this Function combines the 4 BYTES to a DWORD">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024, 2025 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Version="3.0.2" Author="Martin Jobst" Date="2026-09-29" Remarks="fix ST package declaration">
+	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik" Version="3.0.1" Author="Franz Höpfinger" Date="2025-12-21" Remarks="fix 2 --&gt; 4">
 	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
@@ -37,7 +39,9 @@
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[(* this Function combines the 4 BYTES to a DWORD *)
+		<ST><![CDATA[PACKAGE eclipse4diac::utils::assembling;
+
+(* this Function combines the 4 BYTES to a DWORD *)
 FUNCTION ASSEMBLE_DWORD_FROM_BYTES : DWORD
 
 VAR_INPUT

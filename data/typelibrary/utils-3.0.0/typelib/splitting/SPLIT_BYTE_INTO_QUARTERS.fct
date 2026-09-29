@@ -9,6 +9,7 @@
 	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2024-02-22" Remarks="initial Implementation">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::utils::splitting">
+		<Import declaration="eclipse4diac::utils::const::quarterconst"/>
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -35,7 +36,11 @@
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[(* this Function extracts the 4 QUARTER BYTE from a byte *)
+		<ST><![CDATA[PACKAGE eclipse4diac::utils::splitting;
+
+IMPORT eclipse4diac::utils::const::quarterconst;
+
+(* this Function extracts the 4 QUARTER BYTE from a byte *)
 FUNCTION SPLIT_BYTE_INTO_QUARTERS
 
 VAR_INPUT
