@@ -2,6 +2,8 @@
 <Function Name="SPLIT_WORD_INTO_BYTES" Comment="this Function extracts the 2 BYTE from a word">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Version="3.0.1" Author="Martin Jobst" Date="2026-09-29" Remarks="fix ST package declaration">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik" Version="1.1" Author="Moritz Ortmeier" Date="2024-07-24" Remarks="rename Function and change Output Variables">
@@ -12,26 +14,28 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event">
 				<With Var="BYTE_00"/>
 				<With Var="BYTE_01"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
+			<VarDeclaration Name="IN" Type="WORD"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="BYTE_00" Type="BYTE" Comment=""/>
-			<VarDeclaration Name="BYTE_01" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_00" Type="BYTE"/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[(* this Function extracts the 2 BYTE from a word *)
+		<ST><![CDATA[PACKAGE eclipse4diac::utils::splitting;
+
+(* this Function extracts the 2 BYTE from a word *)
 FUNCTION SPLIT_WORD_INTO_BYTES
 
 VAR_INPUT

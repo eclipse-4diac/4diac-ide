@@ -2,6 +2,8 @@
 <Function Name="SPLIT_LWORD_INTO_BOOLS" Comment="this Function extracts the 64 BOOLS from a lword">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Version="3.0.1" Author="Martin Jobst" Date="2026-09-29" Remarks="fix ST package declaration">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik" Version="1.1" Author="Moritz Ortmeier" Date="2024-07-24" Remarks="rename Function and change Output Variables">
@@ -12,12 +14,12 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event">
 				<With Var="BIT_00"/>
 				<With Var="BIT_01"/>
 				<With Var="BIT_02"/>
@@ -85,77 +87,79 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="LWORD" Comment=""/>
+			<VarDeclaration Name="IN" Type="LWORD"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="BIT_00" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_01" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_02" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_03" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_04" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_05" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_06" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_07" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_08" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_09" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_10" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_11" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_12" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_13" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_14" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_15" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_16" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_17" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_18" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_19" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_20" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_21" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_22" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_23" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_24" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_25" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_26" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_27" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_28" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_29" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_30" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_31" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_32" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_33" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_34" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_35" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_36" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_37" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_38" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_39" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_40" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_41" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_42" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_43" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_44" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_45" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_46" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_47" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_48" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_49" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_50" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_51" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_52" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_53" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_54" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_55" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_56" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_57" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_58" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_59" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_60" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_61" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_62" Type="BOOL" Comment=""/>
-			<VarDeclaration Name="BIT_63" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="BIT_00" Type="BOOL"/>
+			<VarDeclaration Name="BIT_01" Type="BOOL"/>
+			<VarDeclaration Name="BIT_02" Type="BOOL"/>
+			<VarDeclaration Name="BIT_03" Type="BOOL"/>
+			<VarDeclaration Name="BIT_04" Type="BOOL"/>
+			<VarDeclaration Name="BIT_05" Type="BOOL"/>
+			<VarDeclaration Name="BIT_06" Type="BOOL"/>
+			<VarDeclaration Name="BIT_07" Type="BOOL"/>
+			<VarDeclaration Name="BIT_08" Type="BOOL"/>
+			<VarDeclaration Name="BIT_09" Type="BOOL"/>
+			<VarDeclaration Name="BIT_10" Type="BOOL"/>
+			<VarDeclaration Name="BIT_11" Type="BOOL"/>
+			<VarDeclaration Name="BIT_12" Type="BOOL"/>
+			<VarDeclaration Name="BIT_13" Type="BOOL"/>
+			<VarDeclaration Name="BIT_14" Type="BOOL"/>
+			<VarDeclaration Name="BIT_15" Type="BOOL"/>
+			<VarDeclaration Name="BIT_16" Type="BOOL"/>
+			<VarDeclaration Name="BIT_17" Type="BOOL"/>
+			<VarDeclaration Name="BIT_18" Type="BOOL"/>
+			<VarDeclaration Name="BIT_19" Type="BOOL"/>
+			<VarDeclaration Name="BIT_20" Type="BOOL"/>
+			<VarDeclaration Name="BIT_21" Type="BOOL"/>
+			<VarDeclaration Name="BIT_22" Type="BOOL"/>
+			<VarDeclaration Name="BIT_23" Type="BOOL"/>
+			<VarDeclaration Name="BIT_24" Type="BOOL"/>
+			<VarDeclaration Name="BIT_25" Type="BOOL"/>
+			<VarDeclaration Name="BIT_26" Type="BOOL"/>
+			<VarDeclaration Name="BIT_27" Type="BOOL"/>
+			<VarDeclaration Name="BIT_28" Type="BOOL"/>
+			<VarDeclaration Name="BIT_29" Type="BOOL"/>
+			<VarDeclaration Name="BIT_30" Type="BOOL"/>
+			<VarDeclaration Name="BIT_31" Type="BOOL"/>
+			<VarDeclaration Name="BIT_32" Type="BOOL"/>
+			<VarDeclaration Name="BIT_33" Type="BOOL"/>
+			<VarDeclaration Name="BIT_34" Type="BOOL"/>
+			<VarDeclaration Name="BIT_35" Type="BOOL"/>
+			<VarDeclaration Name="BIT_36" Type="BOOL"/>
+			<VarDeclaration Name="BIT_37" Type="BOOL"/>
+			<VarDeclaration Name="BIT_38" Type="BOOL"/>
+			<VarDeclaration Name="BIT_39" Type="BOOL"/>
+			<VarDeclaration Name="BIT_40" Type="BOOL"/>
+			<VarDeclaration Name="BIT_41" Type="BOOL"/>
+			<VarDeclaration Name="BIT_42" Type="BOOL"/>
+			<VarDeclaration Name="BIT_43" Type="BOOL"/>
+			<VarDeclaration Name="BIT_44" Type="BOOL"/>
+			<VarDeclaration Name="BIT_45" Type="BOOL"/>
+			<VarDeclaration Name="BIT_46" Type="BOOL"/>
+			<VarDeclaration Name="BIT_47" Type="BOOL"/>
+			<VarDeclaration Name="BIT_48" Type="BOOL"/>
+			<VarDeclaration Name="BIT_49" Type="BOOL"/>
+			<VarDeclaration Name="BIT_50" Type="BOOL"/>
+			<VarDeclaration Name="BIT_51" Type="BOOL"/>
+			<VarDeclaration Name="BIT_52" Type="BOOL"/>
+			<VarDeclaration Name="BIT_53" Type="BOOL"/>
+			<VarDeclaration Name="BIT_54" Type="BOOL"/>
+			<VarDeclaration Name="BIT_55" Type="BOOL"/>
+			<VarDeclaration Name="BIT_56" Type="BOOL"/>
+			<VarDeclaration Name="BIT_57" Type="BOOL"/>
+			<VarDeclaration Name="BIT_58" Type="BOOL"/>
+			<VarDeclaration Name="BIT_59" Type="BOOL"/>
+			<VarDeclaration Name="BIT_60" Type="BOOL"/>
+			<VarDeclaration Name="BIT_61" Type="BOOL"/>
+			<VarDeclaration Name="BIT_62" Type="BOOL"/>
+			<VarDeclaration Name="BIT_63" Type="BOOL"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[(* this Function extracts the 64 BOOLS from a lword *)
+		<ST><![CDATA[PACKAGE eclipse4diac::utils::splitting;
+
+(* this Function extracts the 64 BOOLS from a lword *)
 FUNCTION SPLIT_LWORD_INTO_BOOLS
 
 VAR_INPUT
