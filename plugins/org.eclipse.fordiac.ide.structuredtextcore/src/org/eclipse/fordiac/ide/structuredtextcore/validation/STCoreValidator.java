@@ -77,6 +77,7 @@ import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
@@ -196,6 +197,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNUSED_IMPORT = ISSUE_CODE_PREFIX + "unusedImport"; //$NON-NLS-1$
 	public static final String DUPLICATE_ATTRIBUTE = ISSUE_CODE_PREFIX + "duplicateAttribute"; //$NON-NLS-1$
 	public static final String PACKAGE_NAME_MISMATCH = ISSUE_CODE_PREFIX + "packageNameMismatch"; //$NON-NLS-1$
+	public static final String PACKAGE_NAME_TYPE_MISMATCH = ISSUE_CODE_PREFIX + "packageNameTypeMismatch"; //$NON-NLS-1$
 	public static final String UNUSED_VARIABLE = ISSUE_CODE_PREFIX + "unusedVariable"; //$NON-NLS-1$
 	public static final String UNREAD_VARIABLE = ISSUE_CODE_PREFIX + "unreadVariable"; //$NON-NLS-1$
 	public static final String UNWRITTEN_VARIABLE = ISSUE_CODE_PREFIX + "unwrittenVariable"; //$NON-NLS-1$
@@ -988,11 +990,23 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	protected void checkPackageDeclaration(final STSource source, final EStructuralFeature feature,
 			final String packageName) {
 		final Resource resource = source.eResource();
+		if (resource instanceof final STCoreResource coreResource && coreResource.getInternalLibraryElement() != null) {
+			final String expectedPackageName = PackageNameHelper
+					.getPackageName(coreResource.getInternalLibraryElement());
+			if (!Objects.requireNonNullElse(packageName, "").equals(expectedPackageName)) { //$NON-NLS-1$
+				error(MessageFormat.format(Messages.STCoreValidator_PackageNameTypeMismatch,
+						Objects.requireNonNullElse(packageName, ""), expectedPackageName), source, feature, //$NON-NLS-1$
+						PACKAGE_NAME_TYPE_MISMATCH, expectedPackageName);
+				return; // avoid duplicate errors
+			}
+		}
 		if (resource != null) {
 			final String expectedPackageName = PackageNameHelper.getPackageNameFromURI(resource.getURI());
 			if (!Objects.requireNonNullElse(packageName, "").equals(expectedPackageName)) { //$NON-NLS-1$
-				addIssue(MessageFormat.format(Messages.STCoreValidator_PackageNameMismatch, packageName,
-						expectedPackageName), source, feature, PACKAGE_NAME_MISMATCH, expectedPackageName);
+				addIssue(
+						MessageFormat.format(Messages.STCoreValidator_PackageNameMismatch,
+								Objects.requireNonNullElse(packageName, ""), expectedPackageName), //$NON-NLS-1$
+						source, feature, PACKAGE_NAME_MISMATCH, expectedPackageName);
 			}
 		}
 	}
