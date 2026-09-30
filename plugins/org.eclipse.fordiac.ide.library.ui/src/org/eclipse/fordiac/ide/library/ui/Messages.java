@@ -121,6 +121,9 @@ public class Messages extends NLS {
 	public static String LibraryExporter_Browse;
 	public static String LibraryExporter_BrowseText;
 	public static String LibraryExporter_BrowseMessage;
+	public static String LibraryExporter_ErrorTitle;
+	public static String LibraryExporter_ErrorMessage;
+	public static String LibraryExporter_ExportingLibrary;
 	public static String LibraryExporter_TypeSelection;
 	public static String LibraryExporter_UseIncludeExclude;
 	public static String LibraryExporter_ExportAllTypes;

@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.eclipse.fordiac.ide.library.export.LibraryExporter.TypeSelection;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -39,10 +40,6 @@ public class LibrarySelectionPage extends WizardPage {
 
 	private static final int SYMBOLIC_NAME_COLUMN_WIDTH = 300;
 	private static final int NAME_COLUMN_WIDTH = 300;
-
-	private enum TypeSelection {
-		ALL_TYPES, INCLUDE_EXCLUDE_PATTERNS
-	}
 
 	private final Collection<Library> libraries;
 
