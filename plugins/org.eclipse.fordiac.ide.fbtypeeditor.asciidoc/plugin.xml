@@ -24,9 +24,7 @@
   </extension>
   <extension point="org.eclipse.mylyn.wikitext.ui.contentAssist">
     <templates markupLanguage="AsciiDoc">
-
        <template name="fbt" description="%template.fbt.macro" content="fbt:${text}[${param}] $"/>
-
      </templates>
   </extension>
 
@@ -51,6 +49,15 @@
         optional="false">
       </commandParameter>
     </command>
+    <command
+      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+      name="%command.headings">
+      <commandParameter
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level"
+        name="%command.parameter.headingLevel"
+        optional="false">
+      </commandParameter>
+    </command>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
@@ -62,11 +69,23 @@
       class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.ListFormatHandler"
       commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list">
     </handler>
+    <handler
+      class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.HeadingHandler"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading">
+    </handler>
   </extension>
 
   <extension point="org.eclipse.ui.menus">
     <menuContribution
       locationURI="toolbar:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar">
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        icon="icons/heading.svg"
+        label="%toolbar.headings.label"
+        tooltip="%toolbar.headings.tooltip"
+        style="pulldown">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="==" />
+      </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
         icon="icons/bold.svg"
@@ -122,6 +141,46 @@
         tooltip="%toolbar.orderedList.tooltip"
         style="push">
         <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list.prefix" value="." />
+      </command>
+    </menuContribution>
+    <!-- Dropdown content for headings -->
+    <menuContribution
+      locationURI="menu:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading">
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        label="%toolbar.heading0.label"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="=" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        label="%toolbar.heading1.label"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="==" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        label="%toolbar.heading2.label"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="===" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        label="%toolbar.heading3.label"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="====" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        label="%toolbar.heading4.label"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="=====" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        label="%toolbar.heading5.label"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="======" />
       </command>
     </menuContribution>
   </extension>
