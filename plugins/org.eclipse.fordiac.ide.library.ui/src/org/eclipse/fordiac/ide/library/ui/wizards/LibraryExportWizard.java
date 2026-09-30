@@ -12,13 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.fordiac.ide.library.export.LibraryExporter;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
@@ -34,7 +38,25 @@ public class LibraryExportWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
-		return false;
+		final LibraryExporter exporter = new LibraryExporter(selectionPage.getOutputDirectory(),
+				selectionPage.getTypeSelection(), selectionPage.getSelectedLibrary(), version, project);
+
+		try {
+			getContainer().run(true, true, progress -> {
+				try {
+					exporter.export(progress);
+				} catch (final IOException e) {
+					throw new InvocationTargetException(e);
+				}
+			});
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			return false;
+		} catch (final InterruptedException _) {
+			Thread.currentThread().interrupt();
+			return false;
+		}
+		return true;
 	}
 
 	@Override
