@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.osgi.service.event
 Export-Package: org.eclipse.fordiac.ide.library,
  org.eclipse.fordiac.ide.library.download,
+ org.eclipse.fordiac.ide.library.export,
  org.eclipse.fordiac.ide.library.preferences,
  org.eclipse.fordiac.ide.library.provider
 Import-Package: org.eclipse.fordiac.ide.util
