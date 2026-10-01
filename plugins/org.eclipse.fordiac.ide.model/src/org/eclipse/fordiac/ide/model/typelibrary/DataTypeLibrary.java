@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,30 +65,18 @@ public final class DataTypeLibrary {
 
 	public boolean addTypeEntry(final DataTypeEntry entry) {
 		final String uppercaseName = entry.getFullTypeName().toUpperCase();
-		// remove stale error data type
-		final DataTypeEntry oldEntry = removeErrorTypeEntry(uppercaseName);
-		// add new type entry
-		final boolean added = derivedTypes.putIfAbsent(uppercaseName, entry) == null;
+		// add new type entry, replace old error type entry if present
+		final AtomicReference<DataTypeEntry> replaced = new AtomicReference<>();
+		final boolean added = TypeLibrary.addTypeEntry(derivedTypes, uppercaseName, entry, replaced);
 		// trigger transitive refresh after new entry has been added
-		if (oldEntry != null) {
-			oldEntry.setTypeLibrary(null);
+		if (replaced.get() != null) {
+			replaced.get().setTypeLibrary(null);
 		}
 		return added;
 	}
 
 	public void removeTypeEntry(final DataTypeEntry entry) {
 		derivedTypes.remove(entry.getFullTypeName().toUpperCase(), entry);
-	}
-
-	private DataTypeEntry removeErrorTypeEntry(final String uppercaseName) {
-		DataTypeEntry oldEntry = derivedTypes.get(uppercaseName);
-		while (oldEntry != null && oldEntry.getFile() == null) {
-			if (derivedTypes.remove(uppercaseName, oldEntry)) {
-				return oldEntry;
-			}
-			oldEntry = derivedTypes.get(uppercaseName);
-		}
-		return null;
 	}
 
 	private void addToTypeMap(final DataType type) {
