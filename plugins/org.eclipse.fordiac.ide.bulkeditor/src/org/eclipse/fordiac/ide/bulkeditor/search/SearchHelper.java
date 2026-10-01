@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -98,6 +99,9 @@ public class SearchHelper {
 			if (cfg.serviceInterfaceType().selected()) {
 				s = Stream.concat(s, getServiceInterfaceTypes(cfg));
 			}
+			if (cfg.functionType().selected()) {
+				s = Stream.concat(s, getFunctionTypes(cfg));
+			}
 			if (cfg.subappType().selected()) {
 				s = Stream.concat(s, getSubappTypes(cfg));
 			}
@@ -158,6 +162,12 @@ public class SearchHelper {
 			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof ServiceInterfaceFBType)
 					.filter(entry -> cfg.serviceInterfaceType().matches(entry.getFullTypeName(), entry.getComment())
 							&& cfg.serviceInterfaceType().matchesAttribute(entry.getType()));
+		}
+
+		private Stream<? extends TypeEntry> getFunctionTypes(final PlaceConfig cfg) {
+			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof FunctionFBType)
+					.filter(entry -> cfg.functionType().matches(entry.getFullTypeName(), entry.getComment())
+							&& cfg.functionType().matchesAttribute(entry.getType()));
 		}
 
 		private Stream<? extends TypeEntry> getSubappTypes(final PlaceConfig cfg) {
@@ -280,6 +290,9 @@ public class SearchHelper {
 				if (type instanceof ServiceInterfaceFBType) {
 					return cfg.serviceInterfaceFB();
 				}
+				if (type instanceof FunctionFBType) {
+					return cfg.functionFB();
+				}
 			}
 			return InstanceConfig.INACTIVE;
 		}
@@ -342,6 +355,9 @@ public class SearchHelper {
 			}
 			if (fbType instanceof ServiceInterfaceFBType) {
 				return cfg.serviceInterfaceType().selected();
+			}
+			if (fbType instanceof FunctionFBType) {
+				return cfg.functionType().selected();
 			}
 			return false;
 		}
@@ -406,6 +422,9 @@ public class SearchHelper {
 			}
 			if (fbType instanceof ServiceInterfaceFBType) {
 				return cfg.serviceInterfaceType().pin();
+			}
+			if (fbType instanceof FunctionFBType) {
+				return cfg.functionType().pin();
 			}
 			return PinConfig.INACTIVE;
 		}
@@ -482,6 +501,10 @@ public class SearchHelper {
 			if (type instanceof ServiceInterfaceFBType) {
 				return cfg.serviceInterfaceFB().matchesOccurrence(occurrence, context)
 						&& cfg.serviceInterfaceFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
+			}
+			if (type instanceof FunctionFBType) {
+				return cfg.functionFB().matchesOccurrence(occurrence, context)
+						&& cfg.functionFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
 			}
 			return false;
 		}

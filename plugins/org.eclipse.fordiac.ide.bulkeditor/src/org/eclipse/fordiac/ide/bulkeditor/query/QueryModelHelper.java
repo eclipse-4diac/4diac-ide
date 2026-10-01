@@ -60,6 +60,7 @@ public final class QueryModelHelper {
 	public static final String REF_BASIC_TYPE = "basicType"; //$NON-NLS-1$
 	public static final String REF_COMPOSITE_TYPE = "compositeType"; //$NON-NLS-1$
 	public static final String REF_SERVICE_INTERFACE_TYPE = "serviceInterfaceType"; //$NON-NLS-1$
+	public static final String REF_FUNCTION_TYPE = "functionType"; //$NON-NLS-1$
 	public static final String REF_SUBAPP_TYPE = "subappType"; //$NON-NLS-1$
 	public static final String REF_STRUCT_TYPE = "structType"; //$NON-NLS-1$
 	public static final String REF_ATTRIBUTE_TYPE = "attributeType"; //$NON-NLS-1$
@@ -67,6 +68,7 @@ public final class QueryModelHelper {
 	public static final String REF_BASIC_FB = "basicFB"; //$NON-NLS-1$
 	public static final String REF_COMPOSITE_FB = "compositeFB"; //$NON-NLS-1$
 	public static final String REF_SERVICE_INTERFACE_FB = "serviceInterfaceFB"; //$NON-NLS-1$
+	public static final String REF_FUNCTION_FB = "functionFB"; //$NON-NLS-1$
 	public static final String REF_TYPED_SUBAPP = "typedSubapp"; //$NON-NLS-1$
 	public static final String REF_UNTYPED_SUBAPP = "untypedSubapp"; //$NON-NLS-1$
 
@@ -393,7 +395,7 @@ public final class QueryModelHelper {
 		final MenuItem item = new MenuItem(menu, SWT.NONE);
 		item.setText(Messages.Negate);
 		item.setSelection(currentValue);
-		item.addListener(SWT.Selection, e -> {
+		item.addListener(SWT.Selection, _ -> {
 			setFeatureValue(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue));
 			afterChange.run();
 		});

@@ -20,6 +20,7 @@ public record PlaceConfig( //@formatter:off
         TypeConfig basicType,
         TypeConfig compositeType,
         TypeConfig serviceInterfaceType,
+        TypeConfig functionType,
         TypeConfig subappType,
         TypeConfig structType,
         TypeConfig attributeType,
@@ -27,6 +28,7 @@ public record PlaceConfig( //@formatter:off
         InstanceConfig basicFB,
         InstanceConfig compositeFB,
         InstanceConfig serviceInterfaceFB,
+        InstanceConfig functionFB,
         InstanceConfig typedSubapp,
         InstanceConfig untypedSubapp,
         boolean ignoreLinkedLibraries) {
@@ -50,13 +52,14 @@ public record PlaceConfig( //@formatter:off
 
 	public boolean anyInstanceSelected() {
 		return simpleFB.selected() || basicFB.selected() || compositeFB.selected() || serviceInterfaceFB.selected()
-				|| typedSubapp.selected() || untypedSubapp.selected();
+				|| functionFB.selected() || typedSubapp.selected() || untypedSubapp.selected();
 	}
 
 	private boolean hasOccurrence(final String occurrence) {
 		return simpleFB.hasOccurrence(occurrence) || basicFB.hasOccurrence(occurrence)
 				|| compositeFB.hasOccurrence(occurrence) || serviceInterfaceFB.hasOccurrence(occurrence)
-				|| typedSubapp.hasOccurrence(occurrence) || untypedSubapp.hasOccurrence(occurrence);
+				|| functionFB.hasOccurrence(occurrence) || typedSubapp.hasOccurrence(occurrence)
+				|| untypedSubapp.hasOccurrence(occurrence);
 	}
 
 	public record TypeConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint,
