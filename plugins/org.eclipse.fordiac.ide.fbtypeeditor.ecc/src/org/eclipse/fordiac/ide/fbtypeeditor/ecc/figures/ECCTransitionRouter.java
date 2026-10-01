@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Bendpoint;
@@ -32,6 +33,16 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 	private static final double EPSILON = 0.001;
 	private static final double MAX_HANDLE_DISTANCE = 150.0;
 	private static final double SELF_LOOP_ARC_FACTOR = 1.1;
+	private static final int OBSTACLE_CLEARANCE = 6;
+	/** The bendpoint is pushed away from the chord in steps of this size ... */
+	private static final double BEND_STEP = 8.0;
+	/**
+	 * ... but never further than this, so a crowded chart cannot create huge arcs.
+	 * Increased to handle transitions crossing multiple states.
+	 */
+	private static final double MAX_BEND_SHIFT = 1500.0;
+	/** Line segments per half of the curve that are tested against the states. */
+	private static final int SAMPLES_PER_HALF = 16;
 
 	@Override
 	public void route(final Connection conn) {
@@ -59,7 +70,105 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 		conn.translateToRelative(p4);
 		conn.translateToRelative(p7);
 
-		conn.setPoints(isSelfLoop(conn) ? routeSelfLoop(conn, p1, p4, p7) : routeTransition(conn, p1, p4, p7));
+		conn.setPoints(isSelfLoop(conn) ? routeSelfLoop(conn, p1, p4, p7) : routeAroundStates(conn, p1, p4, p7));
+	}
+
+	/**
+	 * Routes the transition as usual, but if the curve runs through another state
+	 * the bendpoint is moved away from the source-target line, in small steps,
+	 * until the curve is clear. Checks both sides of the chord to avoid getting
+	 * trapped.
+	 */
+	private static PointList routeAroundStates(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7) {
+		final List<Rectangle> obstacles = collectObstacles(conn);
+		final Vector chord = new Vector(p1, p7);
+		if (obstacles.isEmpty() || chord.getLength() < EPSILON) {
+			return routeTransition(conn, p1, p4, p7);
+		}
+
+		final Vector preferredAway = getBendSide(chord, p1, p4);
+		final Vector oppositeAway = new Vector(-preferredAway.x, -preferredAway.y);
+
+		for (double shift = 0; shift <= MAX_BEND_SHIFT; shift += BEND_STEP) {
+
+			// 1. Check preferred side
+			PointList curve = routeTransition(conn, p1, translate(p4, preferredAway, shift), p7);
+			if (!hitsAny(curve, obstacles)) {
+				return curve;
+			}
+
+			// 2. Check opposite side
+			if (shift > 0) {
+				curve = routeTransition(conn, p1, translate(p4, oppositeAway, shift), p7);
+				if (!hitsAny(curve, obstacles)) {
+					return curve;
+				}
+			}
+		}
+		return routeTransition(conn, p1, p4, p7);
+	}
+
+	/**
+	 * Unit vector perpendicular to the chord, pointing to the side the bendpoint is
+	 * on (fixed per transition).
+	 */
+	private static Vector getBendSide(final Vector chord, final PrecisionPoint p1, final PrecisionPoint p4) {
+		final Vector unitChord = getNormalized(chord);
+		final Vector normal = new Vector(-unitChord.y, unitChord.x);
+		final double offset = ((p4.preciseX() - p1.preciseX()) * normal.x)
+				+ ((p4.preciseY() - p1.preciseY()) * normal.y);
+		return offset >= 0 ? normal : new Vector(unitChord.y, -unitChord.x);
+	}
+
+	private static List<Rectangle> collectObstacles(final Connection conn) {
+		final IFigure source = conn.getSourceAnchor().getOwner();
+		final IFigure target = conn.getTargetAnchor().getOwner();
+		final List<Rectangle> obstacles = new ArrayList<>();
+		if (source.getParent() == null) {
+			return obstacles;
+		}
+		for (final Object child : source.getParent().getChildren()) {
+			if (child instanceof final ECStateFigure state && state != source && state != target) {
+				final Rectangle bounds = state.getBounds().getCopy();
+				state.translateToAbsolute(bounds);
+				conn.translateToRelative(bounds);
+				obstacles.add(bounds.expand(OBSTACLE_CLEARANCE, OBSTACLE_CLEARANCE));
+			}
+		}
+		return obstacles;
+	}
+
+	private static boolean hitsAny(final PointList curve, final List<Rectangle> obstacles) {
+		final PointList path = flatten(curve);
+		return obstacles.stream().anyMatch(path::intersects);
+	}
+
+	/**
+	 * Turns the two cubic Beziers of the curve (points 0..3 and 3..6) into a
+	 * polyline.
+	 */
+	private static PointList flatten(final PointList curve) {
+		final PointList path = new PointList(2 * (SAMPLES_PER_HALF + 1));
+		for (int start = 0; start <= 3; start += 3) {
+			for (int i = 0; i <= SAMPLES_PER_HALF; i++) {
+				path.addPoint(bezier(curve, start, (double) i / SAMPLES_PER_HALF));
+			}
+		}
+		return path;
+	}
+
+	private static Point bezier(final PointList curve, final int start, final double t) {
+		final double u = 1 - t;
+		final double[] weights = { u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t };
+		double x = 0;
+		double y = 0;
+		for (int i = 0; i < weights.length; i++) {
+			final Point control = curve.getPoint(start + i);
+			x += weights[i] * control.x;
+			y += weights[i] * control.y;
+		}
+		return toPoint(new PrecisionPoint(x, y));
 	}
 
 	private static PointList routeTransition(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
