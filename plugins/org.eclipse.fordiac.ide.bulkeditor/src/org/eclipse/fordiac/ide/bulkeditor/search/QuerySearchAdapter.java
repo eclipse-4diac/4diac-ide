@@ -96,7 +96,7 @@ public class QuerySearchAdapter {
 		final EObject targetOption = (target != null) ? getContainedChild(target, QueryModelHelper.REF_TARGET) : null;
 
 		if (targetOption == null) {
-			return searchCandidate -> false;
+			return _ -> false;
 		}
 
 		final Map<String, String> placeholders = resolvePlaceholders(queryRoot);
@@ -107,7 +107,7 @@ public class QuerySearchAdapter {
 		case QueryModelHelper.ATTRIBUTE ->
 			buildDefaultFilter(targetOption, BulkEditorMode.ADVANCED_ATTRIBUTE, placeholders);
 		case QueryModelHelper.ATTRIBUTE_DECLARATION -> buildAttributeDeclarationFilter(targetOption, placeholders);
-		default -> searchCandidate -> false;
+		default -> _ -> false;
 		};
 	}
 
@@ -150,6 +150,7 @@ public class QuerySearchAdapter {
 		        buildTypeConfig(place, QueryModelHelper.REF_BASIC_TYPE, placeholders, pinsImplicit),
 		        buildTypeConfig(place, QueryModelHelper.REF_COMPOSITE_TYPE, placeholders, pinsImplicit),
 		        buildTypeConfig(place, QueryModelHelper.REF_SERVICE_INTERFACE_TYPE, placeholders, pinsImplicit),
+		        buildTypeConfig(place, QueryModelHelper.REF_FUNCTION_TYPE, placeholders, pinsImplicit),
 		        buildTypeConfig(place, QueryModelHelper.REF_SUBAPP_TYPE, placeholders, pinsImplicit),
 		        buildTypeConfig(place, QueryModelHelper.REF_STRUCT_TYPE, placeholders, pinsImplicit),
 		        buildTypeConfig(place, QueryModelHelper.REF_ATTRIBUTE_TYPE, placeholders, pinsImplicit),
@@ -157,6 +158,7 @@ public class QuerySearchAdapter {
 		        buildInstanceConfig(place, QueryModelHelper.REF_BASIC_FB, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_COMPOSITE_FB, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_SERVICE_INTERFACE_FB, placeholders, pinsImplicit),
+		        buildInstanceConfig(place, QueryModelHelper.REF_FUNCTION_FB, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_TYPED_SUBAPP, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_UNTYPED_SUBAPP, placeholders, pinsImplicit),
 		        readIgnoreLinkedLibraries(queryRoot));
