@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -127,6 +128,26 @@ public class ConnectionAnnotations {
 						MessageFormat.format(Messages.ConnectionAnnotations_DuplicateConnection,
 								connection.getSource().getQualifiedName(),
 								connection.getDestination().getQualifiedName()),
+						FordiacMarkerHelper.getDiagnosticData(connection)));
+			}
+			return false;
+		}
+		if (connection instanceof AdapterConnection && !isIncomplete(connection)) {
+			final IInterfaceElement source = connection.getSource();
+			final IInterfaceElement destination = connection.getDestination();
+			final String message;
+			if (LinkConstraints.hasAlreadyOutputConnectionsCheck(source, connection)) {
+				message = MessageFormat.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection,
+						source.getQualifiedName());
+			} else if (!LinkConstraints.hasAlreadyInputConnectionsCheck(source, destination, connection)) {
+				message = MessageFormat.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection,
+						destination.getQualifiedName());
+			} else {
+				return true;
+			}
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONNECTION__VALIDATE_DUPLICATE, message,
 						FordiacMarkerHelper.getDiagnosticData(connection)));
 			}
 			return false;
