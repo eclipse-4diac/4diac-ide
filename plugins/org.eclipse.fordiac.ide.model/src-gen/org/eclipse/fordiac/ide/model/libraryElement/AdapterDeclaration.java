@@ -16,7 +16,9 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
 import java.util.stream.Stream;
+import org.eclipse.emf.common.util.DiagnosticChain;
 
 /**
  * <!-- begin-user-doc -->
@@ -95,5 +97,21 @@ public interface AdapterDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	Stream<INamedElement> findBySimpleName(String name);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateMultipleInputConnections(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateMultipleOutputConnections(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // AdapterDeclaration
