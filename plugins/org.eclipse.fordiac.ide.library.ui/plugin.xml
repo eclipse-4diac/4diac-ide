@@ -31,6 +31,8 @@
             editorId="org.eclipse.fordiac.ide.library.ui.editors.ManifestEditor">
       </editorContentTypeBinding>
    </extension>
+   
+   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
@@ -41,6 +43,8 @@
             priority="normal">
       </content-type>
    </extension>
+   
+   
    <extension
          point="org.eclipse.ui.importWizards">
       <category
@@ -55,6 +59,22 @@
     <description>Browse and import libraries from GitLab, archives, or existing workspace libraries.</description>
   </wizard>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="org.eclipse.fordiac.ide.library.ui.wizards.exportWizardCategory"
+            name="Library Exporter">
+      </category>
+  <wizard
+      category="org.eclipse.fordiac.ide.library.ui.wizards.exportWizardCategory"
+      class="org.eclipse.fordiac.ide.library.ui.wizards.LibraryExportWizard"
+      id="org.eclipse.fordiac.ide.library.ui.wizards.LibraryExportWizard"
+      name="Library Export">
+    <description>Export Libraries defined by the project manifest</description>
+  </wizard>
+   </extension>
+   
    <extension
          point="org.eclipse.ui.activities">
     <activity
@@ -95,7 +115,7 @@
       		id="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"
       		name="Open My Wizard"/>
 	</extension>
-
+	
 <extension point="org.eclipse.ui.handlers">
   <handler
       commandId="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"
