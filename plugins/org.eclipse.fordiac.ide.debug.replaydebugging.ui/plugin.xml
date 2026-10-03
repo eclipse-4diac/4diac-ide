@@ -336,6 +336,7 @@
 
     <!-- Key bindings -->
 <extension point="org.eclipse.ui.bindings">
+	<!-- Single step (up, down, right, left) -->
     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
@@ -344,14 +345,6 @@
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="ARROW_RIGHT"/>
-    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
-         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
-         sequence="M1+ARROW_LEFT"/>
-    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
-         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
-         sequence="M1+ARROW_RIGHT"/>
     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
@@ -360,6 +353,44 @@
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="ARROW_DOWN"/>
+
+     <!-- Jump left - Use all modifier keys -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_LEFT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M2+ARROW_LEFT"/>
+     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M3+ARROW_LEFT"/>
+     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M4+ARROW_LEFT"/>
+
+     <!-- Jump right - Use all modifier keys -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_RIGHT"/>
+ 	<key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M2+ARROW_RIGHT"/>
+	 <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M3+ARROW_RIGHT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M4+ARROW_RIGHT"/>
+
+
 </extension>
 
 </plugin>
