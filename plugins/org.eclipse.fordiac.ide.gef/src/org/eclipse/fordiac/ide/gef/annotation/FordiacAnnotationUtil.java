@@ -53,6 +53,11 @@ public final class FordiacAnnotationUtil {
 				|| targetFeature == LibraryElementPackage.eINSTANCE.getVarDeclaration_Value();
 	}
 
+	public static boolean showOnOverrideAttributeLocation(final GraphicalAnnotation annotation) {
+		final EStructuralFeature targetFeature = getTargetFeature(annotation);
+		return targetFeature == LibraryElementPackage.eINSTANCE.getOverrideAttribute_Location();
+	}
+
 	public static EStructuralFeature getTargetFeature(final GraphicalAnnotation annotation)
 			throws IllegalArgumentException {
 		final String targetFeatureAttribute = (String) annotation.getAttribute(FordiacErrorMarker.TARGET_FEATURE);

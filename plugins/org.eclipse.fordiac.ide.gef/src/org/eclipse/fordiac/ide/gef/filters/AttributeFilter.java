@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.gef.filters;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -31,7 +32,8 @@ public class AttributeFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		return parseObject(toTest) instanceof ConfigurableObject;
+		return parseObject(toTest) instanceof final ConfigurableObject conf
+				&& !FBNetworkElementHelper.isContainedInTypedSubApp(conf);
 	}
 
 	public static Object parseObject(final Object input) {

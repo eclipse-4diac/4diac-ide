@@ -1,0 +1,283 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Johannes Kepler University Linz, Martin Erich Jobst,
+ * 					Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Alois Zoitl - initial implementation
+ * Bianca Wiesmayr - enhanced add functionality
+ * Daniel Lindhuber - added separate delete listener
+ * Martin Jobst - check editable when enabling buttons
+ * Sebastian Hollersbacher - extracted delete only base class from AddDeleteWidget
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.ui.widget;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+
+public class DeleteWidget {
+
+	private boolean enabled = true;
+	protected Composite container;
+	protected Button deleteButton;
+
+	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
+		createControls(parent, widgetFactory, false);
+	}
+
+	public void createControls(final Composite parent, final FormToolkit widgetFactory, final boolean horizontal) {
+		container = createContainer(widgetFactory, parent, horizontal ? getButtonCount() : 1);
+
+		createButtons(widgetFactory, container);
+
+		// initially nothing should be selected therefore deactivate the buttons
+		setButtonEnablement(false);
+	}
+
+	@SuppressWarnings("static-method")
+	protected int getButtonCount() {
+		return 1;
+	}
+
+	protected void createButtons(final FormToolkit widgetFactory, final Composite container) {
+		createDeleteButton(widgetFactory, container);
+	}
+
+	protected void createDeleteButton(final FormToolkit widgetFactory, final Composite container) {
+		deleteButton = widgetFactory.createButton(container, "", SWT.PUSH); //$NON-NLS-1$
+		deleteButton.setToolTipText("Delete selected interface element"); //$NON-NLS-1$
+		deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE));
+		deleteButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+	}
+
+	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent,
+			final int columns) {
+		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
+		GridLayoutFactory.fillDefaults().numColumns(columns).equalWidth(true).margins(1, 0).spacing(1, 0)
+				.applyTo(container);
+		return container;
+	}
+
+	public void setVisible(final boolean visible) {
+		setVisible(visible, container);
+	}
+
+	public void setVisibleDeleteButton(final boolean visible) {
+		setVisible(visible, deleteButton);
+	}
+
+	protected static void setVisible(final boolean visible, final Control widget) {
+		widget.setVisible(visible);
+		if (null != widget.getLayoutData()) {
+			((GridData) widget.getLayoutData()).exclude = !visible;
+		} else {
+			widget.setLayoutData(GridDataFactory.fillDefaults().exclude(!visible).create());
+		}
+		widget.getParent().pack();
+	}
+
+	protected void setButtonEnablement(final boolean enable) {
+		deleteButton.setEnabled(enable);
+		deleteButton
+				.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
+						: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+	}
+
+	public void addDeleteListener(final Listener deleteListener) {
+		deleteButton.addListener(SWT.Selection, deleteListener);
+	}
+
+	public void bindToTableViewer(final TableViewer viewer, final CommandExecutor executor,
+			final CommandProvider deleteCommand) {
+		bindToTableViewer(viewer, getDeleteListener(viewer, executor, deleteCommand));
+	}
+
+	public void bindToTableViewer(final NatTable table, final CommandExecutor executor,
+			final CommandProvider deleteCommand) {
+		bindToTableViewer(table, getDeleteListener(table, executor, deleteCommand));
+	}
+
+	public void bindToTableViewer(final TableViewer viewer, final Listener deleteListener) {
+		addDeleteListener(deleteListener);
+		bindSelectionChanged(viewer);
+		viewer.getTable().addKeyListener(createKeyListener(event -> {
+			if (deleteButton.isEnabled()) {
+				deleteListener.handleEvent(event);
+			}
+		}));
+	}
+
+	public void bindToTableViewer(final NatTable table, final Listener deleteListener) {
+		addDeleteListener(deleteListener);
+		bindSelectionChanged(table);
+		table.addKeyListener(createKeyListener(event -> {
+			if (deleteButton.isEnabled()) {
+				deleteListener.handleEvent(event);
+			}
+		}));
+	}
+
+	protected void bindSelectionChanged(final TableViewer viewer) {
+		viewer.addSelectionChangedListener(_ -> setButtonEnablement(!viewer.getSelection().isEmpty() && enabled));
+	}
+
+	protected void bindSelectionChanged(final NatTable table) {
+		table.addListener(SWT.Selection, _ -> {
+			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			setButtonEnablement(rows.length > 0 && enabled);
+		});
+	}
+
+	protected static KeyListener createKeyListener(final Listener deleteListener) {
+		return createKeyListener(null, deleteListener);
+	}
+
+	protected static KeyListener createKeyListener(final Listener createListener, final Listener deleteListener) {
+		return new KeyAdapter() {
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				if ((createListener != null) && (e.keyCode == SWT.INSERT) && (e.stateMask == 0)) {
+					createListener.handleEvent(null);
+				} else if ((e.character == SWT.DEL) && (e.stateMask == 0)) {
+					deleteListener.handleEvent(null);
+				}
+			}
+		};
+	}
+
+	public static Listener getSelectionListener(final TableViewer viewer, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
+		return _ -> {
+			if (!viewer.getStructuredSelection().isEmpty()) {
+				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
+						commandProvider);
+			}
+		};
+	}
+
+	public static Listener getSelectionListener(final NatTable table, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
+		return _ -> {
+			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
+					.getDataProvider();
+			if (!selectionLayer.hasRowSelection() || selectionLayer.isRowPositionSelected(0)) {
+				return;
+			}
+
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			final List<Object> rowObjects = new ArrayList<>();
+			for (final int row : rows) {
+				if (row >= 0) {
+					rowObjects.add(dataProvider.getRowObject(row));
+				}
+			}
+			if (!rowObjects.isEmpty()) {
+				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
+				for (final int row : rows) {
+					if (row == 0) {
+						selectionLayer.selectRow(0, row, true, true);
+					} else {
+						selectionLayer.selectRow(0, row - 1, true, true);
+					}
+				}
+			}
+		};
+	}
+
+	protected static void executeCompoundCommandForList(final TableViewer viewer, final List<?> selection,
+			final CommandExecutor executor, final CommandProvider commandProvider) {
+		final CompoundCommand cmd = new CompoundCommand();
+		selection.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+		executor.executeCommand(cmd);
+		viewer.refresh();
+	}
+
+	protected static void executeCompoundCommandForList(final NatTable table, final List<Object> selection,
+			final CommandExecutor executor, final CommandProvider commandProvider) {
+		final CompoundCommand cmd = new CompoundCommand();
+		selection.forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+		executor.executeCommand(cmd);
+		table.refresh();
+	}
+
+	public static Listener getDeleteListener(final TableViewer viewer, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
+		return _ -> {
+			if (!viewer.getStructuredSelection().isEmpty()) {
+				int pos = viewer.getTable().getSelectionIndices()[0];
+				executeCompoundCommandForList(viewer, viewer.getStructuredSelection().toList(), executor,
+						commandProvider);
+				final int itemCnt = viewer.getTable().getItemCount();
+				if (pos <= itemCnt) {
+					if (pos == itemCnt) {
+						pos--;
+					}
+					viewer.getTable().forceFocus();
+					// the selection has to be set again via the table viewer for the widgets to
+					// recognize it
+					viewer.getTable().setSelection(pos);
+				}
+			}
+		};
+	}
+
+	public static Listener getDeleteListener(final NatTable table, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
+		return _ -> {
+			final int[] rows = NatTableWidgetFactory.getSelectionLayer(table).getFullySelectedRowPositions();
+			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
+					.getDataProvider();
+			final List<Object> rowObjects = new ArrayList<>();
+			for (final int row : rows) {
+				if (row >= 0) {
+					rowObjects.add(dataProvider.getRowObject(row));
+				}
+			}
+			if (!rowObjects.isEmpty()) {
+				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
+			}
+		};
+	}
+
+	public Composite getControl() {
+		return container;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(final boolean enabled) {
+		this.enabled = enabled;
+		setButtonEnablement(false); // initially nothing should be selected therefore deactivate the buttons
+	}
+}

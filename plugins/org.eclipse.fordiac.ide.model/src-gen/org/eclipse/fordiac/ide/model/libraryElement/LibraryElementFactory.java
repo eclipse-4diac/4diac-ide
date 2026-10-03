@@ -918,6 +918,15 @@ public interface LibraryElementFactory extends EFactory {
 	VarConfigInstance createVarConfigInstance();
 
 	/**
+	 * Returns a new object of class '<em>Override Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Override Attribute</em>'.
+	 * @generated
+	 */
+	OverrideAttribute createOverrideAttribute();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

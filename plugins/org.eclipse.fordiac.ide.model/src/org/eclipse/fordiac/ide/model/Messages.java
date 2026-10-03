@@ -122,6 +122,7 @@ public final class Messages extends NLS {
 	public static String IdentifierVerifier_QualifiedNameNotValid;
 	public static String IdentifierVerifier_NotMatchingWithFilename;
 	public static String IdentifierVerifier_PackageNameMismatch;
+	public static String OverrideAttributeVerifier_InvalidPath;
 	public static String Import_ERROR_InputVariableTypeNotDefined;
 	public static String Import_ERROR_NameNotDefined;
 	public static String ImportUtils_ERROR_ParameterNotSet;
