@@ -97,7 +97,7 @@ public class EventMarkerFigure extends Figure {
 		if (isHighlighted) {
 			// Fill the full oval with the highlight color — this becomes
 			// the visible ring since the inner circle paints over the centre
-			g.setBackgroundColor(ColorConstants.black);
+			g.setBackgroundColor(ColorConstants.red);
 			g.fillOval(completeBound);
 
 			// Paint the actual circle inset by the ring thickness,
