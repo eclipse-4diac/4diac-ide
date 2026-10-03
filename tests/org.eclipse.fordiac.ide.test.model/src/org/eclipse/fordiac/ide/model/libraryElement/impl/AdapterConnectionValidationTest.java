@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
@@ -34,8 +35,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("static-method")
 class AdapterConnectionValidationTest {
@@ -50,54 +55,79 @@ class AdapterConnectionValidationTest {
 	@Test
 	void reportsFanOutThroughModelValidation() {
 		final AdapterDeclaration source = adapter("OUT1"); //$NON-NLS-1$
-		final AdapterConnection first = (AdapterConnection) connect(
-				LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, inputAdapter("IN1")); //$NON-NLS-1$
+		connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, inputAdapter("IN1")); //$NON-NLS-1$
 		connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, inputAdapter("IN2")); //$NON-NLS-1$
 		final BasicDiagnostic diagnostics = new BasicDiagnostic();
 
-		LibraryElementValidator.INSTANCE.validateAdapterConnection(first, diagnostics, new HashMap<>());
+		LibraryElementValidator.INSTANCE.validateAdapterDeclaration(source, diagnostics, new HashMap<>());
 
 		assertTrue(diagnostics.getChildren().stream()
 				.anyMatch(diagnostic -> LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(diagnostic.getSource())
-						&& diagnostic.getCode() == LibraryElementValidator.CONNECTION__VALIDATE_DUPLICATE
-						&& diagnostic.getSeverity() == Diagnostic.ERROR
-						&& diagnostic.getData().getFirst() == first));
+						&& diagnostic.getSeverity() == Diagnostic.ERROR && diagnostic.getData().getFirst() == source
+						&& EcoreUtil.getURI(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS)
+								.toString().equals(diagnostic.getData().get(4))));
 	}
 
 	@Test
-	void reportsAdapterFanOutOnBothConnections() {
+	void reportsAdapterFanOutOnSource() {
 		final AdapterDeclaration source = adapter("OUT1"); //$NON-NLS-1$
-		final Connection first = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
-				inputAdapter("IN1")); //$NON-NLS-1$
-		final Connection second = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
-				inputAdapter("IN2")); //$NON-NLS-1$
+		connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, inputAdapter("IN1")); //$NON-NLS-1$
+		connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, inputAdapter("IN2")); //$NON-NLS-1$
 
-		assertEquals(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection,
-				source.getQualifiedName()), assertConnectionError(first).getMessage());
-		assertConnectionError(second);
-		assertFalse(first.validateDuplicate(null, Map.of()));
+		assertAdapterError(source, LibraryElementPackage.Literals.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS);
+		assertFalse(source.validateMultipleOutputConnections(null, Map.of()));
 	}
 
 	@Test
-	void reportsAdapterFanInOnBothConnections() {
-		final AdapterDeclaration destination = inputAdapter("IN1"); //$NON-NLS-1$
-		final Connection first = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(),
-				adapter("OUT1"), destination); //$NON-NLS-1$
-		final Connection second = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(),
-				adapter("OUT2"), destination); //$NON-NLS-1$
+	void reportsFanOutOnSocketBoundary() {
+		final AdapterDeclaration boundary = boundaryAdapter(true);
+		final var innerNetwork = ((SubApp) boundary.getBlockFBNetworkElement()).getSubAppNetwork();
+		for (final String name : new String[] { "IN1", "IN2" }) { //$NON-NLS-1$ //$NON-NLS-2$
+			final AdapterDeclaration destination = inputAdapter(name);
+			innerNetwork.getNetworkElements().add(destination.getBlockFBNetworkElement());
+			innerNetwork.getAdapterConnections()
+					.add((AdapterConnection) connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(),
+							boundary, destination));
+		}
 
-		assertEquals(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection,
-				destination.getQualifiedName()), assertConnectionError(first).getMessage());
-		assertConnectionError(second);
-		assertFalse(first.validateDuplicate(null, Map.of()));
+		assertAdapterError(boundary, LibraryElementPackage.Literals.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS);
+	}
+
+	@Test
+	void reportsFanInOnPlugBoundary() {
+		final AdapterDeclaration boundary = boundaryAdapter(false);
+		final var innerNetwork = ((SubApp) boundary.getBlockFBNetworkElement()).getSubAppNetwork();
+		for (final String name : new String[] { "OUT1", "OUT2" }) { //$NON-NLS-1$ //$NON-NLS-2$
+			final AdapterDeclaration source = adapter(name);
+			innerNetwork.getNetworkElements().add(source.getBlockFBNetworkElement());
+			innerNetwork.getAdapterConnections()
+					.add((AdapterConnection) connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
+							boundary));
+		}
+
+		assertAdapterError(boundary, LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS);
+	}
+
+	@Test
+	void reportsAdapterFanInOnDestination() {
+		final AdapterDeclaration destination = inputAdapter("IN1"); //$NON-NLS-1$
+		connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), adapter("OUT1"), destination); //$NON-NLS-1$
+		connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), adapter("OUT2"), destination); //$NON-NLS-1$
+
+		assertAdapterError(destination, LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS);
+		assertFalse(destination.validateMultipleInputConnections(null, Map.of()));
 	}
 
 	@Test
 	void acceptsSingleAdapterConnection() {
-		final Connection connection = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(),
-				adapter("OUT1"), inputAdapter("IN1")); //$NON-NLS-1$ //$NON-NLS-2$
+		final AdapterDeclaration source = adapter("OUT1"); //$NON-NLS-1$
+		final AdapterDeclaration destination = inputAdapter("IN1"); //$NON-NLS-1$
+		final Connection connection = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
+				destination);
 
 		assertNoConnectionError(connection);
+		assertNoAdapterError(source);
+		assertNoAdapterError(destination);
 	}
 
 	@Test
@@ -107,35 +137,31 @@ class AdapterConnectionValidationTest {
 				inputAdapter("IN1")); //$NON-NLS-1$
 		final Connection second = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
 				inputAdapter("IN2")); //$NON-NLS-1$
-		assertConnectionError(first);
+		assertAdapterError(source, LibraryElementPackage.Literals.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS);
 
 		EcoreUtil.delete(second);
 
 		assertNoConnectionError(first);
+		assertNoAdapterError(source);
 	}
 
-	@Test
-	void acceptsAdapterBoundaryConnectionInEachDirection() {
-		final var subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
-		subApp.setName("SUBAPP"); //$NON-NLS-1$
-		subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		subApp.setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-		network.getNetworkElements().add(subApp);
-		final AdapterDeclaration boundary = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
-		boundary.setName("BOUNDARY"); //$NON-NLS-1$
-		boundary.setType(adapterType);
-		boundary.setIsInput(true);
-		subApp.getInterface().getSockets().add(boundary);
-		final AdapterDeclaration internalDestination = inputAdapter("IN1"); //$NON-NLS-1$
-		subApp.getSubAppNetwork().getNetworkElements().add(internalDestination.getBlockFBNetworkElement());
-		final Connection incoming = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(),
-				adapter("OUT1"), boundary); //$NON-NLS-1$
+	@ParameterizedTest
+	@ValueSource(booleans = { true, false })
+	void acceptsAdapterBoundaryConnectionInEachDirection(final boolean isInput) {
+		final AdapterDeclaration boundary = boundaryAdapter(isInput);
+		final var innerNetwork = ((SubApp) boundary.getBlockFBNetworkElement()).getSubAppNetwork();
+		final AdapterDeclaration source = adapter("OUT1"); //$NON-NLS-1$
+		final AdapterDeclaration destination = inputAdapter("IN1"); //$NON-NLS-1$
+		innerNetwork.getNetworkElements().add((isInput ? destination : source).getBlockFBNetworkElement());
+		final Connection incoming = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
+				boundary);
 		final Connection outgoing = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), boundary,
-				internalDestination);
-		subApp.getSubAppNetwork().getAdapterConnections().add((AdapterConnection) outgoing);
+				destination);
+		innerNetwork.getAdapterConnections().add((AdapterConnection) (isInput ? outgoing : incoming));
 
 		assertNoConnectionError(incoming);
 		assertNoConnectionError(outgoing);
+		assertNoAdapterError(boundary);
 	}
 
 	@Test
@@ -178,11 +204,13 @@ class AdapterConnectionValidationTest {
 	void preservesDuplicateConnectionError() {
 		final AdapterDeclaration source = adapter("OUT1"); //$NON-NLS-1$
 		final AdapterDeclaration destination = inputAdapter("IN1"); //$NON-NLS-1$
-		final Connection first = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, destination);
-		final Connection second = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, destination);
+		final Connection first = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
+				destination);
+		final Connection second = connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source,
+				destination);
 
-		assertEquals(MessageFormat.format(Messages.ConnectionAnnotations_DuplicateConnection,
-				source.getQualifiedName(), destination.getQualifiedName()), assertConnectionError(first).getMessage());
+		assertEquals(MessageFormat.format(Messages.ConnectionAnnotations_DuplicateConnection, source.getQualifiedName(),
+				destination.getQualifiedName()), assertConnectionError(first).getMessage());
 		assertConnectionError(second);
 	}
 
@@ -193,8 +221,7 @@ class AdapterConnectionValidationTest {
 		connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, destination);
 		assertNoConnectionError(LibraryElementFactory.eINSTANCE.createAdapterConnection());
 		assertNoConnectionError(connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), source, null));
-		assertNoConnectionError(connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), null,
-				destination));
+		assertNoConnectionError(connect(LibraryElementFactory.eINSTANCE.createAdapterConnection(), null, destination));
 	}
 
 	private Connection connect(final Connection connection, final IInterfaceElement source,
@@ -230,6 +257,20 @@ class AdapterConnectionValidationTest {
 		return adapter;
 	}
 
+	private AdapterDeclaration boundaryAdapter(final boolean isInput) {
+		final var subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
+		subApp.setName("SUBAPP"); //$NON-NLS-1$
+		subApp.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		subApp.setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
+		network.getNetworkElements().add(subApp);
+		final AdapterDeclaration boundary = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
+		boundary.setName("BOUNDARY"); //$NON-NLS-1$
+		boundary.setType(adapterType);
+		boundary.setIsInput(isInput);
+		(isInput ? subApp.getInterface().getSockets() : subApp.getInterface().getPlugs()).add(boundary);
+		return boundary;
+	}
+
 	private static Diagnostic assertConnectionError(final Connection connection) {
 		final BasicDiagnostic diagnostics = new BasicDiagnostic();
 		assertFalse(LibraryElementValidator.INSTANCE.validateConnection_validateDuplicate(connection, diagnostics,
@@ -240,6 +281,35 @@ class AdapterConnectionValidationTest {
 		assertEquals(LibraryElementValidator.CONNECTION__VALIDATE_DUPLICATE, diagnostic.getCode());
 		assertSame(connection, diagnostic.getData().getFirst());
 		return diagnostic;
+	}
+
+	private static void assertAdapterError(final AdapterDeclaration adapter, final EStructuralFeature feature) {
+		final BasicDiagnostic diagnostics = new BasicDiagnostic();
+		LibraryElementValidator.INSTANCE.validateAdapterDeclaration(adapter, diagnostics, new HashMap<>());
+		final var errors = diagnostics.getChildren().stream().filter(diagnostic -> diagnostic.getData().size() > 4
+				&& EcoreUtil.getURI(feature).toString().equals(diagnostic.getData().get(4))).toList();
+		assertEquals(1, errors.size());
+		assertEquals(Diagnostic.ERROR, errors.getFirst().getSeverity());
+		assertEquals(LibraryElementValidator.DIAGNOSTIC_SOURCE, errors.getFirst().getSource());
+		assertEquals(
+				feature == LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS
+						? LibraryElementValidator.ADAPTER_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS
+						: LibraryElementValidator.ADAPTER_DECLARATION__VALIDATE_MULTIPLE_OUTPUT_CONNECTIONS,
+				errors.getFirst().getCode());
+		assertSame(adapter, errors.getFirst().getData().getFirst());
+	}
+
+	private static void assertNoAdapterError(final AdapterDeclaration adapter) {
+		assertTrue(adapter.validateMultipleInputConnections(null, Map.of()));
+		assertTrue(adapter.validateMultipleOutputConnections(null, Map.of()));
+		final BasicDiagnostic diagnostics = new BasicDiagnostic();
+		LibraryElementValidator.INSTANCE.validateAdapterDeclaration(adapter, diagnostics, new HashMap<>());
+		assertTrue(diagnostics.getChildren().stream()
+				.noneMatch(diagnostic -> diagnostic.getData().size() > 4 && (EcoreUtil
+						.getURI(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS).toString()
+						.equals(diagnostic.getData().get(4))
+						|| EcoreUtil.getURI(LibraryElementPackage.Literals.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS)
+								.toString().equals(diagnostic.getData().get(4)))));
 	}
 
 	private static void assertNoConnectionError(final Connection connection) {
