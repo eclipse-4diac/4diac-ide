@@ -24,7 +24,8 @@
             extensions="MF"
             id="org.eclipse.fordiac.ide.library.ui.editors.ManifestEditor"
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"
-            name="Manifest Editor">
+            name="Manifest Editor"
+            contributorClass="org.eclipse.fordiac.ide.library.ui.editors.ManifestEditorActionBarContributor">
       </editor>
       <editorContentTypeBinding
             contentTypeId="org.eclipse.fordiac.ide.library.ui.manifest"
