@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Consumer" Comment="">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-07-29">
+	</VersionInfo>
+	<CompilerInfo packageName="mypackage">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="DI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="DO1"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI" Type="mypackage::MyStruct"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="mypackage::MyStruct"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<ECState Name="REQ">
+			<ECAction Algorithm="REQ" Output="CNF"/>
+		</ECState>
+		<Algorithm Name="REQ">
+			<ST><![CDATA[]]></ST>
+		</Algorithm>
+	</SimpleFB>
+</FBType>
