@@ -47,13 +47,20 @@
             id="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
             name="Library Importer">
       </category>
-  <wizard
-      category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
-      class="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
-      id="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
-      name="Library Import">
-    <description>Browse and import libraries from GitLab, archives, or existing workspace libraries.</description>
-  </wizard>
+      <wizard
+            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+            class="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+            id="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+            name="Library Import">
+         <description>Browse and import libraries from GitLab, archives, or existing workspace libraries.</description>
+      </wizard>
+      <wizard
+            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+            class="org.eclipse.fordiac.ide.library.ui.wizards.UAOLibraryImportWizard"
+            id="org.eclipse.fordiac.ide.library.ui.wizards.UAOLibraryImportWizard"
+            name="UAO Library Importer">
+         <description>Import a UAO module folder by loading Manifest.mf as UAO EMF and converting it to a 4diac library.</description>
+      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
@@ -88,8 +95,11 @@
     		</and>
    		</enabledWhen>
   	</activity>
+	<activityPatternBinding
+      activityId="org.eclipse.fordiac.ide.ui.wizardDisabling"
+      pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.UAOLibraryImportWizard"/>
    </extension>
-   
+
 	<extension point="org.eclipse.ui.commands">
   		<command
       		id="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"
@@ -159,4 +169,6 @@
          </enabledWhen>
       </page>
    </extension>
+
+
 </plugin>
