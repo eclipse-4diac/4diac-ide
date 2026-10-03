@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPartFactory;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
+import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.MouseWheelHandler;
@@ -29,7 +30,10 @@ import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ColorRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
@@ -50,6 +54,12 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 	private final Session session = new Session();
 
 	private static String menuId = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"; //$NON-NLS-1$
+
+	// this is a workaround to show the the changed datapoints in a different color
+	// than the default error color
+	private RGB originalErrorColor = null;
+
+	private final RGB replayColor = new RGB(255, 165, 0); // Orange color for changed datapoints
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -87,11 +97,23 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 			bars.updateActionBars();
 		});
 
+		// handle color override for changed datapoints
+		final ColorRegistry registry = JFaceResources.getColorRegistry();
+		if (originalErrorColor == null) { // guard against double-apply
+			originalErrorColor = registry.getRGB(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR); // snapshot before
+																										// overriding
+		}
+		registry.put(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR, replayColor);
+
 		ReplayNavigatorManager.getDefault().addListener(this);
 		SelectionService.getDefault().install(getSite().getPage());
 		parent.addDisposeListener(_ -> {
 			ReplayNavigatorManager.getDefault().removeListener(this);
 			SelectionService.getDefault().uninstall(getSite().getPage());
+			if (originalErrorColor != null) {
+				JFaceResources.getColorRegistry().put(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR,
+						originalErrorColor);
+			}
 		});
 		viewer.setContents(session);
 
