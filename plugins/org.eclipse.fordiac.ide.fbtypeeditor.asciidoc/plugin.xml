@@ -29,4 +29,101 @@
 
      </templates>
   </extension>
+
+
+<!-- toolbar -->
+  <extension point="org.eclipse.ui.commands">
+    <command
+      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+      name="%command.formatAsciidocText">
+      <commandParameter
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter"
+        name="%command.parameter.formattingDelimiter"
+        optional="false">
+      </commandParameter>
+    </command>
+    <command
+      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list"
+      name="%command.lists">
+      <commandParameter
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list.prefix"
+        name="%command.parameter.listPrefix"
+        optional="false">
+      </commandParameter>
+    </command>
+  </extension>
+
+  <extension point="org.eclipse.ui.handlers">
+    <handler
+      class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.FormatHandler"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format">
+    </handler>
+    <handler
+      class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.ListFormatHandler"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list">
+    </handler>
+  </extension>
+
+  <extension point="org.eclipse.ui.menus">
+    <menuContribution
+      locationURI="toolbar:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar">
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        icon="icons/bold.svg"
+        label="%toolbar.bold.label"
+        tooltip="%toolbar.bold.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="*" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        icon="icons/italic.svg"
+        label="%toolbar.italic.label"
+        tooltip="%toolbar.italic.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="_" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        icon="icons/monospace.svg"
+        label="%toolbar.monospace.label"
+        tooltip="%toolbar.monospace.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="`" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        icon="icons/subscript.svg"
+        label="%toolbar.subscript.label"
+        tooltip="%toolbar.subscript.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="~" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        icon="icons/superscript.svg"
+        label="%toolbar.superscript.label"
+        tooltip="%toolbar.superscript.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="^" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list"
+        icon="icons/listUnordered.svg"
+        label="%toolbar.unorderedList.label"
+        tooltip="%toolbar.unorderedList.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list.prefix" value="*" />
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list"
+        icon="icons/listOrdered.svg"
+        label="%toolbar.orderedList.label"
+        tooltip="%toolbar.orderedList.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list.prefix" value="." />
+      </command>
+    </menuContribution>
+  </extension>
+  
 </plugin>
