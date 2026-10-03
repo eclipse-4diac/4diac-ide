@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011, 2014 - 2016 Profactor GbmH, fortiss GmbH
  * 				 2020						   Andrea Zoitl
+ * 				 2026						   HR Agrartechnik
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,9 @@
  *     - initial API and implementation and/or initial documentation
  *   Andrea Zoitl
  *     - externalized translatable strings
+ *   Moritz Ortmeier
+ *     - added print preview strings for page limit, paper format and
+ *       orientation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
@@ -87,12 +91,20 @@ public final class Messages extends NLS {
 	public static String PrintPreview_LABEL_NextPage;
 	public static String PrintPreview_LABEL_Of;
 	public static String PrintPreview_LABEL_Page;
+	public static String PrintPreview_LABEL_Pages;
 	public static String PrintPreview_LABEL_Print;
 	public static String PrintPreview_LABEL_PrinterSettings;
 	public static String PrintPreview_LABEL_PrintBorder;
 	public static String PrintPreview_LABEL_PrintPreview;
 	public static String PrintPreview_LABEL_Scale;
+	public static String PrintPreview_LABEL_Set;
+	public static String PrintPreview_LABEL_PageLimit;
+	public static String PrintPreview_LABEL_Percent;
 	public static String PrintPreview_LABEL_Tile;
+	public static String PrintPreview_LABEL_Orientation;
+	public static String PrintPreview_LABEL_Portrait;
+	public static String PrintPreview_LABEL_Landscape;
+	public static String PrintPreview_LABEL_PaperFormat;
 	public static String SetProfileCommand_LABEL_SetProfile;
 
 	public static String UtilityMarker_ActiveMarker;
