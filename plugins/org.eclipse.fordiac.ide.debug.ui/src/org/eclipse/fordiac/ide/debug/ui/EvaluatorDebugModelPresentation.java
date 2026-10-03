@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorModelBreakpoint;
 import org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferences;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -113,6 +114,12 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation,
 		if (element instanceof final EvaluatorDebugVariable variable) {
 			return getVariableText(variable);
 		}
+		if (element instanceof final EvaluatorModelBreakpoint breakpoint) {
+			final IMarker marker = breakpoint.getMarker();
+			if (marker != null) {
+				return marker.getResource().getName() + " [" + breakpoint.getQualifiedName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+			}
+		}
 		return null;
 	}
 
@@ -154,8 +161,8 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation,
 		return false;
 	}
 
-	private void showWithMarker(final IEditorPart editor, final IFile file, final IStackFrame frame, final EObject sourceElement)
-			throws CoreException {
+	private void showWithMarker(final IEditorPart editor, final IFile file, final IStackFrame frame,
+			final EObject sourceElement) throws CoreException {
 		final ErrorMarkerBuilder builder = ErrorMarkerBuilder.createErrorMarkerBuilder(getText(frame))
 				.setType(IMarker.MARKER).setSource(frame.getModelIdentifier()).setTarget(sourceElement)
 				.addAdditionalAttributes(Map.of(IMarker.LINE_NUMBER, Integer.valueOf(frame.getLineNumber()),
