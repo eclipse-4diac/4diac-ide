@@ -23,6 +23,9 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
+	public static String AdapterDeclarationAnnotations_MultipleInputConnections;
+	public static String AdapterDeclarationAnnotations_MultipleOutputConnections;
+
 	public static String ArrayValueConverter_IllegalElementValue;
 
 	public static String ArrayValueConverter_InvalidArrayLiteral;
