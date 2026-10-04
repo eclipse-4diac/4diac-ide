@@ -31,6 +31,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.AbstractEditPolicy;
@@ -107,6 +108,26 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 			}
 		});
 
+	}
+
+	@Override
+	public void performRequest(final Request req) {
+		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
+			// Create the select event request
+			final var request = new Request(CommonConstants.ADD_TO_COMPARISON_REQUEST);
+
+			EditPart current = this;
+			while (current != null) {
+				final Command command = current.getCommand(request);
+				if (command != null && command.canExecute()) {
+					getViewer().getEditDomain().getCommandStack().execute(command);
+					return;
+				}
+				current = current.getParent();
+			}
+			return;
+		}
+		super.performRequest(req);
 	}
 
 	@Override

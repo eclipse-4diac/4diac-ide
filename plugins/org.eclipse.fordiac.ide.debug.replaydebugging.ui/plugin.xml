@@ -431,6 +431,18 @@
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="BS"/>
 
+	<!-- Add comment - c from comment -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="C"/>
+
+	<!-- Add to comparison table - Enter -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="CR"/>
+
 </extension>
 
 </plugin>
