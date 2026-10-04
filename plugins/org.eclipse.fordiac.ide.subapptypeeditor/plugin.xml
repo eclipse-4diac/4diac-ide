@@ -77,31 +77,31 @@
          <propertyTab
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
-               label="Instance">
+               label="%propertyTab.instance.label">
          </propertyTab>
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
-               label="Instance">
+               label="%propertyTab.instance.label">
          </propertyTab>
          <propertyTab
                category="Resource"
                id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
-               label="Instance">
+               label="%propertyTab.resourceInstance.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                image="fordiacimage://ICON_FB_TYPE"
-               label="Type Info">
+               label="%propertyTab.typeInfo.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowEvent"
                image="fordiacimage://ICON_EVENT"
-               label="Events"
+               label="%propertyTab.events.label"
                indented="true">
          </propertyTab>
          <propertyTab
@@ -109,7 +109,7 @@
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
                image="fordiacimage://ICON_DATA"
-               label="Data"
+               label="%propertyTab.data.label"
                indented="true">
          </propertyTab>
          <propertyTab
@@ -117,41 +117,41 @@
                category="FB"
                id="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter"
                image="fordiacimage://ICON_ADAPTER_LIST"
-               label="Adapter"
+               label="%propertyTab.adapter.label"
                indented="true">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB"
                id="org.eclipse.fordiac.ide.application.propertyAppearanceTab"
-               label="Appearance">
+               label="%propertyTab.appearance.label">
          </propertyTab>
          <propertyTab
                category="Connection"
                id="org.eclipse.fordiac.ide.application.propertyConnectionTab"
-               label="Connection">
+               label="%propertyTab.connection.label">
          </propertyTab>
          <propertyTab
                category="Connection"
                id="org.eclipse.fordiac.ide.application.CreateConnection"
-               label="Create Connection">
+               label="%propertyTab.createConnection.label">
          </propertyTab>
          <propertyTab
                category="Interface"
                id="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-               label="Pin">
+               label="%propertyTab.pin.label">
          </propertyTab>
          <propertyTab
                category="Application"
                id="org.eclipse.fordiac.ide.application.propertyAttributeTab"
                indented="false"
-               label="Attributes">
+               label="%propertyTab.attributes.label">
          </propertyTab>
          <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
        		   category="Application"
                id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
                indented="false"
-               label="Var Config">
+               label="%propertyTab.varConfig.label">
       	</propertyTab>
       </propertyTabs>
    </extension>
