@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.data.util.DataValidator;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -188,7 +189,8 @@ public final class FordiacMarkerHelper {
 	 * @return The marker attributes
 	 */
 	public static Map<String, Object> getDiagnosticAttributes(final Diagnostic diagnostic) {
-		if (LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(diagnostic.getSource())) {
+		if (LibraryElementValidator.DIAGNOSTIC_SOURCE.equals(diagnostic.getSource())
+				|| DataValidator.DIAGNOSTIC_SOURCE.equals(diagnostic.getSource())) {
 			final List<?> data = diagnostic.getData();
 			if (data != null && data.size() >= 5) {
 				if (data.get(4) != null) {

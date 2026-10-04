@@ -257,6 +257,7 @@ public final class Messages extends NLS {
 	public static String AttributeTarget_ServiceSequences_tooltip;
 
 	public static String BaseFBTypeAnnotations_UnsupportedInternalFBType;
+	public static String StructuredTypeAnnotations_CircularReference;
 
 	public static String BlockFBNetworkElementAnnotations_Unused;
 
