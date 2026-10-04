@@ -45,4 +45,8 @@
          id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc"
          version="0.0.0"/>
 
+   <plugin
+         id="org.eclipse.fordiac.ide.library.model.uao"
+         version="0.0.0"/>
+
 </feature>

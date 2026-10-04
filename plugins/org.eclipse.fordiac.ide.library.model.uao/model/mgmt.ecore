@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mgmt" nsURI="http://tempuri.org/library-mgmt" nsPrefix="mgmt">
+  <eClassifiers xsi:type="ecore:EClass" name="DependenciesType">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Dependencies_._type"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependency" upperBound="-1"
+        eType="#//DependencyType" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Dependency"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyType">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Dependency_._type"/>
+      <details key="kind" value="empty"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="Version"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentRoot">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value=""/>
+      <details key="kind" value="mixed"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mixed" unique="false" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFeatureMapEntry">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="elementWildcard"/>
+        <details key="name" value=":mixed"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xMLNSPrefixMap" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"
+        transient="true" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="xmlns:prefix"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xSISchemaLocation" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"
+        transient="true" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="xsi:schemaLocation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" unique="false"
+        upperBound="-2" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+        volatile="true" transient="true" derived="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Comment"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-2"
+        eType="#//DependenciesType" volatile="true" transient="true" derived="true"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Dependencies"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependency" upperBound="-2"
+        eType="#//DependencyType" volatile="true" transient="true" derived="true"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Dependency"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" upperBound="-2"
+        eType="#//LibraryType" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Library"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="license" upperBound="-2"
+        eType="#//LicenseType" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="License"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manifest" upperBound="-2"
+        eType="#//ManifestType" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Manifest"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" unique="false" upperBound="-2"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String" volatile="true"
+        transient="true" derived="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Path"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="readMe" upperBound="-2"
+        eType="#//ReadMeType" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="ReadMe"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-2"
+        eType="#//SourcesType" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Sources"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vendor" unique="false"
+        upperBound="-2" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+        volatile="true" transient="true" derived="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Vendor"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LibraryType">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Library_._type"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="readMe" eType="#//ReadMeType"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="ReadMe"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" eType="#//SourcesType"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Sources"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vendor" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Vendor"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Comment"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="license" eType="#//LicenseType"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="License"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="DisplayName"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="Version"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LicenseType">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="License_._type"/>
+      <details key="kind" value="empty"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="Identifier"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="Path"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ManifestType">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Manifest_._type"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" lowerBound="1"
+        eType="#//LibraryType" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Library"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" lowerBound="1"
+        eType="#//DependenciesType" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Dependencies"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReadMeType">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="ReadMe_._type"/>
+      <details key="kind" value="empty"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="Path"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourcesType">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Sources_._type"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" unique="false" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Path"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>
