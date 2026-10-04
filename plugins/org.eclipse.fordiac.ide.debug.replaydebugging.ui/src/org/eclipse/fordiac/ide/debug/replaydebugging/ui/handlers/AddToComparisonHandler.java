@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.StatesC
 import org.eclipse.gef.Request;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISources;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -35,7 +36,8 @@ public class AddToComparisonHandler extends AbstractHandler {
 			final var window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 			final var page = window.getActivePage();
 			try {
-				page.showView(StatesComparisonView.VIEW_ID);
+				// open but keep the focus on the current view
+				page.showView(StatesComparisonView.VIEW_ID, null, IWorkbenchPage.VIEW_VISIBLE);
 			} catch (final PartInitException e) {
 				ILog.get().error("Failed to open States Comparison View", e); //$NON-NLS-1$
 			}
