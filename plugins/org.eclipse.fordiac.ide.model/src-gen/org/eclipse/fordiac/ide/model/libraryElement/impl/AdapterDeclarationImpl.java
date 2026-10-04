@@ -678,6 +678,26 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	@Override
+	public boolean validateMultipleInputConnections(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.validateMultipleInputConnections(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateMultipleOutputConnections(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.validateMultipleOutputConnections(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BlockFBNetworkElement getBlockFBNetworkElement() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockFBNetworkElement(this);
 	}
