@@ -390,6 +390,16 @@
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="M4+ARROW_RIGHT"/>
 
+     <!-- Delete events - Delete and backspace -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="DEL"/>
+
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="BS"/>
 
 </extension>
 

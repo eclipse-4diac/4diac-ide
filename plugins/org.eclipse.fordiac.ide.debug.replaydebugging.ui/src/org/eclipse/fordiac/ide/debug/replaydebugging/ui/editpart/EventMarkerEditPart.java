@@ -134,6 +134,7 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 				refreshVisuals();
 				if (getModel().getIsCurrentEvent() && reveal) {
 					getViewer().reveal(this);
+					getViewer().select(this);
 				}
 			}
 		});
