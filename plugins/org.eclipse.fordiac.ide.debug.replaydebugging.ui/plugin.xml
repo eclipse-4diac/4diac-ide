@@ -48,6 +48,8 @@
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight" name="%command.jumpRight.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"    name="%command.moveUp.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"  name="%command.moveDown.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpBeginning"  name="%command.jumpBeginning.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpEnd"  name="%command.jumpEnd.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
              name="%command.deleteEvent.name"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteTimeline"
@@ -96,6 +98,24 @@
 
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
          class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpRightHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpBeginning"
+         class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpBeginningHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpEnd"
+         class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpEndHandler">
         <activeWhen>
             <with variable="activePartId">
                 <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
@@ -389,6 +409,16 @@
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="M4+ARROW_RIGHT"/>
+
+     <!-- Jump to the beginning and end -->
+	<key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpBeginning"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="HOME"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpEnd"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="END"/>
 
      <!-- Delete events - Delete and backspace -->
     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
