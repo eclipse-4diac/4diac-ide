@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGeneratorFactory;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
@@ -39,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class CommFBGenerator {
 	private static final String GENERATED_ANNOTATION = "generatedComm"; //$NON-NLS-1$
@@ -111,7 +111,7 @@ public class CommFBGenerator {
 
 	private void generateFBs(final CommunicationChannelDestination destination) {
 		if (destination.getSelectedMedia() == null || destination.getSelectedProtocolId() == null) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.CommFBGenerator_NoSelectionFor, destination));
+			ILog.get().error(MessageFormat.format(Messages.CommFBGenerator_NoSelectionFor, destination));
 			return;
 		}
 		int numberDataPorts = 0;
@@ -138,7 +138,7 @@ public class CommFBGenerator {
 		final MediaSpecificGenerator specificGenerator = specificGeneratorFactory
 				.getForProtocolId(destination.getSelectedProtocolId());
 		if (specificGenerator == null) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.CommFBGenerator_NoGeneratorForProtocol,
+			ILog.get().error(MessageFormat.format(Messages.CommFBGenerator_NoGeneratorForProtocol,
 					destination.getSelectedProtocolId()));
 		} else {
 			final GeneratedFBInfo sourceGeneratedFBInfo = generateFB(ChannelEnd.SOURCE, numberDataPorts, withPorts,
@@ -292,8 +292,8 @@ public class CommFBGenerator {
 		if (sourceEvents.isEmpty()) {
 			final FB startFB = resource.getFBNetwork().getFBNamed("START"); //$NON-NLS-1$
 			if (startFB == null) {
-				FordiacLogHelper.logError(
-						MessageFormat.format(Messages.CommFBGenerator_NoStartFBInResource, resource.getName()));
+				ILog.get()
+						.error(MessageFormat.format(Messages.CommFBGenerator_NoStartFBInResource, resource.getName()));
 				return;
 			}
 			sourceEvents.add(startFB.getInterface().getEventOutputs().get(COLD));
