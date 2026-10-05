@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IStackFrame;
@@ -38,7 +39,6 @@ import org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferences;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorDescriptor;
@@ -136,7 +136,7 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation,
 		try {
 			listener.detailComputed(value, value.getValueString());
 		} catch (final DebugException e) {
-			FordiacLogHelper.logWarning("Cannot compute value detail", e); //$NON-NLS-1$
+			ILog.get().warn("Cannot compute value detail", e); //$NON-NLS-1$
 		}
 	}
 
@@ -148,14 +148,14 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation,
 			try {
 				showWithMarker(editorPart, fileEditorInput.getFile(), frame, sourceObject);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Cannot show debug source element with marker", e); //$NON-NLS-1$
+				ILog.get().error("Cannot show debug source element with marker", e); //$NON-NLS-1$
 			}
 		}
 		return false;
 	}
 
-	private void showWithMarker(final IEditorPart editor, final IFile file, final IStackFrame frame, final EObject sourceElement)
-			throws CoreException {
+	private void showWithMarker(final IEditorPart editor, final IFile file, final IStackFrame frame,
+			final EObject sourceElement) throws CoreException {
 		final ErrorMarkerBuilder builder = ErrorMarkerBuilder.createErrorMarkerBuilder(getText(frame))
 				.setType(IMarker.MARKER).setSource(frame.getModelIdentifier()).setTarget(sourceElement)
 				.addAdditionalAttributes(Map.of(IMarker.LINE_NUMBER, Integer.valueOf(frame.getLineNumber()),
