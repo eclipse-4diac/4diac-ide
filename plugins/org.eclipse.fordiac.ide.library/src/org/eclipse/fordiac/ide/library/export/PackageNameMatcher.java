@@ -42,7 +42,7 @@ public class PackageNameMatcher {
 
 		while (packageIndex < packageSegments.length) {
 			if (patternIndex < patternSegments.length && (WILDCARD_EXACTLY_ONE.equals(patternSegments[patternIndex]) // $NON-NLS-1$
-					|| packageSegments[packageIndex].equals(patternSegments[patternIndex]))) {
+					|| packageSegments[packageIndex].equalsIgnoreCase(patternSegments[patternIndex]))) {
 				packageIndex++;
 				patternIndex++;
 			} else if (patternIndex < patternSegments.length
