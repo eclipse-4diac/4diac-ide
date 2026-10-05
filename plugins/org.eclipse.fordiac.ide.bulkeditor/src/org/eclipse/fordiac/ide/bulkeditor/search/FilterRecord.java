@@ -16,11 +16,12 @@ import java.util.regex.Pattern;
 
 public class FilterRecord {
 
-	public static final FilterRecord INACTIVE = new FilterRecord(false, false, MatcherConfig.INACTIVE,
+	public static final FilterRecord INACTIVE = new FilterRecord(false, false, false, MatcherConfig.INACTIVE,
 			MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, null, null);
 
 	private final boolean selected;
 	private final boolean negate;
+	private final boolean attributeConstraint;
 	private final MatcherConfig nameConfig;
 	private final MatcherConfig typeConfig;
 	private final MatcherConfig commentConfig;
@@ -32,11 +33,12 @@ public class FilterRecord {
 	private final FilterRecord orConstraint;
 	private final FilterRecord andConstraint;
 
-	public FilterRecord(final boolean selected, final boolean negate, final MatcherConfig nameConfig,
-			final MatcherConfig typeConfig, final MatcherConfig commentConfig, final MatcherConfig valueConfig,
-			final FilterRecord orConstraint, final FilterRecord andConstraint) {
+	public FilterRecord(final boolean selected, final boolean negate, final boolean attributeConstraint,
+			final MatcherConfig nameConfig, final MatcherConfig typeConfig, final MatcherConfig commentConfig,
+			final MatcherConfig valueConfig, final FilterRecord orConstraint, final FilterRecord andConstraint) {
 		this.selected = selected;
 		this.negate = negate;
+		this.attributeConstraint = attributeConstraint;
 		this.nameConfig = nameConfig;
 		this.typeConfig = typeConfig;
 		this.commentConfig = commentConfig;
@@ -50,21 +52,26 @@ public class FilterRecord {
 		this.andConstraint = andConstraint;
 	}
 
-	public boolean isSelected() {
-		return selected;
+	public boolean accepts(final MatchTarget target) {
+		return !selected || matches(target);
 	}
 
-	public boolean matches(final String name, final String type, final String comment, final String value) {
-		return (matchesFields(name, type, comment, value) != negate
-				&& (andConstraint == null || andConstraint.matches(name, type, comment, value)))
-				|| (orConstraint != null && orConstraint.matches(name, type, comment, value));
-
+	private boolean matches(final MatchTarget element) {
+		return (matchesConstraint(element) && (andConstraint == null || andConstraint.matches(element)))
+				|| (orConstraint != null && orConstraint.matches(element));
 	}
 
-	private boolean matchesFields(final String name, final String type, final String comment, final String value) {
-		return StringMatcher.matches(name, nameConfig, namePattern)
-				&& StringMatcher.matches(type, typeConfig, typePattern)
-				&& StringMatcher.matches(comment, commentConfig, commentPattern)
-				&& StringMatcher.matches(value, valueConfig, valuePattern);
+	private boolean matchesConstraint(final MatchTarget element) {
+		if (attributeConstraint) {
+			return element.attributes().stream().map(MatchTarget::ofAttribute).anyMatch(this::matchesFields) != negate;
+		}
+		return matchesFields(element) != negate;
+	}
+
+	private boolean matchesFields(final MatchTarget target) {
+		return StringMatcher.matches(target.name(), nameConfig, namePattern)
+				&& StringMatcher.matches(target.type(), typeConfig, typePattern)
+				&& StringMatcher.matches(target.comment(), commentConfig, commentPattern)
+				&& StringMatcher.matches(target.value(), valueConfig, valuePattern);
 	}
 }
