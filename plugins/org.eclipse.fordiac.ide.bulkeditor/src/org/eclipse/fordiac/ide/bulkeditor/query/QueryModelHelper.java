@@ -54,7 +54,6 @@ public final class QueryModelHelper {
 	public static final String REF_PLACE = "place"; //$NON-NLS-1$
 	public static final String REF_PIN = "pin"; //$NON-NLS-1$
 	public static final String REF_CONSTRAINT = "constraint"; //$NON-NLS-1$
-	public static final String REF_ATTRIBUTE_CONSTRAINT = "attributeConstraint"; //$NON-NLS-1$
 
 	public static final String REF_SIMPLE_TYPE = "simpleType"; //$NON-NLS-1$
 	public static final String REF_BASIC_TYPE = "basicType"; //$NON-NLS-1$
@@ -112,6 +111,14 @@ public final class QueryModelHelper {
 		return isOfType(eObj, CONSTRAINT) || isOfType(eObj, ATTRIBUTE_CONSTRAINT);
 	}
 
+	public static boolean isAttributeConstraint(final EObject eObj) {
+		return isOfType(eObj, ATTRIBUTE_CONSTRAINT);
+	}
+
+	private static boolean isConstraintClass(final EClass eClass) {
+		return CONSTRAINT.equals(eClass.getName()) || ATTRIBUTE_CONSTRAINT.equals(eClass.getName());
+	}
+
 	public static boolean isPlace(final EObject eObj) {
 		return isOfType(eObj, PLACE);
 	}
@@ -141,6 +148,10 @@ public final class QueryModelHelper {
 		if (FEATURE_NAME.equals(fieldRefName) || FEATURE_COMMENT.equals(fieldRefName)) {
 			return true;
 		}
+		if (isAttributeConstraint(constraint)) {
+			// AttributeConstraints should always have: name, type, comment, value
+			return true;
+		}
 
 		final EObject owner = findConstraintOwner(constraint);
 		if (owner == null) {
@@ -159,6 +170,15 @@ public final class QueryModelHelper {
 			return !FEATURE_VALUE.equals(fieldRefName);
 		}
 		return true;
+	}
+
+	private static boolean isChildTypeAllowed(final EObject parent, final EClass childType) {
+		final boolean attributeConstraintChild = ATTRIBUTE_CONSTRAINT.equals(childType.getName());
+		if (isAttributeConstraint(parent)) {
+			// the and/or chain of an attribute constraint matches the same attribute
+			return attributeConstraintChild;
+		}
+		return !attributeConstraintChild || !isOfType(findConstraintOwner(parent), ATTRIBUTE);
 	}
 
 	private static EObject findConstraintOwner(final EObject obj) {
@@ -188,7 +208,7 @@ public final class QueryModelHelper {
 			return null;
 		}
 		final EStructuralFeature feature = eObj.eClass().getEStructuralFeature(featureName);
-		return (feature != null && eObj.eIsSet(feature)) ? eObj.eGet(feature) : null;
+		return feature != null ? eObj.eGet(feature) : null;
 	}
 
 	public static void setFeatureValue(final EObject eObj, final String featureName, final Object value) {
@@ -329,24 +349,38 @@ public final class QueryModelHelper {
 			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final EReference ref,
 			final Runnable afterAdd) {
 		final EClass type = ref.getEReferenceType();
-		// TargetOption children are labeled by their concrete class, everything else by
-		// the reference
-		final boolean useClassName = type.getName().equals(TARGET_OPTION);
-		for (final EClass concrete : getInstantiableClasses(queryPackage, type)) {
-			final EClass actualType = resolveChildType(selected, concrete);
-			final String name = useClassName ? actualType.getName() : ref.getName();
-			addMenuItem(menu, NLS.bind(Messages.AddChild, name), () -> {
-				addChild(editingDomain, queryPackage, selected, ref, actualType);
+		for (final EClass concrete : getAddableClasses(queryPackage, selected, type)) {
+			addMenuItem(menu, NLS.bind(Messages.AddChild, getChildLabel(ref, concrete)), () -> {
+				addChild(editingDomain, queryPackage, selected, ref, concrete);
 				afterAdd.run();
 			});
 		}
 	}
 
-	private static EClass resolveChildType(final EObject parent, final EClass childType) {
-		if (isOfType(parent, ATTRIBUTE_CONSTRAINT) && CONSTRAINT.equals(childType.getName())) {
-			return parent.eClass();
+	private static List<EClass> getAddableClasses(final EPackage queryPackage, final EObject parent,
+			final EClass type) {
+		if (isConstraintClass(type)) {
+			// a constraint slot accepts both Constraint and AttributeConstraint
+			return getConcreteSubclasses(queryPackage, type).stream().filter(cls -> isChildTypeAllowed(parent, cls))
+					.toList();
 		}
-		return childType;
+		return getInstantiableClasses(queryPackage, type);
+	}
+
+	private static String getChildLabel(final EReference ref, final EClass childType) {
+		final EClass refType = ref.getEReferenceType();
+		if (TARGET_OPTION.equals(refType.getName())) {
+			return childType.getName();
+		}
+		if (isConstraintClass(refType)) {
+			final String refName = ref.getName();
+			final String prefix = refName.regionMatches(true, refName.length() - CONSTRAINT.length(), CONSTRAINT, 0,
+					CONSTRAINT.length()) ? refName.substring(0, refName.length() - CONSTRAINT.length()) : refName;
+			final String className = childType.getName();
+			return prefix.isEmpty() ? Character.toLowerCase(className.charAt(0)) + className.substring(1)
+					: prefix + className;
+		}
+		return ref.getName();
 	}
 
 	public static void populateRemoveMenuItem(final Menu menu, final EObject selected,

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.InstanceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.OccurrenceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.PinConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.TypeConfig;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -116,10 +117,11 @@ public class QuerySearchAdapter {
 		final FilterRecord constraint = readFilterRecord(targetOption, QueryModelHelper.REF_CONSTRAINT, placeholders);
 
 		return searchCandidate -> switch (searchCandidate) {
-		case final Attribute attribute when mode == BulkEditorMode.ADVANCED_ATTRIBUTE -> constraint
-				.matches(attribute.getName(), attribute.getTypeName(), attribute.getComment(), attribute.getValue());
-		case final VarDeclaration varDecl when mode == BulkEditorMode.VARIABLE -> constraint.matches(varDecl.getName(),
-				varDecl.getTypeName(), varDecl.getComment(), varDecl.getValueString());
+		case final Attribute attribute when mode == BulkEditorMode.ADVANCED_ATTRIBUTE ->
+			constraint.accepts(MatchTarget.ofAttribute(attribute));
+		case final VarDeclaration varDecl when mode == BulkEditorMode.VARIABLE ->
+			constraint.accepts(MatchTarget.of(varDecl.getName(), varDecl.getTypeName(), varDecl.getComment(),
+					InitialValueHelper.getInitialOrDefaultValue(varDecl), varDecl));
 		case null, default -> false;
 		};
 	}
@@ -188,11 +190,8 @@ public class QuerySearchAdapter {
 			return TypeConfig.INACTIVE;
 		}
 		final FilterRecord constraintRecord = readFilterRecord(child, QueryModelHelper.REF_CONSTRAINT, placeholders);
-		final FilterRecord attributeConstraintRecord = readFilterRecord(child,
-				QueryModelHelper.REF_ATTRIBUTE_CONSTRAINT, placeholders);
 
-		return new TypeConfig(true, constraintRecord, attributeConstraintRecord,
-				buildPinConfig(child, placeholders, pinsImplicit));
+		return new TypeConfig(true, constraintRecord, buildPinConfig(child, placeholders, pinsImplicit));
 	}
 
 	private static InstanceConfig buildInstanceConfig(final EObject place, final String refName,
@@ -205,10 +204,8 @@ public class QuerySearchAdapter {
 			return InstanceConfig.INACTIVE;
 		}
 		final FilterRecord constraintRecord = readFilterRecord(child, QueryModelHelper.REF_CONSTRAINT, placeholders);
-		final FilterRecord attributeConstraintRecord = readFilterRecord(child,
-				QueryModelHelper.REF_ATTRIBUTE_CONSTRAINT, placeholders);
 
-		return new InstanceConfig(true, constraintRecord, attributeConstraintRecord,
+		return new InstanceConfig(true, constraintRecord,
 				readOccurrenceConfig(child, QueryModelHelper.REF_APPLICATION_OCCURRENCE, placeholders),
 				readOccurrenceConfig(child, QueryModelHelper.REF_COMPOSITE_FB_OCCURRENCE, placeholders),
 				readOccurrenceConfig(child, QueryModelHelper.REF_TYPED_SUBAPP_OCCURRENCE, placeholders),
@@ -223,10 +220,8 @@ public class QuerySearchAdapter {
 		}
 
 		final FilterRecord constraintRecord = readFilterRecord(pin, QueryModelHelper.REF_CONSTRAINT, placeholders);
-		final FilterRecord attributeConstraintRecord = readFilterRecord(pin, QueryModelHelper.REF_ATTRIBUTE_CONSTRAINT,
-				placeholders);
 
-		return new PinConfig(true, constraintRecord, attributeConstraintRecord);
+		return new PinConfig(true, constraintRecord);
 	}
 
 	private static FilterRecord readFilterRecord(final EObject parent, final String constraintRefName,
@@ -240,6 +235,7 @@ public class QuerySearchAdapter {
 			return FilterRecord.INACTIVE;
 		}
 		return new FilterRecord(true, QueryModelHelper.isNegatedConstraint(constraint),
+				QueryModelHelper.isAttributeConstraint(constraint),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_NAME, placeholders),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_TYPE, placeholders),
 				readConstraintField(constraint, QueryModelHelper.FEATURE_COMMENT, placeholders),
@@ -263,8 +259,7 @@ public class QuerySearchAdapter {
 		if (occ == null) {
 			return OccurrenceConfig.INACTIVE;
 		}
-		return new OccurrenceConfig(true, readFilterRecord(occ, QueryModelHelper.REF_CONSTRAINT, placeholders),
-				readFilterRecord(occ, QueryModelHelper.REF_ATTRIBUTE_CONSTRAINT, placeholders));
+		return new OccurrenceConfig(true, readFilterRecord(occ, QueryModelHelper.REF_CONSTRAINT, placeholders));
 	}
 
 	private static MatcherConfig readConstraintField(final EObject constraint, final String fieldName,

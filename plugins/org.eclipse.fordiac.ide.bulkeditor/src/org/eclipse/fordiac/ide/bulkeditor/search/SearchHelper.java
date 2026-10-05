@@ -138,55 +138,47 @@ public class SearchHelper {
 			return typeEntry.getType();
 		}
 
+		private static MatchTarget typeTarget(final TypeEntry entry) {
+			return MatchTarget.of(entry.getFullTypeName(), null, entry.getComment(), null, entry.getType());
+		}
+
 		private Stream<? extends TypeEntry> getSimpleTypes(final PlaceConfig cfg) {
 			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof SimpleFBType)
-					.filter(entry -> cfg.simpleType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.simpleType().matchesAttribute(entry.getType()));
+					.filter(entry -> cfg.simpleType().matches(typeTarget(entry)));
 		}
 
 		private Stream<? extends TypeEntry> getBasicTypes(final PlaceConfig cfg) {
 			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof BasicFBType)
-					.filter(entry -> cfg.basicType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.basicType().matchesAttribute(entry.getType()));
+					.filter(entry -> cfg.basicType().matches(typeTarget(entry)));
 		}
 
 		private Stream<? extends TypeEntry> getCompositeTypes(final PlaceConfig cfg) {
-			return getTypelib().getFbTypes()
-					.filter(entry -> entry.getType() instanceof CompositeFBType
-							&& !(entry.getType() instanceof SubAppType)
-							&& cfg.compositeType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.compositeType().matchesAttribute(entry.getType()));
+			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof CompositeFBType
+					&& !(entry.getType() instanceof SubAppType) && cfg.compositeType().matches(typeTarget(entry)));
 		}
 
 		private Stream<? extends TypeEntry> getServiceInterfaceTypes(final PlaceConfig cfg) {
 			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof ServiceInterfaceFBType)
-					.filter(entry -> cfg.serviceInterfaceType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.serviceInterfaceType().matchesAttribute(entry.getType()));
+					.filter(entry -> cfg.serviceInterfaceType().matches(typeTarget(entry)));
 		}
 
 		private Stream<? extends TypeEntry> getFunctionTypes(final PlaceConfig cfg) {
 			return getTypelib().getFbTypes().filter(entry -> entry.getType() instanceof FunctionFBType)
-					.filter(entry -> cfg.functionType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.functionType().matchesAttribute(entry.getType()));
+					.filter(entry -> cfg.functionType().matches(typeTarget(entry)));
 		}
 
 		private Stream<? extends TypeEntry> getSubappTypes(final PlaceConfig cfg) {
-			return getTypelib().getSubAppTypes()
-					.filter(entry -> cfg.subappType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.subappType().matchesAttribute(entry.getType()));
+			return getTypelib().getSubAppTypes().filter(entry -> cfg.subappType().matches(typeTarget(entry)));
 		}
 
 		private Stream<? extends TypeEntry> getStructTypes(final PlaceConfig cfg) {
 			return getTypelib().getDataTypeLibrary().getDerivedDataTypes()
 					.filter(entry -> entry.getType() instanceof StructuredType)
-					.filter(entry -> cfg.structType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.structType().matchesAttribute(entry.getType()));
+					.filter(entry -> cfg.structType().matches(typeTarget(entry)));
 		}
 
 		private Stream<? extends TypeEntry> getAttributeTypes(final PlaceConfig cfg) {
-			return getTypelib().getAttributeTypes()
-					.filter(entry -> cfg.attributeType().matches(entry.getFullTypeName(), entry.getComment())
-							&& cfg.attributeType().matchesAttribute(entry.getType()));
+			return getTypelib().getAttributeTypes().filter(entry -> cfg.attributeType().matches(typeTarget(entry)));
 		}
 	}
 
@@ -257,9 +249,6 @@ public class SearchHelper {
 
 		private Stream<? extends EObject> getInstanceElementChildren(final BlockFBNetworkElement elem) {
 			final InstanceConfig instanceConfig = resolveInstancePinConfig(elem);
-			if (!instanceConfig.matchesAttribute(elem)) {
-				return Stream.empty();
-			}
 
 			Stream<? extends EObject> children = elem.getAttributes().stream();
 
@@ -304,12 +293,10 @@ public class SearchHelper {
 			}
 
 			return SearchChildrenProviderHelper.getInterfaceListChildren(iface).filter(pin -> {
-				if (pin instanceof final VarDeclaration varDecl) {
-					return pinCfg.includePin(varDecl.getName(), varDecl.getTypeName(), varDecl.getComment(),
-							varDecl.getValueString());
-				}
-				return pinCfg.includePin(pin.getName(), pin.getTypeName(), pin.getComment(), null);
-			}).filter(pinCfg::matchesAttribute);
+				final String value = (pin instanceof final VarDeclaration varDecl) ? varDecl.getValueString() : null;
+				return pinCfg
+						.includePin(MatchTarget.of(pin.getName(), pin.getTypeName(), pin.getComment(), value, pin));
+			});
 		}
 
 		private Stream<? extends EObject> getFBTypeChildren(final FBType fbType) {
@@ -378,10 +365,9 @@ public class SearchHelper {
 			final PinConfig pinCfg = cfg.attributeType().pin();
 			if (attrdecl.getType() instanceof final StructuredType structType && pinCfg.active()) {
 				// members of attributeType Struct
-				final var typeChildren = SearchChildrenProviderHelper
-						.getStructChildren(structType).filter(member -> pinCfg.includePin(member.getName(),
-								member.getTypeName(), member.getComment(), member.getValueString()))
-						.filter(pinCfg::matchesAttribute);
+				final var typeChildren = SearchChildrenProviderHelper.getStructChildren(structType)
+						.filter(member -> pinCfg.includePin(MatchTarget.of(member.getName(), member.getTypeName(),
+								member.getComment(), member.getValueString(), member)));
 				children = Stream.concat(children, typeChildren);
 			} else if (attrdecl.getType() instanceof DirectlyDerivedType) {
 				// TODO: directly derived types (Add special constraint for AttributeType)
@@ -397,10 +383,9 @@ public class SearchHelper {
 			// Member variables — gated and filtered by StructType's PIN config
 			final PinConfig pinCfg = cfg.structType().pin();
 			if (pinCfg.active()) {
-				final var typeChildren = SearchChildrenProviderHelper
-						.getStructChildren(structType).filter(member -> pinCfg.includePin(member.getName(),
-								member.getTypeName(), member.getComment(), member.getValueString()))
-						.filter(pinCfg::matchesAttribute);
+				final var typeChildren = SearchChildrenProviderHelper.getStructChildren(structType)
+						.filter(member -> pinCfg.includePin(MatchTarget.of(member.getName(), member.getTypeName(),
+								member.getComment(), member.getValueString(), member)));
 				children = Stream.concat(children, typeChildren);
 			}
 
@@ -434,8 +419,8 @@ public class SearchHelper {
 			Stream<? extends EObject> stream = Stream.empty();
 
 			if (ctx != null && cfg.untypedSubapp().matchesOccurrence(ctx.kind(), ctx.context())
-					&& cfg.untypedSubapp().matches(untypedSubapp.getName(), null, untypedSubapp.getComment())
-					&& cfg.untypedSubapp().matchesAttribute(untypedSubapp)) {
+					&& cfg.untypedSubapp().matches(MatchTarget.of(untypedSubapp.getName(), null,
+							untypedSubapp.getComment(), null, untypedSubapp))) {
 				final PinConfig pinCfg = resolveInstancePinConfig(untypedSubapp).pin();
 				stream = Stream.concat(stream, getFilteredInterfaceChildren(untypedSubapp.getInterface(), pinCfg));
 				stream = Stream.concat(stream, untypedSubapp.getAttributes().stream());
@@ -471,7 +456,7 @@ public class SearchHelper {
 			}
 			if (fbne instanceof final TypedSubApp tsa) {
 				return cfg.typedSubapp().matchesOccurrence(occurrence, context)
-						&& cfg.typedSubapp().matches(tsa.getName(), tsa.getTypeName(), tsa.getComment());
+						&& cfg.typedSubapp().matches(instanceTarget(tsa));
 			}
 			if (fbne instanceof final FB fb) {
 				return matchesFBInstance(fb, occurrence, context);
@@ -488,25 +473,29 @@ public class SearchHelper {
 			}
 			if (type instanceof CompositeFBType) {
 				return cfg.compositeFB().matchesOccurrence(occurrence, context)
-						&& cfg.compositeFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
+						&& cfg.compositeFB().matches(instanceTarget(fb));
 			}
 			if (type instanceof SimpleFBType) {
 				return cfg.simpleFB().matchesOccurrence(occurrence, context)
-						&& cfg.simpleFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
+						&& cfg.simpleFB().matches(instanceTarget(fb));
 			}
 			if (type instanceof BasicFBType) {
 				return cfg.basicFB().matchesOccurrence(occurrence, context)
-						&& cfg.basicFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
+						&& cfg.basicFB().matches(instanceTarget(fb));
 			}
 			if (type instanceof ServiceInterfaceFBType) {
 				return cfg.serviceInterfaceFB().matchesOccurrence(occurrence, context)
-						&& cfg.serviceInterfaceFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
+						&& cfg.serviceInterfaceFB().matches(instanceTarget(fb));
 			}
 			if (type instanceof FunctionFBType) {
 				return cfg.functionFB().matchesOccurrence(occurrence, context)
-						&& cfg.functionFB().matches(fb.getName(), fb.getTypeName(), fb.getComment());
+						&& cfg.functionFB().matches(instanceTarget(fb));
 			}
 			return false;
+		}
+
+		private static MatchTarget instanceTarget(final FBNetworkElement elem) {
+			return MatchTarget.of(elem.getName(), elem.getTypeName(), elem.getComment(), null, elem);
 		}
 
 		private record OccurrenceContext(String kind, INamedElement context) {
