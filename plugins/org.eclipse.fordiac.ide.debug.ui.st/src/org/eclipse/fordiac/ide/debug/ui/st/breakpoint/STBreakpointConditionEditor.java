@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.debug.ui.st.breakpoint;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint;
 import org.eclipse.fordiac.ide.debug.ui.st.Messages;
@@ -23,7 +24,6 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmConditionEditedResourceProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.text.DocumentEvent;
@@ -108,7 +108,7 @@ public class STBreakpointConditionEditor {
 						STDebugUIUtil.getAdditionalScope(input.getMarker().getResource(), input.getLineNumber()),
 						ElementaryTypes.BOOL);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Couldn't get breakpoint attributes", e); //$NON-NLS-1$
+				ILog.get().error("Couldn't get breakpoint attributes", e); //$NON-NLS-1$
 				STAlgorithmEmbeddedEditorUtil.updateEditor(conditionEditor, null, null, null, ElementaryTypes.BOOL);
 			}
 			conditionEditorModelAccess.updateModel(input.getCondition());
@@ -140,7 +140,7 @@ public class STBreakpointConditionEditor {
 			}
 			setDirty(false);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Couldn't set breakpoint condition on " + input, e); //$NON-NLS-1$
+			ILog.get().error("Couldn't set breakpoint condition on " + input, e); //$NON-NLS-1$
 		}
 	}
 
