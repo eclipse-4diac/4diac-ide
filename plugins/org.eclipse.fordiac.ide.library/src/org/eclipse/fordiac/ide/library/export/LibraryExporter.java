@@ -54,9 +54,6 @@ public class LibraryExporter {
 	private final String version;
 	private final IProject project;
 
-	private static final String WILDCARD_EXACTLY_ONE = "*"; //$NON-NLS-1$
-	private static final String WILDCARD_AT_LEAST_ONE = "**"; //$NON-NLS-1$
-
 	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final Library library,
 			final String version, final IProject project) {
 		this.outputDirectory = outputDirectory;
@@ -172,45 +169,8 @@ public class LibraryExporter {
 	}
 
 	private static Predicate<TypeEntry> matchesAny(final EList<LibraryElement> patterns) {
-		return typeEntry -> patterns.stream()
-				.anyMatch(pattern -> matchesPackage(typeEntry.getFullTypeName(), pattern.getValue()));
-	}
-
-	// TODO Move to package name helper? and add unit tests
-	private static boolean matchesPackage(final String packageName, final String pattern) {
-		final String[] packageSegments = packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER);
-		final String[] patternSegments = pattern.split(PackageNameHelper.PACKAGE_NAME_DELIMITER);
-
-		int packageIndex = 0;
-		int patternIndex = 0;
-
-		int wildcardPatternIndex = -1;
-		int wildcardPackageIndex = -1;
-
-		while (packageIndex < packageSegments.length) {
-			if (patternIndex < patternSegments.length && (WILDCARD_EXACTLY_ONE.equals(patternSegments[patternIndex]) // $NON-NLS-1$
-					|| packageSegments[packageIndex].equals(patternSegments[patternIndex]))) {
-				packageIndex++;
-				patternIndex++;
-			} else if (patternIndex < patternSegments.length
-					&& WILDCARD_AT_LEAST_ONE.equals(patternSegments[patternIndex])) { // $NON-NLS-1$
-				// whildcard match at least one segment
-				wildcardPatternIndex = patternIndex;
-				patternIndex++;
-				packageIndex++;
-				wildcardPackageIndex = packageIndex;
-			} else if (wildcardPatternIndex >= 0 && wildcardPackageIndex < packageSegments.length) {
-
-				// Previous wildcard consumes additional segment
-				patternIndex = wildcardPatternIndex + 1;
-				wildcardPackageIndex++;
-				packageIndex = wildcardPackageIndex;
-			} else {
-				return false;
-			}
-		}
-
-		return patternIndex == patternSegments.length;
+		return typeEntry -> patterns.stream().anyMatch(
+				pattern -> PackageNameMatcher.matchesPattern(typeEntry.getFullTypeName(), pattern.getValue()));
 	}
 
 	private static void deleteDirectory(final Path directory) throws IOException {
