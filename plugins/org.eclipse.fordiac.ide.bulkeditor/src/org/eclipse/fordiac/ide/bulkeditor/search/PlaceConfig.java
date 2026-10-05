@@ -62,51 +62,30 @@ public record PlaceConfig( //@formatter:off
 				|| untypedSubapp.hasOccurrence(occurrence);
 	}
 
-	public record TypeConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint,
-			PinConfig pin) {
-		public static final TypeConfig INACTIVE = new TypeConfig(false, FilterRecord.INACTIVE, FilterRecord.INACTIVE,
-				PinConfig.INACTIVE);
+	public record TypeConfig(boolean selected, FilterRecord constraint, PinConfig pin) {
+		public static final TypeConfig INACTIVE = new TypeConfig(false, FilterRecord.INACTIVE, PinConfig.INACTIVE);
 
-		public boolean matches(final String name, final String comment) {
-			return !constraint.isSelected() || constraint.matches(name, null, comment, null);
-		}
-
-		public boolean matchesAttribute(final ConfigurableObject confObj) {
-			return !attributeConstraint.isSelected()
-					|| confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
-							att.getTypeName(), att.getComment(), att.getValue()));
+		public boolean matches(final MatchTarget target) {
+			return constraint.accepts(target);
 		}
 	}
 
-	public record OccurrenceConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint) {
-		public static final OccurrenceConfig INACTIVE = new OccurrenceConfig(false, FilterRecord.INACTIVE,
-				FilterRecord.INACTIVE);
+	public record OccurrenceConfig(boolean selected, FilterRecord constraint) {
+		public static final OccurrenceConfig INACTIVE = new OccurrenceConfig(false, FilterRecord.INACTIVE);
 
 		public boolean matchesContext(final INamedElement context) {
 			if (!selected) {
 				return false;
 			}
-			return !constraint.isSelected() || constraint.matches(context.getName(), null, context.getComment(), null);
-		}
-
-		public boolean matchesContextAttribute(final INamedElement context) {
-			if (!selected || !attributeConstraint.isSelected()) {
-				return true;
-			}
-			if (context instanceof final ConfigurableObject confObj) {
-				return confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
-						att.getTypeName(), att.getComment(), att.getValue()));
-			}
-			return true;
+			final ConfigurableObject owner = context instanceof final ConfigurableObject co ? co : null;
+			return constraint.accepts(MatchTarget.of(context.getName(), null, context.getComment(), null, owner));
 		}
 	}
 
-	public record InstanceConfig(boolean selected, FilterRecord constraint, FilterRecord attributeConstraint,
-			OccurrenceConfig application, OccurrenceConfig compositeFBOcc, OccurrenceConfig typedSubappOcc,
-			PinConfig pin) {
+	public record InstanceConfig(boolean selected, FilterRecord constraint, OccurrenceConfig application,
+			OccurrenceConfig compositeFBOcc, OccurrenceConfig typedSubappOcc, PinConfig pin) {
 		public static final InstanceConfig INACTIVE = new InstanceConfig(false, FilterRecord.INACTIVE,
-				FilterRecord.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE,
-				PinConfig.INACTIVE);
+				OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE, PinConfig.INACTIVE);
 
 		private boolean noOccurrenceRestriction() {
 			return !application.selected() && !compositeFBOcc.selected() && !typedSubappOcc.selected();
@@ -126,8 +105,7 @@ public record PlaceConfig( //@formatter:off
 			if (noOccurrenceRestriction()) {
 				return true;
 			}
-			final OccurrenceConfig occ = occurrenceFor(kind);
-			return occ.matchesContext(context) && occ.matchesContextAttribute(context);
+			return occurrenceFor(kind).matchesContext(context);
 		}
 
 		private OccurrenceConfig occurrenceFor(final String kind) {
@@ -139,30 +117,17 @@ public record PlaceConfig( //@formatter:off
 			};
 		}
 
-		public boolean matches(final String name, final String type, final String comment) {
-			return !constraint.isSelected() || constraint.matches(name, type, comment, null);
-		}
-
-		public boolean matchesAttribute(final ConfigurableObject confObj) {
-			return !attributeConstraint.isSelected()
-					|| confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
-							att.getTypeName(), att.getComment(), att.getValue()));
+		public boolean matches(final MatchTarget target) {
+			return constraint.accepts(target);
 		}
 	}
 
-	public record PinConfig(boolean active, FilterRecord constraint, FilterRecord attributeConstraint) {
-		public static final PinConfig INACTIVE = new PinConfig(false, FilterRecord.INACTIVE, FilterRecord.INACTIVE);
-		public static final PinConfig ACTIVE_UNFILTERED = new PinConfig(true, FilterRecord.INACTIVE,
-				FilterRecord.INACTIVE);
+	public record PinConfig(boolean active, FilterRecord constraint) {
+		public static final PinConfig INACTIVE = new PinConfig(false, FilterRecord.INACTIVE);
+		public static final PinConfig ACTIVE_UNFILTERED = new PinConfig(true, FilterRecord.INACTIVE);
 
-		public boolean includePin(final String name, final String type, final String comment, final String value) {
-			return !constraint.isSelected() || constraint.matches(name, type, comment, value);
-		}
-
-		public boolean matchesAttribute(final ConfigurableObject confObj) {
-			return !attributeConstraint.isSelected()
-					|| confObj.getAttributes().stream().anyMatch(att -> attributeConstraint.matches(att.getName(),
-							att.getTypeName(), att.getComment(), att.getValue()));
+		public boolean includePin(final MatchTarget target) {
+			return constraint.accepts(target);
 		}
 	}
 }
