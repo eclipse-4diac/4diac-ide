@@ -23,13 +23,13 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorInput;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -62,7 +62,7 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 					window.getActivePage().openEditor(new BulkEditorInput(project, subAppList),
 							"org.eclipse.fordiac.ide.bulkeditor.BulkEditor"); //$NON-NLS-1$
 				} catch (final Exception e) {
-					FordiacLogHelper.logWarning("Couldn't open Bulk Editor", e); //$NON-NLS-1$
+					ILog.get().warn("Couldn't open Bulk Editor", e); //$NON-NLS-1$
 				}
 			});
 		}
