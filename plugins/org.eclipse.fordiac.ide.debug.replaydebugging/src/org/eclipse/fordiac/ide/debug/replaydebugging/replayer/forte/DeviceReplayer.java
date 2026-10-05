@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IDeviceReplayer;
 import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IResourceReplayer;
 import org.eclipse.fordiac.ide.deployment.debug.Messages;
@@ -25,7 +26,6 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class DeviceReplayer implements IDeviceReplayer {
 
@@ -56,7 +56,7 @@ public class DeviceReplayer implements IDeviceReplayer {
 				result.put(resource, new ResourceReplayer(executorService, resource));
 			}
 		} catch (final DeploymentException e) {
-			FordiacLogHelper.logError("Error in reading traces!", e); //$NON-NLS-1$
+			ILog.get().error("Error in reading traces!", e); //$NON-NLS-1$
 		}
 		return result;
 	}
@@ -66,8 +66,7 @@ public class DeviceReplayer implements IDeviceReplayer {
 		try {
 			executorService.disconnect();
 		} catch (final DeploymentException e) {
-			FordiacLogHelper
-					.logError(MessageFormat.format(Messages.DeploymentDebugDevice_ConnectError, device.getName()));
+			ILog.get().error(MessageFormat.format(Messages.DeploymentDebugDevice_ConnectError, device.getName()));
 			return false;
 		}
 		return true;
