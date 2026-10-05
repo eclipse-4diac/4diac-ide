@@ -90,6 +90,19 @@ class PackageNameMatchingTest {
 				Arguments.of("a::x::y::b::d", "a::**::b::c", Boolean.FALSE)); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	@SuppressWarnings("static-method")
+	@ParameterizedTest
+	@MethodSource("provideCaseInsensitiveMatches")
+	void testMatchesCaseInsensitivity(final String packageName, final String pattern, final Boolean expected) {
+		testMatch(packageName, pattern, expected);
+	}
+
+	private static Stream<Arguments> provideCaseInsensitiveMatches() {
+		return Stream.of(Arguments.of("controls::motor", "Controls::Motor", Boolean.TRUE), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("Controls::Motor", "controls::motor", Boolean.TRUE), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("CONTROLS::MOTOR", "controls::*", Boolean.TRUE)); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	private static void testMatch(final String packageName, final String pattern, final Boolean expected) {
 		assertEquals(expected, Boolean.valueOf(PackageNameMatcher.matchesPattern(packageName, pattern)));
 	}
