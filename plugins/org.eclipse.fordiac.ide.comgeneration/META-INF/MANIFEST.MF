@@ -18,4 +18,3 @@ Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.comgeneration
-Import-Package: org.eclipse.fordiac.ide.util
