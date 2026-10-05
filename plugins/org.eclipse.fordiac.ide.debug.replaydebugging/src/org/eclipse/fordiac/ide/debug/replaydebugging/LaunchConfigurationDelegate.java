@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /**
  * Launch delegate for the Replay Debugging configuration.
@@ -78,7 +78,7 @@ public class LaunchConfigurationDelegate extends DeploymentLaunchConfigurationDe
 			debugTarget.start();
 
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Couldn't launch replay debugging target!", e); //$NON-NLS-1$
+			ILog.get().error("Couldn't launch replay debugging target!", e); //$NON-NLS-1$
 		}
 	}
 

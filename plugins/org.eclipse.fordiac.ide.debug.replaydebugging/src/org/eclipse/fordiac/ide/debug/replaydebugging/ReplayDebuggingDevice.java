@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -46,7 +47,6 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /**
  * @brief A debug device for replay debugging. It handles the watches of the
@@ -248,7 +248,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.removeWatch();
 			} catch (final DebugException e) {
-				FordiacLogHelper.logWarning("Cannot remove watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot remove watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -274,7 +274,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 					variableWatch.clearForce();
 				}
 			} catch (final DebugException e) {
-				FordiacLogHelper.logWarning("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -294,7 +294,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 				}
 				updateWatches();
 			} catch (final CoreException e) {
-				FordiacLogHelper.logWarning("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 
@@ -317,7 +317,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 				}
 				updateWatches();
 			} catch (final CoreException e) {
-				FordiacLogHelper.logWarning("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
