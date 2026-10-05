@@ -17,11 +17,11 @@ import java.util.Objects;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.LineBreakpoint;
 import org.eclipse.fordiac.ide.debug.CommonEvaluatorDebugger;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugStackFrame;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public abstract class EvaluatorLineBreakpoint extends LineBreakpoint implements IEvaluatorBreakpoint {
 
@@ -75,7 +75,7 @@ public abstract class EvaluatorLineBreakpoint extends LineBreakpoint implements 
 			}
 			return true;
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 			// ignore (we don't care about broken breakpoints)
 			return false;
 		}

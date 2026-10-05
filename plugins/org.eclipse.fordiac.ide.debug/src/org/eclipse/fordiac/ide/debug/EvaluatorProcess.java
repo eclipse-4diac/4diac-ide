@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class EvaluatorProcess extends AbstractLaunchProcess implements Callable<IStatus> {
 
@@ -75,7 +75,7 @@ public class EvaluatorProcess extends AbstractLaunchProcess implements Callable<
 			return Status.error("Terminated"); //$NON-NLS-1$
 		} catch (final Exception t) {
 			streamsProxy.getErrorStreamMonitor().error("Exception occurred", t); //$NON-NLS-1$
-			FordiacLogHelper.logWarning("Exception occurred while evaluating " + name, t); //$NON-NLS-1$
+			ILog.get().warn("Exception occurred while evaluating " + name, t); //$NON-NLS-1$
 			return Status.error("Exception occurred", t); //$NON-NLS-1$
 		} finally {
 			executor.shutdown();
