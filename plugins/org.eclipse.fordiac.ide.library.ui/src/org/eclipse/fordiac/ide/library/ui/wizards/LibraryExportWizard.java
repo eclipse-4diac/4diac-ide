@@ -20,16 +20,19 @@ import java.util.Collections;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.export.LibraryExporter;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.ide.IDE;
 import org.osgi.framework.Version;
 
 public class LibraryExportWizard extends Wizard implements IExportWizard {
@@ -41,6 +44,13 @@ public class LibraryExportWizard extends Wizard implements IExportWizard {
 
 	@Override
 	public boolean performFinish() {
+		final IResource[] relevantResourceRoots = { project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME),
+				project.getFile(LibraryManager.MANIFEST) };
+
+		if (!IDE.saveAllEditors(relevantResourceRoots, true)) {
+			return false;
+		}
+
 		final LibraryExporter exporter = new LibraryExporter(selectionPage.getOutputDirectory(),
 				selectionPage.getTypeSelection(), selectionPage.getSelectedLibrary(), version, project);
 
