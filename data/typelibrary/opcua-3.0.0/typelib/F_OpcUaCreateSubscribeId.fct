@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="F_OpcUaCreateSubscribeId" Comment="Creates an OPC UA identifier for a subscription">
+	<Identification Standard="61499-2" Description="Copyright (c) 2026 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2026-10-14">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::opcua">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="instanceBrowseName"/>
+				<With Var="instanceNodeId"/>
+				<With Var="host"/>
+				<With Var="port"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="instanceBrowseName" Type="WSTRING"/>
+			<VarDeclaration Name="instanceNodeId" Type="WSTRING"/>
+			<VarDeclaration Name="host" Type="WSTRING"/>
+			<VarDeclaration Name="port" Type="USINT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="WSTRING"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE eclipse4diac::opcua;
+
+(* Creates an OPC UA identifier for a subscription *)
+FUNCTION F_OpcUaCreateSubscribeId : WSTRING
+VAR_INPUT
+	instanceBrowseName : WSTRING;
+	instanceNodeId : WSTRING;
+	host : WSTRING;
+	port : USINT;
+END_VAR
+VAR CONSTANT
+	PREFIX : WSTRING := "opc_ua[SUBSCRIBE;opc.tcp://";
+	NODEID_TYPE : WSTRING := ",s=";
+	SUFFIX : WSTRING := "]";
+	SEPARATOR_HASH : WSTRING := "#;";
+	SEPARATOR_HOST : WSTRING := ":";
+END_VAR
+F_OpcUaCreateSubscribeId := CONCAT(PREFIX, host, SEPARATOR_HOST, USINT_AS_WSTRING(port), SEPARATOR_HASH,
+	instanceBrowseName, NODEID_TYPE, instanceNodeId, SUFFIX);
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
+</Function>
