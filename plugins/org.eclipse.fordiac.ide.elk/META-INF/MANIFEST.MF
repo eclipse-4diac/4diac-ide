@@ -30,5 +30,5 @@ Require-Bundle: org.eclipse.elk.core,
  org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-ActivationPolicy: lazy
+Bundle-Localization: plugin
 Export-Package: org.eclipse.fordiac.ide.elk
-Import-Package: org.eclipse.fordiac.ide.util

@@ -20,12 +20,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -55,7 +55,7 @@ public class AddFBBookMark extends AbstractHandler {
 					PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().execute(op, null,
 							WorkspaceUndoUtil.getUIInfoAdapter(HandlerUtil.getActiveShell(event)));
 				} catch (final ExecutionException e) {
-					FordiacLogHelper.logError("Could not create bookmark", e); //$NON-NLS-1$
+					ILog.get().error("Could not create bookmark", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
 			}

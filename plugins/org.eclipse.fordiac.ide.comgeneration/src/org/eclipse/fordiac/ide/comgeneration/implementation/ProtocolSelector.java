@@ -18,11 +18,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class ProtocolSelector {
 
@@ -56,8 +56,8 @@ public final class ProtocolSelector {
 		}
 	}
 
-	private static void processSegment(Iterator<CommunicationChannelDestination> destinationIterator,
-			Segment selectedCommonSegment) {
+	private static void processSegment(final Iterator<CommunicationChannelDestination> destinationIterator,
+			final Segment selectedCommonSegment) {
 		CommunicationChannelDestination destination;
 		while (destinationIterator.hasNext()) {
 			destination = destinationIterator.next();
@@ -77,13 +77,13 @@ public final class ProtocolSelector {
 					}
 				}
 			} else {
-				FordiacLogHelper.logError(Messages.ProtocolSelector_NoConnectionAvailable);
+				ILog.get().error(Messages.ProtocolSelector_NoConnectionAvailable);
 			}
 
 		}
 	}
 
-	private static Segment createSegment(CommunicationChannelDestination destination, Segment selectedSegment) {
+	private static Segment createSegment(final CommunicationChannelDestination destination, Segment selectedSegment) {
 		final ArrayList<Segment> availableSegments = new ArrayList<>();
 		for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
 			availableSegments.add(mediaInfo.getSegment());
@@ -95,7 +95,7 @@ public final class ProtocolSelector {
 		return selectedSegment;
 	}
 
-	private static void removeSegment(CommunicationChannelDestination destination,
+	private static void removeSegment(final CommunicationChannelDestination destination,
 			final Iterator<Segment> segmentIterator) {
 		while (segmentIterator.hasNext()) {
 			final Segment segment = segmentIterator.next();
@@ -114,7 +114,8 @@ public final class ProtocolSelector {
 	private static String getProtocolIdForMetiaType(final Segment segment) {
 		if (segment.getType().getName().equalsIgnoreCase(ETH)) {
 			return EthernetPubSubGenerator.PROTOCOL_ID;
-		} else if (segment.getType().getName().equalsIgnoreCase(CAN)) {
+		}
+		if (segment.getType().getName().equalsIgnoreCase(CAN)) {
 			return CanPubSubGenerator.PROTOCOL_ID;
 		}
 		return null;

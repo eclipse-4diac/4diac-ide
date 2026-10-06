@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.debug.breakpoint;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -25,7 +26,6 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class BreakpointUtils {
 
@@ -46,7 +46,7 @@ public final class BreakpointUtils {
 			Thread.currentThread().interrupt();
 			return false;
 		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Couldn't evaluate breakpoint condition: " + e.getMessage(), e); //$NON-NLS-1$
+			ILog.get().warn("Couldn't evaluate breakpoint condition: " + e.getMessage(), e); //$NON-NLS-1$
 			return false;
 		}
 	}

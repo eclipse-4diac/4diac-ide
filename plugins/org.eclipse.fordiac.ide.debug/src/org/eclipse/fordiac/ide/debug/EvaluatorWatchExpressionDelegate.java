@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugElement;
@@ -24,7 +25,6 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class EvaluatorWatchExpressionDelegate implements IWatchExpressionDelegate {
 
@@ -51,7 +51,7 @@ public class EvaluatorWatchExpressionDelegate implements IWatchExpressionDelegat
 			try {
 				listener.watchEvaluationFinished(watchResult);
 			} catch (final Exception e) {
-				FordiacLogHelper.logWarning("Exception in watch listener: " + e.getMessage(), e); //$NON-NLS-1$
+				ILog.get().warn("Exception in watch listener: " + e.getMessage(), e); //$NON-NLS-1$
 			}
 		}
 	}

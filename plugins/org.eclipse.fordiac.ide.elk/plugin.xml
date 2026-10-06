@@ -4,10 +4,10 @@
 
 	<!-- Command Definitions -->
 	<extension point="org.eclipse.ui.commands">
-		<command id="org.eclipse.fordiac.ide.elk.layout" name="Layout with ELK"/>
-		<command id="org.eclipse.fordiac.ide.elk.connectionLayout" name="Layout with ELK"/>
-		<command id="org.eclipse.fordiac.ide.elk.connectionLayoutMule" name="Return layout command"/>
-		<command categoryId="org.eclipse.fordiac.ide.commands.category" id="org.eclipse.fordiac.ide.elk.systemExplorerLayout" name="Connection Layouting..."/>
+		<command id="org.eclipse.fordiac.ide.elk.layout" name="%command.layout.name"/>
+		<command id="org.eclipse.fordiac.ide.elk.connectionLayout" name="%command.connectionLayout.name"/>
+		<command id="org.eclipse.fordiac.ide.elk.connectionLayoutMule" name="%command.connectionLayoutMule.name"/>
+		<command categoryId="org.eclipse.fordiac.ide.commands.category" id="org.eclipse.fordiac.ide.elk.systemExplorerLayout" name="%command.systemExplorerLayout.name"/>
 	</extension>
 
 	<!-- Handlers for Commands -->
@@ -22,7 +22,7 @@
 	<extension point="org.eclipse.ui.menus">
 		<!-- System Layout Menu -->
 		<menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
-			<command commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout" style="push" tooltip="Layout the entire system.">
+			<command commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout" style="push" tooltip="%command.systemExplorerLayout.tooltip">
 				<visibleWhen checkEnabled="false">
 					<with variable="selection">
 						<iterate ifEmpty="false">
@@ -47,7 +47,7 @@
 		<!-- Layout Commands in Popup Menus -->
 		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=additions">
 			<separator name="layouting stuff" visible="true"/>
-			<command commandId="org.eclipse.fordiac.ide.elk.layout" label="Auto Layouting" style="push">
+			<command commandId="org.eclipse.fordiac.ide.elk.layout" label="%menu.layout.label" style="push">
 				<visibleWhen checkEnabled="false">
 				    <with variable="selection">
 				        <and>
@@ -64,7 +64,7 @@
 				</visibleWhen>
 			</command>
 
-			<command commandId="org.eclipse.fordiac.ide.elk.connectionLayout" label="Connection Layouting" style="push">
+			<command commandId="org.eclipse.fordiac.ide.elk.connectionLayout" label="%menu.connectionLayout.label" style="push">
 				<visibleWhen checkEnabled="false">
 				    <with variable="selection">
 				        <and>
@@ -85,7 +85,7 @@
 		<!-- Additional Menu Contributions -->
 		<menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
 			<separator name="layouting stuff" visible="true"/>
-			<command commandId="org.eclipse.fordiac.ide.elk.layout" label="Auto Layouting" style="push">
+			<command commandId="org.eclipse.fordiac.ide.elk.layout" label="%menu.layout.label" style="push">
 				<visibleWhen checkEnabled="false">
 					<with variable="selection">
 						<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
@@ -93,7 +93,7 @@
 				</visibleWhen>
 			</command>
 
-			<command commandId="org.eclipse.fordiac.ide.elk.connectionLayout" label="Connection Layouting" style="push">
+			<command commandId="org.eclipse.fordiac.ide.elk.connectionLayout" label="%menu.connectionLayout.label" style="push">
 				<visibleWhen checkEnabled="false">
 					<with variable="selection">
 						<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
@@ -129,7 +129,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.elk.preferences.LayoutPreferencePage"
             id="org.eclipse.fordiac.ide.elk.layoutPreferences"
-            name="Layout">
+            name="%page.layoutPreferences.name">
       </page>
    </extension>
    

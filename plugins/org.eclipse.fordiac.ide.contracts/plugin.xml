@@ -4,13 +4,13 @@
   <extension point="org.eclipse.ui.commands">
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.contracts.defineFbInterfaceConstraint"
-             name="Define Contract for FB Interface Pins" />
+             name="%command.defineFbInterfaceConstraint.name" />
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.contracts.staticContractCheck"
-             name="Static Contract Check" />
+             name="%command.staticContractCheck.name" />
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.contracts.dynamicContractCheck"
-             name="Dynamic Contract Check" />
+             name="%command.dynamicContractCheck.name" />
   </extension>
   <extension point="org.eclipse.ui.handlers">
     <!-- HANDLERS -->

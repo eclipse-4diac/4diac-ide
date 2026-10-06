@@ -295,6 +295,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	}
 
 	@Fix(STCoreValidator.PACKAGE_NAME_MISMATCH)
+	@Fix(STCoreValidator.PACKAGE_NAME_TYPE_MISMATCH)
 	public static void fixPackageNameMismatch(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_ChangePackage,

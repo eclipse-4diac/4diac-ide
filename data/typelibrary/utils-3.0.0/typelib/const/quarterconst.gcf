@@ -2,6 +2,8 @@
 <GlobalConstants Name="quarterconst" Comment="Global constants">
 	<Identification Standard="61499-1">
 	</Identification>
+	<VersionInfo Version="3.0.1" Author="Martin Jobst" Date="2026-09-29" Remarks="fix ST package declaration">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Version="1.0" Author="franz" Date="2024-02-22">
@@ -9,104 +11,106 @@
 	<CompilerInfo packageName="eclipse4diac::utils::const">
 	</CompilerInfo>
 	<GlobalConstants>
-		<VarDeclaration Name="BYTE_QUARTER_ZZ" Type="BYTE" Comment="ZERO Constant"  InitialValue="2#0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_00" Type="SINT" Comment="shift 0 bits"  InitialValue="0"/>
-		<VarDeclaration Name="BYTE_QUARTER_00" Type="BYTE" Comment="quarter byte 00 Constant"  InitialValue="2#0000_0011"/>
-		<VarDeclaration Name="SHIFT_QUARTER_01" Type="SINT" Comment="shift 2 bits"  InitialValue="2"/>
-		<VarDeclaration Name="BYTE_QUARTER_01" Type="BYTE" Comment="quarter byte 01 Constant"  InitialValue="2#0000_1100"/>
-		<VarDeclaration Name="SHIFT_QUARTER_02" Type="SINT" Comment="shift 4 bits"  InitialValue="4"/>
-		<VarDeclaration Name="BYTE_QUARTER_02" Type="BYTE" Comment="quarter byte 02 Constant"  InitialValue="2#0011_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_03" Type="SINT" Comment="shift 6 bits"  InitialValue="6"/>
-		<VarDeclaration Name="BYTE_QUARTER_03" Type="BYTE" Comment="quarter byte 03 Constant"  InitialValue="2#1100_0000"/>
-		<VarDeclaration Name="WORD_QUARTER_ZZ" Type="WORD" Comment="ZERO Constant"  InitialValue="2#0000_0000_0000_0000"/>
-		<VarDeclaration Name="WORD_QUARTER_00" Type="WORD" Comment="quarter WORD 00 Constant"  InitialValue="2#0000_0000_0000_0011"/>
-		<VarDeclaration Name="WORD_QUARTER_01" Type="WORD" Comment="quarter WORD 01 Constant"  InitialValue="2#0000_0000_0000_1100"/>
-		<VarDeclaration Name="WORD_QUARTER_02" Type="WORD" Comment="quarter WORD 02 Constant"  InitialValue="2#0000_0000_0011_0000"/>
-		<VarDeclaration Name="WORD_QUARTER_03" Type="WORD" Comment="quarter WORD 03 Constant"  InitialValue="2#0000_0000_1100_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_04" Type="SINT" Comment="shift 8 bits"  InitialValue="8"/>
-		<VarDeclaration Name="WORD_QUARTER_04" Type="WORD" Comment="quarter WORD 04 Constant"  InitialValue="2#0000_0011_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_05" Type="SINT" Comment="shift 10 bits"  InitialValue="10"/>
-		<VarDeclaration Name="WORD_QUARTER_05" Type="WORD" Comment="quarter WORD 05 Constant"  InitialValue="2#0000_1100_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_06" Type="SINT" Comment="shift 12 bits"  InitialValue="12"/>
-		<VarDeclaration Name="WORD_QUARTER_06" Type="WORD" Comment="quarter WORD 06 Constant"  InitialValue="2#0011_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_07" Type="SINT" Comment="shift 14 bits"  InitialValue="14"/>
-		<VarDeclaration Name="WORD_QUARTER_07" Type="WORD" Comment="quarter WORD 07 Constant"  InitialValue="2#1100_0000_0000_0000"/>
-		<VarDeclaration Name="DWORD_QUARTER_ZZ" Type="DWORD" Comment="ZERO Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="DWORD_QUARTER_00" Type="DWORD" Comment="quarter DWORD 00 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0011"/>
-		<VarDeclaration Name="DWORD_QUARTER_01" Type="DWORD" Comment="quarter DWORD 01 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_1100"/>
-		<VarDeclaration Name="DWORD_QUARTER_02" Type="DWORD" Comment="quarter DWORD 02 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0011_0000"/>
-		<VarDeclaration Name="DWORD_QUARTER_03" Type="DWORD" Comment="quarter DWORD 03 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_1100_0000"/>
-		<VarDeclaration Name="DWORD_QUARTER_04" Type="DWORD" Comment="quarter DWORD 04 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0011_0000_0000"/>
-		<VarDeclaration Name="DWORD_QUARTER_05" Type="DWORD" Comment="quarter DWORD 05 Constant"  InitialValue="2#0000_0000_0000_0000_0000_1100_0000_0000"/>
-		<VarDeclaration Name="DWORD_QUARTER_06" Type="DWORD" Comment="quarter DWORD 06 Constant"  InitialValue="2#0000_0000_0000_0000_0011_0000_0000_0000"/>
-		<VarDeclaration Name="DWORD_QUARTER_07" Type="DWORD" Comment="quarter DWORD 07 Constant"  InitialValue="2#0000_0000_0000_0000_1100_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_08" Type="SINT" Comment="shift 16 bits"  InitialValue="16"/>
-		<VarDeclaration Name="DWORD_QUARTER_08" Type="DWORD" Comment="quarter DWORD 08 Constant"  InitialValue="2#0000_0000_0000_0011_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_09" Type="SINT" Comment="shift 18 bits"  InitialValue="18"/>
-		<VarDeclaration Name="DWORD_QUARTER_09" Type="DWORD" Comment="quarter DWORD 09 Constant"  InitialValue="2#0000_0000_0000_1100_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_10" Type="SINT" Comment="shift 20 bits"  InitialValue="20"/>
-		<VarDeclaration Name="DWORD_QUARTER_10" Type="DWORD" Comment="quarter DWORD 10 Constant"  InitialValue="2#0000_0000_0011_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_11" Type="SINT" Comment="shift 22 bits"  InitialValue="22"/>
-		<VarDeclaration Name="DWORD_QUARTER_11" Type="DWORD" Comment="quarter DWORD 11 Constant"  InitialValue="2#0000_0000_1100_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_12" Type="SINT" Comment="shift 24 bits"  InitialValue="24"/>
-		<VarDeclaration Name="DWORD_QUARTER_12" Type="DWORD" Comment="quarter DWORD 12 Constant"  InitialValue="2#0000_0011_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_13" Type="SINT" Comment="shift 26 bits"  InitialValue="26"/>
-		<VarDeclaration Name="DWORD_QUARTER_13" Type="DWORD" Comment="quarter DWORD 13 Constant"  InitialValue="2#0000_1100_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_14" Type="SINT" Comment="shift 28 bits"  InitialValue="28"/>
-		<VarDeclaration Name="DWORD_QUARTER_14" Type="DWORD" Comment="quarter DWORD 14 Constant"  InitialValue="2#0011_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_15" Type="SINT" Comment="shift 30 bits"  InitialValue="30"/>
-		<VarDeclaration Name="DWORD_QUARTER_15" Type="DWORD" Comment="quarter DWORD 15 Constant"  InitialValue="2#1100_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_ZZ" Type="LWORD" Comment="ZERO Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_00" Type="LWORD" Comment="quarter LWORD 00 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011"/>
-		<VarDeclaration Name="LWORD_QUARTER_01" Type="LWORD" Comment="quarter LWORD 01 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100"/>
-		<VarDeclaration Name="LWORD_QUARTER_02" Type="LWORD" Comment="quarter LWORD 02 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_03" Type="LWORD" Comment="quarter LWORD 03 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_04" Type="LWORD" Comment="quarter LWORD 04 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_05" Type="LWORD" Comment="quarter LWORD 05 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_06" Type="LWORD" Comment="quarter LWORD 06 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_07" Type="LWORD" Comment="quarter LWORD 07 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_08" Type="LWORD" Comment="quarter LWORD 08 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_09" Type="LWORD" Comment="quarter LWORD 09 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_10" Type="LWORD" Comment="quarter LWORD 10 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_11" Type="LWORD" Comment="quarter LWORD 11 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_12" Type="LWORD" Comment="quarter LWORD 12 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_13" Type="LWORD" Comment="quarter LWORD 13 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_14" Type="LWORD" Comment="quarter LWORD 14 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="LWORD_QUARTER_15" Type="LWORD" Comment="quarter LWORD 15 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_16" Type="SINT" Comment="shift 32 bits"  InitialValue="32"/>
-		<VarDeclaration Name="LWORD_QUARTER_16" Type="LWORD" Comment="quarter LWORD 16 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_17" Type="SINT" Comment="shift 34 bits"  InitialValue="34"/>
-		<VarDeclaration Name="LWORD_QUARTER_17" Type="LWORD" Comment="quarter LWORD 17 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_18" Type="SINT" Comment="shift 36 bits"  InitialValue="36"/>
-		<VarDeclaration Name="LWORD_QUARTER_18" Type="LWORD" Comment="quarter LWORD 18 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_19" Type="SINT" Comment="shift 38 bits"  InitialValue="38"/>
-		<VarDeclaration Name="LWORD_QUARTER_19" Type="LWORD" Comment="quarter LWORD 19 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_20" Type="SINT" Comment="shift 40 bits"  InitialValue="40"/>
-		<VarDeclaration Name="LWORD_QUARTER_20" Type="LWORD" Comment="quarter LWORD 20 Constant"  InitialValue="2#0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_21" Type="SINT" Comment="shift 42 bits"  InitialValue="42"/>
-		<VarDeclaration Name="LWORD_QUARTER_21" Type="LWORD" Comment="quarter LWORD 21 Constant"  InitialValue="2#0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_22" Type="SINT" Comment="shift 44 bits"  InitialValue="44"/>
-		<VarDeclaration Name="LWORD_QUARTER_22" Type="LWORD" Comment="quarter LWORD 22 Constant"  InitialValue="2#0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_23" Type="SINT" Comment="shift 46 bits"  InitialValue="46"/>
-		<VarDeclaration Name="LWORD_QUARTER_23" Type="LWORD" Comment="quarter LWORD 23 Constant"  InitialValue="2#0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_24" Type="SINT" Comment="shift 48 bits"  InitialValue="48"/>
-		<VarDeclaration Name="LWORD_QUARTER_24" Type="LWORD" Comment="quarter LWORD 24 Constant"  InitialValue="2#0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_25" Type="SINT" Comment="shift 50 bits"  InitialValue="50"/>
-		<VarDeclaration Name="LWORD_QUARTER_25" Type="LWORD" Comment="quarter LWORD 25 Constant"  InitialValue="2#0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_26" Type="SINT" Comment="shift 52 bits"  InitialValue="52"/>
-		<VarDeclaration Name="LWORD_QUARTER_26" Type="LWORD" Comment="quarter LWORD 26 Constant"  InitialValue="2#0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_27" Type="SINT" Comment="shift 54 bits"  InitialValue="54"/>
-		<VarDeclaration Name="LWORD_QUARTER_27" Type="LWORD" Comment="quarter LWORD 27 Constant"  InitialValue="2#0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_28" Type="SINT" Comment="shift 56 bits"  InitialValue="56"/>
-		<VarDeclaration Name="LWORD_QUARTER_28" Type="LWORD" Comment="quarter LWORD 28 Constant"  InitialValue="2#0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_29" Type="SINT" Comment="shift 58 bits"  InitialValue="58"/>
-		<VarDeclaration Name="LWORD_QUARTER_29" Type="LWORD" Comment="quarter LWORD 29 Constant"  InitialValue="2#0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_30" Type="SINT" Comment="shift 60 bits"  InitialValue="60"/>
-		<VarDeclaration Name="LWORD_QUARTER_30" Type="LWORD" Comment="quarter LWORD 30 Constant"  InitialValue="2#0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
-		<VarDeclaration Name="SHIFT_QUARTER_31" Type="SINT" Comment="shift 62 bits"  InitialValue="62"/>
-		<VarDeclaration Name="LWORD_QUARTER_31" Type="LWORD" Comment="quarter LWORD 31 Constant"  InitialValue="2#1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="BYTE_QUARTER_ZZ" Type="BYTE" Comment="ZERO Constant" InitialValue="2#0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_00" Type="SINT" Comment="shift 0 bits" InitialValue="0"/>
+		<VarDeclaration Name="BYTE_QUARTER_00" Type="BYTE" Comment="quarter byte 00 Constant" InitialValue="2#0000_0011"/>
+		<VarDeclaration Name="SHIFT_QUARTER_01" Type="SINT" Comment="shift 2 bits" InitialValue="2"/>
+		<VarDeclaration Name="BYTE_QUARTER_01" Type="BYTE" Comment="quarter byte 01 Constant" InitialValue="2#0000_1100"/>
+		<VarDeclaration Name="SHIFT_QUARTER_02" Type="SINT" Comment="shift 4 bits" InitialValue="4"/>
+		<VarDeclaration Name="BYTE_QUARTER_02" Type="BYTE" Comment="quarter byte 02 Constant" InitialValue="2#0011_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_03" Type="SINT" Comment="shift 6 bits" InitialValue="6"/>
+		<VarDeclaration Name="BYTE_QUARTER_03" Type="BYTE" Comment="quarter byte 03 Constant" InitialValue="2#1100_0000"/>
+		<VarDeclaration Name="WORD_QUARTER_ZZ" Type="WORD" Comment="ZERO Constant" InitialValue="2#0000_0000_0000_0000"/>
+		<VarDeclaration Name="WORD_QUARTER_00" Type="WORD" Comment="quarter WORD 00 Constant" InitialValue="2#0000_0000_0000_0011"/>
+		<VarDeclaration Name="WORD_QUARTER_01" Type="WORD" Comment="quarter WORD 01 Constant" InitialValue="2#0000_0000_0000_1100"/>
+		<VarDeclaration Name="WORD_QUARTER_02" Type="WORD" Comment="quarter WORD 02 Constant" InitialValue="2#0000_0000_0011_0000"/>
+		<VarDeclaration Name="WORD_QUARTER_03" Type="WORD" Comment="quarter WORD 03 Constant" InitialValue="2#0000_0000_1100_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_04" Type="SINT" Comment="shift 8 bits" InitialValue="8"/>
+		<VarDeclaration Name="WORD_QUARTER_04" Type="WORD" Comment="quarter WORD 04 Constant" InitialValue="2#0000_0011_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_05" Type="SINT" Comment="shift 10 bits" InitialValue="10"/>
+		<VarDeclaration Name="WORD_QUARTER_05" Type="WORD" Comment="quarter WORD 05 Constant" InitialValue="2#0000_1100_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_06" Type="SINT" Comment="shift 12 bits" InitialValue="12"/>
+		<VarDeclaration Name="WORD_QUARTER_06" Type="WORD" Comment="quarter WORD 06 Constant" InitialValue="2#0011_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_07" Type="SINT" Comment="shift 14 bits" InitialValue="14"/>
+		<VarDeclaration Name="WORD_QUARTER_07" Type="WORD" Comment="quarter WORD 07 Constant" InitialValue="2#1100_0000_0000_0000"/>
+		<VarDeclaration Name="DWORD_QUARTER_ZZ" Type="DWORD" Comment="ZERO Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="DWORD_QUARTER_00" Type="DWORD" Comment="quarter DWORD 00 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0011"/>
+		<VarDeclaration Name="DWORD_QUARTER_01" Type="DWORD" Comment="quarter DWORD 01 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_1100"/>
+		<VarDeclaration Name="DWORD_QUARTER_02" Type="DWORD" Comment="quarter DWORD 02 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0011_0000"/>
+		<VarDeclaration Name="DWORD_QUARTER_03" Type="DWORD" Comment="quarter DWORD 03 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_1100_0000"/>
+		<VarDeclaration Name="DWORD_QUARTER_04" Type="DWORD" Comment="quarter DWORD 04 Constant" InitialValue="2#0000_0000_0000_0000_0000_0011_0000_0000"/>
+		<VarDeclaration Name="DWORD_QUARTER_05" Type="DWORD" Comment="quarter DWORD 05 Constant" InitialValue="2#0000_0000_0000_0000_0000_1100_0000_0000"/>
+		<VarDeclaration Name="DWORD_QUARTER_06" Type="DWORD" Comment="quarter DWORD 06 Constant" InitialValue="2#0000_0000_0000_0000_0011_0000_0000_0000"/>
+		<VarDeclaration Name="DWORD_QUARTER_07" Type="DWORD" Comment="quarter DWORD 07 Constant" InitialValue="2#0000_0000_0000_0000_1100_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_08" Type="SINT" Comment="shift 16 bits" InitialValue="16"/>
+		<VarDeclaration Name="DWORD_QUARTER_08" Type="DWORD" Comment="quarter DWORD 08 Constant" InitialValue="2#0000_0000_0000_0011_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_09" Type="SINT" Comment="shift 18 bits" InitialValue="18"/>
+		<VarDeclaration Name="DWORD_QUARTER_09" Type="DWORD" Comment="quarter DWORD 09 Constant" InitialValue="2#0000_0000_0000_1100_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_10" Type="SINT" Comment="shift 20 bits" InitialValue="20"/>
+		<VarDeclaration Name="DWORD_QUARTER_10" Type="DWORD" Comment="quarter DWORD 10 Constant" InitialValue="2#0000_0000_0011_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_11" Type="SINT" Comment="shift 22 bits" InitialValue="22"/>
+		<VarDeclaration Name="DWORD_QUARTER_11" Type="DWORD" Comment="quarter DWORD 11 Constant" InitialValue="2#0000_0000_1100_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_12" Type="SINT" Comment="shift 24 bits" InitialValue="24"/>
+		<VarDeclaration Name="DWORD_QUARTER_12" Type="DWORD" Comment="quarter DWORD 12 Constant" InitialValue="2#0000_0011_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_13" Type="SINT" Comment="shift 26 bits" InitialValue="26"/>
+		<VarDeclaration Name="DWORD_QUARTER_13" Type="DWORD" Comment="quarter DWORD 13 Constant" InitialValue="2#0000_1100_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_14" Type="SINT" Comment="shift 28 bits" InitialValue="28"/>
+		<VarDeclaration Name="DWORD_QUARTER_14" Type="DWORD" Comment="quarter DWORD 14 Constant" InitialValue="2#0011_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_15" Type="SINT" Comment="shift 30 bits" InitialValue="30"/>
+		<VarDeclaration Name="DWORD_QUARTER_15" Type="DWORD" Comment="quarter DWORD 15 Constant" InitialValue="2#1100_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_ZZ" Type="LWORD" Comment="ZERO Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_00" Type="LWORD" Comment="quarter LWORD 00 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011"/>
+		<VarDeclaration Name="LWORD_QUARTER_01" Type="LWORD" Comment="quarter LWORD 01 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100"/>
+		<VarDeclaration Name="LWORD_QUARTER_02" Type="LWORD" Comment="quarter LWORD 02 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_03" Type="LWORD" Comment="quarter LWORD 03 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_04" Type="LWORD" Comment="quarter LWORD 04 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_05" Type="LWORD" Comment="quarter LWORD 05 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_06" Type="LWORD" Comment="quarter LWORD 06 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_07" Type="LWORD" Comment="quarter LWORD 07 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_08" Type="LWORD" Comment="quarter LWORD 08 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_09" Type="LWORD" Comment="quarter LWORD 09 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_10" Type="LWORD" Comment="quarter LWORD 10 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_11" Type="LWORD" Comment="quarter LWORD 11 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_12" Type="LWORD" Comment="quarter LWORD 12 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_13" Type="LWORD" Comment="quarter LWORD 13 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_14" Type="LWORD" Comment="quarter LWORD 14 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="LWORD_QUARTER_15" Type="LWORD" Comment="quarter LWORD 15 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_16" Type="SINT" Comment="shift 32 bits" InitialValue="32"/>
+		<VarDeclaration Name="LWORD_QUARTER_16" Type="LWORD" Comment="quarter LWORD 16 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_17" Type="SINT" Comment="shift 34 bits" InitialValue="34"/>
+		<VarDeclaration Name="LWORD_QUARTER_17" Type="LWORD" Comment="quarter LWORD 17 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_18" Type="SINT" Comment="shift 36 bits" InitialValue="36"/>
+		<VarDeclaration Name="LWORD_QUARTER_18" Type="LWORD" Comment="quarter LWORD 18 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_19" Type="SINT" Comment="shift 38 bits" InitialValue="38"/>
+		<VarDeclaration Name="LWORD_QUARTER_19" Type="LWORD" Comment="quarter LWORD 19 Constant" InitialValue="2#0000_0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_20" Type="SINT" Comment="shift 40 bits" InitialValue="40"/>
+		<VarDeclaration Name="LWORD_QUARTER_20" Type="LWORD" Comment="quarter LWORD 20 Constant" InitialValue="2#0000_0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_21" Type="SINT" Comment="shift 42 bits" InitialValue="42"/>
+		<VarDeclaration Name="LWORD_QUARTER_21" Type="LWORD" Comment="quarter LWORD 21 Constant" InitialValue="2#0000_0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_22" Type="SINT" Comment="shift 44 bits" InitialValue="44"/>
+		<VarDeclaration Name="LWORD_QUARTER_22" Type="LWORD" Comment="quarter LWORD 22 Constant" InitialValue="2#0000_0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_23" Type="SINT" Comment="shift 46 bits" InitialValue="46"/>
+		<VarDeclaration Name="LWORD_QUARTER_23" Type="LWORD" Comment="quarter LWORD 23 Constant" InitialValue="2#0000_0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_24" Type="SINT" Comment="shift 48 bits" InitialValue="48"/>
+		<VarDeclaration Name="LWORD_QUARTER_24" Type="LWORD" Comment="quarter LWORD 24 Constant" InitialValue="2#0000_0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_25" Type="SINT" Comment="shift 50 bits" InitialValue="50"/>
+		<VarDeclaration Name="LWORD_QUARTER_25" Type="LWORD" Comment="quarter LWORD 25 Constant" InitialValue="2#0000_0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_26" Type="SINT" Comment="shift 52 bits" InitialValue="52"/>
+		<VarDeclaration Name="LWORD_QUARTER_26" Type="LWORD" Comment="quarter LWORD 26 Constant" InitialValue="2#0000_0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_27" Type="SINT" Comment="shift 54 bits" InitialValue="54"/>
+		<VarDeclaration Name="LWORD_QUARTER_27" Type="LWORD" Comment="quarter LWORD 27 Constant" InitialValue="2#0000_0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_28" Type="SINT" Comment="shift 56 bits" InitialValue="56"/>
+		<VarDeclaration Name="LWORD_QUARTER_28" Type="LWORD" Comment="quarter LWORD 28 Constant" InitialValue="2#0000_0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_29" Type="SINT" Comment="shift 58 bits" InitialValue="58"/>
+		<VarDeclaration Name="LWORD_QUARTER_29" Type="LWORD" Comment="quarter LWORD 29 Constant" InitialValue="2#0000_1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_30" Type="SINT" Comment="shift 60 bits" InitialValue="60"/>
+		<VarDeclaration Name="LWORD_QUARTER_30" Type="LWORD" Comment="quarter LWORD 30 Constant" InitialValue="2#0011_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
+		<VarDeclaration Name="SHIFT_QUARTER_31" Type="SINT" Comment="shift 62 bits" InitialValue="62"/>
+		<VarDeclaration Name="LWORD_QUARTER_31" Type="LWORD" Comment="quarter LWORD 31 Constant" InitialValue="2#1100_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000"/>
 	</GlobalConstants>
-	<OriginalSource><![CDATA[GLOBALCONSTANTS quarterconst
+	<OriginalSource><![CDATA[PACKAGE eclipse4diac::utils::const;
+
+GLOBALCONSTANTS quarterconst
 	VAR_GLOBAL CONSTANT
 		BYTE_QUARTER_ZZ : BYTE := 2#0000_0000; // ZERO Constant
 		SHIFT_QUARTER_00 : SINT := 0; // shift 0 bits

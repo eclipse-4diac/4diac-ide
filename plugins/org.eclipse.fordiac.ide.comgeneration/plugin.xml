@@ -8,7 +8,7 @@
             objectClass="org.eclipse.fordiac.ide.model.libraryElement.Application"
             id="org.eclipse.fordiac.ide.comgeneration.plugin.contribution">
          <menu
-               label="Generate"
+               label="%menu.generate.label"
                path="additions"
                id="org.eclipse.fordiac.ide.comgeneration.plugin.generate">
             <separator
@@ -16,7 +16,7 @@
             </separator>
          </menu>
          <action
-               label="Generate communication FBs"
+               label="%action.generateCommunicationFBs.label"
                class="org.eclipse.fordiac.ide.comgeneration.plugin.popup.actions.GenerateCommAction"
                menubarPath="org.eclipse.fordiac.ide.comgeneration.plugin.generate/group"
                enablesFor="1"

@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreResourceCache;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreResourceValidator;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.conversion.IValueConverterService;
@@ -51,6 +52,8 @@ import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.eclipse.xtext.serializer.ISerializer;
+import org.eclipse.xtext.util.IResourceScopeCache;
+import org.eclipse.xtext.util.OnChangeEvictingCache;
 import org.eclipse.xtext.validation.ConfigurableIssueCodesProvider;
 import org.eclipse.xtext.validation.IResourceValidator;
 
@@ -71,6 +74,14 @@ public class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	@Override
 	public Class<? extends XtextResource> bindXtextResource() {
 		return STAlgorithmResource.class;
+	}
+
+	public Class<? extends IResourceScopeCache> bindIResourceScopeCache() {
+		return STCoreResourceCache.class;
+	}
+
+	public Class<? extends OnChangeEvictingCache> bindOnChangeEvictingCache() {
+		return STCoreResourceCache.class;
 	}
 
 	@Override

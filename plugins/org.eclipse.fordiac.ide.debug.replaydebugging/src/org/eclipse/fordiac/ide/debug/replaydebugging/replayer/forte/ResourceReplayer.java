@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.replayer.forte;
 import java.util.Optional;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DatapointsState;
 import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IResourceReplayer;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
@@ -23,7 +24,6 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class ResourceReplayer implements IResourceReplayer {
 
@@ -50,7 +50,7 @@ public class ResourceReplayer implements IResourceReplayer {
 			readWatchesIntoState();
 			return lastEvent;
 		} catch (final DeploymentException e) {
-			FordiacLogHelper.logError("Error in processing next event!", e); //$NON-NLS-1$
+			ILog.get().error("Error in processing next event!", e); //$NON-NLS-1$
 			return Optional.empty();
 		}
 	}

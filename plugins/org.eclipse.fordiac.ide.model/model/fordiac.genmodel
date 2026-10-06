@@ -44,6 +44,16 @@
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.findBySimpleName(this, name);">
         <genParameters ecoreParameter="lib.ecore#//AdapterDeclaration/findBySimpleName/name"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/validateMultipleInputConnections"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.validateMultipleInputConnections(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//AdapterDeclaration/validateMultipleInputConnections/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//AdapterDeclaration/validateMultipleInputConnections/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/validateMultipleOutputConnections"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.validateMultipleOutputConnections(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//AdapterDeclaration/validateMultipleOutputConnections/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//AdapterDeclaration/validateMultipleOutputConnections/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterFB">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFB/adapterDecl"/>

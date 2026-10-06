@@ -43,6 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -260,17 +261,6 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		return oldEntry != null ? oldEntry : entry;
 	}
 
-	private TypeEntry removeErrorTypeEntry(final TypeEntry entry) {
-		TypeEntry oldEntry = getBlockTypeEntry(entry);
-		while (oldEntry != null && oldEntry.getFile() == null) {
-			if (removeBlockTypeEntry(oldEntry)) {
-				return oldEntry;
-			}
-			oldEntry = getBlockTypeEntry(entry);
-		}
-		return null;
-	}
-
 	public void addTypeEntry(final TypeEntry entry) {
 		if (entry.getTypeLibrary() != null) {
 			entry.getTypeLibrary().removeTypeEntry(entry);
@@ -290,16 +280,15 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 				handleDuplicateTypeName(entry);
 			}
 		} else {
-			// remove stale error marker data type
-			final TypeEntry oldEntry = removeErrorTypeEntry(entry);
-			// add new type entry
-			typeEntryAdded = addBlockTypeEntry(entry);
+			// add new type entry, replace old error type entry if present
+			final AtomicReference<TypeEntry> replaced = new AtomicReference<>();
+			typeEntryAdded = addBlockTypeEntry(entry, replaced);
 			if (!typeEntryAdded) {
 				handleDuplicateTypeName(entry);
 			}
 			// trigger transitive refresh after new entry has been added
-			if (oldEntry != null) {
-				oldEntry.setTypeLibrary(null);
+			if (replaced.get() != null) {
+				replaced.get().setTypeLibrary(null);
 			}
 		}
 		boolean programTypeEntryAdded = true;
@@ -528,6 +517,52 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private boolean addBlockTypeEntry(final TypeEntry entry) {
 		return putBlockTypeEntryIfAbsent(entry) == null;
+	}
+
+	private boolean addBlockTypeEntry(final TypeEntry entry, final AtomicReference<TypeEntry> replaced) {
+		final String name = entry.getFullTypeName().toLowerCase();
+		return switch (entry) {
+		case final AdapterTypeEntry adpEntry -> addTypeEntry(adapterTypes, name, adpEntry, replaced);
+		case final AttributeTypeEntry atpEntry -> addTypeEntry(attributeTypes, name, atpEntry, replaced);
+		case final DeviceTypeEntry devEntry -> addTypeEntry(deviceTypes, name, devEntry, replaced);
+		case final FBTypeEntry fbtEntry -> addTypeEntry(fbTypes, name, fbtEntry, replaced);
+		case final ResourceTypeEntry resEntry -> addTypeEntry(resourceTypes, name, resEntry, replaced);
+		case final SegmentTypeEntry segEntry -> addTypeEntry(segmentTypes, name, segEntry, replaced);
+		case final SubAppTypeEntry subAppEntry -> addTypeEntry(subAppTypes, name, subAppEntry, replaced);
+		case final SystemEntry sysEntry -> addTypeEntry(systems, name, sysEntry, replaced);
+		case final GlobalConstantsEntry globalConstEntry ->
+			addTypeEntry(globalConstants, name, globalConstEntry, replaced);
+		default -> {
+			FordiacLogHelper.logError("Unknown type entry to be added to library: " //$NON-NLS-1$
+					+ entry.getClass().getName());
+			yield false;
+		}
+		};
+	}
+
+	/**
+	 * Adds or replaces a type entry in the given map.
+	 *
+	 * @param <T>      the class of the type entry
+	 * @param entries  the map of type entries
+	 * @param name     the name to be used as the map key
+	 * @param entry    the entry to add
+	 * @param replaced the replaced entry if present, unchanged if not
+	 * @return true if the provided entry was added or already present in the map,
+	 *         false otherwise
+	 */
+	static <T extends TypeEntry> boolean addTypeEntry(final Map<String, T> entries, final String name, final T entry,
+			final AtomicReference<? super T> replaced) {
+		return entries.compute(name, (_, existing) -> {
+			if (existing == null) {
+				return entry; // no existing entry
+			}
+			if (existing.getFile() == null) {
+				replaced.set(existing);
+				return entry; // replace existing error entry
+			}
+			return existing; // keep existing valid entry
+		}) == entry;
 	}
 
 	private TypeEntry putBlockTypeEntryIfAbsent(final TypeEntry entry) {

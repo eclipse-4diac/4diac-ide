@@ -15,13 +15,13 @@ package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 
 import java.text.MessageFormat;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.comgeneration.implementation.ChannelEnd;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGenerator {
 	private static final String PALETTE_ENTRY_SOURCE_LOCAL = "iec61499::net::PUBL_"; //$NON-NLS-1$
@@ -54,7 +54,7 @@ public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGen
 		final FBTypeEntry entry = getTypeLibrary().getFBTypeEntry(commTypeName);
 
 		if (entry == null) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.CommGenerator_FBTypeEntryNotFound, commTypeName));
+			ILog.get().error(MessageFormat.format(Messages.CommGenerator_FBTypeEntryNotFound, commTypeName));
 		}
 		return entry;
 	}

@@ -583,7 +583,7 @@ public abstract class CommonElementImporter {
 		if (null == declaration) {
 			throw new TypeImportException(Messages.CommonElementImporter_ERROR_DeclarationNotSet);
 		}
-		imp.setImportedNamespace(declaration);
+		imp.setImportedNamespace(declaration.strip());
 
 		proceedToEndElementNamed(LibraryElementTags.IMPORT_ELEMENT);
 		compilerInfo.getImports().add(imp);

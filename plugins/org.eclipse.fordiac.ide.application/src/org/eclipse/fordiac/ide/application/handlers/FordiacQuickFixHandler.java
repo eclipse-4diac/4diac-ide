@@ -33,6 +33,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
@@ -48,7 +49,6 @@ import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalMarkerAnnotation;
 import org.eclipse.fordiac.ide.model.ui.annotation.ResourceMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.validation.GraphicalValidationAnnotation;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -186,9 +186,9 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 				}
 			}.run(new NullProgressMonitor());
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -198,7 +198,7 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 			try {
 				return marker.getType().equals(FordiacErrorMarker.TEMPORARY_MARKER);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 			return false;
 		}).toList();
@@ -218,15 +218,15 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 								marker.delete();
 							}
 						} catch (final CoreException e) {
-							FordiacLogHelper.logError(e.getMessage(), e);
+							ILog.get().error(e.getMessage(), e);
 						}
 					});
 				}
 			}.run(new NullProgressMonitor());
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			Thread.currentThread().interrupt();
 		}
 	}

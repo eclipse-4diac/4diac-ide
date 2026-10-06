@@ -2,6 +2,8 @@
 <Function Name="SPLIT_DWORD_INTO_WORDS" Comment="this Function extracts the 2 WORD from a dword">
 	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Version="3.0.1" Author="Martin Jobst" Date="2026-09-29" Remarks="fix ST package declaration">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik" Version="1.1" Author="Moritz Ortmeier" Date="2024-07-24" Remarks="rename Function and change Output Variables">
@@ -12,26 +14,28 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			<Event Name="REQ" Type="Event">
 				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			<Event Name="CNF" Type="Event">
 				<With Var="WORD_00"/>
 				<With Var="WORD_01"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN" Type="DWORD" Comment=""/>
+			<VarDeclaration Name="IN" Type="DWORD"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="WORD_00" Type="WORD" Comment=""/>
-			<VarDeclaration Name="WORD_01" Type="WORD" Comment=""/>
+			<VarDeclaration Name="WORD_00" Type="WORD"/>
+			<VarDeclaration Name="WORD_01" Type="WORD"/>
 		</OutputVars>
 	</InterfaceList>
 	<FunctionBody>
-		<ST><![CDATA[(* this Function extracts the 2 WORD from a dword *)
+		<ST><![CDATA[PACKAGE eclipse4diac::utils::splitting;
+
+(* this Function extracts the 2 WORD from a dword *)
 FUNCTION SPLIT_DWORD_INTO_WORDS
 
 VAR_INPUT

@@ -52,19 +52,19 @@
          <propertyTab
                category="AttributeType"
                id="org.eclipse.fordiac.ide.attributetypeeditor.propertyDataTypeInfoTab"
-               label="TypeInfo">
+               label="%propertyTab.typeInfo.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab"
                category="AttributeType"
                id="org.eclipse.fordiac.ide.attributetypeeditor.propertyAttributeTab"
-               label="Attributes">
+               label="%propertyTab.attributes.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.attributetypeeditor.propertyDataTypeInfoTab"
                category="AttributeType"
                id="org.eclipse.fordiac.ide.attributetypeeditor.propertyTargetTab"
-               label="Target">
+               label="%propertyTab.target.label">
          </propertyTab>
       </propertyTabs>
    </extension>

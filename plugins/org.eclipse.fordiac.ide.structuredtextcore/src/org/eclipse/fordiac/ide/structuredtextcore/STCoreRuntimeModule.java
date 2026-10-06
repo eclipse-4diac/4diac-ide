@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryAllContain
 import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryResourceDescriptions;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreLinkingDiagnosticMessageProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSerializer;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreResourceCache;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreCustomConfigurableIssueCodesProvider;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.linking.ILinkingDiagnosticMessageProvider;
@@ -29,6 +30,8 @@ import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.serializer.ISerializer;
+import org.eclipse.xtext.util.IResourceScopeCache;
+import org.eclipse.xtext.util.OnChangeEvictingCache;
 import org.eclipse.xtext.validation.ConfigurableIssueCodesProvider;
 
 import com.google.inject.Binder;
@@ -43,6 +46,14 @@ public class STCoreRuntimeModule extends AbstractSTCoreRuntimeModule {
 	@Override
 	public Class<? extends IValueConverterService> bindIValueConverterService() {
 		return STCoreValueConverters.class;
+	}
+
+	public Class<? extends IResourceScopeCache> bindIResourceScopeCache() {
+		return STCoreResourceCache.class;
+	}
+
+	public Class<? extends OnChangeEvictingCache> bindOnChangeEvictingCache() {
+		return STCoreResourceCache.class;
 	}
 
 	@Override

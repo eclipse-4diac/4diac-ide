@@ -20,4 +20,3 @@ Require-Bundle: org.eclipse.debug.core,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.tracecompass.ctf.core,
  org.eclipse.fordiac.ide.fb.interpreter
-Import-Package: org.eclipse.fordiac.ide.util

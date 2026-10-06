@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.debug.replaydebugging.trace.SendOutputEvent;
 import org.eclipse.fordiac.debug.replaydebugging.trace.TracesReader;
 import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IDeviceReplayer;
@@ -31,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.tracecompass.ctf.core.CTFException;
 
 /**
@@ -63,7 +63,7 @@ public class DeviceReplayer implements IDeviceReplayer {
 			try {
 				externalEvents = tracerReader.read();
 			} catch (final CTFException e) {
-				FordiacLogHelper.logError("Error reading traces: " + e.getMessage()); //$NON-NLS-1$
+				ILog.get().error("Error reading traces: " + e.getMessage()); //$NON-NLS-1$
 				return result;
 			}
 		}

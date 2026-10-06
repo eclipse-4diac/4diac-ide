@@ -52,13 +52,13 @@
          <propertyTab
                category="DataType"
                id="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab"
-               label="TypeInfo">
+               label="%propertyTab.typeInfo.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.datatypeeditor.propertyDataTypeInfoTab"
                category="DataType"
                id="org.eclipse.fordiac.ide.datatypeeditor.propertyStructAttributeTab"
-               label="Attributes">
+               label="%propertyTab.attributes.label">
          </propertyTab>
       </propertyTabs>
    </extension>

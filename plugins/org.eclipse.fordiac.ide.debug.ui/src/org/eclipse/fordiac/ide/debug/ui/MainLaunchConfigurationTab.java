@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -32,7 +33,6 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.gef.widgets.VariableWidget;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -118,8 +118,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		group.setText("Arguments"); //$NON-NLS-1$
 
 		argumentsWidget = new VariableWidget();
-		argumentsWidget
-				.addVariableModificationListener((_, _, _) -> updateLaunchConfigurationDialog());
+		argumentsWidget.addVariableModificationListener((_, _, _) -> updateLaunchConfigurationDialog());
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(argumentsWidget.createWidget(group));
 
 		return group;
@@ -169,7 +168,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 			resourceText.setText(resourceAttribute);
 			stopOnFirstLineCheckbox.setSelection(LaunchConfigurationAttributes.isStopOnFirstLine(configuration));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 	}
 
@@ -212,7 +211,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 							try {
 								variable.setValue(arg.getValue().toString());
 							} catch (final Exception e) {
-								FordiacLogHelper.logWarning(e.getMessage(), e);
+								ILog.get().warn(e.getMessage(), e);
 							}
 						}));
 			}

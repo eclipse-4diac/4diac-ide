@@ -16,10 +16,10 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.StatesComparisonView;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.Request;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISources;
@@ -37,7 +37,7 @@ public class AddToComparisonHandler extends AbstractHandler {
 			try {
 				page.showView(StatesComparisonView.VIEW_ID);
 			} catch (final PartInitException e) {
-				FordiacLogHelper.logError("Failed to open States Comparison View", e); //$NON-NLS-1$
+				ILog.get().error("Failed to open States Comparison View", e); //$NON-NLS-1$
 			}
 		}
 		return null;

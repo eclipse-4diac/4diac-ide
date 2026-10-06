@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.library.model.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -415,6 +416,8 @@ public final class ManifestHelper {
 		final Resource resource = createResource(uri);
 		try {
 			resource.load(null);
+		} catch (final FileNotFoundException e) {
+			return null; // suppress logging of file not found exception
 		} catch (final IOException e) {
 			FordiacLogHelper.logWarning("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
 			return null;

@@ -26,6 +26,7 @@ import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -57,7 +58,6 @@ import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.model.ui.editors.MultiLibraryElementActivationListener;
 import org.eclipse.fordiac.ide.model.ui.editors.MultiLibraryElementOperationContextUpdater;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -277,8 +277,8 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 						.getAttributeTypeEntry(controls.getSearchText().getText());
 
 		if (controls.getModeSelection() == 1) {
-			natTable.changeNatTable(modeSelection, simpleAttribute,
-					_ -> handleAddAttribute(attributeTypeEntry), this::handleDeleteAttribute);
+			natTable.changeNatTable(modeSelection, simpleAttribute, _ -> handleAddAttribute(attributeTypeEntry),
+					this::handleDeleteAttribute);
 		} else {
 			natTable.changeNatTable(modeSelection, simpleAttribute);
 		}
@@ -384,9 +384,9 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		try {
 			operation.run(monitor);
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			Thread.currentThread().interrupt();
 		}
 		commandStack.markSaveLocation();
