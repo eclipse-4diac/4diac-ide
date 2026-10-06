@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <relativePath>../../pom.xml</relativePath>
-    <groupId>org.eclipse.fordiac</groupId>
-    <artifactId>parent</artifactId>
-    <version>3.4.0-SNAPSHOT</version>
-  </parent>
+	<parent>
+		<relativePath>../../pom.xml</relativePath>
+		<groupId>org.eclipse.fordiac</groupId>
+		<artifactId>parent</artifactId>
+		<version>3.4.0-SNAPSHOT</version>
+	</parent>
 
-  <artifactId>org.eclipse.fordiac.ide</artifactId>
-  <packaging>eclipse-plugin</packaging>
-  
-  <properties>
+	<artifactId>org.eclipse.fordiac.ide</artifactId>
+	<packaging>eclipse-plugin</packaging>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <asciidoctor.maven.plugin.version>3.2.0</asciidoctor.maven.plugin.version>
-        <asciidoctorj.version>3.0.1</asciidoctorj.version>
+		<asciidoctor.maven.plugin.version>3.2.0</asciidoctor.maven.plugin.version>
+		<asciidoctorj.version>3.0.1</asciidoctorj.version>
 	</properties>
 	<build>
 		<defaultGoal>process-resources</defaultGoal>
@@ -23,12 +23,12 @@
 			<plugin>
 				<groupId>org.asciidoctor</groupId>
 				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<version>${asciidoctor.maven.plugin.version}</version>				
+				<version>${asciidoctor.maven.plugin.version}</version>
 				<configuration>
 					<enableVerbose>true</enableVerbose>
 					<attributes>
-                        <doctype>book</doctype>
-                    </attributes>
+						<doctype>book</doctype>
+						</attributes>
 				</configuration>
 				<executions>
 					<execution>
@@ -38,16 +38,18 @@
 							<goal>process-asciidoc</goal>
 						</goals>
 						<configuration>
-						 	<sourceDirectory>doc-src/src</sourceDirectory>
-                            <backend>html5</backend>
-                            <preserveDirectories>true</preserveDirectories> 
-                            <outputDirectory>html</outputDirectory>                           
+							<sourceDirectory>doc-src/src</sourceDirectory>
+							<backend>html5</backend>
+							<preserveDirectories>true</preserveDirectories>
+							<outputDirectory>html</outputDirectory>
+							<attributes>
+								<skip-front-matter>true</skip-front-matter>
+							</attributes>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>			
-		</plugins>		
+			</plugin>
+		</plugins>
 	</build>
-  
-  
+
 </project> 
