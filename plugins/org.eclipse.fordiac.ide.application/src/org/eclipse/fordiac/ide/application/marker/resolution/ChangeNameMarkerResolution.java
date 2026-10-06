@@ -19,12 +19,12 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -52,7 +52,7 @@ public abstract class ChangeNameMarkerResolution extends WorkbenchMarkerResoluti
 			if (e.getCause() instanceof final CoreException ce) {
 				ErrorDialog.openError(null, null, null, ce.getStatus());
 			} else {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();

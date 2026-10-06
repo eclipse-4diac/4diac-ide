@@ -17,11 +17,11 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -37,7 +37,7 @@ public class ToggleJumpStepHandler extends AbstractHandler {
 		try {
 			prefs.flush();
 		} catch (final BackingStoreException e) {
-			FordiacLogHelper.logError(Messages.HandlerPreferenceSafeError, e);
+			ILog.get().error(Messages.HandlerPreferenceSafeError, e);
 		}
 		return null;
 	}

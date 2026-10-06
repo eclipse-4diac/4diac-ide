@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class UtilityMarkerListener extends QualNameChangeListener {
 
@@ -84,7 +84,7 @@ public class UtilityMarkerListener extends QualNameChangeListener {
 			try {
 				UtilityMarkerHelper.deleteElementMarker(m.getType(), m.getResource());
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		});
 
@@ -101,7 +101,7 @@ public class UtilityMarkerListener extends QualNameChangeListener {
 						Stream.of(file.findMarkers(UtilityMarkerHelper.PREDECESSOR_MARKER_ID, false,
 								IResource.DEPTH_ZERO)));
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Cannot fetch marker", e); //$NON-NLS-1$
+				ILog.get().error("Cannot fetch marker", e); //$NON-NLS-1$
 			}
 		}
 		return Stream.empty();
@@ -123,7 +123,7 @@ public class UtilityMarkerListener extends QualNameChangeListener {
 					}
 				}
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 			return m.getAttribute(IMarker.LOCATION, ""); //$NON-NLS-1$
 		}
