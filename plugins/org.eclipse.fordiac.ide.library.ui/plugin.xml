@@ -49,11 +49,12 @@
          point="org.eclipse.ui.importWizards">
       <category
             id="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
-            name="%category.importCategory.name">
+            name="%wizard.libraryCategory.name">
       </category>
   <wizard
       category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
       class="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      icon="fordiacimage://ICON_LINKED_LIBRARY"
       id="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
       name="%wizard.unifiedLibraryImport.name">
     <description>%wizard.unifiedLibraryImport.description</description>
@@ -63,15 +64,16 @@
    <extension
          point="org.eclipse.ui.exportWizards">
       <category
-            id="org.eclipse.fordiac.ide.library.ui.wizards.exportWizardCategory"
-            name="Library Exporter">
+            id="org.eclipse.fordiac.ide.library.ui.wizards.exportCategory"
+            name="%wizard.libraryCategory.name">
       </category>
   <wizard
-      category="org.eclipse.fordiac.ide.library.ui.wizards.exportWizardCategory"
+      category="org.eclipse.fordiac.ide.library.ui.wizards.exportCategory"
       class="org.eclipse.fordiac.ide.library.ui.wizards.LibraryExportWizard"
+      icon="fordiacimage://ICON_LINKED_LIBRARY"
       id="org.eclipse.fordiac.ide.library.ui.wizards.LibraryExportWizard"
-      name="Library Export">
-    <description>Export Libraries defined by the project manifest</description>
+      name="%wizard.libraryExport.name">
+    <description>%wizard.libraryExport.description</description>
   </wizard>
    </extension>
    

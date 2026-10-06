@@ -114,7 +114,8 @@ public class LibraryExporter {
 		try (InputStream input = sourceFile.getContents()) {
 			Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);
 		} catch (final CoreException e) {
-			throw new IOException("Error while exporting file " + sourceFile.getFullPath(), e); //$NON-NLS-1$
+			throw new IOException(MessageFormat.format(Messages.LibraryExporter_ErrorFile, sourceFile.getFullPath()),
+					e);
 		}
 	}
 

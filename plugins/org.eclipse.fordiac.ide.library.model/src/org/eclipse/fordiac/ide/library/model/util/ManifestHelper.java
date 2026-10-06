@@ -36,6 +36,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryFactory;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -298,7 +299,7 @@ public final class ManifestHelper {
 		try {
 			resource.save(null);
 		} catch (final IOException e) {
-			throw new IOException("Could not create library manifest", e); //$NON-NLS-1$
+			throw new IOException(Messages.ManifestHelper_CannotCreateManifest, e);
 		}
 		return manifest;
 	}
