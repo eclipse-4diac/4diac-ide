@@ -53,27 +53,31 @@ public final class EventManagerUtils {
 		final var transactions = eventManager.getTransactions();
 		long time = eventManager.getStartTime();
 
-		for (var i = 0; i < transactions.size(); i++) {
-			final var transaction = transactions.get(i);
-			if (transaction instanceof final FBTransaction fbtransaction) {
-				processFbTransaction(fbtransaction, time);
-				// use fb runtime in the resulting transactions
-				final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
+		try {
+			for (var i = 0; i < transactions.size(); i++) {
+				final var transaction = transactions.get(i);
+				if (transaction instanceof final FBTransaction fbtransaction) {
+					processFbTransaction(fbtransaction, time);
+					// use fb runtime in the resulting transactions
+					final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
 
-				if (network) {
-					for (final EventOccurrence eo : fbtransaction.getOutputEventOccurrences()) {
-						for (final Transaction t : eo.getCreatedTransactions()) {
-							if (t.getInputEventOccurrence().getFbRuntime() == null) {
-								t.getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+					if (network) {
+						for (final EventOccurrence eo : fbtransaction.getOutputEventOccurrences()) {
+							for (final Transaction t : eo.getCreatedTransactions()) {
+								if (t.getInputEventOccurrence().getFbRuntime() == null) {
+									t.getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+								}
+								eventManager.getTransactions().add(t);
 							}
-							eventManager.getTransactions().add(t);
 						}
+					} else if ((i + 1) < transactions.size()) {
+						transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
 					}
-				} else if ((i + 1) < transactions.size()) {
-					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
 				}
+				time += transaction.getDuration();
 			}
-			time += transaction.getDuration();
+		} finally {
+			DefaultRunFBType.clearCaches();
 		}
 	}
 

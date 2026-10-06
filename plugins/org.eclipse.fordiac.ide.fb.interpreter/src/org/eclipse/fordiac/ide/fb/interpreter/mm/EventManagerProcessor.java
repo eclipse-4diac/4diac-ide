@@ -104,6 +104,7 @@ public class EventManagerProcessor {
 
 		final var transactions = eventManager.getTransactions();
 		if (transactions.isEmpty()) {
+			DefaultRunFBType.clearCaches();
 			return Optional.empty();
 		}
 
@@ -133,6 +134,9 @@ public class EventManagerProcessor {
 			}
 		}
 		time += transaction.getDuration();
+		if (transactions.isEmpty()) {
+			DefaultRunFBType.clearCaches();
+		}
 		return Optional.of(transaction.getInputEventOccurrence().getEvent());
 	}
 

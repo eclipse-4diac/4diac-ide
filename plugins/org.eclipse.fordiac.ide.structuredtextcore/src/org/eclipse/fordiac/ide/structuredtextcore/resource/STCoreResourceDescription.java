@@ -65,7 +65,11 @@ public class STCoreResourceDescription extends DefaultResourceDescription {
 	}
 
 	protected void computeImportedNames(final Import imp, final Set<QualifiedName> result) {
-		final QualifiedName imported = nameConverter.toQualifiedName(imp.getImportedNamespace());
+		final String importedNamespace = imp.getImportedNamespace();
+		if (importedNamespace == null || importedNamespace.isBlank()) {
+			return;
+		}
+		final QualifiedName imported = nameConverter.toQualifiedName(importedNamespace);
 		if (!ImportHelper.WILDCARD_IMPORT.equals(imported.getLastSegment())) {
 			result.add(imported.toLowerCase());
 		}
