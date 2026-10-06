@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OpcUaCreateId" Comment="Creates an OPC UA identifier">
+	<Identification Standard="61499-2" Description="Copyright (c) 2026 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2025-12-05">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::opcua">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="OpcUaMethod" Type="Event">
+				<With Var="instanceBrowseName"/>
+				<With Var="instanceNodeId"/>
+			</Event>
+			<Event Name="OpcUaWrite" Type="Event">
+				<With Var="instanceBrowseName"/>
+				<With Var="instanceNodeId"/>
+			</Event>
+			<Event Name="OpcUaSubscribe" Type="Event">
+				<With Var="instanceBrowseName"/>
+				<With Var="instanceNodeId"/>
+				<With Var="host"/>
+				<With Var="port"/>
+			</Event>
+			<Event Name="OpcUaCreateObject" Type="Event">
+				<With Var="typeBrowseName"/>
+				<With Var="instanceBrowseName"/>
+				<With Var="instanceNodeId"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="typeBrowseName" Type="WSTRING"/>
+			<VarDeclaration Name="instanceBrowseName" Type="WSTRING"/>
+			<VarDeclaration Name="instanceNodeId" Type="WSTRING"/>
+			<VarDeclaration Name="host" Type="WSTRING"/>
+			<VarDeclaration Name="port" Type="USINT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="WSTRING"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalConstVars>
+			<VarDeclaration Name="PREFIX" Type="WSTRING" InitialValue="&quot;opc_ua[&quot;"/>
+			<VarDeclaration Name="SUFFIX" Type="WSTRING" InitialValue="&quot;]&quot;"/>
+			<VarDeclaration Name="OPCUA_CREATE_METHOD" Type="WSTRING" InitialValue="&quot;CREATE_METHOD;&quot;"/>
+			<VarDeclaration Name="OPCUA_WRITE" Type="WSTRING" InitialValue="&quot;WRITE;&quot;"/>
+			<VarDeclaration Name="OPCUA_SUBSCRIBE" Type="WSTRING" InitialValue="&quot;SUBSCRIBE;opc.tcp://&quot;"/>
+			<VarDeclaration Name="OPCUA_CREATE_OBJECT" Type="WSTRING" InitialValue="&quot;CREATE_OBJECT;&quot;"/>
+			<VarDeclaration Name="NODEID_TYPE" Type="WSTRING" InitialValue="&quot;,s=&quot;"/>
+			<VarDeclaration Name="SEPARATOR_PAIR" Type="WSTRING" InitialValue="&quot;;&quot;"/>
+			<VarDeclaration Name="SEPARATOR_HOST" Type="WSTRING" InitialValue="&quot;:&quot;"/>
+			<VarDeclaration Name="SEPARATOR_HASH" Type="WSTRING" InitialValue="&quot;#;&quot;"/>
+		</InternalConstVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550" y="425">
+			</ECState>
+			<ECState Name="createMethod" x="2300" y="540">
+				<ECAction Algorithm="MethodId" Output="CNF"/>
+			</ECState>
+			<ECState Name="write" x="1440" y="1040">
+				<ECAction Algorithm="WriteId" Output="CNF"/>
+			</ECState>
+			<ECState Name="subscribe" x="0" y="1600">
+				<ECAction Algorithm="SubscribeId" Output="CNF"/>
+			</ECState>
+			<ECState Name="createObject" x="-2080" y="1600">
+				<ECAction Algorithm="CreateObjectId" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="createMethod" Condition="OpcUaMethod" x="1653.33" y="346.67"/>
+			<ECTransition Source="createMethod" Destination="START" Condition="1" x="1540" y="753.33"/>
+			<ECTransition Source="START" Destination="write" Condition="OpcUaWrite" x="1093.33" y="833.33"/>
+			<ECTransition Source="write" Destination="START" Condition="1" x="733.33" y="1106.67"/>
+			<ECTransition Source="START" Destination="subscribe" Condition="OpcUaSubscribe" x="246.67" y="1213.33"/>
+			<ECTransition Source="subscribe" Destination="START" Condition="1" x="-26.67" y="1013.33"/>
+			<ECTransition Source="START" Destination="createObject" Condition="OpcUaCreateObject" x="-420" y="853.33"/>
+			<ECTransition Source="createObject" Destination="START" Condition="1" x="-793.33" y="640"/>
+		</ECC>
+		<Algorithm Name="MethodId">
+			<ST><![CDATA[
+OUT := CONCAT(PREFIX, OPCUA_CREATE_METHOD, instanceBrowseName, NODEID_TYPE, instanceNodeId, SUFFIX);
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="WriteId">
+			<ST><![CDATA[
+OUT := CONCAT(PREFIX, OPCUA_WRITE, instanceBrowseName, NODEID_TYPE, instanceNodeId, SUFFIX);
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="SubscribeId">
+			<ST><![CDATA[
+OUT := CONCAT(PREFIX, OPCUA_SUBSCRIBE, host, SEPARATOR_HOST, USINT_AS_WSTRING(port), SEPARATOR_HASH, instanceBrowseName,
+	NODEID_TYPE, instanceNodeId, SUFFIX);
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="CreateObjectId">
+			<ST><![CDATA[
+OUT := CONCAT(PREFIX, OPCUA_CREATE_OBJECT, typeBrowseName, SEPARATOR_PAIR, instanceBrowseName, NODEID_TYPE,
+	instanceNodeId, SUFFIX);
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
+</FBType>

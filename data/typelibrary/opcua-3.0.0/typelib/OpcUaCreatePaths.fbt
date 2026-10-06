@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OpcUaCreatePaths" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2" Description="Copyright (c) 2026 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2025-12-05">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::opcua">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="Create" Type="Event">
+				<With Var="containerName"/>
+				<With Var="browsePrefix"/>
+				<With Var="nodePrefix"/>
+				<With Var="objectPrefix"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="browseName"/>
+				<With Var="nodeId"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="browsePrefix" Type="WSTRING" InitialValue="&quot;/Objects/skills/&quot;"/>
+			<VarDeclaration Name="nodePrefix" Type="WSTRING" InitialValue="&quot;skills.&quot;"/>
+			<VarDeclaration Name="containerName" Type="WSTRING"/>
+			<VarDeclaration Name="objectPrefix" Type="WSTRING"/>
+			<VarDeclaration Name="objectName" Type="WSTRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="browseName" Type="WSTRING"/>
+			<VarDeclaration Name="nodeId" Type="WSTRING"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalConstVars>
+			<VarDeclaration Name="BROWSE_SEPARATOR" Type="WSTRING" InitialValue="&quot;/&quot;"/>
+			<VarDeclaration Name="NODE_SEPARATOR" Type="WSTRING" InitialValue="&quot;.&quot;"/>
+		</InternalConstVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550" y="425">
+			</ECState>
+			<ECState Name="createIt" x="2300" y="540">
+				<ECAction Algorithm="CreateIds" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="createIt" Condition="Create" x="1653.33" y="346.67"/>
+			<ECTransition Source="createIt" Destination="START" Condition="1" x="1540" y="753.33"/>
+		</ECC>
+		<Algorithm Name="CreateIds">
+			<ST><![CDATA[ALGORITHM CreateIds
+IF EQ(objectPrefix, "") THEN
+	browseName := CONCAT(browsePrefix, containerName, BROWSE_SEPARATOR, objectName);
+	nodeId := CONCAT(nodePrefix, containerName, NODE_SEPARATOR, objectName);
+ELSE
+	browseName := CONCAT(browsePrefix, containerName, BROWSE_SEPARATOR, objectPrefix, BROWSE_SEPARATOR, objectName);
+	nodeId := CONCAT(nodePrefix, containerName, NODE_SEPARATOR, objectPrefix, NODE_SEPARATOR, objectName);
+END_IF;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
+</FBType>
