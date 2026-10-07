@@ -31,6 +31,7 @@ import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.swt.SWT;
@@ -68,10 +69,13 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 		}
 	}
 
+	public ZoomManager getZoomManager() {
+		return ((ScalableFreeformRootEditPart) getRootEditPart()).getZoomManager();
+	}
+
 	public void createContextMenu(final EPackage queryPackage, final Runnable onSave, final Runnable onLoad,
 			final Runnable onSearch) {
-		final ScalableFreeformRootEditPart root = (ScalableFreeformRootEditPart) getRootEditPart();
-		setContextMenu(new QueryContextMenuProvider(this, root.getZoomManager(), actionRegistry, queryPackage, onSave,
+		setContextMenu(new QueryContextMenuProvider(this, getZoomManager(), actionRegistry, queryPackage, onSave,
 				onLoad, onSearch));
 	}
 

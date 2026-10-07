@@ -63,6 +63,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
@@ -422,6 +423,10 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		}
 		if (IPropertySheetPage.class.equals(adapter)) {
 			return adapter.cast(queryViewer.createPropertySheetPage());
+		}
+		if (adapter == ZoomManager.class && queryViewer != null) {
+			// allows to zoom the query with the zoom toolbar of 4diac
+			return adapter.cast(queryViewer.getZoomManager());
 		}
 		return super.getAdapter(adapter);
 	}
