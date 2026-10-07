@@ -14,18 +14,19 @@ package org.eclipse.fordiac.ide.bulkeditor.query;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
+import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
+import org.eclipse.fordiac.ide.bulkeditor.commands.CreateQueryElementCommand;
+import org.eclipse.fordiac.ide.bulkeditor.commands.DeleteQueryElementCommand;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
@@ -211,13 +212,6 @@ public final class QueryModelHelper {
 		return value != null ? String.valueOf(value) : ""; //$NON-NLS-1$
 	}
 
-	public static void setFeatureValue(final EObject eObj, final String featureName, final Object value) {
-		final EStructuralFeature feature = eObj.eClass().getEStructuralFeature(featureName);
-		if (feature != null) {
-			eObj.eSet(feature, value);
-		}
-	}
-
 	private static boolean getBooleanFeature(final EObject eObj, final String featureName) {
 		return Boolean.TRUE.equals(getFeatureValue(eObj, featureName));
 	}
@@ -226,32 +220,11 @@ public final class QueryModelHelper {
 		return (getFeatureValue(parent, refName) instanceof final EObject eObj) ? eObj : null;
 	}
 
-	// named setters for readable call sites
-	public static void setPlaceholderFeature(final EObject placeholder, final String featureName, final String value) {
-		setFeatureValue(placeholder, featureName, value);
-	}
-
-	public static void setAttributeDeclarationName(final EObject attrDecl, final String name) {
-		setFeatureValue(attrDecl, FEATURE_NAME, name);
-	}
-
-	public static void setIgnoreLinkedLibrary(final EObject instance, final boolean value) {
-		setFeatureValue(instance, FEATURE_IGNORE_LINKED_LIBRARIES, Boolean.valueOf(value));
-	}
-
 	// field constraints
 	public static FieldConstraintData readFieldConstraint(final EObject fc) {
 		return new FieldConstraintData((String) getFeatureValue(fc, FEATURE_VALUE),
 				getBooleanFeature(fc, FEATURE_CASE_SENSITIVE), getBooleanFeature(fc, FEATURE_WHOLE_WORD),
 				getBooleanFeature(fc, FEATURE_ENTIRE), getBooleanFeature(fc, FEATURE_REGEX));
-	}
-
-	public static void writeFieldConstraint(final EObject fc, final FieldConstraintData data) {
-		setFeatureValue(fc, FEATURE_VALUE, data.value());
-		setFeatureValue(fc, FEATURE_CASE_SENSITIVE, Boolean.valueOf(data.caseSensitive()));
-		setFeatureValue(fc, FEATURE_WHOLE_WORD, Boolean.valueOf(data.wholeWord()));
-		setFeatureValue(fc, FEATURE_ENTIRE, Boolean.valueOf(data.entire()));
-		setFeatureValue(fc, FEATURE_REGEX, Boolean.valueOf(data.regex()));
 	}
 
 	public static List<FieldConstraintEntry> getContainedFieldConstraints(final EObject constraint) {
@@ -314,43 +287,23 @@ public final class QueryModelHelper {
 		return !getChildNodes(eObj).isEmpty();
 	}
 
-	// model modification
-	public static EObject addChild(final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
-			final EObject parent, final EReference reference, final EClass childType) {
-		final EObject child = queryPackage.getEFactoryInstance().create(childType);
-		final Command cmd = reference.isMany() //
-				? AddCommand.create(editingDomain, parent, reference, child)
-				: SetCommand.create(editingDomain, parent, reference, child);
-		editingDomain.getCommandStack().execute(cmd);
-		return child;
-	}
-
-	public static void removeChild(final AdapterFactoryEditingDomain editingDomain, final EObject child) {
-		final EReference containment = child.eContainmentFeature();
-		final Command cmd = (containment != null && !containment.isMany())
-				? SetCommand.create(editingDomain, child.eContainer(), containment, SetCommand.UNSET_VALUE)
-				: RemoveCommand.create(editingDomain, child);
-		editingDomain.getCommandStack().execute(cmd);
-	}
-
 	// context menu
 	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
-			final Predicate<EReference> referenceFilter) {
+			final CommandStack commandStack, final EPackage queryPackage, final Predicate<EReference> referenceFilter) {
 		addSeparatorIfNeeded(menu);
 		for (final EReference ref : selected.eClass().getEAllContainments()) {
 			if (referenceFilter.test(ref) && (ref.isMany() || !selected.eIsSet(ref))) {
-				addItemsForReference(menu, selected, editingDomain, queryPackage, ref);
+				addItemsForReference(menu, selected, commandStack, queryPackage, ref);
 			}
 		}
 	}
 
-	private static void addItemsForReference(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final EReference ref) {
+	private static void addItemsForReference(final Menu menu, final EObject selected, final CommandStack commandStack,
+			final EPackage queryPackage, final EReference ref) {
 		final EClass type = ref.getEReferenceType();
 		for (final EClass concrete : getAddableClasses(queryPackage, selected, type)) {
-			addMenuItem(menu, NLS.bind(Messages.AddChild, getChildLabel(ref, concrete)),
-					() -> addChild(editingDomain, queryPackage, selected, ref, concrete));
+			addCommandMenuItem(menu, NLS.bind(Messages.AddChild, getChildLabel(ref, concrete)), commandStack,
+					() -> new CreateQueryElementCommand(selected, ref, concrete));
 		}
 	}
 
@@ -381,17 +334,17 @@ public final class QueryModelHelper {
 	}
 
 	public static void populateRemoveMenuItem(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain) {
+			final CommandStack commandStack) {
 		if (selected.eContainer() == null || isMandatoryChild(selected)) {
 			return;
 		}
 		addSeparatorIfNeeded(menu);
-		addMenuItem(menu, NLS.bind(Messages.RemoveChild, selected.eClass().getName()),
-				() -> removeChild(editingDomain, selected));
+		addCommandMenuItem(menu, NLS.bind(Messages.RemoveChild, selected.eClass().getName()), commandStack,
+				() -> new DeleteQueryElementCommand(selected));
 	}
 
 	public static void populateFieldConstraintRemoval(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain) {
+			final CommandStack commandStack) {
 		if (!isConstraint(selected)) {
 			return;
 		}
@@ -402,7 +355,7 @@ public final class QueryModelHelper {
 		addSeparatorIfNeeded(menu);
 		for (final FieldConstraintEntry entry : entries) {
 			final String label = NLS.bind(Messages.RemoveChild, entry.reference().getName());
-			addMenuItem(menu, label, () -> removeChild(editingDomain, entry.fieldConstraint()));
+			addCommandMenuItem(menu, label, commandStack, () -> new DeleteQueryElementCommand(entry.fieldConstraint()));
 		}
 	}
 
@@ -412,7 +365,17 @@ public final class QueryModelHelper {
 		item.addListener(SWT.Selection, _ -> action.run());
 	}
 
-	public static void populateNegateToggle(final Menu menu, final EObject selected) {
+	private static void addCommandMenuItem(final Menu menu, final String text, final CommandStack commandStack,
+			final Supplier<Command> commandSupplier) {
+		addMenuItem(menu, text, () -> execute(commandStack, text, commandSupplier.get()));
+	}
+
+	private static void execute(final CommandStack commandStack, final String label, final Command command) {
+		command.setLabel(label);
+		commandStack.execute(command);
+	}
+
+	public static void populateNegateToggle(final Menu menu, final EObject selected, final CommandStack commandStack) {
 		if (!isConstraint(selected)) {
 			return;
 		}
@@ -421,7 +384,8 @@ public final class QueryModelHelper {
 		final MenuItem item = new MenuItem(menu, SWT.NONE);
 		item.setText(Messages.Negate);
 		item.setSelection(currentValue);
-		item.addListener(SWT.Selection, _ -> setFeatureValue(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue)));
+		item.addListener(SWT.Selection, _ -> execute(commandStack, Messages.Negate,
+				new ChangeQueryFeatureCommand(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue))));
 	}
 
 	@SuppressWarnings("unused")

@@ -130,7 +130,7 @@ public class QueryAttributeDeclarationNodeFigure extends QueryNodeFigure {
 				final String newValue = searchText.getText() != null ? searchText.getText() : ""; //$NON-NLS-1$
 				valueLabel.setText(newValue);
 				searchText.dispose();
-				QueryModelHelper.setAttributeDeclarationName(element, newValue);
+				changeFeature(element, QueryModelHelper.FEATURE_NAME, newValue);
 				resizeToFit();
 			}
 		};
