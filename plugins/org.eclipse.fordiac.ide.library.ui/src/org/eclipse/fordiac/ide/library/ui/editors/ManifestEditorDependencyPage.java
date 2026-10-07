@@ -98,9 +98,11 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 	@Override
 	protected void createPageContent(final Composite parent, final FormToolkit toolkit, final IManagedForm form) {
 		createDependencySection(parent, toolkit);
-		createButtonBar(parent, form);
 
-		refreshLibraries(form);
+		if (isProjectManifest()) {
+			createButtonBar(parent, form);
+			refreshLibraries(form);
+		}
 	}
 
 	@Override
@@ -164,7 +166,11 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 
 		treeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		configureColumns(columnLayout);
+		configureCommonColumns(columnLayout);
+
+		if (isProjectManifest()) {
+			configureProjectManifestColumns(columnLayout);
+		}
 
 		// do not compute dependencies
 		offlineLibraryProvider.refresh(new NullProgressMonitor(), false);
@@ -266,7 +272,7 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 		return linkedLibVersions.getOrDefault(symbolicName, ""); //$NON-NLS-1$
 	}
 
-	private void configureColumns(final TreeColumnLayout layout) {
+	private void configureCommonColumns(final TreeColumnLayout layout) {
 		// symbolic name column
 		final TreeViewerColumn symbolicNameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		symbolicNameColumn.getColumn().setText(Messages.ManifestEditor_SymbolicName);
@@ -320,6 +326,12 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 			}
 		});
 
+		// define column width ratios
+		layout.setColumnData(symbolicNameColumn.getColumn(), new ColumnWeightData(40));
+		layout.setColumnData(versionRangeColumn.getColumn(), new ColumnWeightData(30));
+	}
+
+	private void configureProjectManifestColumns(final TreeColumnLayout layout) {
 		// active version column
 		final TreeViewerColumn activeVersionColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		activeVersionColumn.getColumn().setText(Messages.ManifestEditor_Used);
@@ -347,9 +359,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 				.sorted(VERSION_DESCENDING).map(lib -> lib.version().toString()).findFirst().orElse(""), null, false) //$NON-NLS-1$
 		);
 
-		// define column width ratios
-		layout.setColumnData(symbolicNameColumn.getColumn(), new ColumnWeightData(40));
-		layout.setColumnData(versionRangeColumn.getColumn(), new ColumnWeightData(30));
 		layout.setColumnData(activeVersionColumn.getColumn(), new ColumnWeightData(20));
 		layout.setColumnData(latestInRangeColumn.getColumn(), new ColumnWeightData(20));
 		layout.setColumnData(latestColumn.getColumn(), new ColumnWeightData(20));
