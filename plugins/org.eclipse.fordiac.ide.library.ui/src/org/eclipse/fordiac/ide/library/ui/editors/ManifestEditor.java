@@ -73,8 +73,15 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 		try {
 			addPage(new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, "Product"));
+
+			// dependency page read only for scope == library? the buttons do not make sense
+			// here, probably let the page adapt itself
 			addPage(new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"));
-			addPage(new ManifestEditorLibraryPage(this, LIBRARY_PAGE_ID, "Library"));
+
+			// do not show library editing page for library manifest
+			if (manifest != null && ManifestHelper.isProject(manifest)) {
+				addPage(new ManifestEditorLibraryPage(this, LIBRARY_PAGE_ID, "Library"));
+			}
 		} catch (final PartInitException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
