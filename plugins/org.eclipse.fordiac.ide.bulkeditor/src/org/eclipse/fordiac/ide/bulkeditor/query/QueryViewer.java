@@ -41,6 +41,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -82,6 +83,10 @@ public class QueryViewer {
 
 	public ISelectionProvider getSelectionProvider() {
 		return graphicalViewer;
+	}
+
+	public ZoomManager getZoomManager() {
+		return graphicalViewer.getZoomManager();
 	}
 
 	public IPropertySheetPage createPropertySheetPage() {
