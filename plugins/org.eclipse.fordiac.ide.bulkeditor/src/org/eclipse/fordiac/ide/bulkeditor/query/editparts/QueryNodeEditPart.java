@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query.editparts;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,6 +20,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
@@ -30,16 +32,20 @@ import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceholderNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.DeleteQueryNodeEditPolicy;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.QueryDirectEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Handle;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.LocationRequest;
 import org.eclipse.gef.tools.SelectEditPartTracker;
@@ -91,6 +97,16 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected void createEditPolicies() {
+		final NonResizableEditPolicy selectionPolicy = new NonResizableEditPolicy() {
+			@Override
+			protected List<Handle> createSelectionHandles() {
+				final List<Handle> list = new ArrayList<>(1);
+				list.add(new ModifiedMoveHandle(getHost(), new Insets(2), GefPreferenceConstants.CORNER_DIM));
+				return list;
+			}
+		};
+		selectionPolicy.setDragAllowed(false);
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, selectionPolicy);
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteQueryNodeEditPolicy());
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new QueryDirectEditPolicy());
 	}
