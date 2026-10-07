@@ -10,7 +10,10 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.bulkeditor.query;
+package org.eclipse.fordiac.ide.bulkeditor.query.figures;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureCanvas;
@@ -23,13 +26,11 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
+import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.zest.core.widgets.Graph;
-import org.eclipse.zest.core.widgets.GraphItem;
 
 public class QueryPlaceholderNodeFigure extends QueryNodeFigure {
 
@@ -37,11 +38,19 @@ public class QueryPlaceholderNodeFigure extends QueryNodeFigure {
 	private static final Color COLOR_VALUE_BORDER = QueryUIPreferenceConstants.getValueBorder();
 
 	private final FigureCanvas canvas;
+	private final Map<String, Label> valueLabels = new HashMap<>();
 
 	public QueryPlaceholderNodeFigure(final EObject element, final FigureCanvas canvas) {
 		super(element);
 		this.canvas = canvas;
 		add(createPlaceholderBody(element));
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		valueLabels.forEach((featureName, valueLabel) -> valueLabel
+				.setText(QueryModelHelper.getFeatureText(getElement(), featureName)));
 	}
 
 	private Figure createPlaceholderBody(final EObject placeholder) {
@@ -70,21 +79,16 @@ public class QueryPlaceholderNodeFigure extends QueryNodeFigure {
 		row.add(nameLabel);
 		gl.setConstraint(nameLabel, new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 
-		final EStructuralFeature feature = placeholder.eClass().getEStructuralFeature(featureName);
-		final String initialValue = feature != null && placeholder.eIsSet(feature)
-				? String.valueOf(placeholder.eGet(feature))
-				: ""; //$NON-NLS-1$
-
-		final Label valueLabel = new Label(initialValue);
+		final Label valueLabel = new Label();
+		valueLabels.put(featureName, valueLabel);
 		valueLabel.setOpaque(true);
 		valueLabel.setBackgroundColor(COLOR_VALUE_BG);
 		valueLabel.setBorder(new LineBorder(COLOR_VALUE_BORDER, 1));
 		valueLabel.addMouseListener(new MouseListener.Stub() {
 			@Override
 			public void mouseDoubleClicked(final MouseEvent me) {
-				if (canvas instanceof final Graph graph) {
-					graph.setSelection(new GraphItem[0]);
-				}
+				// the double click shall not collapse the node
+				me.consume();
 				openDirectEdit(valueLabel, placeholder, featureName);
 			}
 		});

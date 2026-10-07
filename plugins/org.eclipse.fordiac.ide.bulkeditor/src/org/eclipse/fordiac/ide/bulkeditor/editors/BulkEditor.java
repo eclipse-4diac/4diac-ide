@@ -153,7 +153,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	private void createResultPage() {
 		final Composite pageComposite = new Composite(getContainer(), SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
+		GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(pageComposite);
 
 		natTable = new BulkEditorNatTable(pageComposite, this, BulkEditorMode.VARIABLE, getSite(),
 				selectionProviderDelegate);
@@ -165,7 +165,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	private void createQueryViewerPage() {
 		final Composite pageComposite = new Composite(getContainer(), SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
+		GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(pageComposite);
 		final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		pageComposite.setLayoutData(gd);
 

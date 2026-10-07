@@ -206,6 +206,11 @@ public final class QueryModelHelper {
 		return feature != null ? eObj.eGet(feature) : null;
 	}
 
+	public static String getFeatureText(final EObject eObj, final String featureName) {
+		final Object value = getFeatureValue(eObj, featureName);
+		return value != null ? String.valueOf(value) : ""; //$NON-NLS-1$
+	}
+
 	public static void setFeatureValue(final EObject eObj, final String featureName, final Object value) {
 		final EStructuralFeature feature = eObj.eClass().getEStructuralFeature(featureName);
 		if (feature != null) {
@@ -331,24 +336,21 @@ public final class QueryModelHelper {
 	// context menu
 	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
 			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage,
-			final Predicate<EReference> referenceFilter, final Runnable afterAdd) {
+			final Predicate<EReference> referenceFilter) {
 		addSeparatorIfNeeded(menu);
 		for (final EReference ref : selected.eClass().getEAllContainments()) {
 			if (referenceFilter.test(ref) && (ref.isMany() || !selected.eIsSet(ref))) {
-				addItemsForReference(menu, selected, editingDomain, queryPackage, ref, afterAdd);
+				addItemsForReference(menu, selected, editingDomain, queryPackage, ref);
 			}
 		}
 	}
 
 	private static void addItemsForReference(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final EReference ref,
-			final Runnable afterAdd) {
+			final AdapterFactoryEditingDomain editingDomain, final EPackage queryPackage, final EReference ref) {
 		final EClass type = ref.getEReferenceType();
 		for (final EClass concrete : getAddableClasses(queryPackage, selected, type)) {
-			addMenuItem(menu, NLS.bind(Messages.AddChild, getChildLabel(ref, concrete)), () -> {
-				addChild(editingDomain, queryPackage, selected, ref, concrete);
-				afterAdd.run();
-			});
+			addMenuItem(menu, NLS.bind(Messages.AddChild, getChildLabel(ref, concrete)),
+					() -> addChild(editingDomain, queryPackage, selected, ref, concrete));
 		}
 	}
 
@@ -379,19 +381,17 @@ public final class QueryModelHelper {
 	}
 
 	public static void populateRemoveMenuItem(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain, final Runnable afterRemove) {
+			final AdapterFactoryEditingDomain editingDomain) {
 		if (selected.eContainer() == null || isMandatoryChild(selected)) {
 			return;
 		}
 		addSeparatorIfNeeded(menu);
-		addMenuItem(menu, NLS.bind(Messages.RemoveChild, selected.eClass().getName()), () -> {
-			removeChild(editingDomain, selected);
-			afterRemove.run();
-		});
+		addMenuItem(menu, NLS.bind(Messages.RemoveChild, selected.eClass().getName()),
+				() -> removeChild(editingDomain, selected));
 	}
 
 	public static void populateFieldConstraintRemoval(final Menu menu, final EObject selected,
-			final AdapterFactoryEditingDomain editingDomain, final Runnable afterRemove) {
+			final AdapterFactoryEditingDomain editingDomain) {
 		if (!isConstraint(selected)) {
 			return;
 		}
@@ -402,10 +402,7 @@ public final class QueryModelHelper {
 		addSeparatorIfNeeded(menu);
 		for (final FieldConstraintEntry entry : entries) {
 			final String label = NLS.bind(Messages.RemoveChild, entry.reference().getName());
-			addMenuItem(menu, label, () -> {
-				removeChild(editingDomain, entry.fieldConstraint());
-				afterRemove.run();
-			});
+			addMenuItem(menu, label, () -> removeChild(editingDomain, entry.fieldConstraint()));
 		}
 	}
 
@@ -415,7 +412,7 @@ public final class QueryModelHelper {
 		item.addListener(SWT.Selection, _ -> action.run());
 	}
 
-	public static void populateNegateToggle(final Menu menu, final EObject selected, final Runnable afterChange) {
+	public static void populateNegateToggle(final Menu menu, final EObject selected) {
 		if (!isConstraint(selected)) {
 			return;
 		}
@@ -424,10 +421,7 @@ public final class QueryModelHelper {
 		final MenuItem item = new MenuItem(menu, SWT.NONE);
 		item.setText(Messages.Negate);
 		item.setSelection(currentValue);
-		item.addListener(SWT.Selection, _ -> {
-			setFeatureValue(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue));
-			afterChange.run();
-		});
+		item.addListener(SWT.Selection, _ -> setFeatureValue(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue)));
 	}
 
 	@SuppressWarnings("unused")
