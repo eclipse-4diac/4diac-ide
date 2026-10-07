@@ -18,7 +18,6 @@ import java.util.Objects;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
@@ -26,9 +25,14 @@ import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryAttributeDeclarationNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure;
+import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure.EditableValue;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceholderNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.DeleteQueryNodeEditPolicy;
+import org.eclipse.fordiac.ide.bulkeditor.query.policies.QueryDirectEditPolicy;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
@@ -36,7 +40,11 @@ import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.gef.requests.LocationRequest;
 import org.eclipse.gef.tools.SelectEditPartTracker;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
+import org.eclipse.swt.SWT;
 
 /** Edit part of a query element shown as node of the query viewer. */
 public class QueryNodeEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
@@ -60,25 +68,23 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected IFigure createFigure() {
-		final QueryNodeFigure figure = createNodeFigure();
+		final QueryNodeFigure figure = createNodeFigure(getModel());
 		figure.setFeatureChangeHandler(this::changeFeature);
 		return figure;
 	}
 
-	private QueryNodeFigure createNodeFigure() {
-		final EObject element = getModel();
-		final FigureCanvas canvas = (FigureCanvas) getViewer().getControl();
+	private static QueryNodeFigure createNodeFigure(final EObject element) {
 		if (QueryModelHelper.isPlace(element)) {
 			return new QueryPlaceNodeFigure(element);
 		}
 		if (QueryModelHelper.isConstraint(element)) {
-			return new QueryConstraintNodeFigure(element, canvas);
+			return new QueryConstraintNodeFigure(element);
 		}
 		if (QueryModelHelper.isPlaceholder(element)) {
-			return new QueryPlaceholderNodeFigure(element, canvas);
+			return new QueryPlaceholderNodeFigure(element);
 		}
 		if (QueryModelHelper.isAttributeDeclaration(element)) {
-			return new QueryAttributeDeclarationNodeFigure(element, canvas, project);
+			return new QueryAttributeDeclarationNodeFigure(element);
 		}
 		return new QueryNodeFigure(element);
 	}
@@ -86,6 +92,7 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteQueryNodeEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new QueryDirectEditPolicy());
 	}
 
 	@Override
@@ -96,12 +103,34 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 	@Override
 	public DragTracker getDragTracker(final Request request) {
 		// the nodes are placed by the query layout and can only be selected
-		return new SelectEditPartTracker(this);
+		return new SelectEditPartTracker(this) {
+			@Override
+			protected boolean handleButtonUp(final int button) {
+				if (button == 1 && isInState(STATE_DRAG) && isPlainClick()
+						&& getFigure().getEditableValueAt(getLocation()) != null) {
+					// values are edited with a single click, like the toggle buttons are pressed
+					performSelection();
+					final DirectEditRequest directEditRequest = new DirectEditRequest();
+					directEditRequest.setLocation(getLocation());
+					performRequest(directEditRequest);
+					setState(STATE_TERMINAL);
+					return true;
+				}
+				return super.handleButtonUp(button);
+			}
+
+			private boolean isPlainClick() {
+				return !getCurrentInput().isModKeyDown(SWT.MOD1) && !getCurrentInput().isShiftKeyDown();
+			}
+		};
 	}
 
 	@Override
 	public void performRequest(final Request request) {
-		if (RequestConstants.REQ_OPEN.equals(request.getType())) {
+		final EditableValue editableValue = getEditableValue(request);
+		if (editableValue != null) {
+			performDirectEdit(editableValue);
+		} else if (RequestConstants.REQ_OPEN.equals(request.getType())) {
 			toggleCollapsed();
 		} else {
 			super.performRequest(request);
@@ -155,6 +184,26 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 		if (!Objects.equals(QueryModelHelper.getFeatureValue(element, featureName), value)) {
 			getViewer().getEditDomain().getCommandStack()
 					.execute(new ChangeQueryFeatureCommand(element, featureName, value));
+		}
+	}
+
+	private EditableValue getEditableValue(final Request request) {
+		if ((RequestConstants.REQ_OPEN.equals(request.getType())
+				|| RequestConstants.REQ_DIRECT_EDIT.equals(request.getType()))
+				&& request instanceof final LocationRequest locationRequest) {
+			return getFigure().getEditableValueAt(locationRequest.getLocation());
+		}
+		return null;
+	}
+
+	private void performDirectEdit(final EditableValue editableValue) {
+		if (QueryModelHelper.isAttributeDeclaration(editableValue.element())) {
+			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(
+					() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
+					AttributeSelectionContentProvider.INSTANCE);
+			new QueryDirectEditManager(this, editableValue, proposalProvider).show();
+		} else {
+			new QueryDirectEditManager(this, editableValue).show();
 		}
 	}
 

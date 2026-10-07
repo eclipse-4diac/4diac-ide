@@ -201,7 +201,7 @@ public final class QueryModelHelper {
 		return value != null ? String.valueOf(value) : ""; //$NON-NLS-1$
 	}
 
-	private static boolean getBooleanFeature(final EObject eObj, final String featureName) {
+	public static boolean getBooleanFeature(final EObject eObj, final String featureName) {
 		return Boolean.TRUE.equals(getFeatureValue(eObj, featureName));
 	}
 

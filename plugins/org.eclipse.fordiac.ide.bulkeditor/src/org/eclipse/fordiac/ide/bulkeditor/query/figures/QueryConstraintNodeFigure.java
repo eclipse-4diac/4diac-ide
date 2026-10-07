@@ -12,78 +12,62 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureCanvas;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper.FieldConstraintEntry;
 import org.eclipse.swt.graphics.Color;
 
+/** Node of a constraint showing its field constraints, red if negated. */
 public class QueryConstraintNodeFigure extends QueryNodeFigure {
 
 	private static final Color NEGATED_COLOR_HEADER_BG = QueryUIPreferenceConstants.getNegatedHeaderBackgroundColor();
-	private final FigureCanvas canvas;
-	private final Figure body;
-	private final Map<EObject, FieldConstraintFigure> filters = new LinkedHashMap<>();
 
-	public QueryConstraintNodeFigure(final EObject element, final FigureCanvas canvas) {
-		super(element);
-		this.canvas = canvas;
-		body = createFieldConstraintBody();
+	private final Figure body = createBody();
+	private final List<FieldConstraintFigure> fieldConstraintFigures = new ArrayList<>();
+
+	public QueryConstraintNodeFigure(final EObject constraint) {
+		super(constraint);
 		add(body);
 	}
 
 	@Override
 	public void refresh() {
 		super.refresh();
-		final List<FieldConstraintEntry> entries = QueryModelHelper.getContainedFieldConstraints(getElement());
-		if (entries.stream().map(FieldConstraintEntry::fieldConstraint).toList()
-				.equals(List.copyOf(filters.keySet()))) {
-			filters.forEach((fc, filter) -> filter.setData(QueryModelHelper.readFieldConstraint(fc)));
-		} else {
-			body.removeAll();
-			filters.clear();
-			entries.forEach(
-					entry -> body.add(createFieldConstraintRow(entry.reference().getName(), entry.fieldConstraint())));
+		final List<EObject> fieldConstraints = QueryModelHelper.getContainedFieldConstraints(getElement()).stream()
+				.map(FieldConstraintEntry::fieldConstraint).toList();
+		if (!fieldConstraints.equals(getShownFieldConstraints())) {
+			createFieldConstraintFigures(fieldConstraints);
 		}
-	}
-
-	private static Figure createFieldConstraintBody() {
-		final Figure body = new Figure();
-		final ToolbarLayout bodyLayout = new ToolbarLayout(false);
-		bodyLayout.setStretchMinorAxis(true);
-		bodyLayout.setSpacing(1);
-		body.setLayoutManager(bodyLayout);
-		body.setBorder(new MarginBorder(2, 6, 4, 6));
-		body.setOpaque(true);
-		return body;
-	}
-
-	private Figure createFieldConstraintRow(final String fieldName, final EObject fc) {
-		final Figure row = new Figure();
-		final GridLayout gl = new GridLayout(1, false);
-		gl.marginHeight = 1;
-		gl.marginWidth = 0;
-		row.setLayoutManager(gl);
-
-		final var filter = new FieldConstraintFigure(fieldName, QueryModelHelper.readFieldConstraint(fc), canvas);
-		filter.addFilterChangeListener((featureName, value) -> changeFeature(fc, featureName, value));
-		row.add(filter);
-		filters.put(fc, filter);
-		return row;
+		fieldConstraintFigures.forEach(FieldConstraintFigure::refresh);
 	}
 
 	@Override
 	public Color getBackgroundColor() {
 		return QueryModelHelper.isNegatedConstraint(getElement()) ? NEGATED_COLOR_HEADER_BG
 				: super.getBackgroundColor();
+	}
+
+	@Override
+	protected List<EditableValue> getEditableValues() {
+		return fieldConstraintFigures.stream().map(FieldConstraintFigure::getEditableValue).toList();
+	}
+
+	private List<EObject> getShownFieldConstraints() {
+		return fieldConstraintFigures.stream().map(FieldConstraintFigure::getFieldConstraint).toList();
+	}
+
+	private void createFieldConstraintFigures(final List<EObject> fieldConstraints) {
+		body.removeAll();
+		fieldConstraintFigures.clear();
+		for (final EObject fieldConstraint : fieldConstraints) {
+			final FieldConstraintFigure figure = new FieldConstraintFigure(fieldConstraint, this::changeFeature);
+			body.add(figure);
+			fieldConstraintFigures.add(figure);
+		}
 	}
 }
