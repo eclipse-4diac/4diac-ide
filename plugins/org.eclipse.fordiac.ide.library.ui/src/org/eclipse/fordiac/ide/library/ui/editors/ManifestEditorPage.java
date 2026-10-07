@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.layout.GridLayout;
@@ -45,6 +46,10 @@ public abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 		body.setLayout(new GridLayout(1, false));
 
 		createPageContent(body, managedForm.getToolkit(), managedForm);
+	}
+
+	protected boolean isProjectManifest() {
+		return ManifestHelper.isProject(getManifestEditor().getManifest());
 	}
 
 	protected boolean containsElement(final EObject element) {
