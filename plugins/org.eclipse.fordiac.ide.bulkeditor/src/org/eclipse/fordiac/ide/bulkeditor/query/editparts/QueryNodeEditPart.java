@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.bulkeditor.query.editparts;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.ChopboxAnchor;
@@ -20,6 +21,7 @@ import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryAttributeDeclarationNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintNodeFigure;
@@ -56,6 +58,12 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected IFigure createFigure() {
+		final QueryNodeFigure figure = createNodeFigure();
+		figure.setFeatureChangeHandler(this::changeFeature);
+		return figure;
+	}
+
+	private QueryNodeFigure createNodeFigure() {
 		final EObject element = getModel();
 		final FigureCanvas canvas = (FigureCanvas) getViewer().getControl();
 		if (QueryModelHelper.isPlace(element)) {
@@ -139,6 +147,13 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	private QueryDiagram getDiagram() {
 		return (QueryDiagram) getParent().getModel();
+	}
+
+	private void changeFeature(final EObject element, final String featureName, final Object value) {
+		if (!Objects.equals(QueryModelHelper.getFeatureValue(element, featureName), value)) {
+			getViewer().getEditDomain().getCommandStack()
+					.execute(new ChangeQueryFeatureCommand(element, featureName, value));
+		}
 	}
 
 	private void toggleCollapsed() {

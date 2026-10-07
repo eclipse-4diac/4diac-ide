@@ -68,7 +68,7 @@ public class QueryViewer {
 		editingDomain = createEditingDomain(adapterFactory);
 		queryPackage = loadQueryPackage(getResourceSet());
 
-		graphicalViewer = new QueryGraphicalViewer(parent, editor, project, editingDomain);
+		graphicalViewer = new QueryGraphicalViewer(parent, editor, project);
 		graphicalViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		graphicalViewer.createContextMenu(queryPackage, this::saveQueryToFile, this::loadQueryFromFile,
 				editor::onSearchRequested);
@@ -197,6 +197,7 @@ public class QueryViewer {
 			resources.remove(queryResource);
 		}
 		editingDomain.getCommandStack().flush();
+		graphicalViewer.getEditDomain().getCommandStack().flush();
 		showQuery(candidate);
 	}
 

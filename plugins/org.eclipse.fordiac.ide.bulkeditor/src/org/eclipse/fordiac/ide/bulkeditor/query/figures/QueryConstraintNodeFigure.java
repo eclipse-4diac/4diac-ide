@@ -75,7 +75,7 @@ public class QueryConstraintNodeFigure extends QueryNodeFigure {
 		row.setLayoutManager(gl);
 
 		final var filter = new FieldConstraintFigure(fieldName, QueryModelHelper.readFieldConstraint(fc), canvas);
-		filter.addFilterChangeListener(data -> QueryModelHelper.writeFieldConstraint(fc, data));
+		filter.addFilterChangeListener((featureName, value) -> changeFeature(fc, featureName, value));
 		row.add(filter);
 		filters.put(fc, filter);
 		return row;

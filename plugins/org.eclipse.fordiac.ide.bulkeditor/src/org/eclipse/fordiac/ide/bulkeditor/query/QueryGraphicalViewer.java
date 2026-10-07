@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.query.editparts.QueryDiagram;
 import org.eclipse.fordiac.ide.bulkeditor.query.editparts.QueryEditPartFactory;
@@ -33,6 +32,7 @@ import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.swt.SWT;
@@ -44,17 +44,14 @@ import org.eclipse.ui.IEditorPart;
 /** Graphical viewer showing a query as tree of nodes. */
 public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer {
 
-	private final AdapterFactoryEditingDomain editingDomain;
 	private QueryDiagram diagram;
 	private EPackage queryPackage;
 	private Runnable onSave;
 	private Runnable onLoad;
 	private Runnable onSearch;
 
-	public QueryGraphicalViewer(final Composite parent, final IEditorPart editor, final IProject project,
-			final AdapterFactoryEditingDomain editingDomain) {
+	public QueryGraphicalViewer(final Composite parent, final IEditorPart editor, final IProject project) {
 		super(new GefPreferenceConstantsCache(project));
-		this.editingDomain = editingDomain;
 		createControl(parent);
 
 		final ScalableFreeformRootEditPart root = new ZoomScalableFreeformRootEditPart(editor.getSite(),
@@ -90,6 +87,8 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 
 	private static DefaultEditDomain createEditDomain(final IEditorPart editor) {
 		final DefaultEditDomain editDomain = new DefaultEditDomain(editor);
+		// query changes are undone together with the other bulk editor changes
+		editDomain.setCommandStack(editor.getAdapter(CommandStack.class));
 		editDomain.setDefaultTool(new AdvancedPanningSelectionTool());
 		editDomain.setActiveTool(editDomain.getDefaultTool());
 		return editDomain;
@@ -106,11 +105,12 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 			return;
 		}
 
-		QueryModelHelper.populateNegateToggle(menu, selected);
-		QueryModelHelper.populateAddChildMenuItems(menu, selected, editingDomain, queryPackage,
+		final CommandStack commandStack = getEditDomain().getCommandStack();
+		QueryModelHelper.populateNegateToggle(menu, selected, commandStack);
+		QueryModelHelper.populateAddChildMenuItems(menu, selected, commandStack, queryPackage,
 				child -> isReferenceAddable(child) && isFieldReferenceAllowed(selected, child));
-		QueryModelHelper.populateFieldConstraintRemoval(menu, selected, editingDomain);
-		QueryModelHelper.populateRemoveMenuItem(menu, selected, editingDomain);
+		QueryModelHelper.populateFieldConstraintRemoval(menu, selected, commandStack);
+		QueryModelHelper.populateRemoveMenuItem(menu, selected, commandStack);
 	}
 
 	private EObject getSelectedElement() {

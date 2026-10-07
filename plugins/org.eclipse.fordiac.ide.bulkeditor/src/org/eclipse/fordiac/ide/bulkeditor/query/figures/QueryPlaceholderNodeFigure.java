@@ -119,7 +119,7 @@ public class QueryPlaceholderNodeFigure extends QueryNodeFigure {
 				final String newValue = textWidget.getText() != null ? textWidget.getText() : ""; //$NON-NLS-1$
 				valueLabel.setText(newValue);
 				textWidget.dispose();
-				QueryModelHelper.setPlaceholderFeature(placeholder, featureName, newValue);
+				changeFeature(placeholder, featureName, newValue);
 			}
 		};
 		final Runnable cancel = () -> {
