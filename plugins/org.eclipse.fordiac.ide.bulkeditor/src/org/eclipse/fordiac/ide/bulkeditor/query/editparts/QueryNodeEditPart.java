@@ -28,8 +28,10 @@ import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintNodeFigur
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceholderNodeFigure;
+import org.eclipse.fordiac.ide.bulkeditor.query.policies.DeleteQueryNodeEditPolicy;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -83,7 +85,7 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected void createEditPolicies() {
-		// the nodes are edited through their figures and the context menu of the viewer
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteQueryNodeEditPolicy());
 	}
 
 	@Override
