@@ -126,6 +126,7 @@ public class Messages extends NLS {
 	public static String LibraryExporter_TypeSelection;
 	public static String LibraryExporter_UseIncludeExclude;
 	public static String LibraryExporter_ExportAllTypes;
+	public static String LibraryExporter_ExportSIFB;
 
 	// Manage Library Wizard
 	public static String ManageLibraryWizard_Label;
