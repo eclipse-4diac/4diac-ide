@@ -30,16 +30,20 @@ import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.KeyHandler;
+import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.DeleteAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 
 /** Graphical viewer showing a query as tree of nodes. */
 public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer {
@@ -60,7 +64,7 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 		setRootEditPart(root);
 		setEditPartFactory(new QueryEditPartFactory(project));
 		setEditDomain(createEditDomain(editor));
-		setKeyHandler(new AdvancedGraphicalViewerKeyHandler(this));
+		setKeyHandler(createKeyHandler(editor));
 		setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 	}
 
@@ -83,6 +87,17 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 		final Menu menu = new Menu(getControl());
 		getControl().setMenu(menu);
 		menu.addListener(SWT.Show, _ -> rebuildContextMenu(menu));
+	}
+
+	private KeyHandler createKeyHandler(final IEditorPart editor) {
+		final DeleteAction deleteAction = new DeleteAction((IWorkbenchPart) editor);
+		deleteAction.setSelectionProvider(this);
+		addSelectionChangedListener(_ -> deleteAction.update());
+		editor.getAdapter(ActionRegistry.class).registerAction(deleteAction);
+
+		final KeyHandler keyHandler = new AdvancedGraphicalViewerKeyHandler(this);
+		keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0), deleteAction);
+		return keyHandler;
 	}
 
 	private static DefaultEditDomain createEditDomain(final IEditorPart editor) {
