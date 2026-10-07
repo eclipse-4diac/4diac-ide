@@ -13,25 +13,14 @@
 package org.eclipse.fordiac.ide.bulkeditor.query;
 
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.fordiac.ide.bulkeditor.Messages;
-import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
-import org.eclipse.fordiac.ide.bulkeditor.commands.CreateQueryElementCommand;
-import org.eclipse.fordiac.ide.bulkeditor.commands.DeleteQueryElementCommand;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 
+/** Constants and helpers for the query model defined in searchQuery.ecore. */
 public final class QueryModelHelper {
 
 	public static final String QUERY = "Query"; //$NON-NLS-1$
@@ -189,7 +178,7 @@ public final class QueryModelHelper {
 	}
 
 	public static boolean isNegatedConstraint(final EObject eObj) {
-		return Boolean.TRUE.equals(QueryModelHelper.getFeatureValue(eObj, QueryModelHelper.FEATURE_NEGATE));
+		return getBooleanFeature(eObj, FEATURE_NEGATE);
 	}
 
 	public static boolean isPinTargetQuery(final EObject queryRoot) {
@@ -287,28 +276,8 @@ public final class QueryModelHelper {
 		return !getChildNodes(eObj).isEmpty();
 	}
 
-	// context menu
-	public static void populateAddChildMenuItems(final Menu menu, final EObject selected,
-			final CommandStack commandStack, final EPackage queryPackage, final Predicate<EReference> referenceFilter) {
-		addSeparatorIfNeeded(menu);
-		for (final EReference ref : selected.eClass().getEAllContainments()) {
-			if (referenceFilter.test(ref) && (ref.isMany() || !selected.eIsSet(ref))) {
-				addItemsForReference(menu, selected, commandStack, queryPackage, ref);
-			}
-		}
-	}
-
-	private static void addItemsForReference(final Menu menu, final EObject selected, final CommandStack commandStack,
-			final EPackage queryPackage, final EReference ref) {
-		final EClass type = ref.getEReferenceType();
-		for (final EClass concrete : getAddableClasses(queryPackage, selected, type)) {
-			addCommandMenuItem(menu, NLS.bind(Messages.AddChild, getChildLabel(ref, concrete)), commandStack,
-					() -> new CreateQueryElementCommand(selected, ref, concrete));
-		}
-	}
-
-	private static List<EClass> getAddableClasses(final EPackage queryPackage, final EObject parent,
-			final EClass type) {
+	// child creation
+	public static List<EClass> getAddableClasses(final EPackage queryPackage, final EObject parent, final EClass type) {
 		if (isConstraintClass(type)) {
 			// a constraint slot accepts both Constraint and AttributeConstraint
 			return getConcreteSubclasses(queryPackage, type).stream().filter(cls -> isChildTypeAllowed(parent, cls))
@@ -317,7 +286,7 @@ public final class QueryModelHelper {
 		return getInstantiableClasses(queryPackage, type);
 	}
 
-	private static String getChildLabel(final EReference ref, final EClass childType) {
+	public static String getChildLabel(final EReference ref, final EClass childType) {
 		final EClass refType = ref.getEReferenceType();
 		if (TARGET_OPTION.equals(refType.getName())) {
 			return childType.getName();
@@ -331,67 +300,5 @@ public final class QueryModelHelper {
 					: prefix + className;
 		}
 		return ref.getName();
-	}
-
-	public static void populateRemoveMenuItem(final Menu menu, final EObject selected,
-			final CommandStack commandStack) {
-		if (selected.eContainer() == null || isMandatoryChild(selected)) {
-			return;
-		}
-		addSeparatorIfNeeded(menu);
-		addCommandMenuItem(menu, NLS.bind(Messages.RemoveChild, selected.eClass().getName()), commandStack,
-				() -> new DeleteQueryElementCommand(selected));
-	}
-
-	public static void populateFieldConstraintRemoval(final Menu menu, final EObject selected,
-			final CommandStack commandStack) {
-		if (!isConstraint(selected)) {
-			return;
-		}
-		final List<FieldConstraintEntry> entries = getContainedFieldConstraints(selected);
-		if (entries.isEmpty()) {
-			return;
-		}
-		addSeparatorIfNeeded(menu);
-		for (final FieldConstraintEntry entry : entries) {
-			final String label = NLS.bind(Messages.RemoveChild, entry.reference().getName());
-			addCommandMenuItem(menu, label, commandStack, () -> new DeleteQueryElementCommand(entry.fieldConstraint()));
-		}
-	}
-
-	public static void addMenuItem(final Menu menu, final String text, final Runnable action) {
-		final MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText(text);
-		item.addListener(SWT.Selection, _ -> action.run());
-	}
-
-	private static void addCommandMenuItem(final Menu menu, final String text, final CommandStack commandStack,
-			final Supplier<Command> commandSupplier) {
-		addMenuItem(menu, text, () -> execute(commandStack, text, commandSupplier.get()));
-	}
-
-	private static void execute(final CommandStack commandStack, final String label, final Command command) {
-		command.setLabel(label);
-		commandStack.execute(command);
-	}
-
-	public static void populateNegateToggle(final Menu menu, final EObject selected, final CommandStack commandStack) {
-		if (!isConstraint(selected)) {
-			return;
-		}
-		addSeparatorIfNeeded(menu);
-		final boolean currentValue = Boolean.TRUE.equals(getFeatureValue(selected, FEATURE_NEGATE));
-		final MenuItem item = new MenuItem(menu, SWT.NONE);
-		item.setText(Messages.Negate);
-		item.setSelection(currentValue);
-		item.addListener(SWT.Selection, _ -> execute(commandStack, Messages.Negate,
-				new ChangeQueryFeatureCommand(selected, FEATURE_NEGATE, Boolean.valueOf(!currentValue))));
-	}
-
-	@SuppressWarnings("unused")
-	private static void addSeparatorIfNeeded(final Menu menu) {
-		if (menu.getItemCount() > 0) {
-			new MenuItem(menu, SWT.SEPARATOR);
-		}
 	}
 }
