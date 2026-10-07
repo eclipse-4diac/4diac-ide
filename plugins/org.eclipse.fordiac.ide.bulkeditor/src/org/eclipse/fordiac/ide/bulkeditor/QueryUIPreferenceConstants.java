@@ -16,9 +16,14 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
-public class QueryUIPreferenceConstants {
+/** Theme fonts and colors of the query viewer. */
+public final class QueryUIPreferenceConstants {
 
 	private static final String HEADER_FONT = "org.eclipse.fordiac.ide.bulkeditor.query.headerFont"; //$NON-NLS-1$
+
+	private QueryUIPreferenceConstants() {
+		// utility class
+	}
 
 	public static Font getHeaderFont() {
 		return JFaceResources.getFontRegistry().get(HEADER_FONT);
