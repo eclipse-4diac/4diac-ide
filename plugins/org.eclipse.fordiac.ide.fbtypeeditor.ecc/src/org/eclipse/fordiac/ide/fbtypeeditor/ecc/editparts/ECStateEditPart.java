@@ -15,6 +15,7 @@
  *     - added tooltip functionality at state
  *     - added refresh tooltip at state
  *   Alois Zoitl - modernized and reworked ECC look
+ *   Vikash Kumar Sinha - revalidate transitions when a state changes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -118,7 +119,13 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected IFigure createFigure() {
-		return new ECStateFigure(getModel());
+		final ECStateFigure figure = new ECStateFigure(getModel());
+		figure.addFigureListener(source -> {
+			if (getParent() instanceof final ECCEditPart eccEditPart) {
+				eccEditPart.revalidateTransitions();
+			}
+		});
+		return figure;
 	}
 
 	@Override

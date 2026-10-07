@@ -12,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Vikash Kumar Sinha
  *     - create a state via a direct edit policy on canvas double-click
+ *     - revalidate transitions when states are added or removed
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
@@ -76,6 +78,7 @@ public class ECCEditPart extends AbstractDiagramEditPart {
 					switch (type) {
 					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
 						refreshChildren();
+						revalidateTransitions();
 						break;
 					default:
 						break;
@@ -84,6 +87,12 @@ public class ECCEditPart extends AbstractDiagramEditPart {
 			};
 		}
 		return adapter;
+	}
+
+	void revalidateTransitions() {
+		for (final Object connection : getLayer(LayerConstants.CONNECTION_LAYER).getChildren()) {
+			((IFigure) connection).revalidate();
+		}
 	}
 
 	/**

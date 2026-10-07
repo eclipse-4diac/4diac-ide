@@ -12,17 +12,17 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - increased size of middle bendpoint
  *               - changed middle bendpoint color to default selection color
+ *   Vikash Kumar Sinha - bind the bendpoint handle to the routed bendpoint
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.Bendpoint;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECCTransitionRouter;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
@@ -70,37 +70,19 @@ public class TransitionBendPointEditPolicy extends BendpointEditPolicy {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected List createSelectionHandles() {
 		final List list = new ArrayList();
-		final PointList points = getConnection().getPoints();
-		List bendPoints = (List) getConnection().getRoutingConstraint();
-		int bendPointIndex = 0;
-		Point currBendPoint = null;
+		final List bendPoints = (List) getConnection().getRoutingConstraint();
 
-		if (bendPoints == null) {
-			bendPoints = new ArrayList();
-		} else if (!bendPoints.isEmpty()) {
-			currBendPoint = ((Bendpoint) bendPoints.get(0)).getLocation();
-		}
-
-		for (int i = 0; i < points.size() - 1; i++) {
-			// If the current user bendpoint matches a bend location, show a move handle
-			if (i < points.size() - 1 && bendPointIndex < bendPoints.size()
-					&& points.getPoint(i + 1).equals(currBendPoint)) {
-				list.add(createBendPointMoveHandle(getHost(), bendPointIndex, i));
-
-				// Go to the next user bendpoint
-				bendPointIndex++;
-				if (bendPointIndex < bendPoints.size()) {
-					currBendPoint = ((Bendpoint) bendPoints.get(bendPointIndex)).getLocation();
-				}
-			}
+		if (bendPoints != null && !bendPoints.isEmpty()
+				&& getConnection().getPoints().size() > ECCTransitionRouter.BENDPOINT_INDEX) {
+			list.add(createBendPointMoveHandle(getHost(), 0, ECCTransitionRouter.BENDPOINT_INDEX));
 		}
 
 		return list;
 	}
 
 	private static BendpointMoveHandle createBendPointMoveHandle(final ConnectionEditPart connEP,
-			final int bendPointIndex, final int i) {
-		final BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, i + 1) {
+			final int bendPointIndex, final int pointIndex) {
+		final BendpointMoveHandle handle = new BendpointMoveHandle(connEP, bendPointIndex, pointIndex) {
 
 			@Override
 			protected Color getBorderColor() {
