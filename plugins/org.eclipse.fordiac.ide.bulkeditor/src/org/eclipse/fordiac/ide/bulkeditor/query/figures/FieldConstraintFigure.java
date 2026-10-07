@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.draw2d.ActionListener;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
@@ -29,6 +28,7 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
+import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper.FieldConstraintData;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Text;
 public class FieldConstraintFigure extends Figure {
 	@FunctionalInterface
 	public interface FilterChangeListener {
-		void onFilterChanged(FieldConstraintData data);
+		void onFilterChanged(String featureName, Object value);
 	}
 
 	private static final Color COLOR_VALUE_BG = QueryUIPreferenceConstants.getDefaultQueryBackground();
@@ -103,14 +103,10 @@ public class FieldConstraintFigure extends Figure {
 						FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(REGULAR_EXPRESSION_IMAGE))),
 				gl, initial.regex(), Messages.RegularExpression);
 
-		final ActionListener onToggleChanged = _ -> {
-			updateEnablement();
-			fireFilterChanged();
-		};
-		caseSensitive.addActionListener(onToggleChanged);
-		wholeWord.addActionListener(onToggleChanged);
-		exactMatch.addActionListener(onToggleChanged);
-		regularExpression.addActionListener(onToggleChanged);
+		addToggleListener(caseSensitive, QueryModelHelper.FEATURE_CASE_SENSITIVE);
+		addToggleListener(wholeWord, QueryModelHelper.FEATURE_WHOLE_WORD);
+		addToggleListener(exactMatch, QueryModelHelper.FEATURE_ENTIRE);
+		addToggleListener(regularExpression, QueryModelHelper.FEATURE_REGEX);
 
 		updateEnablement();
 	}
@@ -156,7 +152,7 @@ public class FieldConstraintFigure extends Figure {
 			if (!textWidget.isDisposed()) {
 				valueLabel.setText(textWidget.getText() != null ? textWidget.getText() : ""); //$NON-NLS-1$
 				textWidget.dispose();
-				fireFilterChanged();
+				fireFilterChanged(QueryModelHelper.FEATURE_VALUE, valueLabel.getText());
 			}
 		};
 		final Runnable cancel = () -> {
@@ -185,9 +181,14 @@ public class FieldConstraintFigure extends Figure {
 		return btn;
 	}
 
-	private void fireFilterChanged() {
-		final var data = new FieldConstraintData(valueLabel.getText(), caseSensitive.isSelected(),
-				wholeWord.isSelected(), exactMatch.isSelected(), regularExpression.isSelected());
-		listeners.forEach(l -> l.onFilterChanged(data));
+	private void addToggleListener(final QueryToggleButton toggle, final String featureName) {
+		toggle.addActionListener(_ -> {
+			updateEnablement();
+			fireFilterChanged(featureName, Boolean.valueOf(toggle.isSelected()));
+		});
+	}
+
+	private void fireFilterChanged(final String featureName, final Object value) {
+		listeners.forEach(l -> l.onFilterChanged(featureName, value));
 	}
 }

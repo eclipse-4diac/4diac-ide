@@ -26,12 +26,19 @@ import org.eclipse.swt.graphics.Font;
 
 public class QueryNodeFigure extends Figure {
 
+	/** Performs the changes of query elements requested in the figures. */
+	@FunctionalInterface
+	public interface FeatureChangeHandler {
+		void changeFeature(EObject element, String featureName, Object value);
+	}
+
 	private static final Color COLOR_HEADER_BG = QueryUIPreferenceConstants.getHeaderBackgroundColor();
 	private static final Color COLOR_HEADER_FG = QueryUIPreferenceConstants.getHeaderForegroundColor();
 	private static final Font BOLD_FONT = QueryUIPreferenceConstants.getHeaderFont();
 
 	private final EObject element;
 	private final Figure header;
+	private FeatureChangeHandler featureChangeHandler;
 
 	public QueryNodeFigure(final EObject element) {
 		this.element = element;
@@ -42,6 +49,14 @@ public class QueryNodeFigure extends Figure {
 
 	public EObject getElement() {
 		return element;
+	}
+
+	public void setFeatureChangeHandler(final FeatureChangeHandler featureChangeHandler) {
+		this.featureChangeHandler = featureChangeHandler;
+	}
+
+	protected void changeFeature(final EObject featureOwner, final String featureName, final Object value) {
+		featureChangeHandler.changeFeature(featureOwner, featureName, value);
 	}
 
 	/** Updates the figure to the current state of its element. */

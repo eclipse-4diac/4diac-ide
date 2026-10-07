@@ -24,7 +24,7 @@ public class QueryPlaceNodeFigure extends QueryNodeFigure {
 
 	public QueryPlaceNodeFigure(final EObject element) {
 		super(element);
-		ignoreLinkedLibrariesToggle = createOccurrenceToggle(element);
+		ignoreLinkedLibrariesToggle = createOccurrenceToggle();
 		add(createOccurrenceBody(ignoreLinkedLibrariesToggle));
 	}
 
@@ -45,9 +45,10 @@ public class QueryPlaceNodeFigure extends QueryNodeFigure {
 		return body;
 	}
 
-	private static QueryToggleButton createOccurrenceToggle(final EObject instance) {
+	private QueryToggleButton createOccurrenceToggle() {
 		final var button = new QueryToggleButton(QueryModelHelper.FEATURE_IGNORE_LINKED_LIBRARIES);
-		button.addActionListener(event -> QueryModelHelper.setIgnoreLinkedLibrary(instance, button.isSelected()));
+		button.addActionListener(_ -> changeFeature(getElement(), QueryModelHelper.FEATURE_IGNORE_LINKED_LIBRARIES,
+				Boolean.valueOf(button.isSelected())));
 		return button;
 	}
 }
