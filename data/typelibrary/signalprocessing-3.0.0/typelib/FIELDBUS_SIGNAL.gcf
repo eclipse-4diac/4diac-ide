@@ -40,7 +40,7 @@
 		<VarDeclaration Name="ERROR_INDI_DWM" Type="DWORD" Comment="32 bit error indicator max"  InitialValue="DWORD#16#FEFFFFFF"/>
 		<VarDeclaration Name="NOT_AVAILABLE_DM" Type="DWORD" Comment="32 bit not available max"  InitialValue="DWORD#16#FFFFFFFF"/>
 	</GlobalConstants>
-	<OriginalSource><![CDATA[PACKAGE signalprocessing;
+	<OriginalSource><![CDATA[PACKAGE eclipse4diac::signalprocessing;
 
 GLOBALCONSTANTS FIELDBUS_SIGNAL
 	VAR_GLOBAL CONSTANT
