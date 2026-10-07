@@ -10,7 +10,7 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.bulkeditor.query;
+package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
@@ -31,19 +31,25 @@ public class QueryNodeFigure extends Figure {
 	private static final Font BOLD_FONT = QueryUIPreferenceConstants.getHeaderFont();
 
 	private final EObject element;
+	private final Figure header;
 
 	public QueryNodeFigure(final EObject element) {
 		this.element = element;
 		configureLayout();
-		add(createHeader(element));
+		header = createHeader(element);
+		add(header);
 	}
 
 	public EObject getElement() {
 		return element;
 	}
 
-	public boolean isPlaceNode() {
-		return QueryModelHelper.isOfType(element, QueryModelHelper.PLACE);
+	/** Updates the figure to the current state of its element. */
+	public void refresh() {
+		final Color color = getBackgroundColor();
+		header.setBackgroundColor(color);
+		((LineBorder) getBorder()).setColor(color);
+		repaint();
 	}
 
 	private void configureLayout() {

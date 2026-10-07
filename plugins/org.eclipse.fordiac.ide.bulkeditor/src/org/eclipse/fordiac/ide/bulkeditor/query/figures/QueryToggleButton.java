@@ -10,7 +10,7 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.bulkeditor.query;
+package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
@@ -22,7 +22,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
-public class ToggleButton extends Toggle {
+public class QueryToggleButton extends Toggle {
 	private static final Color COLOR_SELECTED_BG = QueryUIPreferenceConstants.getToggleButtonSelectedBackground();
 	private static final Color COLOR_BORDER_DEFAULT = QueryUIPreferenceConstants.getToggleButtonDefaultBorder();
 	private static final Color COLOR_BORDER_SELECTED = QueryUIPreferenceConstants.getToggleButtonSelectedBorder();
@@ -34,7 +34,7 @@ public class ToggleButton extends Toggle {
 	private ImageDescriptor imageDescriptor;
 	private final Label label;
 
-	public ToggleButton(final ImageDescriptor descriptor) {
+	public QueryToggleButton(final ImageDescriptor descriptor) {
 		label = new Label();
 		imageDescriptor = descriptor;
 		managedImage = descriptor.createImage();
@@ -42,7 +42,7 @@ public class ToggleButton extends Toggle {
 		initContents();
 	}
 
-	public ToggleButton(final String text) {
+	public QueryToggleButton(final String text) {
 		label = new Label();
 		label.setText(text);
 		initContents();

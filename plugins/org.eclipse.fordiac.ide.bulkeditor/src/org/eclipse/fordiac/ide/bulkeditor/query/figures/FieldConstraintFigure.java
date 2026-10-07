@@ -10,7 +10,7 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.bulkeditor.query;
+package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +35,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.zest.core.widgets.Graph;
-import org.eclipse.zest.core.widgets.GraphItem;
 
-public class FilterFigure extends Figure {
+public class FieldConstraintFigure extends Figure {
 	@FunctionalInterface
 	public interface FilterChangeListener {
 		void onFilterChanged(FieldConstraintData data);
@@ -53,15 +51,15 @@ public class FilterFigure extends Figure {
 	private static final String REGULAR_EXPRESSION_IMAGE = "icons/full/elcl16/regex.png"; //$NON-NLS-1$
 
 	private final Label valueLabel;
-	private final ToggleButton caseSensitive;
-	private final ToggleButton wholeWord;
-	private final ToggleButton exactMatch;
-	private final ToggleButton regularExpression;
+	private final QueryToggleButton caseSensitive;
+	private final QueryToggleButton wholeWord;
+	private final QueryToggleButton exactMatch;
+	private final QueryToggleButton regularExpression;
 
 	private final FigureCanvas canvas;
 	private final List<FilterChangeListener> listeners = new ArrayList<>();
 
-	public FilterFigure(final String name, final FieldConstraintData initial, final FigureCanvas canvas) {
+	public FieldConstraintFigure(final String name, final FieldConstraintData initial, final FigureCanvas canvas) {
 		this.canvas = canvas;
 		final GridLayout gl = new GridLayout(6, false);
 		gl.marginHeight = 2;
@@ -79,9 +77,8 @@ public class FilterFigure extends Figure {
 		valueLabel.addMouseListener(new MouseListener.Stub() {
 			@Override
 			public void mouseDoubleClicked(final MouseEvent me) {
-				if (canvas instanceof final Graph graph) {
-					graph.setSelection(new GraphItem[0]);
-				}
+				// the double click shall not collapse the node
+				me.consume();
 				openDirectEdit();
 			}
 		});
@@ -124,6 +121,15 @@ public class FilterFigure extends Figure {
 
 	public void removeFilterChangeListener(final FilterChangeListener listener) {
 		listeners.remove(listener);
+	}
+
+	public void setData(final FieldConstraintData data) {
+		valueLabel.setText(data.value());
+		caseSensitive.setSelected(data.caseSensitive());
+		wholeWord.setSelected(data.wholeWord());
+		exactMatch.setSelected(data.entire());
+		regularExpression.setSelected(data.regex());
+		updateEnablement();
 	}
 
 	private void updateEnablement() {
@@ -169,9 +175,9 @@ public class FilterFigure extends Figure {
 		});
 	}
 
-	private ToggleButton createImageToggle(final ImageDescriptor descriptor, final GridLayout gl,
+	private QueryToggleButton createImageToggle(final ImageDescriptor descriptor, final GridLayout gl,
 			final boolean initialSelection, final String tooltip) {
-		final var btn = new ToggleButton(descriptor);
+		final var btn = new QueryToggleButton(descriptor);
 		btn.setToolTip(new Label(tooltip));
 		add(btn);
 		gl.setConstraint(btn, new GridData(SWT.CENTER, SWT.CENTER, false, false));
