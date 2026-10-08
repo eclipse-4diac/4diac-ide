@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -58,7 +59,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class DeploymentDebugDevice extends DeploymentDebugElement implements IDeploymentDebugTarget {
 
@@ -134,7 +134,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 	}
 
 	protected void handleDeviceError(final DeploymentException exception) {
-		FordiacLogHelper.logWarning(exception.getLocalizedMessage(), exception);
+		ILog.get().warn(exception.getLocalizedMessage(), exception);
 		if (canDisconnect()) {
 			deviceManagementExecutor.shutdown();
 			terminated();
@@ -296,7 +296,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 					variableWatch.forceValue(watchpoint.forceValue());
 				}
 			} catch (CoreException | EvaluatorException e) {
-				FordiacLogHelper.logWarning("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -319,7 +319,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				}
 				watchpoint.setInstalled(true);
 			} catch (CoreException | EvaluatorException e) {
-				FordiacLogHelper.logWarning("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot create watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -334,7 +334,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				}
 				watch.removeWatch();
 			} catch (final DebugException e) {
-				FordiacLogHelper.logWarning("Cannot remove watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot remove watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -350,7 +350,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 					variableWatch.clearForce();
 				}
 			} catch (final DebugException e) {
-				FordiacLogHelper.logWarning("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -372,7 +372,7 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				subContainerWatch.addWatch();
 				getPrimaryDebugTarget().updateWatches(true);
 			} catch (final DebugException e) {
-				FordiacLogHelper.logWarning("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+				ILog.get().warn("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
 			}
 		}
 	}
