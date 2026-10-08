@@ -22,8 +22,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -78,8 +78,8 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 		return writeToAnyFile(fileName, stringBuffer.toString(), overwriteWithouAsking, shell);
 	}
 
-	protected static boolean writeToAnyFile(final String fileName, final String toWrite, final boolean overwriteWithouAsking,
-			final Shell shell) {
+	protected static boolean writeToAnyFile(final String fileName, final String toWrite,
+			final boolean overwriteWithouAsking, final Shell shell) {
 		boolean returnValue = false;
 		final File bootFile = createOrOverwriteFile(fileName, overwriteWithouAsking, shell);
 		if (null != bootFile) {
@@ -88,7 +88,7 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 				boot.flush();
 				returnValue = true;
 			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
 						Messages.AbstractFileManagementHandler_CouldNotWriteFile, fileName, e.getMessage()), shell);
 			}
@@ -97,7 +97,8 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 		return returnValue;
 	}
 
-	private static File createOrOverwriteFile(final String fileName, final boolean overwriteWithouAsking, final Shell shell) {
+	private static File createOrOverwriteFile(final String fileName, final boolean overwriteWithouAsking,
+			final Shell shell) {
 		final File bootFile = new File(fileName);
 		int res = SWT.YES;
 		if (bootFile.exists()) {
@@ -112,11 +113,11 @@ public abstract class AbstractFileManagementHandler implements IDeviceManagement
 			try {
 				if (!bootFile.createNewFile()) {
 					IDeviceManagementCommunicationHandler
-					.showErrorMessage(Messages.AbstractFileManagementHandler_CouldnotCreateFile, shell);
+							.showErrorMessage(Messages.AbstractFileManagementHandler_CouldnotCreateFile, shell);
 					res = SWT.NO;
 				}
 			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 				IDeviceManagementCommunicationHandler.showErrorMessage(MessageFormat.format(
 						Messages.AbstractFileManagementHandler_CouldnotCreateFileWithError, e.getMessage()), shell);
 			}

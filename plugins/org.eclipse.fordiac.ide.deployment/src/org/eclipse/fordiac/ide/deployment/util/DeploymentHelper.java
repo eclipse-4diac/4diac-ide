@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.deployment.util;
 
 import java.text.MessageFormat;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -28,7 +29,6 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class DeploymentHelper {
 
@@ -132,7 +132,7 @@ public final class DeploymentHelper {
 		try {
 			return getMgrID(dev);
 		} catch (final DeploymentException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 		return ""; //$NON-NLS-1$
 	}
