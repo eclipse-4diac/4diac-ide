@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -43,7 +45,9 @@ import javax.xml.xpath.XPathFactory;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.ethercat.model.Device;
 import org.eclipse.fordiac.ide.ethercat.model.Module;
 import org.eclipse.fordiac.ide.ethercat.model.Pdo;
@@ -65,6 +69,9 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 
 	private static final String DEVICE_CONFIG_TYPE = "eclipse4diac::io::ethercat::ECDeviceConfig"; //$NON-NLS-1$
 	private static final String MODULE_CONFIG_TYPE = "eclipse4diac::io::ethercat::ECModuleConfig"; //$NON-NLS-1$
+	private static final String BUS_ADAPTER_TYPE = "eclipse4diac::io::ethercat::ECBusAdapter"; //$NON-NLS-1$
+	private static final String FORDIAC_NATURE = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
+	private static final String RESERVED_EXISTING_NAME = ""; //$NON-NLS-1$
 	private static final String REVISION_NO_ATTRIBUTE_FULL_NAME = "eclipse4diac::io::ethercat::RevisionNo"; //$NON-NLS-1$
 	private static final Pattern MODULE_IDENT_PATTERN = Pattern.compile("ModuleIdent\\s*:=\\s*(\\d+)"); //$NON-NLS-1$
 	private static final Pattern PRODUCT_CODE_PATTERN = Pattern.compile("ProductCode\\s*:=\\s*(\\d+)"); //$NON-NLS-1$
@@ -100,9 +107,9 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 		final Object element = selection.getFirstElement();
 		if (element instanceof final AutomationSystem system) {
 			project = system.getTypeLibrary().getProject();
-		} else if (element instanceof final IProject selectedProject) {
+		} else if (element instanceof final IProject selectedProject && hasFordiacNature(selectedProject)) {
 			project = selectedProject;
-		} else if (element instanceof final IFolder folder) {
+		} else if (element instanceof final IFolder folder && hasFordiacNature(folder.getProject())) {
 			project = folder.getProject();
 		} else if (element instanceof final TypeLibRootElement typeLibRoot) {
 			project = typeLibRoot.getSystem().getTypeLibrary().getProject();
@@ -170,9 +177,20 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 
 			project.refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (final Exception e) {
+			Platform.getLog(EsiFileImporter.class).error(Messages.EsiFileImporter_WindowTitle, e);
+			MessageDialog.openError(getShell(), Messages.EsiFileImporter_WindowTitle,
+					MessageFormat.format(Messages.EsiFileImporter_ImportFailed, e.getMessage()));
 			return false;
 		}
 		return true;
+	}
+
+	private static boolean hasFordiacNature(final IProject candidate) {
+		try {
+			return candidate != null && candidate.hasNature(FORDIAC_NATURE);
+		} catch (final CoreException e) {
+			return false;
+		}
 	}
 
 	private static List<Module> deduplicateModules(final List<Module> catalog) {
@@ -202,20 +220,19 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			final String baseName = module.moduleType;
 			byBaseName.computeIfAbsent(baseName, unused -> new ArrayList<>()).add(module);
 		}
+		final Set<String> usedNames = new HashSet<>();
 		for (final Map.Entry<String, List<Module>> entry : byBaseName.entrySet()) {
 			final String baseName = entry.getKey();
 			final List<Module> group = entry.getValue();
 			final boolean collideInImport = group.size() > 1;
 			for (final Module module : group) {
 				String name = baseName;
-				if (collideInImport) {
-					name = baseName + "_" + EsiFileParser.toUnsignedHexSuffix(module.moduleIdent); //$NON-NLS-1$
-				}
 				final String existingIdent = existingNameToIdent.get(name);
-				if (existingIdent != null && !existingIdent.equals(module.moduleIdent)) {
+				final boolean occupiedByOther = existingIdent != null && !existingIdent.equals(module.moduleIdent);
+				if (collideInImport || occupiedByOther || usedNames.contains(name)) {
 					name = baseName + "_" + EsiFileParser.toUnsignedHexSuffix(module.moduleIdent); //$NON-NLS-1$
 				}
-				module.moduleType = name;
+				module.moduleType = allocateName(name, usedNames);
 			}
 		}
 	}
@@ -227,6 +244,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			final String baseName = device.deviceType;
 			byBaseName.computeIfAbsent(baseName, unused -> new ArrayList<>()).add(device);
 		}
+		final Set<String> usedNames = new HashSet<>();
 		for (final Map.Entry<String, List<Device>> entry : byBaseName.entrySet()) {
 			final String baseName = entry.getKey();
 			final List<Device> group = entry.getValue();
@@ -234,16 +252,26 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			for (final Device device : group) {
 				final String deviceKey = deviceIdentityKey(device.productCode, device.revisionNo);
 				String name = baseName;
-				if (collideInImport) {
-					name = baseName + "_" + EsiFileParser.toUnsignedHexSuffix(device.revisionNo); //$NON-NLS-1$
-				}
 				final String existingKey = existingNameToKey.get(name);
-				if (existingKey != null && !existingKey.equals(deviceKey)) {
-					name = baseName + "_" + EsiFileParser.toUnsignedHexSuffix(device.revisionNo); //$NON-NLS-1$
+				final boolean occupiedByOther = existingKey != null && !existingKey.equals(deviceKey);
+				if (collideInImport || occupiedByOther || usedNames.contains(name)) {
+					name = baseName + "_" + EsiFileParser.toUnsignedHexSuffix(device.productCode) + "_" //$NON-NLS-1$
+							+ EsiFileParser.toUnsignedHexSuffix(device.revisionNo);
 				}
-				device.deviceType = name;
+				device.deviceType = allocateName(name, usedNames);
 			}
 		}
+	}
+
+	private static String allocateName(final String name, final Set<String> usedNames) {
+		String candidate = name;
+		int suffix = 2;
+		while (usedNames.contains(candidate)) {
+			candidate = name + "_" + suffix; //$NON-NLS-1$
+			suffix++;
+		}
+		usedNames.add(candidate);
+		return candidate;
 	}
 
 	private static String deviceIdentityKey(final String productCode, final String revisionNo) {
@@ -258,17 +286,19 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			return;
 		}
 		for (final File file : files) {
+			final String typeName = file.getName().substring(0, file.getName().length() - 4);
 			final String content = readFileQuietly(file);
 			if (content == null) {
+				nameToIdent.put(typeName, RESERVED_EXISTING_NAME);
 				continue;
 			}
 			final Matcher matcher = MODULE_IDENT_PATTERN.matcher(content);
 			if (!matcher.find()) {
+				nameToIdent.put(typeName, RESERVED_EXISTING_NAME);
 				continue;
 			}
 			final String ident = matcher.group(1);
 			existingIdents.add(ident);
-			final String typeName = file.getName().substring(0, file.getName().length() - 4);
 			nameToIdent.put(typeName, ident);
 		}
 	}
@@ -281,12 +311,15 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			return;
 		}
 		for (final File file : files) {
+			final String typeName = file.getName().substring(0, file.getName().length() - 4);
 			final String content = readFileQuietly(file);
 			if (content == null) {
+				nameToKey.put(typeName, RESERVED_EXISTING_NAME);
 				continue;
 			}
 			final Matcher productMatcher = PRODUCT_CODE_PATTERN.matcher(content);
 			if (!productMatcher.find()) {
+				nameToKey.put(typeName, RESERVED_EXISTING_NAME);
 				continue;
 			}
 			final String productCode = productMatcher.group(1);
@@ -297,7 +330,6 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			}
 			final String key = deviceIdentityKey(productCode, revisionNo);
 			existingKeys.add(key);
-			final String typeName = file.getName().substring(0, file.getName().length() - 4);
 			nameToKey.put(typeName, key);
 		}
 	}
@@ -310,20 +342,17 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 		}
 	}
 
-	private void writeDocumentToFile(final Document doc, final String filePath) {
-		try {
-			final File file = new File(filePath);
-			final File parentDir = file.getParentFile();
-			if (parentDir != null && !parentDir.exists()) {
-				parentDir.mkdirs();
-			}
-			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			final Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
-			transformer.transform(new DOMSource(doc), new StreamResult(file));
-		} catch (final Exception e) {
-			// ignore
+	private void writeDocumentToFile(final Document doc, final String filePath)
+			throws IOException, TransformerException {
+		final File file = new File(filePath);
+		final File parentDir = file.getParentFile();
+		if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
+			throw new IOException(MessageFormat.format(Messages.EsiFileImporter_CreateDirectoryFailed, parentDir));
 		}
+		final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		final Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
+		transformer.transform(new DOMSource(doc), new StreamResult(file));
 	}
 
 	private Document createFB(final Device device) throws ParserConfigurationException, XPathExpressionException {
@@ -333,7 +362,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 
 		final String configInit = String.format("(Alias := 0, Position := 0, VendorId := %s, ProductCode := %s)", //$NON-NLS-1$
 				device.vendorId, device.productCode);
-		addElement(doc, inputVarsElement, "VarDeclaration", mapOf( //$NON-NLS-1$
+		addElement(doc, inputVarsElement, "VarDeclaration", Map.of( //$NON-NLS-1$
 				"Name", "Config", //$NON-NLS-1$ //$NON-NLS-2$
 				"Type", DEVICE_CONFIG_TYPE, //$NON-NLS-1$
 				"InitialValue", configInit)); //$NON-NLS-1$
@@ -342,11 +371,11 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 
 		final Element plugsElement = addElement(doc, interfaceListElement, "Plugs"); //$NON-NLS-1$
 		final Element socketsElement = addElement(doc, interfaceListElement, "Sockets"); //$NON-NLS-1$
-		addElement(doc, plugsElement, "AdapterDeclaration", mapOf("Name", "BusAdapterOut", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		addElement(doc, socketsElement, "AdapterDeclaration", mapOf("Name", "BusAdapterIn", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, plugsElement, "AdapterDeclaration", Map.of("Name", "BusAdapterOut", "Type", BUS_ADAPTER_TYPE)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, socketsElement, "AdapterDeclaration", Map.of("Name", "BusAdapterIn", "Type", BUS_ADAPTER_TYPE)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
 		if (device.deviceCategory == Device.DeviceCategory.GEN_Coupler) {
-			addElement(doc, plugsElement, "AdapterDeclaration", mapOf("Name", "ModuleAdapterOut", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			addElement(doc, plugsElement, "AdapterDeclaration", Map.of("Name", "ModuleAdapterOut", "Type", BUS_ADAPTER_TYPE)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		}
 
 		return doc;
@@ -358,7 +387,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 		final Element inputVarsElement = getElementByXPath(doc, "//InputVars"); //$NON-NLS-1$
 
 		final String configInit = String.format("(ModuleIdent := %s, Slot := 0)", module.moduleIdent); //$NON-NLS-1$
-		addElement(doc, inputVarsElement, "VarDeclaration", mapOf( //$NON-NLS-1$
+		addElement(doc, inputVarsElement, "VarDeclaration", Map.of( //$NON-NLS-1$
 				"Name", "Config", //$NON-NLS-1$ //$NON-NLS-2$
 				"Type", MODULE_CONFIG_TYPE, //$NON-NLS-1$
 				"InitialValue", configInit)); //$NON-NLS-1$
@@ -368,43 +397,44 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 
 		final Element plugsElement = addElement(doc, interfaceListElement, "Plugs"); //$NON-NLS-1$
 		final Element socketsElement = addElement(doc, interfaceListElement, "Sockets"); //$NON-NLS-1$
-		addElement(doc, plugsElement, "AdapterDeclaration", mapOf("Name", "ModuleAdapterOut", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		addElement(doc, socketsElement, "AdapterDeclaration", mapOf("Name", "ModuleAdapterIn", "Type", "ECBusAdapter")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, plugsElement, "AdapterDeclaration", Map.of("Name", "ModuleAdapterOut", "Type", BUS_ADAPTER_TYPE)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, socketsElement, "AdapterDeclaration", Map.of("Name", "ModuleAdapterIn", "Type", BUS_ADAPTER_TYPE)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		return doc;
 	}
 
 	private Document createBasicFB(final String fbName, final String fbType, final String fbComment,
 			final String revisionNo) throws ParserConfigurationException {
 		final Document doc = createDocument();
-		final Element fbTypeElement = addElement(doc, doc, "FBType", mapOf("Name", fbName, "Comment", fbComment)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		addElement(doc, fbTypeElement, "Identification", mapOf("Standard", "61499-2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addElement(doc, fbTypeElement, "VersionInfo", mapOf("Version", "1.0", "Author", "Zijun Tang", "Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+		final Element fbTypeElement = addElement(doc, doc, "FBType", //$NON-NLS-1$
+				Map.of("Name", fbName, "Comment", fbComment == null ? "" : fbComment)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		addElement(doc, fbTypeElement, "Identification", Map.of("Standard", "61499-2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addElement(doc, fbTypeElement, "VersionInfo", Map.of("Version", "1.0", "Author", "Zijun Tang", "Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				LocalDate.now().toString()));
-		addElement(doc, fbTypeElement, "CompilerInfo", mapOf("packageName", "eclipse4diac::io::ethercat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addElement(doc, fbTypeElement, "Attribute", mapOf("Name", "eclipse4diac::core::TypeHash", "Value", "''")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, fbTypeElement, "CompilerInfo", Map.of("packageName", "eclipse4diac::io::ethercat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addElement(doc, fbTypeElement, "Attribute", Map.of("Name", "eclipse4diac::core::TypeHash", "Value", "''")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		final String deployTypeName = "'eclipse4diac::io::ethercat::" + fbType + "'"; //$NON-NLS-1$ //$NON-NLS-2$
 		addElement(doc, fbTypeElement, "Attribute", //$NON-NLS-1$
-				mapOf("Name", "eclipse4diac::core::ForteTypeOverride", "Value", deployTypeName)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				Map.of("Name", "eclipse4diac::core::ForteTypeOverride", "Value", deployTypeName)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (revisionNo != null) {
-			addElement(doc, fbTypeElement, "Attribute", mapOf("Name", //$NON-NLS-1$ //$NON-NLS-2$
+			addElement(doc, fbTypeElement, "Attribute", Map.of("Name", //$NON-NLS-1$ //$NON-NLS-2$
 					REVISION_NO_ATTRIBUTE_FULL_NAME, "Value", "'" + revisionNo + "'")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		final Element interfaceListElement = addElement(doc, fbTypeElement, "InterfaceList"); //$NON-NLS-1$
 		final Element eventInputsElement = addElement(doc, interfaceListElement, "EventInputs"); //$NON-NLS-1$
 		final Element eventOutputsElement = addElement(doc, interfaceListElement, "EventOutputs"); //$NON-NLS-1$
-		final Element mapElement = addElement(doc, eventInputsElement, "Event", mapOf("Name", "MAP", "Type", "Event")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		final Element mapElement = addElement(doc, eventInputsElement, "Event", Map.of("Name", "MAP", "Type", "Event")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		final Element mapOElement = addElement(doc, eventOutputsElement, "Event", //$NON-NLS-1$
-				mapOf("Name", "MAPO", "Type", "Event")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		final Element indElement = addElement(doc, eventOutputsElement, "Event", mapOf("Name", "IND", "Type", "Event")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				Map.of("Name", "MAPO", "Type", "Event")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		final Element indElement = addElement(doc, eventOutputsElement, "Event", Map.of("Name", "IND", "Type", "Event")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
 		final Element inputVarsElement = addElement(doc, interfaceListElement, "InputVars"); //$NON-NLS-1$
-		addElement(doc, inputVarsElement, "VarDeclaration", mapOf("Name", "QI", "Type", "BOOL")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, inputVarsElement, "VarDeclaration", Map.of("Name", "QI", "Type", "BOOL")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		addElement(doc, mapElement, "With", "Var", "QI"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		final Element outputVarsElement = addElement(doc, interfaceListElement, "OutputVars"); //$NON-NLS-1$
-		addElement(doc, outputVarsElement, "VarDeclaration", mapOf("Name", "QO", "Type", "BOOL")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		addElement(doc, outputVarsElement, "VarDeclaration", mapOf("Name", "STATUS", "Type", "WSTRING")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, outputVarsElement, "VarDeclaration", Map.of("Name", "QO", "Type", "BOOL")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		addElement(doc, outputVarsElement, "VarDeclaration", Map.of("Name", "STATUS", "Type", "WSTRING")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		addElement(doc, indElement, "With", "Var", "QO"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addElement(doc, indElement, "With", "Var", "STATUS"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addElement(doc, mapOElement, "With", "Var", "QO"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -419,7 +449,8 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			for (final PdoEntry entry : pdo.pdoEntries) {
 				final String diName = prefix + (pdoEntryIndex + 1);
 				addElement(doc, inputVarsElement, "VarDeclaration", //$NON-NLS-1$
-						mapOf("Name", diName, "Type", "WSTRING", "Comment", entry.comment)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						Map.of("Name", diName, "Type", "WSTRING", "Comment", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+								entry.comment == null ? "" : entry.comment)); //$NON-NLS-1$
 				addElement(doc, mapElement, "With", "Var", diName); //$NON-NLS-1$ //$NON-NLS-2$
 				pdoEntryIndex++;
 			}
@@ -458,20 +489,5 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 		final Element element = doc.createElement(elementName);
 		parent.appendChild(element);
 		return element;
-	}
-
-	public static <K, V> Map<K, V> mapOf(final Object... keyValues) {
-		if (keyValues.length % 2 != 0) {
-			throw new IllegalArgumentException("Invalid number of arguments for key-value pairs."); //$NON-NLS-1$
-		}
-		final Map<K, V> map = new HashMap<>();
-		for (int i = 0; i < keyValues.length; i += 2) {
-			@SuppressWarnings("unchecked")
-			final K key = (K) keyValues[i];
-			@SuppressWarnings("unchecked")
-			final V value = (V) keyValues[i + 1];
-			map.put(key, value);
-		}
-		return map;
 	}
 }

@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ethercat;
 
+import java.io.File;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -41,7 +43,7 @@ public class EsiFileImporterWizardPage extends WizardPage {
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		createEsiFileSourceGroup(composite);
-		setPageComplete(true);
+		setPageComplete(false);
 		setControl(composite);
 	}
 
@@ -58,13 +60,22 @@ public class EsiFileImporterWizardPage extends WizardPage {
 		browserButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				selectedEsiFileName = null;
 				final FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.SINGLE);
-				dialog.setFilterExtensions(new String[] {"*.xml"}); //$NON-NLS-1$
+				dialog.setFilterExtensions(new String[] { "*.xml" }); //$NON-NLS-1$
 				final String result = dialog.open();
-				if(result != null) {
-					selectedEsiFileName = dialog.getFilterPath() + "/" + dialog.getFileName(); //$NON-NLS-1$
-					esiFileText.setText(selectedEsiFileName);
+				if (result == null) {
+					return;
+				}
+				final File selected = new File(result);
+				esiFileText.setText(result);
+				if (selected.isFile()) {
+					selectedEsiFileName = result;
+					setErrorMessage(null);
+					setPageComplete(true);
+				} else {
+					selectedEsiFileName = null;
+					setErrorMessage(Messages.EsiFileImporterWizardPage_FileNotFound);
+					setPageComplete(false);
 				}
 			}
 		});

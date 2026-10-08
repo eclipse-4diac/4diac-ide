@@ -32,6 +32,9 @@ import org.eclipse.fordiac.ide.ethercat.model.Device;
 import org.eclipse.fordiac.ide.ethercat.model.Module;
 import org.eclipse.fordiac.ide.ethercat.model.Pdo;
 import org.eclipse.fordiac.ide.ethercat.model.PdoEntry;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.util.XMLResourceOptions;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -50,12 +53,36 @@ public class EsiFileParser {
 	private static final Pattern TRAILING_UNDERSCORES_PATTERN = Pattern.compile("_+$"); //$NON-NLS-1$
 
 	public static String replaceSpecialChars(final String input) {
-		if(input == null) {
+		if (input == null) {
 			return null;
 		}
 		String result = NON_ALPHANUMERIC_PATTERN.matcher(input).replaceAll("_"); //$NON-NLS-1$
 		result = result.replaceAll("__+", "_"); //$NON-NLS-1$ //$NON-NLS-2$
+		result = result.replaceAll("^_+", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		return TRAILING_UNDERSCORES_PATTERN.matcher(result).replaceAll(""); //$NON-NLS-1$
+	}
+
+	/**
+	 * Turn an ESI type name into an IEC 61499 identifier. {@code requiredPrefix} is
+	 * always applied (for example {@code M} for modules); pass {@code null} when
+	 * the ESI name itself should be kept if it is already valid.
+	 */
+	public static String toTypeName(final String raw, final String requiredPrefix) {
+		String body = replaceSpecialChars(raw);
+		if (body == null || body.isEmpty()) {
+			body = "Type"; //$NON-NLS-1$
+		}
+		String name = requiredPrefix == null || requiredPrefix.isEmpty() ? body : requiredPrefix + "_" + body; //$NON-NLS-1$
+		if (Character.isDigit(name.charAt(0)) || FordiacKeywords.isReservedKeyword(name)) {
+			name = "D_" + name; //$NON-NLS-1$
+		}
+		if (IdentifierVerifier.verifyIdentifier(name).isPresent()) {
+			name = "Type_" + body; //$NON-NLS-1$
+		}
+		if (IdentifierVerifier.verifyIdentifier(name).isPresent()) {
+			return "D_Type"; //$NON-NLS-1$
+		}
+		return name;
 	}
 
 	public EsiFileParser(final String esiFile) throws EsiParseException {
@@ -78,6 +105,7 @@ public class EsiFileParser {
 		try {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setNamespaceAware(true);
+			configureSecureXml(factory);
 			final DocumentBuilder builder = factory.newDocumentBuilder();
 			document = builder.parse(inputStream);
 			xpath = XPathFactory.newInstance().newXPath();
@@ -147,7 +175,7 @@ public class EsiFileParser {
 			}
 
 			final String originalDeviceType = typeElement.getTextContent();
-			final String deviceType = replaceSpecialChars(originalDeviceType);
+			final String deviceType = toTypeName(originalDeviceType, null);
 			final Device device = new Device(deviceType);
 			device.setOriDeviceType(originalDeviceType);
 
@@ -205,7 +233,7 @@ public class EsiFileParser {
 		try {
 			final Element typeElement = (Element) moduleElement.getElementsByTagName("Type").item(0); //$NON-NLS-1$
 			final String moduleIdent = typeElement.getAttribute("ModuleIdent"); //$NON-NLS-1$
-			final String moduleType = "M_" + replaceSpecialChars(typeElement.getTextContent()); //$NON-NLS-1$
+			final String moduleType = toTypeName(typeElement.getTextContent(), "M"); //$NON-NLS-1$
 			final Module module = new Module(moduleType);
 
 			final Element nameElement = (Element) moduleElement.getElementsByTagName("Name").item(0); //$NON-NLS-1$
@@ -302,6 +330,15 @@ public class EsiFileParser {
 			return new PdoEntry(entryName, comment);
 		} catch(final Exception e) {
 			return null;
+		}
+	}
+
+	private static void configureSecureXml(final DocumentBuilderFactory factory) throws ParserConfigurationException {
+		for (final var feature : XMLResourceOptions.XML_PARSER_FEATURES.entrySet()) {
+			factory.setFeature(String.valueOf(feature.getKey()), Boolean.TRUE.equals(feature.getValue()));
+		}
+		for (final var property : XMLResourceOptions.XML_PARSER_PROPERTIES.entrySet()) {
+			factory.setAttribute(String.valueOf(property.getKey()), property.getValue());
 		}
 	}
 

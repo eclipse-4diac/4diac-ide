@@ -40,10 +40,16 @@
                      </adapt>
                      <adapt
                            type="org.eclipse.core.resources.IFolder">
-                        <test
-                              property="org.eclipse.core.resources.name"
-                              value="Type Library">
-                        </test>
+                        <and>
+                           <test
+                                 property="org.eclipse.core.resources.name"
+                                 value="Type Library">
+                           </test>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+                           </test>
+                        </and>
                      </adapt>
                      <instanceof
                            value="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement">

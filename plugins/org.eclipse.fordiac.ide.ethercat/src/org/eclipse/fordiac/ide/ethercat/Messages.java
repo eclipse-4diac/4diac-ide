@@ -21,11 +21,14 @@ public final class Messages extends NLS {
 	public static String EsiFileImporter_PageName;
 	public static String EsiFileImporter_WindowTitle;
 	public static String EsiFileImporter_NoProjectSelected;
+	public static String EsiFileImporter_ImportFailed;
+	public static String EsiFileImporter_CreateDirectoryFailed;
 
 	public static String EsiFileImporterWizardPage_Description;
 	public static String EsiFileImporterWizardPage_Title;
 	public static String EsiFileImporterWizardPage_SelectEsiFile;
 	public static String EsiFileImporterWizardPage_Browse;
+	public static String EsiFileImporterWizardPage_FileNotFound;
 
 	public static String EsiFileParser_ReadFileErrorPrefix;
 	public static String EsiFileParser_ParseFileError;
