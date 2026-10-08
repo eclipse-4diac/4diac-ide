@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.deployment.bootfile.BootFileDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.bootfile.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -105,7 +105,7 @@ public class CreateBootfilesWizard extends Wizard implements IExportWizard {
 		final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
 		msg.setMessage(Messages.CreateBootfilesWizard_BootFileCreationError + e.getMessage());
 		msg.open();
-		FordiacLogHelper.logError(msg.getMessage(), e);
+		ILog.get().error(msg.getMessage(), e);
 	}
 
 	private Map<Device, List<Object>> prepareWorkload() {
