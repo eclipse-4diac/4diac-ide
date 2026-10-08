@@ -8,7 +8,7 @@
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             icon="fordiacimage://ICON_RESOURCE"
             id="org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor"
-            name="ResourceEditor">
+            name="%editor.resourceEditor.name">
       </editor>
    </extension>
   <extension
@@ -17,7 +17,7 @@
             class="org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"
             icon="fordiacimage://ICON_RESOURCE"
             id="org.eclipse.fordiac.ide.resourceediting.actions.OpenResourceEditorAction"
-            label="Resource">
+            label="%openListener.resource.label">
       </openListener>
    </extension>
   <extension
@@ -25,12 +25,12 @@
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
-            name="Show FB in Application">
+            name="%command.showFBInApp.name">
       </command>
        <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
-            name="Open connection opposite resource">
+            name="%command.openConnectionOppositeResource.name">
       </command>
    </extension>
    <extension
@@ -58,7 +58,7 @@
         	mnemonic="S">
         </command>
 		<command commandId="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
-			tooltip="Open the resouce at the opposite end of the connection">
+			tooltip="%menu.openConnectionOppositeResource.tooltip">
 		</command>
       </menuContribution>
       <menuContribution
@@ -66,7 +66,7 @@
          <command
                commandId="org.eclipse.fordiac.ide.resourceediting.commands.ShowFBInAppCommand"
                icon="fordiacimage://ICON_APPLICATION"
-               tooltip="Show in Application Editor">
+               tooltip="%menu.showFBInApp.tooltip">
             <visibleWhen checkEnabled="true">
             	<and>
 	               <with variable="activeEditor">
@@ -85,7 +85,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.resourceediting.commands.OpenConnectionOppositeResource"
-               tooltip="Open the resouce at the opposite end of the connection">
+               tooltip="%menu.openConnectionOppositeResource.tooltip">
             <visibleWhen
                   checkEnabled="true">
                <iterate ifEmpty="false">
