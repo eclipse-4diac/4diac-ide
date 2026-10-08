@@ -52,7 +52,8 @@ public class LibraryExportWizard extends Wizard implements IExportWizard {
 		}
 
 		final LibraryExporter exporter = new LibraryExporter(selectionPage.getOutputDirectory(),
-				selectionPage.getTypeSelection(), selectionPage.getSelectedLibrary(), version, project);
+				selectionPage.getTypeSelection(), selectionPage.isServiceInterfaceExportEnabled(),
+				selectionPage.getSelectedLibrary(), version, project);
 
 		try {
 			getContainer().run(true, true, progress -> {

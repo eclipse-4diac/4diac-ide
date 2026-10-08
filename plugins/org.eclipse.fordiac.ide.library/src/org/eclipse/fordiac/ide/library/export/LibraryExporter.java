@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -53,11 +54,13 @@ public class LibraryExporter {
 	private final Library library;
 	private final String version;
 	private final IProject project;
+	private final boolean exportSIFB;
 
-	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final Library library,
-			final String version, final IProject project) {
+	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final boolean exportSIFB,
+			final Library library, final String version, final IProject project) {
 		this.outputDirectory = outputDirectory;
 		this.exportType = exportType;
+		this.exportSIFB = exportSIFB;
 		this.library = library;
 		this.version = version;
 		this.project = project;
@@ -137,10 +140,10 @@ public class LibraryExporter {
 	private Stream<TypeEntry> getTypes(final IProject project) {
 		return switch (exportType) {
 		case ALL_TYPES: {
-			yield getLocalTypes(project);
+			yield getLocalTypes(project, exportSIFB);
 		}
 		case INCLUDE_EXCLUDE_PATTERNS: {
-			yield getLocalTypes(project).filter(createPackageFilter(library));
+			yield getLocalTypes(project, exportSIFB).filter(createPackageFilter(library));
 		}
 		default: {
 			yield Stream.empty();
@@ -159,8 +162,17 @@ public class LibraryExporter {
 		return included.and(Predicate.not(excluded));
 	}
 
-	private static Stream<TypeEntry> getLocalTypes(final IProject project) {
-		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getAllTypes().filter(te -> isLocalType(te, project));
+	private static Stream<TypeEntry> getLocalTypes(final IProject project, final boolean exportSIFB) {
+		if (exportSIFB) {
+			return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getAllTypes()
+					.filter(te -> isLocalType(te, project));
+		}
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getAllTypes().filter(te -> isLocalType(te, project))
+				.filter(Predicate.not(LibraryExporter::isServiceInterfaceFB));
+	}
+
+	private static boolean isServiceInterfaceFB(final TypeEntry entry) {
+		return LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE.equals(entry.getTypeEClass());
 	}
 
 	private static boolean isLocalType(final TypeEntry entry, final IProject project) {
