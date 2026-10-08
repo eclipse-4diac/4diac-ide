@@ -65,10 +65,11 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 
 	private static final String DEVICE_CONFIG_TYPE = "eclipse4diac::io::ethercat::ECDeviceConfig"; //$NON-NLS-1$
 	private static final String MODULE_CONFIG_TYPE = "eclipse4diac::io::ethercat::ECModuleConfig"; //$NON-NLS-1$
+	private static final String REVISION_NO_ATTRIBUTE_FULL_NAME = "eclipse4diac::io::ethercat::RevisionNo"; //$NON-NLS-1$
 	private static final Pattern MODULE_IDENT_PATTERN = Pattern.compile("ModuleIdent\\s*:=\\s*(\\d+)"); //$NON-NLS-1$
 	private static final Pattern PRODUCT_CODE_PATTERN = Pattern.compile("ProductCode\\s*:=\\s*(\\d+)"); //$NON-NLS-1$
 	private static final Pattern REVISION_ATTR_PATTERN = Pattern.compile("Name\\s*=\\s*\"" //$NON-NLS-1$
-			+ Pattern.quote(TypeLibraryTags.REVISION_NO_ATTRIBUTE_FULL_NAME)
+			+ Pattern.quote(REVISION_NO_ATTRIBUTE_FULL_NAME)
 			+ "\"[^>]*Value\\s*=\\s*\"'?(\\d+)'?\""); //$NON-NLS-1$
 
 	private IProject project;
@@ -386,7 +387,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 				mapOf("Name", "eclipse4diac::core::ForteTypeOverride", "Value", deployTypeName)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (revisionNo != null) {
 			addElement(doc, fbTypeElement, "Attribute", mapOf("Name", //$NON-NLS-1$ //$NON-NLS-2$
-					TypeLibraryTags.REVISION_NO_ATTRIBUTE_FULL_NAME, "Value", "'" + revisionNo + "'")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					REVISION_NO_ATTRIBUTE_FULL_NAME, "Value", "'" + revisionNo + "'")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		final Element interfaceListElement = addElement(doc, fbTypeElement, "InterfaceList"); //$NON-NLS-1$

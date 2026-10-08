@@ -6,7 +6,7 @@ Bundle-Version: 3.2.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.ethercat
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-25
 Require-Bundle: org.eclipse.ui,
  org.eclipse.jface,
  org.eclipse.core.runtime,
