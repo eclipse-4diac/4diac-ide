@@ -21,10 +21,10 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /**
  * The Class CompareEditorOpenerUtil is a helper class to get the
@@ -55,7 +55,7 @@ public final class CompareEditorOpenerUtil {
 					openers.put(name, compareEditorOpener);
 				}
 			} catch (final CoreException corex) {
-				FordiacLogHelper.logError("Error loading Compareeditor", corex); //$NON-NLS-1$
+				ILog.get().error("Error loading Compareeditor", corex); //$NON-NLS-1$
 			}
 		}
 		return openers;
