@@ -23,10 +23,10 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.export.Exporter;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -90,7 +90,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e.getCause());
+			ILog.get().error(e.getMessage(), e.getCause());
 		}
 		return true;
 	}
