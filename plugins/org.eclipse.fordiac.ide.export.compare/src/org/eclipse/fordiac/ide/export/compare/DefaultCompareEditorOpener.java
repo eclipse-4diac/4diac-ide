@@ -17,9 +17,9 @@ import java.io.File;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareUI;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.export.ICompareEditorOpener;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /**
  * Implements the CompareEditorOpener extension point.
@@ -52,11 +52,11 @@ public class DefaultCompareEditorOpener implements ICompareEditorOpener {
 		try {
 			input.run(new NullProgressMonitor());
 		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();  // mark interruption
-			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt(); // mark interruption
+			ILog.get().error(e.getMessage(), e);
 			return false;
 		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return false;
 		}
 		return input.getCompareResult() != null;

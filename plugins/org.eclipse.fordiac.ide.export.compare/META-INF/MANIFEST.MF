@@ -11,4 +11,3 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.compare;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.compare
-Import-Package: org.eclipse.fordiac.ide.util
