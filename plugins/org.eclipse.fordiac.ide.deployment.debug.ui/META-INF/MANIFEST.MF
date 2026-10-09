@@ -40,4 +40,3 @@ Export-Package: org.eclipse.fordiac.ide.deployment.debug.ui,
  org.eclipse.fordiac.ide.deployment.debug.ui.fb,
  org.eclipse.fordiac.ide.deployment.debug.ui.handler,
  org.eclipse.fordiac.ide.deployment.debug.ui.runtime
-Import-Package: org.eclipse.fordiac.ide.util
