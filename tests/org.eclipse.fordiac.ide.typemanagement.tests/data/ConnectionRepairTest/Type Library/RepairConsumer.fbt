@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="RepairConsumer" Comment="Simple FB with one algorithm">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-07-21">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="DI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI" Type="BOOL"/>
+		</InputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<ECState Name="REQ">
+			<ECAction Algorithm="REQ" Output="CNF"/>
+		</ECState>
+		<Algorithm Name="REQ">
+			<ST><![CDATA[]]></ST>
+		</Algorithm>
+	</SimpleFB>
+</FBType>
