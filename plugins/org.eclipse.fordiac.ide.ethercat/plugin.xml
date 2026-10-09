@@ -20,9 +20,9 @@
    <extension
          point="org.eclipse.ui.activities">
       <activity
-            description="Show EtherCAT ESI import only for 4diac projects or Type Library selection"
+            description="%ethercat.activity.description"
             id="org.eclipse.fordiac.ide.ethercat.importWizardActivity"
-            name="EtherCAT Import Wizard">
+            name="%ethercat.activity.name">
          <enabledWhen>
             <and>
                <count

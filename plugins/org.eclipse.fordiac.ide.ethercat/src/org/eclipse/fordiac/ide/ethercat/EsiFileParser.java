@@ -302,7 +302,7 @@ public class EsiFileParser {
 		if(indexElement == null) {
 			return false;
 		}
-		return !"#x0".equals(indexElement.getTextContent()); //$NON-NLS-1$
+		return !"0".equals(toUnsignedDecimal(indexElement.getTextContent())); //$NON-NLS-1$
 	}
 
 	private PdoEntry parsePdoEntry(final Element entryElement, final String pdoName, final Pdo.PdoType pdoType) {
@@ -317,15 +317,15 @@ public class EsiFileParser {
 			final String dataTypeContent = dataTypeElement != null ? dataTypeElement.getTextContent() : ""; //$NON-NLS-1$
 
 			if("BOOL".equals(dataTypeContent)) { //$NON-NLS-1$
-				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IX" : ", map to an QX"; //$NON-NLS-1$ //$NON-NLS-2$
+				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IX" : ", map to a QX"; //$NON-NLS-1$ //$NON-NLS-2$
 			} else if("USINT".equals(dataTypeContent) || "SINT".equals(dataTypeContent)) { //$NON-NLS-1$ //$NON-NLS-2$
-				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IB" : ", map to an QB"; //$NON-NLS-1$ //$NON-NLS-2$
+				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IB" : ", map to a QB"; //$NON-NLS-1$ //$NON-NLS-2$
 			} else if("UINT".equals(dataTypeContent) || "INT".equals(dataTypeContent)) { //$NON-NLS-1$ //$NON-NLS-2$
-				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IW" : ", map to an QW"; //$NON-NLS-1$ //$NON-NLS-2$
+				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IW" : ", map to a QW"; //$NON-NLS-1$ //$NON-NLS-2$
 			} else if("UDINT".equals(dataTypeContent) || "DINT".equals(dataTypeContent)) { //$NON-NLS-1$ //$NON-NLS-2$
-				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an ID" : ", map to an QD"; //$NON-NLS-1$ //$NON-NLS-2$
+				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an ID" : ", map to a QD"; //$NON-NLS-1$ //$NON-NLS-2$
 			} else if("ULINT".equals(dataTypeContent) || "LINT".equals(dataTypeContent)) { //$NON-NLS-1$ //$NON-NLS-2$
-				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IL" : ", map to an QL"; //$NON-NLS-1$ //$NON-NLS-2$
+				comment += pdoType == Pdo.PdoType.TxPdo ? ", map to an IL" : ", map to a QL"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			return new PdoEntry(entryName, comment);
 		} catch(final Exception e) {
