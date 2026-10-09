@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
@@ -55,7 +56,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.milo.opcua.sdk.client.DiscoveryClient;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClientConfigBuilder;
@@ -128,15 +128,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			});
 			return newClient;
 		} catch (final DeploymentException e) {
-			FordiacLogHelper
-					.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_GetMgrIDFailed, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_GetMgrIDFailed, e.getMessage()), e);
 		} catch (final ExecutionException | UaException e) {
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_CreateClientFailed, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_CreateClientFailed, e.getMessage()),
+					e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		return null;
 	}
@@ -248,8 +247,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_CreateResourceFailed, resName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		if (result != null) {
 			resourceNode = processResult(result);
@@ -270,8 +269,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_WriteResourceFailed, resName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -289,8 +288,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_WriteDeviceFailed, devName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -378,8 +377,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_StartFBFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -419,8 +418,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_StartDeviceFailed, devName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -436,8 +435,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_KillResourceFailed, resName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 
 		final CallMethodRequest deleteRequest = new CallMethodRequest(Constants.MGMT_NODE,
@@ -450,8 +449,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeleteResourceFailed, resName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -474,8 +473,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_DeleteFBFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -512,8 +511,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -530,8 +529,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_KillDeviceFailed, devName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -544,7 +543,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
 			if (response == Constants.EMPTY_RESPONSE) {
-				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryResources,
+				ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryResources,
 						getIEC61499Status(result.getStatusCode())));
 			}
 			return getQueryElements(response);
@@ -552,8 +551,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryResourcesFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		return Collections.emptyList();
 	}
@@ -568,7 +567,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
 			if (response == Constants.EMPTY_RESPONSE) {
-				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
+				ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
 						getIEC61499Status(result.getStatusCode())));
 			}
 			return response;
@@ -576,8 +575,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryFBTypeFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		return Constants.EMPTY_RESPONSE;
 	}
@@ -592,7 +591,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
 			if (response == Constants.EMPTY_RESPONSE) {
-				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
+				ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
 						getIEC61499Status(result.getStatusCode())));
 			}
 			return response;
@@ -600,8 +599,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryDataTypeFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		return Constants.EMPTY_RESPONSE;
 	}
@@ -616,7 +615,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
 			if (response == Constants.EMPTY_RESPONSE) {
-				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
+				ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
 						getIEC61499Status(result.getStatusCode())));
 			}
 			return response;
@@ -624,8 +623,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryGlobalConstTypeFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		return Constants.EMPTY_RESPONSE;
 	}
@@ -642,8 +641,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_ReadWatchesFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 			return Constants.EMPTY_RESPONSE;
 		}
 	}
@@ -665,8 +664,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_AddWatchFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 			return false;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
@@ -691,8 +690,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RemoveWatchFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 			return false;
 		}
 		final StatusCode opcuaStatus = result.getStatusCode();
@@ -717,8 +716,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_TriggerEventFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 			return;
 		}
 		logResponseStatus(result.getStatusCode(), resName, fullFbName,
@@ -743,8 +742,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_ForceValueFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 			return;
 		}
 		logResponseStatus(result.getStatusCode(), resName, fullFbName,
@@ -768,8 +767,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_ClearForceFailed, fullFbName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 			return;
 		}
 		logResponseStatus(result.getStatusCode(), resName, fullFbName,
@@ -795,8 +794,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_ReadTracesFailed, devName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 	}
 
@@ -827,8 +826,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_ReplayNextEventFailed, resName), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		return Optional.empty();
 	}
@@ -864,8 +863,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_BrowseOPCUAFailed);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 		}
 		return status.isGood() && !availableResources.isEmpty();
 	}
@@ -895,8 +894,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_WriteFBFailed, destination, value), e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
+					e);
 			return;
 		}
 		logResponseStatus(result.getStatusCode(), resName, destination,
@@ -955,7 +954,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final StatusCode[] inputArgumentResults = result.getInputArgumentResults();
 		if (inputArgumentResults != null) {
 			for (int i = 0; i < inputArgumentResults.length; i++) {
-				FordiacLogHelper.logInfo(MessageFormat.format("Input Argument Result {0}: {1}", Integer.valueOf(i), //$NON-NLS-1$
+				ILog.get().info(MessageFormat.format("Input Argument Result {0}: {1}", Integer.valueOf(i), //$NON-NLS-1$
 						inputArgumentResults[i]));
 			}
 		}
@@ -965,7 +964,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	private List<CallMethodResult> handleResponse(final CallResponse response, final String destination) {
 		final List<CallMethodResult> results = Arrays.asList(response.getResults());
 		if (results.size() != requestMessages.size()) {
-			FordiacLogHelper.logInfo("Result list size does not match number of requests!"); //$NON-NLS-1$
+			ILog.get().info("Result list size does not match number of requests!"); //$NON-NLS-1$
 		}
 		for (int i = 0; i < results.size(); i++) {
 			final CallMethodResult result = results.get(i);
@@ -1004,7 +1003,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	private static void logResponseStatus(final StatusCode opcuaStatus, final String resourceName,
 			final String errorElement, final String messageTemplate) {
 		if (!opcuaStatus.isGood()) {
-			FordiacLogHelper.logError(
+			ILog.get().error(
 					MessageFormat.format(messageTemplate, getIEC61499Status(opcuaStatus), resourceName, errorElement));
 		}
 	}
@@ -1014,7 +1013,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		if (status != null) {
 			return status;
 		}
-		FordiacLogHelper.logInfo(
+		ILog.get().info(
 				MessageFormat.format(Messages.OPCUADeploymentExecutor_UnknownResponseCode, opcuaStatus.toString()));
 		return Constants.MGM_RESPONSE_UNKNOWN;
 	}
