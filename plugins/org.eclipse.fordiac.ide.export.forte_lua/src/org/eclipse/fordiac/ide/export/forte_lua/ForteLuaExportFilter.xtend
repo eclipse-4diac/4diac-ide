@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
-import org.eclipse.fordiac.ide.util.FordiacLogHelper
+import org.eclipse.core.runtime.ILog
 
 class ForteLuaExportFilter implements IExportFilter {
 
@@ -39,9 +39,9 @@ class ForteLuaExportFilter implements IExportFilter {
 
 	override export(IFile typeFile, String destination, boolean forceOverwrite, EObject type) throws ExportException {
 		switch (type) {
-			BasicFBType: FordiacLogHelper.logInfo(type.lua)
-			CompositeFBType: FordiacLogHelper.logInfo(type.lua)
-			AdapterType: FordiacLogHelper.logInfo(type.lua)
+			BasicFBType: ILog.get().info(type.lua)
+			CompositeFBType: ILog.get().info(type.lua)
+			AdapterType: ILog.get().info(type.lua)
 			default: throw new UnsupportedOperationException("Unknown library element type " + type.eClass.name)
 		}
 	}
