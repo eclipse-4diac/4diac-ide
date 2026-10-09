@@ -24,4 +24,3 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.iec61499;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.iec61499
-Import-Package: org.eclipse.fordiac.ide.util

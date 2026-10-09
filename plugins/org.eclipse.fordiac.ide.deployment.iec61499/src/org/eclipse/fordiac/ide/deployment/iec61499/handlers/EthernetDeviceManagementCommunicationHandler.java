@@ -27,11 +27,11 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
 import org.eclipse.fordiac.ide.deployment.iec61499.preferences.IEC61499PreferenceConstants;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class EthernetDeviceManagementCommunicationHandler implements IDeviceManagementCommunicationHandler {
 	private static final int ASN1_TAG_IECSTRING = 80;
@@ -87,7 +87,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 			throw new DeploymentException(Messages.DeploymentExecutor_DisconnectFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt(); // mark interruption
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
