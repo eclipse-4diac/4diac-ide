@@ -31,6 +31,8 @@
             editorId="org.eclipse.fordiac.ide.library.ui.editors.ManifestEditor">
       </editorContentTypeBinding>
    </extension>
+   
+   
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
@@ -41,20 +43,40 @@
             priority="normal">
       </content-type>
    </extension>
+   
+   
    <extension
          point="org.eclipse.ui.importWizards">
       <category
             id="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
-            name="%category.importCategory.name">
+            name="%wizard.libraryCategory.name">
       </category>
   <wizard
       category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
       class="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      icon="fordiacimage://ICON_LINKED_LIBRARY"
       id="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
       name="%wizard.unifiedLibraryImport.name">
     <description>%wizard.unifiedLibraryImport.description</description>
   </wizard>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="org.eclipse.fordiac.ide.library.ui.wizards.exportCategory"
+            name="%wizard.libraryCategory.name">
+      </category>
+  <wizard
+      category="org.eclipse.fordiac.ide.library.ui.wizards.exportCategory"
+      class="org.eclipse.fordiac.ide.library.ui.wizards.LibraryExportWizard"
+      icon="fordiacimage://ICON_LINKED_LIBRARY"
+      id="org.eclipse.fordiac.ide.library.ui.wizards.LibraryExportWizard"
+      name="%wizard.libraryExport.name">
+    <description>%wizard.libraryExport.description</description>
+  </wizard>
+   </extension>
+   
    <extension
          point="org.eclipse.ui.activities">
     <activity
@@ -95,7 +117,7 @@
       		id="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"
       		name="%command.openManageLibraryWizard.name"/>
 	</extension>
-
+	
 <extension point="org.eclipse.ui.handlers">
   <handler
       commandId="org.eclipse.fordiac.ide.library.ui.openManageLibraryWizard"

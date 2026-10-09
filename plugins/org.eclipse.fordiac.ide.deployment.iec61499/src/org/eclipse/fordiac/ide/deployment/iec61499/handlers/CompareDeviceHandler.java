@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.deployment.iec61499.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
@@ -28,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.DeviceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.DeviceDeleteCommand;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -55,7 +55,7 @@ public class CompareDeviceHandler extends AbstractHandler {
 						compareDevices(selectedDevice, onlineDevice);
 						printDiffInConsole();
 					} catch (final DeploymentException e) {
-						FordiacLogHelper.logError("Cannot compare devices!", e); //$NON-NLS-1$
+						ILog.get().error("Cannot compare devices!", e); //$NON-NLS-1$
 					}
 				}
 
@@ -102,7 +102,7 @@ public class CompareDeviceHandler extends AbstractHandler {
 					compareParameters(resOnlineData, resOfflineData);
 
 				} else {
-					FordiacLogHelper.logInfo(
+					ILog.get().info(
 							"No Resource: " + resOfflineData.getRes().getName() + " not found online to compare!"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
@@ -214,12 +214,12 @@ public class CompareDeviceHandler extends AbstractHandler {
 				interactor.connect();
 				dynamicTypeLoadInteractor.queryResourcesWithNetwork(onlineDevice);
 			} catch (final Exception e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			} finally {
 				try {
 					interactor.disconnect();
 				} catch (final DeploymentException e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
+					ILog.get().error(e.getMessage(), e);
 				}
 			}
 		}
@@ -228,19 +228,19 @@ public class CompareDeviceHandler extends AbstractHandler {
 
 	private void printDiffInConsole() {
 		differenceDataDeltaPlus.getResData().forEach(res -> {
-			FordiacLogHelper.logInfo("== Resource: " + res.getRes().getName() + " (online)"); //$NON-NLS-1$ //$NON-NLS-2$
-			res.getFbs().forEach(fb -> FordiacLogHelper.logInfo("++ fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
-			res.getConnections().forEach(con -> FordiacLogHelper.logInfo("++ con: " + con.sourcePrefix() //$NON-NLS-1$
+			ILog.get().info("== Resource: " + res.getRes().getName() + " (online)"); //$NON-NLS-1$ //$NON-NLS-2$
+			res.getFbs().forEach(fb -> ILog.get().info("++ fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
+			res.getConnections().forEach(con -> ILog.get().info("++ con: " + con.sourcePrefix() //$NON-NLS-1$
 					+ con.source().getName() + " -> " + con.destinationPrefix() + con.destination().getName())); //$NON-NLS-1$
-			res.getParams().forEach((name, _) -> FordiacLogHelper.logInfo("++ param: " + name)); //$NON-NLS-1$
+			res.getParams().forEach((name, _) -> ILog.get().info("++ param: " + name)); //$NON-NLS-1$
 		});
 
 		differenceDataDeltaMinus.getResData().forEach(res -> {
-			FordiacLogHelper.logInfo("== Resource: " + res.getRes().getName() + "(local)"); //$NON-NLS-1$ //$NON-NLS-2$
-			res.getFbs().forEach(fb -> FordiacLogHelper.logInfo("-- fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
-			res.getConnections().forEach(con -> FordiacLogHelper.logInfo("-- con: " + con.sourcePrefix() //$NON-NLS-1$
+			ILog.get().info("== Resource: " + res.getRes().getName() + "(local)"); //$NON-NLS-1$ //$NON-NLS-2$
+			res.getFbs().forEach(fb -> ILog.get().info("-- fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
+			res.getConnections().forEach(con -> ILog.get().info("-- con: " + con.sourcePrefix() //$NON-NLS-1$
 					+ con.source().getName() + " -> " + con.destinationPrefix() + con.destination().getName())); //$NON-NLS-1$
-			res.getParams().forEach((name, _) -> FordiacLogHelper.logInfo("-- param: " + name)); //$NON-NLS-1$
+			res.getParams().forEach((name, _) -> ILog.get().info("-- param: " + name)); //$NON-NLS-1$
 		});
 	}
 }

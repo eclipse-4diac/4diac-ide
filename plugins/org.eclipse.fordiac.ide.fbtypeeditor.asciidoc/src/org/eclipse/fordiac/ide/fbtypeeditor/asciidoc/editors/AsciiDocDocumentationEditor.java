@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Andrea Zoitl - added toolbar
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors;
 
@@ -27,24 +28,35 @@ import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.FileEditorInput;
 
 @SuppressWarnings("restriction")
 public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEditorPage {
 
+	public static final String TOOLBAR_LOCATION = "toolbar:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar"; //$NON-NLS-1$
+
 	// The editor input of the type file given to us.
-	IEditorInput originEditorInput;
+	private IEditorInput originEditorInput;
+	private ToolBarManager toolBarManager;
+	private IMenuService menuService;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -58,12 +70,38 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		super.createPartControl(parent);
+		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(parent);
+
+		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.HORIZONTAL);
+		final ToolBar toolbarControl = toolBarManager.createControl(parent);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarControl);
+		menuService = getSite().getService(IMenuService.class);
+		if (menuService != null) {
+			menuService.populateContributionManager(toolBarManager, TOOLBAR_LOCATION);
+		}
+		toolBarManager.update(true);
+
+		final Composite newParent = new Composite(parent, SWT.NONE);
+		newParent.setLayout(new FillLayout());
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(newParent);
+
+		super.createPartControl(newParent);
 
 		final Browser browser = findBrowser(parent);
 		if (browser != null) {
 			browser.addLocationListener(new ModelLocationListener());
 		}
+	}
+
+	@Override
+	public void dispose() {
+		if (toolBarManager != null) {
+			if (menuService != null) {
+				menuService.releaseContributions(toolBarManager);
+			}
+			toolBarManager.dispose();
+		}
+		super.dispose();
 	}
 
 	private Browser findBrowser(final Control control) {

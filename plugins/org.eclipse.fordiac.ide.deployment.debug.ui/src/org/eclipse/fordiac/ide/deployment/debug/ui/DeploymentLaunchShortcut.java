@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -39,7 +40,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -123,7 +123,7 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 						.filter(configuration -> isRelevantLaunchConfiguration(configuration, resource))
 						.toArray(ILaunchConfiguration[]::new);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
+				ILog.get().warn(e.getMessage(), e);
 			}
 		}
 		return new ILaunchConfiguration[0];
@@ -134,7 +134,7 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 		try {
 			return resource.equals(DeploymentLaunchConfigurationAttributes.getSystemResource(configuration));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 		return false;
 	}

@@ -21,7 +21,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.Messages;
@@ -29,35 +28,26 @@ import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
+import org.eclipse.fordiac.ide.gef.nat.AttributeNameEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
-import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
-import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
-import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
@@ -65,27 +55,15 @@ import org.eclipse.fordiac.ide.ui.widget.nattable.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
-import org.eclipse.fordiac.ide.util.ErrorMessenger;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.bindings.keys.KeyStroke;
-import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.IContentProposal;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.EditableRule;
-import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
-import org.eclipse.nebula.widgets.nattable.data.validate.IDataValidator;
-import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommandHandler;
-import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
-import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -130,28 +108,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 						DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE),
 				this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
-
-		final Predicate<TypeEntry> targetFilter = entry -> {
-			if (entry.getType() instanceof final AttributeDeclaration decl) {
-				return decl.isValidObject(getType());
-			}
-			return true;
-		};
-		final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
-		attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
-				new ImportTypeSelectionProposalProvider(this::getType, TypeLibrary::getAttributeTypeEntry,
-						AttributeSelectionContentProvider.INSTANCE, targetFilter),
-				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
-		table.addConfiguration(new AbstractRegistryConfiguration() {
-			@Override
-			public void configureRegistry(final IConfigRegistry configRegistry) {
-				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
-						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
-				configRegistry.registerConfigAttribute(EditConfigAttributes.DATA_VALIDATOR, attributeNameValidator,
-						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
-			}
-		});
-
+		table.addConfiguration(new AttributeNameEditorConfiguration(this::getType, this));
 		table.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		table.configure();
 
@@ -288,27 +245,6 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		return InternalAttributeDeclarations.getInternalAttributeByName(name) != null;
 	}
 
-	private final IDataValidator attributeNameValidator = new IDataValidator() {
-		@Override
-		public boolean validate(final int columnIndex, final int rowIndex, final Object newValue) {
-			if (!(newValue instanceof final String name)) {
-				return true;
-			}
-
-			if (isInternalAttribute(name)) {
-				ErrorMessenger
-						.popUpErrorMessage(MessageFormat.format(Messages.AttributeSection_NameReservedKeyWord, name));
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public boolean validate(final ILayerCell cell, final IConfigRegistry configRegistry, final Object newValue) {
-			return validate(cell.getColumnIndex(), cell.getRowIndex(), newValue);
-		}
-	};
-
 	@Override
 	protected ConfigurableObject getType() {
 		return type instanceof final ConfigurableObject configurableObject ? configurableObject : null;
@@ -348,23 +284,6 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 				FordiacLogHelper.logError(MessageFormat.format(Messages.NatTable_Update_Failed, command.getNewValue()),
 						e);
 				return false;
-			}
-		}
-	}
-
-	protected class AttributeNameCellEditor extends TextCellEditor {
-
-		@Override
-		protected void configureContentProposalAdapter(final ContentProposalAdapter contentProposalAdapter) {
-			contentProposalAdapter.addContentProposalListener(this::proposalAccepted);
-			super.configureContentProposalAdapter(contentProposalAdapter);
-		}
-
-		protected void proposalAccepted(final IContentProposal proposal) {
-			final LibraryElement libraryElement = ModelHelper.getLibraryElementFromContextChecked(getType());
-			if (proposal instanceof final ImportContentProposal importProposal
-					&& !ImportHelper.matchesImports(importProposal.getImportedNamespace(), libraryElement)) {
-				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
 			}
 		}
 	}

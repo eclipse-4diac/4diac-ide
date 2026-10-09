@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 
 public final class FBNetworkElementHelper {
 
@@ -48,6 +49,28 @@ public final class FBNetworkElementHelper {
 			}
 		}
 		return null;
+	}
+
+	public static TypedSubApp getContainerTypedSubApp(final EObject element) {
+		EObject obj = element;
+		while (obj.eContainer() != null) {
+			obj = obj.eContainer();
+			if (obj instanceof final TypedSubApp subApp && !subApp.isContainedInTypedInstance()) {
+				return subApp;
+			}
+		}
+		return null;
+	}
+
+	public static boolean isContainedInTypedSubApp(final EObject element) {
+		EObject obj = element;
+		while (obj.eContainer() != null) {
+			obj = obj.eContainer();
+			if (obj instanceof final SubApp subApp && subApp.isTyped()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private FBNetworkElementHelper() {

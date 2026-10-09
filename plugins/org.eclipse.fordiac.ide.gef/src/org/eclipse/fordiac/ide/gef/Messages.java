@@ -117,6 +117,7 @@ public final class Messages extends NLS {
 	public static String HandlerPreferenceSafeError;
 
 	public static String AttributeSection_NameReservedKeyWord;
+	public static String AttributeColumnAccessor_NameContainsDot;
 
 	public static String GraphicalViewerAnnotationModelEventDispatcher_Name;
 

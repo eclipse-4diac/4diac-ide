@@ -20,11 +20,11 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /**
  * Factory for loading DeviceManagementInteractors and handle related data
@@ -93,7 +93,7 @@ public enum DeviceManagementInteractorFactory {
 					interactors.add(iDeviceManagementInteractorProvider);
 				}
 			} catch (final CoreException corex) {
-				FordiacLogHelper.logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
+				ILog.get().error(Messages.DeploymentCoordinator_ERROR_Message, corex);
 			}
 		}
 		return interactors;

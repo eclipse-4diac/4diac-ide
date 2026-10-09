@@ -20,11 +20,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class ExportFilterUtil {
 
@@ -47,7 +47,7 @@ public class ExportFilterUtil {
 				return (IExportFilter) filterConfig.get().createExecutableExtension("class"); //$NON-NLS-1$
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(Messages.FordiacExporter_ERROR, e);
+			ILog.get().error(Messages.FordiacExporter_ERROR, e);
 		}
 		return null;
 	}
@@ -82,7 +82,7 @@ public class ExportFilterUtil {
 				final int sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
 				return sortIndex1 - sortIndex2;
 			} catch (final NumberFormatException e2) {
-				FordiacLogHelper.logError(e2.getMessage(), e2);
+				ILog.get().error(e2.getMessage(), e2);
 			}
 			return 0;
 		}).toArray(IConfigurationElement[]::new);

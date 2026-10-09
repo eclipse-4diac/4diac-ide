@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -31,7 +32,6 @@ import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.DeviceTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.ResourceTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.Window;
@@ -212,7 +212,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 					DeploymentEvaluatorConfiguration.getDefaultResourceType(getTypeLibrary())));
 			traceButton.setSelection(configuration.getAttribute(DeploymentEvaluatorConfiguration.TRACE, false));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 	}
 

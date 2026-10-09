@@ -34,7 +34,10 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.fordiac.ide.library.model.Messages;
+import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryFactory;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Product;
@@ -261,6 +264,42 @@ public final class ManifestHelper {
 			resource.save(null);
 		} catch (final IOException e) {
 			FordiacLogHelper.logWarning("Could not create project manifest", e); //$NON-NLS-1$
+		}
+		return manifest;
+	}
+
+	/**
+	 * Creates a new {@link Manifest} at the specified {@link Path}
+	 *
+	 * @param folder  specified folder path
+	 * @param library to create a manifest for
+	 * @return the created manifest
+	 */
+	public static Manifest createLibraryManifest(final java.nio.file.Path folder, final Library library,
+			final String version) throws IOException {
+		final Manifest manifest = createManifest(SCOPE_LIBRARY);
+		final java.nio.file.Path manifestFile = folder.resolve(MANIFEST_FILENAME);
+		final Product product = manifest.getProduct();
+
+		product.setName(library.getName());
+		product.setSymbolicName(library.getSymbolicName());
+		product.setComment(library.getComment());
+		product.getVersionInfo().setVersion(version);
+
+		final Resource resource = createResource(URI.createFileURI(manifestFile.toAbsolutePath().toString()));
+
+		final var dependencies = library.getDependencies();
+		if (dependencies != null) {
+			for (final Required req : dependencies.getRequired()) {
+				addDependency(manifest, EcoreUtil.copy(req));
+			}
+		}
+
+		resource.getContents().add(manifest);
+		try {
+			resource.save(null);
+		} catch (final IOException e) {
+			throw new IOException(Messages.ManifestHelper_CannotCreateManifest, e);
 		}
 		return manifest;
 	}

@@ -16,9 +16,9 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -36,7 +36,7 @@ public class ToggleWatchpointHandler extends AbstractHandler {
 				target.toggleWatchpoints(activePart, currentSelection);
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getLocalizedMessage(), e);
+			ILog.get().error(e.getLocalizedMessage(), e);
 		}
 		return null;
 	}

@@ -84,6 +84,8 @@ public class AttributeConfigLabelAccumulator extends AbstractAnnotatedConfigLabe
 			break;
 		case LOCATION:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			accumulateAttributeConfigLabels(configLabels, rowItem,
+					FordiacAnnotationUtil::showOnOverrideAttributeLocation);
 			break;
 		default:
 			break;

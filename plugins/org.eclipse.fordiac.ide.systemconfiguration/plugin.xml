@@ -9,7 +9,7 @@
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             icon="fordiacimage://ICON_SYSTEM_CONFIGURATION"
             id="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor"
-            name="System Configuration">
+            name="%editor.systemConfiguration.name">
       </editor>
    </extension>
    <extension
@@ -19,25 +19,25 @@
          <propertyTab
                category="Device"
                id="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
-               label="Instance">
+               label="%propertyTab.deviceInstance.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab"
                category="Device"
                id="org.eclipse.fordiac.ide.device.propertyAttributeTab"
                indented="true"
-               label="Attributes">
+               label="%propertyTab.attributes.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.device.propertyAttributeTab"
                category="Device"
                id="org.eclipse.fordiac.ide.device.propertyAppearanceTab"
-               label="Appearance">
+               label="%propertyTab.appearance.label">
          </propertyTab>
          <propertyTab
                category="Device"
                id="org.eclipse.fordiac.ide.device.propertyInterfaceElementTab"
-               label="Interface Element">
+               label="%propertyTab.interfaceElement.label">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -106,7 +106,7 @@
             class="org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"
             icon="fordiacimage://ICON_SYSTEM_CONFIGURATION"
             id="org.eclipse.fordiac.ide.systemconfiguration.actions.OpenSystemConfEditorAction"
-            label="Systemconfiguration">
+            label="%openListener.systemConfiguration.label">
       </openListener>
    </extension>   
 </plugin>

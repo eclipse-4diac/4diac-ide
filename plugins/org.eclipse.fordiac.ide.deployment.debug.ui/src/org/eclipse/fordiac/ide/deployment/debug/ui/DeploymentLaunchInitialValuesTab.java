@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -60,7 +61,6 @@ import org.eclipse.fordiac.ide.ui.widget.nattable.AbstractColumnAccessor;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -202,7 +202,7 @@ public class DeploymentLaunchInitialValuesTab extends AbstractLaunchConfiguratio
 			valuesTable.refresh();
 			addButton.setEnabled(system != null);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 	}
 

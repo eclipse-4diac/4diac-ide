@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.export.builder.ExportBuilder;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.export.utils.AdditionalSourceDirectories;
 import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -84,7 +84,8 @@ public class TypeExportPropertyPage extends PropertyPage {
 
 		createDirectoryEditor(settingsContainer);
 		createDefaultExporterEditor(settingsContainer);
-		additionalSourceDirectoriesSection = new AdditionalSourceDirectoriesSection(settingsContainer, this::validatePage);
+		additionalSourceDirectoriesSection = new AdditionalSourceDirectoriesSection(settingsContainer,
+				this::validatePage);
 		loadPreferences();
 
 		return composite;
@@ -172,10 +173,9 @@ public class TypeExportPropertyPage extends PropertyPage {
 		getPreferenceStore().setValue(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES,
 				AdditionalSourceDirectories.formatPaths(additionalSourceDirectoriesSection.getDirectories()));
 
-		if (getPreferenceStore() instanceof final IPersistentPreferenceStore store && store.needsSaving()) {
-			if (!saveAndUpdateExport(store)) {
-				return false;
-			}
+		if ((getPreferenceStore() instanceof final IPersistentPreferenceStore store && store.needsSaving())
+				&& !saveAndUpdateExport(store)) {
+			return false;
 		}
 		return super.performOk();
 	}
@@ -188,7 +188,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 		try {
 			store.save();
 		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			setErrorMessage(e.getLocalizedMessage());
 			return false;
 		}
