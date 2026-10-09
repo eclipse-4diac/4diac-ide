@@ -81,13 +81,8 @@
       <feature id="org.eclipse.emf.ecore.editor"/>
       <feature id="org.eclipse.emf.databinding"/>
       <feature id="org.eclipse.egit" installMode="root"/>
-      <feature id="org.eclipse.jgit" installMode="root"/>
-      <feature id="org.eclipse.jgit.http.apache" installMode="root"/>
-      <feature id="org.eclipse.jgit.ssh.apache" installMode="root"/>
       <feature id="org.eclipse.justj.openjdk.hotspot.jre.full.stripped" installMode="root"/>
       <feature id="org.eclipse.elk.feature" installMode="root"/>
-      <feature id="org.eclipse.jgit.gpg.bc" installMode="root"/>
-      <feature id="org.eclipse.jgit.ssh.jsch" installMode="root"/>
       <feature id="org.eclipse.elk.algorithms.feature"/>
       <feature id="org.eclipse.nebula.widgets.richtext.feature"/>
       <feature id="org.eclipse.emf.compare"/>
