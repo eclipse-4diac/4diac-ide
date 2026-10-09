@@ -17,6 +17,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
@@ -51,13 +52,13 @@ public class GoToElementHandler extends AbstractHandler {
 			marker.setAttribute(FordiacErrorMarker.TARGET_URI, EcoreUtil.getURI(rowObject).toString());
 			IDE.gotoMarker(editor, marker);
 		} catch (final CoreException es) {
-			// ignore
+			ILog.get().warn(es.getMessage(), es);
 		} finally {
 			if (marker != null) {
 				try {
 					marker.delete();
 				} catch (final CoreException es) {
-					// ignore
+					ILog.get().warn(es.getMessage(), es);
 				}
 			}
 		}
