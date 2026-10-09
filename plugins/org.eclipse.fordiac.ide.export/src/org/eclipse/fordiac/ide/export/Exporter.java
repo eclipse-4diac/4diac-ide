@@ -20,13 +20,13 @@ import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class Exporter {
 
@@ -99,7 +99,7 @@ public class Exporter {
 		} catch (final ExportException.UserInteraction e) {
 			throw (e);
 		} catch (final ExportException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
