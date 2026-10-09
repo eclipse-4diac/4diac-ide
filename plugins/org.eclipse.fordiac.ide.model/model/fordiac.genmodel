@@ -1175,6 +1175,11 @@
       <genOperations ecoreOperation="data.ecore#//StructuredType/getMemberVar" body="return getMemberVariables().stream().filter(mv -> mv.getName().equalsIgnoreCase(name)).findAny().orElse(null);">
         <genParameters ecoreParameter="data.ecore#//StructuredType/getMemberVar/name"/>
       </genOperations>
+      <genOperations ecoreOperation="data.ecore#//StructuredType/validateNoCircularReferences"
+          body="return org.eclipse.fordiac.ide.model.data.impl.StructuredTypeAnnotations.validateNoCircularReferences(this, diagnostics, context);">
+        <genParameters ecoreParameter="data.ecore#//StructuredType/validateNoCircularReferences/diagnostics"/>
+        <genParameters ecoreParameter="data.ecore#//StructuredType/validateNoCircularReferences/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//Subrange">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//Subrange/lowerLimit"/>

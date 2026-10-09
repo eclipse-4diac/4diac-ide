@@ -19,17 +19,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.util.LinkedHashSet;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.NoSuchElementException;
-import java.util.SequencedSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -125,11 +129,10 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 	@Override
 	public boolean canExecute() {
 		if (getInterfaceElement() instanceof VarDeclaration
-				&& getInterfaceElement().eContainer() instanceof final StructuredType parentStruct
-				&& dataType instanceof final StructuredType structType) {
-			final SequencedSet<String> structs = new LinkedHashSet<>();
-			structs.add(PackageNameHelper.getFullTypeName(parentStruct));
-			if (hasRecursionCheck(structs, structType)) {
+				&& getInterfaceElement().eContainer() instanceof final StructuredType parentStruct) {
+			final Set<Object> activeTypes = Collections.newSetFromMap(new IdentityHashMap<>());
+			activeTypes.add(identity(parentStruct));
+			if (hasRecursionCheck(activeTypes, dataType)) {
 				ErrorMessenger.popUpErrorMessage(Messages.ChangeDataTypeCommand_RecursiveStructError);
 				return false;
 			}
@@ -137,18 +140,32 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 		return true;
 	}
 
-	private boolean hasRecursionCheck(final SequencedSet<String> structs, final StructuredType structuredType) {
-		if (!structs.add(PackageNameHelper.getFullTypeName(structuredType))) {
+	private boolean hasRecursionCheck(final Set<Object> activeTypes, final DataType type) {
+		if (type == null) {
+			return false;
+		}
+		if (!activeTypes.add(identity(type))) {
 			return true;
 		}
-		for (final VarDeclaration member : structuredType.getMemberVariables()) {
-			if (member.getType() instanceof final StructuredType memberStruct
-					&& hasRecursionCheck(structs, memberStruct)) {
-				return true;
-			}
+		if (references(type).anyMatch(reference -> hasRecursionCheck(activeTypes, reference))) {
+			return true;
 		}
-		structs.removeLast();
+		activeTypes.remove(identity(type));
 		return false;
+	}
+
+	private static Object identity(final DataType type) {
+		return type.getTypeEntry() != null ? type.getTypeEntry() : type;
+	}
+
+	private static Stream<DataType> references(final DataType type) {
+		return switch (type) {
+		case final StructuredType structure -> structure.getMemberVariables().stream().map(VarDeclaration::getType)
+				.filter(Objects::nonNull);
+		case final ArrayType array -> Stream.ofNullable(array.getBaseType());
+		case final DirectlyDerivedType derived -> Stream.ofNullable(derived.getBaseType());
+		default -> Stream.empty();
+		};
 	}
 
 	@Override
