@@ -25,7 +25,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferencePage"
             id="org.eclipse.fordiac.ide.deployment.iec61499.preferences.HoloblocDeploymentPreferences"
-            name="Deployment Preferences (HOLOBLOC Profile)">
+            name="%preferencePage.holoblocDeployment.name">
       </page>
    </extension>
    <extension
@@ -39,7 +39,7 @@
       <command
             defaultHandler="org.eclipse.fordiac.ide.deployment.iec61499.handlers.GetResourcesHandler"
             id="org.eclipse.fordiac.ide.discovery.getResources"
-            name="Get Resources">
+            name="%command.getResources.name">
       </command>
    </extension>
    <extension
@@ -47,7 +47,7 @@
    	<command
          categoryId="org.eclipse.fordiac.ide.commands.category"
          id="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice"
-         name="compare Device">
+         name="%command.compareDevice.name">
    	</command>
    </extension>
    <extension
@@ -66,7 +66,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.edit">
          <command
                commandId="org.eclipse.fordiac.ide.discovery.getResources"
-               label="Get Resources"
+               label="%menu.getResources.label"
                icon="fordiacimage://ICON_DISCOVER"
                style="push">
             <visibleWhen
@@ -85,7 +85,7 @@
 	   <command
 	         commandId="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice"
 	         icon="fordiacimage://ICON_PROPERTIES"
-	         label="compare Device"
+	         label="%menu.compareDevice.label"
 	         style="push">
 	      <visibleWhen
 	            checkEnabled="false">
@@ -98,7 +98,7 @@
         <command
 			 commandId="org.eclipse.fordiac.ide.deployment.iec61499.compareDevice"
 			 icon="fordiacimage://ICON_PROPERTIES"
-			 label="compare Device"
+			 label="%menu.compareDevice.label"
 			 style="push">
 		</command>
     </menuContribution>
