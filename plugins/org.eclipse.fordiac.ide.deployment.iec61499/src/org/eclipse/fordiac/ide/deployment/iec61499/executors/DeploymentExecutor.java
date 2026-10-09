@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
@@ -51,7 +52,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
@@ -420,8 +420,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		}
 	}
 
-	private String getTypeNameWithHash(final TypeEntry entry)
-			throws LibraryElementHashException, DeploymentException {
+	private String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException, DeploymentException {
 		final String hash = entry.getTypeHash();
 		if (hash.isEmpty()) {
 			return getTypeNameCreator().getTypeName(entry);
@@ -441,7 +440,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 					}
 				}
 			} catch (final IOException e) {
-				FordiacLogHelper.logWarning(MessageFormat.format("{0}\n{1}", e.getMessage(), result), e); //$NON-NLS-1$
+				ILog.get().warn(MessageFormat.format("{0}\n{1}", e.getMessage(), result), e); //$NON-NLS-1$
 				throw e;
 			}
 		}
