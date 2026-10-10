@@ -212,7 +212,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	}
 
 	@Override
-	public void columnsChanged(final List<ComparisonColumn> columns) {
+	public void columnsChanged(final List<ComparisonColumn> columns, final ComparisonService.Listener.Event event) {
 		for (final var eventMarker : eventMarkers) {
 			eventMarker.setComparisonColor(null);
 		}

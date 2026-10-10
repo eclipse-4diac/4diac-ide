@@ -13,12 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.IReplayNavigatorRegistrationListener;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPartFactory;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.StatesComparisonView;
 import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
@@ -37,6 +40,8 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.ViewPart;
@@ -58,6 +63,18 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 	// this is a workaround to show the the changed datapoints in a different color
 	// than the default error color
 	private RGB originalErrorColor = null;
+
+	private final ComparisonService.Listener stateComparisonListener = (_, event) -> {
+		if (event == ComparisonService.Listener.Event.COLUMN_ADDED) {
+			// open the state comparison table if not open
+			final var page = getSite().getPage();
+			try {
+				page.showView(StatesComparisonView.VIEW_ID, null, IWorkbenchPage.VIEW_VISIBLE);
+			} catch (final PartInitException e) {
+				ILog.get().error("Failed to open States Comparison View", e); //$NON-NLS-1$
+			}
+		}
+	};
 
 	private final RGB replayColor = new RGB(255, 165, 0); // Orange color for changed datapoints
 
@@ -105,6 +122,8 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 		}
 		registry.put(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR, replayColor);
 
+		ComparisonService.getInstance().addListener(stateComparisonListener);
+
 		ReplayNavigatorManager.getDefault().addListener(this);
 		SelectionService.getDefault().install(getSite().getPage());
 		parent.addDisposeListener(_ -> {
@@ -114,6 +133,7 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 				JFaceResources.getColorRegistry().put(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR,
 						originalErrorColor);
 			}
+			ComparisonService.getInstance().removeListener(stateComparisonListener);
 		});
 		viewer.setContents(session);
 
