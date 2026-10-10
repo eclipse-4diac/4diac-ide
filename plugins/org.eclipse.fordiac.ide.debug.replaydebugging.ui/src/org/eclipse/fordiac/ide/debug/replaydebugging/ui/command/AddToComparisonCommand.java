@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.Compari
 import org.eclipse.fordiac.ide.model.helpers.ColorHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 
 public class AddToComparisonCommand extends Command {
 
@@ -47,7 +48,10 @@ public class AddToComparisonCommand extends Command {
 	public void execute() {
 		final var snapshot = replayNavigator.getStateAtEventPosition(eventPosition);
 
-		final var rgb = ColorHelper.createRandomColor(COLOR_SATURATION, COLOR_BRIGHTNESS);
+		RGB rgb;
+		do {
+			rgb = ColorHelper.createRandomColor(COLOR_SATURATION, COLOR_BRIGHTNESS);
+		} while (!ColorHelper.isReadable(rgb));
 
 		// label empty for now
 		column = new ComparisonColumn(ComparisonService.getInstance().generateUniqueColumnId(), eventPosition, label,

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonSorter.SortMode;
+import org.eclipse.fordiac.ide.model.helpers.ColorHelper;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
@@ -39,6 +40,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -59,6 +61,8 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			.get("org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDiffColor"); //$NON-NLS-1$
 	private static final Color DISABLED_TEXT_COLOR = JFaceResources.getColorRegistry()
 			.get("org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDisabledColor"); //$NON-NLS-1$
+	private static final Color BLACK_TEXT = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	private static final Color WHITE_TEXT = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 
 	private static final int KEY_COLUMN_WIDTH_DEFAULT = 200;
 	private static final int DATA_COLUMN_WIDTH_DEFAULT = 100;
@@ -269,7 +273,11 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 				if (columnState.isDisabled()) {
 					return DISABLED_TEXT_COLOR;
 				}
-				return null;
+				final Color background = getBackground(element);
+				if (background == null) {
+					return null; // no custom background: keep the theme's default text color
+				}
+				return ColorHelper.prefersWhiteText(background.getRGB()) ? WHITE_TEXT : BLACK_TEXT;
 			}
 
 			@Override
