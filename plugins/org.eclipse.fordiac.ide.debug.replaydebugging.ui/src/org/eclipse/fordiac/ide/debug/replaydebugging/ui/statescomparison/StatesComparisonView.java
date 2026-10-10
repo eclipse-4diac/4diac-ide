@@ -102,7 +102,6 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		contributeToActionBars();
 
 		ComparisonService.getInstance().addListener(this);
-		columnsChanged(ComparisonService.getInstance().getColumns());
 	}
 
 	@Override
@@ -119,7 +118,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	// ── Service Listener ─────────────────────────────────────────────────
 
 	@Override
-	public void columnsChanged(final List<ComparisonColumn> incoming) {
+	public void columnsChanged(final List<ComparisonColumn> incoming, final ComparisonService.Listener.Event event) {
 		if (tableViewer == null || tableViewer.getTable().isDisposed()) {
 			return;
 		}
