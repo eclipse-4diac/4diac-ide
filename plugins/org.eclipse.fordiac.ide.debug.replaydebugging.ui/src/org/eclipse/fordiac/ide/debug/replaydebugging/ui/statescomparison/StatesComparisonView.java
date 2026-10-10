@@ -65,13 +65,19 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	private static final Color WHITE_TEXT = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 
 	private static final int KEY_COLUMN_WIDTH_DEFAULT = 200;
-	private static final int DATA_COLUMN_WIDTH_DEFAULT = 100;
+
+	/** Narrowest a data column may get before a horizontal scrollbar appears. */
+	private static final int DATA_COLUMN_MIN_WIDTH = 20;
+
+	/**
+	 * All data columns have the same weight, so they share the free space equally.
+	 */
+	private static final int DATA_COLUMN_WEIGHT = 100;
 
 	// ── State ────────────────────────────────────────────────────────────
 
 	private TableViewer tableViewer;
 	private Composite tableComposite;
-	private TableViewerColumn fillerColumn;
 	private final List<ColumnState> columnStates = new ArrayList<>();
 	private final List<TableViewerColumn> viewerColumns = new ArrayList<>();
 	private Listener headerMenuListener;
@@ -150,11 +156,6 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			viewerColumns.forEach(vc -> vc.getColumn().dispose());
 			viewerColumns.clear();
 
-			if (fillerColumn != null && !fillerColumn.getColumn().isDisposed()) {
-				fillerColumn.getColumn().dispose();
-				fillerColumn = null;
-			}
-
 			if (columnStates.isEmpty()) {
 				tableViewer.setInput(Collections.emptyList());
 				updateSorterAndFilter();
@@ -176,54 +177,13 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			tableViewer.setInput(rows);
 			tableViewer.refresh();
 
-			viewerColumns.forEach(TableViewerColumn::getColumn);
-
-			applyColumnWidths();
-
 			attachHeaderMenuListener();
-
-			addFillerColumn();
 
 		} finally {
 			table.setRedraw(true);
 		}
-	}
-
-	private void addFillerColumn() {
-		// Dispose previous filler if present
-		if (fillerColumn != null && !fillerColumn.getColumn().isDisposed()) {
-			fillerColumn.getColumn().dispose();
-		}
-
-		fillerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		fillerColumn.getColumn().setResizable(false);
-		fillerColumn.getColumn().setMoveable(false);
-		fillerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return EMPTY;
-			}
-		});
-
-		// Give it weight=1 via ColumnWeightData so it absorbs all remaining
-		// space — real columns use ColumnPixelData so they are unaffected
-		final TableColumnLayout layout = (TableColumnLayout) tableComposite.getLayout();
-		layout.setColumnData(fillerColumn.getColumn(), new ColumnWeightData(1, 0, false)); // weight=1, minWidth=0,
-																							// resizable=false
-
 		tableComposite.layout(true, true);
-	}
-
-	private void applyColumnWidths() {
-		final TableColumnLayout layout = (TableColumnLayout) tableComposite.getLayout();
-
-		for (int i = 0; i < viewerColumns.size(); i++) {
-			final int width = (i == 0) ? KEY_COLUMN_WIDTH_DEFAULT : DATA_COLUMN_WIDTH_DEFAULT;
-
-			layout.setColumnData(viewerColumns.get(i).getColumn(), new ColumnPixelData(width, true, false));
-		}
-
-		tableComposite.layout(true, true);
+		table.redraw();
 	}
 
 	// ── Column Factory ───────────────────────────────────────────────────
@@ -238,6 +198,8 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 				return e instanceof final RowEntry r ? r.rowKey() : EMPTY;
 			}
 		});
+		// fixed (but user-resizable) width; the data columns share what is left
+		getTableLayout().setColumnData(col.getColumn(), new ColumnPixelData(KEY_COLUMN_WIDTH_DEFAULT, true, false));
 		viewerColumns.add(col);
 	}
 
@@ -245,7 +207,14 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		final TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.NONE);
 		styleColumnHeader(col, columnState);
 		col.setLabelProvider(buildLabelProvider(columnState));
+		// shrink/grow with the view, but never below the minimum width
+		getTableLayout().setColumnData(col.getColumn(),
+				new ColumnWeightData(DATA_COLUMN_WEIGHT, DATA_COLUMN_MIN_WIDTH, true));
 		viewerColumns.add(col);
+	}
+
+	private TableColumnLayout getTableLayout() {
+		return (TableColumnLayout) tableComposite.getLayout();
 	}
 
 	/**
