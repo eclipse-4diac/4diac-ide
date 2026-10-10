@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchValueAnnotation;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
@@ -30,6 +31,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class SelectionService implements ISelectionListener {
+
+	private static String SYSTEM_EDITOR_PAGE_ID = "org.eclipse.fordiac.ide.editors.SystemEditor"; //$NON-NLS-1$
 
 	private SelectionService() {
 		// singleton
@@ -55,11 +58,9 @@ public class SelectionService implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (part instanceof ReplayDebuggingView) {
-			return; // ignore own view
-		}
-		if (!(selection instanceof final IStructuredSelection sel)) {
-			return;
+		if (!part.getSite().getId().equals(SYSTEM_EDITOR_PAGE_ID)
+				|| !(selection instanceof final IStructuredSelection sel)) {
+			return; // accept only selections in the system editor
 		}
 
 		final var it = sel.iterator();
@@ -83,10 +84,17 @@ public class SelectionService implements ISelectionListener {
 					}
 					lastSelectedDatapoints.add(interfaceElement.getQualifiedName());
 				}
+				if (fb.getType() instanceof BasicFBType) {
+					// add also the ECC current state
+					lastSelectedDatapoints.add(fb.getQualifiedName() + ".!ECC");
+				}
 			}
 			case final org.eclipse.fordiac.ide.model.libraryElement.Connection conn -> {
 				lastSelectedDatapoints.add(conn.getSource().getQualifiedName());
 				lastSelectedDatapoints.add(conn.getDestination().getQualifiedName());
+				// add also the connection data
+				lastSelectedDatapoints
+						.add(conn.getSource().getQualifiedName() + "!" + conn.getDestination().getQualifiedName());
 			}
 			case final WatchValueAnnotation watch -> lastSelectedDatapoints.add(watch.getElement().getQualifiedName());
 			default -> {
