@@ -217,7 +217,8 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 			eventMarker.setComparisonColor(null);
 		}
 		for (final var column : columns) {
-			if (column.getEventPosition().timeline() == timeline) {
+			if (column.getEventPosition().timeline() == timeline
+					&& column.getEventPosition().eventNumber() < eventMarkers.size()) {
 				eventMarkers.get(column.getEventPosition().eventNumber()).setComparisonColor(column.getColor());
 			}
 		}

@@ -101,23 +101,33 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 		installEditPolicy(CommonConstants.COMPARISON_POLICY, new AbstractEditPolicy() {
 			@Override
 			public Command getCommand(final Request request) {
-				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())) {
+				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())
+						|| CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())
+						|| CommonConstants.TOGGLE_COMPARISON_REQUEST.equals(request.getType())) {
+
 					var eventPosition = (EventPosition) request.getExtendedData()
 							.get(CommonConstants.SELECTED_EVENT_POSITION);
 					if (eventPosition == null) {
 						eventPosition = getModel().getReplayNavigator().getCurrentEventPosition();
 					}
 
-					return new AddToComparisonCommand(getModel().getReplayNavigator(), eventPosition,
-							CommentsHandler.getInstance().getComment(eventPosition));
-				}
-				if (CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())) {
-					var eventPosition = (EventPosition) request.getExtendedData()
-							.get(CommonConstants.SELECTED_EVENT_POSITION);
-					if (eventPosition == null) {
-						eventPosition = getModel().getReplayNavigator().getCurrentEventPosition();
+					boolean isToggleRequestAdding = false;
+					boolean isToggleRequestRemoving = false;
+					if (CommonConstants.TOGGLE_COMPARISON_REQUEST.equals(request.getType())) {
+						isToggleRequestRemoving = ((Boolean) request.getExtendedData()
+								.get(CommonConstants.EVENT_ALREADY_COMPARED)).booleanValue();
+						isToggleRequestAdding = !isToggleRequestRemoving;
 					}
-					return new RemoveFromComparisonCommand(eventPosition);
+
+					if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType()) || isToggleRequestAdding) {
+						return new AddToComparisonCommand(getModel().getReplayNavigator(), eventPosition,
+								CommentsHandler.getInstance().getComment(eventPosition));
+					}
+					if (CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())
+							|| isToggleRequestRemoving) {
+						return new RemoveFromComparisonCommand(eventPosition);
+
+					}
 				}
 				return null;
 			}
