@@ -58,6 +58,8 @@
              name="%command.addToComparison.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
              name="%command.removeFromComparison.name"/>
+  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.toggleComparison"
+             name="%command.toggleComparison.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
              name="%command.addEventComment.name"/>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
@@ -170,6 +172,15 @@
 
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
              class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveFromComparisonHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
+   <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.toggleComparison"
+     		class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.ToggleComparisonHandler">
       <activeWhen>
         <with variable="activePartId">
           <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
@@ -437,8 +448,8 @@
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="C"/>
 
-	<!-- Add to comparison table - Enter -->
-    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
+	<!-- toggle comparison - Enter -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.toggleComparison"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="CR"/>

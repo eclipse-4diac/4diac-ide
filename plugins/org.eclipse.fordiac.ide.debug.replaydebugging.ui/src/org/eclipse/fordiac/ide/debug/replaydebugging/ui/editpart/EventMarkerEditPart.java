@@ -100,9 +100,12 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 			@Override
 			public Command getCommand(final Request request) {
 				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())
-						|| CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())) {
+						|| CommonConstants.REMOVE_FROM_COMPARISON_REQUEST.equals(request.getType())
+						|| CommonConstants.TOGGLE_COMPARISON_REQUEST.equals(request.getType())) {
 					request.getExtendedData().put(CommonConstants.SELECTED_EVENT_POSITION,
 							new EventPosition(getModel().getParentTimeline().getTimeline(), getModel().getIndex()));
+					request.getExtendedData().put(CommonConstants.EVENT_ALREADY_COMPARED,
+							Boolean.valueOf(getModel().getComparisonColor() != null));
 				}
 				return null;
 			}
@@ -114,7 +117,9 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 	public void performRequest(final Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			// Create the select event request
-			final var request = new Request(CommonConstants.ADD_TO_COMPARISON_REQUEST);
+			final var request = new Request(
+					getModel().getComparisonColor() == null ? CommonConstants.ADD_TO_COMPARISON_REQUEST
+							: CommonConstants.REMOVE_FROM_COMPARISON_REQUEST);
 
 			EditPart current = this;
 			while (current != null) {
