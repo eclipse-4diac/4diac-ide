@@ -14,15 +14,20 @@
 
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.SelectionService;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonSorter.SortMode;
 import org.eclipse.fordiac.ide.model.helpers.ColorHelper;
 import org.eclipse.jface.action.Action;
@@ -36,6 +41,8 @@ import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
@@ -51,7 +58,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public class StatesComparisonView extends ViewPart implements ComparisonService.Listener {
+public class StatesComparisonView extends ViewPart implements ComparisonService.Listener, PropertyChangeListener {
 
 	public static final String VIEW_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.StatesComparisonView"; //$NON-NLS-1$
 
@@ -82,9 +89,19 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	private final List<TableViewerColumn> viewerColumns = new ArrayList<>();
 	private Listener headerMenuListener;
 
+	private Set<String> highlightedDatapoints = new HashSet<>();
+
 	private final ComparisonSorter sorter = new ComparisonSorter();
 	private final UniquenessFilter uniquenessFilter = new UniquenessFilter();
 	private boolean hideNonUnique = false;
+	private boolean showOnlyHighlighted = false;
+
+	private final ViewerFilter highlightFilter = new ViewerFilter() {
+		@Override
+		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+			return isHighlighted(element);
+		}
+	};
 
 	// Toolbar action references — kept to update checked/icon state
 	private Action alphaAscAction;
@@ -112,11 +129,14 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		contributeToActionBars();
 
 		ComparisonService.getInstance().addListener(this);
+		SelectionService.getDefault().addPropertyChangeListener(this);
+		highlightedDatapoints = new HashSet<>(SelectionService.getDefault().getSelectedElements());
 	}
 
 	@Override
 	public void dispose() {
 		ComparisonService.getInstance().removeListener(this);
+		SelectionService.getDefault().removePropertyChangeListener(this);
 		super.dispose();
 	}
 
@@ -145,6 +165,16 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		});
 
 		rebuildTable();
+	}
+
+	@Override
+	public void propertyChange(final PropertyChangeEvent evt) {
+		if (SelectionService.PROPERTY_SELECTION.equals(evt.getPropertyName())) {
+			highlightedDatapoints = new HashSet<>(SelectionService.getDefault().getSelectedElements());
+			if (tableViewer != null && !tableViewer.getTable().isDisposed()) {
+				tableViewer.refresh();
+			}
+		}
 	}
 
 	// ── Table Rebuild ────────────────────────────────────────────────────
@@ -197,6 +227,11 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			public String getText(final Object e) {
 				return e instanceof final RowEntry r ? r.rowKey() : EMPTY;
 			}
+
+			@Override
+			public Color getForeground(final Object e) {
+				return isHighlighted(e) ? getHighlightColor() : null;
+			}
 		});
 		// fixed (but user-resizable) width; the data columns share what is left
 		getTableLayout().setColumnData(col.getColumn(), new ColumnPixelData(KEY_COLUMN_WIDTH_DEFAULT, true, false));
@@ -215,6 +250,14 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 
 	private TableColumnLayout getTableLayout() {
 		return (TableColumnLayout) tableComposite.getLayout();
+	}
+
+	private boolean isHighlighted(final Object element) {
+		return element instanceof final RowEntry r && highlightedDatapoints.contains(r.rowKey());
+	}
+
+	private static Color getHighlightColor() {
+		return ColorConstants.red;
 	}
 
 	/**
@@ -420,6 +463,17 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			}
 		};
 		toolbar.add(hideNonUniqueAction);
+
+		final var showOnlyHighlightedAction = new Action(Messages.StatesComparisonView_ShowOnlyHighlightedLabel,
+				IAction.AS_CHECK_BOX) {
+			@Override
+			public void run() {
+				showOnlyHighlighted = isChecked();
+				updateSorterAndFilter();
+				tableViewer.refresh();
+			}
+		};
+		toolbar.add(showOnlyHighlightedAction);
 	}
 
 	/**
@@ -451,11 +505,15 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		sorter.setActiveColumns(enabled);
 		uniquenessFilter.setActiveColumns(enabled);
 
+		final List<ViewerFilter> filters = new ArrayList<>();
 		if (hideNonUnique) {
-			tableViewer.setFilters(uniquenessFilter);
-		} else {
-			tableViewer.setFilters(); // remove all filters
+			filters.add(uniquenessFilter);
 		}
+		if (showOnlyHighlighted) {
+			filters.add(highlightFilter);
+		}
+		tableViewer.setFilters(filters.toArray(ViewerFilter[]::new)); // empty array = no filters
+
 	}
 
 	// ── Uniqueness Helper ────────────────────────────────────────────────
