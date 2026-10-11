@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.command;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
@@ -20,6 +21,7 @@ import org.eclipse.gef.commands.Command;
 
 public class RemoveEventCommentCommand extends Command {
 	private final EventPosition eventPosition;
+	private ReplayNavigator replayNavigator; // for undo
 	private String previousComment = null; // for undo
 
 	public RemoveEventCommentCommand(final EventPosition eventPosition) {
@@ -30,12 +32,14 @@ public class RemoveEventCommentCommand extends Command {
 	@Override
 	public void execute() {
 		previousComment = CommentsHandler.getInstance().getComment(eventPosition);
+		replayNavigator = CommentsHandler.getInstance().getReplayNavigator(eventPosition);
 		CommentsHandler.getInstance().removeComment(eventPosition);
 	}
 
 	@Override
 	public void undo() {
-		CommentsHandler.getInstance().setComment(eventPosition, previousComment); // restore prior comment
+		CommentsHandler.getInstance().setComment(eventPosition, previousComment, replayNavigator); // restore prior
+																									// comment
 	}
 
 	@Override

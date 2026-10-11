@@ -34,4 +34,14 @@ public class CommonConstants {
 	public static final String ADD_EDIT_EVENT_COMMENT_DATA = "AddEditEventCommentData"; //$NON-NLS-1$
 	public static final String REMOVE_EVENT_COMMENT_REQUEST = "RemoveEventComment"; //$NON-NLS-1$
 
+	/** The id of the command that goes to the comment's timeline/event. */
+	public static final String GO_TO_EVENT_COMMAND_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.commands.goToEvent"; //$NON-NLS-1$
+
+	public static final String REMOVE_EVENT_COMMENT_COMMAND_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"; //$NON-NLS-1$
+	public static final String REMOVE_TIMELINE_COMMENT_COMMAND_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"; //$NON-NLS-1$
+
+	public static final String EDIT_EVENT_COMMENT_COMMAND_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"; //$NON-NLS-1$
+	public static final String EDIT_TIMELINE_COMMENT_COMMAND_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"; //$NON-NLS-1$
+	public static final String COMMENT_TEXT_PARAMETER_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.commentText"; //$NON-NLS-1$
+
 }
