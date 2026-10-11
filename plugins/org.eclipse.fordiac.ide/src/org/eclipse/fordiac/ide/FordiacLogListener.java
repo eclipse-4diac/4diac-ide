@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -31,7 +32,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.issuereport.GitIssueCreator;
 import org.eclipse.fordiac.ide.issuereport.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -165,9 +165,8 @@ public class FordiacLogListener implements ILogListener {
 			final String pluginID = e.getAttribute("id"); //$NON-NLS-1$
 			final String pluginPreferenceQualifier = e.getAttribute("preference_qualifier"); //$NON-NLS-1$
 			if (pluginID.isBlank() || pluginPreferenceQualifier.isBlank()) {
-				FordiacLogHelper
-						.logInfo("Invalid error dialog filter extension, missing id or preference_qualifier attribute: " //$NON-NLS-1$
-								+ e.getContributor().getName());
+				ILog.get().info("Invalid error dialog filter extension, missing id or preference_qualifier attribute: " //$NON-NLS-1$
+						+ e.getContributor().getName());
 				continue;
 			}
 			filters.put(pluginID, pluginPreferenceQualifier);
