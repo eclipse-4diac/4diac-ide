@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.command;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
@@ -20,6 +21,7 @@ import org.eclipse.gef.commands.Command;
 
 public class RemoveTimelineCommentCommand extends Command {
 	private final Timeline timeline;
+	private ReplayNavigator replayNavigator; // for undo
 	private String previousComment = null; // for undo
 
 	public RemoveTimelineCommentCommand(final Timeline eventPosition) {
@@ -30,12 +32,13 @@ public class RemoveTimelineCommentCommand extends Command {
 	@Override
 	public void execute() {
 		previousComment = CommentsHandler.getInstance().getComment(timeline);
+		replayNavigator = CommentsHandler.getInstance().getReplayNavigator(timeline);
 		CommentsHandler.getInstance().removeComment(timeline);
 	}
 
 	@Override
 	public void undo() {
-		CommentsHandler.getInstance().setComment(timeline, previousComment); // restore prior comment
+		CommentsHandler.getInstance().setComment(timeline, previousComment, replayNavigator); // restore prior comment
 	}
 
 	@Override

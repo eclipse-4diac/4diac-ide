@@ -17,7 +17,9 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.IReplayNavigatorRegistrationListener;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPartFactory;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
@@ -58,7 +60,9 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 	private GraphicalViewer viewer;
 	private final Session session = new Session();
 
-	private static String menuId = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"; //$NON-NLS-1$
+	public static String ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"; //$NON-NLS-1$
+
+	private static String menuId = ID;
 
 	// this is a workaround to show the the changed datapoints in a different color
 	// than the default error color
@@ -72,6 +76,30 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 				page.showView(StatesComparisonView.VIEW_ID, null, IWorkbenchPage.VIEW_VISIBLE);
 			} catch (final PartInitException e) {
 				ILog.get().error("Failed to open States Comparison View", e); //$NON-NLS-1$
+			}
+		}
+	};
+
+	private final CommentsHandler.Listener commentsHandlerListener = new CommentsHandler.Listener() {
+
+		@Override
+		public void eventCommentChanged(final EventPosition position, final String comment, final Event event) {
+			openCommentsView(event);
+		}
+
+		@Override
+		public void timelineCommentChanged(final Timeline timeline, final String comment, final Event event) {
+			openCommentsView(event);
+		}
+
+		private void openCommentsView(final Event event) {
+			if (event == CommentsHandler.Listener.Event.ADDED_EDITED) {
+				final var page = getSite().getPage();
+				try {
+					page.showView(CommentsView.ID, null, IWorkbenchPage.VIEW_VISIBLE);
+				} catch (final PartInitException e) {
+					ILog.get().error("Failed to open Comments View", e); //$NON-NLS-1$
+				}
 			}
 		}
 	};
@@ -123,6 +151,7 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 		registry.put(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR, replayColor);
 
 		ComparisonService.getInstance().addListener(stateComparisonListener);
+		CommentsHandler.getInstance().addListener(commentsHandlerListener);
 
 		ReplayNavigatorManager.getDefault().addListener(this);
 		SelectionService.getDefault().install(getSite().getPage());
@@ -134,6 +163,7 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 						originalErrorColor);
 			}
 			ComparisonService.getInstance().removeListener(stateComparisonListener);
+			CommentsHandler.getInstance().removeListener(commentsHandlerListener);
 		});
 		viewer.setContents(session);
 
