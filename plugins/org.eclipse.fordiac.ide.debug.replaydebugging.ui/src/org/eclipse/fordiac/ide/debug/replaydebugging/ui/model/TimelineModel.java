@@ -38,6 +38,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	private final Timeline timeline;
 	private TimelineConnection connectionToParentTimelineModel;
+	private final Resource resource;
 
 	private final List<TimelineConnection> spawnedConnections = new ArrayList<>();
 	private final List<EventMarker> eventMarkers = new ArrayList<>();
@@ -54,8 +55,9 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public TimelineModel(final Timeline timeline) {
+	public TimelineModel(final Timeline timeline, final Resource resource) {
 		this.timeline = timeline;
+		this.resource = resource;
 
 		for (var i = 0; i <= timeline.getMaxEventNumber(); i++) {
 			eventMarkers.add(new EventMarker(i, this));
@@ -78,6 +80,23 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 		ComparisonService.getInstance().removeListener(this);
 		CommentsHandler.getInstance().removeListener(this);
 		SelectionService.getDefault().removePropertyChangeListener(this);
+
+		// remove timeline comment and all comments from events belonging to this
+		// timeline
+		CommentsHandler.getInstance().removeComment(timeline);
+		for (final var event : eventMarkers) {
+			if (event.getComment() != null) {
+				CommentsHandler.getInstance().removeComment(new EventPosition(timeline, event.getIndex()));
+			}
+		}
+
+		// remove events being compared
+		for (final var column : ComparisonService.getInstance().getColumns()) {
+			final var eventPosition = column.getEventPosition();
+			if (eventPosition.timeline() == timeline) {
+				ComparisonService.getInstance().removeColumn(column.getColumnId());
+			}
+		}
 	}
 
 	public List<EventMarker> getEventMarkers() {
@@ -100,6 +119,10 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 		return comment;
 	}
 
+	public Resource getResource() {
+		return resource;
+	}
+
 	public List<TimelineModel> getSpawnedTimelineModels() {
 		final List<TimelineModel> timelines = spawnedConnections.stream().map(TimelineConnection::child)
 				.collect(Collectors.toList());
@@ -116,7 +139,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	}
 
 	private void addNewSpawnedTimeline(final Timeline spawnedTimeline) {
-		final var spawnedModel = new TimelineModel(spawnedTimeline);
+		final var spawnedModel = new TimelineModel(spawnedTimeline, resource);
 		final var connectionToChild = new TimelineConnection(this, spawnedModel,
 				timeline.getSpawnedTimelineEventNumber(spawnedTimeline));
 		spawnedModel.connectionToParentTimelineModel = connectionToChild;
@@ -225,7 +248,8 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	}
 
 	@Override
-	public void eventCommentChanged(final EventPosition position, final String comment) {
+	public void eventCommentChanged(final EventPosition position, final String comment,
+			final CommentsHandler.Listener.Event event) {
 		if (position.timeline() != timeline) {
 			return;
 		}
@@ -241,7 +265,8 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	}
 
 	@Override
-	public void timelineCommentChanged(final Timeline timeline, final String comment) {
+	public void timelineCommentChanged(final Timeline timeline, final String comment,
+			final CommentsHandler.Listener.Event event) {
 		if (timeline != this.timeline) {
 			return;
 		}

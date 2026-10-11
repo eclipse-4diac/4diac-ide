@@ -16,13 +16,15 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.AddEditEventCommentCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.TimelineViewCommandStack;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -34,28 +36,42 @@ public class AddEventCommentHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final EventPosition eventPosition;
+		final ReplayNavigator replayNavigator;
 
-		final EditPart editPart = HandlerHelper.getSelectedEditPart(event);
-		if (!(editPart instanceof final EventMarkerEditPart eventMarkerEditPart)) {
+		final CommentsView.CommentRow row = CommentsView.CommentRow.of(HandlerUtil.getCurrentSelection(event));
+		if (row != null) {
+			if (row.isTimelineComment()) {
+				return null;
+			}
+			eventPosition = row.position();
+			replayNavigator = row.navigator();
+		} else if (HandlerHelper.getSelectedEditPart(event) instanceof final EventMarkerEditPart eventMarkerEditPart) {
+			eventPosition = new EventPosition(eventMarkerEditPart.getModel().getParentTimeline().getTimeline(),
+					eventMarkerEditPart.getModel().getIndex());
+			replayNavigator = eventMarkerEditPart.getModel().getParentTimeline().getResource().getReplayNavigator();
+		} else {
 			return null;
 		}
 
-		// Open the dialog
-		final Shell shell = HandlerUtil.getActiveShellChecked(event);
-		final var eventPosition = new EventPosition(eventMarkerEditPart.getModel().getParentTimeline().getTimeline(),
-				eventMarkerEditPart.getModel().getIndex());
-		final String currentText = CommentsHandler.getInstance().getComment(eventPosition);
-		final InputDialog dialog = new InputDialog(shell, Messages.AddEventCommentHandler_DialogTitle,
-				Messages.AddEventCommentHandler_HintForTheUser, currentText, null);
-
-		if (dialog.open() != Window.OK) {
-			return null;
+		// The comments view supplies the new text (edited in its table), otherwise ask
+		// the user.
+		String text = event.getParameter(CommonConstants.COMMENT_TEXT_PARAMETER_ID);
+		if (text == null) {
+			final Shell shell = HandlerUtil.getActiveShellChecked(event);
+			final String currentText = CommentsHandler.getInstance().getComment(eventPosition);
+			final InputDialog dialog = new InputDialog(shell, Messages.AddEventCommentHandler_DialogTitle,
+					Messages.AddEventCommentHandler_HintForTheUser, currentText, null);
+			if (dialog.open() != Window.OK) {
+				return null;
+			}
+			text = dialog.getValue();
 		}
 
-		final String text = dialog.getValue().trim();
-
-		final var viewer = HandlerUtil.getActivePartChecked(event).getAdapter(GraphicalViewer.class);
-		viewer.getEditDomain().getCommandStack().execute(new AddEditEventCommentCommand(eventPosition, text));
+		final var stack = TimelineViewCommandStack.find(HandlerUtil.getActiveWorkbenchWindowChecked(event), true);
+		if (stack != null) {
+			stack.execute(new AddEditEventCommentCommand(eventPosition, text.trim(), replayNavigator));
+		}
 		return null;
 	}
 
@@ -63,7 +79,10 @@ public class AddEventCommentHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
-			setBaseEnabled(!s.isEmpty() && s.getFirstElement() instanceof EventMarkerEditPart);
+			final Object first = s.getFirstElement();
+			setBaseEnabled(
+					!s.isEmpty() && (first instanceof final CommentsView.CommentRow row ? !row.isTimelineComment()
+							: first instanceof EventMarkerEditPart));
 		}
 	}
 }

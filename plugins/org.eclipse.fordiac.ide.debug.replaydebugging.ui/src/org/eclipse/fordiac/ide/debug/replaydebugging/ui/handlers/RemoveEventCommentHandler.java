@@ -17,27 +17,48 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.RemoveEventCommentCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.TimelineViewCommandStack;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+/**
+ * Removes the comment of an event. Serves two sources: the timeline view
+ * (selected {@link EventMarkerEditPart}) and the comments view (selected
+ * {@link CommentsView.CommentRow}). In both cases the command is executed on
+ * the command stack of the timeline view, so there is a single undo history.
+ */
 public class RemoveEventCommentHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final EditPart editPart = HandlerHelper.getSelectedEditPart(event);
-		if (!(editPart instanceof final EventMarkerEditPart eventMarkerEditPart)) {
+		final EventPosition eventPosition = getEventPosition(event);
+		if (eventPosition == null) {
 			return null;
 		}
+		final var stack = TimelineViewCommandStack.find(HandlerUtil.getActiveWorkbenchWindowChecked(event), true);
+		if (stack != null) {
+			stack.execute(new RemoveEventCommentCommand(eventPosition));
+		}
+		return null;
+	}
 
-		final var eventPosition = new EventPosition(eventMarkerEditPart.getModel().getParentTimeline().getTimeline(),
-				eventMarkerEditPart.getModel().getIndex());
-		final var viewer = HandlerUtil.getActivePartChecked(event).getAdapter(GraphicalViewer.class);
-		viewer.getEditDomain().getCommandStack().execute(new RemoveEventCommentCommand(eventPosition));
+	/**
+	 * The event whose comment is removed: the selected row (comments view) or event
+	 * marker (timeline view).
+	 */
+	private static EventPosition getEventPosition(final ExecutionEvent event) {
+		final CommentsView.CommentRow row = CommentsView.CommentRow.of(HandlerUtil.getCurrentSelection(event));
+		if (row != null) {
+			return row.isTimelineComment() ? null : row.position();
+		}
+		if (HandlerHelper.getSelectedEditPart(event) instanceof final EventMarkerEditPart eventMarkerEditPart) {
+			return new EventPosition(eventMarkerEditPart.getModel().getParentTimeline().getTimeline(),
+					eventMarkerEditPart.getModel().getIndex());
+		}
 		return null;
 	}
 
@@ -45,8 +66,11 @@ public class RemoveEventCommentHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
-			setBaseEnabled(!s.isEmpty() && s.getFirstElement() instanceof final EventMarkerEditPart ep
-					&& ep.getModel() != null && ep.getModel().getComment() != null);
+			final Object first = s.getFirstElement();
+			setBaseEnabled(
+					!s.isEmpty() && (first instanceof final CommentsView.CommentRow row ? !row.isTimelineComment()
+							: first instanceof final EventMarkerEditPart ep && ep.getModel() != null
+									&& ep.getModel().getComment() != null));
 		}
 	}
 }

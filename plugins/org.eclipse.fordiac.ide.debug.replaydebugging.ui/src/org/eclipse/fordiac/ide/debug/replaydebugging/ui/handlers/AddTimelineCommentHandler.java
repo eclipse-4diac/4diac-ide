@@ -16,14 +16,17 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.AddEditTimelineCommentCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.TimelineViewCommandStack;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -37,31 +40,50 @@ public class AddTimelineCommentHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		Timeline timeline = null;
-		final EditPart editPart = HandlerHelper.getSelectedEditPart(event);
+		ReplayNavigator replayNavigator = null;
 
-		switch (editPart) {
-		case final EventMarkerEditPart eventMarkerEditPart ->
-			timeline = eventMarkerEditPart.getModel().getParentTimeline().getTimeline();
-		case final TimelineEditPart timelineEditPart -> timeline = timelineEditPart.getModel().getTimeline();
-		default -> {
-			return null;
+		final CommentsView.CommentRow row = CommentsView.CommentRow.of(HandlerUtil.getCurrentSelection(event));
+		if (row != null) {
+			if (!row.isTimelineComment()) {
+				return null;
+			}
+			timeline = row.timeline();
+			replayNavigator = row.navigator();
+		} else {
+			final EditPart editPart = HandlerHelper.getSelectedEditPart(event);
+			switch (editPart) {
+			case final EventMarkerEditPart eventMarkerEditPart -> {
+				timeline = eventMarkerEditPart.getModel().getParentTimeline().getTimeline();
+				replayNavigator = eventMarkerEditPart.getModel().getParentTimeline().getResource().getReplayNavigator();
+			}
+			case final TimelineEditPart timelineEditPart -> {
+				timeline = timelineEditPart.getModel().getTimeline();
+				replayNavigator = timelineEditPart.getModel().getResource().getReplayNavigator();
+			}
+			default -> {
+				return null;
+			}
+			}
 		}
+
+		// The comments view supplies the new text (edited in its table), otherwise ask
+		// the user.
+		String text = event.getParameter(CommonConstants.COMMENT_TEXT_PARAMETER_ID);
+		if (text == null) {
+			final Shell shell = HandlerUtil.getActiveShellChecked(event);
+			final String currentText = CommentsHandler.getInstance().getComment(timeline);
+			final InputDialog dialog = new InputDialog(shell, Messages.AddTimelineCommentHandler_DialogTitle,
+					Messages.AddTimelineCommentHandler_HintForTheUser, currentText, null);
+			if (dialog.open() != Window.OK) {
+				return null;
+			}
+			text = dialog.getValue();
 		}
 
-		// Open the dialog
-		final Shell shell = HandlerUtil.getActiveShellChecked(event);
-		final String currentText = CommentsHandler.getInstance().getComment(timeline);
-		final InputDialog dialog = new InputDialog(shell, Messages.AddTimelineCommentHandler_DialogTitle,
-				Messages.AddTimelineCommentHandler_HintForTheUser, currentText, null);
-
-		if (dialog.open() != Window.OK) {
-			return null;
+		final var stack = TimelineViewCommandStack.find(HandlerUtil.getActiveWorkbenchWindowChecked(event), true);
+		if (stack != null) {
+			stack.execute(new AddEditTimelineCommentCommand(timeline, text.trim(), replayNavigator));
 		}
-
-		final String text = dialog.getValue().trim();
-
-		final var viewer = HandlerUtil.getActivePartChecked(event).getAdapter(GraphicalViewer.class);
-		viewer.getEditDomain().getCommandStack().execute(new AddEditTimelineCommentCommand(timeline, text));
 		return null;
 	}
 
@@ -69,8 +91,9 @@ public class AddTimelineCommentHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
-			setBaseEnabled(!s.isEmpty() && (s.getFirstElement() instanceof EventMarkerEditPart
-					|| s.getFirstElement() instanceof TimelineEditPart));
+			final Object first = s.getFirstElement();
+			setBaseEnabled(!s.isEmpty() && (first instanceof final CommentsView.CommentRow row ? row.isTimelineComment()
+					: first instanceof EventMarkerEditPart || first instanceof TimelineEditPart));
 		}
 	}
 }

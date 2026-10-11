@@ -32,7 +32,7 @@ public class Resource implements ReplayNavigator.StateListener {
 
 	public Resource(final ReplayNavigator replayNavigator) {
 		this.replayNavigator = replayNavigator;
-		this.rootTimelineModel = new TimelineModel(replayNavigator.getRootTimeline());
+		this.rootTimelineModel = new TimelineModel(replayNavigator.getRootTimeline(), this);
 		replayNavigator.addStateChangeListener(this);
 		updateCurrentPosition();
 	}
