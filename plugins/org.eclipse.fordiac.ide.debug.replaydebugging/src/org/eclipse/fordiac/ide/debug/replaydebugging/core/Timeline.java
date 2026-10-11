@@ -180,7 +180,7 @@ public class Timeline {
 		var maxEventNumber = eventChanges.size();
 		for (final var entry : spawnedTimelines.entrySet()) {
 			final var longestSpawnedTimelineMaxEventNumber = entry.getKey().getTotalMaxEventNumber()
-					+ entry.getValue().intValue();
+					+ entry.getValue().intValue() + 1;
 			if (longestSpawnedTimelineMaxEventNumber > maxEventNumber) {
 				maxEventNumber = longestSpawnedTimelineMaxEventNumber;
 			}

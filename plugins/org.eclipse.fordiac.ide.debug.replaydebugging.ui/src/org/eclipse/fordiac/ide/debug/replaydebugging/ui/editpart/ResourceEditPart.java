@@ -26,6 +26,8 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveRightCommand
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveUpCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.RemoveFromComparisonCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.SelectEventCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.EventIndexRulerFigure;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.IEventAxis;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.NameStackedFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
 import org.eclipse.gef.EditPart;
@@ -47,9 +49,37 @@ import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
  */
 public class ResourceEditPart extends AbstractGraphicalEditPart {
 
+	private EventIndexRulerFigure ruler;
+
 	@Override
 	protected IFigure createFigure() {
-		return new NameStackedFigure(getReplayNavigatorName());
+		final var figure = new NameStackedFigure(getReplayNavigatorName());
+		ruler = new EventIndexRulerFigure();
+		figure.setHeader(ruler);
+		return figure;
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		super.addChildVisual(childEditPart, index);
+		final IEventAxis axis = childEditPart.getAdapter(IEventAxis.class);
+		if (axis != null) {
+			ruler.setAxis(axis);
+		}
+	}
+
+	@Override
+	protected void removeChildVisual(final EditPart childEditPart) {
+		if (childEditPart.getAdapter(IEventAxis.class) != null) {
+			ruler.setAxis(null);
+		}
+		super.removeChildVisual(childEditPart);
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		ruler.repaint();
 	}
 
 	private String getReplayNavigatorName() {
