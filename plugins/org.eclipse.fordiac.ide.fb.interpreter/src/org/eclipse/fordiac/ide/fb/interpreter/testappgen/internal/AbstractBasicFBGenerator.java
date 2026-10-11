@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.GeneratedNameConstants;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestEccGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.testappgen.TestGenBlockNames;
@@ -35,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 
@@ -153,7 +153,7 @@ public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 		try {
 			cmd.execute();
 		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage());
+			ILog.get().error(e.getMessage());
 		}
 
 		final AdapterDeclaration timeOutPlug = (AdapterDeclaration) cmd.getCreatedElement();

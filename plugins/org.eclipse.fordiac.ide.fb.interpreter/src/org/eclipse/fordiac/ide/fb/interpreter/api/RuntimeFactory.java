@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.api;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
@@ -42,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class RuntimeFactory {
 
@@ -290,7 +290,7 @@ public final class RuntimeFactory {
 	public static void setStartState(final FBRuntimeAbstract fbRT, final String startStateName) {
 		if (fbRT instanceof final BasicFBTypeRuntime basicFBTypeRT) {
 			if ((basicFBTypeRT.getBasicfbtype() == null) || (basicFBTypeRT.getBasicfbtype().getECC() == null)) {
-				FordiacLogHelper.logWarning("RuntimeFactory could not set start state of FBType"); //$NON-NLS-1$
+				ILog.get().warn("RuntimeFactory could not set start state of FBType"); //$NON-NLS-1$
 				return;
 			}
 			if (startStateName != null) {
