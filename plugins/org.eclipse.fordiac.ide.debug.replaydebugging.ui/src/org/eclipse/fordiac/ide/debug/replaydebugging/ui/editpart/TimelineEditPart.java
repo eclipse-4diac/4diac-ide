@@ -29,6 +29,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteTimelineCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.CommonFigureConstants;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.IEventAxis;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineAnchor;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineWithChildrenFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineConnection;
@@ -271,6 +272,35 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == IEventAxis.class) {
+			return key.cast(new IEventAxis() {
+
+				@Override
+				public final IFigure getFigure() {
+					return TimelineEditPart.this.getFigure();
+				}
+
+				@Override
+				public int getEventCount() {
+					return getModel().getTimeline().getTotalMaxEventNumber();
+				}
+
+				@Override
+				public int getFirstEventCenterX() {
+					return getFigure().getBounds().x + CommonFigureConstants.MARKER_SIZE / 2;
+				}
+
+				@Override
+				public double getEventPitch() {
+					return CommonFigureConstants.TOTAL_MARKER_SPACE;
+				}
+			});
+		}
+		return super.getAdapter(key);
 	}
 
 }
