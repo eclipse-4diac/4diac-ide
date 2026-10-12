@@ -54,6 +54,7 @@ public class Messages extends NLS {
 	public static String LibraryExporter_ExportingLibrary;
 	public static String LibraryExporter_ExportingTypes;
 	public static String LibraryExporter_ErrorFile;
+	public static String LibraryExporter_MissingTypeHashAttribute;
 
 	public static String LibraryManager_BuildingDependencyGraph;
 
