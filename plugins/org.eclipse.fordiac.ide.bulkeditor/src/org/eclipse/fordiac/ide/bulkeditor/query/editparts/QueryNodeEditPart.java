@@ -155,14 +155,19 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected List<QueryConnection> getModelSourceConnections() {
-		return getDiagram().getVisibleChildren(getModel()).stream().map(child -> new QueryConnection(getModel(), child))
-				.toList();
+		// placeholders are shown in rows above the query without connections
+		return getDiagram().getVisibleChildren(getModel()).stream()
+				.filter(child -> !QueryModelHelper.isPlaceholder(child))
+				.map(child -> new QueryConnection(getModel(), child)).toList();
 	}
 
 	@Override
 	protected List<QueryConnection> getModelTargetConnections() {
 		final EObject container = getModel().eContainer();
-		return container != null ? List.of(new QueryConnection(container, getModel())) : List.of();
+		if (container == null || QueryModelHelper.isPlaceholder(getModel())) {
+			return List.of();
+		}
+		return List.of(new QueryConnection(container, getModel()));
 	}
 
 	@Override
