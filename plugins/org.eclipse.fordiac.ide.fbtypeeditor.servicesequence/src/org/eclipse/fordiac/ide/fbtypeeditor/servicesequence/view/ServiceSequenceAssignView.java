@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
@@ -47,7 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
@@ -355,7 +355,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 				setParameters(fbType, parameters);
 				runInterpreter(seq, events, fbType, count, parameters);
 			} catch (final Exception e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 			seq.setStartState("START"); //$NON-NLS-1$
 			return seq;
