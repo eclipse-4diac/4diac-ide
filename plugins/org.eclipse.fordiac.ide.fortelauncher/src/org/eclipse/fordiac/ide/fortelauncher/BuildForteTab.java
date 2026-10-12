@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.fortelauncher;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -21,7 +22,6 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
 import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -72,7 +72,7 @@ public class BuildForteTab extends AbstractLaunchConfigurationTab {
 			buildLocationChooser.setValue(configuration.getAttribute(RuntimeLaunchTab.ATTR_WORKING_DIRECTORY, "")); //$NON-NLS-1$
 			argumentsField.setText(configuration.getAttribute(ATTR_BUILD_ARGUMENTS, "")); //$NON-NLS-1$
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 	}
 
