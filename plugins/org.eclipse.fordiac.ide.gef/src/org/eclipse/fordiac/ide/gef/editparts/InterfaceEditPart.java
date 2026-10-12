@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
@@ -74,7 +75,6 @@ import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -253,7 +253,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 						resource.findMarkers(UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID, true, IResource.DEPTH_ZERO))
 						.findAny().isPresent();
 			} catch (final CoreException e) {
-				FordiacLogHelper.logWarning("Cannot fetch marker", e); //$NON-NLS-1$
+				ILog.get().warn("Cannot fetch marker", e); //$NON-NLS-1$
 			}
 			return false;
 		}
@@ -271,7 +271,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 					HandlerHelper.getHandlerService().executeCommand(COMMAND_ID, event);
 				}
 			} catch (final Exception e) {
-				FordiacLogHelper.logError("commands.markConnectionSource not found", e); //$NON-NLS-1$
+				ILog.get().error("commands.markConnectionSource not found", e); //$NON-NLS-1$
 			}
 		}
 
