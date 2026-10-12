@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -114,7 +114,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 		final MessageBox msg = new MessageBox(getShell(), SWT.ERROR);
 		msg.setMessage(Messages.CreateFMUWizard_FMUCreationError + e.getMessage());
 		msg.open();
-		FordiacLogHelper.logError(msg.getMessage(), e);
+		ILog.get().error(msg.getMessage(), e);
 	}
 
 	private List<String> getLibraries() {
