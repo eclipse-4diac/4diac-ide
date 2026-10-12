@@ -20,15 +20,18 @@ import org.eclipse.draw2d.AbstractLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 
 /**
  * Places the query nodes as tree: the children of a place side by side, AND
  * constraints right of their constraint and all other children below their
- * parent.
+ * parent. The placeholders of the query are placed in a grid above the tree,
+ * which fills the width of the drawing area around the tree.
  */
 public class QueryTreeLayout extends AbstractLayout {
 
@@ -36,6 +39,11 @@ public class QueryTreeLayout extends AbstractLayout {
 	private static final double VERTICAL_GAP = 25;
 	private static final double CHILD_INDENT = 60;
 	private static final double PADDING = 25;
+	private static final double PLACEHOLDER_GAP = 25;
+	// the drawing area of the 4diac root edit part (ModuloFreeformFigure) is a
+	// multiple of 400 wide, but at least 1200
+	private static final double DRAWING_AREA_UNIT = 400;
+	private static final double DRAWING_AREA_MIN_UNITS = 3;
 
 	private record Size(double width, double height) {
 	}
@@ -54,8 +62,12 @@ public class QueryTreeLayout extends AbstractLayout {
 		}
 		final EObject root = findRoot();
 		if (root != null) {
-			computeSubtreeSize(root);
-			position(root, PADDING, PADDING);
+			final List<EObject> placeholders = getPlaceholders(root);
+			placeholders.forEach(this::computeSubtreeSize);
+			final double treeRight = PADDING + computeSubtreeSize(root).width();
+			final double gridWidth = getDrawingAreaWidth(container, treeRight) - 2 * PADDING;
+			final double treeY = positionPlaceholders(placeholders, gridWidth, PADDING, PADDING);
+			position(root, PADDING, treeY);
 		}
 	}
 
@@ -147,6 +159,34 @@ public class QueryTreeLayout extends AbstractLayout {
 		}
 	}
 
+	/**
+	 * Places the placeholders in a grid with columns of the same width that fill
+	 * the given width.
+	 *
+	 * @return the y coordinate below the grid
+	 */
+	private double positionPlaceholders(final List<EObject> placeholders, final double width, final double startX,
+			final double startY) {
+		if (placeholders.isEmpty()) {
+			return startY;
+		}
+		final double minColumnWidth = getMaxWidth(placeholders);
+		final int columns = (int) Math.max(1,
+				Math.floor((width + PLACEHOLDER_GAP) / (minColumnWidth + PLACEHOLDER_GAP)));
+		final double columnWidth = Math.max(minColumnWidth, (width - PLACEHOLDER_GAP * (columns - 1)) / columns);
+		double y = startY;
+		for (int rowStart = 0; rowStart < placeholders.size(); rowStart += columns) {
+			final List<EObject> row = placeholders.subList(rowStart, Math.min(rowStart + columns, placeholders.size()));
+			for (int column = 0; column < row.size(); column++) {
+				final IFigure figure = nodeFigures.get(row.get(column));
+				final double x = startX + column * (columnWidth + PLACEHOLDER_GAP);
+				figure.setBounds(new PrecisionRectangle(x, y, columnWidth, figure.getPreferredSize().height()));
+			}
+			y += getMaxHeight(row) + PLACEHOLDER_GAP;
+		}
+		return y;
+	}
+
 	private void positionConstraintChildren(final List<EObject> children, final double x, final double y,
 			final Size nodeSize) {
 		final List<EObject> andConstraints = getAndConstraints(children);
@@ -156,7 +196,27 @@ public class QueryTreeLayout extends AbstractLayout {
 	}
 
 	private List<EObject> getLaidOutChildren(final EObject element) {
-		return QueryModelHelper.getChildNodes(element).stream().filter(nodeFigures::containsKey).toList();
+		// the placeholders are laid out in rows above the tree
+		return QueryModelHelper.getChildNodes(element).stream().filter(nodeFigures::containsKey)
+				.filter(child -> !QueryModelHelper.isPlaceholder(child)).toList();
+	}
+
+	/** @return the width of the drawing area around a tree ending at treeRight */
+	private static double getDrawingAreaWidth(final IFigure container, final double treeRight) {
+		for (IFigure figure = container.getParent(); figure != null; figure = figure.getParent()) {
+			if (figure instanceof final ModuloFreeformFigure drawingArea) {
+				// computed like the extent of the drawing area from the extent of the container
+				final double contentsRight = treeRight + container.getInsets().right - drawingArea.getInsets().right;
+				return Math.max(DRAWING_AREA_MIN_UNITS, Math.ceil(contentsRight / DRAWING_AREA_UNIT))
+						* DRAWING_AREA_UNIT;
+			}
+		}
+		return treeRight + PADDING;
+	}
+
+	private List<EObject> getPlaceholders(final EObject root) {
+		return QueryModelHelper.getChildNodes(root).stream().filter(nodeFigures::containsKey)
+				.filter(QueryModelHelper::isPlaceholder).toList();
 	}
 
 	private Size getNodeSize(final EObject element) {
