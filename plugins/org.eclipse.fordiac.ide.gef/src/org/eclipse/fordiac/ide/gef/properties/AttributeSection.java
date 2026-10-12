@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
@@ -55,7 +56,6 @@ import org.eclipse.fordiac.ide.ui.widget.nattable.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -281,8 +281,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 				}
 				return true;
 			} catch (final Exception e) {
-				FordiacLogHelper.logError(MessageFormat.format(Messages.NatTable_Update_Failed, command.getNewValue()),
-						e);
+				ILog.get().error(MessageFormat.format(Messages.NatTable_Update_Failed, command.getNewValue()), e);
 				return false;
 			}
 		}
