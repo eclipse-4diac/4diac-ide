@@ -10,7 +10,7 @@
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ant.ant;
+package org.eclipse.fordiac.ide.library.export;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
