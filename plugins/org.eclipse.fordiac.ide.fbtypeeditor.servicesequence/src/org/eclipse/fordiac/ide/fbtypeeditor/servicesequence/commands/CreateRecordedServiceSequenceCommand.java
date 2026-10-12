@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -37,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 public class CreateRecordedServiceSequenceCommand extends Command {
@@ -124,7 +124,7 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 						+ CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType));
 			}
 		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("interpreter could not execute: " + e.getMessage()); //$NON-NLS-1$
+			ILog.get().warn("interpreter could not execute: " + e.getMessage()); //$NON-NLS-1$
 		}
 	}
 
