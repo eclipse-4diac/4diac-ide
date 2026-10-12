@@ -42,28 +42,28 @@
 	</extension>
 
    <extension point="org.eclipse.ui.commands">
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"  name="Move Left"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight" name="Move Right"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"  name="Jump Left"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight" name="Jump Right"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"    name="Move Up"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"  name="Move Down"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"  name="%command.moveLeft.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight" name="%command.moveRight.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"  name="%command.jumpLeft.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight" name="%command.jumpRight.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"    name="%command.moveUp.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"  name="%command.moveDown.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
-             name="Delete Event"/>
+             name="%command.deleteEvent.name"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteTimeline"
-             name="Delete Timeline"/>
+             name="%command.deleteTimeline.name"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
-             name="Add To Comparison"/>
+             name="%command.addToComparison.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
-             name="Remove From Comparison"/>
+             name="%command.removeFromComparison.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
-             name="Add/edit event comment"/>
+             name="%command.addEventComment.name"/>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
-             name="Remove event comment"/>
+             name="%command.removeEventComment.name"/>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
-             name="Add/edit timeline comment"/>
+             name="%command.addTimelineComment.name"/>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
-             name="Remove timeline comment"/>
+             name="%command.removeTimelineComment.name"/>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
