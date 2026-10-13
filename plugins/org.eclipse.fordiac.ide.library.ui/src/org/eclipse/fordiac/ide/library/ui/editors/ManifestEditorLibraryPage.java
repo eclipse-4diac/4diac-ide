@@ -21,8 +21,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
 import org.eclipse.fordiac.ide.library.model.library.Library;
+import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.AddElementOperation;
@@ -182,7 +184,9 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 	}
 
 	private void addLibrary() {
-		final Library library = ManifestHelper.createExportLibrary(getManifestEditor().getManifest());
+		final Manifest manifest = getManifestEditor().getManifest();
+		final Library library = ManifestHelper.createExportLibrary(manifest);
+		library.setDependencies(EcoreUtil.copy(manifest.getDependencies()));
 
 		execute(new AddElementOperation<>(Messages.ManifestEditor_AddLibrary, getLibraries(), library,
 				libraryTable.getViewer()::refresh));
