@@ -105,8 +105,12 @@ public final class QueryModelHelper {
 		return isOfType(eObj, ATTRIBUTE_CONSTRAINT);
 	}
 
-	private static boolean isConstraintClass(final EClass eClass) {
+	public static boolean isConstraintClass(final EClass eClass) {
 		return CONSTRAINT.equals(eClass.getName()) || ATTRIBUTE_CONSTRAINT.equals(eClass.getName());
+	}
+
+	public static boolean isSubtypeOf(final EClass eClass, final String superTypeName) {
+		return eClass.getEAllSuperTypes().stream().anyMatch(superType -> superTypeName.equals(superType.getName()));
 	}
 
 	public static boolean isPlace(final EObject eObj) {
@@ -122,16 +126,15 @@ public final class QueryModelHelper {
 	}
 
 	public static boolean isInstance(final EObject eObj) {
-		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> INSTANCE.equals(st.getName()));
+		return eObj != null && isSubtypeOf(eObj.eClass(), INSTANCE);
 	}
 
 	public static boolean isOccurrence(final EObject eObj) {
-		return eObj != null
-				&& eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> OCCURRENCE.equals(st.getName()));
+		return eObj != null && isSubtypeOf(eObj.eClass(), OCCURRENCE);
 	}
 
 	public static boolean isType(final EObject eObj) {
-		return eObj != null && eObj.eClass().getEAllSuperTypes().stream().anyMatch(st -> TYPE.equals(st.getName()));
+		return eObj != null && isSubtypeOf(eObj.eClass(), TYPE);
 	}
 
 	public static boolean isFieldAllowedForConstraint(final EObject constraint, final String fieldRefName) {
