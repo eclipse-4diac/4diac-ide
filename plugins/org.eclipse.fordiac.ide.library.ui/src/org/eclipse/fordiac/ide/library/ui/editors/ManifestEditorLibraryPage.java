@@ -17,6 +17,8 @@ import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
@@ -29,9 +31,11 @@ import org.eclipse.fordiac.ide.library.ui.editors.tabs.AttributeTab;
 import org.eclipse.fordiac.ide.library.ui.editors.tabs.ContentTab;
 import org.eclipse.fordiac.ide.library.ui.editors.tabs.DependenciesTab;
 import org.eclipse.fordiac.ide.library.ui.editors.tabs.TableControl;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -40,11 +44,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IExportWizard;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.wizards.IWizardDescriptor;
 
 public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 
@@ -107,7 +116,7 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 		GridLayoutFactory.fillDefaults().applyTo(actions);
 
 		final Button exportButton = toolkit.createButton(actions, "Export", SWT.PUSH); //$NON-NLS-1$
-		exportButton.addListener(SWT.Selection, _ -> exportLibrary());
+		exportButton.addListener(SWT.Selection, _ -> exportLibrary(exportButton.getShell()));
 		section.setTextClient(actions);
 	}
 
@@ -279,11 +288,25 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 		return selection instanceof final Library library ? library : null;
 	}
 
-	private void exportLibrary() {
+	private void exportLibrary(final Shell shell) {
 		if (selectedLibrary == null) {
 			return;
 		}
-		// TODO implement export
+
+		final IWizardDescriptor descriptor = PlatformUI.getWorkbench().getExportWizardRegistry()
+				.findWizard("org.eclipse.fordiac.ide.library.ui.wizards.LibraryExportWizard"); //$NON-NLS-1$
+
+		if (descriptor != null && getEditorInput() instanceof final IFileEditorInput input) {
+			try {
+				final IExportWizard wizard = (IExportWizard) descriptor.createWizard();
+				wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(input.getFile()));
+				new WizardDialog(shell, wizard).open();
+			} catch (final CoreException e) {
+				ILog.get().error(e.getMessage(), e);
+				MessageDialog.openError(shell, Messages.LibraryExporter_ErrorTitle,
+						MessageFormat.format(Messages.LibraryExporter_ErrorMessage, e.getMessage()));
+			}
+		}
 	}
 
 	private boolean isValidName(final String name) {
