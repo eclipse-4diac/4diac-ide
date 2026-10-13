@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -127,7 +128,16 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	private void loadManifest() {
 		if (getEditorInput() instanceof final FileEditorInput input) {
 			manifest = ManifestHelper.getManifest(input.getFile());
+		} else {
+			manifest = ManifestHelper.getManifest(getEditorInputURI(getEditorInput()));
 		}
+	}
+
+	private static URI getEditorInputURI(final IEditorInput input) {
+		if (input instanceof final IURIEditorInput uriInput) {
+			return URI.createURI(uriInput.getURI().toString());
+		}
+		throw new IllegalArgumentException("Unsupported editor input"); //$NON-NLS-1$
 	}
 
 	private Stream<ManifestEditorPage<?>> getPages() {
