@@ -666,7 +666,6 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
 				icon="fordiacimage://ICON_CLEAR_DEVICE"
-				label="%cleanDevice.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -677,7 +676,6 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
-				label="%killDevice.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -688,7 +686,6 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
 				icon="fordiacimage://ICON_DEVICE_RESTART"
-				label="%restartDevice.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -699,7 +696,6 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
 				icon="fordiacimage://ICON_DELETE_RESOURCE"
-				label="%deleteResource.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -713,7 +709,6 @@
 			</separator>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
-				label="%onlineCreateFB.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -722,8 +717,7 @@
 				</visibleWhen>
 			</command>
 			<command
-				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
-				label="%onlineStartFB.label">
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB">
 				<visibleWhen
 					checkEnabled="false">
 					<reference
@@ -732,7 +726,6 @@
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
-				label="%onlineCreateConnection.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -759,7 +752,6 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
 				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj.png"
-				label="%toggleWatch.label"
 				style="push"
 				tooltip="%toggleWatch.tooltip">
 				<visibleWhen
@@ -779,7 +771,6 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.togglePinned"
 				icon="fordiacimage://ICON_PIN"
-				label="%togglePinned.label"
 				style="push"
 				tooltip="%togglePinned.tooltip">
 				<visibleWhen
@@ -789,7 +780,6 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatchSubElements"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/elcl16/hierarchicalLayout.svg"
-				label="%toggleWatchSubElements.label"
 				style="push"
 				tooltip="%toggleWatchSubElements.tooltip">
 				<visibleWhen
@@ -810,7 +800,6 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
 				disabledIcon="fordiacimage://ICON_CLEAR_FORCE_DISABLED"
 				icon="fordiacimage://ICON_CLEAR_FORCE"
-				label="%clearForce.label"
 				tooltip="%clearForce.tooltip">
 				<visibleWhen
 					checkEnabled="true">
@@ -819,7 +808,6 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
 				icon="fordiacimage://ICON_TRIGGER_EVENT"
-				label="%triggerEvent.label"
 				tooltip="%triggerEvent.tooltip">
 				<visibleWhen
 					checkEnabled="true">
@@ -835,25 +823,21 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
 				icon="fordiacimage://ICON_CLEAR_DEVICE"
-				label="%cleanDevice.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
-				label="%killDevice.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
 				icon="fordiacimage://ICON_DEVICE_RESTART"
-				label="%restartDevice.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
 				icon="fordiacimage://ICON_DELETE_RESOURCE"
-				label="%deleteResource.label"
 				style="push">
 			</command>
 			<separator
@@ -862,23 +846,19 @@
 			</separator>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
-				label="%onlineCreateFB.label"
 				style="push">
 			</command>
 			<command
-				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
-				label="%onlineStartFB.label">
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
-				label="%onlineCreateConnection.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
 				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj.png"
-				label="%toggleWatch.label"
 				style="push"
 				tooltip="%toggleWatch.tooltip">
 			</command>
@@ -893,13 +873,11 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
 				disabledIcon="fordiacimage://ICON_CLEAR_FORCE_DISABLED"
 				icon="fordiacimage://ICON_CLEAR_FORCE"
-				label="%clearForce.label"
 				tooltip="%clearForce.tooltip">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
 				icon="fordiacimage://ICON_TRIGGER_EVENT"
-				label="%triggerEvent.label"
 				tooltip="%triggerEvent.tooltip">
 			</command>
 		</menuContribution>
