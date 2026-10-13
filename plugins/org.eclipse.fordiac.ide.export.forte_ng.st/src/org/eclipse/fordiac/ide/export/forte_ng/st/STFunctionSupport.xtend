@@ -65,31 +65,31 @@ class STFunctionSupport extends StructuredTextSupport {
 		result
 	}
 
-	def private CharSequence generateStructuredTextFunctionHeader(STFunction func) '''
+	def protected CharSequence generateStructuredTextFunctionHeader(STFunction func) '''
 		«func.generateStructuredTextFunctionDeclaration»;
 	'''
 
-	def private CharSequence generateStructuredTextFunctionImpl(STFunction func) '''
+	def protected CharSequence generateStructuredTextFunctionImpl(STFunction func) '''
 		«func.generateStructuredTextFunctionDeclaration» {
+		  «func.varDeclarations.filter(STVarOutputDeclarationBlock).generateOutputGuard»
 		  «func.generateStructuredTextFunctionBody»
 		}
 		
 	'''
 
-	def private CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
+	def protected CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
 	'''«func.returnType?.generateTypeName ?: "void"» func_«func.name»(«func.generateStructuredTextFunctionParameters»)'''
 
-	def private CharSequence generateStructuredTextFunctionParameters(STFunction func) //
+	def protected CharSequence generateStructuredTextFunctionParameters(STFunction func) //
 	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "»«param.generateParameterTypeName»«param.generateParameterName»«ENDFOR»'''
 
-	def private getStructuredTextFunctionParameters(STFunction func) {
+	def protected getStructuredTextFunctionParameters(STFunction func) {
 		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations] +
 			func.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations] +
 			func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations]
 	}
 
-	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
-		«func.varDeclarations.filter(STVarOutputDeclarationBlock).generateOutputGuard»
+	def protected CharSequence generateStructuredTextFunctionBody(STFunction func) '''
 		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val = «func.returnType.generateTypeDefaultValue»;«ENDIF»
 		«func.varDeclarations.filter(STVarOutputDeclarationBlock).generateVariables(false)»
 		«func.varDeclarations.filter(STVarPlainDeclarationBlock).generateVariables(true)»

@@ -12,16 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
+import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParseUtil.*
-import org.eclipse.fordiac.ide.export.language.ILanguageSupport
-import org.eclipse.xtend.lib.annotations.Accessors
-import java.util.List
 
 @FinalFieldsConstructor
 class STFunctionBodySupport implements ILanguageSupport {
@@ -33,12 +34,14 @@ class STFunctionBodySupport implements ILanguageSupport {
 
 	STFunctionSource parseResult
 	STFunctionSupport support
+	STFunctionSupport supportImpl
 
 	override prepare() {
 		if (parseResult === null && errors.empty) {
 			parseResult = body.parse(errors, warnings, infos)
 			if (parseResult !== null) {
 				support = new STFunctionSupport(parseResult)
+				supportImpl = new STFunctionImplSupport(parseResult)
 			}
 		}
 		return parseResult !== null
@@ -46,11 +49,17 @@ class STFunctionBodySupport implements ILanguageSupport {
 
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare()
-		support?.generate(options)
+		if (options.get(ForteNgExportFilter.OPTION_FUNCTION_IMPL) == Boolean.TRUE)
+			supportImpl?.generate(options)
+		else
+			support?.generate(options)
 	}
 
 	override getDependencies(Map<?, ?> options) {
 		prepare()
-		support?.getDependencies(options) ?: emptySet
+		if (options.get(ForteNgExportFilter.OPTION_FUNCTION_IMPL) == Boolean.TRUE)
+			supportImpl?.getDependencies(options) ?: emptySet
+		else
+			support?.getDependencies(options) ?: emptySet
 	}
 }
