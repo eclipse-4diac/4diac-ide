@@ -1171,7 +1171,7 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="%commands_ungroup_label"
-               tooltip="Remove group">
+               tooltip="%menu.ungroup.tooltip">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.changeType"
                label="%commands_changeType_label">
@@ -1224,13 +1224,13 @@
         <command commandId="org.eclipse.fordiac.ide.application.commands.hideEventConnections"
                  icon="fordiacimage://ICON_HIDE_EVENT"
                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
-                 tooltip="Hide Event Connections"
+                 tooltip="%menu.hideEventConnections.tooltip"
                  style="toggle">
         </command>
         <command commandId="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
                  icon="fordiacimage://ICON_HIDE_DATA"
                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
-                 tooltip="Hide Data Connections"
+                 tooltip="%menu.hideDataConnections.tooltip"
                  style="toggle">
         </command>
       </toolbar>
@@ -1240,7 +1240,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"/>
       <command 
       	commandId="org.eclipse.fordiac.ide.application.commands.toggleJumpStep"
-      	tooltip="Toggle Step Mode"
+        tooltip="%menu.toggleJumpStep.tooltip"
       	icon="platform:/plugin/org.eclipse.egit.ui/icons/elcl16/skip.png"
       	style="toggle"/>
     </menuContribution>
@@ -1466,7 +1466,7 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="%commands_ungroup_label"
-               tooltip="Remove group">
+               tooltip="%menu.ungroup.tooltip">
         <visibleWhen checkEnabled="false">
           <with variable="selection">
             <count value="1" />
@@ -1742,7 +1742,7 @@
   
   <extension point="org.eclipse.ui.ide.markerSupport">
     <markerTypeCategory
-          name="4diac IDE Problem">
+          name="%markerTypeCategory.problem.name">
        <markerTypeReference
              id="org.eclipse.fordiac.ide.model.problem">
        </markerTypeReference>
