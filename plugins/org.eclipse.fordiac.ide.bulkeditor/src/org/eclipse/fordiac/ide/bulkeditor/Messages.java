@@ -56,6 +56,45 @@ public final class Messages extends NLS {
 
 	public static String Negate;
 
+	public static String QueryMenu_AddField;
+	public static String QueryMenu_RemoveField;
+	public static String QueryMenu_AddConstraint;
+	public static String QueryMenu_AddAndConstraint;
+	public static String QueryMenu_AddOrConstraint;
+	public static String QueryMenu_AddInstance;
+	public static String QueryMenu_AddType;
+	public static String QueryMenu_AddOccurrence;
+
+	public static String QueryMenu_Name;
+	public static String QueryMenu_Type;
+	public static String QueryMenu_Comment;
+	public static String QueryMenu_Value;
+	public static String QueryMenu_Constraint;
+	public static String QueryMenu_AttributeConstraint;
+	public static String QueryMenu_SimpleFB;
+	public static String QueryMenu_BasicFB;
+	public static String QueryMenu_CompositeFB;
+	public static String QueryMenu_ServiceInterfaceFB;
+	public static String QueryMenu_FunctionFB;
+	public static String QueryMenu_TypedSubapp;
+	public static String QueryMenu_UntypedSubapp;
+	public static String QueryMenu_SimpleType;
+	public static String QueryMenu_BasicType;
+	public static String QueryMenu_CompositeType;
+	public static String QueryMenu_ServiceInterfaceType;
+	public static String QueryMenu_FunctionType;
+	public static String QueryMenu_SubappType;
+	public static String QueryMenu_StructType;
+	public static String QueryMenu_AttributeType;
+	public static String QueryMenu_ApplicationOccurrence;
+	public static String QueryMenu_CompositeFBOccurrence;
+	public static String QueryMenu_TypedSubappOccurrence;
+	public static String QueryMenu_Pin;
+	public static String QueryMenu_Placeholder;
+	public static String QueryMenu_PinTarget;
+	public static String QueryMenu_Attribute;
+	public static String QueryMenu_AttributeDeclaration;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
