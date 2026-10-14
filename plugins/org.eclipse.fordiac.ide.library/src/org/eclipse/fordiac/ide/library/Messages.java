@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
 
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.library.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String AddLibraryDependency_Change_Title;
 
@@ -46,7 +46,6 @@ public class Messages extends NLS {
 	public static String LibraryChange_Update;
 
 	public static String LibraryChange_Downgrade_fullText;
-	public static String LibraryChange_Select_fullText;
 	public static String LibraryChange_Remove_fullText;
 	public static String LibraryChange_Update_fullText;
 	public static String LibraryChange_Add_fullText;
