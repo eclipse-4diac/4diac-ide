@@ -13,6 +13,8 @@
 
 package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers;
 
+import java.util.Map;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -38,10 +40,33 @@ public class AsciiDocTemplateHandler extends AbstractHandler {
 
 	private static final String PARAM_TEMPLATE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name"; //$NON-NLS-1$
 
+	// Maps XML semantic values to the actual template names declared in Mylyn's
+	// wikitext plugin.xml
+	private static final Map<String, String> TEMPLATE_MAPPING = Map.ofEntries(
+			// Headings
+			Map.entry("heading0", "= "), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("heading1", "== "), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("heading2", "=== "), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("heading3", "==== "), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("heading4", "===== "), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("heading5", "====== "), //$NON-NLS-1$ //$NON-NLS-2$
+
+			// Inline Styles (Resolves bold vs. list spacing trimming bug)
+			Map.entry("bold", "*"), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("italic", "_"), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("monospace", "`"), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("subscript", "~"), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("superscript", "^"), //$NON-NLS-1$ //$NON-NLS-2$
+
+			// Lists (Preserves the necessary trailing space safely)
+			Map.entry("unorderedList", "* "), //$NON-NLS-1$ //$NON-NLS-2$
+			Map.entry("orderedList", ". ") //$NON-NLS-1$ //$NON-NLS-2$
+	);
+
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final String templateName = event.getParameter(PARAM_TEMPLATE_NAME);
-		if (templateName == null || templateName.isEmpty()) {
+		final String parameterValue = event.getParameter(PARAM_TEMPLATE_NAME);
+		if (parameterValue == null || parameterValue.isEmpty()) {
 			throw new ExecutionException("Template name parameter is missing."); //$NON-NLS-1$
 		}
 
@@ -55,9 +80,13 @@ public class AsciiDocTemplateHandler extends AbstractHandler {
 			return null;
 		}
 
-		final Template template = findTemplate(templateName);
+		// Resolve semantic parameter to actual Mylyn Template name via map
+		// (or default to raw name)
+		final String targetTemplateName = TEMPLATE_MAPPING.getOrDefault(parameterValue, parameterValue);
+
+		final Template template = findTemplate(targetTemplateName);
 		if (template == null) {
-			throw new ExecutionException("Template '" + templateName + "' not found."); //$NON-NLS-1$//$NON-NLS-2$
+			throw new ExecutionException("Template '" + targetTemplateName + "' not found."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		final IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
@@ -76,6 +105,8 @@ public class AsciiDocTemplateHandler extends AbstractHandler {
 			final DocumentTemplateContext ctx = new DocumentTemplateContext(type, document, offset, length);
 			try {
 				final String selectedText = length > 0 ? document.get(offset, length) : ""; //$NON-NLS-1$
+				// Map to both variables to ensure Mylyn and custom template variables bind
+				// properly
 				ctx.setVariable("selection", selectedText); //$NON-NLS-1$
 				ctx.setVariable("text", selectedText); //$NON-NLS-1$
 			} catch (final BadLocationException e) {
@@ -85,7 +116,7 @@ public class AsciiDocTemplateHandler extends AbstractHandler {
 			final Region region = new Region(offset, length);
 			final TemplateProposal proposal = new TemplateProposal(template, ctx, region, null);
 
-			// Apply the template proposal using the resolved text viewer
+			// Apply the template proposal directly using the resolved text viewer
 			proposal.apply(viewer, (char) 0, 0, offset);
 		}
 		return null;
@@ -94,14 +125,55 @@ public class AsciiDocTemplateHandler extends AbstractHandler {
 	@SuppressWarnings("restriction")
 	private static Template findTemplate(final String name) {
 		final Templates templates = WikiTextUiPlugin.getDefault().getTemplates().get("AsciiDoc"); //$NON-NLS-1$
-		if (templates != null) {
-			for (final Template t : templates.getTemplate()) {
-				if (t.getName().equals(name)) {
-					return t;
+		if (templates == null) {
+			return null;
+		}
+
+		final String trimmedSearchName = name.trim();
+		final java.util.List<Template> matches = new java.util.ArrayList<>();
+
+		// 1. Gather all templates matching the trimmed name
+		for (final Template t : templates.getTemplate()) {
+			if (t.getName().trim().equals(trimmedSearchName)) {
+				matches.add(t);
+			}
+		}
+
+		if (matches.isEmpty()) {
+			return null;
+		}
+
+		Template selectedTemplate = null;
+
+		// 2. If there is only one match (like NOTE, TIP, link, image), use it directly!
+		if (matches.size() == 1) {
+			selectedTemplate = matches.get(0);
+		} else {
+			// 3. If there is a collision (like "*" vs "* "), disambiguate
+			final boolean wantBlock = name.endsWith(" "); //$NON-NLS-1$
+			for (final Template t : matches) {
+				final boolean isBlock = t.getPattern().contains("\n"); //$NON-NLS-1$
+				if (wantBlock == isBlock) {
+					selectedTemplate = t;
+					break;
 				}
 			}
 		}
-		return null;
+
+		selectedTemplate = superscriptFix(trimmedSearchName, selectedTemplate);
+
+		return selectedTemplate;
+	}
+
+	private static Template superscriptFix(final String trimmedSearchName, Template selectedTemplate) {
+		// Workaround: Patch Mylyn's superscript typo (missing leading "^")
+		if (selectedTemplate != null && "^".equals(trimmedSearchName) //$NON-NLS-1$
+				&& !selectedTemplate.getPattern().startsWith("^")) { //$NON-NLS-1$
+			selectedTemplate = new Template(selectedTemplate.getName(), selectedTemplate.getDescription(),
+					selectedTemplate.getContextTypeId(), "^" + selectedTemplate.getPattern(), //$NON-NLS-1$
+					selectedTemplate.isAutoInsertable());
+		}
+		return selectedTemplate;
 	}
 
 }

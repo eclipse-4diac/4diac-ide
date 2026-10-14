@@ -59,7 +59,7 @@
         label="%toolbar.headings.label"
         tooltip="%toolbar.headings.tooltip"
         style="pulldown">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="== " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading1" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -67,7 +67,7 @@
         label="%toolbar.bold.label"
         tooltip="%toolbar.bold.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="*" />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="bold" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -75,7 +75,7 @@
         label="%toolbar.italic.label"
         tooltip="%toolbar.italic.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="_" />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="italic" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -83,7 +83,7 @@
         label="%toolbar.monospace.label"
         tooltip="%toolbar.monospace.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="`" />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="monospace" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -91,7 +91,7 @@
         label="%toolbar.subscript.label"
         tooltip="%toolbar.subscript.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="~" />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="subscript" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -99,7 +99,7 @@
         label="%toolbar.superscript.label"
         tooltip="%toolbar.superscript.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="^" />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="superscript" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -107,7 +107,7 @@
         label="%toolbar.unorderedList.label"
         tooltip="%toolbar.unorderedList.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="* " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="unorderedList" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -115,7 +115,7 @@
         label="%toolbar.orderedList.label"
         tooltip="%toolbar.orderedList.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value=". " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="orderedList" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -142,37 +142,37 @@
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
         label="%toolbar.heading0.label"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="= " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading0" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
         label="%toolbar.heading1.label"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="== " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading1" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
         label="%toolbar.heading2.label"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="=== " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading2" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
         label="%toolbar.heading3.label"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="==== " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading3" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
         label="%toolbar.heading4.label"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="===== " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading4" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
         label="%toolbar.heading5.label"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="====== " />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading5" />
       </command>
     </menuContribution>
     <!-- Dropdown content for admonition -->
