@@ -31,6 +31,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -119,9 +121,18 @@ public final class LibraryTestFixtures {
 		}
 	}
 
+	public static List<Version> getExtractedVersions(final String symbolicName) {
+		return LibraryManager.INSTANCE.getExtractedLibraries().getOrDefault(symbolicName, List.of()).stream()
+				.map(LibraryRecord::version).toList();
+	}
+
 	public static boolean hasFixtureLibraries() {
 		final Map<String, List<LibraryRecord>> libraries = LibraryManager.INSTANCE.getExtractedLibraries();
 		return ARCHIVES.stream().anyMatch(archive -> isListed(libraries, archive));
+	}
+
+	public static Path getDownloadFolder() {
+		return getWorkspacePath().resolve(LibraryManager.PACKAGE_DOWNLOAD_DIRECTORY);
 	}
 
 	/**
@@ -166,6 +177,22 @@ public final class LibraryTestFixtures {
 
 	public static boolean isMockDownloaderActive() {
 		return new MockDownloader().isActive();
+	}
+
+	/**
+	 * Enables or disables the automatic workspace build.
+	 *
+	 * @return the previous state
+	 */
+	public static boolean setAutoBuilding(final boolean enabled) throws CoreException {
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		final IWorkspaceDescription description = workspace.getDescription();
+		final boolean previous = description.isAutoBuilding();
+		if (previous != enabled) {
+			description.setAutoBuilding(enabled);
+			workspace.setDescription(description);
+		}
+		return previous;
 	}
 
 	public static boolean isAutoBuilding() {
