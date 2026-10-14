@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -301,7 +302,7 @@ public class SearchHelper {
 				return true;
 			}
 
-			return obj instanceof IInterfaceElement;
+			return obj instanceof IInterfaceElement || obj instanceof Connection;
 		}
 
 		private boolean hasFBNetworkToTraverse(final FBType fbType) {
