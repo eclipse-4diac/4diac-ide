@@ -41,10 +41,10 @@ public class FieldConstraintFigure extends Figure {
 	private final EObject fieldConstraint;
 	private final FeatureChangeHandler changeHandler;
 	private final Label valueLabel = QueryValueLabel.createFixedWidth(VALUE_WIDTH);
-	private final QueryToggleButton caseSensitive;
-	private final QueryToggleButton wholeWord;
-	private final QueryToggleButton exactMatch;
-	private final QueryToggleButton regularExpression;
+	private final QueryButton caseSensitive;
+	private final QueryButton wholeWord;
+	private final QueryButton exactMatch;
+	private final QueryButton regularExpression;
 
 	public FieldConstraintFigure(final EObject fieldConstraint, final FeatureChangeHandler changeHandler) {
 		this.fieldConstraint = fieldConstraint;
@@ -86,8 +86,8 @@ public class FieldConstraintFigure extends Figure {
 		updateEnablement();
 	}
 
-	private QueryToggleButton addToggle(final ImageDescriptor image, final String tooltip, final String featureName) {
-		final QueryToggleButton toggle = new QueryToggleButton(image);
+	private QueryButton addToggle(final ImageDescriptor image, final String tooltip, final String featureName) {
+		final QueryButton toggle = QueryButton.createToggle(image);
 		toggle.setToolTip(new Label(tooltip));
 		toggle.addActionListener(_ -> {
 			updateEnablement();

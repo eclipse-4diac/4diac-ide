@@ -28,12 +28,12 @@ import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryAttributeDeclaratio
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure.EditableValue;
-import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceholderNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.DeleteQueryNodeEditPolicy;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.QueryDirectEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
@@ -74,15 +74,13 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected IFigure createFigure() {
-		final QueryNodeFigure figure = createNodeFigure(getModel());
+		final QueryNodeFigure figure = createNodeFigure();
 		figure.setFeatureChangeHandler(this::changeFeature);
 		return figure;
 	}
 
-	private static QueryNodeFigure createNodeFigure(final EObject element) {
-		if (QueryModelHelper.isPlace(element)) {
-			return new QueryPlaceNodeFigure(element);
-		}
+	protected QueryNodeFigure createNodeFigure() {
+		final EObject element = getModel();
 		if (QueryModelHelper.isConstraint(element)) {
 			return new QueryConstraintNodeFigure(element);
 		}
@@ -190,6 +188,21 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 		return getAnchor();
 	}
 
+	protected IProject getProject() {
+		return project;
+	}
+
+	protected TypeLibrary getTypeLibrary() {
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+	}
+
+	protected void changeFeature(final EObject element, final String featureName, final Object value) {
+		if (!Objects.equals(QueryModelHelper.getFeatureValue(element, featureName), value)) {
+			getViewer().getEditDomain().getCommandStack()
+					.execute(new ChangeQueryFeatureCommand(element, featureName, value));
+		}
+	}
+
 	private ConnectionAnchor getAnchor() {
 		if (anchor == null) {
 			anchor = new ChopboxAnchor(getFigure());
@@ -199,13 +212,6 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	private QueryDiagram getDiagram() {
 		return (QueryDiagram) getParent().getModel();
-	}
-
-	private void changeFeature(final EObject element, final String featureName, final Object value) {
-		if (!Objects.equals(QueryModelHelper.getFeatureValue(element, featureName), value)) {
-			getViewer().getEditDomain().getCommandStack()
-					.execute(new ChangeQueryFeatureCommand(element, featureName, value));
-		}
 	}
 
 	private EditableValue getEditableValue(final Request request) {
@@ -219,8 +225,7 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	private void performDirectEdit(final EditableValue editableValue) {
 		if (QueryModelHelper.isAttributeDeclaration(editableValue.element())) {
-			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(
-					() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
+			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(this::getTypeLibrary,
 					AttributeSelectionContentProvider.INSTANCE);
 			new QueryDirectEditManager(this, editableValue, proposalProvider).show();
 		} else {

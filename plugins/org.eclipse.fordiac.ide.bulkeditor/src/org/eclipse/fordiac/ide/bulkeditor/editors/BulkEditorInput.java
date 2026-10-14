@@ -12,11 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
@@ -30,12 +28,6 @@ public class BulkEditorInput implements IEditorInput, IPersistableElement {
 
 	public BulkEditorInput(final IProject project) {
 		this(project, ""); //$NON-NLS-1$
-	}
-
-	public BulkEditorInput(final IProject project, final List<URI> initialSelectedSubApps) {
-		this.project = project;
-		this.query = ""; //$NON-NLS-1$
-		// TODO: subapp as scope
 	}
 
 	public BulkEditorInput(final IProject project, final String query) {
