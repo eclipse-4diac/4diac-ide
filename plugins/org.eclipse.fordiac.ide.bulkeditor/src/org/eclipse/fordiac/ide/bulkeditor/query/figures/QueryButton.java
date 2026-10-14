@@ -12,10 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
+import org.eclipse.draw2d.ButtonModel;
+import org.eclipse.draw2d.Clickable;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.Toggle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -23,8 +24,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
-/** Toggle button with a rounded frame that is filled while selected. */
-public class QueryToggleButton extends Toggle {
+/** Button with a rounded frame that is filled while selected or pressed. */
+public final class QueryButton extends Clickable {
 
 	private static final Color COLOR_SELECTED_BG = QueryUIPreferenceConstants.getToggleButtonSelectedBackground();
 	private static final Color COLOR_BORDER_DEFAULT = QueryUIPreferenceConstants.getToggleButtonDefaultBorder();
@@ -37,20 +38,28 @@ public class QueryToggleButton extends Toggle {
 	private final ImageDescriptor imageDescriptor;
 	private Image image;
 
-	public QueryToggleButton(final ImageDescriptor imageDescriptor) {
+	public static QueryButton createToggle(final String text) {
+		return new QueryButton(text, null, true);
+	}
+
+	public static QueryButton createToggle(final ImageDescriptor imageDescriptor) {
+		return new QueryButton(null, imageDescriptor, true);
+	}
+
+	public static QueryButton createPushButton(final String text) {
+		return new QueryButton(text, null, false);
+	}
+
+	private QueryButton(final String text, final ImageDescriptor imageDescriptor, final boolean toggle) {
 		this.imageDescriptor = imageDescriptor;
-		initContents();
-	}
-
-	public QueryToggleButton(final String text) {
-		this.imageDescriptor = null;
-		label.setText(text);
-		initContents();
-	}
-
-	private void initContents() {
+		if (text != null) {
+			label.setText(text);
+		}
 		label.setBorder(new MarginBorder(3, 5, 3, 5));
 		setContents(label);
+		if (toggle) {
+			setStyle(STYLE_TOGGLE);
+		}
 		setRolloverEnabled(true);
 		setRequestFocusEnabled(false);
 		setOpaque(false);
@@ -59,20 +68,26 @@ public class QueryToggleButton extends Toggle {
 	@Override
 	protected void paintFigure(final Graphics graphics) {
 		final Rectangle frame = getBounds().getCopy().shrink(1, 1);
+		final boolean highlighted = isEnabled() && (isSelected() || isPressed());
 		if (!isEnabled()) {
 			graphics.setBackgroundColor(COLOR_DISABLED_BG);
 			graphics.setAlpha(DISABLED_ALPHA);
 			graphics.fillRoundRectangle(frame, ARC, ARC);
 			graphics.setAlpha(255);
 			graphics.setLineStyle(SWT.LINE_DOT);
-		} else if (isSelected()) {
+		} else if (highlighted) {
 			graphics.setBackgroundColor(COLOR_SELECTED_BG);
 			graphics.fillRoundRectangle(frame, ARC, ARC);
 		}
-		graphics.setForegroundColor(isEnabled() && isSelected() ? COLOR_BORDER_SELECTED : COLOR_BORDER_DEFAULT);
+		graphics.setForegroundColor(highlighted ? COLOR_BORDER_SELECTED : COLOR_BORDER_DEFAULT);
 		graphics.setLineWidth(1);
 		graphics.drawRoundRectangle(frame, ARC, ARC);
 		graphics.setLineStyle(SWT.LINE_SOLID);
+	}
+
+	private boolean isPressed() {
+		final ButtonModel model = getModel();
+		return model.isArmed() && model.isPressed();
 	}
 
 	@Override

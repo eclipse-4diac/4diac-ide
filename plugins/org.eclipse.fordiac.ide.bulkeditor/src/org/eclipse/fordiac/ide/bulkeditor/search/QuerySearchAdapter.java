@@ -163,7 +163,9 @@ public class QuerySearchAdapter {
 		        buildInstanceConfig(place, QueryModelHelper.REF_FUNCTION_FB, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_TYPED_SUBAPP, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_UNTYPED_SUBAPP, placeholders, pinsImplicit),
-		        readIgnoreLinkedLibraries(queryRoot));
+		        readIgnoreLinkedLibraries(queryRoot),
+		        QueryModelHelper.isSubappHierarchyScope(place),
+		        QueryModelHelper.getSubappHierarchy(place));
 		//@formatter:on
 	}
 

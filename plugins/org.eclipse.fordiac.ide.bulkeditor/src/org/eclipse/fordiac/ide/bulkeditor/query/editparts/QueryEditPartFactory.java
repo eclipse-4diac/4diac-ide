@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.bulkeditor.query.editparts;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.gef.EditPart;
 
@@ -33,6 +34,7 @@ public class QueryEditPartFactory extends Abstract4diacEditPartFactory {
 		return switch (modelElement) {
 		case final QueryDiagram _ -> new QueryDiagramEditPart();
 		case final QueryConnection _ -> new QueryConnectionEditPart();
+		case final EObject element when QueryModelHelper.isPlace(element) -> new QueryPlaceEditPart(project);
 		case final EObject _ -> new QueryNodeEditPart(project);
 		default -> throw createEditpartCreationException(context, modelElement);
 		};

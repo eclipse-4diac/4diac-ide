@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.search;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -19,10 +22,13 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.InstanceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.PinConfig;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -39,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -50,9 +57,12 @@ import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.ISearchChildrenProvider;
 import org.eclipse.fordiac.ide.model.search.types.SearchChildrenProviderHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class SearchHelper {
+
+	private static final char HIERARCHY_NAME_DELIMITER = '.';
 
 	public static final Predicate<TypeEntry> linkedElementsFilter = entry -> {
 		for (final String segment : entry.getFile().getFullPath().segments()) {
@@ -67,11 +77,84 @@ public class SearchHelper {
 	}
 
 	public static ISearchContext createSearchContext(final IProject project, final PlaceConfig cfg) {
+		if (cfg.subappHierarchyScope()) {
+			return new SubappHierarchySearchContext(project, cfg.subappHierarchy());
+		}
 		return new PlaceAwareSearchContext(project, cfg);
 	}
 
 	public static ISearchChildrenProvider createChildrenSearchProvider(final PlaceConfig cfg) {
 		return new PlaceAwareChildrenProvider(cfg);
+	}
+
+	public static EObject resolveElement(final URI uri) {
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
+		if (typeEntry == null || typeEntry.getType() == null) {
+			return null;
+		}
+		if (!uri.hasFragment()) {
+			return typeEntry.getType();
+		}
+		final Resource resource = typeEntry.getType().eResource();
+		return resource != null ? resource.getEObject(uri.fragment()) : null;
+	}
+
+	public static String getSubappHierarchyName(final EObject element) {
+		final EObject root = EcoreUtil.getRootContainer(element);
+		final String rootName = root instanceof final LibraryElement libraryElement
+				? PackageNameHelper.getFullTypeName(libraryElement)
+				: ""; //$NON-NLS-1$
+		if (root != element && element instanceof final INamedElement namedElement) {
+			return rootName + HIERARCHY_NAME_DELIMITER + namedElement.getQualifiedName();
+		}
+		return rootName;
+	}
+
+	public static INamedElement resolveSubappHierarchyElement(final TypeLibrary typeLibrary, final String name) {
+		final int delimiter = name.indexOf(HIERARCHY_NAME_DELIMITER);
+		final String rootName = delimiter < 0 ? name : name.substring(0, delimiter);
+		final TypeEntry rootEntry = findSubappHierarchyRoot(typeLibrary, rootName);
+		if (rootEntry == null || rootEntry.getType() == null) {
+			return null;
+		}
+		if (delimiter < 0) {
+			return rootEntry.getType();
+		}
+		return rootEntry.getType().findByQualifiedName(name.substring(delimiter + 1))
+				.filter(element -> element instanceof Application || element instanceof UntypedSubApp).findFirst()
+				.orElse(null);
+	}
+
+	private static TypeEntry findSubappHierarchyRoot(final TypeLibrary typeLibrary, final String name) {
+		final TypeEntry system = typeLibrary.getSystemEntry(name);
+		return system != null ? system : typeLibrary.getSubAppTypeEntry(name);
+	}
+
+	private static class SubappHierarchySearchContext extends AbstractLiveSearchContext {
+		private final Map<URI, EObject> roots = new LinkedHashMap<>();
+
+		public SubappHierarchySearchContext(final IProject project, final List<String> hierarchy) {
+			super(project);
+			final List<INamedElement> elements = hierarchy.stream()
+					.map(name -> resolveSubappHierarchyElement(getTypelib(), name)).filter(Objects::nonNull).toList();
+			// elements inside other elements of the hierarchy are searched with them
+			elements.stream().filter(element -> !isInsideOther(element, elements))
+					.forEach(element -> roots.put(EcoreUtil.getURI(element), element));
+		}
+
+		private static boolean isInsideOther(final EObject element, final List<? extends EObject> others) {
+			return others.stream().anyMatch(other -> other != element && EcoreUtil.isAncestor(other, element));
+		}
+
+		@Override
+		public Stream<URI> getTypes() {
+			return roots.keySet().stream();
+		}
+
+		@Override
+		public EObject mapTypes(final URI uri) {
+			return roots.get(uri);
+		}
 	}
 
 	private static class PlaceAwareSearchContext extends AbstractLiveSearchContext {

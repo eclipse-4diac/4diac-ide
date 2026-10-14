@@ -49,7 +49,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -89,6 +88,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	private static final String CONTEXT_ID = "org.eclipse.fordiac.ide.bulkeditor"; //$NON-NLS-1$
 
+	private static final int QUERY_PAGE_INDEX = 0;
 	private static final int RESULT_PAGE_INDEX = 1;
 
 	private IProject project;
@@ -185,6 +185,11 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		return project;
 	}
 
+	public void showSubappHierarchyScope(final List<String> hierarchy) {
+		queryViewer.setSubappHierarchyScope(hierarchy);
+		setActivePage(QUERY_PAGE_INDEX);
+	}
+
 	public boolean confirmDiscardUnsavedChanges() {
 		if (!isDirty()) {
 			return true;
@@ -272,12 +277,13 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	}
 
 	private Command handleAddAttribute(final AttributeTypeEntry attributeTypeEntry) {
-		final List<LibraryElement> libraryElements = searchScope.stream()
-				.map(TypeLibraryManager.INSTANCE::getTypeEntryForURI).filter(Objects::nonNull)
-				.filter(SearchHelper.linkedElementsFilter).map(TypeEntry::getType).filter(Objects::nonNull).toList();
+		final List<EObject> searchRoots = searchScope.stream()
+				.filter(uri -> TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri) instanceof final TypeEntry entry
+						&& SearchHelper.linkedElementsFilter.test(entry))
+				.map(SearchHelper::resolveElement).filter(Objects::nonNull).toList();
 
 		final AddAttributeTreeSelectionDialog addAttributeDialog = new AddAttributeTreeSelectionDialog(
-				getSite().getShell(), libraryElements, SearchHelper.createChildrenSearchProvider(latestQueryConfig),
+				getSite().getShell(), searchRoots, SearchHelper.createChildrenSearchProvider(latestQueryConfig),
 				attributeTypeEntry != null ? attributeTypeEntry.getFullTypeName() : null, project, new HashSet<>());
 		if (addAttributeDialog.open() != Window.OK) {
 			return null;

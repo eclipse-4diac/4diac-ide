@@ -95,6 +95,13 @@ public final class Messages extends NLS {
 	public static String QueryMenu_Attribute;
 	public static String QueryMenu_AttributeDeclaration;
 
+	public static String QueryScope_Project;
+	public static String QueryScope_SubappHierarchy;
+	public static String QueryScope_SelectSubappHierarchy;
+	public static String QueryScope_IgnoreLinkedLibraries;
+	public static String QueryScope_NoSubappHierarchy;
+	public static String QueryScope_MissingElement;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
