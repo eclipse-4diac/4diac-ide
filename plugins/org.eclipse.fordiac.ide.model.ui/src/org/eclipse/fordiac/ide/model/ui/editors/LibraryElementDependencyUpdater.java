@@ -12,9 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
@@ -42,10 +46,20 @@ import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.progress.UIJob;
 
 public class LibraryElementDependencyUpdater extends LibraryElementDependencyTracker {
+
+	private static final Duration UPDATE_JOB_TIME_BUDGET = Duration.ofMillis(100);
+
+	private record QueuedDependencyUpdate(TypeEntry dependency, String fullTypeName) {
+	}
+
+	private final BlockingDeque<QueuedDependencyUpdate> pendingUpdates = new LinkedBlockingDeque<>();
+	private final UIJob updateJob = UIJob.create(Messages.LibraryElementDependencyUpdater_UpdateJobName,
+			this::updatePendingDependencies);
 
 	private LibraryElement libraryElement;
 	private boolean updating;
@@ -62,14 +76,13 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 						|| TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE.equals(notification.getFeature())
 						|| (TypeEntry.TYPE_ENTRY_TYPE_FEATURE.equals(notification.getFeature())
 								&& notification.getNewValue() == null)) {
-					Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
+					enqueueUpdate(dependency, dependency.getFullTypeName());
 				}
 				// react to TYPE_ENTRY_FULL_TYPE_NAME_FEATURE for renamed dependencies
 				if (TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE.equals(notification.getFeature())) {
 					// use the old type name here to explicitly request an error type, which is
 					// needed for correct behavior when a type is renamed outside of a refactoring
-					Display.getDefault()
-							.asyncExec(() -> updateDependency(dependency, notification.getOldStringValue()));
+					enqueueUpdate(dependency, notification.getOldStringValue());
 				}
 			}
 		} else if (notification.getNotifier() instanceof TypeLibrary
@@ -94,11 +107,35 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void updateRemovedTypeEntryNameReference(final Object object) {
 		if (object instanceof final TypeEntry dependency && getDependencies().contains(dependency)) {
-			Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
+			enqueueUpdate(dependency, dependency.getFullTypeName());
 		}
 	}
 
-	public void updateDependency(final TypeEntry dependency, final String fullTypeName) {
+	private void enqueueUpdate(final TypeEntry dependency, final String fullTypeName) {
+		pendingUpdates.add(new QueuedDependencyUpdate(dependency, fullTypeName));
+		updateJob.schedule();
+	}
+
+	private void updatePendingDependencies(final IProgressMonitor monitor) {
+		final long deadline = System.nanoTime() + UPDATE_JOB_TIME_BUDGET.toNanos();
+		try {
+			QueuedDependencyUpdate update;
+			while (!monitor.isCanceled() && (update = pendingUpdates.poll()) != null) {
+				updateDependency(update.dependency(), update.fullTypeName());
+				// check if deadline exceeded
+				if (System.nanoTime() - deadline >= 0) {
+					break;
+				}
+			}
+		} finally {
+			// reschedule job if not canceled and there are still pending updates
+			if (!pendingUpdates.isEmpty() && !monitor.isCanceled()) {
+				updateJob.schedule();
+			}
+		}
+	}
+
+	protected void updateDependency(final TypeEntry dependency, final String fullTypeName) {
 		if (libraryElement == null) {
 			return;
 		}
@@ -254,6 +291,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	}
 
 	private void uninstall() {
+		updateJob.cancel();
+		pendingUpdates.clear();
 		if (libraryElement != null) {
 			libraryElement.eAdapters().remove(this);
 		}
