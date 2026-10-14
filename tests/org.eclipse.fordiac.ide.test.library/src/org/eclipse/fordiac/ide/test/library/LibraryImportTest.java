@@ -39,11 +39,9 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LibraryMarkerFactory;
-import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.ProjectCreator;
 import org.junit.jupiter.api.AfterEach;
@@ -91,10 +89,6 @@ class LibraryImportTest {
 					url.getQuery(), url.getRef());
 			LibraryManager.INSTANCE.extractLibrary(Paths.get(uri), null, false, false);
 		}
-
-		// deactivate other downloaders
-		TypeLibraryManager.useExtensions(LibraryManager.DOWNLOADER_EXTENSION, IArchiveDownloader.class,
-				downloader -> downloader.setActive(downloader instanceof MockDownloader));
 	}
 
 	@BeforeEach

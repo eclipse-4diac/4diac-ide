@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - fix bundle name and add messages for fixture manifests
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.library;
 
@@ -17,10 +18,14 @@ import org.eclipse.osgi.util.NLS;
 /** The Class Messages. */
 @SuppressWarnings("squid:S3008")
 public final class Messages extends NLS {
-	private static String BUNDLE_NAME = "org.eclipse.fordiac.ide.test.libraries.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.test.library.messages"; //$NON-NLS-1$
 
-	public static String Error;
+	public static String Archive_Not_Accessible;
+	public static String Archive_Not_Found;
 	public static String Library_Not_Found;
+	public static String Manifest_Not_Accessible;
+	public static String Manifest_Not_Found;
+	public static String Version_Not_Found;
 
 	static {
 		// initialize resource bundle
