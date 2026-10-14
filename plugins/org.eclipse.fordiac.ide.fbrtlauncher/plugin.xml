@@ -7,7 +7,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.fbrtlauncher.preferences.FBRTPreferencePage"
             id="org.eclipse.fordiac.ide.fbrtlauncher.preferences.FBRTPreferencePage"
-            name="FBRT Preferences">
+            name="%preferencePage.fbrt.name">
       </page>
    </extension>
    <extension
@@ -19,7 +19,7 @@
    
    <extension point="org.eclipse.debug.core.launchConfigurationTypes">
 		<launchConfigurationType
-    		name="Local FBRT"
+    		name="%launchConfiguration.runLocalFBRT.name"
     		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
     		modes="run"               
     		id="org.eclipse.fordiac.ide.runLocalFBRT">        
