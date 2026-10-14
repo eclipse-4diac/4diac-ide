@@ -80,6 +80,8 @@ public final class QueryModelHelper {
 
 	public static final String FEATURE_PLACEHOLDER = "placeholder"; //$NON-NLS-1$
 	public static final String FEATURE_IGNORE_LINKED_LIBRARIES = "ignoreLinkedLibraries"; //$NON-NLS-1$
+	public static final String FEATURE_SUBAPP_HIERARCHY = "subappHierarchy"; //$NON-NLS-1$
+	public static final String FEATURE_SUBAPP_HIERARCHY_ELEMENTS = "subappHierarchyElements"; //$NON-NLS-1$
 
 	public record FieldConstraintData(String value, boolean caseSensitive, boolean wholeWord, boolean entire,
 			boolean regex) {
@@ -188,6 +190,18 @@ public final class QueryModelHelper {
 		final EObject target = getContainedChild(queryRoot, REF_TARGET);
 		final EObject targetOption = getContainedChild(target, REF_TARGET);
 		return isOfType(targetOption, PIN_TARGET);
+	}
+
+	// scope of the place
+	public static boolean isSubappHierarchyScope(final EObject place) {
+		return getBooleanFeature(place, FEATURE_SUBAPP_HIERARCHY);
+	}
+
+	public static List<String> getSubappHierarchy(final EObject place) {
+		if (getFeatureValue(place, FEATURE_SUBAPP_HIERARCHY_ELEMENTS) instanceof final List<?> names) {
+			return names.stream().map(String::valueOf).toList();
+		}
+		return List.of();
 	}
 
 	// generic feature access

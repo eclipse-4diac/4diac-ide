@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.search;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
@@ -31,7 +33,9 @@ public record PlaceConfig( //@formatter:off
         InstanceConfig functionFB,
         InstanceConfig typedSubapp,
         InstanceConfig untypedSubapp,
-        boolean ignoreLinkedLibraries) {
+        boolean ignoreLinkedLibraries,
+        boolean subappHierarchyScope,
+        List<String> subappHierarchy) {
 		// @formatter:on
 
 	public static final String OCC_APPLICATION = "Application"; //$NON-NLS-1$

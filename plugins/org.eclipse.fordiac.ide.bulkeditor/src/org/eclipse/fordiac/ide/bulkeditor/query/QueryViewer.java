@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -39,8 +40,10 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
+import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.SWT;
@@ -87,6 +90,15 @@ public class QueryViewer {
 
 	public ZoomManager getZoomManager() {
 		return graphicalViewer.getZoomManager();
+	}
+
+	public void setSubappHierarchyScope(final List<String> hierarchy) {
+		final EObject place = QueryModelHelper.getContainedChild(queryRoot, QueryModelHelper.REF_PLACE);
+		final CompoundCommand command = new CompoundCommand(Messages.QueryScope_SubappHierarchy);
+		command.add(new ChangeQueryFeatureCommand(place, QueryModelHelper.FEATURE_SUBAPP_HIERARCHY, Boolean.TRUE));
+		command.add(
+				new ChangeQueryFeatureCommand(place, QueryModelHelper.FEATURE_SUBAPP_HIERARCHY_ELEMENTS, hierarchy));
+		graphicalViewer.getEditDomain().getCommandStack().execute(command);
 	}
 
 	public IPropertySheetPage createPropertySheetPage() {

@@ -104,8 +104,12 @@ public class QueryTreeLayout extends AbstractLayout {
 
 	private Size computeHorizontalSize(final Size nodeSize, final List<EObject> children) {
 		final double childrenWidth = getTotalWidth(children) + HORIZONTAL_GAP * (children.size() - 1);
-		return new Size(Math.max(nodeSize.width(), nodeSize.width() / 2 + childrenWidth),
+		return new Size(getPlaceChildrenOffset(nodeSize) + childrenWidth,
 				nodeSize.height() + VERTICAL_GAP + getMaxHeight(children));
+	}
+
+	private static double getPlaceChildrenOffset(final Size placeSize) {
+		return placeSize.width() + HORIZONTAL_GAP;
 	}
 
 	private Size computeVerticalSize(final Size nodeSize, final List<EObject> children) {
@@ -135,7 +139,7 @@ public class QueryTreeLayout extends AbstractLayout {
 		final Size nodeSize = getNodeSize(element);
 		final List<EObject> children = getLaidOutChildren(element);
 		if (QueryModelHelper.isPlace(element)) {
-			positionHorizontal(children, x + nodeSize.width() / 2 + CHILD_INDENT, y + nodeSize.height() + VERTICAL_GAP);
+			positionHorizontal(children, x + getPlaceChildrenOffset(nodeSize), y + nodeSize.height() + VERTICAL_GAP);
 		} else if (QueryModelHelper.isConstraint(element)) {
 			positionConstraintChildren(children, x, y, nodeSize);
 		} else {
