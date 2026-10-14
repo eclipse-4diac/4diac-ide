@@ -36,7 +36,11 @@ import org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
@@ -57,6 +61,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	private IEditorInput originEditorInput;
 	private ToolBarManager toolBarManager;
 	private IMenuService menuService;
+	private ToolBar toolbarControl;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -73,8 +78,9 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(parent);
 
 		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.HORIZONTAL);
-		final ToolBar toolbarControl = toolBarManager.createControl(parent);
+		toolbarControl = toolBarManager.createControl(parent);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarControl);
+
 		menuService = getSite().getService(IMenuService.class);
 		if (menuService != null) {
 			menuService.populateContributionManager(toolBarManager, TOOLBAR_LOCATION);
@@ -91,6 +97,48 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		if (browser != null) {
 			browser.addLocationListener(new ModelLocationListener());
 		}
+
+		// Find the Mylyn tab folder and dynamically toggle toolbar visibility on switch
+		final CTabFolder tabFolder = findTabFolder(newParent);
+		if (tabFolder != null) {
+
+			final Runnable updateToolbarVisibility = () -> {
+				if (toolbarControl != null && !toolbarControl.isDisposed()) {
+					// Index 0 represents the "Source" tab, Index 1 is the "Preview" tab
+					final boolean isSourcePage = tabFolder.getSelectionIndex() == 0;
+					toolbarControl.setVisible(isSourcePage);
+					if (toolbarControl.getLayoutData() instanceof final GridData gridData) {
+						gridData.exclude = !isSourcePage;
+					}
+					// Request parent to adjust bounds immediately to reclaim/release space
+					parent.layout(true, true);
+				}
+			};
+
+			tabFolder.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					updateToolbarVisibility.run();
+				}
+			});
+			updateToolbarVisibility.run();
+		}
+	}
+
+	// Helper method to traverse the widget tree and find the CTabFolder control
+	private CTabFolder findTabFolder(final Control control) {
+		if (control instanceof final CTabFolder tabFolder) {
+			return tabFolder;
+		}
+		if (control instanceof final Composite comp) {
+			for (final Control child : comp.getChildren()) {
+				final CTabFolder tf = findTabFolder(child);
+				if (tf != null) {
+					return tf;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
