@@ -52,6 +52,7 @@ import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBind
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
 import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
+import org.eclipse.nebula.widgets.nattable.sort.event.SortColumnEvent;
 import org.eclipse.nebula.widgets.nattable.tree.ITreeData;
 import org.eclipse.nebula.widgets.nattable.tree.ITreeRowModel;
 import org.eclipse.nebula.widgets.nattable.tree.TreeLayer;
@@ -184,7 +185,7 @@ public final class NatTableWidgetFactory {
 
 		final ILayer columnHeader;
 		if (sortModel != null) {
-			columnHeader = createSortHeaderLayer(columnHeaderLayer, sortModel);
+			columnHeader = createSortHeaderLayer(columnHeaderLayer, sortModel, bodyDataLayer);
 		} else {
 			columnHeader = columnHeaderLayer;
 		}
@@ -321,8 +322,16 @@ public final class NatTableWidgetFactory {
 	}
 
 	private static <T> SortHeaderLayer<T> createSortHeaderLayer(final ColumnHeaderLayer columnHeaderLayer,
-			final ISortModel sortModel) {
-		return new SortHeaderLayer<>(columnHeaderLayer, sortModel, false);
+			final ISortModel sortModel, final DataLayer bodyDataLayer) {
+		final SortHeaderLayer<T> sortHeaderLayer = new SortHeaderLayer<>(columnHeaderLayer, sortModel, false);
+		if (bodyDataLayer instanceof final AbstractCachingDataLayer cachingDataLayer) {
+			sortHeaderLayer.addLayerListener(event -> {
+				if (event instanceof SortColumnEvent) {
+					cachingDataLayer.killCache();
+				}
+			});
+		}
+		return sortHeaderLayer;
 	}
 
 	private static void setColumnWidths(final DataLayer dataLayer) {

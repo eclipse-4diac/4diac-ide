@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -88,12 +87,12 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 	private String comment = ""; //$NON-NLS-1$
 	private String value = ""; //$NON-NLS-1$
 
-	public AddAttributeTreeSelectionDialog(final Shell shell, final Collection<LibraryElement> initial,
+	public AddAttributeTreeSelectionDialog(final Shell shell, final Collection<EObject> initial,
 			final ISearchChildrenProvider childProv, final String attributeDeclName, final IProject project,
 			final Set<Object> disabledElements) {
 		super(shell, new DisabledElementsLabelProvider(disabledElements),
 				new AttributeTreeContentProvider(childProv, attributeDeclName, disabledElements));
-		this.setInput(initial.toArray(LibraryElement[]::new));
+		this.setInput(initial.toArray(EObject[]::new));
 		this.attributeDeclName = attributeDeclName;
 		this.project = project;
 		this.disabledElements = disabledElements;
