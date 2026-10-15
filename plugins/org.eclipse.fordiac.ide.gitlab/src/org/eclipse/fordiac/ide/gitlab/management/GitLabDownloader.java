@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - request GitLab lists in pages of 100 entries
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.management;
 
@@ -71,7 +72,8 @@ public class GitLabDownloader implements IArchiveDownloader {
 	private static final String MANIFEST_FILENAME = "MANIFEST.MF"; //$NON-NLS-1$
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private HashMap<String, List<LeafNode>> packagesAndLeaves;
-	private static final String URL_PARAMETERS = "?per_page=20"; //$NON-NLS-1$
+	// the maximum page size of the GitLab API, to keep the number of requests low
+	private static final String URL_PARAMETERS = "?per_page=100"; //$NON-NLS-1$
 	private static final String CUSTOM_PARAMETERS = "&membership=true"; //$NON-NLS-1$
 	private static final String URL_PAGE_PARAMETER = "&page="; //$NON-NLS-1$
 	private static final String NEXT_PAGE_HEADER = "X-Next-Page"; //$NON-NLS-1$
