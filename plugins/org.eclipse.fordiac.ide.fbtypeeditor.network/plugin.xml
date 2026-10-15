@@ -9,7 +9,7 @@
             default="true"
             icon="fordiacimage://ICON_COMPOSITE_FB"
             id="org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer"
-            name="CompositeInstanceViewer">
+            name="%editor.compositeInstanceViewer.name">
       </editor>
 </extension>
    <extension
@@ -63,29 +63,29 @@
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
-               label="Instance">
+               label="%propertyTab.instance.label">
          </propertyTab>
          
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceElementTab"
-               label="Pin">
+               label="%propertyTab.pin.label">
          </propertyTab>
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyConnectionTab"
-               label="Connection">
+               label="%propertyTab.connection.label">
          </propertyTab>
          <propertyTab
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.CreateConnection"
-               label="Create Connection">
+               label="%propertyTab.createConnection.label">
          </propertyTab>
          <propertyTab
                category="Interface"
                id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
                indented="false"
-               label="Struct Element">
+               label="%propertyTab.structElement.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
@@ -93,7 +93,7 @@
                id="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                image="fordiacimage://ICON_EVENT"
                indented="true"
-               label="Edit Events">
+               label="%propertyTab.editEvents.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
@@ -101,13 +101,13 @@
                image="fordiacimage://ICON_DATA"
                id="org.eclipse.fordiac.ide.application.property.tab.EditData"
                indented="true"
-               label="Edit Data">
+               label="%propertyTab.editData.label">
          </propertyTab>
          <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                category="FB-Network"
                id="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
                indented="true"
-               label="Edit Var In/Out">
+               label="%propertyTab.editVarInOut.label">
          </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
@@ -115,14 +115,14 @@
                image="fordiacimage://ICON_ADAPTER_LIST"
                id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                indented="true"
-               label="Edit Adapters">
+               label="%propertyTab.editAdapters.label">
           </propertyTab>
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                category="FB-Network"
                id="org.eclipse.fordiac.ide.fbnet.propertyFBTypeInfoTab"
                image="fordiacimage://ICON_FB_TYPE"
-               label="Type Info">
+               label="%propertyTab.typeInfo.label">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -208,7 +208,7 @@
       <commonFilter
             activeByDefault="true"
             id="org.eclipse.fordiac.ide.compositefbpaletteviewer.filters.showonlyFBTypes"
-            name="Show only IEC 61499 FB Types"
+            name="%commonFilter.showOnlyFBTypes.name"
             visibleInUI="true">
          <filterExpression>
                   <or>
