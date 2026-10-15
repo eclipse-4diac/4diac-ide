@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.bulkeditor.query;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -44,7 +45,9 @@ import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -55,15 +58,21 @@ public class QueryViewer {
 	private static final String QUERY_ECORE_URI = "/org.eclipse.fordiac.ide.model/model/searchQuery.ecore"; //$NON-NLS-1$
 	private static final String QUERY_FILE_EXTENSION = "query"; //$NON-NLS-1$
 
+	public record QuerySnapshot(String xmi, URI queryFile, boolean dirty) {
+	}
+
 	private final IProject project;
+	private final BulkEditor editor;
 	private final AdapterFactoryEditingDomain editingDomain;
 	private final EPackage queryPackage;
 	private final QueryGraphicalViewer graphicalViewer;
 	private Resource queryResource;
 	private EObject queryRoot;
+	private boolean restoredDirty;
 
 	public QueryViewer(final Composite parent, final IProject project, final BulkEditor editor) {
 		this.project = project;
+		this.editor = editor;
 		editingDomain = createEditingDomain(createAdapterFactory());
 		queryPackage = loadQueryPackage(getResourceSet());
 
@@ -87,6 +96,14 @@ public class QueryViewer {
 		return graphicalViewer.getEditDomain().getCommandStack();
 	}
 
+	public boolean isDirty() {
+		return restoredDirty || getCommandStack().isDirty();
+	}
+
+	public URI getQueryFile() {
+		return queryResource.getURI().isFile() ? queryResource.getURI() : null;
+	}
+
 	public ZoomManager getZoomManager() {
 		return graphicalViewer.getZoomManager();
 	}
@@ -100,13 +117,18 @@ public class QueryViewer {
 		getCommandStack().execute(command);
 	}
 
-	public void loadQueryFromString(final String xmi) {
-		if (xmi == null || xmi.isBlank()) {
+	public void restoreSnapshot(final QuerySnapshot snapshot) {
+		if (snapshot == null || snapshot.xmi() == null || snapshot.xmi().isBlank()) {
 			return;
 		}
-		final Resource restored = getResourceSet().createResource(URI.createURI("temp:/restored.query")); //$NON-NLS-1$
+		final URI uri = snapshot.queryFile() != null ? snapshot.queryFile() : URI.createURI("temp:/restored.query"); //$NON-NLS-1$
+		final Resource restored = getResourceSet().createResource(uri);
+		if (restored == null) {
+			ILog.get().warn("Could not restore query model, unsupported query file: " + uri); //$NON-NLS-1$
+			return;
+		}
 		try {
-			restored.load(new ByteArrayInputStream(xmi.getBytes(StandardCharsets.UTF_8)), null);
+			restored.load(new ByteArrayInputStream(snapshot.xmi().getBytes(StandardCharsets.UTF_8)), null);
 		} catch (final IOException | RuntimeException e) {
 			ILog.get().warn("Could not restore query model, starting empty", e); //$NON-NLS-1$
 			getResourceSet().getResources().remove(restored);
@@ -119,9 +141,15 @@ public class QueryViewer {
 		queryResource.unload();
 		getResourceSet().getResources().remove(queryResource);
 		showQuery(restored);
+		restoredDirty = snapshot.dirty();
 	}
 
-	public String saveQueryToString() {
+	public QuerySnapshot createSnapshot() {
+		final String xmi = saveQueryToString();
+		return xmi != null ? new QuerySnapshot(xmi, getQueryFile(), isDirty()) : null;
+	}
+
+	private String saveQueryToString() {
 		if (queryResource.getContents().isEmpty()) {
 			return null;
 		}
@@ -134,17 +162,38 @@ public class QueryViewer {
 		}
 	}
 
+	public boolean saveQuery() throws IOException {
+		if (getQueryFile() == null) {
+			return saveQueryAs();
+		}
+		saveQueryResource();
+		return true;
+	}
+
 	private void saveQueryToFile() {
+		try {
+			saveQueryAs();
+		} catch (final IOException e) {
+			ILog.get().error("Could not save query file", e); //$NON-NLS-1$
+		}
+	}
+
+	private boolean saveQueryAs() throws IOException {
 		final FileDialog dialog = createQueryFileDialog(SWT.SAVE, Messages.SaveQuery);
 		dialog.setOverwrite(true);
 		final String filePath = dialog.open();
 		if (filePath == null) {
-			return;
+			return false;
+		}
+		final URI fileUri = toQueryFileUri(filePath);
+		if (!fileUri.toFileString().equals(filePath) && new File(fileUri.toFileString()).exists()
+				&& !MessageDialog.openQuestion(graphicalViewer.getControl().getShell(), Messages.SaveQuery,
+						NLS.bind(Messages.QueryFileExists, fileUri.toFileString()))) {
+			return false;
 		}
 
 		// detach the query before a resource of the same file is unloaded
 		queryResource.getContents().remove(queryRoot);
-		final URI fileUri = URI.createFileURI(filePath);
 		final Resource existing = getResourceSet().getResource(fileUri, false);
 		if (existing != null) {
 			existing.unload();
@@ -154,14 +203,26 @@ public class QueryViewer {
 		final Resource fileResource = getResourceSet().createResource(fileUri);
 		fileResource.getContents().add(queryRoot);
 		showQuery(fileResource);
-		try {
-			fileResource.save(null);
-		} catch (final IOException e) {
-			ILog.get().error("Could not save query file", e); //$NON-NLS-1$
-		}
+		saveQueryResource();
+		return true;
+	}
+
+	private static URI toQueryFileUri(final String filePath) {
+		final URI fileUri = URI.createFileURI(filePath);
+		return QUERY_FILE_EXTENSION.equals(fileUri.fileExtension()) ? fileUri
+				: fileUri.appendFileExtension(QUERY_FILE_EXTENSION);
+	}
+
+	private void saveQueryResource() throws IOException {
+		queryResource.save(null);
+		getCommandStack().markSaveLocation();
+		restoredDirty = false;
 	}
 
 	private void loadQueryFromFile() {
+		if (!editor.promptToSaveQuery()) {
+			return;
+		}
 		final String filePath = createQueryFileDialog(SWT.OPEN, Messages.LoadQuery).open();
 		if (filePath == null) {
 			return;
@@ -205,6 +266,7 @@ public class QueryViewer {
 		}
 		getCommandStack().flush();
 		showQuery(candidate);
+		restoredDirty = false;
 	}
 
 	private void showQuery(final Resource resource) {

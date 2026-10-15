@@ -19,6 +19,8 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String BulkEditor_ProblemOpeningSearchResult;
+	public static String BulkEditor_QueryName;
+	public static String BulkEditor_QuerySaveFailed;
 
 	public static String Name;
 	public static String Type;
@@ -35,16 +37,14 @@ public final class Messages extends NLS {
 	public static String SaveQuery;
 	public static String LoadQuery;
 	public static String QueryFileFilterName;
+	public static String QueryFileExists;
 
 	public static String AddChild;
 	public static String RemoveChild;
 
 	public static String Search_Changes;
 	public static String NoUsage;
-	public static String Unsaved_Changes;
 	public static String Save;
-	public static String Discard;
-	public static String Cancel;
 
 	public static String AddElementDialog_InvalidType;
 	public static String AddElementDialog_InvalidSelection;
