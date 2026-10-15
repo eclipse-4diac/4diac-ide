@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.bulkeditor.editors;
 import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer.QuerySnapshot;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
@@ -23,14 +24,14 @@ import org.eclipse.ui.IPersistableElement;
 public class BulkEditorInput implements IEditorInput, IPersistableElement {
 
 	private final IProject project;
-	private String query;
-	private Supplier<String> querySupplier;
+	private QuerySnapshot query;
+	private Supplier<QuerySnapshot> querySupplier;
 
 	public BulkEditorInput(final IProject project) {
-		this(project, ""); //$NON-NLS-1$
+		this(project, null);
 	}
 
-	public BulkEditorInput(final IProject project, final String query) {
+	public BulkEditorInput(final IProject project, final QuerySnapshot query) {
 		this.project = project;
 		this.query = query;
 	}
@@ -95,21 +96,21 @@ public class BulkEditorInput implements IEditorInput, IPersistableElement {
 		return null;
 	}
 
-	public String getQuery() {
+	public QuerySnapshot getQuery() {
 		return query;
 	}
 
-	public void setQuery(final String query) {
+	public void setQuery(final QuerySnapshot query) {
 		this.query = query;
 	}
 
-	public void setQuerySnapshotSupplier(final Supplier<String> querySupplier) {
+	public void setQuerySnapshotSupplier(final Supplier<QuerySnapshot> querySupplier) {
 		this.querySupplier = querySupplier;
 	}
 
-	public String snapshotQueryXmi() {
+	public QuerySnapshot snapshotQuery() {
 		if (querySupplier != null) {
-			final String current = querySupplier.get();
+			final QuerySnapshot current = querySupplier.get();
 			if (current != null) {
 				query = current;
 			}

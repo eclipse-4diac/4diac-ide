@@ -14,12 +14,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
@@ -29,7 +30,6 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -69,7 +69,6 @@ import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -78,13 +77,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.ISaveablesLifecycleListener;
+import org.eclipse.ui.ISaveablesSource;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.Saveable;
+import org.eclipse.ui.SaveablesLifecycleEvent;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
-public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, CommandStackEventListener {
+public class BulkEditor extends MultiPageEditorPart
+		implements CommandExecutor, CommandStackEventListener, ISaveablesSource {
 
 	private static final String CONTEXT_ID = "org.eclipse.fordiac.ide.bulkeditor"; //$NON-NLS-1$
 
@@ -104,6 +107,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	private BulkEditorNatTable natTable;
 	private QueryViewer queryViewer;
+	private final QuerySaveable querySaveable = new QuerySaveable(() -> queryViewer, this::getTitle);
 
 	// Latest successful search result (mapped to editable counterparts).
 	private List<EObject> editableSearchResult;
@@ -173,8 +177,8 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		queryViewer = new QueryViewer(pageComposite, this.project, this);
 		queryViewer.getCommandStack().addCommandStackEventListener(this);
 		if (getEditorInput() instanceof final BulkEditorInput bulkEditorInput) {
-			queryViewer.loadQueryFromString(bulkEditorInput.getQuery());
-			bulkEditorInput.setQuerySnapshotSupplier(queryViewer::saveQueryToString);
+			queryViewer.restoreSnapshot(bulkEditorInput.getQuery());
+			bulkEditorInput.setQuerySnapshotSupplier(queryViewer::createSnapshot);
 		}
 		pageComposite.layout();
 
@@ -191,24 +195,12 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		setActivePage(QUERY_PAGE_INDEX);
 	}
 
-	public boolean confirmDiscardUnsavedChanges() {
-		if (!isDirty()) {
-			return true;
-		}
-		final int result = MessageDialog.open(MessageDialog.QUESTION_WITH_CANCEL, getSite().getShell(), Messages.Save,
-				Messages.Unsaved_Changes, 0, Messages.Save, Messages.Discard, Messages.Cancel);
-		return switch (result) {
-		case 0 -> {
-			doSave(new NullProgressMonitor());
-			yield true;
-		}
-		case 1 -> true;
-		default -> false;
-		};
+	public boolean promptToSaveQuery() {
+		return promptToSave(querySaveable);
 	}
 
 	public void onSearchRequested() {
-		if (!confirmDiscardUnsavedChanges()) {
+		if (!promptToSave(getResultSaveables())) {
 			return;
 		}
 		if (!performSearch()) {
@@ -228,6 +220,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		default -> selectionProviderDelegate.setActiveProvider(null);
 		}
 		updateStackActions();
+		firePropertyChange(PROP_DIRTY);
 	}
 
 	private boolean performSearch() {
@@ -248,6 +241,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		this.latestQueryConfig = result.placeConfig();
 		this.searchScope = result.searchScope();
 
+		fireSaveablesEvent(SaveablesLifecycleEvent.POST_CLOSE, getResultSaveables());
 		disconnectEditorInputs();
 		connectEditorInputs(result.searchResult());
 
@@ -322,6 +316,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	private void connectEditorInputs(final List<? extends EObject> results) {
 		final MultiStatus status = new MultiStatus(getClass(), IStatus.OK,
 				Messages.BulkEditor_ProblemOpeningSearchResult);
+		final List<Saveable> openedSaveables = new ArrayList<>();
 		for (final EObject result : results) {
 			final IEditorInput editorInput = BulkEditorHelper.getEditorInput(result);
 			if (editorInput != null && editorInputs.add(editorInput)) {
@@ -330,8 +325,10 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 				} catch (final CoreException e) {
 					status.add(e.getStatus());
 				}
+				openedSaveables.add(new LibraryElementSaveable(editorInput));
 			}
 		}
+		fireSaveablesEvent(SaveablesLifecycleEvent.POST_OPEN, openedSaveables.toArray(Saveable[]::new));
 		if (!status.isOK()) {
 			ErrorDialog.openError(getSite().getShell(), null, null, status);
 		}
@@ -346,7 +343,48 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	@Override
 	public boolean isDirty() {
-		return editorInputs.stream().anyMatch(LibraryElementProvider.INSTANCE::canSaveLibraryElement);
+		return Arrays.stream(getSaveables()).anyMatch(Saveable::isDirty);
+	}
+
+	@Override
+	public Saveable[] getSaveables() {
+		return Stream.concat(Stream.of(querySaveable), Arrays.stream(getResultSaveables())).toArray(Saveable[]::new);
+	}
+
+	@Override
+	public Saveable[] getActiveSaveables() {
+		// saving saves the query or the search results, whichever is shown
+		if (getActivePage() == QUERY_PAGE_INDEX) {
+			return new Saveable[] { querySaveable };
+		}
+		return getResultSaveables();
+	}
+
+	private Saveable[] getResultSaveables() {
+		return editorInputs.stream().map(LibraryElementSaveable::new).toArray(Saveable[]::new);
+	}
+
+	private boolean promptToSave(final Saveable... saveables) {
+		final SaveablesLifecycleEvent event = new SaveablesLifecycleEvent(this, SaveablesLifecycleEvent.PRE_CLOSE,
+				saveables, false);
+		getSaveablesLifecycleListener().handleLifecycleEvent(event);
+		return !event.isVeto();
+	}
+
+	private void fireDirtyChanged(final Saveable saveable) {
+		firePropertyChange(PROP_DIRTY);
+		fireSaveablesEvent(SaveablesLifecycleEvent.DIRTY_CHANGED, saveable);
+	}
+
+	private void fireSaveablesEvent(final int eventType, final Saveable... saveables) {
+		if (saveables.length > 0) {
+			getSaveablesLifecycleListener()
+					.handleLifecycleEvent(new SaveablesLifecycleEvent(this, eventType, saveables, false));
+		}
+	}
+
+	private ISaveablesLifecycleListener getSaveablesLifecycleListener() {
+		return getSite().getService(ISaveablesLifecycleListener.class);
 	}
 
 	@Override
@@ -361,30 +399,16 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(project.getParent()) {
-			@Override
-			protected void execute(final IProgressMonitor monitor)
-					throws CoreException, InvocationTargetException, InterruptedException {
-				final SubMonitor subMonitor = SubMonitor.convert(monitor, editorInputs.size());
-				int remaining = editorInputs.size();
-				for (final IEditorInput editorInput : editorInputs) {
-					if (LibraryElementProvider.INSTANCE.canSaveLibraryElement(editorInput)) {
-						LibraryElementProvider.INSTANCE.saveLibraryElement(editorInput, subMonitor.split(1));
-					}
-					remaining--;
-					subMonitor.setWorkRemaining(remaining);
-				}
+		// the workbench saves the saveables of the shown page, this saves all of them
+		final List<Saveable> dirtySaveables = Arrays.stream(getSaveables()).filter(Saveable::isDirty).toList();
+		final SubMonitor subMonitor = SubMonitor.convert(monitor, dirtySaveables.size());
+		for (final Saveable saveable : dirtySaveables) {
+			try {
+				saveable.doSave(subMonitor.split(1));
+			} catch (final CoreException e) {
+				ILog.get().error(e.getMessage(), e);
 			}
-		};
-		try {
-			operation.run(monitor);
-		} catch (final InvocationTargetException e) {
-			ILog.get().error(e.getMessage(), e);
-		} catch (final InterruptedException e) {
-			ILog.get().error(e.getMessage(), e);
-			Thread.currentThread().interrupt();
 		}
-		commandStack.markSaveLocation();
 	}
 
 	@Override
@@ -395,7 +419,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	@Override
 	public void dispose() {
 		if (queryViewer != null && getEditorInput() instanceof final BulkEditorInput bulkEditorInput) {
-			bulkEditorInput.setQuery(queryViewer.saveQueryToString());
+			bulkEditorInput.setQuery(queryViewer.createSnapshot());
 			bulkEditorInput.setQuerySnapshotSupplier(null);
 		}
 
@@ -422,6 +446,10 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		}
 		if ((event.getDetail() & CommandStack.POST_MASK) != 0) {
 			updateStackActions();
+			if (event.getSource() != commandStack) {
+				// the search results are dirty by their library elements, not by their stack
+				fireDirtyChanged(querySaveable);
+			}
 		}
 	}
 
@@ -459,7 +487,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		@Override
 		public void elementDirtyStateChanged(final IEditorInput input, final boolean isDirty) {
 			if (editorInputs.contains(input)) {
-				firePropertyChange(PROP_DIRTY);
+				fireDirtyChanged(new LibraryElementSaveable(input));
 				natTable.setSearchInformationText(Messages.Search_Changes);
 			}
 		}
@@ -476,6 +504,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		@Override
 		public void elementDeleted(final IEditorInput input) {
 			if (editorInputs.remove(input)) {
+				fireSaveablesEvent(SaveablesLifecycleEvent.POST_CLOSE, new LibraryElementSaveable(input));
 				LibraryElementProvider.INSTANCE.disconnect(input);
 				editableSearchResult = editableSearchResult.stream()
 						.filter(result -> !input.equals(BulkEditorHelper.getEditorInput(result))).toList();
@@ -486,6 +515,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		@Override
 		public void elementMoved(final IEditorInput originalInput, final IEditorInput movedInput) {
 			if (editorInputs.remove(originalInput)) {
+				fireSaveablesEvent(SaveablesLifecycleEvent.POST_CLOSE, new LibraryElementSaveable(originalInput));
 				LibraryElementProvider.INSTANCE.disconnect(originalInput);
 				connectEditorInputs(editableSearchResult);
 				editableSearchResult = BulkEditorHelper.findEditableResults(editableSearchResult);
