@@ -29,7 +29,6 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -92,8 +91,6 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 
 	private static DefaultEditDomain createEditDomain(final IEditorPart editor) {
 		final DefaultEditDomain editDomain = new DefaultEditDomain(editor);
-		// query changes are undone together with the other bulk editor changes
-		editDomain.setCommandStack(editor.getAdapter(CommandStack.class));
 		editDomain.setDefaultTool(new AdvancedPanningSelectionTool());
 		editDomain.setActiveTool(editDomain.getDefaultTool());
 		return editDomain;
