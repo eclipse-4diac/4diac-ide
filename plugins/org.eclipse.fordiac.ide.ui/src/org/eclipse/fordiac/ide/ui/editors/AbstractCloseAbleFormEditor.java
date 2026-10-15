@@ -26,7 +26,9 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 public abstract class AbstractCloseAbleFormEditor extends FormEditor {
 
 	public boolean closeChildEditor(final IEditorPart childEditor) {
-
+		if (pages == null) {
+			return false;
+		}
 		final int pageIndex = pages.indexOf(childEditor);
 		if (pageIndex != -1) {
 			removePage(pageIndex);
