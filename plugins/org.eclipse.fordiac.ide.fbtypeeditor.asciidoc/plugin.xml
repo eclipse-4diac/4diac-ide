@@ -40,12 +40,20 @@
         optional="false">
       </commandParameter>
     </command>
+    <command
+      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage"
+      name="%toolbar.image.label">
+    </command>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
     <handler
       class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler"
       commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate">
+    </handler>
+    <handler
+      class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.UploadImageHandler"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage">
     </handler>
   </extension>
 
@@ -149,7 +157,14 @@
         tooltip="%toolbar.fbt.tooltip"
         style="push">
         <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="fbt" />
-      </command>
+      </command>   
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage"
+        icon="icons/image.svg"
+        label="%toolbar.image.label"
+        tooltip="%toolbar.image.tooltip"
+        style="push">
+      </command>      
     </menuContribution>
     
     <!-- Dropdown content for headings -->

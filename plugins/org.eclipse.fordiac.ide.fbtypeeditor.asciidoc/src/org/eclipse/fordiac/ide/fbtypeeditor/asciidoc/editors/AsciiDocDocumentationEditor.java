@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
@@ -70,7 +71,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		// shown
 		originEditorInput = input;
 		super.init(site, getDocumentationEditorInput(input));
-		setPartName("AsciiDoc Description");
+		setPartName(Messages.AsciiDoc_Description);
 		setTitleImage(FordiacImage.ICON_DOCUMENTATION_EDITOR.getImage());
 	}
 
