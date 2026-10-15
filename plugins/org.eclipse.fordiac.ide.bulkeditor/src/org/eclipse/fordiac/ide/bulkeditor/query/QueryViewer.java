@@ -224,12 +224,17 @@ public class QueryViewer {
 			return;
 		}
 		final String filePath = createQueryFileDialog(SWT.OPEN, Messages.LoadQuery).open();
-		if (filePath == null) {
-			return;
+		if (filePath != null) {
+			loadQuery(URI.createFileURI(filePath));
 		}
+	}
 
+	/**
+	 * Shows the query of the query file instead of the current query, without
+	 * asking to save the current query.
+	 */
+	public void loadQuery(final URI fileUri) {
 		final EList<Resource> resources = getResourceSet().getResources();
-		final URI fileUri = URI.createFileURI(filePath);
 		final Resource existing = getResourceSet().getResource(fileUri, false);
 		final int existingIndex = existing != null ? resources.indexOf(existing) : -1;
 		if (existing != null) {
@@ -253,7 +258,7 @@ public class QueryViewer {
 			if (existing != null) {
 				resources.add(Math.min(existingIndex, resources.size()), existing);
 			}
-			ILog.get().error(filePath, e);
+			ILog.get().error(fileUri.toFileString(), e);
 			return;
 		}
 

@@ -21,6 +21,7 @@ public final class Messages extends NLS {
 	public static String BulkEditor_ProblemOpeningSearchResult;
 	public static String BulkEditor_QueryName;
 	public static String BulkEditor_QuerySaveFailed;
+	public static String QueryFileLauncher_NotInProject;
 
 	public static String Name;
 	public static String Type;

@@ -67,7 +67,7 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 			final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			try {
 				final IEditorPart editor = window.getActivePage().openEditor(new BulkEditorInput(project),
-						"org.eclipse.fordiac.ide.bulkeditor.BulkEditor"); //$NON-NLS-1$
+						BulkEditor.ID);
 				if (!subAppList.isEmpty() && editor instanceof final BulkEditor bulkEditor) {
 					bulkEditor.showSubappHierarchyScope(subAppList);
 				}
