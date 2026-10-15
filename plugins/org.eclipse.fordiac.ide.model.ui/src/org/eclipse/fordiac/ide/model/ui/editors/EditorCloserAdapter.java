@@ -14,9 +14,8 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
 public class EditorCloserAdapter extends AdapterImpl {
@@ -28,13 +27,11 @@ public class EditorCloserAdapter extends AdapterImpl {
 	}
 
 	protected void closeEditor() {
-		final IEditorSite siteToUse = part.getEditorSite();
-		if (siteToUse instanceof MultiPageEditorSite) {
-			final MultiPageEditorPart editor = ((MultiPageEditorSite) siteToUse).getMultiPageEditor();
-			if (editor instanceof AbstractCloseAbleFormEditor) {
-				((AbstractCloseAbleFormEditor) editor).closeChildEditor(part);
+		Display.getDefault().asyncExec(() -> {
+			if (part.getEditorSite() instanceof final MultiPageEditorSite site
+					&& site.getMultiPageEditor() instanceof final AbstractCloseAbleFormEditor editor) {
+				editor.closeChildEditor(part);
 			}
-		}
+		});
 	}
-
 }
