@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
@@ -57,7 +58,7 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 		originEditorInput = input;
 		setSite(site);
 		setInput(getDocumentationEditorInput(input));
-		setPartName("AsciiDoc Description");
+		setPartName(Messages.AsciiDoc_Description);
 		setTitleImage(FordiacImage.ICON_DOCUMENTATION_EDITOR.getImage());
 	}
 
@@ -96,6 +97,7 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 
 	@Override
 	public void reloadType() {
+		// nothing
 	}
 
 	@Override
@@ -157,7 +159,7 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 
 		if (!(getEditorInput() instanceof final IFileEditorInput fileEI) || !fileEI.getFile().exists()) {
 			browser.setText(
-					"<html><body><p>Error rendering preview: no documentation file available!</p></body></html>");
+					"<html><body><p>Error rendering preview: no documentation file available!</p></body></html>"); //$NON-NLS-1$
 			return;
 		}
 
@@ -171,7 +173,7 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 
 			browser.setText(writer.toString());
 		} catch (final Exception e) {
-			browser.setText("<html><body><p>Error rendering preview: " + e.getMessage() + "</p></body></html>");
+			browser.setText("<html><body><p>Error rendering preview: " + e.getMessage() + "</p></body></html>"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
