@@ -222,8 +222,12 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		}
 		final int pageIndex = pages.indexOf(childEditor);
 		if (pageIndex != -1) {
+			final boolean wasActive = getActiveEditor() == childEditor;
 			removePage(pageIndex);
 			updateEditorMapping(pageIndex);
+			if (wasActive) {
+				breadcrumb.openParent();
+			}
 			return true;
 		}
 		return false;
