@@ -89,6 +89,8 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 public class BulkEditor extends MultiPageEditorPart
 		implements CommandExecutor, CommandStackEventListener, ISaveablesSource {
 
+	public static final String ID = "org.eclipse.fordiac.ide.bulkeditor.BulkEditor"; //$NON-NLS-1$
+
 	private static final String CONTEXT_ID = "org.eclipse.fordiac.ide.bulkeditor"; //$NON-NLS-1$
 
 	private static final int QUERY_PAGE_INDEX = 0;
@@ -193,6 +195,13 @@ public class BulkEditor extends MultiPageEditorPart
 	public void showSubappHierarchyScope(final List<String> hierarchy) {
 		queryViewer.setSubappHierarchyScope(hierarchy);
 		setActivePage(QUERY_PAGE_INDEX);
+	}
+
+	public void openQueryFile(final URI queryFile) {
+		setActivePage(QUERY_PAGE_INDEX);
+		if ((!queryFile.equals(queryViewer.getQueryFile()) || queryViewer.isDirty()) && promptToSaveQuery()) {
+			queryViewer.loadQuery(queryFile);
+		}
 	}
 
 	public boolean promptToSaveQuery() {
