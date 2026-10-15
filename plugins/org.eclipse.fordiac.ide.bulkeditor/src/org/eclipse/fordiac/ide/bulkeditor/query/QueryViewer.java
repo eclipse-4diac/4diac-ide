@@ -38,11 +38,10 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
-import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -50,8 +49,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 /** Query page of the bulk editor, which loads, saves and shows the query. */
 public class QueryViewer {
@@ -59,7 +56,6 @@ public class QueryViewer {
 	private static final String QUERY_FILE_EXTENSION = "query"; //$NON-NLS-1$
 
 	private final IProject project;
-	private final ComposedAdapterFactory adapterFactory;
 	private final AdapterFactoryEditingDomain editingDomain;
 	private final EPackage queryPackage;
 	private final QueryGraphicalViewer graphicalViewer;
@@ -68,8 +64,7 @@ public class QueryViewer {
 
 	public QueryViewer(final Composite parent, final IProject project, final BulkEditor editor) {
 		this.project = project;
-		adapterFactory = createAdapterFactory();
-		editingDomain = createEditingDomain(adapterFactory);
+		editingDomain = createEditingDomain(createAdapterFactory());
 		queryPackage = loadQueryPackage(getResourceSet());
 
 		graphicalViewer = new QueryGraphicalViewer(parent, editor, project);
@@ -88,6 +83,10 @@ public class QueryViewer {
 		return graphicalViewer;
 	}
 
+	public CommandStack getCommandStack() {
+		return graphicalViewer.getEditDomain().getCommandStack();
+	}
+
 	public ZoomManager getZoomManager() {
 		return graphicalViewer.getZoomManager();
 	}
@@ -98,16 +97,7 @@ public class QueryViewer {
 		command.add(new ChangeQueryFeatureCommand(place, QueryModelHelper.FEATURE_SUBAPP_HIERARCHY, Boolean.TRUE));
 		command.add(
 				new ChangeQueryFeatureCommand(place, QueryModelHelper.FEATURE_SUBAPP_HIERARCHY_ELEMENTS, hierarchy));
-		graphicalViewer.getEditDomain().getCommandStack().execute(command);
-	}
-
-	public IPropertySheetPage createPropertySheetPage() {
-		final AdapterFactoryContentProvider contentProvider = new AdapterFactoryContentProvider(adapterFactory);
-		final PropertySheetPage page = new PropertySheetPage();
-		// the viewer selects edit parts, the properties are the ones of their elements
-		page.setPropertySourceProvider(object -> contentProvider
-				.getPropertySource(object instanceof final EditPart editPart ? editPart.getModel() : object));
-		return page;
+		getCommandStack().execute(command);
 	}
 
 	public void loadQueryFromString(final String xmi) {
@@ -213,8 +203,7 @@ public class QueryViewer {
 			queryResource.unload();
 			resources.remove(queryResource);
 		}
-		editingDomain.getCommandStack().flush();
-		graphicalViewer.getEditDomain().getCommandStack().flush();
+		getCommandStack().flush();
 		showQuery(candidate);
 	}
 

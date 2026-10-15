@@ -66,6 +66,7 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
+import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -82,7 +83,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
 
 public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, CommandStackEventListener {
 
@@ -97,7 +97,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 	private final Set<IEditorInput> editorInputs = new HashSet<>();
 	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
 	private final MultiLibraryElementOperationContextUpdater operationContextUpdater = new MultiLibraryElementOperationContextUpdater(
-			commandStack::getUndoContext);
+			commandStack::getUndoContext, editorInputs);
 	private final EditorStateListener elementStateListener = new EditorStateListener();
 	private MultiLibraryElementActivationListener activationListener;
 	private ActionRegistry actionRegistry;
@@ -171,6 +171,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		pageComposite.setLayoutData(gd);
 
 		queryViewer = new QueryViewer(pageComposite, this.project, this);
+		queryViewer.getCommandStack().addCommandStackEventListener(this);
 		if (getEditorInput() instanceof final BulkEditorInput bulkEditorInput) {
 			queryViewer.loadQueryFromString(bulkEditorInput.getQuery());
 			bulkEditorInput.setQuerySnapshotSupplier(queryViewer::saveQueryToString);
@@ -226,6 +227,7 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 		case 1 -> selectionProviderDelegate.setActiveProvider(natTable.getCurrentProvider());
 		default -> selectionProviderDelegate.setActiveProvider(null);
 		}
+		updateStackActions();
 	}
 
 	private boolean performSearch() {
@@ -414,21 +416,37 @@ public class BulkEditor extends MultiPageEditorPart implements CommandExecutor, 
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
-		if ((event.getDetail() & CommandStack.POST_UNDO) != 0 || (event.getDetail() & CommandStack.POST_REDO) != 0) {
+		if (event.getSource() == commandStack && ((event.getDetail() & CommandStack.POST_UNDO) != 0
+				|| (event.getDetail() & CommandStack.POST_REDO) != 0)) {
 			natTable.getCurrentTable().refresh();
+		}
+		if ((event.getDetail() & CommandStack.POST_MASK) != 0) {
+			updateStackActions();
+		}
+	}
+
+	private CommandStack getActiveCommandStack() {
+		if (getActivePage() == QUERY_PAGE_INDEX && queryViewer != null) {
+			return queryViewer.getCommandStack();
+		}
+		return commandStack;
+	}
+
+	private void updateStackActions() {
+		for (final String actionId : List.of(ActionFactory.UNDO.getId(), ActionFactory.REDO.getId())) {
+			if (actionRegistry.getAction(actionId) instanceof final UpdateAction action) {
+				action.update();
+			}
 		}
 	}
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == CommandStack.class) {
-			return adapter.cast(commandStack);
+			return adapter.cast(getActiveCommandStack());
 		}
 		if (adapter == ActionRegistry.class) {
 			return adapter.cast(actionRegistry);
-		}
-		if (IPropertySheetPage.class.equals(adapter)) {
-			return adapter.cast(queryViewer.createPropertySheetPage());
 		}
 		if (adapter == ZoomManager.class && queryViewer != null) {
 			// allows to zoom the query with the zoom toolbar of 4diac
