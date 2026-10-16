@@ -7,7 +7,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsPreferencePage"
             id="org.eclipse.fordiac.ide.gitlab.preferences.gitlabEndpoints"
-            name="GitLab Endpoints">
+            name="%preferencePage.gitlabEndpoints.name">
       </page>
    </extension>
 <!--   <extension point="org.eclipse.ui.preferencePages">
