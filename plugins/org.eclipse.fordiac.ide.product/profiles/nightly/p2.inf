@@ -1,3 +1,9 @@
 instructions.configure=\
   addRepository(type:0,location:https${#58}//download.eclipse.org/4diac/updates/nightly,name:Eclipse 4diac Nightly);\
   addRepository(type:1,location:https${#58}//download.eclipse.org/4diac/updates/nightly,name:Eclipse 4diac Nightly);
+
+# Specify this as a requirement with a version range rather than as <plugin id="slf4j.simple"/> in the product.
+# This way we can specify a version range that allows the logger bundle to be updated without requiring the product to be updated.
+requires.1.namespace = org.eclipse.equinox.p2.iu
+requires.1.name = slf4j.simple
+requires.1.range = [2.0.0,3.0.0)
