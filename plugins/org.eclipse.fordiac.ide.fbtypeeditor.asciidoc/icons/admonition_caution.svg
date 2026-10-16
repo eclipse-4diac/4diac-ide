@@ -7,7 +7,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
-   sodipodi:docname="admonition_caution.svg"
+   sodipodi:docname="admonition_caution_v2.svg"
    xml:space="preserve"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -23,9 +23,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="64"
-     inkscape:cx="7.984375"
-     inkscape:cy="6.8515625"
+     inkscape:zoom="32"
+     inkscape:cx="3.984375"
+     inkscape:cy="9.796875"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -56,6 +56,6 @@
      style="display:inline"
      transform="translate(0,-1036.3622)"><path
        id="path3"
-       style="fill:none;stroke:#666666;stroke-width:1.2"
-       d="m 13.396054,1046.3986 c -0.03126,2.574 -3.380426,3.3649 -5.3956096,3.3604 -1.9849435,0 -5.3735011,-1.179 -5.3735127,-4.1576 -0.057325,-4.311 -0.061181,-0.6569 3.6333049,-0.2178 0.3943593,0.047 1.2103813,0.1545 0.8089355,-0.3932 -0.5048157,-0.6892 -0.7992451,-1.3334 -0.914739,-1.707 -0.072003,-0.2329 -0.6650823,-2.1113 0.9179336,-3.405 0.6966484,-0.5693 2.9221925,-1.2318 2.6560021,-0.8151 -1.3942644,2.1827 -0.4048327,3.0674 1.1298522,3.9741 1.325884,0.7834 2.510714,1.7652 2.537833,3.3612 z"
-       sodipodi:nodetypes="cscssssssc" /></g></svg>
+       style="fill:#666666;fill-opacity:1;stroke:#666666;stroke-width:0;stroke-dasharray:none"
+       d="m 13.997617,1046.6404 c -0.284445,3.2873 -3.760172,3.7292 -6.0017341,3.7243 -2.207925,0 -5.9091449,-0.4873 -5.9927793,-4.6077 0.1242025,-3.2804 2.1811465,-4.5543 1.8771908,-3.3407 -0.4096929,1.6358 1.1125076,3.2725 2.201989,2.9778 0.4601518,-0.1245 0.3303313,-0.7805 0.065643,-1.1208 -1.0289461,-1.3228 -0.7625973,-3.776 0.815618,-4.8588 0.3230525,-0.2216 0.9614111,-0.622 1.7125286,-0.8203 1.1277469,-0.2978 2.402747,-0.3088 2.214111,-0.039 -3.4090609,4.8767 3.032075,2.5246 3.107427,8.0852 z"
+       sodipodi:nodetypes="cscsssssscc" /></g></svg>
