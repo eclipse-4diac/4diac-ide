@@ -217,10 +217,17 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	@Override
 	public boolean closeChildEditor(final IEditorPart childEditor) {
+		if (pages == null) {
+			return false;
+		}
 		final int pageIndex = pages.indexOf(childEditor);
 		if (pageIndex != -1) {
+			final boolean wasActive = getActiveEditor() == childEditor;
 			removePage(pageIndex);
 			updateEditorMapping(pageIndex);
+			if (wasActive) {
+				breadcrumb.openParent();
+			}
 			return true;
 		}
 		return false;

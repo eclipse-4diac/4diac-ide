@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2025 Markus Meingast, Johannes Kepler University Linz
- *                          Martin Erich Jobst
+ * Copyright (c) 2022 Markus Meingast, Johannes Kepler University Linz
+ *                    Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.EObject;
@@ -817,10 +818,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 				throw new DeploymentException(
 						MessageFormat.format(Messages.OPCUADeploymentExecutor_ReplayNextEventFailed, resName));
 			}
-			final String returnedValue = (String) result.getOutputArguments()[0].getValue();
 
-			return returnedValue.isEmpty() ? Optional.empty() : Optional.of(returnedValue);
-
+			final Optional<String> returnedValue = getOutputArgument(result, 0, String.class);
+			if (returnedValue.isEmpty()) {
+				throw new DeploymentException(
+						MessageFormat.format(Messages.OPCUADeploymentExecutor_ReplayNextEventFailed, resName));
+			}
+			return returnedValue.filter(Predicate.not(String::isEmpty));
 		} catch (final ExecutionException e) {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_ReplayNextEventFailed, resName), e);
@@ -860,7 +864,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		try {
 			status = browseResources().get();
 		} catch (final ExecutionException e) {
-			throw new DeploymentException(Messages.OPCUADeploymentExecutor_BrowseOPCUAFailed);
+			throw new DeploymentException(Messages.OPCUADeploymentExecutor_BrowseOPCUAFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
@@ -926,10 +930,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	private Response parseResponse(final CallMethodResult result, final String responseTyp) throws IOException {
-		if (result == null || !(result.getOutputArguments()[0].getValue() instanceof final String response)) {
+		if (result == null) {
 			return Constants.EMPTY_RESPONSE;
 		}
-		return parseXMLResponse(MessageFormat.format(responseTyp, response));
+		final Optional<String> response = getOutputArgument(result, 0, String.class);
+		if (response.isEmpty()) {
+			return Constants.EMPTY_RESPONSE;
+		}
+		return parseXMLResponse(MessageFormat.format(responseTyp, response.get()));
 	}
 
 	private Response parseXMLResponse(final String encodedResponse) throws IOException {
@@ -949,7 +957,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	private static NodeId processResult(final CallMethodResult result) {
 		final StatusCode statusCode = result.getStatusCode();
 		if (statusCode.isGood()) {
-			return (NodeId) result.getOutputArguments()[0].getValue();
+			return getOutputArgument(result, 0, NodeId.class).orElseGet(() -> {
+				ILog.get().warn("Expected NodeId output argument at index 0, but none was found"); //$NON-NLS-1$
+				return null;
+			});
 		}
 		final StatusCode[] inputArgumentResults = result.getInputArgumentResults();
 		if (inputArgumentResults != null) {
@@ -978,7 +989,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	private void displayCommand(final CallMethodResult result, final String destination, final String requestMessage) {
 		final String info = getDestinationInfo(destination);
-		final String responseMessage = getMessagFromResult(result);
+		final String responseMessage = getMessageFromResult(result);
 		for (final IDeploymentListener listener : listeners) {
 			listener.postCommandSent(info, destination, requestMessage);
 		}
@@ -991,13 +1002,24 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		}
 	}
 
-	private static String getMessagFromResult(final CallMethodResult result) {
-		final Variant outArg = result.getOutputArguments()[0];
-		if (outArg != null && outArg.getValue() instanceof final String response) {
-			return MessageFormat.format(Constants.RESPONSE_WITH_ARGUMENT, getIEC61499Status(result.getStatusCode()),
-					response);
+	private static String getMessageFromResult(final CallMethodResult result) {
+		final String status = getIEC61499Status(result.getStatusCode());
+		return getOutputArgument(result, 0, String.class) //
+				.map(resp -> MessageFormat.format(Constants.RESPONSE_WITH_ARGUMENT, status, resp))
+				.orElseGet(() -> MessageFormat.format(Constants.RESPONSE, status));
+	}
+
+	private static Optional<Variant> getOutputArgument(final CallMethodResult result, final int index) {
+		final Variant[] args = result.getOutputArguments();
+		if (args == null || index < 0 || index >= args.length) {
+			return Optional.empty();
 		}
-		return MessageFormat.format(Constants.RESPONSE, getIEC61499Status(result.getStatusCode()));
+		return Optional.ofNullable(args[index]);
+	}
+
+	private static <T> Optional<T> getOutputArgument(final CallMethodResult result, final int index,
+			final Class<T> type) {
+		return getOutputArgument(result, index).map(Variant::getValue).filter(type::isInstance).map(type::cast);
 	}
 
 	private static void logResponseStatus(final StatusCode opcuaStatus, final String resourceName,
