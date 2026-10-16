@@ -21,3 +21,4 @@ Export-Package: org.eclipse.fordiac.ide.gitlab,
  org.eclipse.fordiac.ide.gitlab.management,
  org.eclipse.fordiac.ide.gitlab.preferences,
  org.eclipse.fordiac.ide.gitlab.treeviewer
+Bundle-Localization: plugin
