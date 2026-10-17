@@ -55,6 +55,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -79,7 +80,6 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.preferences.PreferenceProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
@@ -139,7 +139,7 @@ public enum LibraryManager {
 			try {
 				Files.createDirectory(libraryPath);
 			} catch (final IOException e) {
-				FordiacLogHelper.logError("Cannot create lib path!", e); //$NON-NLS-1$
+				ILog.get().error("Cannot create lib path!", e); //$NON-NLS-1$
 			}
 		}
 		initLibraryMap(libraries, libraryPath, workspaceLibraryURI);
@@ -148,7 +148,7 @@ public enum LibraryManager {
 			libraryPath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
 					StandardWatchEventKinds.ENTRY_DELETE);
 		} catch (final IOException e) {
-			FordiacLogHelper.logError("Cannot register watch watch service!", e); //$NON-NLS-1$
+			ILog.get().error("Cannot register watch watch service!", e); //$NON-NLS-1$
 		}
 
 		LibraryPermission.setLibReadOnly(standardLibraryPath);
@@ -305,7 +305,7 @@ public enum LibraryManager {
 			throw new FileNotFoundException("Archive file does not exist: " + archive); //$NON-NLS-1$
 		}
 
-		FordiacLogHelper.logInfo("Extracting library at " + archive); //$NON-NLS-1$
+		ILog.get().info("Extracting library at " + archive); //$NON-NLS-1$
 		final byte[] buffer = new byte[1024];
 		String folderName;
 		try (InputStream inputStream = Files.newInputStream(archive);
@@ -410,7 +410,7 @@ public enum LibraryManager {
 			final boolean resolve) {
 		boolean imported = false;
 
-		FordiacLogHelper.logInfo("Importing library at " + uri + " into project " + project.getName() + " (update=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		ILog.get().info("Importing library at " + uri + " into project " + project.getName() + " (update=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ update + ", resolve=" + resolve + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		checkLibChanges(SubMonitor.convert(null));
@@ -448,7 +448,7 @@ public enum LibraryManager {
 			}
 			imported = true;
 		} catch (final CoreException | IOException e) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage()), e);
+			ILog.get().error(MessageFormat.format(Messages.ImportFailedOnLinkCreation, e.getMessage()), e);
 		}
 
 		return imported;
@@ -541,7 +541,7 @@ public enum LibraryManager {
 			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve,
 			final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(MessageFormat.format(Messages.LibraryManager_LibraryDownload, symbolicName));
-		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
+		ILog.get().info("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
 				+ " preferring " + preferred + " Project: " + project.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
@@ -578,7 +578,7 @@ public enum LibraryManager {
 					errors.append(dlResult.message());
 				}
 			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		}
 		return new DownloadResult<>(DownloadResult.Status.ERROR, errors.toString());
@@ -812,7 +812,7 @@ public enum LibraryManager {
 				final var rnode = data.resolveNodes().get(dnode.getSymbolicName());
 
 				if (rnode == null) {
-					FordiacLogHelper.logWarning(MessageFormat.format(Messages.LibraryManager_UnresolvedDependency,
+					ILog.get().warn(MessageFormat.format(Messages.LibraryManager_UnresolvedDependency,
 							dnode.getSymbolicName(), project.getName()));
 					continue;
 				}
@@ -827,7 +827,7 @@ public enum LibraryManager {
 				} else {
 					final var marker = LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode);
 					markerList.add(marker);
-					FordiacLogHelper.logError(marker.getMessage());
+					ILog.get().error(marker.getMessage());
 				}
 			} else if (dnode.isRangeEmpty()) {
 				markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, dnode));
@@ -926,7 +926,7 @@ public enum LibraryManager {
 				return new ResolveNode(rec);
 			}
 		} else {
-			FordiacLogHelper.logWarning(dlResult.message());
+			ILog.get().warn(dlResult.message());
 		}
 
 		if (usePref) {
