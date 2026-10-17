@@ -21,7 +21,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -52,6 +54,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	public static final String PROPERTY_EVENT_DELETED = "eventDeleted"; //$NON-NLS-1$
 	public static final String PROPERTY_TIMELINE_DELETED = "timelineDeleted"; //$NON-NLS-1$
 	public static final String PROPERTY_STATE_CHANGED = "stateChanged"; //$NON-NLS-1$
+	public static final String PROPERTY_EVENT_COMMENTS_CHANGED = "eventCommentsChanged"; //$NON-NLS-1$
 
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -121,6 +124,20 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	public Resource getResource() {
 		return resource;
+	}
+
+	/**
+	 * The comments of this timeline's events, by event index, in event order. Empty
+	 * if no event of this timeline is commented.
+	 */
+	public Map<Integer, String> getEventComments() {
+		final Map<Integer, String> comments = new TreeMap<>();
+		for (final EventMarker eventMarker : eventMarkers) {
+			if (eventMarker.getComment() != null) {
+				comments.put(Integer.valueOf(eventMarker.getIndex()), eventMarker.getComment());
+			}
+		}
+		return comments;
 	}
 
 	public List<TimelineModel> getSpawnedTimelineModels() {
@@ -195,8 +212,15 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	@Override
 	public void eventAdded(final Timeline timeline) {
-		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this));
+		final var newEventModel = new EventMarker(timeline.getMaxEventNumber(), this);
+		final var existingComment = CommentsHandler.getInstance()
+				.getComment(new EventPosition(timeline, newEventModel.getIndex()));
+		if (existingComment != null) {
+			newEventModel.setComment(existingComment);
+		}
+		eventMarkers.add(newEventModel);
 		setHighlighted(SelectionService.getDefault().getSelectedElements());
+
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_ADDED, null, null);
 	}
 
@@ -262,6 +286,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 				break;
 			}
 		}
+		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_COMMENTS_CHANGED, null, null);
 	}
 
 	@Override
