@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.library;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -28,15 +29,18 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 public class LibraryValidation {
 
 	public static boolean validate(final EObject element, final IProject project) {
-		final Diagnostic validationResult = Diagnostician.INSTANCE.validate(element);
-		final List<ErrorMarkerBuilder> markerList = validationResult.getChildren().stream()
-				.filter(d -> Objects.equals(d.getSource(), LibraryValidator.DIAGNOSTIC_SOURCE))
-				.map(LibraryMarkerFactory::forDiagnostic).toList();
+		final List<ErrorMarkerBuilder> markerList = validate(element).map(LibraryMarkerFactory::forDiagnostic).toList();
 
 		FordiacMarkerHelper.updateMarkers(project.getFile(LibraryManager.MANIFEST), FordiacErrorMarker.LIBRARY_MARKER,
 				markerList, true);
 
 		return markerList.stream().noneMatch(b -> b.getSeverity() >= IMarker.SEVERITY_ERROR);
+	}
+
+	public static Stream<Diagnostic> validate(final EObject element) {
+		final Diagnostic validationResult = Diagnostician.INSTANCE.validate(element);
+		return validationResult.getChildren().stream()
+				.filter(d -> Objects.equals(d.getSource(), LibraryValidator.DIAGNOSTIC_SOURCE));
 	}
 
 	private LibraryValidation() {
