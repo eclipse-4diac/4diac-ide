@@ -43,6 +43,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -59,9 +60,9 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	// The editor input of the type file given to us.
 	private IEditorInput originEditorInput;
-	private ToolBarManager toolBarManager;
+	private Composite toolbarContainer;
 	private IMenuService menuService;
-	private ToolBar toolbarControl;
+	private ToolBarManager toolBarManager;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -77,8 +78,12 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	public void createPartControl(final Composite parent) {
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(parent);
 
+		toolbarContainer = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(1).spacing(0, 0).applyTo(toolbarContainer);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarContainer);
+
 		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.HORIZONTAL);
-		toolbarControl = toolBarManager.createControl(parent);
+		final ToolBar toolbarControl = toolBarManager.createControl(toolbarContainer);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarControl);
 
 		menuService = getSite().getService(IMenuService.class);
@@ -86,6 +91,9 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 			menuService.populateContributionManager(toolBarManager, TOOLBAR_LOCATION);
 		}
 		toolBarManager.update(true);
+
+		final Label separator = new Label(toolbarContainer, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(separator);
 
 		final Composite newParent = new Composite(parent, SWT.NONE);
 		newParent.setLayout(new FillLayout());
@@ -103,11 +111,11 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		if (tabFolder != null) {
 
 			final Runnable updateToolbarVisibility = () -> {
-				if (toolbarControl != null && !toolbarControl.isDisposed()) {
+				if (toolbarContainer != null && !toolbarContainer.isDisposed()) {
 					// Index 0 represents the "Source" tab, Index 1 is the "Preview" tab
 					final boolean isSourcePage = tabFolder.getSelectionIndex() == 0;
-					toolbarControl.setVisible(isSourcePage);
-					if (toolbarControl.getLayoutData() instanceof final GridData gridData) {
+					toolbarContainer.setVisible(isSourcePage);
+					if (toolbarContainer.getLayoutData() instanceof final GridData gridData) {
 						gridData.exclude = !isSourcePage;
 					}
 					// Request parent to adjust bounds immediately to reclaim/release space
