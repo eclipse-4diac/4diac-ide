@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Profactor GbmH, Johannes Kepler University
+ * Copyright (c) 2019 Profactor GbmH, Johannes Kepler University, HR Agrartechnik
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +10,13 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl - initial API and implementation and/or
  *   								  initial documentation
+ *   Moritz Ortmeier - print the currently visible page of multi-page and
+ *                     breadcrumb editors (e.g. the FB network of a Subapp)
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.print;
 
 import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.gef.utilities.GraphicalViewerResolver;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
@@ -25,7 +28,8 @@ import org.eclipse.ui.actions.ActionFactory;
 
 public class PrintPreviewAction extends Action {
 
-	private GraphicalViewer viewer;
+	/** The viewer of the editor this action belongs to, used if the active editor has none. */
+	private final GraphicalViewer viewer;
 
 	/** Instantiates a new prints the preview action.
 	 *
@@ -40,32 +44,45 @@ public class PrintPreviewAction extends Action {
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED));
 	}
 
-	/** returns true if editor is either an applicationEditor or a PhysicalViewEditor.
+	/** returns true if there is a viewer that can be printed.
 	 *
 	 * @return true, if checks if is enabled */
 	@Override
 	public boolean isEnabled() {
-		if (null == viewer) {
-			viewer = getViewer();
-		}
-		return (null != viewer);
+		return getViewerToPrint() != null;
 	}
 
-	private static GraphicalViewer getViewer() {
+	/** The viewer of the visible page of the active editor, e.g. the FB Network of a Subapp, or the viewer this
+	 * action was created for if the active editor has none. */
+	private GraphicalViewer getViewerToPrint() {
+		final GraphicalViewer activeViewer = getActiveViewer();
+		return activeViewer != null ? activeViewer : usableViewer();
+	}
+
+	/** The viewer of this action, or null if its editor was closed meanwhile. */
+	private GraphicalViewer usableViewer() {
+		return (viewer != null && viewer.getControl() != null && !viewer.getControl().isDisposed()) ? viewer : null;
+	}
+
+	private static GraphicalViewer getActiveViewer() {
 		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		final IEditorPart editor = window.getActivePage().getActiveEditor();
-		if (null != editor) {
-			return editor.getAdapter(GraphicalViewer.class);
+		if (window == null || window.getActivePage() == null) {
+			return null;
 		}
-		return null;
+		final IEditorPart editor = window.getActivePage().getActiveEditor();
+		return GraphicalViewerResolver.resolveActiveViewer(editor);
 	}
 
 	/** opens the IEC61499PrintDialog. */
 	@Override
 	public void run() {
-		if (null != viewer) {
-			final Shell shell = viewer.getControl().getShell();
-			final PrintPreview preview = new PrintPreview(shell, viewer, Messages.PrintPreviewAction_LABEL_PrintPreview);
+		// Always resolve from the currently active editor so we print whichever
+		// tab (FB Interface / FB Network) is visible.
+		final GraphicalViewer viewerToPrint = getViewerToPrint();
+		if (null != viewerToPrint) {
+			final Shell shell = viewerToPrint.getControl().getShell();
+			final PrintPreview preview = new PrintPreview(shell, viewerToPrint,
+					Messages.PrintPreviewAction_LABEL_PrintPreview);
 			preview.setBlockOnOpen(true);
 			preview.open();
 		}
