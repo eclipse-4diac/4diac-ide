@@ -44,6 +44,7 @@
 		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/releases/2026-12"/>
 			<unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="0.0.0"/>
@@ -66,6 +67,9 @@
 			<unit id="junit-jupiter-api" version="0.0.0"/>
 			<unit id="junit-jupiter-engine" version="0.0.0"/>
 			<unit id="junit-jupiter-params" version="0.0.0"/>
+			<unit id="junit-platform-suite-api" version="0.0.0"/>
+			<unit id="junit-platform-suite-engine" version="0.0.0"/>
+			<unit id="javax.activation" version="0.0.0"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
       		<repository location="https://download.eclipse.org/technology/swtbot/releases/4.3.0/"/>

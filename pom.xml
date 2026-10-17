@@ -35,7 +35,6 @@
 		<maven.compiler.target>25</maven.compiler.target>
 		<maven.compiler.release/>
 		<tycho.version>5.0.4</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
-		<tycho-repo.url>https://download.eclipse.org/releases/2026-12</tycho-repo.url>
 		<sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
@@ -55,11 +54,6 @@
 
 	<repositories>
 		<repository>
-			<id>tycho-latest</id>
-			<url>${tycho-repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
 			<id>jre-updates</id>
 			<url>${org.eclipse.justj.jre.repository}</url>
 			<layout>p2</layout>
@@ -76,10 +70,6 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>tycho-snapshots</id>
-			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
 		</pluginRepository>
 	</pluginRepositories>
 
@@ -283,14 +273,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtend.lib</artifactId>
-			<version>${xtend-version}</version>
-		</dependency>
-	</dependencies>
 
 	<profiles>
 		<profile>
