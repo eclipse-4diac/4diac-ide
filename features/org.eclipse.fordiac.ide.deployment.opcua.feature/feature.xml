@@ -33,12 +33,12 @@
       %license
    </license>
 
-   <includes
-         id="org.eclipse.fordiac.ide.milo"
-         version="0.0.0"/>
-
-   <requires>
+    <requires>
       <import feature="org.eclipse.fordiac.ide.deployment.feature"/>
+      <import plugin="org.eclipse.milo.sdk-client"/>
+      <import plugin="org.eclipse.milo.sdk-core"/>
+      <import plugin="org.eclipse.milo.stack-core"/>
+      <import plugin="org.eclipse.milo.transport"/>
    </requires>
 
    <plugin
