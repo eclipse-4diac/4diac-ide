@@ -261,7 +261,7 @@
 									<filtering>true</filtering>
 								</resource>
 							</resources>
-							<overwrite>true</overwrite>
+							<changeDetection>always</changeDetection>
 						</configuration>
 					</execution>
 				</executions>
