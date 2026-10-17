@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -41,7 +42,6 @@ import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.HierarchyPackage
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.RootLevel;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceFactoryImpl;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.util.HierarchyResourceImpl;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class HierarchyManagerPersistenceHelper {
 
@@ -92,7 +92,7 @@ public final class HierarchyManagerPersistenceHelper {
 			}
 			return (RootLevel) resource.getContents().get(0);
 		} catch (final IOException e) {
-			FordiacLogHelper.logWarning("Could not load plant hierarchy", e); //$NON-NLS-1$
+			ILog.get().warn("Could not load plant hierarchy", e); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -134,7 +134,7 @@ public final class HierarchyManagerPersistenceHelper {
 		try {
 			job.join();
 		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError("Could not wait for plant hierarchy creation", e); //$NON-NLS-1$
+			ILog.get().error("Could not wait for plant hierarchy creation", e); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -155,7 +155,7 @@ public final class HierarchyManagerPersistenceHelper {
 				try {
 					eResource.save(SAVE_OPTIONS);
 				} catch (final IOException e) {
-					FordiacLogHelper.logError("Could not save plant hierarchy!", e); //$NON-NLS-1$
+					ILog.get().error("Could not save plant hierarchy!", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
 			}
