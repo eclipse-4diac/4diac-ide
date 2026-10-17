@@ -75,8 +75,10 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 
 	private Point applySpacing(final Rectangle bounds, final EdgeDirection edge) {
 		final List<Endpoint> ordered = endpointsOnEdge(edge, bounds);
-		final int index = Math.max(0, ordered.indexOf(new Endpoint(transition, sourceEnd)));
-		final int count = Math.max(1, ordered.size());
+		final int listed = ordered.indexOf(new Endpoint(transition, sourceEnd));
+		final boolean unlisted = transition != null && listed < 0;
+		final int index = unlisted ? ordered.size() : Math.max(0, listed);
+		final int count = Math.max(1, ordered.size() + (unlisted ? 1 : 0));
 
 		return switch (edge) {
 		case TOP -> {

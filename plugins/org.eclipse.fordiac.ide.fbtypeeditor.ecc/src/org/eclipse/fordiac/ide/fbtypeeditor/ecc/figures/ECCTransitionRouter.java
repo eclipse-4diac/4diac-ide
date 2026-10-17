@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.eclipse.draw2d.Bendpoint;
 import org.eclipse.draw2d.BendpointConnectionRouter;
@@ -32,6 +35,19 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 	private static final double EPSILON = 0.001;
 	private static final double MAX_HANDLE_DISTANCE = 150.0;
 	private static final double SELF_LOOP_ARC_FACTOR = 1.1;
+	private static final int OBSTACLE_CLEARANCE = 6;
+	private static final double BEND_STEP = 8.0;
+	private static final double MAX_BEND_SHIFT = 1500.0;
+	private static final int SAMPLES_PER_HALF = 16;
+	private static final int ANCHOR_SAMPLES = 2;
+
+	public static final int BENDPOINT_INDEX = 3;
+
+	private final Map<Connection, RouteCache> routeCache = new WeakHashMap<>();
+
+	private record RouteCache(Point p1, Point p4, Point p7, List<Rectangle> obstacles, List<Rectangle> endpoints,
+			PointList curve) {
+	}
 
 	@Override
 	public void route(final Connection conn) {
@@ -59,7 +75,151 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 		conn.translateToRelative(p4);
 		conn.translateToRelative(p7);
 
-		conn.setPoints(isSelfLoop(conn) ? routeSelfLoop(conn, p1, p4, p7) : routeTransition(conn, p1, p4, p7));
+		if (isSelfLoop(conn)) {
+			conn.setPoints(routeSelfLoop(conn, p1, p4, p7));
+			return;
+		}
+
+		conn.setPoints(routeAroundStatesCached(conn, p1, p4, p7));
+	}
+
+	private PointList routeAroundStatesCached(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7) {
+		final List<Rectangle> obstacles = collectObstacles(conn);
+		final List<Rectangle> endpoints = List.of(getEndpointBounds(conn, conn.getSourceAnchor().getOwner()),
+				getEndpointBounds(conn, conn.getTargetAnchor().getOwner()));
+		final Point key1 = toPoint(p1);
+		final Point key4 = toPoint(p4);
+		final Point key7 = toPoint(p7);
+
+		final RouteCache cached = routeCache.get(conn);
+		if (cached != null && cached.p1().equals(key1) && cached.p4().equals(key4) && cached.p7().equals(key7)
+				&& cached.obstacles().equals(obstacles) && cached.endpoints().equals(endpoints)) {
+			return cached.curve();
+		}
+
+		final PointList curve = routeAroundStates(conn, p1, p4, p7, obstacles, endpoints);
+		routeCache.put(conn, new RouteCache(key1, key4, key7, obstacles, endpoints, curve));
+		return curve;
+	}
+
+	@Override
+	public void remove(final Connection connection) {
+		routeCache.remove(connection);
+		super.remove(connection);
+	}
+
+	private static PointList routeAroundStates(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7, final List<Rectangle> obstacles, final List<Rectangle> endpoints) {
+		final PointList original = routeTransition(conn, p1, p4, p7);
+		final Vector chord = new Vector(p1, p7);
+		if (obstacles.isEmpty() || chord.getLength() < EPSILON || !hitsAny(flatten(original), obstacles)) {
+			return original;
+		}
+
+		final Vector preferredAway = getBendSide(chord, p1, p4);
+		final Vector oppositeAway = new Vector(-preferredAway.x, -preferredAway.y);
+
+		for (double shift = BEND_STEP; shift <= MAX_BEND_SHIFT; shift += BEND_STEP) {
+			for (final Vector away : List.of(preferredAway, oppositeAway)) {
+				final PointList curve = routeVia(conn, translate(p4, away, shift));
+				if (isClear(curve, obstacles, endpoints)) {
+					return curve;
+				}
+			}
+		}
+		return original;
+	}
+
+	private static PointList routeVia(final Connection conn, final PrecisionPoint bend) {
+		return routeTransition(conn, getAnchorLocation(conn, conn.getSourceAnchor(), bend), bend,
+				getAnchorLocation(conn, conn.getTargetAnchor(), bend));
+	}
+
+	private static PrecisionPoint getAnchorLocation(final Connection conn, final ConnectionAnchor anchor,
+			final PrecisionPoint bend) {
+		final PrecisionPoint reference = new PrecisionPoint(bend);
+		conn.translateToAbsolute(reference);
+		final PrecisionPoint location = new PrecisionPoint(anchor.getLocation(reference));
+		conn.translateToRelative(location);
+		return location;
+	}
+
+	private static boolean isClear(final PointList curve, final List<Rectangle> obstacles,
+			final List<Rectangle> endpoints) {
+		final PointList path = flatten(curve);
+		return !hitsAny(path, obstacles) && !entersAny(path, endpoints);
+	}
+
+	private static Vector getBendSide(final Vector chord, final PrecisionPoint p1, final PrecisionPoint p4) {
+		final Vector unitChord = getNormalized(chord);
+		final Vector normal = new Vector(-unitChord.y, unitChord.x);
+		final double offset = ((p4.preciseX() - p1.preciseX()) * normal.x)
+				+ ((p4.preciseY() - p1.preciseY()) * normal.y);
+		return offset >= 0 ? normal : new Vector(unitChord.y, -unitChord.x);
+	}
+
+	private static List<Rectangle> collectObstacles(final Connection conn) {
+		final IFigure source = conn.getSourceAnchor().getOwner();
+		final IFigure target = conn.getTargetAnchor().getOwner();
+		final List<Rectangle> obstacles = new ArrayList<>();
+		if (source.getParent() == null) {
+			return obstacles;
+		}
+		for (final Object child : source.getParent().getChildren()) {
+			if (child instanceof final ECStateFigure state && state != source && state != target) {
+				obstacles.add(getBounds(conn, state).expand(OBSTACLE_CLEARANCE, OBSTACLE_CLEARANCE));
+			}
+		}
+		return obstacles;
+	}
+
+	private static Rectangle getBounds(final Connection conn, final IFigure figure) {
+		final Rectangle bounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(bounds);
+		conn.translateToRelative(bounds);
+		return bounds;
+	}
+
+	private static Rectangle getEndpointBounds(final Connection conn, final IFigure owner) {
+		return getBounds(conn, owner instanceof final ECStateFigure state ? state.getNameLabel() : owner);
+	}
+
+	private static boolean hitsAny(final PointList path, final List<Rectangle> obstacles) {
+		return obstacles.stream().anyMatch(path::intersects);
+	}
+
+	private static boolean entersAny(final PointList path, final List<Rectangle> bodies) {
+		for (int i = ANCHOR_SAMPLES; i < path.size() - ANCHOR_SAMPLES; i++) {
+			final Point sample = path.getPoint(i);
+			if (bodies.stream().anyMatch(body -> body.contains(sample))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static PointList flatten(final PointList curve) {
+		final PointList path = new PointList(2 * (SAMPLES_PER_HALF + 1));
+		for (int start = 0; start <= 3; start += 3) {
+			for (int i = 0; i <= SAMPLES_PER_HALF; i++) {
+				path.addPoint(bezier(curve, start, (double) i / SAMPLES_PER_HALF));
+			}
+		}
+		return path;
+	}
+
+	private static Point bezier(final PointList curve, final int start, final double t) {
+		final double u = 1 - t;
+		final double[] weights = { u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t };
+		double x = 0;
+		double y = 0;
+		for (int i = 0; i < weights.length; i++) {
+			final Point control = curve.getPoint(start + i);
+			x += weights[i] * control.x;
+			y += weights[i] * control.y;
+		}
+		return toPoint(new PrecisionPoint(x, y));
 	}
 
 	private static PointList routeTransition(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
@@ -125,18 +285,7 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 
 	private static PrecisionPoint calcOrthogonalControlPoint(final PrecisionPoint anchor, final IFigure owner,
 			final double distance, final Connection conn) {
-		final Rectangle bounds;
-		if (owner instanceof final ECStateFigure stateFigure) {
-			bounds = stateFigure.getNameLabel().getBounds().getCopy();
-			stateFigure.getNameLabel().translateToAbsolute(bounds);
-		} else {
-			bounds = owner.getBounds().getCopy();
-			owner.translateToAbsolute(bounds);
-		}
-
-		conn.translateToRelative(bounds);
-
-		final Vector normal = EdgeDirection.of(toPoint(anchor), bounds).toNormal();
+		final Vector normal = EdgeDirection.of(toPoint(anchor), getEndpointBounds(conn, owner)).toNormal();
 		return translate(anchor, normal, distance);
 	}
 
