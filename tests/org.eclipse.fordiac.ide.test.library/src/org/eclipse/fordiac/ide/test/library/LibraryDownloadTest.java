@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.List;
@@ -114,6 +115,27 @@ class LibraryDownloadTest {
 
 	@Test
 	void downloadsHighestMatchingVersion() throws Exception {
+		assertHighestMatchingVersionDownloaded();
+	}
+
+	@Test
+	void downloadsWithoutFileSystemNotifications() throws Exception {
+		final Field watchServiceField = LibraryManager.class.getDeclaredField("watchService"); //$NON-NLS-1$
+		watchServiceField.setAccessible(true);
+		final Object originalWatchService = watchServiceField.get(LibraryManager.INSTANCE);
+		try {
+			watchServiceField.set(LibraryManager.INSTANCE, null);
+			assertHighestMatchingVersionDownloaded();
+			// Replacing the same library must not duplicate its cached version.
+			LibraryTestFixtures.extract(TEST01 + "-" + V1_5_0); //$NON-NLS-1$
+			assertEquals(List.of(new Version(V1_5_0)), LibraryTestFixtures.getExtractedVersions(TEST01));
+		} finally {
+			watchServiceField.set(LibraryManager.INSTANCE, originalWatchService);
+		}
+		assertEquals(List.of(new Version(V1_5_0)), LibraryTestFixtures.getExtractedVersions(TEST01));
+	}
+
+	private void assertHighestMatchingVersionDownloaded() throws Exception {
 		// test02 1.1.0 requires test01 [1.0.0-2.0.0)
 		LibraryTestFixtures.extract(TEST02_ARCHIVE);
 		assertTrue(LibraryTestFixtures.getExtractedVersions(TEST01).isEmpty(),

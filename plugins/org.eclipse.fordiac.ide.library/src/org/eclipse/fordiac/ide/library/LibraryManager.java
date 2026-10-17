@@ -192,10 +192,9 @@ public enum LibraryManager {
 		progress.setWorkRemaining(events.size());
 		events.forEach(event -> {
 			try {
-				if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
-					addLibrary(libraries, libraryPath.resolve((Path) event.context()), workspaceLibraryURI);
-				} else if (event.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
-					removeLibrary(libraries, libraryPath.resolve((Path) event.context()));
+				if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE
+						|| event.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
+					refreshLibrary(libraryPath.resolve((Path) event.context()));
 				} else { // Overflow -> reinitialise libraries to ensure correct state
 					initLibraryMap(libraries, libraryPath, workspaceLibraryURI);
 					return;
@@ -255,25 +254,16 @@ public enum LibraryManager {
 	}
 
 	/**
-	 * Remove {@link LibraryRecord} from the given map based on the {@link Path}
+	 * Refresh the cached library at the given path from its current file system state.
 	 *
-	 * @param map  target map
 	 * @param path path of the library folder
+	 * @throws IOException if an I/O error occurs
 	 */
-	private static void removeLibrary(final Map<String, List<LibraryRecord>> map, final Path path) {
-		String folderName = path.getFileName().toString();
-		final int pos = folderName.lastIndexOf('-');
-		if (pos > 0) {
-			folderName = folderName.substring(0, pos);
-		}
-		final List<LibraryRecord> records = map.get(folderName);
-		if (records != null) {
-			records.removeIf(r -> r.path().equals(path));
-			if (records.isEmpty()) {
-				map.remove(folderName);
-			}
-		} else {
-			map.values().forEach(rl -> rl.removeIf(r -> r.path().equals(path)));
+	private void refreshLibrary(final Path path) throws IOException {
+		libraries.values().forEach(records -> records.removeIf(record -> record.path().equals(path)));
+		libraries.values().removeIf(List::isEmpty);
+		if (Files.isDirectory(path)) {
+			addLibrary(libraries, path, workspaceLibraryURI);
 		}
 	}
 
@@ -308,13 +298,15 @@ public enum LibraryManager {
 		ILog.get().info("Extracting library at " + archive); //$NON-NLS-1$
 		final byte[] buffer = new byte[1024];
 		String folderName;
+		Path extractedFolder = null;
 		try (InputStream inputStream = Files.newInputStream(archive);
 				ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
 			ZipEntry entry = zipInputStream.getNextEntry();
 			folderName = ""; //$NON-NLS-1$
 			if (entry != null) {
 				folderName = entry.getName();
-				deleteLibFolder(newPath(libraryPath, entry));
+				extractedFolder = newPath(libraryPath, entry);
+				deleteLibFolder(extractedFolder);
 			}
 			while (entry != null) {
 				final Path newFile = newPath(libraryPath, entry);
@@ -339,6 +331,10 @@ public enum LibraryManager {
 			}
 		}
 		checkLibChanges(SubMonitor.convert(null));
+		if (extractedFolder != null) {
+			// File system notifications may arrive after the dependency is resolved.
+			refreshLibrary(extractedFolder);
+		}
 
 		// strip potential trailing slash
 		if (folderName.endsWith("/")) { //$NON-NLS-1$
