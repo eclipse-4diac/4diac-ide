@@ -46,6 +46,7 @@ public class LibrarySelectionPage extends WizardPage {
 	private Text outputDirectoryText;
 	private TableViewer viewer;
 	private Button exportAllTypesButton;
+	private Button exportTypesAsSIFB;
 
 	public LibrarySelectionPage(final Collection<Library> libraries) {
 		super(""); //$NON-NLS-1$
@@ -82,6 +83,10 @@ public class LibrarySelectionPage extends WizardPage {
 
 	public TypeSelection getTypeSelection() {
 		return exportAllTypesButton.getSelection() ? TypeSelection.ALL_TYPES : TypeSelection.INCLUDE_EXCLUDE_PATTERNS;
+	}
+
+	public boolean exportTypesAsSIFB() {
+		return exportTypesAsSIFB.getSelection();
 	}
 
 	private void createOutputDirectoryEditor(final Composite parent) {
@@ -168,7 +173,7 @@ public class LibrarySelectionPage extends WizardPage {
 	private void createTypeSelection(final Composite parent) {
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText(Messages.LibraryExporter_TypeSelection);
-		group.setLayout(new GridLayout());
+		group.setLayout(new GridLayout(2, false));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		exportAllTypesButton = new Button(group, SWT.RADIO);
@@ -177,6 +182,10 @@ public class LibrarySelectionPage extends WizardPage {
 
 		final Button usePatternsButton = new Button(group, SWT.RADIO);
 		usePatternsButton.setText(Messages.LibraryExporter_UseIncludeExclude);
+
+		exportTypesAsSIFB = new Button(group, SWT.CHECK);
+		exportTypesAsSIFB.setText(Messages.LibraryExporter_ExportTypesAsSIFB);
+		exportTypesAsSIFB.setSelection(false);
 	}
 
 	private void updatePageComplete() {

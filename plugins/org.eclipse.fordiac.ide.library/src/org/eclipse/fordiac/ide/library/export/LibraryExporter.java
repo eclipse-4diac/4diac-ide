@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 
 public class LibraryExporter {
 
@@ -53,11 +54,13 @@ public class LibraryExporter {
 	private final Library library;
 	private final String version;
 	private final IProject project;
+	private final boolean exportAsSIFB;
 
-	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final Library library,
-			final String version, final IProject project) {
+	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final boolean exportSIFB,
+			final Library library, final String version, final IProject project) {
 		this.outputDirectory = outputDirectory;
 		this.exportType = exportType;
+		this.exportAsSIFB = exportSIFB;
 		this.library = library;
 		this.version = version;
 		this.project = project;
@@ -105,11 +108,22 @@ public class LibraryExporter {
 		}
 	}
 
-	private static void exportType(final TypeEntry typeEntry, final Path targetFolder) throws IOException {
+	private void exportType(final TypeEntry typeEntry, final Path targetFolder) throws IOException {
 		final IFile sourceFile = typeEntry.getFile();
 		final Path targetFile = targetFolder.resolve(getTargetPath(typeEntry));
 
 		Files.createDirectories(targetFile.getParent());
+
+		if (exportAsSIFB) {
+			try {
+				final java.io.File file = targetFile.getParent() != null ? targetFile.getParent().toFile()
+						: targetFile.toFile();
+				LibraryExportUtil.exportTypeAsSIFB(typeEntry, file);
+				return;
+			} catch (final LibraryElementHashException e) {
+				throw new IOException(e);
+			}
+		}
 
 		try (InputStream input = sourceFile.getContents()) {
 			Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);

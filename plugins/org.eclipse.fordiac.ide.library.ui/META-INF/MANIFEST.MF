@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: Library Ui
 Bundle-SymbolicName: org.eclipse.fordiac.ide.library.ui;singleton:=true
 Bundle-Version: 3.3.100.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.library.ui
