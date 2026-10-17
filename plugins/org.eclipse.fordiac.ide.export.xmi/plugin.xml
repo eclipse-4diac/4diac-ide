@@ -5,8 +5,8 @@
          point="org.eclipse.fordiac.ide.export.exportFilter">
       <ExportFilter
             class="org.eclipse.fordiac.ide.export.xmi.XMIExportFilter"
-            description="XMI Export"
-            name="XMI"
+            description="%exportFilter.xmi.description"
+            name="%exportFilter.xmi.name"
             sortIndex="50"
             id="org.eclipse.fordiac.ide.export.exportFilter.xmi">
       </ExportFilter>
