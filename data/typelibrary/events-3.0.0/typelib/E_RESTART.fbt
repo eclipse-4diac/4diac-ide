@@ -2,6 +2,8 @@
 
 <FBType Comment="Service Interface Function Block Type" Name="E_RESTART">
   <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0.1" Author="Franz Höpfinger" Date="2026-10-17" Remarks="Fix Service Definition: cold_restart outputs COLD (was START).">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
   <VersionInfo Author="Alois Zoitl" Date="2017-09-21" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
@@ -21,7 +23,7 @@
     <ServiceSequence Comment="" Name="cold_restart">
       <ServiceTransaction>
         <InputPrimitive Event="start" Interface="RESOURCE"/>
-        <OutputPrimitive Event="START" Interface="E_RESTART"/>
+        <OutputPrimitive Event="COLD" Interface="E_RESTART"/>
       </ServiceTransaction>
     </ServiceSequence>
     <ServiceSequence Comment="" Name="warm_restart">
