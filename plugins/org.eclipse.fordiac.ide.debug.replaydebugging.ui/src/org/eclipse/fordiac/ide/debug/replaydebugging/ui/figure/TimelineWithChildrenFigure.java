@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
+import java.util.Map;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -26,6 +28,16 @@ import org.eclipse.draw2d.geometry.Rectangle;
  */
 public class TimelineWithChildrenFigure extends Figure {
 
+	/**
+	 * First row: the comment row above the timeline row, without spacing between
+	 * them.
+	 */
+	private final Figure timelineBlock;
+	/**
+	 * Holds one comment icon per commented event; has height 0 while no event is
+	 * commented.
+	 */
+	private final Figure commentRow;
 	private final Figure timelineFigure;
 	private final LineFigure lineFigure;
 	private final Figure childrenFigure;
@@ -54,12 +66,24 @@ public class TimelineWithChildrenFigure extends Figure {
 		timelineFigure.add(lineFigure,
 				new Rectangle(startPosition * CommonFigureConstants.TOTAL_MARKER_SPACE, 0, figureWidth, figureHeight));
 
+		// An XYLayout without children has preferred size 0x0, so the row takes no
+		// space until an icon is added.
+		commentRow = new Figure();
+		commentRow.setLayoutManager(new XYLayout());
+
+		timelineBlock = new Figure();
+		final var blockLayout = new ToolbarLayout(false); // no spacing: an empty comment row must vanish completely
+		blockLayout.setStretchMinorAxis(true);
+		timelineBlock.setLayoutManager(blockLayout);
+		timelineBlock.add(commentRow);
+		timelineBlock.add(timelineFigure);
+
 		childrenFigure = new Figure();
 
 		childrenFigure.setLayoutManager(new ToolbarLayout(false));
 		childrenFigure.setOpaque(true);
 
-		add(timelineFigure); // first row
+		add(timelineBlock); // first row: comment icons above the timeline
 		add(childrenFigure); // spawned timelines stacked below
 	}
 
@@ -83,6 +107,29 @@ public class TimelineWithChildrenFigure extends Figure {
 		}
 	}
 
+	/**
+	 * Shows a comment icon above each commented event of this timeline, connected
+	 * to the event by a stem. The row grows to fit the icons and collapses to
+	 * height 0 when the map is empty; everything below moves accordingly.
+	 *
+	 * @param commentsByEventIndex the comment of each commented event, by the
+	 *                             event's index within this timeline
+	 */
+	public void setEventComments(final Map<Integer, String> commentsByEventIndex) {
+		commentRow.removeAll();
+		commentsByEventIndex
+				.forEach((eventIndex, comment) -> commentRow.add(new CommentIconFigure(comment), new Rectangle(
+						getCommentIconX(eventIndex.intValue()), 0, CommentIconFigure.WIDTH, CommentIconFigure.HEIGHT)));
+		revalidate();
+		repaint();
+	}
+
+	/** Left edge of the icon of an event: centered over the event's marker. */
+	private int getCommentIconX(final int eventIndex) {
+		return (startPosition + eventIndex) * CommonFigureConstants.TOTAL_MARKER_SPACE
+				+ (CommonFigureConstants.MARKER_SIZE - CommentIconFigure.WIDTH) / 2;
+	}
+
 	public void updateMaxNumberOfEvents(final int maxNumberOfEvents) {
 		lineFigure.setMaxNumberOfEvents(maxNumberOfEvents);
 
@@ -101,7 +148,8 @@ public class TimelineWithChildrenFigure extends Figure {
 
 		final int width = Math.max(startPosition * CommonFigureConstants.TOTAL_MARKER_SPACE + timelineSize.width,
 				contentSize.width);
-		final int height = timelineSize.height + contentSize.height + SPACING_BETWEEN_TIMELINES;
+		final int height = commentRow.getPreferredSize().height + timelineSize.height + contentSize.height
+				+ SPACING_BETWEEN_TIMELINES;
 
 		return new Dimension(width, height);
 	}

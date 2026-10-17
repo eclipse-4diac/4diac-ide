@@ -182,6 +182,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		final var fig = getFigure();
 		fig.getLineFigure().setFirstInvalid(getModel().getFirstInvalid());
 		fig.setTooltipText(getModel().getComment());
+		fig.setEventComments(getModel().getEventComments());
 	}
 
 	@Override
@@ -266,7 +267,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		case TimelineModel.PROPERTY_TIMELINE_ADDED, TimelineModel.PROPERTY_TIMELINE_DELETED:
 			safeRefresh(true, false);
 			break;
-		case TimelineModel.PROPERTY_STATE_CHANGED:
+		case TimelineModel.PROPERTY_STATE_CHANGED, TimelineModel.PROPERTY_EVENT_COMMENTS_CHANGED:
 			safeRefresh(false, false);
 			break;
 		default:
