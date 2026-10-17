@@ -142,10 +142,10 @@
      </command>
       <command
       id="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxy"
-      name="Insert Adapter Proxy"/>
+      name="%command.insertAdapterProxy.name"/>
         <command
       id="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.replaceConnectionWithAdapter"
-      name="Replace Connection with Adapter"/>
+      name="%command.replaceConnectionWithAdapter.name"/>
      <command
            id="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection"
            name="%command.RepairBrokenConnection">
@@ -715,7 +715,6 @@
             </command>
               <command
                   commandId="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxy"
-                  label="Insert Adapter Proxy"
                   style="push">
                <visibleWhen
                      checkEnabled="true">
@@ -723,7 +722,6 @@
             </command>
        <command
           commandId="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.replaceConnectionWithAdapter"
-          label="Replace Connection with Adapter"
           style="push">
         <!-- Show only when selection passes the tester (prevents a greyed entry) -->
          <visibleWhen
@@ -789,7 +787,7 @@
         <command
             commandId="org.eclipse.ui.newWizard"
             label="%NewTypeWizard_label"
-            tooltip="Create a new type"
+            tooltip="%menu.newType.tooltip"
             icon="fordiacimage://ICON_NEW_FUNCTIONBLOCK">
             <parameter
                 name="newWizardId"
@@ -838,7 +836,6 @@
       locationURI="popup:org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer?after=group.search">
     <command
         commandId="org.eclipse.fordiac.refactoring.insertAdapterProxy"
-        label="Insert Adapter Proxy"
         style="push">
       <visibleWhen checkEnabled="true">
         <with variable="selection">
