@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
@@ -45,7 +46,6 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceFactoryImpl;
 import org.eclipse.fordiac.ide.model.util.XMLResourceOptions;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.framework.Version;
 
 public final class ManifestHelper {
@@ -263,7 +263,7 @@ public final class ManifestHelper {
 		try {
 			resource.save(null);
 		} catch (final IOException e) {
-			FordiacLogHelper.logWarning("Could not create project manifest", e); //$NON-NLS-1$
+			ILog.get().warn("Could not create project manifest", e); //$NON-NLS-1$
 		}
 		return manifest;
 	}
@@ -458,7 +458,7 @@ public final class ManifestHelper {
 		} catch (final FileNotFoundException e) {
 			return null; // suppress logging of file not found exception
 		} catch (final IOException e) {
-			FordiacLogHelper.logWarning("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
+			ILog.get().warn("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
 			return null;
 		}
 		return (Manifest) resource.getContents().get(0);
