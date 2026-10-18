@@ -45,6 +45,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -80,6 +82,15 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	 * All data columns have the same weight, so they share the free space equally.
 	 */
 	private static final int DATA_COLUMN_WEIGHT = 100;
+
+	/** Edge length in pixels of the color swatch shown in a column header. */
+	private static final int SWATCH_SIZE = 12;
+
+	/**
+	 * The swatch images in the current headers; they are not owned by the columns,
+	 * so we dispose them.
+	 */
+	private final List<Image> swatchImages = new ArrayList<>();
 
 	// ── State ────────────────────────────────────────────────────────────
 
@@ -185,6 +196,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		try {
 			viewerColumns.forEach(vc -> vc.getColumn().dispose());
 			viewerColumns.clear();
+			disposeSwatches(); // after the old columns are disposed, so none still references an image
 
 			if (columnStates.isEmpty()) {
 				tableViewer.setInput(Collections.emptyList());
@@ -261,12 +273,39 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	}
 
 	/**
-	 * Sets the column header text and greys it out when disabled.
+	 * Sets the column header text, and the column color as a swatch next to it. SWT
+	 * cannot color a single header, hence the swatch.
 	 */
-	private static void styleColumnHeader(final TableViewerColumn col, final ColumnState columnState) {
+	private void styleColumnHeader(final TableViewerColumn col, final ColumnState columnState) {
 		col.getColumn().setText(columnState.getColumn().getLabel());
 		col.getColumn().setResizable(true);
 		col.getColumn().setMoveable(true);
+
+		final Color color = columnState.getColumn().getColor();
+		if (columnState.isShowColor() && color != null) {
+			col.getColumn().setImage(createSwatch(color));
+		}
+	}
+
+	private Image createSwatch(final Color color) {
+		final Image image = new Image(Display.getDefault(), SWATCH_SIZE, SWATCH_SIZE);
+		final GC gc = new GC(image);
+		try {
+			gc.setBackground(color);
+			gc.fillRectangle(0, 0, SWATCH_SIZE, SWATCH_SIZE);
+			// thin border so similar colors stay distinguishable from the header
+			gc.setForeground(BLACK_TEXT);
+			gc.drawRectangle(0, 0, SWATCH_SIZE - 1, SWATCH_SIZE - 1);
+		} finally {
+			gc.dispose();
+		}
+		swatchImages.add(image);
+		return image;
+	}
+
+	private void disposeSwatches() {
+		swatchImages.forEach(Image::dispose);
+		swatchImages.clear();
 	}
 
 	private ColumnLabelProvider buildLabelProvider(final ColumnState columnState) {
@@ -298,13 +337,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 				if (columnState.isDisabled() || !(element instanceof final RowEntry r)) {
 					return null;
 				}
-				if (isUnique(r.rowKey(), columnState)) {
-					return DIFF_HIGHLIGHT_COLOR;
-				}
-				if (columnState.isShowColor()) {
-					return columnState.getColumn().getColor();
-				}
-				return null;
+				return isUnique(r.rowKey(), columnState) ? DIFF_HIGHLIGHT_COLOR : null;
 			}
 		};
 	}
