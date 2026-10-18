@@ -87,6 +87,11 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 
 	/** move viewport such that the editpart is in the center of the visible area */
 	private void centerPartPositionInViewport(final GraphicalEditPart part) {
+		if (getFigureCanvas() == null || getFigureCanvas().isDisposed() || getFigureCanvas().getViewport() == null) {
+			// editor was closed or is about to close
+			return;
+		}
+
 		// calculate current center of the visible part of figurecanvas
 		final Rectangle visibleArea = getFigureCanvas().getViewport().getBounds();
 		final Point currentCenter = new Point(getViewLocation().x + (visibleArea.width / 2),
