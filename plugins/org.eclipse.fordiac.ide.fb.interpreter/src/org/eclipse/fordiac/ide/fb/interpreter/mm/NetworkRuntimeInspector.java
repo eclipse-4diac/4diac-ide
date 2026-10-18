@@ -51,6 +51,8 @@ public class NetworkRuntimeInspector {
 
 	private static final Pattern TYPE_PREFIX_PATTERN = Pattern.compile("\\G([_a-zA-Z][a-zA-Z_0-9:]*+)#"); //$NON-NLS-1$
 
+	public static final String DEFAULT_NAME_SEPARATOR = "."; //$NON-NLS-1$
+
 	private final NetworkRuntimeState networkRuntimeState = new NetworkRuntimeState();
 
 	private final Map<String, BlockFBNetworkElement> realBlockNames = new HashMap<>();
@@ -71,6 +73,10 @@ public class NetworkRuntimeInspector {
 		this.nameSeparator = nameSeparator;
 
 		loadAllInformation(networkRuntime, firstLevelPrefix);
+	}
+
+	public static String getDefaultFirstLevelPrefix(final String deviceName, final String resourceName) {
+		return deviceName + DEFAULT_NAME_SEPARATOR + resourceName + DEFAULT_NAME_SEPARATOR;
 	}
 
 	public NetworkRuntimeState getNetworkRuntimeState() {
