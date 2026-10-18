@@ -248,6 +248,10 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 		if (commentMarkers.keySet().removeIf(index -> index.intValue() >= removedStartEventIndex)) {
 			propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_COMMENTS_CHANGED, null, null);
 		}
+		ComparisonService.getInstance().getColumns().stream()
+				.filter(column -> column.getEventPosition().timeline() == timeline
+						&& column.getEventPosition().eventNumber() >= removedStartEventIndex)
+				.map(ComparisonColumn::getColumnId).toList().forEach(ComparisonService.getInstance()::removeColumn);
 	}
 
 	@Override
