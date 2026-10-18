@@ -46,6 +46,7 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 	private final List<EventMarker> eventMarkers = new ArrayList<>();
 	private String comment = null;
 	private Set<Integer> highlightedEvents = new HashSet<>();
+	private final Map<Integer, EventCommentMarker> commentMarkers = new TreeMap<>();
 
 	private int firstInvalid = -1;
 
@@ -104,6 +105,10 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 
 	public List<EventMarker> getEventMarkers() {
 		return List.copyOf(eventMarkers);
+	}
+
+	public List<EventCommentMarker> getCommentMarkers() {
+		return List.copyOf(commentMarkers.values());
 	}
 
 	public int getFirstInvalid() {
@@ -217,6 +222,8 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 				.getComment(new EventPosition(timeline, newEventModel.getIndex()));
 		if (existingComment != null) {
 			newEventModel.setComment(existingComment);
+			commentMarkers.put(Integer.valueOf(newEventModel.getIndex()),
+					new EventCommentMarker(this, newEventModel.getIndex(), existingComment));
 		}
 		eventMarkers.add(newEventModel);
 		setHighlighted(SelectionService.getDefault().getSelectedElements());
@@ -237,6 +244,10 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 			eventMarkers.removeLast();
 		}
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_DELETED, null, null);
+
+		if (commentMarkers.keySet().removeIf(index -> index.intValue() >= removedStartEventIndex)) {
+			propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_COMMENTS_CHANGED, null, null);
+		}
 	}
 
 	@Override
@@ -278,6 +289,22 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 			return;
 		}
 		eventMarkers.get(position.eventNumber()).setComment(comment);
+
+		final Integer eventIndex = Integer.valueOf(position.eventNumber());
+		if (event == CommentsHandler.Listener.Event.REMOVED) {
+			if (commentMarkers.remove(eventIndex) != null) {
+				propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_COMMENTS_CHANGED, null, null);
+			}
+		} else {
+			final EventCommentMarker commentMarker = commentMarkers.get(eventIndex);
+			if (commentMarker == null) {
+				commentMarkers.put(eventIndex, new EventCommentMarker(this, position.eventNumber(), comment));
+				propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_COMMENTS_CHANGED, null, null);
+			} else {
+				commentMarker.setComment(comment);
+			}
+		}
+
 		// update column header if it's present in the comparison table
 		for (final var column : ComparisonService.getInstance().getColumns()) {
 			if (column.getEventPosition().eventNumber() == position.eventNumber()) {
@@ -286,7 +313,6 @@ public class TimelineModel implements Timeline.StructureListener, ComparisonServ
 				break;
 			}
 		}
-		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_COMMENTS_CHANGED, null, null);
 	}
 
 	@Override
