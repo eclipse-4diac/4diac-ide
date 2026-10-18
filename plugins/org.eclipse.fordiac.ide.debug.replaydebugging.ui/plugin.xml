@@ -338,6 +338,7 @@
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.CommentMarkerEditPart"/>
               </or>
             </iterate>
           </with>
@@ -351,16 +352,12 @@
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.CommentMarkerEditPart"/>
               </or>
             </iterate>
           </with>
         </visibleWhen>
       </command>
-
-
-
-
-
 
        <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.timelineCommentsSeparator" visible="true"/>
 

@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventP
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.RemoveEventCommentCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.TimelineViewCommandStack;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.CommentMarkerEditPart;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISources;
@@ -59,6 +60,9 @@ public class RemoveEventCommentHandler extends AbstractHandler {
 			return new EventPosition(eventMarkerEditPart.getModel().getParentTimeline().getTimeline(),
 					eventMarkerEditPart.getModel().getIndex());
 		}
+		if (HandlerHelper.getSelectedEditPart(event) instanceof final CommentMarkerEditPart commentMarkerEditPart) {
+			return commentMarkerEditPart.getModel().getEventPosition();
+		}
 		return null;
 	}
 
@@ -66,11 +70,20 @@ public class RemoveEventCommentHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
+			if (s.isEmpty()) {
+				setBaseEnabled(false);
+				return;
+			}
 			final Object first = s.getFirstElement();
-			setBaseEnabled(
-					!s.isEmpty() && (first instanceof final CommentsView.CommentRow row ? !row.isTimelineComment()
-							: first instanceof final EventMarkerEditPart ep && ep.getModel() != null
-									&& ep.getModel().getComment() != null));
+			if (first instanceof final CommentsView.CommentRow row) {
+				setBaseEnabled(!row.isTimelineComment());
+			} else if (first instanceof final EventMarkerEditPart ep) {
+				setBaseEnabled(ep.getModel() != null && ep.getModel().getComment() != null);
+			} else if (first instanceof final CommentMarkerEditPart cmp) {
+				setBaseEnabled(cmp.getModel() != null);
+			} else {
+				setBaseEnabled(false);
+			}
 		}
 	}
 }

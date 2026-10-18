@@ -13,8 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
-import java.util.Map;
-
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -108,20 +106,17 @@ public class TimelineWithChildrenFigure extends Figure {
 	}
 
 	/**
-	 * Shows a comment icon above each commented event of this timeline, connected
-	 * to the event by a stem. The row grows to fit the icons and collapses to
-	 * height 0 when the map is empty; everything below moves accordingly.
-	 *
-	 * @param commentsByEventIndex the comment of each commented event, by the
-	 *                             event's index within this timeline
+	 * Adds the icon of the commented event with the given index to the comment row.
 	 */
-	public void setEventComments(final Map<Integer, String> commentsByEventIndex) {
-		commentRow.removeAll();
-		commentsByEventIndex
-				.forEach((eventIndex, comment) -> commentRow.add(new CommentIconFigure(comment), new Rectangle(
-						getCommentIconX(eventIndex.intValue()), 0, CommentIconFigure.WIDTH, CommentIconFigure.HEIGHT)));
-		revalidate();
-		repaint();
+	public void addCommentIcon(final IFigure icon, final int eventIndex) {
+		commentRow.add(icon,
+				new Rectangle(getCommentIconX(eventIndex), 0, CommentIconFigure.WIDTH, CommentIconFigure.HEIGHT));
+	}
+
+	public void removeCommentIcon(final IFigure icon) {
+		if (icon.getParent() == commentRow) {
+			commentRow.remove(icon);
+		}
 	}
 
 	/** Left edge of the icon of an event: centered over the event's marker. */

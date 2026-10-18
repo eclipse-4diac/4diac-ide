@@ -106,8 +106,8 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	protected List<?> getModelChildren() {
 		final var model = getModel();
 
-		return Stream.concat(model.getSpawnedTimelineModels().stream(), model.getEventMarkers().stream())
-				.collect(Collectors.toList());
+		return Stream.concat(Stream.concat(model.getSpawnedTimelineModels().stream(), model.getEventMarkers().stream()),
+				model.getCommentMarkers().stream()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -129,6 +129,10 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final var fig = getFigure();
 
+		if (childEditPart instanceof final CommentMarkerEditPart commentMarkerEditPart) {
+			fig.addCommentIcon(commentMarkerEditPart.getFigure(), commentMarkerEditPart.getModel().getEventIndex());
+			return;
+		}
 		if (childEditPart instanceof final EventMarkerEditPart marker) {
 			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
 
@@ -148,7 +152,10 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		final var fig = getFigure();
-
+		if (childEditPart instanceof final CommentMarkerEditPart commentMarkerEditPart) {
+			fig.removeCommentIcon(commentMarkerEditPart.getFigure());
+			return;
+		}
 		if (childEditPart instanceof EventMarkerEditPart) {
 			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
 			fig.getTimelineFigure().remove(markerFigure);
@@ -182,7 +189,6 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		final var fig = getFigure();
 		fig.getLineFigure().setFirstInvalid(getModel().getFirstInvalid());
 		fig.setTooltipText(getModel().getComment());
-		fig.setEventComments(getModel().getEventComments());
 	}
 
 	@Override
@@ -261,13 +267,14 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
-		case TimelineModel.PROPERTY_EVENT_ADDED, TimelineModel.PROPERTY_EVENT_DELETED:
+		case TimelineModel.PROPERTY_EVENT_ADDED, TimelineModel.PROPERTY_EVENT_DELETED,
+				TimelineModel.PROPERTY_EVENT_COMMENTS_CHANGED:
 			safeRefresh(false, true);
 			break;
 		case TimelineModel.PROPERTY_TIMELINE_ADDED, TimelineModel.PROPERTY_TIMELINE_DELETED:
 			safeRefresh(true, false);
 			break;
-		case TimelineModel.PROPERTY_STATE_CHANGED, TimelineModel.PROPERTY_EVENT_COMMENTS_CHANGED:
+		case TimelineModel.PROPERTY_STATE_CHANGED:
 			safeRefresh(false, false);
 			break;
 		default:
