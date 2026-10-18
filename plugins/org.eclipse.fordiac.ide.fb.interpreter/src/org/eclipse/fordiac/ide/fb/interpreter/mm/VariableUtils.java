@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.mm;
 import java.util.List;
 import java.util.function.Function;
 
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -55,19 +56,15 @@ public final class VariableUtils {
 		}
 	}
 
-	private static boolean isAny(final IInterfaceElement varDeclaration) {
-		return varDeclaration.getType().getName().startsWith("ANY"); //$NON-NLS-1$
-	}
-
 	/**
 	 * Looks for the a non-ANY interface in a connection, first from the source and
 	 * then from the destination. If both are ANY Types, the source is returned.
 	 */
 	public static IInterfaceElement getNonAnyValueFromConnection(final Connection connection) {
-		if (!isAny(connection.getSource())) {
+		if (!GenericTypes.isAnyType(connection.getSource().getType())) {
 			return connection.getSource();
 		}
-		if (!isAny(connection.getDestination())) {
+		if (!GenericTypes.isAnyType(connection.getDestination().getType())) {
 			return connection.getDestination();
 		}
 		return connection.getSource();
@@ -82,15 +79,19 @@ public final class VariableUtils {
 	 */
 	private static IInterfaceElement getNonAnyVarFromConnections(final VarDeclaration varDeclaration) {
 		if (varDeclaration.isIsInput()) {
+			if (varDeclaration.getInputConnections().isEmpty()) {
+				// the input has no incoming connections
+				return null;
+			}
 			// only one input connection allowed, check if the source is not an ANY type
-			if (!isAny(varDeclaration.getInputConnections().get(0).getSource())) {
+			if (!GenericTypes.isAnyType(varDeclaration.getInputConnections().get(0).getSource().getType())) {
 				return varDeclaration.getInputConnections().get(0).getSource();
 			}
 
 		} else {
 			// find the first output connection whose destination is not an ANY type
 			for (final var connection : varDeclaration.getOutputConnections()) {
-				if (!isAny(connection.getDestination())) {
+				if (!GenericTypes.isAnyType(connection.getDestination().getType())) {
 					return connection.getDestination();
 				}
 			}
@@ -106,7 +107,7 @@ public final class VariableUtils {
 	 * type.
 	 */
 	public static VarDeclaration getNonAnyVarDeclaration(final VarDeclaration original) {
-		if (!isAny(original)) {
+		if (!GenericTypes.isAnyType(original.getType())) {
 			return original;
 		}
 
