@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.AddEditEventCommentCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.TimelineViewCommandStack;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.CommentMarkerEditPart;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -50,6 +51,11 @@ public class AddEventCommentHandler extends AbstractHandler {
 			eventPosition = new EventPosition(eventMarkerEditPart.getModel().getParentTimeline().getTimeline(),
 					eventMarkerEditPart.getModel().getIndex());
 			replayNavigator = eventMarkerEditPart.getModel().getParentTimeline().getResource().getReplayNavigator();
+		} else if (HandlerHelper
+				.getSelectedEditPart(event) instanceof final CommentMarkerEditPart commentMarkerEditPart) {
+			eventPosition = commentMarkerEditPart.getModel().getEventPosition();
+			replayNavigator = commentMarkerEditPart.getModel().getParentTimeline().getResource().getReplayNavigator();
+
 		} else {
 			return null;
 		}
@@ -80,9 +86,17 @@ public class AddEventCommentHandler extends AbstractHandler {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof final IStructuredSelection s) {
 			final Object first = s.getFirstElement();
-			setBaseEnabled(
-					!s.isEmpty() && (first instanceof final CommentsView.CommentRow row ? !row.isTimelineComment()
-							: first instanceof EventMarkerEditPart));
+			if (s.isEmpty()) {
+				setBaseEnabled(false);
+				return;
+			}
+			if (first instanceof final CommentsView.CommentRow row) {
+				setBaseEnabled(!row.isTimelineComment());
+			} else if (first instanceof EventMarkerEditPart || first instanceof CommentMarkerEditPart) {
+				setBaseEnabled(true);
+			} else {
+				setBaseEnabled(false);
+			}
 		}
 	}
 }

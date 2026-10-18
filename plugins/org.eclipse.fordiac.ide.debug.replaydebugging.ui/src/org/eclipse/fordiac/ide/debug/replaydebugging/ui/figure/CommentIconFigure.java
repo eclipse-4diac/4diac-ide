@@ -33,6 +33,10 @@ public class CommentIconFigure extends Figure {
 
 	public CommentIconFigure(final String comment) {
 		setOpaque(false);
+		setComment(comment);
+	}
+
+	public void setComment(final String comment) {
 		setToolTip(new TooltipFigure(comment));
 	}
 
