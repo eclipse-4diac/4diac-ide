@@ -3,7 +3,7 @@
 <plugin>
     <extension
           id="oclbuilder"
-          name="4diac OCL Validation Builder"
+          name="%builder.oclValidation.name"
           point="org.eclipse.core.resources.builders">
        <builder
              hasNature="true">
