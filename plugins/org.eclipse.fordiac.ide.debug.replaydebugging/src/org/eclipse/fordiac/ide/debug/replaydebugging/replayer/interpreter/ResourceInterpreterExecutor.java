@@ -38,15 +38,14 @@ public class ResourceInterpreterExecutor {
 	private final EventManagerProcessor eventManagerProcessor;
 	private final ResourceState state;
 	private Event lastInjectedEvent = null;
-	private static final String NAME_SEPARATOR = "."; //$NON-NLS-1$
+	private static final String NAME_SEPARATOR = NetworkRuntimeInspector.DEFAULT_NAME_SEPARATOR;
 
 	public ResourceInterpreterExecutor(final Resource resource) {
-
-		final var deviceResourcePrefix = resource.getDevice().getName() + NAME_SEPARATOR + resource.getName()
-				+ NAME_SEPARATOR;
-
-		final FBNetworkRuntime networkRuntime = RuntimeFactory.createRecursiveFrom(resource.getFBNetwork());
-		networkRuntimeInspector = new NetworkRuntimeInspector(networkRuntime, deviceResourcePrefix, NAME_SEPARATOR);
+		final FBNetworkRuntime networkRuntime = RuntimeFactory.createRecursiveFrom(resource.getFBNetwork(),
+				RuntimeFactory::getDefaultValueFromNetworkElement);
+		networkRuntimeInspector = new NetworkRuntimeInspector(networkRuntime,
+				NetworkRuntimeInspector.getDefaultFirstLevelPrefix(resource.getDevice().getName(), resource.getName()),
+				NAME_SEPARATOR);
 
 		eventManagerProcessor = new EventManagerProcessor(EventManagerFactory.createFrom(List.of()), networkRuntime);
 
