@@ -15,7 +15,7 @@
  <extension point="org.eclipse.search.searchPages">
 		<page
 			id="org.eclipse.fordiac.ide.model.search.ModelSearchPage"
-			label="IEC 61499 Model Search"
+			label="%SearchHeaderName"
 			sizeHint="250,160"
 			tabPosition="1"
 			extensions="*:1"
@@ -30,13 +30,13 @@
           categoryId="org.eclipse.fordiac.ide.commands.category"
           defaultHandler="org.eclipse.fordiac.ide.model.search.handlers.OpenModelSearchPageHandler"
           id="org.eclipse.fordiac.ide.model.search.openModelSearchPage"
-          name="IEC 61499 Model... ">
+          name="%openModelSearchPage.name">
     </command>
     <command
           categoryId="org.eclipse.fordiac.ide.commands.category"
           defaultHandler="org.eclipse.fordiac.ide.model.search.handlers.SearchTypeReferences"
           id="org.eclipse.fordiac.ide.model.search.typeReferences"
-          name="References">
+          name="%typeReferences.name">
     </command>
     <command id="org.eclipse.fordiac.ide.model.search.searchReference"
           defaultHandler="org.eclipse.fordiac.ide.model.search.handlers.SearchReferenceHandler"
