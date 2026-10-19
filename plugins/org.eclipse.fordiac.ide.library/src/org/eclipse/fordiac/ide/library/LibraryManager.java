@@ -196,7 +196,9 @@ public enum LibraryManager {
 						|| event.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
 					refreshLibrary(libraryPath.resolve((Path) event.context()));
 				} else { // Overflow -> reinitialise libraries to ensure correct state
-					initLibraryMap(libraries, libraryPath, workspaceLibraryURI);
+					synchronized (libraries) {
+						initLibraryMap(libraries, libraryPath, workspaceLibraryURI);
+					}
 					return;
 				}
 				progress.worked(1);
@@ -260,10 +262,12 @@ public enum LibraryManager {
 	 * @throws IOException if an I/O error occurs
 	 */
 	private void refreshLibrary(final Path path) throws IOException {
-		libraries.values().forEach(records -> records.removeIf(record -> record.path().equals(path)));
-		libraries.values().removeIf(List::isEmpty);
-		if (Files.isDirectory(path)) {
-			addLibrary(libraries, path, workspaceLibraryURI);
+		synchronized (libraries) {
+			libraries.values().forEach(records -> records.removeIf(record -> record.path().equals(path)));
+			libraries.values().removeIf(List::isEmpty);
+			if (Files.isDirectory(path)) {
+				addLibrary(libraries, path, workspaceLibraryURI);
+			}
 		}
 	}
 
@@ -510,7 +514,11 @@ public enum LibraryManager {
 	 */
 	public Map<String, List<LibraryRecord>> getExtractedLibraries() {
 		checkLibChanges(SubMonitor.convert(null));
-		return new HashMap<>(libraries);
+		synchronized (libraries) {
+			final Map<String, List<LibraryRecord>> snapshot = new HashMap<>();
+			libraries.forEach((name, records) -> snapshot.put(name, new ArrayList<>(records)));
+			return snapshot;
+		}
 	}
 
 	/**
@@ -961,6 +969,13 @@ public enum LibraryManager {
 
 	}
 
+	private static List<LibraryRecord> getLibraryRecords(final Map<String, List<LibraryRecord>> libs,
+			final String symbolicName) {
+		synchronized (libs) {
+			return List.copyOf(libs.getOrDefault(symbolicName, Collections.emptyList()));
+		}
+	}
+
 	/**
 	 * Search for existing library based on symbolic name and version
 	 *
@@ -971,7 +986,7 @@ public enum LibraryManager {
 	 */
 	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
 			final String symbolicName, final Version version) {
-		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream()
+		return getLibraryRecords(libs, symbolicName).stream()
 				.filter(l -> l.version().equals(version)).findFirst().orElse(null);
 	}
 
@@ -985,7 +1000,7 @@ public enum LibraryManager {
 	 */
 	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
 			final String symbolicName, final VersionRange range) {
-		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream()
+		return getLibraryRecords(libs, symbolicName).stream()
 				.filter(l -> range.includes(l.version())).sorted((o1, o2) -> o2.version().compareTo(o1.version()))
 				.findFirst().orElse(null);
 	}
@@ -1000,7 +1015,7 @@ public enum LibraryManager {
 	 */
 	private static LibraryRecord getLibraryRecord(final Map<String, List<LibraryRecord>> libs,
 			final String symbolicName, final java.net.URI uri) {
-		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream().filter(l -> l.uri().equals(uri))
+		return getLibraryRecords(libs, symbolicName).stream().filter(l -> l.uri().equals(uri))
 				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
 	}
 
