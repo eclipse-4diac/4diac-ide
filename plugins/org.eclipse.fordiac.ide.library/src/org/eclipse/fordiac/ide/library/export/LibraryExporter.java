@@ -33,11 +33,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -114,11 +116,9 @@ public class LibraryExporter {
 
 		Files.createDirectories(targetFile.getParent());
 
-		if (exportAsSIFB) {
+		if (exportAsSIFB && canExportAsSIFB(typeEntry)) {
 			try {
-				final java.io.File file = targetFile.getParent() != null ? targetFile.getParent().toFile()
-						: targetFile.toFile();
-				LibraryExportUtil.exportTypeAsSIFB(typeEntry, file);
+				LibraryExportUtil.exportTypeAsSIFB(typeEntry, targetFile.getParent().toFile());
 				return;
 			} catch (final LibraryElementHashException e) {
 				throw new IOException(e);
@@ -131,6 +131,14 @@ public class LibraryExporter {
 			throw new IOException(MessageFormat.format(Messages.LibraryExporter_ErrorFile, sourceFile.getFullPath()),
 					e);
 		}
+	}
+
+	private static boolean canExportAsSIFB(final TypeEntry typeEntry) {
+		final EClass eclass = typeEntry.getTypeEClass();
+		return eclass == LibraryElementPackage.Literals.SIMPLE_FB_TYPE
+				|| eclass == LibraryElementPackage.Literals.COMPOSITE_FB_TYPE
+				|| eclass == LibraryElementPackage.Literals.BASIC_FB_TYPE
+				|| eclass == LibraryElementPackage.Literals.FUNCTION_FB_TYPE;
 	}
 
 	private static Path getTargetPath(final TypeEntry typeEntry) {

@@ -33,7 +33,8 @@ public class ExportCopier extends EcoreUtil.Copier {
 				|| eClass == LibraryElementPackage.Literals.BASIC_FB_TYPE
 				|| eClass == LibraryElementPackage.Literals.SIMPLE_FB_TYPE
 				|| eClass == LibraryElementPackage.Literals.COMPOSITE_FB_TYPE
-				|| eClass == LibraryElementPackage.Literals.SUB_APP_TYPE) {
+				|| eClass == LibraryElementPackage.Literals.SUB_APP_TYPE
+				|| eClass == LibraryElementPackage.Literals.FUNCTION_FB_TYPE) {
 			return LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE;
 		}
 		return super.getTarget(eClass);
