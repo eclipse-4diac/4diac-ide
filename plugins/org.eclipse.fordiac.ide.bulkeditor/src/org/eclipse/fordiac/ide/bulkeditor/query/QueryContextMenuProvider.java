@@ -56,6 +56,7 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 		OR_CONSTRAINTS(2, Messages.QueryMenu_AddOrConstraint),
 		INSTANCES(3, Messages.QueryMenu_AddInstance),
 		TYPES(3, Messages.QueryMenu_AddType),
+		CONNECTIONS(3, null),
 		DATA_TYPES(4, null),
 		OCCURRENCES(5, Messages.QueryMenu_AddOccurrence),
 		TARGETS(6, null),
@@ -92,6 +93,9 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 			if (QueryModelHelper.isSubtypeOf(type, QueryModelHelper.INSTANCE)) {
 				return INSTANCES;
 			}
+			if (QueryModelHelper.CONNECTION.equals(type.getName())) {
+				return CONNECTIONS;
+			}
 			if (QueryModelHelper.REF_STRUCT_TYPE.equals(ref.getName())
 					|| QueryModelHelper.REF_ATTRIBUTE_TYPE.equals(ref.getName())) {
 				return DATA_TYPES;
@@ -127,6 +131,7 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 			Map.entry(QueryModelHelper.REF_FUNCTION_FB, Messages.QueryMenu_FunctionFB),
 			Map.entry(QueryModelHelper.REF_TYPED_SUBAPP, Messages.QueryMenu_TypedSubapp),
 			Map.entry(QueryModelHelper.REF_UNTYPED_SUBAPP, Messages.QueryMenu_UntypedSubapp),
+			Map.entry(QueryModelHelper.REF_CONNECTION, Messages.QueryMenu_Connection),
 			Map.entry(QueryModelHelper.REF_SIMPLE_TYPE, Messages.QueryMenu_SimpleType),
 			Map.entry(QueryModelHelper.REF_BASIC_TYPE, Messages.QueryMenu_BasicType),
 			Map.entry(QueryModelHelper.REF_COMPOSITE_TYPE, Messages.QueryMenu_CompositeType),

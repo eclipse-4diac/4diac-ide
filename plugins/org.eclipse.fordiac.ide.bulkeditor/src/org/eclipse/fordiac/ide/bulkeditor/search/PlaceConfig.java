@@ -33,6 +33,7 @@ public record PlaceConfig( //@formatter:off
         InstanceConfig functionFB,
         InstanceConfig typedSubapp,
         InstanceConfig untypedSubapp,
+        ConnectionConfig connection,
         boolean ignoreLinkedLibraries,
         boolean subappHierarchyScope,
         List<String> subappHierarchy) {
@@ -63,7 +64,7 @@ public record PlaceConfig( //@formatter:off
 		return simpleFB.hasOccurrence(occurrence) || basicFB.hasOccurrence(occurrence)
 				|| compositeFB.hasOccurrence(occurrence) || serviceInterfaceFB.hasOccurrence(occurrence)
 				|| functionFB.hasOccurrence(occurrence) || typedSubapp.hasOccurrence(occurrence)
-				|| untypedSubapp.hasOccurrence(occurrence);
+				|| untypedSubapp.hasOccurrence(occurrence) || connection.hasOccurrence(occurrence);
 	}
 
 	public record TypeConfig(boolean selected, FilterRecord constraint, PinConfig pin) {
@@ -86,44 +87,61 @@ public record PlaceConfig( //@formatter:off
 		}
 	}
 
-	public record InstanceConfig(boolean selected, FilterRecord constraint, OccurrenceConfig application,
-			OccurrenceConfig compositeFBOcc, OccurrenceConfig typedSubappOcc, PinConfig pin) {
-		public static final InstanceConfig INACTIVE = new InstanceConfig(false, FilterRecord.INACTIVE,
-				OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE, PinConfig.INACTIVE);
+	public record OccurrencesConfig(OccurrenceConfig application, OccurrenceConfig compositeFB,
+			OccurrenceConfig typedSubapp) {
+		public static final OccurrencesConfig INACTIVE = new OccurrencesConfig(OccurrenceConfig.INACTIVE,
+				OccurrenceConfig.INACTIVE, OccurrenceConfig.INACTIVE);
 
-		private boolean noOccurrenceRestriction() {
-			return !application.selected() && !compositeFBOcc.selected() && !typedSubappOcc.selected();
+		private boolean noRestriction() {
+			return !application.selected() && !compositeFB.selected() && !typedSubapp.selected();
 		}
 
-		public boolean hasOccurrence(final String kind) {
-			if (!selected) {
-				return false;
-			}
-			return noOccurrenceRestriction() || occurrenceFor(kind).selected();
+		public boolean has(final String kind) {
+			return noRestriction() || occurrenceFor(kind).selected();
 		}
 
-		public boolean matchesOccurrence(final String kind, final INamedElement context) {
-			if (!selected) {
-				return false;
-			}
-			if (noOccurrenceRestriction()) {
-				return true;
-			}
-			return occurrenceFor(kind).matchesContext(context);
+		public boolean matches(final String kind, final INamedElement context) {
+			return noRestriction() || occurrenceFor(kind).matchesContext(context);
 		}
 
 		private OccurrenceConfig occurrenceFor(final String kind) {
 			return switch (kind) {
 			case OCC_APPLICATION -> application;
-			case OCC_COMPOSITE_FB -> compositeFBOcc;
-			case OCC_TYPED_SUBAPP -> typedSubappOcc;
+			case OCC_COMPOSITE_FB -> compositeFB;
+			case OCC_TYPED_SUBAPP -> typedSubapp;
 			case null, default -> OccurrenceConfig.INACTIVE;
 			};
 		}
+	}
 
-		public boolean matches(final MatchTarget target) {
-			return constraint.accepts(target);
+	public interface NetworkElementConfig {
+		boolean selected();
+		FilterRecord constraint();
+		OccurrencesConfig occurrences();
+
+		default boolean hasOccurrence(final String kind) {
+			return selected() && occurrences().has(kind);
 		}
+
+		default boolean matchesOccurrence(final String kind, final INamedElement context) {
+			return selected() && occurrences().matches(kind, context);
+		}
+
+		default boolean matches(final MatchTarget target) {
+			return constraint().accepts(target);
+		}
+	}
+
+	public record InstanceConfig(boolean selected, FilterRecord constraint, OccurrencesConfig occurrences,
+			PinConfig pin) implements NetworkElementConfig {
+		public static final InstanceConfig INACTIVE = new InstanceConfig(false, FilterRecord.INACTIVE,
+				OccurrencesConfig.INACTIVE, PinConfig.INACTIVE);
+	}
+
+	public record ConnectionConfig(boolean selected, FilterRecord constraint, OccurrencesConfig occurrences)
+			implements NetworkElementConfig {
+		public static final ConnectionConfig INACTIVE = new ConnectionConfig(false, FilterRecord.INACTIVE,
+				OccurrencesConfig.INACTIVE);
 	}
 
 	public record PinConfig(boolean active, FilterRecord constraint) {

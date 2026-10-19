@@ -78,6 +78,7 @@ public final class Messages extends NLS {
 	public static String QueryMenu_FunctionFB;
 	public static String QueryMenu_TypedSubapp;
 	public static String QueryMenu_UntypedSubapp;
+	public static String QueryMenu_Connection;
 	public static String QueryMenu_SimpleType;
 	public static String QueryMenu_BasicType;
 	public static String QueryMenu_CompositeType;

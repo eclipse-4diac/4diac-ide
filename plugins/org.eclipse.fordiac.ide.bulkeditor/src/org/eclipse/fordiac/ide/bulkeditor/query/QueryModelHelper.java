@@ -38,6 +38,7 @@ public final class QueryModelHelper {
 	public static final String OCCURRENCE = "Occurrence"; //$NON-NLS-1$
 	public static final String PIN = "PIN"; //$NON-NLS-1$
 	public static final String UNTYPED_SUBAPP = "UntypedSubapp"; //$NON-NLS-1$
+	public static final String CONNECTION = "Connection"; //$NON-NLS-1$
 
 	public static final String FEATURE_NEGATE = "negate"; //$NON-NLS-1$
 	public static final String REF_TARGET = "target"; //$NON-NLS-1$
@@ -60,6 +61,7 @@ public final class QueryModelHelper {
 	public static final String REF_FUNCTION_FB = "functionFB"; //$NON-NLS-1$
 	public static final String REF_TYPED_SUBAPP = "typedSubapp"; //$NON-NLS-1$
 	public static final String REF_UNTYPED_SUBAPP = "untypedSubapp"; //$NON-NLS-1$
+	public static final String REF_CONNECTION = "connection"; //$NON-NLS-1$
 
 	public static final String FEATURE_NAME = "name"; //$NON-NLS-1$
 	public static final String FEATURE_TYPE = "type"; //$NON-NLS-1$
@@ -140,15 +142,19 @@ public final class QueryModelHelper {
 	}
 
 	public static boolean isFieldAllowedForConstraint(final EObject constraint, final String fieldRefName) {
-		if (FEATURE_NAME.equals(fieldRefName) || FEATURE_COMMENT.equals(fieldRefName)) {
-			return true;
-		}
 		if (isAttributeConstraint(constraint)) {
 			// AttributeConstraints should always have: name, type, comment, value
 			return true;
 		}
 
 		final EObject owner = findConstraintOwner(constraint);
+		if (isOfType(owner, CONNECTION)) {
+			// Connections: no name and value
+			return FEATURE_TYPE.equals(fieldRefName) || FEATURE_COMMENT.equals(fieldRefName);
+		}
+		if (FEATURE_NAME.equals(fieldRefName) || FEATURE_COMMENT.equals(fieldRefName)) {
+			return true;
+		}
 		if (owner == null) {
 			return true;
 		}

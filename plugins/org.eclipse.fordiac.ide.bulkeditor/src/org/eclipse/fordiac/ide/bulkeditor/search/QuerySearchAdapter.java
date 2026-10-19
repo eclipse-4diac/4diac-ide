@@ -22,8 +22,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorMode;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.ConnectionConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.InstanceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.OccurrenceConfig;
+import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.OccurrencesConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.PinConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.TypeConfig;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
@@ -163,6 +165,7 @@ public class QuerySearchAdapter {
 		        buildInstanceConfig(place, QueryModelHelper.REF_FUNCTION_FB, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_TYPED_SUBAPP, placeholders, pinsImplicit),
 		        buildInstanceConfig(place, QueryModelHelper.REF_UNTYPED_SUBAPP, placeholders, pinsImplicit),
+		        buildConnectionConfig(place, placeholders),
 		        readIgnoreLinkedLibraries(queryRoot),
 		        QueryModelHelper.isSubappHierarchyScope(place),
 		        QueryModelHelper.getSubappHierarchy(place));
@@ -207,11 +210,18 @@ public class QuerySearchAdapter {
 		}
 		final FilterRecord constraintRecord = readFilterRecord(child, QueryModelHelper.REF_CONSTRAINT, placeholders);
 
-		return new InstanceConfig(true, constraintRecord,
-				readOccurrenceConfig(child, QueryModelHelper.REF_APPLICATION_OCCURRENCE, placeholders),
-				readOccurrenceConfig(child, QueryModelHelper.REF_COMPOSITE_FB_OCCURRENCE, placeholders),
-				readOccurrenceConfig(child, QueryModelHelper.REF_TYPED_SUBAPP_OCCURRENCE, placeholders),
+		return new InstanceConfig(true, constraintRecord, readOccurrencesConfig(child, placeholders),
 				buildPinConfig(child, placeholders, pinsImplicit));
+	}
+
+	private static ConnectionConfig buildConnectionConfig(final EObject place, final Map<String, String> placeholders) {
+		final EObject child = getContainedChild(place, QueryModelHelper.REF_CONNECTION);
+		if (child == null) {
+			return ConnectionConfig.INACTIVE;
+		}
+		final FilterRecord constraintRecord = readFilterRecord(child, QueryModelHelper.REF_CONSTRAINT, placeholders);
+
+		return new ConnectionConfig(true, constraintRecord, readOccurrencesConfig(child, placeholders));
 	}
 
 	private static PinConfig buildPinConfig(final EObject searchTarget, final Map<String, String> placeholders,
@@ -255,9 +265,17 @@ public class QuerySearchAdapter {
 		return readConstraintTree(eobj, placeholders);
 	}
 
-	private static OccurrenceConfig readOccurrenceConfig(final EObject instance, final String refName,
+	private static OccurrencesConfig readOccurrencesConfig(final EObject networkElement,
 			final Map<String, String> placeholders) {
-		final EObject occ = QueryModelHelper.getContainedChild(instance, refName);
+		return new OccurrencesConfig(
+				readOccurrenceConfig(networkElement, QueryModelHelper.REF_APPLICATION_OCCURRENCE, placeholders),
+				readOccurrenceConfig(networkElement, QueryModelHelper.REF_COMPOSITE_FB_OCCURRENCE, placeholders),
+				readOccurrenceConfig(networkElement, QueryModelHelper.REF_TYPED_SUBAPP_OCCURRENCE, placeholders));
+	}
+
+	private static OccurrenceConfig readOccurrenceConfig(final EObject networkElement, final String refName,
+			final Map<String, String> placeholders) {
+		final EObject occ = QueryModelHelper.getContainedChild(networkElement, refName);
 		if (occ == null) {
 			return OccurrenceConfig.INACTIVE;
 		}

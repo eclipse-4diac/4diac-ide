@@ -287,11 +287,8 @@ public class SearchHelper {
 			}
 
 			// Instance-level: occurrence-driven traversal
-			if (obj instanceof AutomationSystem) {
+			if (obj instanceof AutomationSystem || obj instanceof Application) {
 				return cfg.needsSystems();
-			}
-			if (obj instanceof Application) {
-				return cfg.anyInstanceSelected();
 			}
 			if (obj instanceof UntypedSubApp) {
 				return true;
@@ -525,12 +522,23 @@ public class SearchHelper {
 			stream = Stream.concat(stream, network.getNetworkElements().stream()
 					.filter(fbne -> matchesInstanceConstraint(fbne, occurrence, context)));
 
-			// Connections are always included
-			stream = Stream.concat(stream, network.getAdapterConnections().stream());
-			stream = Stream.concat(stream, network.getDataConnections().stream());
-			stream = Stream.concat(stream, network.getEventConnections().stream());
+			if (cfg.connection().selected()) {
+				final Predicate<Connection> connectionFilter = conn -> matchesConnectionConstraint(conn, occurrence,
+						context);
+				stream = Stream.concat(stream, network.getAdapterConnections().stream().filter(connectionFilter));
+				stream = Stream.concat(stream, network.getDataConnections().stream().filter(connectionFilter));
+				stream = Stream.concat(stream, network.getEventConnections().stream().filter(connectionFilter));
+			}
 
 			return stream;
+		}
+
+		private boolean matchesConnectionConstraint(final Connection connection, final String occurrence,
+				final INamedElement context) {
+			return cfg.connection().matchesOccurrence(occurrence, context) && cfg.connection()
+					.matches(MatchTarget.of(null,
+							connection.getSource() != null ? connection.getSource().getTypeName() : null,
+							connection.getComment(), null, connection));
 		}
 
 		private boolean matchesInstanceConstraint(final FBNetworkElement fbne, final String occurrence,
