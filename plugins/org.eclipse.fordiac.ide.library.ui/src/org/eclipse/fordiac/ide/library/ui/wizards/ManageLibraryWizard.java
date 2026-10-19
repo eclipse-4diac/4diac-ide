@@ -18,12 +18,12 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.fordiac.ide.library.LibraryChange;
 import org.eclipse.fordiac.ide.library.LibraryResolver;
 import org.eclipse.fordiac.ide.library.ui.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -74,7 +74,7 @@ public class ManageLibraryWizard extends Wizard {
 		try {
 			getContainer().run(false, true, libraryChangeOperation);
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError("Major error while applying library changes", e); //$NON-NLS-1$
+			ILog.get().error("Major error while applying library changes", e); //$NON-NLS-1$
 			return false;
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
