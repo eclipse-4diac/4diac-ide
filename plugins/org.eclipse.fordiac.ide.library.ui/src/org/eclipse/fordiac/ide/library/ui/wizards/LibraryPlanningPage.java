@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -43,7 +44,6 @@ import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
 import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
@@ -246,7 +246,7 @@ public class LibraryPlanningPage extends WizardPage {
 			LinkedLibrary.getStandard(project, new NullProgressMonitor()).forEach(folder -> stdLibNode.children()
 					.add(LibraryChange.createEmpty(folder.getSymbolicName(), folder.getVersion().toString())));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 
 		return List.of(extLibNode, stdLibNode);

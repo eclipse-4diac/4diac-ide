@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -34,7 +35,6 @@ import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -63,7 +63,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 			setPageText(index, dependencyPage.getTitle());
 			setPageImage(index, dependencyPage.getTitleImage());
 		} catch (final PartInitException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
