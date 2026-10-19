@@ -21,13 +21,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
-import org.eclipse.fordiac.ide.model.util.LibraryElementHasher;
 import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 
 public class LibraryExportUtil {
@@ -35,7 +35,6 @@ public class LibraryExportUtil {
 	public static void exportTypeAsSIFB(final TypeEntry entry, final File destination)
 			throws LibraryElementHashException, IOException {
 		final LibraryElement element = entry.getType();
-		final String hash = LibraryElementHasher.hash(element);
 
 		final ExportCopier copier = new ExportCopier();
 		final var copy = (LibraryElement) copier.copy(element);
@@ -50,20 +49,20 @@ public class LibraryExportUtil {
 			throw new LibraryElementHashException(Messages.LibraryExporter_MissingTypeHashAttribute);
 		}
 
-		copy.setAttribute(hashDecl.getType(), StringValueConverter.INSTANCE.toString(hash), null);
+		copy.setAttribute(hashDecl.getType(), StringValueConverter.INSTANCE.toString(entry.getTypeHash()), null);
 
 		final Resource resource = FordiacTypeResourceFactory.INSTANCE
-				.createResource(URI.createFileURI(new File(destination, getTargetFileName(entry)).getAbsolutePath()));
+				.createResource(URI.createFileURI(new File(destination, getExportFileName(entry)).getAbsolutePath()));
 		resource.getContents().add(copy);
 		resource.save(null);
 	}
 
-	private static String getTargetFileName(final TypeEntry entry) {
+	private static String getExportFileName(final TypeEntry entry) {
 		final IFile file = entry.getFile();
 
-		if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())) {
-			return file.getFullPath().removeFileExtension().addFileExtension(TypeLibraryTags.FB_TYPE_FILE_ENDING)
-					.lastSegment();
+		if (entry.getTypeEClass() == LibraryElementPackage.Literals.FUNCTION_FB_TYPE) {
+			return file.getFullPath().removeFileExtension()
+					.addFileExtension(TypeLibraryTags.FB_TYPE_FILE_ENDING.toLowerCase()).lastSegment();
 		}
 
 		return file.getName();
