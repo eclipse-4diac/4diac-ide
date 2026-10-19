@@ -126,6 +126,14 @@
         <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="[]" />
       </command>
       <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+        icon="icons/code_block.svg"
+        label="%toolbar.source.label"
+        tooltip="%toolbar.source.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="source" />
+      </command>
+      <command
         id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.admonition"
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
         icon="icons/admonition_note.svg"
@@ -134,7 +142,16 @@
         style="pulldown">
         <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="NOTE" />
       </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+        icon="icons/fbt.svg"
+        label="%toolbar.fbt.label"
+        tooltip="%toolbar.fbt.tooltip"
+        style="push">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="fbt" />
+      </command>
     </menuContribution>
+    
     <!-- Dropdown content for headings -->
     <menuContribution
       locationURI="menu:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.heading">
@@ -175,6 +192,7 @@
         <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading5" />
       </command>
     </menuContribution>
+    
     <!-- Dropdown content for admonition -->
     <menuContribution
       locationURI="menu:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.admonition">
