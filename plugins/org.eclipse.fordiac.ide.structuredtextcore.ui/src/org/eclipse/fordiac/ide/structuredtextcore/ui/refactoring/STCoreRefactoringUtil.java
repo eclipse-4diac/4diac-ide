@@ -9,17 +9,24 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - find the text editor of a language in multi-page editors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.INode;
@@ -27,6 +34,7 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parsetree.reconstr.impl.NodeIterator;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.util.ITextRegion;
 import org.eclipse.xtext.util.TextRegion;
 
@@ -134,6 +142,18 @@ public final class STCoreRefactoringUtil {
 			return ITextRegion.EMPTY_REGION;
 		}
 		return new TextRegion(firstLeafNode.getOffset(), lastLeafNode.getEndOffset() - firstLeafNode.getOffset());
+	}
+
+	/**
+	 * A type editor can contain text editors of several xText languages
+	 */
+	public static XtextEditor findXtextEditor(final IEditorPart editor, final IEditorInput editorInput,
+			final String languageName) {
+		final IEditorPart[] pages = editor instanceof final MultiPageEditorPart multiPageEditor
+				? multiPageEditor.findEditors(editorInput)
+				: new IEditorPart[] { editor };
+		return Stream.of(pages).map(page -> Adapters.adapt(page, XtextEditor.class)).filter(Objects::nonNull)
+				.filter(page -> Objects.equals(languageName, page.getLanguageName())).findFirst().orElse(null);
 	}
 
 	private static boolean contains(final ITextRegion region, final ITextRegion other) {
