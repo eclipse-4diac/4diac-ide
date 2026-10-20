@@ -27,6 +27,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -44,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class FordiacMarkerHelper {
 	public static final Object FAMILY_FORDIAC_MARKER = new Object();
@@ -255,7 +255,7 @@ public final class FordiacMarkerHelper {
 				builder.createMarker(resource);
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Could not create error markers", e); //$NON-NLS-1$
+			ILog.get().error("Could not create error markers", e); //$NON-NLS-1$
 		}
 	}
 
@@ -301,7 +301,7 @@ public final class FordiacMarkerHelper {
 				builder.createMarker(resource);
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Could not update error markers on resource: " + resource.getName(), //$NON-NLS-1$
+			ILog.get().error("Could not update error markers on resource: " + resource.getName(), //$NON-NLS-1$
 					e);
 		}
 	}
@@ -323,7 +323,7 @@ public final class FordiacMarkerHelper {
 		try {
 			return !builders.isEmpty() || resource.findMarkers(type, true, IResource.DEPTH_ZERO).length != 0;
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning("Couldn't determine marker state of resoruce: " + resource.getName(), e); //$NON-NLS-1$
+			ILog.get().warn("Couldn't determine marker state of resoruce: " + resource.getName(), e); //$NON-NLS-1$
 
 		}
 		return false;

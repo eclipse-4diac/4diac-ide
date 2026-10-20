@@ -19,11 +19,11 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
@@ -54,7 +54,7 @@ public abstract class CommunicationConfigurationDetails {
 					return (CommunicationConfigurationDetails) o;
 				}
 			} catch (final CoreException ex) {
-				FordiacLogHelper.logError(ex.getMessage());
+				ILog.get().error(ex.getMessage());
 			}
 		}
 		return null;

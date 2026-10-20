@@ -29,10 +29,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class FordiacKeywords {
 
@@ -553,7 +553,7 @@ public final class FordiacKeywords {
 		try {
 			return (String) f.get(null); // Static field, so get with null
 		} catch (final IllegalArgumentException | IllegalAccessException e) {
-			FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
+			ILog.get().error("Exception in keyword access", e); //$NON-NLS-1$
 			throw new IllegalStateException(e);
 		}
 	}
@@ -562,7 +562,7 @@ public final class FordiacKeywords {
 		try {
 			return f.getAnnotation(AllowedContexts.class);
 		} catch (final IllegalArgumentException e) {
-			FordiacLogHelper.logError("Exception in allowed context access", e); //$NON-NLS-1$
+			ILog.get().error("Exception in allowed context access", e); //$NON-NLS-1$
 			throw new IllegalStateException(e);
 		}
 	}
