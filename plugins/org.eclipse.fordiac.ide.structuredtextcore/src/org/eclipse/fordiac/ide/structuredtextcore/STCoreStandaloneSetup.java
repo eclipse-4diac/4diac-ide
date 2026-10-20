@@ -13,12 +13,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore;
 
+import java.util.Map;
+
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.xtext.resource.IResourceServiceProvider;
 
 import com.google.inject.Injector;
 
 /**
- * Initialization support for running Xtext languages without Equinox extension registry.
+ * Initialization support for running Xtext languages without Equinox extension
+ * registry.
  */
 public class STCoreStandaloneSetup extends STCoreStandaloneSetupGenerated {
 
@@ -30,5 +34,15 @@ public class STCoreStandaloneSetup extends STCoreStandaloneSetupGenerated {
 	public void register(final Injector injector) {
 		STCorePackage.eINSTANCE.eClass();
 		super.register(injector);
+	}
+
+	public static void registerFileExtensions(final Injector injector, final String... extensions) {
+		final IResourceServiceProvider serviceProvider = injector.getInstance(IResourceServiceProvider.class);
+		final Map<String, Object> extensionToFactoryMap = IResourceServiceProvider.Registry.INSTANCE
+				.getExtensionToFactoryMap();
+		for (final String extension : extensions) {
+			extensionToFactoryMap.putIfAbsent(extension, serviceProvider);
+			extensionToFactoryMap.putIfAbsent(extension.toLowerCase(), serviceProvider);
+		}
 	}
 }
