@@ -8,11 +8,11 @@
             class="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
             icon="fordiacimage://ICON_EXPORT"
             id="org.eclipse.fordiac.ide.export.ui.wizard.FordiacExportWizard"
-            name="4diac IDE Type Export">
+            name="%FordiacExportWizard_LABEL_Window_Title">
       </wizard>
       <category
             id="org.eclipse.fordiac.ide.export.ui"
-            name="4diac IDE">
+            name="%exportCategory.name">
       </category>
    </extension>
    <extension
@@ -21,7 +21,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferencePage"
             id="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferences"
-            name="FORTE Export Preferences">
+            name="%forteExportPreferences.name">
       </page>
    </extension> 
    <extension
