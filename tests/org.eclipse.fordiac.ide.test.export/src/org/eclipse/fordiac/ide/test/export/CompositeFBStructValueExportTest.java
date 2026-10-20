@@ -16,8 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.eclipse.emf.common.util.URI;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
@@ -37,9 +39,9 @@ import org.eclipse.fordiac.ide.test.model.typelibrary.FBTypeEntryMock;
 import org.junit.jupiter.api.Test;
 
 /**
- * Verifies that a struct literal assigned to a struct-typed input variable of
- * a plain (non-adapter) FB instance is exported with that value as the
- * generated assignment's right-hand side.
+ * Verifies that a struct literal assigned to a struct-typed input variable of a
+ * plain (non-adapter) FB instance is exported with that value as the generated
+ * assignment's right-hand side.
  */
 @SuppressWarnings("nls")
 class CompositeFBStructValueExportTest extends ExporterTestBase<CompositeFBType> {
@@ -52,26 +54,28 @@ class CompositeFBStructValueExportTest extends ExporterTestBase<CompositeFBType>
 
 	@Override
 	void setupFunctionBlock() {
-		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null);
+		final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("test");
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 
 		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
 		structType.setName(STRUCT_TYPE_NAME);
 		structType.getMemberVariables().add(createStructMember("code", ElementaryTypes.DINT));
 		structType.getMemberVariables().add(createStructMember("bCyclic", ElementaryTypes.BOOL));
-		typeLib.addTypeEntry(new DataTypeEntryMock(structType, typeLib, null));
-		FordiacTypeResourceFactory.INSTANCE
-				.createResource(URI.createFileURI(STRUCT_TYPE_NAME + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT))
-				.getContents().add(structType);
+		final DataTypeEntryMock structEntry = new DataTypeEntryMock(structType, typeLib,
+				project.getFile(STRUCT_TYPE_NAME + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT));
+		structType.setTypeEntry(structEntry);
+		typeLib.addTypeEntry(structEntry);
+		FordiacTypeResourceFactory.INSTANCE.createResource(structEntry.getURI()).getContents().add(structType);
 
 		final SimpleFBType leafType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
 		leafType.setName(LEAF_FB_NAME);
 		leafType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		leafType.getInterfaceList().getInputVars().add(createStructMember(STRUCT_VAR_NAME, structType));
-		final FBTypeEntry leafEntry = new FBTypeEntryMock(leafType, typeLib, null);
+		final FBTypeEntry leafEntry = new FBTypeEntryMock(leafType, typeLib,
+				project.getFile(LEAF_FB_NAME + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT));
+		leafType.setTypeEntry(leafEntry);
 		typeLib.addTypeEntry(leafEntry);
-		FordiacTypeResourceFactory.INSTANCE
-				.createResource(URI.createFileURI(LEAF_FB_NAME + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT))
-				.getContents().add(leafType);
+		FordiacTypeResourceFactory.INSTANCE.createResource(leafEntry.getURI()).getContents().add(leafType);
 
 		final FB leafInstance = BlockInstanceFactory.createFBInstanceForTypeEntry(leafEntry);
 		leafInstance.setName(LEAF_INSTANCE_NAME);
@@ -85,7 +89,11 @@ class CompositeFBStructValueExportTest extends ExporterTestBase<CompositeFBType>
 		final FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		fbNetwork.getNetworkElements().add(leafInstance);
 		functionBlock.setFBNetwork(fbNetwork);
-		functionBlock.setTypeEntry(prepareTypeEntryWithTypeLib());
+		final FBTypeEntry compositeEntry = new FBTypeEntryMock(functionBlock, typeLib,
+				project.getFile(COMPOSITEFUNCTIONBLOCK_NAME + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT));
+		functionBlock.setTypeEntry(compositeEntry);
+		typeLib.addTypeEntry(compositeEntry);
+		FordiacTypeResourceFactory.INSTANCE.createResource(compositeEntry.getURI()).getContents().add(functionBlock);
 	}
 
 	@Test
@@ -99,11 +107,11 @@ class CompositeFBStructValueExportTest extends ExporterTestBase<CompositeFBType>
 		assertTrue(assignmentIndex >= 0, () -> "Expected to find \"" + expectedAssignment + "\" in:\n" + content);
 		final int lineEnd = content.indexOf(';', assignmentIndex);
 		final String rightHandSide = content.substring(assignmentIndex + expectedAssignment.length(), lineEnd).strip();
-		assertTrue(!rightHandSide.isEmpty(),
-				() -> "Expected a non-empty initializer for " + STRUCT_VAR_NAME + ", but the assignment was empty");
+		assertTrue(!rightHandSide.isEmpty(), () -> "Expected a non-empty initializer for " + STRUCT_VAR_NAME
+				+ ", but the assignment was empty: " + implFile.getErrors());
 	}
 
-	private static VarDeclaration createStructMember(final String name, final org.eclipse.fordiac.ide.model.data.DataType type) {
+	private static VarDeclaration createStructMember(final String name, final DataType type) {
 		final VarDeclaration member = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		member.setName(name);
 		member.setType(type);
