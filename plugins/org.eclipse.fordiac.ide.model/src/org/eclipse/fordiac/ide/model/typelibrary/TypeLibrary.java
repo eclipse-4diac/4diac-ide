@@ -53,6 +53,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.common.notify.impl.SingletonAdapterImpl;
@@ -72,7 +73,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class TypeLibrary extends ConcurrentNotifierImpl {
 
@@ -313,7 +313,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 			createTypeLibraryMarker(entry.getFile(),
 					MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
 		} else {
-			FordiacLogHelper.logWarning(MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
+			ILog.get().warn(MessageFormat.format(Messages.TypeLibrary_TypeExists, entry.getFullTypeName()));
 		}
 	}
 
@@ -463,7 +463,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 			checkReferencedProjectsAdditions();
 			checkAdditions(project);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
@@ -492,7 +492,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		try {
 			currentReferencedProjects.addAll(Arrays.asList(project.getReferencedProjects()));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 		for (final IProject referencedProject : referencedProjects) {
 			if (!currentReferencedProjects.contains(referencedProject)) {
@@ -533,7 +533,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		case final GlobalConstantsEntry globalConstEntry ->
 			addTypeEntry(globalConstants, name, globalConstEntry, replaced);
 		default -> {
-			FordiacLogHelper.logError("Unknown type entry to be added to library: " //$NON-NLS-1$
+			ILog.get().error("Unknown type entry to be added to library: " //$NON-NLS-1$
 					+ entry.getClass().getName());
 			yield false;
 		}
@@ -578,7 +578,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		case final SystemEntry sysEntry -> systems.putIfAbsent(fullTypeName, sysEntry);
 		case final GlobalConstantsEntry globalConstEntry -> globalConstants.putIfAbsent(fullTypeName, globalConstEntry);
 		default -> {
-			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
+			ILog.get().error("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
 			yield null;
 		}
 		};
@@ -597,7 +597,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		case final SystemEntry sysEntry -> systems.remove(fullTypeName, sysEntry);
 		case final GlobalConstantsEntry globalConstEntry -> globalConstants.remove(fullTypeName, globalConstEntry);
 		default -> {
-			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
+			ILog.get().error("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
 			yield true;
 		}
 		};
@@ -616,7 +616,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		case final SystemEntry _ -> systems.get(fullTypeName);
 		case final GlobalConstantsEntry _ -> globalConstants.get(fullTypeName);
 		default -> {
-			FordiacLogHelper.logError("Unknown type entry to be retrieved from library: " + entry.getClass().getName()); //$NON-NLS-1$
+			ILog.get().error("Unknown type entry to be retrieved from library: " + entry.getClass().getName()); //$NON-NLS-1$
 			yield null;
 		}
 		};

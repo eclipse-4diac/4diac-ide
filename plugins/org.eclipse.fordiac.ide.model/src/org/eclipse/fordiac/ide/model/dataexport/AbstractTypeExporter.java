@@ -27,12 +27,12 @@ import java.io.InputStream;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
 	private final LibraryElement type;
@@ -58,12 +58,12 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			getWriter().close();
 			return new ByteBufferInputStream(getOutputStream().transferDataBuffers());
 		} catch (final XMLStreamException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		} finally {
 			try {
 				getOutputStream().close();
 			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		}
 		return null;

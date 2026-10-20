@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.URI;
@@ -45,7 +46,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public enum TypeLibraryManager {
 
@@ -175,7 +175,7 @@ public enum TypeLibraryManager {
 						consumer.accept(type.cast(obj));
 					}
 				} catch (final Exception e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
+					ILog.get().error(e.getMessage(), e);
 				}
 			}
 		}

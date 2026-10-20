@@ -30,6 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -45,7 +46,6 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.DataTypeEntryImpl;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class DataTypeLibrary {
 
@@ -196,7 +196,7 @@ public final class DataTypeLibrary {
 
 	private AnyDerivedType createErrorMarkerType(final String typeName, final String message) {
 		return derivedTypes.computeIfAbsent(typeName.toUpperCase(), _ -> {
-			FordiacLogHelper.logInfo(message);
+			ILog.get().info(message);
 			final DataTypeEntry entry = new DataTypeEntryImpl();
 			final ErrorDataType type = ErrorDataTypeFactory.INSTANCE.createErrorDataType(typeName);
 			entry.setType(type);
