@@ -7,6 +7,18 @@
       </appinfo>
       <documentation>
          Registers library sources from which the 4diac IDE downloads library packages, i.e. library archives and their manifests.
+&lt;p&gt;
+A library source with exactly one endpoint contributes its downloader with a &lt;code&gt;client&lt;/code&gt; element. A library source whose endpoints are configured by the user, such as GitLab servers, contributes a &lt;code&gt;provider&lt;/code&gt; element implementing &lt;code&gt;ILibraryPackageDownloaderProvider.getConfiguredDownloaders()&lt;/code&gt; that supplies one downloader per configured endpoint.
+&lt;/p&gt;
+&lt;p&gt;
+Library downloads and the online library catalogue obtain their downloaders from &lt;code&gt;org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider&lt;/code&gt;, and the library import wizard offers the GitLab endpoints found by the same lookup, so all of them work with the same sources:
+&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;every endpoint of every registered source is a separate downloader, independent of how many sources are registered,&lt;/li&gt;
+&lt;li&gt;downloaders whose &lt;code&gt;isActive()&lt;/code&gt; returns &lt;code&gt;false&lt;/code&gt; are left out,&lt;/li&gt;
+&lt;li&gt;the provider returns the active downloader list together with an &lt;code&gt;IStatus&lt;/code&gt;. A contribution that cannot be instantiated or queried produces an error status, while other sources remain available. The catalogue includes these errors in its status; downloads and the import wizard log them. An empty configuration has an OK discovery status,&lt;/li&gt;
+&lt;li&gt;results with status &lt;code&gt;NO_CONFIG&lt;/code&gt; mark a source without configuration and are skipped by downloads and the catalogue. The catalogue shows &lt;code&gt;CONFIG_ERROR&lt;/code&gt; and other errors; a download tries the next source and combines these errors into its own error only if no source provides the library.&lt;/li&gt;
+&lt;/ul&gt;
       </documentation>
    </annotation>
 
@@ -49,11 +61,16 @@
    </element>
 
    <element name="client">
+      <annotation>
+         <documentation>
+            A library source with exactly one endpoint.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-
+                  The downloader of the library source. It is instantiated for every lookup, so state that has to outlive a lookup, such as the activation state, cannot be kept in the instance alone.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader"/>
@@ -64,11 +81,16 @@
    </element>
 
    <element name="provider">
+      <annotation>
+         <documentation>
+            A library source with configurable endpoints.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-
+                  The provider that supplies one downloader for each configured endpoint. It is asked on every lookup, so it has to read the current configuration on every call, and it must not contact the endpoints, because lookups also run on the UI thread. If nothing is configured, it returns an empty list.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloaderProvider"/>
@@ -92,7 +114,18 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         A library source with one fixed endpoint:
+&lt;pre&gt;
+&lt;extension point=&quot;org.eclipse.fordiac.ide.library.LibraryPackageDownloader&quot;&gt;
+   &lt;client class=&quot;com.example.library.ExampleDownloader&quot;/&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
+A library source with endpoints configured in the preferences:
+&lt;pre&gt;
+&lt;extension point=&quot;org.eclipse.fordiac.ide.library.LibraryPackageDownloader&quot;&gt;
+   &lt;provider class=&quot;com.example.library.ExampleDownloaderProvider&quot;/&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -101,7 +134,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         Clients implement &lt;code&gt;org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader&lt;/code&gt;.
+         Clients implement &lt;code&gt;org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader&lt;/code&gt;, providers implement &lt;code&gt;org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloaderProvider&lt;/code&gt;. Each downloader returned by a provider should have a distinct name, because the name identifies the endpoint in messages.
       </documentation>
    </annotation>
 
@@ -110,7 +143,7 @@
          <meta.section type="implementation"/>
       </appinfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The bundle &lt;code&gt;org.eclipse.fordiac.ide.gitlab&lt;/code&gt; registers &lt;code&gt;org.eclipse.fordiac.ide.gitlab.management.GitLabDownloaderProvider&lt;/code&gt;, which creates one &lt;code&gt;GitLabDownloader&lt;/code&gt; per GitLab endpoint configured in the preferences.
       </documentation>
    </annotation>
 
