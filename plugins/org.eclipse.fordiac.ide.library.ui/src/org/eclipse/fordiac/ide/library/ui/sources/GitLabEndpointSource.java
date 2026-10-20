@@ -73,11 +73,8 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 	@Override
 	public Object loadLibrarySource(final IProgressMonitor monitor) {
 		final AdaptableList root = new AdaptableList();
-		if (!endpoint.isValid()) {
-			return root;
-		}
-
-		downloadManager = new GitLabDownloader(endpoint.token(), endpoint.url());
+		// a new downloader per load, as concurrent loads must not share the fetched packages
+		downloadManager = new GitLabDownloader(endpoint);
 		final GitLabDownloader mgr = downloadManager;
 		final DownloadResult<Void> fetchProjectsAndPackages = mgr.fetchProjectsAndPackages();
 		if (fetchProjectsAndPackages.status() == Status.OK) {

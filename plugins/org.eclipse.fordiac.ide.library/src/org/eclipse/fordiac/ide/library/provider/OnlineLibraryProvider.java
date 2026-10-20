@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Mario Kastner - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - use the shared downloader lookup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.provider;
 
@@ -29,59 +30,68 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
-import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
+import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
+import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
 public class OnlineLibraryProvider extends AbstractLibraryProvider {
 
 	private final AtomicReference<Map<String, List<LibraryDescriptor>>> availableLibs = new AtomicReference<>(Map.of());
+	private final LibraryPackageDownloaderProvider downloaderProvider;
+
+	public OnlineLibraryProvider() {
+		this(new LibraryPackageDownloaderProvider());
+	}
+
+	public OnlineLibraryProvider(final LibraryPackageDownloaderProvider downloaderProvider) {
+		this.downloaderProvider = Objects.requireNonNull(downloaderProvider);
+	}
 
 	@Override
 	public IStatus refresh(final IProgressMonitor monitor, final boolean fetchDependencies) {
 		final Map<String, List<LibraryDescriptor>> refreshedLibs = new HashMap<>();
-
-		final List<IArchiveDownloader> downloaderExtensions = TypeLibraryManager
-				.listExtensions(LibraryManager.DOWNLOADER_EXTENSION, IArchiveDownloader.class);
-
-		if (downloaderExtensions.isEmpty()) {
-			return Status.error("No downloader extension available"); //$NON-NLS-1$
-		}
-
 		final MultiStatus status = new MultiStatus(PLUGIN_ID, IStatus.OK, "Download versions status"); //$NON-NLS-1$
+		boolean sourceConfigured = false;
+		final var sources = downloaderProvider.getActiveDownloaders();
+		status.merge(sources.status());
 
-		for (final IArchiveDownloader downloaderExtension : downloaderExtensions) {
-			for (final IArchiveDownloader endpointDownloader : downloaderExtension.convertEndpointsToDownloader()) {
+		for (final ILibraryPackageDownloader downloader : sources.downloaders()) {
+			final DownloadResult<Map<String, List<String>>> downloadResult = downloader
+					.availableLibrariesAndVersions(monitor);
 
-				if (!endpointDownloader.isActive()) {
-					continue;
-				}
-
-				final DownloadResult<Map<String, List<String>>> downloadResult = endpointDownloader
-						.availableLibrariesAndVersions(monitor);
-
-				if (downloadResult.status() == DownloadResult.Status.OK) {
-					refreshedLibs.putAll(toLibraryDescriptors(downloadResult.result(), fetchDependencies,
-							endpointDownloader, monitor, status));
-					status.add(Status.info(endpointDownloader.getName() + ": OK")); //$NON-NLS-1$
-				} else {
-					status.add(Status.error(endpointDownloader.getName() + ": " + downloadResult.message())); //$NON-NLS-1$
-				}
+			switch (downloadResult.status()) {
+			case OK -> {
+				refreshedLibs.putAll(
+						toLibraryDescriptors(downloadResult.result(), fetchDependencies, downloader, monitor, status));
+				status.add(Status.info(downloader.getName() + ": OK")); //$NON-NLS-1$
+				sourceConfigured = true;
+			}
+			case NO_CONFIG -> {
+				// a source without any configuration is skipped, as for library downloads
+			}
+			default -> {
+				status.add(Status.error(downloader.getName() + ": " + downloadResult.message())); //$NON-NLS-1$
+				sourceConfigured = true;
+			}
 			}
 		}
 
+		if (!sourceConfigured && status.isOK()) {
+			status.add(Status.info(Messages.OnlineLibraryProvider_NoLibrarySource));
+		}
 		availableLibs.set(Map.copyOf(refreshedLibs));
 
 		return status;
 	}
 
 	private static Map<String, List<LibraryDescriptor>> toLibraryDescriptors(final Map<String, List<String>> versions,
-			final boolean fetchDependencies, final IArchiveDownloader downloader, final IProgressMonitor monitor,
+			final boolean fetchDependencies, final ILibraryPackageDownloader downloader, final IProgressMonitor monitor,
 			final MultiStatus status) {
 		return versions.entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().map(version -> {
@@ -99,7 +109,7 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 				}).filter(Objects::nonNull).toList()));
 	}
 
-	private static Map<String, VersionRange> getDependencies(final IArchiveDownloader downloader,
+	private static Map<String, VersionRange> getDependencies(final ILibraryPackageDownloader downloader,
 			final String symbolicName, final Version version, final IProgressMonitor monitor,
 			final MultiStatus status) {
 

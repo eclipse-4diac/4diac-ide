@@ -10,6 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Michael Oberlehner - request GitLab lists in pages of 100 entries
+ *   Michael Oberlehner - one downloader per configured endpoint
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.management;
 
@@ -33,6 +34,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -47,15 +49,21 @@ import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpoint;
-import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsStore;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
-import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
+import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
-public class GitLabDownloader implements IArchiveDownloader {
+/**
+ * Downloads libraries from the package registries of one GitLab endpoint.
+ *
+ * <p>
+ * The downloaders of all configured endpoints are created by the
+ * {@link GitLabDownloaderProvider}.
+ */
+public class GitLabDownloader implements ILibraryPackageDownloader {
 
 	private static final String PACKAGE_TYPE = "packageType"; //$NON-NLS-1$
 	private static final String PACKAGE_VERSION = "packageVersion"; //$NON-NLS-1$
@@ -92,52 +100,36 @@ public class GitLabDownloader implements IArchiveDownloader {
 		}
 	}
 
-	private final VersionComparator versionComparator;
+	private final VersionComparator versionComparator = new VersionComparator();
 
-	private String baseUrl;
-	private String token;
+	private final GitLabEndpoint endpoint;
+	private final String baseUrl;
+	private final String token;
 
-	private boolean active;
-	private List<GitLabEndpoint> endpoints;
+	private boolean active = true;
 
 	/**
-	 * constructor to be used for Archive Downloader Extension
+	 * Creates the downloader of a GitLab endpoint.
+	 *
+	 * @param endpoint the configured endpoint
 	 */
-	public GitLabDownloader() {
-		this(GitLabEndpointsStore.loadEndpoints());
+	public GitLabDownloader(final GitLabEndpoint endpoint) {
+		this.endpoint = Objects.requireNonNull(endpoint);
+		baseUrl = withTrailingSlash(endpoint.url());
+		token = endpoint.token();
 	}
 
-	private GitLabDownloader(final List<GitLabEndpoint> endpoints) {
-		this(endpoints.isEmpty() ? "" : endpoints.get(0).token(), //$NON-NLS-1$
-				endpoints.isEmpty() ? "" : endpoints.get(0).url()); //$NON-NLS-1$
-		this.endpoints = endpoints;
+	/**
+	 * Returns the endpoint this downloader connects to.
+	 *
+	 * @return the configured endpoint
+	 */
+	public GitLabEndpoint getEndpoint() {
+		return endpoint;
 	}
 
-	@Override
-	public boolean hasMultipleEndpoints() {
-		return !endpoints.isEmpty();
-	}
-
-	@Override
-	public List<IArchiveDownloader> convertEndpointsToDownloader() {
-		final List<IArchiveDownloader> downloader = new ArrayList<>();
-		endpoints.forEach(e -> downloader.add(new GitLabDownloader(e.token(), e.url())));
-		return downloader;
-	}
-
-	public GitLabDownloader(final String token, final String baseUrl) {
-		init(token, baseUrl);
-		versionComparator = new VersionComparator();
-		active = true;
-	}
-
-	public void init(final String token, final String baseUrl) {
-		if (!baseUrl.isBlank() && !baseUrl.endsWith("/")) { //$NON-NLS-1$
-			this.baseUrl = baseUrl + "/"; //$NON-NLS-1$
-		} else {
-			this.baseUrl = baseUrl;
-		}
-		this.token = token;
+	private static String withTrailingSlash(final String url) {
+		return url.isBlank() || url.endsWith("/") ? url : url + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
@@ -149,8 +141,8 @@ public class GitLabDownloader implements IArchiveDownloader {
 	}
 
 	public DownloadResult<Void> fetchProjectsAndPackages() {
-		final boolean missingUrl = baseUrl == null || baseUrl.isBlank();
-		final boolean missingToken = token == null || token.isBlank();
+		final boolean missingUrl = baseUrl.isBlank();
+		final boolean missingToken = token.isBlank();
 		if (missingUrl && missingToken) {
 			return new DownloadResult<>(DownloadResult.Status.NO_CONFIG, Messages.No_Config);
 		}
@@ -379,7 +371,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	@Override
 	public String getName() {
-		return baseUrl != null ? "Gitlab(" + baseUrl + ")" : "Gitlab"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return MessageFormat.format(Messages.GitLabDownloader_Name, endpoint.name());
 	}
 
 	@Override
