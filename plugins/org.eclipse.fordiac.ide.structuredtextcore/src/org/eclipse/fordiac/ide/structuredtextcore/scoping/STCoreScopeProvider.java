@@ -32,6 +32,7 @@ import java.util.stream.StreamSupport;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -109,6 +110,9 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
 
+	private static final Set<EReference> APPLICABLE_STRUCT_FEATURES = Set
+			.of(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES);
+
 	@Inject
 	IQualifiedNameProvider qualifiedNameProvider;
 
@@ -170,8 +174,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	protected IScope getReceiverScope(final STExpression receiver, final EObject context, final EReference reference) {
 		final var receiverType = receiver.getResultType();
 		if (receiverType != null) {
-			if (receiverType instanceof final StructuredType structuredVarType) {
-				return qualifiedScope(structuredVarType.getMemberVariables(), reference);
+			if (receiverType instanceof final StructuredType structType) {
+				return typeScope(structType, context, reference, this::isApplicableForStructFeatureReference);
 			}
 			if (receiverType instanceof final AdapterType adapterType) {
 				if (adapterType.eContainer() instanceof final AdapterType primaryAdapterType) {
@@ -214,7 +218,7 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		final var container = context.eContainer();
 		if (container instanceof final STStructInitializerExpression structInitializerExpression
 				&& structInitializerExpression.getResultType() instanceof final StructuredType structType) {
-			return qualifiedScope(structType.getMemberVariables(), reference);
+			return typeScope(structType, context, reference, this::isApplicableForStructFeatureReference);
 		}
 		return IScope.NULLSCOPE;
 	}
@@ -223,10 +227,19 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		return new SimpleScope(parent, NON_USER_DEFINED_TYPES_DESCRIPTIONS, true);
 	}
 
-	public ImportScope typeScope(final EObject type, final EObject context, final EReference reference,
+	public IScope typeScope(final EObject type, final EObject context, final EReference reference,
 			final Predicate<IEObjectDescription> filter) {
-		return new ImportScope(List.of(createImportNormalizer(qualifiedNameProvider.getFullyQualifiedName(type))),
-				IScope.NULLSCOPE, new ScopeBasedSelectable(filterScope(delegateGetScope(context, reference), filter)),
+		if (type == null) {
+			return IScope.NULLSCOPE;
+		}
+
+		final QualifiedName typeName = qualifiedNameProvider.getFullyQualifiedName(type);
+		if (typeName == null || typeName.isEmpty()) {
+			return IScope.NULLSCOPE;
+		}
+
+		return new ImportScope(List.of(createImportNormalizer(typeName)), IScope.NULLSCOPE,
+				new ScopeBasedSelectable(filterScope(delegateGetScope(context, reference), filter)),
 				reference.getEReferenceType(), true);
 	}
 
@@ -308,6 +321,10 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	protected boolean isApplicableForAdapterFeatureReference(final IEObjectDescription description) {
 		return isApplicable(description, LibraryElementPackage.Literals.INTERFACE_LIST, APPLICABLE_ADAPTER_FEATURES);
+	}
+
+	protected boolean isApplicableForStructFeatureReference(final IEObjectDescription description) {
+		return isApplicable(description, DataPackage.Literals.STRUCTURED_TYPE, APPLICABLE_STRUCT_FEATURES);
 	}
 
 	protected static boolean isApplicable(final IEObjectDescription description, final EClass containerClass,
