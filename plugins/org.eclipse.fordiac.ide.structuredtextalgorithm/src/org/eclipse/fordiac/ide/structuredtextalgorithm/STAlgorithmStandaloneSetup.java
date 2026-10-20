@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm;
 
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
+import org.eclipse.fordiac.ide.structuredtextcore.STCoreStandaloneSetup;
 
 import com.google.inject.Injector;
 
@@ -30,5 +32,10 @@ public class STAlgorithmStandaloneSetup extends STAlgorithmStandaloneSetupGenera
 	public void register(final Injector injector) {
 		STAlgorithmPackage.eINSTANCE.eClass();
 		super.register(injector);
+		STCoreStandaloneSetup.registerFileExtensions(injector, TypeLibraryTags.FB_TYPE_FILE_ENDING,
+				TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING, TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING,
+				TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING, TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
+				TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING, TypeLibraryTags.DEVICE_TYPE_FILE_ENDING,
+				TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING, TypeLibraryTags.DATA_TYPE_FILE_ENDING);
 	}
 }

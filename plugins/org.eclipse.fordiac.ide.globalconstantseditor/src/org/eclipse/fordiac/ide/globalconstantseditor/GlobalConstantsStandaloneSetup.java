@@ -14,6 +14,8 @@
 package org.eclipse.fordiac.ide.globalconstantseditor;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.structuredtextcore.STCoreStandaloneSetup;
 
 import com.google.inject.Injector;
 
@@ -31,6 +33,7 @@ public class GlobalConstantsStandaloneSetup extends GlobalConstantsStandaloneSet
 	public void register(final Injector injector) {
 		GlobalConstantsPackage.eINSTANCE.eClass();
 		super.register(injector);
+		STCoreStandaloneSetup.registerFileExtensions(injector, TypeLibraryTags.GLOBAL_CONST_FILE_ENDING);
 	}
 
 }
