@@ -50,9 +50,9 @@ import org.junit.jupiter.api.Test;
 import org.osgi.framework.Version;
 
 /**
- * Resolves library dependencies through the {@link MockDownloader}. Only the
- * archives a test imports directly are extracted, so all dependencies have to
- * be downloaded.
+ * Resolves library dependencies through the {@link MockDownloader} or an
+ * endpoint of the {@link MockDownloaderProvider}. Only the archives a test
+ * imports directly are extracted, so all dependencies have to be downloaded.
  *
  * <p>
  * The automatic build is disabled and the project is built explicitly, so that
@@ -109,6 +109,7 @@ class LibraryDownloadTest {
 	@AfterEach
 	void cleanupAfterEach() {
 		assertAll("reset the test state", //$NON-NLS-1$
+				() -> LibraryTestFixtures.setMockDownloaderActive(true),
 				() -> LibraryTestFixtures.resetProject(project), LibraryTestFixtures::removeFixtureLibraries);
 	}
 
@@ -125,6 +126,21 @@ class LibraryDownloadTest {
 		final Manifest manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_1_0, 0,
 				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		assertEquals(List.of(new Version(V1_5_0)), LibraryTestFixtures.getExtractedVersions(TEST01));
+		final IMarker[] markers = findManifestMarkers();
+		assertEquals(0, markers.length, () -> describe(markers));
+	}
+
+	@Test
+	void downloadsFromConfiguredEndpoint() throws Exception {
+		// only the endpoint of the additional provider can serve the dependency
+		LibraryTestFixtures.setMockDownloaderActive(false);
+		LibraryTestFixtures.extract(TEST02_ARCHIVE);
+
+		assertTrue(LibraryManager.INSTANCE.importLibrary(project, URI.create(LIB_LOC + TEST02_ARCHIVE), true, false));
+		buildProject();
+
 		LibraryAssert.assertLibraryLinked(project, TEST01, V1_5_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		assertEquals(List.of(new Version(V1_5_0)), LibraryTestFixtures.getExtractedVersions(TEST01));
 		final IMarker[] markers = findManifestMarkers();
