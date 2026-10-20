@@ -226,8 +226,8 @@ public class GitLabEndpointsPreferencePage extends PreferencePage implements IWo
 
 	protected void testConnection(final GitLabEndpoint selected) {
 		try {
-			final GitLabDownloader dl = new GitLabDownloader(selected.token(), selected.url());
-			final var res = dl.fetchProjectsAndPackages();
+			final GitLabDownloader gitlabDownloader = new GitLabDownloader(selected);
+			final var res = gitlabDownloader.fetchProjectsAndPackages();
 			if (res != null && res.status() == Status.OK) {
 				MessageDialog.openInformation(getShell(), Messages.GitLabEndpointsPreferencePage_test_con,
 						Messages.GitLabEndpointsPreferencePage_connnection_sucessful);

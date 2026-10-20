@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2026 Primetals Technologies Austria GmbH and others
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH and others, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *   Alexander Fedorov (ArSysOp) - fix "Uncontrolled data used in path expression"
+ *   Michael Oberlehner - use configured library package downloader providers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -68,7 +69,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.equinox.p2.operations.IProfileChangeJob;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
-import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
+import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
+import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -93,7 +95,7 @@ public enum LibraryManager {
 	public static final String PACKAGE_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
 	public static final String MANIFEST = "MANIFEST.MF"; //$NON-NLS-1$
-	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension"; //$NON-NLS-1$
+	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.LibraryPackageDownloader"; //$NON-NLS-1$
 
 	private final java.net.URI workspaceLibraryURI = java.net.URI.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
 
@@ -522,11 +524,13 @@ public enum LibraryManager {
 	}
 
 	/**
-	 * Uses registered {@link IArchiveDownloader} to download specified library.
-	 * Will download the latest version if versionRange is {@code null} or empty.
+	 * Uses the active {@link ILibraryPackageDownloader downloaders} of all
+	 * library sources (see {@link LibraryPackageDownloaderProvider}) to download specified
+	 * library. Will download the latest version if versionRange is {@code null} or
+	 * empty.
 	 *
 	 * <p>
-	 * See {@link IArchiveDownloader#downloadLibrary} for more info
+	 * See {@link ILibraryPackageDownloader#downloadLibrary} for more info
 	 *
 	 * @param symbolicName symbolic name of library
 	 * @param versionRange version range of library
@@ -548,23 +552,21 @@ public enum LibraryManager {
 		ILog.get().info("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
 				+ " preferring " + preferred + " Project: " + project.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
-		List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
-				IArchiveDownloader.class);
-
-		if (downloaders.size() == 1 && downloaders.get(0).hasMultipleEndpoints()) {
-			downloaders = downloaders.get(0).convertEndpointsToDownloader();
+		final var sources = new LibraryPackageDownloaderProvider().getActiveDownloaders();
+		final List<ILibraryPackageDownloader> downloaders = sources.downloaders();
+		if (!sources.status().isOK()) {
+			ILog.get().log(sources.status());
 		}
 
 		DownloadResult<Path> dlResult;
 		final StringBuilder errors = new StringBuilder();
+		for (final IStatus status : sources.status().getChildren()) {
+			errors.append(" | ").append(status.getMessage()); //$NON-NLS-1$
+		}
 		final VersionRange range = (versionRange == null || versionRange.isEmpty()) ? ALL_RANGE : versionRange;
 		final Version pref = (preferred != null && range.includes(preferred)) ? preferred : null;
 		progress.setWorkRemaining(downloaders.size());
 		for (final var downloader : downloaders) {
-			if (!downloader.isActive()) {
-				progress.worked(1);
-				continue;
-			}
 			try {
 				dlResult = downloader.downloadLibrary(symbolicName, range, pref, progress.split(1));
 				if (dlResult.status() == DownloadResult.Status.OK) {

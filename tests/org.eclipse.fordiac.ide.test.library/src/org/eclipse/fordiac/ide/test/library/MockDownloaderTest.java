@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
-import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
+import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -162,17 +162,11 @@ class MockDownloaderTest {
 		}
 	}
 
-	@Test
-	void representsSingleEndpoint() {
-		assertFalse(downloader.hasMultipleEndpoints());
-		assertEquals(List.of(downloader), downloader.convertEndpointsToDownloader());
-	}
-
 	@SuppressWarnings("static-method")
 	@Test
-	void isRegisteredAsArchiveDownloader() {
-		final List<IArchiveDownloader> downloaders = TypeLibraryManager
-				.listExtensions(LibraryManager.DOWNLOADER_EXTENSION, IArchiveDownloader.class);
+	void isRegisteredAsLibraryPackageDownloader() {
+		final List<ILibraryPackageDownloader> downloaders = TypeLibraryManager
+				.listExtensions(LibraryManager.DOWNLOADER_EXTENSION, ILibraryPackageDownloader.class);
 
 		assertTrue(downloaders.stream().anyMatch(MockDownloader.class::isInstance));
 	}

@@ -81,6 +81,12 @@ public class Messages extends NLS {
 
 	public static String LibraryManager_UpdateLibraryPackage;
 
+	public static String LibraryPackageDownloaderProvider_DiscoveryStatus;
+	public static String LibraryPackageDownloaderProvider_SourceError;
+	public static String LibraryPackageDownloaderProvider_UnknownElement;
+
+	public static String OnlineLibraryProvider_NoLibrarySource;
+
 	public static String DownloadNullResult;
 	public static String DownloadUnexpectedError;
 

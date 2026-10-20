@@ -3,10 +3,10 @@
 <schema targetNamespace="org.eclipse.fordiac.ide.library" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.fordiac.ide.library" id="ArchiveDownloaderExtension" name="Extension for Archive Downloader"/>
+         <meta.schema plugin="org.eclipse.fordiac.ide.library" id="LibraryPackageDownloader" name="Library Package Downloader"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         Registers library sources from which the 4diac IDE downloads library packages, i.e. library archives and their manifests.
       </documentation>
    </annotation>
 
@@ -19,25 +19,26 @@
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
             <element ref="client"/>
+            <element ref="provider"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
-                  
+
                </documentation>
             </annotation>
          </attribute>
          <attribute name="id" type="string">
             <annotation>
                <documentation>
-                  
+
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string">
             <annotation>
                <documentation>
-                  
+
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -49,13 +50,28 @@
 
    <element name="client">
       <complexType>
-         <attribute name="class" type="string">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.library.IArchiveDownloader"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="provider">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloaderProvider"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -85,7 +101,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         Clients implement &lt;code&gt;org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader&lt;/code&gt;.
       </documentation>
    </annotation>
 

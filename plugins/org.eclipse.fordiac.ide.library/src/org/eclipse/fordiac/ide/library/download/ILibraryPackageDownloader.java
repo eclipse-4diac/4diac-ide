@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - introduce the library package downloader contract
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.download;
 
@@ -21,7 +22,22 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
-public interface IArchiveDownloader {
+/**
+ * Downloads library packages, i.e. library archives and their manifests, from
+ * one library source.
+ *
+ * <p>
+ * A library source with exactly one endpoint registers its downloader with the
+ * {@code client} element of the extension point
+ * {@code org.eclipse.fordiac.ide.library.LibraryPackageDownloader}; a source
+ * with configurable endpoints registers an
+ * {@link ILibraryPackageDownloaderProvider} instead. Contributions are
+ * instantiated for every lookup, so state that has to outlive a lookup, such as
+ * the activation state, cannot be kept in the instance alone.
+ *
+ * @see LibraryPackageDownloaderProvider#getActiveDownloaders()
+ */
+public interface ILibraryPackageDownloader {
 	/**
 	 * Returns configured name of this downloader
 	 *
@@ -63,7 +79,7 @@ public interface IArchiveDownloader {
 	 * given range or the preferred version if it is contained in the range
 	 *
 	 * <p>
-	 * Use {@link VersionRange#includes()}) for the range check
+	 * Use {@link VersionRange#includes(Version)} for the range check.
 	 *
 	 * @param symbolicName     symbolic name of library
 	 * @param range            version range of the specified library
@@ -101,8 +117,4 @@ public interface IArchiveDownloader {
 	 * @param active active state
 	 */
 	void setActive(boolean active);
-
-	boolean hasMultipleEndpoints();
-
-	List<IArchiveDownloader> convertEndpointsToDownloader();
 }
