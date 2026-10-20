@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.library;singleton:=true
 Bundle-Version: 3.3.100.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.library
 Bundle-ActivationPolicy: lazy
+Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,

@@ -39,17 +39,17 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
-import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
+import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
 /**
- * Archive downloader serving the library archives in the {@code data} folder of
- * this test bundle.
+ * Library package downloader serving the library archives in the {@code data}
+ * folder of this test bundle.
  */
-public class MockDownloader implements IArchiveDownloader {
+public class MockDownloader implements ILibraryPackageDownloader {
 	// The extension registry creates a new downloader instance for every lookup,
 	// so the activation state has to be shared between all instances.
 	private static final AtomicBoolean ACTIVE = new AtomicBoolean(false);
@@ -135,18 +135,6 @@ public class MockDownloader implements IArchiveDownloader {
 	@Override
 	public void setActive(final boolean active) {
 		ACTIVE.set(active);
-	}
-
-	@Override
-	public boolean hasMultipleEndpoints() {
-		return false;
-	}
-
-	@Override
-	public List<IArchiveDownloader> convertEndpointsToDownloader() {
-		// the mock is a single source: LibraryManager checks hasMultipleEndpoints(),
-		// while OnlineLibraryProvider iterates the converted endpoint downloaders
-		return List.of(this);
 	}
 
 	@Override
