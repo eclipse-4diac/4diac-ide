@@ -6,5 +6,8 @@
       <client
             class="org.eclipse.fordiac.ide.test.library.MockDownloader">
       </client>
+      <provider
+            class="org.eclipse.fordiac.ide.test.library.MockDownloaderProvider">
+      </provider>
    </extension>
 </plugin>
