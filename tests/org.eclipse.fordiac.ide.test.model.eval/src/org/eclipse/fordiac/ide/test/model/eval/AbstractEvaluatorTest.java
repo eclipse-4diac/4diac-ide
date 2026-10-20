@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -108,6 +109,10 @@ public abstract class AbstractEvaluatorTest {
 		decl.setName(name);
 		decl.setType(type);
 		decl.setIsInput(input);
+		if (type.eResource() != null) {
+			new ResourceImpl(type.eResource().getURI().trimSegments(1).appendSegment(name + ".test")).getContents()
+					.add(decl);
+		}
 		return decl;
 	}
 
@@ -129,6 +134,10 @@ public abstract class AbstractEvaluatorTest {
 		attr.setName(attributeDeclaration.getName());
 		attr.setType(attributeDeclaration.getType());
 		attr.setAttributeDeclaration(attributeDeclaration);
+		if (attributeDeclaration.eResource() != null) {
+			new ResourceImpl(attributeDeclaration.eResource().getURI().trimFileExtension().appendFileExtension("test"))
+					.getContents().add(attr);
+		}
 		return attr;
 	}
 
@@ -146,10 +155,11 @@ public abstract class AbstractEvaluatorTest {
 		final AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
 		attributeDeclaration.setName(name);
 		attributeDeclaration.setType(structType);
-		final AttributeTypeEntryMock typeEntry = new AttributeTypeEntryMock(attributeDeclaration, typeLib, null);
+		final IFile file = project.getFile(name + TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
+		final AttributeTypeEntryMock typeEntry = new AttributeTypeEntryMock(attributeDeclaration, typeLib, file);
 		attributeDeclaration.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(attributeDeclaration);
+		FordiacTypeResourceFactory.INSTANCE.createResource(typeEntry.getURI()).getContents().add(attributeDeclaration);
 		return attributeDeclaration;
 	}
 
@@ -162,10 +172,11 @@ public abstract class AbstractEvaluatorTest {
 		final AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
 		attributeDeclaration.setName(name);
 		attributeDeclaration.setType(derivedType);
-		final AttributeTypeEntryMock typeEntry = new AttributeTypeEntryMock(attributeDeclaration, typeLib, null);
+		final IFile file = project.getFile(name + TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
+		final AttributeTypeEntryMock typeEntry = new AttributeTypeEntryMock(attributeDeclaration, typeLib, file);
 		attributeDeclaration.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(attributeDeclaration);
+		FordiacTypeResourceFactory.INSTANCE.createResource(typeEntry.getURI()).getContents().add(attributeDeclaration);
 		return attributeDeclaration;
 	}
 
@@ -175,10 +186,11 @@ public abstract class AbstractEvaluatorTest {
 		derivedType.setName(name);
 		derivedType.setBaseType(baseType);
 		derivedType.setInitialValue(defaultValue);
-		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(derivedType, typeLib, null);
+		final IFile file = project.getFile(name + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
+		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(derivedType, typeLib, file);
 		derivedType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(derivedType);
+		FordiacTypeResourceFactory.INSTANCE.createResource(typeEntry.getURI()).getContents().add(derivedType);
 		return derivedType;
 	}
 
@@ -186,10 +198,11 @@ public abstract class AbstractEvaluatorTest {
 		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
 		structType.setName(name);
 		structType.getMemberVariables().addAll(vars);
-		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(structType, typeLib, null);
+		final IFile file = project.getFile(name + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
+		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(structType, typeLib, file);
 		structType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(structType);
+		FordiacTypeResourceFactory.INSTANCE.createResource(typeEntry.getURI()).getContents().add(structType);
 		return structType;
 	}
 
@@ -198,10 +211,11 @@ public abstract class AbstractEvaluatorTest {
 		enumType.setName(name);
 		values.stream().map(AbstractEvaluatorTest::newEnumeratedValue)
 				.forEachOrdered(enumType.getEnumeratedValues()::add);
-		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(enumType, typeLib, null);
+		final IFile file = project.getFile(name + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT);
+		final DataTypeEntryMock typeEntry = new DataTypeEntryMock(enumType, typeLib, file);
 		enumType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl().getContents().add(enumType);
+		FordiacTypeResourceFactory.INSTANCE.createResource(typeEntry.getURI()).getContents().add(enumType);
 		return enumType;
 	}
 
@@ -243,7 +257,7 @@ public abstract class AbstractEvaluatorTest {
 		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(simpleType, typeLib, file);
 		simpleType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl(typeEntry.getURI()).getContents().add(simpleType);
+		FordiacTypeResourceFactory.INSTANCE.createResource(typeEntry.getURI()).getContents().add(simpleType);
 		return simpleType;
 	}
 
@@ -273,7 +287,7 @@ public abstract class AbstractEvaluatorTest {
 		final FBTypeEntryMock typeEntry = new FBTypeEntryMock(functionType, typeLib, file);
 		functionType.setTypeEntry(typeEntry);
 		typeLib.addTypeEntry(typeEntry);
-		new ResourceImpl(typeEntry.getURI()).getContents().add(functionType);
+		FordiacTypeResourceFactory.INSTANCE.createResource(typeEntry.getURI()).getContents().add(functionType);
 		return functionType;
 	}
 }
