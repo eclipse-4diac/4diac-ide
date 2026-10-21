@@ -193,7 +193,7 @@
 	</extension>
 	<extension
 			id="problem"
-			name="4diac IDE Problem"
+			name="%marker.problem.name"
 			point="org.eclipse.core.resources.markers">
 		<super
            type="org.eclipse.core.resources.problemmarker">
@@ -204,7 +204,7 @@
  	</extension>
 	<extension
 			id="iec61499"
-			name="4diac IDE IEC 61499 Problem"
+			name="%marker.iec61499.name"
 			point="org.eclipse.core.resources.markers">
 		<super
 			type="org.eclipse.fordiac.ide.model.problem">
@@ -215,7 +215,7 @@
 	</extension>
  <extension
        id="validation"
-       name="4diac IDE Validation Problem"
+       name="%marker.validation.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -226,7 +226,7 @@
  </extension>
  <extension
        id="initialValue"
-       name="4diac IDE Initial Value Problem"
+       name="%marker.initialValue.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -237,7 +237,7 @@
  </extension>
  <extension
        id="typeDeclaration"
-       name="4diac IDE Type Declaration Problem"
+       name="%marker.typeDeclaration.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -248,7 +248,7 @@
  </extension>
  <extension
        id="conditionExpression"
-       name="4diac IDE Condition Expression Problem"
+       name="%marker.conditionExpression.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -259,7 +259,7 @@
  </extension> 
  <extension
        id="import"
-       name="4diac IDE Import Problem"
+       name="%marker.import.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -270,7 +270,7 @@
  </extension>
  <extension
        id="unused"
-       name="4diac IDE Unused Declaration Problem"
+       name="%marker.unused.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -281,7 +281,7 @@
  </extension> 
  <extension
        id="typeLibrary"
-       name="4diac IDE Type Library Problem"
+       name="%marker.typeLibrary.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -292,7 +292,7 @@
  </extension>
  <extension
        id="projectConfiguration"
-       name="4diac IDE Project Configuration Problem"
+       name="%marker.projectConfiguration.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
@@ -303,7 +303,7 @@
  </extension>  
  <extension
        id="library"
-       name="4diac IDE Library Problem"
+       name="%marker.library.name"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.model.problem">
