@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="ArchiveDownloaderExtension" name="Extension point for Archive Downloader" schema="schema/ArchiveDownloaderExtension.exsd"/>
+   <extension-point id="LibraryPackageDownloader" name="%extensionPoint.libraryPackageDownloader.name" schema="schema/LibraryPackageDownloader.exsd"/>
    <extension
          id="builder"
          name="4diac Library Builder"
