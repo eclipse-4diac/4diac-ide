@@ -29,7 +29,7 @@
   </extension>
 
 
-<!-- toolbar -->
+<!-- == TOOLBAR == -->
   <extension point="org.eclipse.ui.commands">
     <command
       id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
@@ -287,5 +287,273 @@
       </command>
     </menuContribution>
   </extension>
+  
+  <!-- == SHORTCUTS == -->
+  <extension point="org.eclipse.ui.contexts">
+    <context
+      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context"
+      parentId="org.eclipse.ui.textEditorScope"
+      name="AsciiDoc Editor Context">
+    </context>
+  </extension>
+  
+  <!-- KEY BINDINGS -->
+  <!-- M1 = Ctrl on Windows/Linux or Command on macOS -->
+  <!-- M2 = Shift -->
+  <!-- M3 = Alt/Option -->
+  <extension point="org.eclipse.ui.bindings">
+    <!-- Macro fbt (Ctrl+Alt+F) -->
+    <key
+      sequence="M1+M3+F"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="fbt" />
+    </key>
+  
+    <!-- Bold (Ctrl+B) -->
+    <key
+      sequence="M1+B"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="bold" />
+    </key>
+
+    <!-- Italic (Ctrl+I) -->
+    <key
+      sequence="M1+I"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="italic" />
+    </key>
+  
+    <!-- Monospace (Ctrl+M) -->
+    <key
+      sequence="M1+M"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="monospace" />
+    </key>
+
+    <!-- Subscript (Ctrl+Shift+S) -->
+    <key
+      sequence="M1+M2+S"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="subscript" />
+    </key>
+
+    <!-- Superscript (Ctrl+Shift+P) -->
+    <key
+      sequence="M1+M2+P"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.ui.textEditorScope">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="superscript" />
+    </key>
+
+    <!-- Heading 0 (Ctrl+Alt+0) -->
+    <key
+      sequence="M1+M3+0"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading0" />
+    </key>
+
+    <!-- Heading 1 (Ctrl+Alt+1) -->
+    <key
+      sequence="M1+M3+1"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading1" />
+    </key>
+
+    <!-- Heading 2 (Ctrl+Alt+2) -->
+    <key
+      sequence="M1+M3+2"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading2" />
+    </key>
+
+    <!-- Heading 3 (Ctrl+Alt+3) -->
+    <key
+      sequence="M1+M3+3"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading3" />
+    </key>
+
+    <!-- Heading 4 (Ctrl+Alt+4) -->
+    <key
+      sequence="M1+M3+4"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading4" />
+    </key>
+
+    <!-- Heading 5 (Ctrl+Alt+5) -->
+    <key
+      sequence="M1+M3+5"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading5" />
+    </key>
+
+    <!-- Unordered List (Ctrl+Shift+U) -->
+    <key
+      sequence="M1+M2+U"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="unorderedList" />
+    </key>
+
+    <!-- Ordered List (Ctrl+Shift+O) -->
+    <key
+      sequence="M1+M2+O"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="orderedList" />
+    </key>
+
+    <!-- Link (Ctrl+K) -->
+    <key
+      sequence="M1+K"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="link" />
+    </key>
+
+    <!-- Image (Ctrl+G) -->
+    <key
+      sequence="M1+G"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="image" />
+    </key>
+
+    <!-- Short Note (Ctrl+Alt+N) -->
+    <key
+      sequence="M1+M3+N"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="NOTE" />
+    </key>
+
+    <!-- Short Tip (Ctrl+Alt+T) -->
+    <key
+      sequence="M1+M3+T"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="TIP" />
+    </key>
+    
+     <!-- Short Important (Ctrl+Alt+I) -->
+    <key
+      sequence="M1+M3+I"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="IMPORTANT" />
+    </key>
+
+    <!-- Short Caution (Ctrl+Alt+C) -->
+    <key
+      sequence="M1+M3+C"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="CAUTION" />
+    </key>
+
+    <!-- Short Warning (Ctrl+Alt+W) -->
+    <key
+      sequence="M1+M3+W"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="WARNING" />
+    </key>
+
+    <!-- Block Note (Ctrl+Shift+Alt+N) -->
+    <key
+      sequence="M1+M2+M3+N"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="NOTE Block" />
+    </key>
+
+    <!-- Block Tip (Ctrl+Shift+Alt+T) -->
+    <key
+      sequence="M1+M2+M3+T"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="TIP Block" />
+    </key>
+
+    <!-- Block Important (Ctrl+Shift+Alt+I) -->
+    <key
+      sequence="M1+M2+M3+I"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="IMPORTANT Block" />
+    </key>
+    
+    <!-- Block Caution (Ctrl+Shift+Alt+C) -->
+    <key
+      sequence="M1+M2+M3+C"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="CAUTION Block" />
+    </key>
+
+    <!-- Block Warning (Ctrl+Shift+Alt+W) -->
+    <key
+      sequence="M1+M2+M3+W"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="WARNING Block" />
+    </key>
+
+    <!-- Source Block Code (Ctrl+Alt+S) -->
+    <key
+      sequence="M1+M3+S"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="source" />
+    </key>
+    
+    <!-- FB Type (Ctrl+Alt+Y) -->
+    <key
+      sequence="M1+M3+Y"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+      <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="fbt" />
+    </key>
+  
+  </extension>  
   
 </plugin>

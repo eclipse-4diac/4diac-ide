@@ -76,6 +76,12 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	}
 
 	@Override
+	protected void initializeEditor() {
+		super.initializeEditor();
+		setKeyBindingScopes(new String[] { "org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context" }); //$NON-NLS-1$
+	}
+
+	@Override
 	public void createPartControl(final Composite parent) {
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(parent);
 
