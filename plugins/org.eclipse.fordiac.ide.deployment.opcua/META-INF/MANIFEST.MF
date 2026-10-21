@@ -23,8 +23,10 @@ Require-Bundle: org.apache.log4j,
 Export-Package: org.eclipse.fordiac.ide.deployment.opcua
 Import-Package: org.eclipse.milo.opcua.sdk.client;version="[1.1.0,2.0.0)",
  org.eclipse.milo.opcua.stack.core;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.core.channel;version="[1.1.0,2.0.0)",
  org.eclipse.milo.opcua.stack.core.types;version="[1.1.0,2.0.0)",
  org.eclipse.milo.opcua.stack.core.types.builtin;version="[1.1.0,2.0.0)",
  org.eclipse.milo.opcua.stack.core.types.builtin.unsigned;version="[1.1.0,2.0.0)",
  org.eclipse.milo.opcua.stack.core.types.enumerated;version="[1.1.0,2.0.0)",
- org.eclipse.milo.opcua.stack.core.types.structured;version="[1.1.0,2.0.0)"
+ org.eclipse.milo.opcua.stack.core.types.structured;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.transport.client.tcp;version="[1.1.0,2.0.0)"
