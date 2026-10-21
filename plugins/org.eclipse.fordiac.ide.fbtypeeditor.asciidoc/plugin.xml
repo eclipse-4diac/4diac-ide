@@ -131,7 +131,7 @@
         label="%toolbar.link.label"
         tooltip="%toolbar.link.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="[]" />
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="link" />
       </command>
       <command
         commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate"
