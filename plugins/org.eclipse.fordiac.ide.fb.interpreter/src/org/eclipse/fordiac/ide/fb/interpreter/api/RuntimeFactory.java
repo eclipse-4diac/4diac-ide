@@ -216,7 +216,7 @@ public final class RuntimeFactory {
 				return;
 			}
 
-			final FBType copiedType = EcoreUtil.copy(networkElement.getType());
+			final FBType copiedType = (FBType) networkElement.getTypeEntry().copyType();
 			VariableUtils.initializeFbType(copiedType,
 					varDeclaration -> getDefaultValueFromNetworkElement(varDeclaration, networkElement));
 
