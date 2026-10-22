@@ -29,13 +29,13 @@ import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
@@ -45,7 +45,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
@@ -65,7 +64,7 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -129,33 +128,25 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
 		// check for the adapters of the FB first
-		final Map<String, AdapterType> adapters = getAdapterTypes(fbData.getFb().getType().getInterfaceList());
-		if (!adapters.isEmpty()) {
-			createAdapterTypes(adapters);
+		if (fbData.getFb() instanceof final BlockFBNetworkElement bfbn) {
+			createAdapterTypes(bfbn.getInterface());
 		}
 
 		// check if we have to create the FBType first
-		checkCreateFBType(fbData.getFb().getType());
+		checkCreateFBType((FBTypeEntry) fbData.getFb().getTypeEntry());
 
 		super.createFBInstance(fbData, res);
 
 	}
 
-	private static Map<String, AdapterType> getAdapterTypes(final InterfaceList interfaceList) {
-		final Map<String, AdapterType> list = new HashMap<>();
-		interfaceList.getPlugs().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
-		interfaceList.getSockets().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
-		return list;
-	}
-
-	private void checkCreateFBType(final FBType fbType) {
+	private void checkCreateFBType(final FBTypeEntry typeEntry) {
 		// if the FPType does not exist create it
-		if (!getTypes().contains(fbType.getName())) {
+		if (!getTypes().contains(typeEntry.getTypeName())) {
 			try {
-				createFBType(fbType);
+				createFBType(typeEntry.getType());
 			} catch (final DeploymentException ce) {
 				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed,
-						fbType.getName()), ce);
+						typeEntry.getTypeName()), ce);
 			}
 		}
 
@@ -187,18 +178,15 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		}
 	}
 
-	private void createFBTypesOfCFB(final FBType fbType) throws DeploymentException {
+	private void createFBTypesOfCFB(final FBType fbType) {
 		final List<BlockFBNetworkElement> blockFBs = FBNetworkHelper
 				.getBlockFBNetworkElementsFromList(((CompositeFBType) fbType).getFBNetwork().getNetworkElements())
 				.toList();
 
 		for (final BlockFBNetworkElement netelem : blockFBs) {
 			if (!getTypes().contains(netelem.getTypeName())) {
-				final Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());
-				if (!adapters.isEmpty()) {
-					createAdapterTypes(adapters);
-				}
-				createFBType(netelem.getType());
+				createAdapterTypes(netelem.getInterface());
+				checkCreateFBType((FBTypeEntry) netelem.getTypeEntry());
 			}
 		}
 	}
@@ -237,16 +225,16 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				);
 	}
 
-	public void createAdapterType(final String adapterKey, final Map<String, AdapterType> adapters)
-			throws DeploymentException {
-
+	public void createAdapterType(final AdapterDeclaration adapter) throws DeploymentException {
 		setAttribute(getDevice(), "AdapterType", getAdapterTypes()); //$NON-NLS-1$
 
-		if (!getAdapterTypes().contains(adapterKey) || !isAttribute(getDevice(), adapterKey, "AdapterType")) { //$NON-NLS-1$
+		if (!getAdapterTypes().contains(adapter.getTypeName())
+				|| !isAttribute(getDevice(), adapter.getTypeName(), "AdapterType")) { //$NON-NLS-1$
 			final ForteLuaExportFilter luaFilter = new ForteLuaExportFilter();
-			final String luaSkript = luaFilter.createLUA(adapters.get(adapterKey));
-			final String request = MessageFormat.format(CREATE_ADAPTER_TYPE, getNextId(), adapterKey, luaSkript);
-			sendCreateAdapterTypeREQ(adapterKey, request);
+			final String luaSkript = luaFilter.createLUA(adapter.getType());
+			final String request = MessageFormat.format(CREATE_ADAPTER_TYPE, getNextId(), adapter.getTypeName(),
+					luaSkript);
+			sendCreateAdapterTypeREQ(adapter.getTypeName(), request);
 		}
 	}
 
@@ -546,14 +534,18 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	}
 
-	private void createAdapterTypes(final Map<String, AdapterType> adapters) {
-		adapters.keySet().forEach(e -> {
-			try {
-				createAdapterType(e, adapters);
-			} catch (final DeploymentException ce) {
-				logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed, e), ce);
-			}
-		});
+	private void createAdapterTypes(final InterfaceList il) {
+		final Set<String> seen = new HashSet<>();
+		Stream.concat(il.getPlugs().stream(), il.getSockets().stream()) //
+				.filter(adp -> seen.add(adp.getTypeName())) //
+				.forEach(adp -> {
+					try {
+						createAdapterType(adp);
+					} catch (final DeploymentException ce) {
+						logger.error(MessageFormat.format(Messages.DynamicTypeLoadDeploymentExecutor_CreateTypeFailed,
+								adp.getTypeName()), ce);
+					}
+				});
 	}
 
 	private QueryResponseHandler sendQUERY(final String destination, final String request)
