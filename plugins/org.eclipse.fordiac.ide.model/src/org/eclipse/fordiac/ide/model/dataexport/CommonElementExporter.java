@@ -383,10 +383,17 @@ public class CommonElementExporter {
 		addCommentAttribute(namedElement.getComment());
 	}
 
-	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final LibraryElement type)
+	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final TypeEntry typeEntry)
 			throws XMLStreamException {
 		addNameAttribute(namedElement.getName());
-		addTypeAttribute(type);
+		addTypeAttribute(typeEntry);
+		addCommentAttribute(namedElement.getComment());
+	}
+
+	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final DataType dt)
+			throws XMLStreamException {
+		addNameAttribute(namedElement.getName());
+		addTypeAttribute(dt);
 		addCommentAttribute(namedElement.getComment());
 	}
 
@@ -441,8 +448,12 @@ public class CommonElementExporter {
 		return escapedValue;
 	}
 
-	protected void addTypeAttribute(final LibraryElement type) throws XMLStreamException {
+	protected void addTypeAttribute(final DataType type) throws XMLStreamException {
 		addTypeAttribute(PackageNameHelper.getFullTypeName(addDependency(type)));
+	}
+
+	protected void addTypeAttribute(final TypeEntry typeEntry) throws XMLStreamException {
+		addTypeAttribute(typeEntry != null ? addDependency(typeEntry).getFullTypeName() : null);
 	}
 
 	protected void addTypeAttribute(final String type) throws XMLStreamException {
