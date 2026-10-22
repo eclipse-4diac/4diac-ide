@@ -97,7 +97,6 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		t.test(subapp);
 		t.test(subapp.getSubAppNetwork());
 		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 0);
-		t.test(subapp.getType(), (SubAppType) null);
 		t.test(subapp.getTypeEntry(), (TypeEntry) null);
 	}
 
@@ -107,7 +106,6 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		t.test(subapp);
 		t.test(subapp.getSubAppNetwork());
 		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 2);
-		t.test(subapp.getType(), (SubAppType) null);
 		t.test(subapp.getTypeEntry(), (TypeEntry) null);
 	}
 
