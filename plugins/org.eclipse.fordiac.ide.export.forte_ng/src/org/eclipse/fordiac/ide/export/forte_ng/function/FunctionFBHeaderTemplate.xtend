@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
 class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 
-	new(FunctionFBType type, String name, Path prefix, Map<?,?> options) {
+	new(FunctionFBType type, String name, Path prefix, Map<?, ?> options) {
 		super(type, name, prefix, "CFunctionBlock", options)
 	}
 
@@ -65,5 +65,9 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 			bodyLanguageSupport.generate(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
 		else
 			'''«generateFunctionSignature»;'''
+	}
+
+	override protected generateEventAccessorDefinitions() {
+		"" // functions cannot be called as internal FBs
 	}
 }
