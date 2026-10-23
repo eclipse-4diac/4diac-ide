@@ -14,29 +14,19 @@
  *   Bianca Wiesmayr -  consistent dropdown menu edit, redesign ECC
  *   Alois Zoitl     - updated for new adapter FB handling
  *   Alois Zoitl     - modernized and reworked ECC look
+ *   Tisya Gupta     - extracted common EC action edit part base class
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_HORIZONTAL;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_VERTICAL;
-
 import java.util.List;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -44,28 +34,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
-public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart {
-	private static final Insets OUTPUT_EVENT_INSETS = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
-			MARGIN_HORIZONTAL);
-
-	private final Adapter adapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			refreshEventLabel(getNameLabel());
-		}
-	};
+public class ECActionOutputEventEditPart extends AbstractECActionElementEditPart {
 
 	private final Adapter interfaceAdapter = new EContentAdapter() {
 		@Override
@@ -86,7 +60,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		private void handleSet(final Notification notification) {
 			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
 					&& (isOutputEvent(notification) || isAdapterOutputEvent(notification))) {
-				refreshEventLabel(getNameLabel());
+				refreshVisuals();
 			}
 		}
 
@@ -119,9 +93,11 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			getAction().eAdapters().add(adapter);
 			// Adapt to the fbtype so that we get informed on interface changes
-			ECCContentAndLabelProvider.getFBType(getAction()).getInterfaceList().eAdapters().add(interfaceAdapter);
+			final FBType fbType = ECCContentAndLabelProvider.getFBType(getAction());
+			if (fbType != null) {
+				fbType.getInterfaceList().eAdapters().add(interfaceAdapter);
+			}
 		}
 	}
 
@@ -129,7 +105,6 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			getAction().eAdapters().remove(adapter);
 			final FBType fbType = ECCContentAndLabelProvider.getFBType(getAction());
 			if (fbType != null) {
 				fbType.getInterfaceList().eAdapters().remove(interfaceAdapter);
@@ -139,27 +114,25 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
-			@Override
-			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteECActionCommand<>(getAction(), getAction().getECState());
-			}
-		});
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
+		super.createEditPolicies();
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
+	}
+
+	@Override
+	protected DirectEditPolicy createDirectEditPolicy() {
+		return new DirectEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					final Integer value = (Integer) request.getCellEditor().getValue();
-					if (null != value) {
-						final int selected = value.intValue();
-						final List<Event> events = ECCContentAndLabelProvider
-								.getOutputEvents(ECCContentAndLabelProvider.getFBType(getAction()));
-						Event ev = null;
-						if ((0 <= selected) && (selected < events.size())) {
-							ev = events.get(selected);
-						}
-						return new ChangeOutputCommand(getAction(), ev);
+				final Integer value = (Integer) request.getCellEditor().getValue();
+				if (null != value) {
+					final int selected = value.intValue();
+					final List<Event> events = ECCContentAndLabelProvider
+							.getOutputEvents(ECCContentAndLabelProvider.getFBType(getAction()));
+					Event ev = null;
+					if ((0 <= selected) && (selected < events.size())) {
+						ev = events.get(selected);
 					}
+					return new ChangeOutputCommand(getAction(), ev);
 				}
 				return null;
 			}
@@ -168,25 +141,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// handled by the direct edit manager
 			}
-		});
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
-	}
-
-	@Override
-	public void performRequest(final Request request) {
-		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
-		// REQ_OPEN -> doubleclick
-		if (request.getType() == RequestConstants.REQ_OPEN) {
-			// transform doubleclick to direct edit
-			request.setType(RequestConstants.REQ_DIRECT_EDIT);
-		}
-		super.performRequest(request);
-	}
-
-	@Override
-	protected ComboDirectEditManager createDirectEditManager() {
-		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
-				getNameLabel());
+		};
 	}
 
 	@Override
@@ -205,31 +160,22 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		return (ECActionOutputEvent) getModel();
 	}
 
+	@Override
 	public ECAction getAction() {
 		return getCastedModel().getAction();
 	}
 
 	@Override
-	public INamedElement getINamedElement() {
-		return getAction().getOutput();
+	protected void setupFigure(final Label label) {
+		label.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccEventColor());
+		label.setForegroundColor(FBTypeEditorPreferenceConstants.getEccEventTextColor());
+		refreshEventLabel(label);
 	}
 
 	@Override
-	public Label getNameLabel() {
-		return (Label) getFigure();
-	}
-
-	@Override
-	protected IFigure createFigure() {
-		final Label eventLabel = new Label();
-		eventLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccEventColor());
-		eventLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccEventTextColor());
-		eventLabel.setOpaque(true);
-		refreshEventLabel(eventLabel);
-		eventLabel.setBorder(new MarginBorder(OUTPUT_EVENT_INSETS));
-		eventLabel.setTextAlignment(PositionConstants.LEFT);
-		eventLabel.setLabelAlignment(PositionConstants.LEFT);
-		return eventLabel;
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		refreshEventLabel(getNameLabel());
 	}
 
 	private void refreshEventLabel(final Label eventLabel) {
