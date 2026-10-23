@@ -52,7 +52,7 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 
 	@Override
 	protected Control createDialogArea(final Composite parent) {
-		setTitle(Messages.ManifestEditor_VersionRange_Title);
+		setTitle(Messages.ManifestEditor_ConfigureVersionRange);
 		setMessage(Messages.ManifestEditor_VersionRange_Description);
 
 		final Composite area = (Composite) super.createDialogArea(parent);
@@ -125,7 +125,7 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 
 			includeMinVersion.setSelection(input.getLeftType() == VersionRange.LEFT_CLOSED);
 			includeMaxVersion.setSelection(input.getRightType() == VersionRange.RIGHT_CLOSED);
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException _) {
 			// ignore invalid initial value
 		}
 	}
