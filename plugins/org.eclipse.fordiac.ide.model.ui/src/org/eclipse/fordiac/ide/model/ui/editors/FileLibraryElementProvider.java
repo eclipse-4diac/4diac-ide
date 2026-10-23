@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -41,7 +42,6 @@ import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.validation.ValidationJob;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -126,7 +126,7 @@ public class FileLibraryElementProvider
 		try {
 			doResetLibraryElement(info, new NullProgressMonitor());
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning("Error refreshing changed library element", e); //$NON-NLS-1$
+			ILog.get().warn("Error refreshing changed library element", e); //$NON-NLS-1$
 		}
 	}
 
@@ -236,7 +236,7 @@ public class FileLibraryElementProvider
 					delta.accept(this);
 				}
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		}
 
@@ -274,8 +274,7 @@ public class FileLibraryElementProvider
 						final IFile newFile = file.getWorkspace().getRoot().getFile(delta.getMovedToPath());
 						final UIJob job = UIJob.create(
 								MessageFormat.format(Messages.FileLibraryElementProvider_MoveJobName, file.getName()),
-								(ICoreRunnable) _ -> handleLibraryElementMoved(info,
-										new FileEditorInput(newFile)));
+								(ICoreRunnable) _ -> handleLibraryElementMoved(info, new FileEditorInput(newFile)));
 						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 						job.setPriority(Job.INTERACTIVE);
 						job.schedule();
