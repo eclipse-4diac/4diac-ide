@@ -15,6 +15,7 @@
  *     - added tooltip functionality at state
  *     - added refresh tooltip at state
  *   Alois Zoitl - modernized and reworked ECC look
+ *   Vikash Kumar Sinha - revalidate transitions when a state changes
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -41,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -55,18 +56,16 @@ import org.eclipse.gef.requests.GroupRequest;
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
 
+	private final FigureListener figureListener = source -> revalidateTransitions();
+
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				final Object feature = notification.getFeature();
-				if ((!(LibraryElementPackage.eINSTANCE.getBaseECAction_Algorithm().equals(feature))
-						&& !(LibraryElementPackage.eINSTANCE.getBaseECAction_Output().equals(feature))
-						&& !(LibraryElementPackage.eINSTANCE.getECState().equals(feature)))) {
-					refreshStateTooltip();
-					refresh();
-				}
+				refreshStateTooltip();
+				refresh();
+				revalidateTransitions();
 			}
 		}
 
@@ -77,19 +76,27 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	}
 
+	private void revalidateTransitions() {
+		if (getParent() instanceof final ECCEditPart eccEditPart) {
+			eccEditPart.revalidateTransitions();
+		}
+	}
+
 	@Override
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
 			getModel().eAdapters().add(adapter);
+			getFigure().addFigureListener(figureListener);
 		}
 	}
 
 	@Override
 	public void deactivate() {
 		if (isActive()) {
-			super.deactivate();
+			getFigure().removeFigureListener(figureListener);
 			getModel().eAdapters().remove(adapter);
+			super.deactivate();
 		}
 	}
 
@@ -164,6 +171,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		getFigure().setHasAction(!getModel().getECAction().isEmpty());
 		refreshStateTooltip();
 		super.refreshVisuals();
+		revalidateTransitions();
 	}
 
 	@Override
@@ -236,5 +244,4 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		}
 		return super.getAdapter(adapter);
 	}
-
 }
