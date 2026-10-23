@@ -136,7 +136,7 @@ public class SystemExporter extends AbstractTypeExporter {
 	private void addSegment(final EList<Segment> segementList) throws XMLStreamException {
 		for (final Segment segment : segementList) {
 			addStartElement(LibraryElementTags.SEGMENT_ELEMENT);
-			addNameTypeCommentAttribute(segment, segment.getType());
+			addNameTypeCommentAttribute(segment, segment.getTypeEntry());
 			addXYAttributes(segment);
 			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, formatPosOrSizeVal(segment.getWidth()));
 			addColorAttributeElement(segment);
@@ -163,7 +163,7 @@ public class SystemExporter extends AbstractTypeExporter {
 	private void addDevices(final EList<Device> deviceList) throws XMLStreamException {
 		for (final Device device : deviceList) {
 			addStartElement(LibraryElementTags.DEVICE_ELEMENT);
-			addNameTypeCommentAttribute(device, device.getType());
+			addNameTypeCommentAttribute(device, device.getTypeEntry());
 			addXYAttributes(device);
 			addParamsConfig(device.getVarDeclarations());
 			addDeviceAttributes(device);
@@ -194,7 +194,7 @@ public class SystemExporter extends AbstractTypeExporter {
 		for (final Resource resource : resourceList) {
 			if (!resource.isDeviceTypeResource()) {
 				addStartElement(LibraryElementTags.RESOURCE_ELEMENT);
-				addNameTypeCommentAttribute(resource, resource.getType());
+				addNameTypeCommentAttribute(resource, resource.getTypeEntry());
 				addXYAttributes(0, 0);
 				addParamsConfig(resource.getVarDeclarations());
 				final var resNetworkExporter = new ResourceInSystemFBNetworkExporter(this);

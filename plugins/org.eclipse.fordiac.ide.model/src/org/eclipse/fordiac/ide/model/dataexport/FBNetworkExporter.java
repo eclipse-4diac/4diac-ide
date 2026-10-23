@@ -106,8 +106,8 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addFBNetworkElementXMLAttributes(final FBNetworkElement fbnElement) throws XMLStreamException {
 		addNameAttribute(getFBNElementName(fbnElement));
-		if (fbnElement.getType() != null) {
-			addTypeAttribute(fbnElement.getType());
+		if (fbnElement.getTypeEntry() != null) {
+			addTypeAttribute(fbnElement.getTypeEntry());
 		}
 		addCommentAttribute(fbnElement.getComment());
 		addXYAttributes(fbnElement);

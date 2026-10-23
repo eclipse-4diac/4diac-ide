@@ -43,7 +43,7 @@ public class UpdateAllFBTypesHandler extends AbstractHandler {
 		final CommandStack stack = editor.getAdapter(CommandStack.class);
 
 		fbnetwork.getBlockFBNetworkElements().forEach(element -> {
-			if (element.getType() != null) {
+			if (element.getTypeEntry() != null) {
 				final Command updateFBTypeCmd = new UpdateFBTypeCommand(element);
 				if (updateFBTypeCmd.canExecute()) {
 					command.add(updateFBTypeCmd);
