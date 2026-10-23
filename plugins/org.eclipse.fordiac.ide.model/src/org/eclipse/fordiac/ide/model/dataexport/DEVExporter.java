@@ -68,7 +68,7 @@ public class DEVExporter extends AbstractTypeExporter {
 
 			new FBNetworkExporter(this).createFBNetworkElement(resource.getFBNetwork());
 
-			addAttributes(getType().getAttributes());
+			addAttributes(resource.getAttributes());
 			addEndElement();
 		}
 	}
