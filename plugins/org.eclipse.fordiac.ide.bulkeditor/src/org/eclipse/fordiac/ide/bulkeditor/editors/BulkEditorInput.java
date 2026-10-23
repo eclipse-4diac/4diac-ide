@@ -12,11 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
-import java.util.List;
+import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
+import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer.QuerySnapshot;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
@@ -25,39 +24,20 @@ import org.eclipse.ui.IPersistableElement;
 public class BulkEditorInput implements IEditorInput, IPersistableElement {
 
 	private final IProject project;
-	private final BulkEditorSettings settings;
-	private final List<URI> initialSelectedSubApps;
+	private QuerySnapshot query;
+	private Supplier<QuerySnapshot> querySupplier;
 
 	public BulkEditorInput(final IProject project) {
-		this(project, new BulkEditorSettings());
+		this(project, null);
 	}
 
-	public BulkEditorInput(final IProject project, final List<URI> initialSelectedSubApps) {
+	public BulkEditorInput(final IProject project, final QuerySnapshot query) {
 		this.project = project;
-		this.settings = new BulkEditorSettings();
-		if (!initialSelectedSubApps.isEmpty()) {
-			this.settings.scope = ScopeOption.SUBAPP_HIERARCHY;
-			this.settings.subappHierarchies = initialSelectedSubApps;
-		}
-		this.initialSelectedSubApps = initialSelectedSubApps;
-	}
-
-	public BulkEditorInput(final IProject project, final BulkEditorSettings settings) {
-		this.project = project;
-		this.settings = settings;
-		this.initialSelectedSubApps = settings.subappHierarchies;
+		this.query = query;
 	}
 
 	public IProject getProject() {
 		return project;
-	}
-
-	public BulkEditorSettings getSettings() {
-		return settings;
-	}
-
-	public List<URI> getInitialSelectedSubApps() {
-		return initialSelectedSubApps;
 	}
 
 	@Override
@@ -114,5 +94,27 @@ public class BulkEditorInput implements IEditorInput, IPersistableElement {
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		return null;
+	}
+
+	public QuerySnapshot getQuery() {
+		return query;
+	}
+
+	public void setQuery(final QuerySnapshot query) {
+		this.query = query;
+	}
+
+	public void setQuerySnapshotSupplier(final Supplier<QuerySnapshot> querySupplier) {
+		this.querySupplier = querySupplier;
+	}
+
+	public QuerySnapshot snapshotQuery() {
+		if (querySupplier != null) {
+			final QuerySnapshot current = querySupplier.get();
+			if (current != null) {
+				query = current;
+			}
+		}
+		return query;
 	}
 }

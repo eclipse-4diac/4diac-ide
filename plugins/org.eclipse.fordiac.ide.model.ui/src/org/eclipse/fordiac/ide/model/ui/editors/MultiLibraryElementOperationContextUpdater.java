@@ -15,22 +15,28 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.operations.IOperationHistoryListener;
 import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryEvent;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.ScopedOperation;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.ui.IEditorInput;
 
 public class MultiLibraryElementOperationContextUpdater implements IOperationHistoryListener {
 
 	private final Supplier<IUndoContext> editorUndoContext;
+	private final Set<IEditorInput> editorInputs;
 
-	public MultiLibraryElementOperationContextUpdater(final Supplier<IUndoContext> editorUndoContext) {
+	public MultiLibraryElementOperationContextUpdater(final Supplier<IUndoContext> editorUndoContext,
+			final Set<IEditorInput> editorInputs) {
 		this.editorUndoContext = editorUndoContext;
+		this.editorInputs = editorInputs;
 	}
 
 	@Override
@@ -38,8 +44,12 @@ public class MultiLibraryElementOperationContextUpdater implements IOperationHis
 		if (event.getEventType() == OperationHistoryEvent.ABOUT_TO_EXECUTE
 				&& event.getOperation().hasContext(editorUndoContext.get())
 				&& event.getOperation() instanceof final ScopedOperation scopedOperation) {
-			scopedOperation.getAffectedObjects().stream().map(EcoreUtil::getRootContainer)
-					.filter(LibraryElement.class::isInstance).distinct().map(ObjectUndoContext::new)
+			final Set<EObject> affectedElements = scopedOperation.getAffectedObjects().stream()
+					.map(EcoreUtil::getRootContainer).collect(Collectors.toSet());
+			editorInputs.stream()
+					.filter(input -> affectedElements
+							.contains(LibraryElementProvider.INSTANCE.getLibraryElement(input)))
+					.map(LibraryElementProvider.INSTANCE::getUndoContext).filter(Objects::nonNull)
 					.forEachOrdered(event.getOperation()::addContext);
 		}
 	}
