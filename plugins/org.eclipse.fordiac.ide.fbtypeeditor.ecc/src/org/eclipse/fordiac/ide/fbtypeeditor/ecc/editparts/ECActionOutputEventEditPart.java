@@ -120,6 +120,9 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		if (!isActive()) {
 			super.activate();
 			getAction().eAdapters().add(adapter);
+			if (getINamedElement() != null) {
+				getINamedElement().eAdapters().remove(getNameAdapter());
+			}
 			// Adapt to the fbtype so that we get informed on interface changes
 			ECCContentAndLabelProvider.getFBType(getAction()).getInterfaceList().eAdapters().add(interfaceAdapter);
 		}
@@ -230,6 +233,11 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		eventLabel.setTextAlignment(PositionConstants.LEFT);
 		eventLabel.setLabelAlignment(PositionConstants.LEFT);
 		return eventLabel;
+	}
+
+	@Override
+	public void refreshName() {
+		refreshEventLabel(getNameLabel());
 	}
 
 	private void refreshEventLabel(final Label eventLabel) {
