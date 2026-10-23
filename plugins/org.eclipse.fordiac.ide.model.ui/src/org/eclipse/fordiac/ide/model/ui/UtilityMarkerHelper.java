@@ -19,13 +19,13 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class UtilityMarkerHelper {
 
@@ -44,7 +44,7 @@ public class UtilityMarkerHelper {
 			return Stream.of(resource.findMarkers(markerId, true, IResource.DEPTH_ZERO))
 					.map(marker -> FordiacErrorMarker.getTargetRelative(marker, libEl)).findAny().orElse(null);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning("Error accessing marked element", e); //$NON-NLS-1$
+			ILog.get().warn("Error accessing marked element", e); //$NON-NLS-1$
 		}
 		return null;
 	}
