@@ -13,12 +13,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.IReplayNavigatorRegistrationListener;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPartFactory;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.StatesComparisonView;
+import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.MouseWheelHandler;
@@ -29,10 +35,15 @@ import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ColorRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.ViewPart;
@@ -49,7 +60,51 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 	private GraphicalViewer viewer;
 	private final Session session = new Session();
 
-	private static String menuId = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"; //$NON-NLS-1$
+	public static String ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"; //$NON-NLS-1$
+
+	private static String menuId = ID;
+
+	// this is a workaround to show the the changed datapoints in a different color
+	// than the default error color
+	private RGB originalErrorColor = null;
+
+	private final ComparisonService.Listener stateComparisonListener = (_, event) -> {
+		if (event == ComparisonService.Listener.Event.COLUMN_ADDED) {
+			// open the state comparison table if not open
+			final var page = getSite().getPage();
+			try {
+				page.showView(StatesComparisonView.VIEW_ID, null, IWorkbenchPage.VIEW_VISIBLE);
+			} catch (final PartInitException e) {
+				ILog.get().error("Failed to open States Comparison View", e); //$NON-NLS-1$
+			}
+		}
+	};
+
+	private final CommentsHandler.Listener commentsHandlerListener = new CommentsHandler.Listener() {
+
+		@Override
+		public void eventCommentChanged(final EventPosition position, final String comment, final Event event) {
+			openCommentsView(event);
+		}
+
+		@Override
+		public void timelineCommentChanged(final Timeline timeline, final String comment, final Event event) {
+			openCommentsView(event);
+		}
+
+		private void openCommentsView(final Event event) {
+			if (event == CommentsHandler.Listener.Event.ADDED_EDITED) {
+				final var page = getSite().getPage();
+				try {
+					page.showView(CommentsView.ID, null, IWorkbenchPage.VIEW_VISIBLE);
+				} catch (final PartInitException e) {
+					ILog.get().error("Failed to open Comments View", e); //$NON-NLS-1$
+				}
+			}
+		}
+	};
+
+	private final RGB replayColor = new RGB(255, 165, 0); // Orange color for changed datapoints
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -87,11 +142,28 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 			bars.updateActionBars();
 		});
 
+		// handle color override for changed datapoints
+		final ColorRegistry registry = JFaceResources.getColorRegistry();
+		if (originalErrorColor == null) { // guard against double-apply
+			originalErrorColor = registry.getRGB(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR); // snapshot before
+																										// overriding
+		}
+		registry.put(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR, replayColor);
+
+		ComparisonService.getInstance().addListener(stateComparisonListener);
+		CommentsHandler.getInstance().addListener(commentsHandlerListener);
+
 		ReplayNavigatorManager.getDefault().addListener(this);
 		SelectionService.getDefault().install(getSite().getPage());
 		parent.addDisposeListener(_ -> {
 			ReplayNavigatorManager.getDefault().removeListener(this);
 			SelectionService.getDefault().uninstall(getSite().getPage());
+			if (originalErrorColor != null) {
+				JFaceResources.getColorRegistry().put(DeploymentDebugModelPresentation.WATCH_ERROR_COLOR,
+						originalErrorColor);
+			}
+			ComparisonService.getInstance().removeListener(stateComparisonListener);
+			CommentsHandler.getInstance().removeListener(commentsHandlerListener);
 		});
 		viewer.setContents(session);
 

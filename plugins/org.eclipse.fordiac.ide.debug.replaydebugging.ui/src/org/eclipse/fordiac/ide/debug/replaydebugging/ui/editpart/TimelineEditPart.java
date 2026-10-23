@@ -29,6 +29,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteTimelineCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.CommonFigureConstants;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.IEventAxis;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineAnchor;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineWithChildrenFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineConnection;
@@ -93,7 +94,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		installEditPolicy(CommonConstants.NAVIGATION_POLICY, new AbstractEditPolicy() {
 			@Override
 			public Command getCommand(final Request request) {
-				if (request instanceof final NavigationRequest nav && nav.isJump()) {
+				if (request instanceof final NavigationRequest nav && nav.isJump() && !nav.isSkipHighlighted()) {
 					nav.setHighlighted(getModel().getHighlighted());
 				}
 				return null; // bubble all navigation to parent
@@ -105,8 +106,8 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	protected List<?> getModelChildren() {
 		final var model = getModel();
 
-		return Stream.concat(model.getSpawnedTimelineModels().stream(), model.getEventMarkers().stream())
-				.collect(Collectors.toList());
+		return Stream.concat(Stream.concat(model.getSpawnedTimelineModels().stream(), model.getEventMarkers().stream()),
+				model.getCommentMarkers().stream()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -128,6 +129,10 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final var fig = getFigure();
 
+		if (childEditPart instanceof final CommentMarkerEditPart commentMarkerEditPart) {
+			fig.addCommentIcon(commentMarkerEditPart.getFigure(), commentMarkerEditPart.getModel().getEventIndex());
+			return;
+		}
 		if (childEditPart instanceof final EventMarkerEditPart marker) {
 			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
 
@@ -147,7 +152,10 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		final var fig = getFigure();
-
+		if (childEditPart instanceof final CommentMarkerEditPart commentMarkerEditPart) {
+			fig.removeCommentIcon(commentMarkerEditPart.getFigure());
+			return;
+		}
 		if (childEditPart instanceof EventMarkerEditPart) {
 			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
 			fig.getTimelineFigure().remove(markerFigure);
@@ -259,7 +267,8 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
-		case TimelineModel.PROPERTY_EVENT_ADDED, TimelineModel.PROPERTY_EVENT_DELETED:
+		case TimelineModel.PROPERTY_EVENT_ADDED, TimelineModel.PROPERTY_EVENT_DELETED,
+				TimelineModel.PROPERTY_EVENT_COMMENTS_CHANGED:
 			safeRefresh(false, true);
 			break;
 		case TimelineModel.PROPERTY_TIMELINE_ADDED, TimelineModel.PROPERTY_TIMELINE_DELETED:
@@ -271,6 +280,35 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == IEventAxis.class) {
+			return key.cast(new IEventAxis() {
+
+				@Override
+				public final IFigure getFigure() {
+					return TimelineEditPart.this.getFigure();
+				}
+
+				@Override
+				public int getEventCount() {
+					return getModel().getTimeline().getTotalMaxEventNumber();
+				}
+
+				@Override
+				public int getFirstEventCenterX() {
+					return getFigure().getBounds().x + CommonFigureConstants.MARKER_SIZE / 2;
+				}
+
+				@Override
+				public double getEventPitch() {
+					return CommonFigureConstants.TOTAL_MARKER_SPACE;
+				}
+			});
+		}
+		return super.getAdapter(key);
 	}
 
 }

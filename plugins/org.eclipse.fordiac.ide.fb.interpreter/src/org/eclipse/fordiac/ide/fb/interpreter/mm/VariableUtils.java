@@ -55,7 +55,7 @@ public final class VariableUtils {
 		}
 	}
 
-	private static boolean isAny(final IInterfaceElement varDeclaration) {
+	public static boolean isAny(final IInterfaceElement varDeclaration) {
 		return varDeclaration.getType().getName().startsWith("ANY"); //$NON-NLS-1$
 	}
 
@@ -82,6 +82,10 @@ public final class VariableUtils {
 	 */
 	private static IInterfaceElement getNonAnyVarFromConnections(final VarDeclaration varDeclaration) {
 		if (varDeclaration.isIsInput()) {
+			if (varDeclaration.getInputConnections().isEmpty()) {
+				// the input has no incoming connections
+				return null;
+			}
 			// only one input connection allowed, check if the source is not an ANY type
 			if (!isAny(varDeclaration.getInputConnections().get(0).getSource())) {
 				return varDeclaration.getInputConnections().get(0).getSource();

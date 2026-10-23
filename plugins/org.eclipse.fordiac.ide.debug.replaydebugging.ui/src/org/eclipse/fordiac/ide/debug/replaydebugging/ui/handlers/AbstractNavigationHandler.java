@@ -27,9 +27,15 @@ public abstract class AbstractNavigationHandler extends AbstractHandler {
 		return false;
 	}
 
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected boolean skipHightlightedEvents() {
+		return false;
+	}
+
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		HandlerHelper.executeOrBubbleUp(event, new NavigationRequest(getDirection(), isJump()));
+		HandlerHelper.executeOrBubbleUp(event,
+				new NavigationRequest(getDirection(), isJump(), skipHightlightedEvents()));
 		return null;
 	}
 

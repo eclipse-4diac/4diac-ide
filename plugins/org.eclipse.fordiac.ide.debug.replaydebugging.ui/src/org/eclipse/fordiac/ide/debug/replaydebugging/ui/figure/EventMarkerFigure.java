@@ -37,6 +37,7 @@ public class EventMarkerFigure extends Figure {
 	private boolean readOnly = false;
 	private boolean isHighlighted = false;
 	private Color secondColor = null;
+	private static final int MIN_CORNER_ARC = 2;
 
 	public EventMarkerFigure(final int eventIndex) {
 		this.eventIndex = eventIndex;
@@ -82,10 +83,12 @@ public class EventMarkerFigure extends Figure {
 
 	public void setIsReadOnly(final boolean isReadOnly) {
 		this.readOnly = isReadOnly;
+		repaint(); // the shape depends on it
 	}
 
 	public void setIsHighlighted(final boolean isHighlighted) {
 		this.isHighlighted = isHighlighted;
+		repaint(); // the shape depends on it
 	}
 
 	@Override
@@ -95,114 +98,47 @@ public class EventMarkerFigure extends Figure {
 		var colorBounds = completeBound;
 
 		if (isHighlighted) {
-			// Fill the full oval with the highlight color — this becomes
-			// the visible ring since the inner circle paints over the centre
-			g.setBackgroundColor(ColorConstants.black);
-			g.fillOval(completeBound);
+			// Fill the full shape with the highlight color — this becomes
+			// the visible ring since the inner shape paints over the centre
+			g.setBackgroundColor(ColorConstants.red);
+			fillShape(g, completeBound);
 
-			// Paint the actual circle inset by the ring thickness,
+			// Paint the actual shape inset by the ring thickness,
 			// so the highlight color is only visible as a border ring
 			colorBounds = completeBound.getCopy().shrink(highlightedThickness, highlightedThickness);
 
 		}
 		if (secondColor != null) {
-			paintSplitCircle(g, colorBounds);
+			paintSplitShape(g, colorBounds);
 		} else {
 			g.setBackgroundColor(getBackgroundColor());
-			g.fillOval(colorBounds);
+			fillShape(g, colorBounds);
 		}
+	}
 
+	/** Read-only events are circles, editable events are rounded squares. */
+	private void fillShape(final Graphics g, final Rectangle b) {
 		if (readOnly) {
-			drawLockBadge(g, completeBound);
-		}
-		if (getToolTip() != null) {
-			drawCommentBadge(g, completeBound);
+			g.fillOval(b);
+		} else {
+			final int arc = Math.max(MIN_CORNER_ARC, b.width / 6);
+			g.fillRoundRectangle(b, arc, arc);
 		}
 	}
 
-	private static void drawLockBadge(final Graphics g, final Rectangle b) {
-		// Position the badge in the top-right quadrant
-		final int size = Math.max(6, b.width / 4);
-		final int bx = b.x + b.width - size - 1;
-		final int by = b.y + 1;
-
-		// Badge background — small white filled circle
-		g.setBackgroundColor(ColorConstants.white);
-		g.fillOval(bx, by, size, size);
-
-		// Shackle (the arc on top of the padlock body)
-		g.setForegroundColor(ColorConstants.darkGray);
-		g.setLineWidth(1);
-		final int shackleInset = size / 4;
-		g.drawArc(bx + shackleInset, by, size - shackleInset * 2, size - shackleInset * 2, 0, 180);
-
-		// Body (the rectangular base of the padlock)
-		final int bodyH = size / 2;
-		final int bodyY = by + size - bodyH;
-		g.setBackgroundColor(ColorConstants.darkGray);
-		g.fillRoundRectangle(new Rectangle(bx, bodyY, size, bodyH), 2, 2);
-	}
-
-	private static void drawCommentBadge(final Graphics g, final Rectangle b) {
-		final int size = Math.max(6, b.width / 4);
-		final int bx = b.x + 1; // top-left corner
-		final int by = b.y + 1;
-		final int fold = size / 3; // size of the folded corner
-
-		g.pushState();
-
-		// ── Page body ────────────────────────────────────────────────────────
-		// A rectangle with the top-right corner cut off, drawn as a polygon:
-		//
-		// (bx, by) ────────── (bx+size-fold, by)
-		// | \
-		// | (bx+size, by+fold)
-		// | |
-		// (bx, by+size) ──── (bx+size, by+size)
-		//
-		final int[] pageBody = { bx, by, bx + size - fold, by, bx + size, by + fold, bx + size, by + size, bx,
-				by + size };
-
-		g.setBackgroundColor(ColorConstants.white);
-		g.fillPolygon(pageBody);
-		g.setForegroundColor(ColorConstants.darkGray);
-		g.setLineWidth(1);
-		g.drawPolygon(pageBody);
-
-		// ── Folded corner triangle ────────────────────────────────────────────
-		final int[] foldTriangle = { bx + size - fold, by, bx + size - fold, by + fold, bx + size, by + fold };
-
-		g.setBackgroundColor(ColorConstants.lightGray);
-		g.fillPolygon(foldTriangle);
-		g.drawPolygon(foldTriangle);
-
-		// ── Text lines (three horizontal rules suggesting content) ────────────
-		g.setForegroundColor(ColorConstants.gray);
-		final int lineStartX = bx + 2;
-		final int lineEndX = bx + size - 2;
-		final int lineSpacing = (size - fold) / 3;
-
-		for (int i = 1; i <= 2; i++) {
-			final int lineY = by + fold + (i * lineSpacing);
-			g.drawLine(lineStartX, lineY, lineEndX, lineY);
-		}
-
-		g.popState();
-	}
-
-	private void paintSplitCircle(final Graphics g, final Rectangle b) {
+	private void paintSplitShape(final Graphics g, final Rectangle b) {
 		final int midX = b.x + b.width / 2;
 
 		g.pushState();
 		g.clipRect(new Rectangle(b.x, b.y, b.width / 2, b.height));
 		g.setBackgroundColor(getBackgroundColor());
-		g.fillOval(b);
+		fillShape(g, b);
 		g.popState();
 
 		g.pushState();
 		g.clipRect(new Rectangle(midX, b.y, b.width - b.width / 2, b.height));
 		g.setBackgroundColor(secondColor);
-		g.fillOval(b);
+		fillShape(g, b);
 		g.popState();
 	}
 

@@ -26,6 +26,12 @@ public class Messages extends NLS {
 	public static String AddEditTimelineCommentCommand_Text;
 	public static String AddTimelineCommentHandler_DialogTitle;
 	public static String AddTimelineCommentHandler_HintForTheUser;
+	public static String CommentsView_Comment;
+	public static String CommentsView_DeleteComment;
+	public static String CommentsView_EditComment;
+	public static String CommentsView_Event;
+	public static String CommentsView_GoToEvent;
+	public static String CommentsView_Timeline;
 	public static String RemoveTimelineCommentCommand_Text;
 
 	public static String RemoveEventCommentCommand_Text;
@@ -43,6 +49,7 @@ public class Messages extends NLS {
 	public static String StatesComparisonView_SortByDiffLabel;
 	public static String StatesComparisonView_HideColumnColor;
 	public static String StatesComparisonView_ShowColumnColor;
+	public static String StatesComparisonView_ShowOnlyHighlightedLabel;
 	public static String DeleteEventsCommand_Label;
 	public static String DeleteTimelineCommand_Label;
 	public static String LaunchConfigurationTab_BrowseButtonText;

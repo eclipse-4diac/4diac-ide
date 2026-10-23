@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.EList;
@@ -122,9 +123,10 @@ public final class RuntimeFactory {
 		return networkRT;
 	}
 
-	public static FBNetworkRuntime createRecursiveFrom(final FBNetwork network) {
+	public static FBNetworkRuntime createRecursiveFrom(final FBNetwork network,
+			final BiFunction<VarDeclaration, BlockFBNetworkElement, String> getDefaultValue) {
 		final var networkRT = createFrom(network);
-		createInternalRuntimes(networkRT);
+		createInternalRuntimes(networkRT, getDefaultValue);
 		return networkRT;
 	}
 
@@ -174,8 +176,10 @@ public final class RuntimeFactory {
 	 *        variables.
 	 *
 	 * @param containerRuntime the runtime for which to create the internal runtimes
+	 * @param getDefaultValue  Function to get the default value of var declaration
 	 */
-	private static void createInternalRuntimes(final FBNetworkRuntime containerRuntime) {
+	private static void createInternalRuntimes(final FBNetworkRuntime containerRuntime,
+			final BiFunction<VarDeclaration, BlockFBNetworkElement, String> getDefaultValue) {
 
 		containerRuntime.getFbnetwork().getBlockFBNetworkElements().forEach(networkElement -> {
 
@@ -205,20 +209,22 @@ public final class RuntimeFactory {
 					possibleNetwork = subAppWithNetowrk.loadSubAppNetwork();
 
 				}
-				final FBNetworkRuntime networkRuntime = RuntimeFactory.createRecursiveFrom(possibleNetwork);
+				final FBNetworkRuntime networkRuntime = RuntimeFactory.createRecursiveFrom(possibleNetwork,
+						getDefaultValue);
 				networkRuntime.setOuterNetworkRuntime(containerRuntime);
 				containerRuntime.getTypeRuntimes().put(originalSubApp, networkRuntime);
 
 				// initialize transfer data from input vars
 				initializeInputTransferData(subAppWithNetowrk, networkRuntime);
 
-				createInternalRuntimes(networkRuntime);
+				createInternalRuntimes(networkRuntime, getDefaultValue);
 				return;
 			}
 
 			final FBType copiedType = EcoreUtil.copy(networkElement.getType());
 			VariableUtils.initializeFbType(copiedType,
-					varDeclaration -> getDefaultValueFromNetworkElement(varDeclaration, networkElement));
+					getDefaultValue != null ? varDeclaration -> getDefaultValue.apply(varDeclaration, networkElement)
+							: null);
 
 			final var fbRuntime = RuntimeFactory.createFrom(copiedType);
 			containerRuntime.getTypeRuntimes().put(networkElement, fbRuntime);
@@ -231,7 +237,7 @@ public final class RuntimeFactory {
 				// initialize transfer data from input vars
 				initializeInputTransferData(networkElement, compositeNetworkRuntime);
 
-				createInternalRuntimes(compositeNetworkRuntime);
+				createInternalRuntimes(compositeNetworkRuntime, getDefaultValue);
 			}
 
 		});
@@ -243,18 +249,9 @@ public final class RuntimeFactory {
 	 * non-Any var declarations on its connections. If no corresponding variable is
 	 * found, it returns the default value of the given VarDeclaration.
 	 */
-	private static String getDefaultValueFromNetworkElement(final VarDeclaration varDeclaration,
+	public static String getDefaultValueFromNetworkElement(final VarDeclaration varDeclaration,
 			final BlockFBNetworkElement networkElement) {
-		// find the corresponding variable in the real FB
-		Optional<VarDeclaration> varDeclFromNetworkElement;
-		if (varDeclaration.isIsInput()) {
-			varDeclFromNetworkElement = networkElement.getInterface().getInputVars().stream()
-					.filter(v -> v.getName().equals(varDeclaration.getName())).findFirst();
-
-		} else {
-			varDeclFromNetworkElement = networkElement.getInterface().getOutputVars().stream()
-					.filter(v -> v.getName().equals(varDeclaration.getName())).findFirst();
-		}
+		final var varDeclFromNetworkElement = getCorrespondingVariableInRealFB(varDeclaration, networkElement);
 
 		if (!varDeclFromNetworkElement.isPresent()) {
 			return InitialValueHelper.getDefaultValue(varDeclaration);
@@ -262,6 +259,48 @@ public final class RuntimeFactory {
 
 		return InitialValueHelper
 				.getDefaultValue(VariableUtils.getNonAnyVarDeclaration(varDeclFromNetworkElement.get()));
+	}
+
+	/**
+	 * Given a VarDeclaration from a type, this method returns the default value of
+	 * the var declaration if it is not of type any. Otherwise it looks for a
+	 * connection in the network element and finds a non-any on the other side to
+	 * get the default value of the type of it.
+	 */
+	public static String getDefaultValueFromTypeOrNetworkElement(final VarDeclaration varDeclaration,
+			final BlockFBNetworkElement networkElement) {
+		if (!VariableUtils.isAny(varDeclaration)) {
+			return InitialValueHelper.getDefaultValue(varDeclaration);
+		}
+		// if type any, we look for its counterpart in the network and get the value
+		// from the type of the counterpart
+		final var varDeclFromNetworkElement = getCorrespondingVariableInRealFB(varDeclaration, networkElement);
+
+		if (!varDeclFromNetworkElement.isPresent()) {
+			return InitialValueHelper.getDefaultValue(varDeclaration);
+		}
+
+		return InitialValueHelper
+				.getDefaultValue(VariableUtils.getNonAnyVarDeclaration(varDeclFromNetworkElement.get()));
+	}
+
+	/**
+	 * @brief Returns a possible var declaration in the real network element which
+	 *        has the same name as the type var declaration
+	 *
+	 * @param varDeclaration the type var declaration to get the name from
+	 * @param networkElement the network element to look for the possible var
+	 *                       declaration
+	 * @return a var declaration in the network element if found one
+	 */
+	private static Optional<VarDeclaration> getCorrespondingVariableInRealFB(final VarDeclaration varDeclaration,
+			final BlockFBNetworkElement networkElement) {
+		if (varDeclaration.isIsInput()) {
+			return networkElement.getInterface().getInputVars().stream()
+					.filter(v -> v.getName().equals(varDeclaration.getName())).findFirst();
+		}
+		return networkElement.getInterface().getOutputVars().stream()
+				.filter(v -> v.getName().equals(varDeclaration.getName())).findFirst();
 	}
 
 	/**

@@ -88,8 +88,8 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		return replayNavigator.getCurrentEventChange();
 	}
 
-	public void load() {
-		createReplayNavigator();
+	public void load(final DatapointsState defaultState) {
+		createReplayNavigator(defaultState);
 	}
 
 	public void unload() {
@@ -97,11 +97,21 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		ReplayNavigatorManager.getDefault().unregisterNavigator(replayNavigator);
 	}
 
-	private void createReplayNavigator() {
+	private void createReplayNavigator(final DatapointsState defaultState) {
 		final DatapointsState initialState = replayer.getCurrentState();
 
+		final List<DataPointChange> changedValues = new ArrayList<>();
+
+		// the changed values of the first step is the different of the initial state
+		// of the network and the default state of it
+		changedValues.addAll(initialState.entrySet().stream()
+				.filter(entry -> defaultState.containsKey(entry.getKey())
+						&& !defaultState.get(entry.getKey()).equals(entry.getValue()))
+				.map(entry -> new DataPointChange(entry.getKey(), defaultState.get(entry.getKey()), entry.getValue()))
+				.toList());
+
 		resourceResponse = new ResourceResponse(replayNavigatorIdentifier.resourceName(), initialState);
-		replayNavigator = new ReplayNavigator(replayNavigatorIdentifier, initialState);
+		replayNavigator = new ReplayNavigator(replayNavigatorIdentifier, initialState, changedValues);
 		replayNavigator.addStateChangeListener(this);
 		ReplayNavigatorManager.getDefault().registerNavigator(replayNavigator);
 		runAllEvents();

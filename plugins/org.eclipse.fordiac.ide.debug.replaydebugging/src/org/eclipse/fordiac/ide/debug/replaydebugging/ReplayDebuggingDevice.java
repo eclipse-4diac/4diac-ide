@@ -29,9 +29,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.DatapointsState;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IDeviceReplayer;
+import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.interpreter.ResourceState;
 import org.eclipse.fordiac.ide.debug.replaydebugging.response.DeviceResponse;
 import org.eclipse.fordiac.ide.debug.replaydebugging.watch.WatchFactoryReplay;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
@@ -43,6 +45,8 @@ import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.NetworkRuntimeInspector;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorCache;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -128,7 +132,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 					new ReplayNavigator.Identifier(device.getAutomationSystem().getName(), device.getName(),
 							resource.getName()),
 					resourceReplayer, this);
-			replayDebuggingResource.load();
+			replayDebuggingResource.load(getDefaultState(resource));
 			replayDebuggingResources.put(resource.getName(), replayDebuggingResource);
 
 		}
@@ -149,6 +153,22 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 			throw new DebugException(Status
 					.error(MessageFormat.format(Messages.DeploymentDebugDevice_ConnectError, device.getName()), e));
 		}
+	}
+
+	/**
+	 * @brief Get the state of the network of the resource composed by the default
+	 *        values of all its datapoints
+	 * @param resource the resource to get the network from
+	 * @return the default state of the network of the resource
+	 */
+	private static DatapointsState getDefaultState(final Resource resource) {
+		final var networkRuntime = RuntimeFactory.createRecursiveFrom(resource.getFBNetwork(),
+				RuntimeFactory::getDefaultValueFromTypeOrNetworkElement);
+		final var networkRuntimeInspector = new NetworkRuntimeInspector(networkRuntime,
+				NetworkRuntimeInspector.getDefaultFirstLevelPrefix(resource.getDevice().getName(), resource.getName()),
+				NetworkRuntimeInspector.DEFAULT_NAME_SEPARATOR);
+
+		return new ResourceState(networkRuntimeInspector.getNetworkRuntimeState()).getCurrentState();
 	}
 
 	private IDeviceReplayer createReplayer() {

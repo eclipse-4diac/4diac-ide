@@ -49,14 +49,15 @@ public class DeleteEventsCommand extends Command {
 
 	@Override
 	public void undo() {
-		// the timeline was removed from the parent, so we need to re-add it
-		if ((eventIndex == 0) && (parentTimeline != null)) {
-			parentTimeline.addSpawnedTimeline(timeline, spawningIndex);
-		}
 		// Restore the event with its previous data
 		for (final var eventChange : eventChanges) {
 			timeline.addEventChange(eventChange.newValues());
 		}
+		// the timeline was removed from the parent, so we need to re-add it
+		if ((eventIndex == 0) && (parentTimeline != null)) {
+			parentTimeline.addSpawnedTimeline(timeline, spawningIndex);
+		}
+
 	}
 
 	@Override

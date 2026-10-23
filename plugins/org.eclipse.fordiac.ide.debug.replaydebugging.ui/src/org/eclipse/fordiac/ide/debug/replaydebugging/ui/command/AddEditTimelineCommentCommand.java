@@ -14,6 +14,7 @@
 
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.command;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsHandler;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
@@ -22,18 +23,21 @@ import org.eclipse.gef.commands.Command;
 public class AddEditTimelineCommentCommand extends Command {
 	private final Timeline timeline;
 	private final String newComment;
+	private final ReplayNavigator replayNavigator;
 	private String previousComment = null; // for undo
 
-	public AddEditTimelineCommentCommand(final Timeline timeline, final String newComment) {
+	public AddEditTimelineCommentCommand(final Timeline timeline, final String newComment,
+			final ReplayNavigator replayNavigator) {
 		super(Messages.AddEditTimelineCommentCommand_Text);
 		this.timeline = timeline;
 		this.newComment = newComment;
+		this.replayNavigator = replayNavigator;
 	}
 
 	@Override
 	public void execute() {
 		previousComment = CommentsHandler.getInstance().getComment(timeline);
-		CommentsHandler.getInstance().setComment(timeline, newComment);
+		CommentsHandler.getInstance().setComment(timeline, newComment, replayNavigator);
 	}
 
 	@Override
@@ -41,13 +45,14 @@ public class AddEditTimelineCommentCommand extends Command {
 		if (previousComment == null) {
 			CommentsHandler.getInstance().removeComment(timeline);
 		} else {
-			CommentsHandler.getInstance().setComment(timeline, previousComment); // restore prior comment
+			CommentsHandler.getInstance().setComment(timeline, previousComment, replayNavigator); // restore prior
+																									// comment
 		}
 	}
 
 	@Override
 	public void redo() {
-		CommentsHandler.getInstance().setComment(timeline, newComment);
+		CommentsHandler.getInstance().setComment(timeline, newComment, replayNavigator);
 	}
 
 	@Override

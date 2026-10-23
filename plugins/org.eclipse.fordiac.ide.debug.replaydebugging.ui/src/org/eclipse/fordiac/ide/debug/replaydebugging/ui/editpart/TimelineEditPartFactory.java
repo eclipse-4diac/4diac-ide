@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Device;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventCommentMarker;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
@@ -65,6 +66,12 @@ public class TimelineEditPartFactory implements EditPartFactory {
 
 		if (model instanceof TimelineConnection) {
 			final var part = new TimelineConnectionEditPart();
+			part.setModel(model);
+			return part;
+		}
+
+		if (model instanceof EventCommentMarker) {
+			final var part = new CommentMarkerEditPart();
 			part.setModel(model);
 			return part;
 		}

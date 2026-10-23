@@ -17,11 +17,12 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.RemoveTimelineCommentCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.TimelineViewCommandStack;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -31,19 +32,28 @@ public class RemoveTimelineCommentHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		Timeline timeline = null;
-		final EditPart editPart = HandlerHelper.getSelectedEditPart(event);
-
-		switch (editPart) {
-		case final EventMarkerEditPart eventMarkerEditPart ->
-			timeline = eventMarkerEditPart.getModel().getParentTimeline().getTimeline();
-		case final TimelineEditPart timelineEditPart -> timeline = timelineEditPart.getModel().getTimeline();
-		default -> {
-			return null;
+		final CommentsView.CommentRow row = CommentsView.CommentRow.of(HandlerUtil.getCurrentSelection(event));
+		if (row != null) {
+			if (!row.isTimelineComment()) {
+				return null;
+			}
+			timeline = row.timeline();
+		} else {
+			final EditPart editPart = HandlerHelper.getSelectedEditPart(event);
+			switch (editPart) {
+			case final EventMarkerEditPart eventMarkerEditPart ->
+				timeline = eventMarkerEditPart.getModel().getParentTimeline().getTimeline();
+			case final TimelineEditPart timelineEditPart -> timeline = timelineEditPart.getModel().getTimeline();
+			default -> {
+				return null;
+			}
+			}
 		}
-		}
 
-		final var viewer = HandlerUtil.getActivePartChecked(event).getAdapter(GraphicalViewer.class);
-		viewer.getEditDomain().getCommandStack().execute(new RemoveTimelineCommentCommand(timeline));
+		final var stack = TimelineViewCommandStack.find(HandlerUtil.getActiveWorkbenchWindowChecked(event), true);
+		if (stack != null) {
+			stack.execute(new RemoveTimelineCommentCommand(timeline));
+		}
 		return null;
 	}
 
@@ -58,6 +68,7 @@ public class RemoveTimelineCommentHandler extends AbstractHandler {
 			}
 			String comment = null;
 			switch (s.getFirstElement()) {
+			case final CommentsView.CommentRow row -> comment = row.isTimelineComment() ? row.comment() : null;
 			case final EventMarkerEditPart eventMarkerEditPart ->
 				comment = eventMarkerEditPart.getModel().getParentTimeline().getComment();
 			case final TimelineEditPart timelineEditPart -> comment = timelineEditPart.getModel().getComment();
