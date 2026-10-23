@@ -56,17 +56,19 @@
 *.xml_gen       text
 
 # 4diac files
-*.adp           text
-*.dev           text
-*.dtp           text
-*.fbt           text
-*.fct           text
-*.res           text
-*.seg           text
-*.sub           text
-*.sys           text
+*.adp           text eol=lf diff=xml
+*.atp           text eol=lf diff=xml
+*.dev           text eol=lf diff=xml
+*.dtp           text eol=lf diff=xml
+*.fbt           text eol=lf diff=xml
+*.fct           text eol=lf diff=xml
+*.gcf           text eol=lf diff=xml
+*.res           text eol=lf diff=xml
+*.seg           text eol=lf diff=xml
+*.sub           text eol=lf diff=xml
+*.sys           text eol=lf diff=xml
 
-*.opsem         text
+*.opsem         text eol=lf diff=xml
 
 # binary files
 *.class         binary
