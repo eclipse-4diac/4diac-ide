@@ -63,13 +63,13 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferencePage"
             id="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferences"
-            name="Block Size">
+            name="%preferencePage.blockSize.name">
       </page>
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferencePage"
             id="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferences"
-            name="Validation">
+            name="%preferencePage.validation.name">
       </page>
    </extension>
    <extension
@@ -78,7 +78,7 @@
             category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
             class="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferencePage"
             id="org.eclipse.fordiac.ide.model.ui.properties.BlockSizePreferences"
-            name="Block Size">
+            name="%preferencePage.blockSize.name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -93,7 +93,7 @@
             category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
             class="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferencePage"
             id="org.eclipse.fordiac.ide.model.ui.properties.ValidationPreferences"
-            name="Validation">
+            name="%preferencePage.validation.name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">

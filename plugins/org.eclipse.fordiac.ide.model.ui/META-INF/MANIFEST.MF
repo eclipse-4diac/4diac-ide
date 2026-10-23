@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model UI
+Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.ui;singleton:=true
 Bundle-Version: 3.4.0.qualifier
