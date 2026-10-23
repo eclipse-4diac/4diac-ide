@@ -27,6 +27,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -65,7 +66,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
 import org.eclipse.fordiac.ide.model.search.types.GlobalConstantsTypeInstanceSearch;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
@@ -132,7 +132,7 @@ public class ModelSearchQuery implements ISearchQuery {
 						searchResult.addResult(libraryElement);
 					}
 				} else {
-					FordiacLogHelper.logWarning("Could not load model for: " + libraryElementURI.toString()); //$NON-NLS-1$
+					ILog.get().warn("Could not load model for: " + libraryElementURI.toString()); //$NON-NLS-1$
 				}
 			});
 		}
