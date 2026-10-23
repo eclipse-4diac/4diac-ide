@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -30,7 +31,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
 public class UpdateFBTypeCommand extends AbstractUpdateBlockFBNElementCommand {
@@ -83,7 +83,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateBlockFBNElementCommand {
 
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(context);
 		if (typeLibrary == null) {
-			FordiacLogHelper.logWarning("Cannot get type library for current FB network element"); //$NON-NLS-1$
+			ILog.get().error("Cannot get type library for current FB network element"); //$NON-NLS-1$
 			return entry;
 		}
 
@@ -100,7 +100,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateBlockFBNElementCommand {
 			return typeLibrary.createErrorTypeEntry(entry.getFullTypeName(),
 					LibraryElementPackage.eINSTANCE.getFBType());
 		}
-		FordiacLogHelper.logWarning("Unsupported error type entry for " + entry.getClass().getName()); //$NON-NLS-1$
+		ILog.get().error("Unsupported error type entry for " + entry.getClass().getName()); //$NON-NLS-1$
 		return entry;
 	}
 
