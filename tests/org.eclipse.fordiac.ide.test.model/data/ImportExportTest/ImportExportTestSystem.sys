@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="ImportExportTestSystem" Comment="System with a device and resource">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="mjobst" Date="2026-10-23">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<Attribute Name="IntegerAttribute" Value="18"/>
+	<Application Name="TestApplication" Comment="Application using the basic FB">
+		<Attribute Name="IntegerAttribute" Value="19"/>
+		<SubAppNetwork>
+			<FB Name="Basic" Type="fixture::basic::BasicTest" x="100" y="100">
+			</FB>
+			<FB Name="Composite" Type="CompositeTest" x="300" y="100">
+			</FB>
+			<FB Name="Mapped" Type="fixture::basic::BasicTest" x="100" y="300">
+			</FB>
+			<FB Name="Mapped2" Type="fixture::basic::BasicTest" x="300" y="300">
+			</FB>
+			<Comment Comment="Application network comment" x="500" y="50" width="120" height="40">
+				<Attribute Name="IntegerAttribute" Value="20"/>
+			</Comment>
+			<EventConnections>
+				<Connection Source="Basic.CNF" Destination="Composite.REQ" Comment="Application event connection" dx1="80"/>
+				<Connection Source="Mapped.CNF" Destination="Mapped2.REQ" Comment="Mapped event connection" dx1="80"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="Basic.DO1" Destination="Composite.DI1">
+					<Attribute Name="Negated" Value="TRUE"/>
+				</Connection>
+			</DataConnections>
+			<AdapterConnections>
+				<Connection Source="Basic.EVENT" Destination="Composite.EVENT"/>
+			</AdapterConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="TestDeviceInstance" Type="TestDevice" Comment="Fixture device" x="0" y="0">
+		<Parameter Name="DEVICE_ID" Value="DINT#17">
+			<Attribute Name="IntegerAttribute" Value="21"/>
+		</Parameter>
+		<Attribute Name="Profile" Type="STRING" Value="FixtureProfile"/>
+		<Attribute Name="IntegerAttribute" Value="22"/>
+		<Resource Name="TestResourceInstance" Type="TestResource" Comment="Fixture resource" x="0" y="0">
+			<Parameter Name="RESOURCE_ID" Value="DINT#23"/>
+			<FBNetwork>
+				<FB Name="Processor" Type="fixture::basic::BasicTest" x="100" y="100">
+				</FB>
+				<FB Name="Controller" Type="CompositeTest" x="300" y="100">
+				</FB>
+				<EventConnections>
+					<Connection Source="Processor.CNF" Destination="Controller.REQ" Comment="Resource event connection" dx1="80"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="Processor.DO1" Destination="Controller.DI1"/>
+				</DataConnections>
+				<AdapterConnections>
+					<Connection Source="Processor.EVENT" Destination="Controller.EVENT"/>
+				</AdapterConnections>
+			</FBNetwork>
+			<Attribute Name="IntegerAttribute" Value="23"/>
+		</Resource>
+	</Device>
+	<Segment Name="TestSegmentInstance" Type="TestSegment" Comment="Fixture segment" x="400" y="200" dx1="160">
+		<Attribute Name="Color" Type="STRING" Value="127,0,0"/>
+		<Attribute Name="IntegerAttribute" Value="24"/>
+	</Segment>
+	<Mapping From="TestApplication.Mapped" To="TestDeviceInstance.TestResourceInstance"/>
+	<Mapping From="TestApplication.Mapped2" To="TestDeviceInstance.TestResourceInstance"/>
+	<Link SegmentName="TestSegmentInstance" CommResource="TestDeviceInstance" Comment="Fixture link">
+		<Attribute Name="IntegerAttribute" Value="25"/>
+	</Link>
+</System>
