@@ -42,6 +42,7 @@ public class ResourceTypeExporter extends AbstractTypeExporter {
 
 		exportFBNetwork();
 
+		addAttributes(getType().getAttributes());
 	}
 
 	private void exportFBNetwork() throws XMLStreamException {

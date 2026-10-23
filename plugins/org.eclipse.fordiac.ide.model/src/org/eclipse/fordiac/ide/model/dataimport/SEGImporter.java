@@ -63,6 +63,10 @@ public class SEGImporter extends TypeImporter {
 				v.setIsInput(true);
 				getElement().getVarDeclaration().add(v);
 			}
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+			}
 			default -> {
 				return false;
 			}
