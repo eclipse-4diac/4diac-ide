@@ -53,7 +53,10 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 	}
 
 	public void refreshName() {
-		getNameLabel().setText(getINamedElement().getName());
+		final INamedElement element = getINamedElement();
+		if (getNameLabel() != null && element != null) {
+			getNameLabel().setText(element.getName());
+		}
 	}
 
 	/** Gets the i named element.

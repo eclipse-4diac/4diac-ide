@@ -239,8 +239,16 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		return algorithmLabel;
 	}
 
+	@Override
+	public void refreshName() {
+		refreshAlgLabel();
+	}
+
 	private void refreshAlgLabel() {
-		getNameLabel().setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
+		final Label nameLabel = getNameLabel();
+		if (nameLabel != null) {
+			nameLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
+		}
 	}
 
 	private void refreshAlgorithmToolTip(final IFigure iFigure) {
