@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener.QualNameChangeState;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
@@ -23,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.editors.EditorFilter;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -52,7 +52,7 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 					listeners.add(l);
 				}
 			} catch (final Exception e) {
-				FordiacLogHelper.logError(EXTENSION_POINT_ID, e);
+				ILog.get().error(EXTENSION_POINT_ID, e);
 			}
 		}
 	}
