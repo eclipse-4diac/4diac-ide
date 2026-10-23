@@ -4,7 +4,7 @@
    <extension-point id="ArchiveDownloaderExtension" name="Extension point for Archive Downloader" schema="schema/ArchiveDownloaderExtension.exsd"/>
    <extension
          id="builder"
-         name="4diac Library Builder"
+          name="%builder.name"
          point="org.eclipse.core.resources.builders">
       <builder
             hasNature="true">
@@ -23,7 +23,7 @@
       <deleteParticipant
             class="org.eclipse.fordiac.ide.library.refactoring.DeleteLibraryRefactoringParticipant"
             id="org.eclipse.fordiac.ide.library.deleteLibrary"
-            name="Delete Library Folder Handler">
+            name="%deleteLibrary.name">
          <enablement>
             <and>
                <instanceof
