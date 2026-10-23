@@ -50,10 +50,20 @@
     <handler
       class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler"
       commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.applyTemplate">
+       <activeWhen>
+          <reference
+                definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+          </reference>
+       </activeWhen>
     </handler>
     <handler
       class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.UploadImageHandler"
       commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage">
+       <activeWhen>
+          <reference
+                definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+          </reference>
+       </activeWhen>
     </handler>
   </extension>
 
@@ -570,6 +580,23 @@
       <parameter id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="fbt" />
     </key>
   
+  </extension>
+  <extension
+        point="org.eclipse.core.expressions.definitions">
+     <definition
+           id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        <and>
+           <with
+                 variable="activeEditor">
+              <adapt
+                    type="org.eclipse.ui.texteditor.ITextEditor">
+                 <instanceof
+                       value="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor">
+                 </instanceof>
+              </adapt>
+           </with>
+        </and>
+     </definition>
   </extension>  
   
 </plugin>
