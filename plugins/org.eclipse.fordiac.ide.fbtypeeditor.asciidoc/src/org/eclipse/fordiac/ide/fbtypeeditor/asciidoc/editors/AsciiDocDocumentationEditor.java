@@ -51,11 +51,14 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.FileEditorInput;
 
 @SuppressWarnings("restriction")
 public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEditorPage {
+
+	public static final String ASCIIDOC_CONTEXT = "org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context"; //$NON-NLS-1$
 
 	public static final String TOOLBAR_LOCATION = "toolbar:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar"; //$NON-NLS-1$
 
@@ -73,12 +76,15 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		super.init(site, getDocumentationEditorInput(input));
 		setPartName(Messages.AsciiDoc_Description);
 		setTitleImage(FordiacImage.ICON_DOCUMENTATION_EDITOR.getImage());
+
+		final IContextService contextService = site.getService(IContextService.class);
+		contextService.activateContext(ASCIIDOC_CONTEXT);
 	}
 
 	@Override
 	protected void initializeEditor() {
 		super.initializeEditor();
-		setKeyBindingScopes(new String[] { "org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context" }); //$NON-NLS-1$
+		setKeyBindingScopes(new String[] { ASCIIDOC_CONTEXT });
 	}
 
 	@Override
