@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="CompositeTest" Comment="Composite FB containing a basic FB">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="mjobst" Date="2026-10-23">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Request">
+				<With Var="DI1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation">
+				<With Var="DO1"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="DINT" InitialValue="DINT#42"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="BOOL"/>
+		</OutputVars>
+		<Sockets>
+			<AdapterDeclaration Name="EVENT" Type="EventAdapter" Comment="Event/data adapter" x="0" y="0"/>
+		</Sockets>
+	</InterfaceList>
+	<FBNetwork>
+		<Group Name="ControlGroup" Comment="Grouped example" x="50" y="50" width="240" height="140" locked="false">
+			<Attribute Name="IntegerAttribute" Value="2"/>
+		</Group>
+		<FB Name="Basic" Type="fixture::basic::BasicTest" x="100" y="100">
+			<Parameter Name="Settings.Enabled" Value="TRUE">
+				<Attribute Name="Visible" Value="TRUE"/>
+				<Attribute Name="IntegerAttribute" Value="3"/>
+			</Parameter>
+			<Attribute Name="GroupName" Type="STRING" Value="ControlGroup"/>
+		</FB>
+		<Comment Comment="Composite network comment" x="300" y="50" width="120" height="40"/>
+		<EventConnections>
+			<Connection Source="REQ" Destination="Basic.REQ" Comment="Request forwarding" dx1="40"/>
+			<Connection Source="Basic.CNF" Destination="CNF"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="DI1" Destination="Basic.DI1"/>
+			<Connection Source="Basic.DO1" Destination="DO1"/>
+		</DataConnections>
+		<AdapterConnections>
+			<Connection Source="Basic.EVENT" Destination="EVENT"/>
+		</AdapterConnections>
+	</FBNetwork>
+</FBType>

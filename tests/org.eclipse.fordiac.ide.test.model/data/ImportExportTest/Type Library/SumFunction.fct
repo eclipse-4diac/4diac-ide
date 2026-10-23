@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SumFunction" Comment="Adds two input values">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="mjobst" Date="2026-10-23">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="DINT"/>
+			<VarDeclaration Name="IN2" Type="DINT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="DINT"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[OUT := IN1 + IN2;]]></ST>
+	</FunctionBody>
+	<Attribute Name="IntegerAttribute" Value="9"/>
+</Function>

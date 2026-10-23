@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="TestSubApp" Comment="Subapplication with a basic FB">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="mjobst" Date="2026-10-23">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="REQ" Type="Event" Comment="Request">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="CNF" Type="Event" Comment="Confirmation">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="DINT" InitialValue="DINT#5"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="BOOL"/>
+		</OutputVars>
+		<Sockets>
+			<AdapterDeclaration Name="EVENT" Type="EventAdapter" Comment="Event/data adapter"/>
+		</Sockets>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<FB Name="Basic" Type="fixture::basic::BasicTest" x="100" y="100">
+		</FB>
+		<SubApp Name="NestedSubApp" x="500" y="100">
+			<SubAppInterfaceList>
+				<InputVars>
+					<VarDeclaration Name="SubIn" Type="DINT"/>
+				</InputVars>
+				<OutputVars>
+					<VarDeclaration Name="SubOut" Type="BOOL"/>
+				</OutputVars>
+			</SubAppInterfaceList>
+			<SubAppNetwork>
+				<FB Name="NestedBasic" Type="fixture::basic::BasicTest" x="100" y="100">
+				</FB>
+				<DataConnections>
+					<Connection Source="SubIn" Destination="NestedBasic.DI1"/>
+					<Connection Source="NestedBasic.DO1" Destination="SubOut"/>
+				</DataConnections>
+			</SubAppNetwork>
+			<Attribute Name="IntegerAttribute" Value="16"/>
+			<Attribute Name="width" Type="LREAL" Value="120"/>
+			<Attribute Name="height" Type="LREAL" Value="80"/>
+			<Attribute Name="locked" Type="BOOL" Value="true"/>
+		</SubApp>
+		<Comment Comment="Subapplication network comment" x="300" y="50" width="120" height="40"/>
+		<EventConnections>
+			<Connection Source="REQ" Destination="Basic.REQ"/>
+			<Connection Source="Basic.CNF" Destination="CNF"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="DI1" Destination="Basic.DI1"/>
+			<Connection Source="Basic.DO1" Destination="DO1"/>
+		</DataConnections>
+		<AdapterConnections>
+			<Connection Source="Basic.EVENT" Destination="EVENT"/>
+		</AdapterConnections>
+	</SubAppNetwork>
+	<Attribute Name="IntegerAttribute" Value="17"/>
+</SubAppType>
