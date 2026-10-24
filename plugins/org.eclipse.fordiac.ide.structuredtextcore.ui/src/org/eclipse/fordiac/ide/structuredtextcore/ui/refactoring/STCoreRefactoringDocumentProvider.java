@@ -9,13 +9,13 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - use the editor of the language in multi-page editors
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import static org.eclipse.ltk.core.refactoring.RefactoringStatus.ERROR;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
@@ -30,6 +30,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorExtension;
+import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.resource.IGlobalServiceProvider;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.refactoring.impl.DefaultRefactoringDocumentProvider;
@@ -39,6 +40,7 @@ import org.eclipse.xtext.ui.util.DisplayRunnableWithResult;
 import org.eclipse.xtext.util.internal.Nullable;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 @SuppressWarnings("restriction")
 public class STCoreRefactoringDocumentProvider extends DefaultRefactoringDocumentProvider {
@@ -49,6 +51,10 @@ public class STCoreRefactoringDocumentProvider extends DefaultRefactoringDocumen
 	@Inject
 	private IGlobalServiceProvider globalServiceProvider;
 
+	@Inject
+	@Named(Constants.LANGUAGE_NAME)
+	private String languageName;
+
 	@Override
 	public IRefactoringDocument get(final URI uri, final StatusWrapper status) {
 		final URI resourceURI = uri.trimFragment();
@@ -57,38 +63,37 @@ public class STCoreRefactoringDocumentProvider extends DefaultRefactoringDocumen
 			final IFile file = fileEditorInput.getFile();
 			final IPath redirectedPath = getChangeRedirector().getRedirectedPath(file.getFullPath());
 			final IFile redirectedFile = file.getWorkspace().getRoot().getFile(redirectedPath);
-			if (redirectedFile.equals(file)) {
-				if (workbench != null) {
-					final ITextEditor editor = new DisplayRunnableWithResult<ITextEditor>() {
-						@Override
-						protected ITextEditor run() throws Exception {
-							final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-							final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-							final ITextEditor editor = Adapters.adapt(activePage.findEditor(fileEditorInput),
-									ITextEditor.class);
-							if (editor != null) {
-								if (editor instanceof ITextEditorExtension
-										&& ((ITextEditorExtension) editor).isEditorInputReadOnly()) {
-									status.add(ERROR, "Editor for {0} is read only", fileEditorInput.getName()); //$NON-NLS-1$
-								}
-								return (editor);
+			if (!redirectedFile.equals(file)) {
+				return new RedirectedFileDocument(resourceURI, file, redirectedFile, getEncodingProvider(resourceURI));
+			}
+			if (workbench != null) {
+				final ITextEditor editor = new DisplayRunnableWithResult<ITextEditor>() {
+					@Override
+					protected ITextEditor run() throws Exception {
+						final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+						final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+						final ITextEditor editor = STCoreRefactoringUtil
+								.findXtextEditor(activePage.findEditor(fileEditorInput), fileEditorInput, languageName);
+						if (editor != null) {
+							if (editor instanceof ITextEditorExtension
+									&& ((ITextEditorExtension) editor).isEditorInputReadOnly()) {
+								status.add(ERROR, "Editor for {0} is read only", fileEditorInput.getName()); //$NON-NLS-1$
 							}
-							return null;
+							return (editor);
 						}
-					}.syncExec();
-					if (editor != null) {
-						final IDocumentProvider documentProvider = editor.getDocumentProvider();
-						if (documentProvider != null) {
-							return new ProviderDocument(resourceURI, fileEditorInput, documentProvider);
-						}
+						return null;
+					}
+				}.syncExec();
+				if (editor != null) {
+					final IDocumentProvider documentProvider = editor.getDocumentProvider();
+					if (documentProvider != null) {
+						return new ProviderDocument(resourceURI, fileEditorInput, documentProvider);
 					}
 				}
-				final IDocumentProvider documentProvider = getDocumentProvider(resourceURI);
-				if (documentProvider != null) {
-					return new ProviderDocument(resourceURI, fileEditorInput, documentProvider);
-				}
-			} else {
-				return new RedirectedFileDocument(resourceURI, file, redirectedFile, getEncodingProvider(resourceURI));
+			}
+			final IDocumentProvider documentProvider = getDocumentProvider(resourceURI);
+			if (documentProvider != null) {
+				return new ProviderDocument(resourceURI, fileEditorInput, documentProvider);
 			}
 		}
 		return null;

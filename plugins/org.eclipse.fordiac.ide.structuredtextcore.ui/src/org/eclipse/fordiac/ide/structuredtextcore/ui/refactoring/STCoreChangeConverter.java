@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - use the text editor of the language of the changed resource
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
@@ -18,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -51,7 +51,6 @@ import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -188,7 +187,7 @@ public class STCoreChangeConverter extends ChangeConverter {
 	protected TextChange createDocumentChange(final ITextDocumentChange change) {
 		final IFile file = resourceUriConverter.toFile(change.getOldURI());
 		final FileEditorInput editorInput = new FileEditorInput(file);
-		final ITextEditor editor = findOpenEditor(editorInput);
+		final ITextEditor editor = findOpenEditor(editorInput, change.getResource().getLanguageName());
 		if (editor != null) {
 			final IDocumentProvider documentProvider = editor.getDocumentProvider();
 			if (documentProvider != null) {
@@ -212,12 +211,7 @@ public class STCoreChangeConverter extends ChangeConverter {
 		return globalServiceProvider.findService(resourceURI, XtextDocumentProvider.class);
 	}
 
-	@Override
-	protected ITextEditor findOpenEditor(final IFile file) {
-		return findOpenEditor(new FileEditorInput(file));
-	}
-
-	protected ITextEditor findOpenEditor(final IEditorInput editorInput) {
+	protected ITextEditor findOpenEditor(final IEditorInput editorInput, final String languageName) {
 		if (workbench == null) {
 			return null;
 		}
@@ -225,9 +219,10 @@ public class STCoreChangeConverter extends ChangeConverter {
 			final IEditorReference[] editorReferences = workbench.getActiveWorkbenchWindow().getActivePage()
 					.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
 			for (final IEditorReference editorReference : editorReferences) {
-				final IEditorPart editor = editorReference.getEditor(true);
-				if (Adapters.adapt(editor, ITextEditor.class) instanceof final XtextEditor xtextEditor) {
-					return xtextEditor;
+				final XtextEditor editor = STCoreRefactoringUtil.findXtextEditor(editorReference.getEditor(true),
+						editorInput, languageName);
+				if (editor != null) {
+					return editor;
 				}
 			}
 			return null;
