@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hierarchy Manager UI
+Bundle-Localization: plugin
 Bundle-SymbolicName: org.eclipse.fordiac.ide.hierarchymanager.ui;singleton:=true
 Bundle-Version: 3.3.100.qualifier
 Require-Bundle: org.eclipse.core.resources,
