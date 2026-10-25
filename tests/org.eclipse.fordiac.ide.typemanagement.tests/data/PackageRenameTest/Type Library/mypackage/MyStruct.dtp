@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataType Name="MyStruct" Comment="">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Dimitrios Kalligaridis" Date="2026-07-29">
+	</VersionInfo>
+	<CompilerInfo packageName="mypackage">
+	</CompilerInfo>
+	<StructuredType>
+		<VarDeclaration Name="A" Type="BOOL" Comment=""/>
+		<VarDeclaration Name="B" Type="BOOL" Comment=""/>
+	</StructuredType>
+</DataType>
