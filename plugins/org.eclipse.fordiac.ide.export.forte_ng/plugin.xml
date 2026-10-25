@@ -5,8 +5,8 @@
          point="org.eclipse.fordiac.ide.export.exportFilter">
       <ExportFilter
             class="org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter"
-            description="Export type files to be added to 4diac FORTE"
-            name="4diac FORTE 3.x"
+            description="%exportFilter.forteNg.description"
+            name="%exportFilter.forteNg.name"
             sortIndex="10"
             id="org.eclipse.fordiac.ide.export.exportFilter.forteNg">
       </ExportFilter>
