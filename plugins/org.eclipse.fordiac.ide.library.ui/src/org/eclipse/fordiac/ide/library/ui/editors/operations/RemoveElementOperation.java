@@ -26,15 +26,13 @@ public class RemoveElementOperation<T> extends AbstractOperation {
 
 	private final List<T> elements;
 	private final T element;
-	private final Runnable refresh;
 
 	private int index;
 
-	public RemoveElementOperation(final String label, final List<T> elements, final T element, final Runnable refresh) {
+	public RemoveElementOperation(final String label, final List<T> elements, final T element) {
 		super(label);
 		this.elements = elements;
 		this.element = element;
-		this.refresh = refresh;
 	}
 
 	@Override
@@ -43,7 +41,6 @@ public class RemoveElementOperation<T> extends AbstractOperation {
 
 		if (index >= 0) {
 			elements.remove(index);
-			refresh();
 		}
 
 		return Status.OK_STATUS;
@@ -52,20 +49,13 @@ public class RemoveElementOperation<T> extends AbstractOperation {
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		elements.remove(element);
-		refresh();
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		elements.add(index, element);
-		refresh();
 		return Status.OK_STATUS;
 	}
 
-	private void refresh() {
-		if (refresh != null) {
-			refresh.run();
-		}
-	}
 }

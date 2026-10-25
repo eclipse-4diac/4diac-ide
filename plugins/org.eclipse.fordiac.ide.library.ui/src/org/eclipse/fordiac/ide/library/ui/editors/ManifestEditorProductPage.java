@@ -11,20 +11,26 @@
  *   Mario Kastner
  *   	- initial API and implementation and/or initial documentation
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.library.ui.editors;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Product;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
-import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.library.ui.Messages;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -36,8 +42,15 @@ import org.eclipse.ui.forms.widgets.Section;
 
 public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 
-	private static final String INVALID_DATE_KEY = "manifest.product.versioninfo.date"; //$NON-NLS-1$
-	private static final String INVALID_VERSION_KEY = "manifest.product.versioninfo.version"; //$NON-NLS-1$
+	private record ValidationControl(Text control, EObject element, EStructuralFeature feature) {
+	}
+
+	private final List<ValidationControl> validationControls = new ArrayList<>();
+
+	private record TextBinding(Text control, Supplier<String> getter) {
+	}
+
+	private final List<TextBinding> textBindings = new ArrayList<>();
 
 	protected ManifestEditorProductPage(final ManifestEditor editor, final String id, final String title) {
 		super(editor, id, title);
@@ -45,6 +58,9 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 
 	@Override
 	protected void createPageContent(final Composite parent, final FormToolkit toolkit, final IManagedForm form) {
+		validationControls.clear();
+		textBindings.clear();
+
 		createProductInformationSection(parent, toolkit);
 		createVersionInformationSection(parent, toolkit);
 	}
@@ -55,49 +71,105 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 	}
 
 	@Override
-	protected boolean isValid() {
-		final VersionInfo versionInfo = getModel().getVersionInfo();
-		return VersionComparator.isValidVersion(versionInfo.getVersion()) && isValidDate(versionInfo.getDate());
+	protected void refresh() {
+		textBindings.forEach(binding -> {
+			final Text control = binding.control();
+
+			if (!control.isDisposed()) {
+				final String value = Objects.toString(binding.getter().get(), ""); //$NON-NLS-1$
+
+				if (!Objects.equals(control.getText(), value)) {
+					control.setText(value);
+				}
+			}
+		});
+	}
+
+	@Override
+	public void updateValidation(final List<Diagnostic> diagnostics) {
+		if (getManagedForm() == null) {
+			return;
+		}
+
+		final var manager = getManagedForm().getMessageManager();
+		manager.removeAllMessages();
+
+		for (final Diagnostic diagnostic : diagnostics) {
+			final EObject target = FordiacMarkerHelper.getDiagnosticTarget(diagnostic);
+
+			if (!containsElement(target)) {
+				continue;
+			}
+
+			final EStructuralFeature feature = FordiacMarkerHelper.getDiagnosticFeature(diagnostic);
+
+			final int severity = toMessageType(diagnostic.getSeverity());
+
+			if (severity == IMessageProvider.NONE) {
+				continue;
+			}
+
+			final ValidationControl registration = validationControls.stream()
+					.filter(entry -> entry.element() == target && entry.feature() == feature).findFirst().orElse(null);
+
+			if (registration != null && !registration.control().isDisposed()) {
+				manager.addMessage(diagnostic, diagnostic.getMessage(), null, severity, registration.control());
+			} else {
+				manager.addMessage(diagnostic, diagnostic.getMessage(), null, severity);
+			}
+		}
+
+		manager.update();
+	}
+
+	private static int toMessageType(final int severity) {
+		if ((severity & Diagnostic.ERROR) != 0) {
+			return IMessageProvider.ERROR;
+		}
+		if ((severity & Diagnostic.WARNING) != 0) {
+			return IMessageProvider.WARNING;
+		}
+		if ((severity & Diagnostic.INFO) != 0) {
+			return IMessageProvider.INFORMATION;
+		}
+		return IMessageProvider.NONE;
 	}
 
 	private void createProductInformationSection(final Composite parent, final FormToolkit toolkit) {
-		final Section productInformationSection = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR);
-		productInformationSection.setText(Messages.ManifestEditor_ProductInformation);
-		productInformationSection.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		final Section section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR);
 
-		final Composite sectionClient = toolkit.createComposite(productInformationSection);
-		sectionClient.setLayout(new GridLayout(1, false));
-		productInformationSection.setClient(sectionClient);
+		section.setText(Messages.ManifestEditor_ProductInformation);
+		section.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		final Composite nameComposite = toolkit.createComposite(sectionClient);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(nameComposite);
-		nameComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		final Composite client = toolkit.createComposite(section);
+		client.setLayout(new GridLayout(1, false));
+		section.setClient(client);
 
-		toolkit.createLabel(nameComposite, Messages.ManifestEditor_Name);
-		toolkit.createLabel(nameComposite, Messages.ManifestEditor_SymbolicName);
+		final Composite names = toolkit.createComposite(client);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(names);
+		names.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		final Text nameText = toolkit.createText(nameComposite,
-				getModel().getName() != null ? getModel().getName() : "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
-		nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(nameText, getModel()::getName, getModel()::setName, Messages.ManifestEditor_Name);
+		toolkit.createLabel(names, Messages.ManifestEditor_Name);
+		toolkit.createLabel(names, Messages.ManifestEditor_SymbolicName);
 
-		final Text symbolicNameText = toolkit.createText(nameComposite,
-				getModel().getSymbolicName() != null ? getModel().getSymbolicName() : "", //$NON-NLS-1$
-				SWT.SINGLE | SWT.BORDER);
-		symbolicNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(symbolicNameText, getModel()::getSymbolicName, getModel()::setSymbolicName,
-				Messages.ManifestEditor_SymbolicName);
+		final Product product = getModel();
 
-		toolkit.createLabel(sectionClient, Messages.ManifestEditor_Comment);
+		createText(names, toolkit, product, LibraryPackage.Literals.PRODUCT__NAME, product::getName, product::setName,
+				Messages.ManifestEditor_Name);
 
-		final Text commentText = toolkit.createText(sectionClient,
-				getModel().getComment() != null ? getModel().getComment() : "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
-		commentText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(commentText, getModel()::getComment, getModel()::setComment, Messages.ManifestEditor_Comment);
+		createText(names, toolkit, product, LibraryPackage.Literals.PRODUCT__SYMBOLIC_NAME, product::getSymbolicName,
+				product::setSymbolicName, Messages.ManifestEditor_SymbolicName);
+
+		toolkit.createLabel(client, Messages.ManifestEditor_Comment);
+
+		createText(client, toolkit, product, LibraryPackage.Literals.PRODUCT__COMMENT, product::getComment,
+				product::setComment, Messages.ManifestEditor_Comment);
 	}
 
 	private void createVersionInformationSection(final Composite parent, final FormToolkit toolkit) {
+
 		final Section section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR);
+
 		section.setText(Messages.ManifestEditor_VersionInformation);
 		section.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
@@ -108,53 +180,32 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		final VersionInfo versionInfo = getModel().getVersionInfo();
 
 		toolkit.createLabel(client, Messages.ManifestEditor_Version);
-
-		final Text versionText = toolkit.createText(client,
-				versionInfo.getVersion() != null ? versionInfo.getVersion() : "", //$NON-NLS-1$
-				SWT.SINGLE | SWT.BORDER);
-		versionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		addControlValidation(versionText, INVALID_VERSION_KEY, Messages.ManifestEditor_InvalidVersion,
-				VersionComparator::isValidVersion);
-		bindText(versionText, versionInfo::getVersion, versionInfo::setVersion, Messages.ManifestEditor_Version);
+		createText(client, toolkit, versionInfo, LibraryPackage.Literals.VERSION_INFO__VERSION, versionInfo::getVersion,
+				versionInfo::setVersion, Messages.ManifestEditor_Version);
 
 		toolkit.createLabel(client, Messages.ManifestEditor_Date);
-
-		final Text dateText = toolkit.createText(client, versionInfo.getDate() != null ? versionInfo.getDate() : "", //$NON-NLS-1$
-				SWT.SINGLE | SWT.BORDER);
-		dateText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(dateText, versionInfo::getDate, versionInfo::setDate, Messages.ManifestEditor_Date);
-		addControlValidation(dateText, INVALID_DATE_KEY, Messages.ManifestEditor_InvalidDate,
-				ManifestEditorProductPage::isValidDate);
+		createText(client, toolkit, versionInfo, LibraryPackage.Literals.VERSION_INFO__DATE, versionInfo::getDate,
+				versionInfo::setDate, Messages.ManifestEditor_Date);
 
 		toolkit.createLabel(client, Messages.ManifestEditor_Author);
-
-		final Text authorText = toolkit.createText(client,
-				versionInfo.getAuthor() != null ? versionInfo.getAuthor() : "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
-		authorText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		bindText(authorText, versionInfo::getAuthor, versionInfo::setAuthor, Messages.ManifestEditor_Author);
-
+		createText(client, toolkit, versionInfo, LibraryPackage.Literals.VERSION_INFO__AUTHOR, versionInfo::getAuthor,
+				versionInfo::setAuthor, Messages.ManifestEditor_Author);
 	}
 
-	private static boolean isValidDate(final String value) {
-		if (value == null || value.isBlank()) {
-			return false;
-		}
-
-		try {
-			LocalDate.parse(value);
-			return true;
-		} catch (final DateTimeParseException _) {
-			return false;
-		}
-	}
-
-	private final ModifyListener bindText(final Text text, final Supplier<String> getter, final Consumer<String> setter,
+	private Text createText(final Composite parent, final FormToolkit toolkit, final EObject element,
+			final EStructuralFeature feature, final Supplier<String> getter, final Consumer<String> setter,
 			final String label) {
 
-		final ModifyListener binding = _ -> setValue(label, getter, setter, text.getText());
-		text.addModifyListener(binding);
+		final Text text = toolkit.createText(parent, Objects.toString(getter.get(), ""), //$NON-NLS-1$
+				SWT.SINGLE | SWT.BORDER);
 
-		return binding;
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		text.addModifyListener(_ -> setValue(label, getter, setter, text.getText()));
+
+		textBindings.add(new TextBinding(text, getter));
+		validationControls.add(new ValidationControl(text, element, feature));
+
+		return text;
 	}
-
 }
