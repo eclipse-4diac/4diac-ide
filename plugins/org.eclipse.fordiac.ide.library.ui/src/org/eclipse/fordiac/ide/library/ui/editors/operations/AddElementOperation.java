@@ -25,19 +25,16 @@ public class AddElementOperation<T> extends AbstractOperation {
 
 	private final EList<T> elements;
 	private final T element;
-	private final Runnable refresh;
 
-	public AddElementOperation(final String label, final EList<T> elements, final T element, final Runnable refresh) {
+	public AddElementOperation(final String label, final EList<T> elements, final T element) {
 		super(label);
 		this.elements = elements;
 		this.element = element;
-		this.refresh = refresh;
 	}
 
 	@Override
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		elements.add(element);
-		refresh();
 		return Status.OK_STATUS;
 	}
 
@@ -49,13 +46,7 @@ public class AddElementOperation<T> extends AbstractOperation {
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		elements.remove(element);
-		refresh();
 		return Status.OK_STATUS;
 	}
 
-	private void refresh() {
-		if (refresh != null) {
-			refresh.run();
-		}
-	}
 }

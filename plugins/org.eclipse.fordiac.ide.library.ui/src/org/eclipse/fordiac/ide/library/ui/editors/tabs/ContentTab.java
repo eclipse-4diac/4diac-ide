@@ -14,8 +14,6 @@
 package org.eclipse.fordiac.ide.library.ui.editors.tabs;
 
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.common.util.ECollections;
@@ -25,84 +23,65 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.editors.ManifestEditorLibraryPage;
+import org.eclipse.fordiac.ide.library.ui.editors.ManifestEditorPage;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.AddElementOperation;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.RemoveElementOperation;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class ContentTab {
 
+	private static final String EXAMPLE_PATTERN = "some::example::pattern::*"; //$NON-NLS-1$
+
+	private final ManifestEditorLibraryPage page;
+	private final Composite control;
 	private final TableControl includesTable;
 	private final TableControl excludesTable;
-	private final Composite control;
-	private final ManifestEditorLibraryPage page;
 
 	private Library library;
-
-	private static final String EXAMPLE_PATTERN = "some::example::pattern::*"; //$NON-NLS-1$
 
 	public ContentTab(final Composite parent, final FormToolkit toolkit, final ManifestEditorLibraryPage page) {
 		this.page = page;
 
-		control = new Composite(parent, SWT.NONE);
+		control = toolkit.createComposite(parent);
 		GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(true).applyTo(control);
-		GridDataFactory.fillDefaults().grab(true, true).align(SWT.FILL, SWT.FILL).applyTo(control);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(control);
 
-		this.includesTable = new TableControl(control, toolkit, Messages.ManifestEditor_Includes);
-		includesTable.setAddHandler(() -> addPattern(getIncludes(), EXAMPLE_PATTERN, "Add include")); //$NON-NLS-1$
-		includesTable.setRemoveHandler(() -> removePattern(includesTable, getIncludes(), "Remove include")); //$NON-NLS-1$
+		includesTable = createPatternTable(toolkit, Messages.ManifestEditor_Includes, this::getIncludes, "Add include", //$NON-NLS-1$
+				"Remove include"); //$NON-NLS-1$
 
-		this.excludesTable = new TableControl(control, toolkit, Messages.ManifestEditor_Excludes);
-		excludesTable.setAddHandler(() -> addPattern(getExcludes(), EXAMPLE_PATTERN, "Add exclude")); //$NON-NLS-1$
-		excludesTable.setRemoveHandler(() -> removePattern(includesTable, getExcludes(), "Remove exclude")); //$NON-NLS-1$
-
-		createColumns();
+		excludesTable = createPatternTable(toolkit, Messages.ManifestEditor_Excludes, this::getExcludes, "Add exclude", //$NON-NLS-1$
+				"Remove exclude"); //$NON-NLS-1$
 	}
 
-	private void createColumns() {
-		final var includeCol = includesTable.createColumn(Messages.ManifestEditor_Pattern, 100);
-		includeCol.setLabelProvider(TableControl.createLabelProvider(LibraryElement.class, LibraryElement::getValue));
+	private TableControl createPatternTable(final FormToolkit toolkit, final String title,
+			final java.util.function.Supplier<EList<LibraryElement>> elements, final String addLabel,
+			final String removeLabel) {
 
-		includeCol.setEditingSupport(TableControl.createEditingSupport(includesTable.getViewer(), page,
-				LibraryElement.class, LibraryElement::getValue, getSetOperationFactory(),
-				new TextCellEditor(includesTable.getViewer().getTable())));
+		final TableControl table = new TableControl(control, toolkit, title);
 
-		final var excludeCol = excludesTable.createColumn(Messages.ManifestEditor_Pattern, 100);
-		excludeCol.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				if ((element instanceof final LibraryElement libElem)) {
-					if (!validatePattern(libElem.getValue())) {
-						return "ERROR";
-					}
-					return libElem.getValue();
-				}
-				return "";
-			}
-		});
+		table.setAddHandler(() -> addPattern(elements.get(), addLabel));
+		table.setRemoveHandler(() -> removePattern(table, elements.get(), removeLabel));
 
-		excludeCol.setEditingSupport(TableControl.createEditingSupport(excludesTable.getViewer(), page,
-				LibraryElement.class, LibraryElement::getValue, getSetOperationFactory(),
-				new TextCellEditor(excludesTable.getViewer().getTable())));
+		createPatternColumn(table);
+
+		return table;
 	}
 
-	private static boolean validatePattern(final String pattern) {
-		final Pattern packageSegmentPattern = Pattern.compile("(?:\\*{1,2}|[A-Za-z0-9_]+)"); //$NON-NLS-1$
-		final String[] segments = pattern.split(PackageNameHelper.PACKAGE_NAME_DELIMITER);
-		for (final String segment : segments) {
-			if (!packageSegmentPattern.matcher(segment).matches()) {
-				return false;
-			}
-		}
-		return true;
+	private void createPatternColumn(final TableControl table) {
+		final var column = table.createColumn(Messages.ManifestEditor_Pattern, 100);
+
+		column.setLabelProvider(TableControl.createLabelProvider(LibraryElement.class, LibraryElement::getValue,
+				element -> ManifestEditorPage.targets(page.getManifestEditor().getValidationResult(), element)));
+
+		column.setEditingSupport(TableControl.createEditingSupport(table.getViewer(), page, LibraryElement.class,
+				LibraryElement::getValue, ContentTab::createSetOperation,
+				new TextCellEditor(table.getViewer().getTable())));
 	}
 
 	public Control getControl() {
@@ -111,44 +90,47 @@ public class ContentTab {
 
 	public void setInput(final Library library) {
 		this.library = library;
-		refresh();
+
+		includesTable.setInput(getIncludes());
+		excludesTable.setInput(getExcludes());
+
+		includesTable.setEnabled(library != null);
+		excludesTable.setEnabled(library != null);
 	}
 
 	public void refresh() {
-		excludesTable.setInput(library != null ? library.getExcludes().getLibraryElement() : List.of());
-		excludesTable.setEnabled(library != null);
-
-		includesTable.setInput(library != null ? library.getIncludes().getLibraryElement() : List.of());
-		includesTable.setEnabled(library != null);
-	}
-
-	public boolean isValid() {
-		// TODO
-		return true;
+		includesTable.getViewer().refresh();
+		excludesTable.getViewer().refresh();
 	}
 
 	private EList<LibraryElement> getIncludes() {
-		return library != null ? library.getIncludes().getLibraryElement() : ECollections.emptyEList();
+		return library != null && library.getIncludes() != null ? library.getIncludes().getLibraryElement()
+				: ECollections.emptyEList();
 	}
 
 	private EList<LibraryElement> getExcludes() {
-		return library != null ? library.getExcludes().getLibraryElement() : ECollections.emptyEList();
+		return library != null && library.getExcludes() != null ? library.getExcludes().getLibraryElement()
+				: ECollections.emptyEList();
 	}
 
-	private void addPattern(final EList<LibraryElement> elements, final String value, final String label) {
-		page.execute(new AddElementOperation<>(label, elements, ManifestHelper.createPattern(value), this::refresh));
+	private void addPattern(final EList<LibraryElement> elements, final String label) {
+		if (library == null) {
+			return;
+		}
+
+		page.execute(new AddElementOperation<>(label, elements, ManifestHelper.createPattern(EXAMPLE_PATTERN)));
 	}
 
 	private void removePattern(final TableControl table, final List<LibraryElement> elements, final String label) {
-		final Object selected = table.getViewer().getStructuredSelection().getFirstElement();
-		if (selected instanceof final LibraryElement element) {
-			page.execute(new RemoveElementOperation<>(label, elements, element, this::refresh));
+		final Object selection = table.getViewer().getStructuredSelection().getFirstElement();
+
+		if (selection instanceof final LibraryElement element) {
+			page.execute(new RemoveElementOperation<>(label, elements, element));
 		}
 	}
 
-	private BiFunction<LibraryElement, String, IUndoableOperation> getSetOperationFactory() {
-		return (libraryElement, value) -> new SetValueOperation<>("Set pattern", libraryElement::getValue, //$NON-NLS-1$
-				libraryElement::setValue, value, () -> includesTable.getViewer().refresh(libraryElement));
+	private static IUndoableOperation createSetOperation(final LibraryElement element, final String value) {
+		return new SetValueOperation<>("Set pattern", //$NON-NLS-1$
+				element::getValue, element::setValue, value);
 	}
-
 }

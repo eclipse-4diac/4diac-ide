@@ -149,13 +149,17 @@ public class Messages extends NLS {
 	public static String ManifestEditor_ConfigureVersionRange;
 	public static String ManifestEditor_Date;
 	public static String ManifestEditor_Dependencies;
+	public static String ManifestEditor_Details;
 	public static String ManifestEditor_Excludes;
+	public static String ManifestEditor_Export;
 	public static String ManifestEditor_ImportLibraries;
 	public static String ManifestEditor_Includes;
 	public static String ManifestEditor_InvalidDate;
 	public static String ManifestEditor_InvalidVersion;
 	public static String ManifestEditor_LatestInRange;
 	public static String ManifestEditor_Latest;
+	public static String ManifestEditor_Library;
+	public static String ManifestEditor_Libraries;
 	public static String ManifestEditor_Name;
 	public static String ManifestEditor_Pattern;
 	public static String ManifestEditor_Product;

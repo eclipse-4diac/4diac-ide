@@ -16,12 +16,14 @@ package org.eclipse.fordiac.ide.library.ui.editors.tabs;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.fordiac.ide.library.ui.editors.ManifestEditorPage;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.resource.JFaceColors;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -33,11 +35,13 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -149,17 +153,31 @@ public final class TableControl {
 	}
 
 	public static <T> ColumnLabelProvider createLabelProvider(final Class<T> type, final Function<T, ?> getter) {
+		return createLabelProvider(type, getter, _ -> false);
+	}
+
+	public static <T> ColumnLabelProvider createLabelProvider(final Class<T> type, final Function<T, ?> getter,
+			final Predicate<T> errorPredicate) {
 
 		return new ColumnLabelProvider() {
+
 			@Override
 			public String getText(final Object element) {
 				return type.isInstance(element) ? Objects.toString(getter.apply(type.cast(element)), "") //$NON-NLS-1$
 						: ""; //$NON-NLS-1$
 			}
+
+			@Override
+			public Color getForeground(final Object element) {
+				if (type.isInstance(element) && errorPredicate.test(type.cast(element))) {
+					return JFaceColors.getErrorText(Display.getCurrent());
+				}
+				return null;
+			}
 		};
 	}
 
-	protected static <T> EditingSupport createEditingSupport(final TableViewer viewer, final ManifestEditorPage<?> page,
+	public static <T> EditingSupport createEditingSupport(final TableViewer viewer, final ManifestEditorPage<?> page,
 			final Class<T> type, final Function<T, String> getter,
 			final BiFunction<T, String, IUndoableOperation> operationFactory, final CellEditor editor) {
 

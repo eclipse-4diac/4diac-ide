@@ -15,8 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
-import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -36,16 +35,20 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.library.LibraryValidation;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -62,26 +65,24 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	private static final String LIBRARY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorLibraryPage"; //$NON-NLS-1$
 
 	private Manifest manifest;
-	private IProject project;
+	private List<Diagnostic> validationResult;
 
 	private IUndoableOperation savePosition;
 
 	@Override
 	protected void addPages() {
 		loadManifest();
+		validateModel();
 
 		savePosition = null;
 
 		try {
-			addPage(new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, "Product"));
+			addPage(new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, Messages.ManifestEditor_Product));
+			addPage(new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, Messages.ManifestEditor_Dependencies));
 
-			// dependency page read only for scope == library? the buttons do not make sense
-			// here, probably let the page adapt itself
-			addPage(new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"));
-
-			// do not show library editing page for library manifest
-			if (manifest != null && ManifestHelper.isProject(manifest)) {
-				addPage(new ManifestEditorLibraryPage(this, LIBRARY_PAGE_ID, "Library"));
+			// do not create library editing page for library manifest
+			if (ManifestHelper.isProject(manifest)) {
+				addPage(new ManifestEditorLibraryPage(this, LIBRARY_PAGE_ID, Messages.ManifestEditor_Library));
 			}
 		} catch (final PartInitException e) {
 			ILog.get().error(e.getMessage(), e);
@@ -98,14 +99,14 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if (!canSave()) {
-			getInvalidPage().ifPresent(p -> setActivePage(p.getId()));
-			getActivePageInstance().getManagedForm().getMessageManager().update();
-			return;
-		}
 		ManifestHelper.saveManifest(manifest);
 		savePosition = OperationHistoryFactory.getOperationHistory().getUndoOperation(getUndoContext());
 		firePropertyChange(PROP_DIRTY);
+
+		if (getEditorInput() instanceof final IFileEditorInput input) {
+			LibraryValidation.validate(manifest, input.getFile());
+		}
+
 	}
 
 	public void execute(final IUndoableOperation operation) {
@@ -113,7 +114,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		try {
 			OperationHistoryFactory.getOperationHistory().execute(operation, null, null);
 		} catch (final ExecutionException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
@@ -121,8 +122,17 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		return undoContext;
 	}
 
-	private Optional<ManifestEditorPage<?>> getInvalidPage() {
-		return getPages().filter(Predicate.not(ManifestEditorPage::isValid)).findFirst();
+	public List<Diagnostic> getValidationResult() {
+		return validationResult;
+	}
+
+	private void validateModel() {
+		validationResult = flatten(LibraryValidation.validate(manifest)).toList();
+
+		getPages().forEach(page -> {
+			page.updateValidation(validationResult);
+			page.refresh();
+		});
 	}
 
 	private void loadManifest() {
@@ -142,10 +152,6 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	private Stream<ManifestEditorPage<?>> getPages() {
 		return pages.stream().filter(ManifestEditorPage.class::isInstance).map(ManifestEditorPage.class::cast);
-	}
-
-	private boolean canSave() {
-		return getPages().allMatch(ManifestEditorPage::isValid);
 	}
 
 	@Override
@@ -168,10 +174,10 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	}
 
 	public IProject getProject() {
-		if (project == null && getEditorInput() instanceof final FileEditorInput input && input.getFile() != null) {
-			project = input.getFile().getProject();
+		if (getEditorInput() instanceof final FileEditorInput input && input.getFile() != null) {
+			return input.getFile().getProject();
 		}
-		return project;
+		return null;
 	}
 
 	@Override
@@ -182,10 +188,12 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 			return;
 		}
 
-		getPages().filter(p -> p.containsElement(markerElement)).findFirst().ifPresent(p -> {
-			setActivePage(p.getId());
-			p.reveal(markerElement);
-		});
+		getPages().filter(p -> p.containsElement(markerElement)).findFirst().ifPresent(p -> setActivePage(p.getId()));
+	}
+
+	private static Stream<Diagnostic> flatten(final Stream<Diagnostic> diagnostics) {
+		return diagnostics.flatMap(
+				diagnostic -> Stream.concat(Stream.of(diagnostic), flatten(diagnostic.getChildren().stream())));
 	}
 
 	@Override
@@ -221,13 +229,19 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	private final IOperationHistoryListener operationHistoryListener = event -> {
 		final IUndoableOperation operation = event.getOperation();
 
-		if (operation != null && operation.hasContext(undoContext) && switch (event.getEventType()) {
-		case OperationHistoryEvent.OPERATION_ADDED, OperationHistoryEvent.OPERATION_REMOVED,
-				OperationHistoryEvent.UNDONE, OperationHistoryEvent.REDONE ->
-			true;
-		default -> false;
-		}) {
+		if (operation == null || !operation.hasContext(undoContext)) {
+			return;
+		}
+
+		switch (event.getEventType()) {
+		case OperationHistoryEvent.OPERATION_ADDED, OperationHistoryEvent.UNDONE, OperationHistoryEvent.REDONE,
+				OperationHistoryEvent.OPERATION_REMOVED -> {
 			firePropertyChange(PROP_DIRTY);
+			validateModel();
+		}
+		default -> {
+			// do nothing
+		}
 		}
 	};
 

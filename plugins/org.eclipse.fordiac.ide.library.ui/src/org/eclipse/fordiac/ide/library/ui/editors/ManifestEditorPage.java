@@ -13,20 +13,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -46,6 +47,8 @@ public abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 		body.setLayout(new GridLayout(1, false));
 
 		createPageContent(body, managedForm.getToolkit(), managedForm);
+
+		updateValidation(getManifestEditor().getValidationResult());
 	}
 
 	protected boolean isProjectManifest() {
@@ -61,18 +64,11 @@ public abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 
 	protected abstract T getModel();
 
-	protected void reveal(final EObject element) {
-		// do nothing
-	}
-
 	protected void refresh() {
 		// do nothing
 	}
 
-	// use complex type instead
-	protected abstract boolean isValid();
-
-	protected final ManifestEditor getManifestEditor() {
+	public final ManifestEditor getManifestEditor() {
 		return (ManifestEditor) getEditor();
 	}
 
@@ -80,26 +76,49 @@ public abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 		getManifestEditor().execute(operation);
 	}
 
-	protected void addControlValidation(final Text text, final String validationKey, final String message,
-			final Predicate<String> validator) {
-
-		final Runnable update = () -> {
-			if (validator.test(text.getText())) {
-				getManagedForm().getMessageManager().removeMessage(validationKey, text);
-			} else {
-				getManagedForm().getMessageManager().addMessage(validationKey, message, null, IMessageProvider.ERROR,
-						text);
-			}
-		};
-
-		text.addModifyListener(_ -> update.run());
-		update.run();
-	}
-
 	public final <V> void setValue(final String label, final Supplier<V> getter, final Consumer<V> setter,
 			final V value) {
 		if (!Objects.equals(value, getter.get())) {
-			execute(new SetValueOperation<>(label, getter, setter, value, null));
+			execute(new SetValueOperation<>(label, getter, setter, value));
 		}
 	}
+
+	/*
+	 * Validation, move to dedicated validation manager
+	 */
+
+	public void updateValidation(final List<Diagnostic> diagnostics) {
+		if (getManagedForm() == null) {
+			return;
+		}
+
+		final var messageManager = getManagedForm().getMessageManager();
+		messageManager.removeAllMessages();
+
+		diagnostics.stream().filter(d -> containsElement(FordiacMarkerHelper.getDiagnosticTarget(d))).forEach(
+				d -> messageManager.addMessage(d, d.getMessage(), null, toMessageProviderSeverity(d.getSeverity())));
+	}
+
+	// TODO needs feature addtionally!
+	public static boolean targets(final Diagnostic diagnostic, final EObject element) {
+		return FordiacMarkerHelper.getDiagnosticTarget(diagnostic) == element;
+	}
+
+	public static boolean targets(final List<Diagnostic> diagnostic, final EObject element) {
+		return diagnostic.stream().anyMatch(d -> targets(d, element));
+	}
+
+	protected static int toMessageProviderSeverity(final int diagnosticSeverity) {
+		if ((diagnosticSeverity & Diagnostic.ERROR) != 0) {
+			return IMessageProvider.ERROR;
+		}
+		if ((diagnosticSeverity & Diagnostic.WARNING) != 0) {
+			return IMessageProvider.WARNING;
+		}
+		if ((diagnosticSeverity & Diagnostic.INFO) != 0) {
+			return IMessageProvider.INFORMATION;
+		}
+		return IMessageProvider.NONE;
+	}
+
 }

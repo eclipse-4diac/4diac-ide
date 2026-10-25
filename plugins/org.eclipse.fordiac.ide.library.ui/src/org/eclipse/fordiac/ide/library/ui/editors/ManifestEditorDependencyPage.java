@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
 import org.eclipse.fordiac.ide.library.model.library.Dependencies;
@@ -111,9 +111,9 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 	}
 
 	@Override
-	protected boolean isValid() {
-		return getModel() != null && getModel().getRequired() != null && getModel().getRequired().stream()
-				.map(Required::getVersion).allMatch(VersionComparator::isValidRange);
+	public void updateValidation(final List<Diagnostic> diagnostics) {
+		super.updateValidation(diagnostics);
+		refresh();
 	}
 
 	@Override
@@ -124,16 +124,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 		collectLinkedLibraryVersions();
 		treeViewer.setInput(createViewerInput());
 		treeViewer.expandAll();
-	}
-
-	@Override
-	protected void reveal(final EObject element) {
-		if (treeViewer == null || treeViewer.getTree().isDisposed()) {
-			return;
-		}
-
-		treeViewer.setSelection(new StructuredSelection(element), true);
-		treeViewer.getTree().setFocus();
 	}
 
 	private List<LibContainer> createViewerInput() {
@@ -150,7 +140,7 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 	private void createDependencySection(final Composite parent, final FormToolkit toolkit) {
 		final Section dependencySection = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR);
 		dependencySection.setText(Messages.ManifestEditor_RequiredDependencies);
-		dependencySection.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		dependencySection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		final Composite treeContainer = toolkit.createComposite(dependencySection);
 		dependencySection.setClient(treeContainer);
@@ -295,13 +285,8 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 				if (element instanceof final Required required) {
 					final String version = value.toString();
 
-					ManifestEditorDependencyPage.this
-							.execute(new SetValueOperation<>(Messages.ManifestEditor_VersionRange, required::getVersion,
-									required::setVersion, version, () -> {
-										if (!treeViewer.getControl().isDisposed()) {
-											treeViewer.refresh(required);
-										}
-									}));
+					ManifestEditorDependencyPage.this.execute(new SetValueOperation<>(
+							Messages.ManifestEditor_VersionRange, required::getVersion, required::setVersion, version));
 
 					getViewer().setSelection(StructuredSelection.EMPTY);
 				}
@@ -408,7 +393,7 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 		};
 	}
 
-	private static CellLabelProvider createLabelProvider(final Function<Required, String> textProvider,
+	private CellLabelProvider createLabelProvider(final Function<Required, String> textProvider,
 			final Consumer<ViewerCell> containerUpdater, final boolean editable) {
 
 		return new StyledCellLabelProvider() {
@@ -441,7 +426,7 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 					cell.setText(text);
 				}
 
-				if (!VersionComparator.isValidRange(required.getVersion())) {
+				if (highlightElement(required)) {
 					final Display display = cell.getControl().getDisplay();
 					cell.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 					cell.setForeground(display.getSystemColor(SWT.COLOR_RED));
@@ -453,6 +438,11 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 				cell.setBackground(null);
 				cell.setForeground(null);
 				cell.setStyleRanges(null);
+			}
+
+			private boolean highlightElement(final Required required) {
+				final var res = getManifestEditor().getValidationResult();
+				return targets(res, required);
 			}
 		};
 	}

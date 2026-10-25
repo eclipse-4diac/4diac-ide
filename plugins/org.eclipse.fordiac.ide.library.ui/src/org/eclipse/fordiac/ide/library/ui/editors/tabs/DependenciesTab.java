@@ -26,19 +26,22 @@ import org.eclipse.fordiac.ide.library.ui.editors.VersionRangeCellEditor;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.AddElementOperation;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.RemoveElementOperation;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class DependenciesTab {
+public final class DependenciesTab {
+
+	private final ManifestEditorPage<Exports> page;
+	private final TableControl dependencyTable;
 
 	private Library library;
-	private final TableControl dependencyTable;
-	private final ManifestEditorPage<Exports> page;
 
 	public DependenciesTab(final Composite parent, final FormToolkit toolkit, final ManifestEditorPage<Exports> page) {
+
 		this.page = page;
 
 		dependencyTable = new TableControl(parent, toolkit, ""); //$NON-NLS-1$
@@ -54,46 +57,56 @@ public class DependenciesTab {
 
 	public void setInput(final Library library) {
 		this.library = library;
-		refresh();
-	}
-
-	public void refresh() {
 		dependencyTable.getViewer().setInput(getDependencies());
 		dependencyTable.setEnabled(library != null);
 	}
 
-	public boolean isValid() {
-		// TODO
-		return true;
+	public void refresh() {
+		dependencyTable.getViewer().refresh();
 	}
 
 	private void createColumns() {
-		final TableViewerColumn symbolicNameColumn = dependencyTable.createColumn(Messages.ManifestEditor_SymbolicName,
-				60);
-		symbolicNameColumn
-				.setLabelProvider(TableControl.createLabelProvider(Required.class, Required::getSymbolicName));
-		symbolicNameColumn.setEditingSupport(TableControl.createEditingSupport(dependencyTable.getViewer(), page,
+		final TableViewerColumn nameColumn = dependencyTable.createColumn(Messages.ManifestEditor_SymbolicName, 60);
+
+		nameColumn.setLabelProvider(
+				TableControl.createLabelProvider(Required.class, Required::getSymbolicName, this::hasError));
+
+		nameColumn.setEditingSupport(TableControl.createEditingSupport(dependencyTable.getViewer(), page,
 				Required.class, Required::getSymbolicName, this::createModifyNameOperation,
 				new TextCellEditor(dependencyTable.getViewer().getTable())));
 
-		final TableViewerColumn versionRangeColumn = dependencyTable.createColumn(Messages.ManifestEditor_VersionRange,
-				40);
-		versionRangeColumn.setLabelProvider(TableControl.createLabelProvider(Required.class, Required::getVersion));
-		versionRangeColumn.setEditingSupport(TableControl.createEditingSupport(dependencyTable.getViewer(), page,
+		final TableViewerColumn versionColumn = dependencyTable.createColumn(Messages.ManifestEditor_VersionRange, 40);
+
+		versionColumn.setLabelProvider(
+				TableControl.createLabelProvider(Required.class, Required::getVersion, this::hasError));
+
+		versionColumn.setEditingSupport(TableControl.createEditingSupport(dependencyTable.getViewer(), page,
 				Required.class, Required::getVersion, this::createModifyVersionOperation,
 				new VersionRangeCellEditor(dependencyTable.getViewer().getTable())));
 	}
 
+	private boolean hasError(final Required required) {
+		return ManifestEditorPage.targets(page.getManifestEditor().getValidationResult(), required);
+	}
+
 	private void addDependency() {
-		page.execute(new AddElementOperation<>("Add Dependency", getDependencies(), //$NON-NLS-1$
-				ManifestHelper.createRequired("dependency", "1.0.0"), this::refresh)); //$NON-NLS-1$ //$NON-NLS-2$
+		if (library == null || library.getDependencies() == null) {
+			return;
+		}
+
+		final Required required = ManifestHelper.createRequired("dependency", "1.0.0"); //$NON-NLS-1$ //$NON-NLS-2$
+
+		page.execute(new AddElementOperation<>("Add Dependency", getDependencies(), required)); //$NON-NLS-1$
+
+		dependencyTable.getViewer().setSelection(new StructuredSelection(required), true);
 	}
 
 	private void removeDependency() {
 		final Object selection = dependencyTable.getViewer().getStructuredSelection().getFirstElement();
 
 		if (selection instanceof final Required required) {
-			page.execute(new RemoveElementOperation<>("Remove Dependency", getDependencies(), required, this::refresh)); //$NON-NLS-1$
+			page.execute(new RemoveElementOperation<>("Remove Dependency", //$NON-NLS-1$
+					getDependencies(), required));
 		}
 	}
 
@@ -103,13 +116,14 @@ public class DependenciesTab {
 	}
 
 	private IUndoableOperation createModifyNameOperation(final Required dependency, final String value) {
-		return new SetValueOperation<>("Set dependency name", dependency::getSymbolicName, dependency::setSymbolicName, //$NON-NLS-1$
-				value, this::refresh);
+
+		return new SetValueOperation<>("Set dependency name", //$NON-NLS-1$
+				dependency::getSymbolicName, dependency::setSymbolicName, value);
 	}
 
 	private IUndoableOperation createModifyVersionOperation(final Required dependency, final String value) {
-		return new SetValueOperation<>("Set dependency version", dependency::getVersion, dependency::setVersion, value, //$NON-NLS-1$
-				this::refresh);
-	}
 
+		return new SetValueOperation<>("Set dependency version", //$NON-NLS-1$
+				dependency::getVersion, dependency::setVersion, value);
+	}
 }

@@ -27,45 +27,33 @@ public class SetValueOperation<T> extends AbstractOperation {
 	private final Supplier<T> getter;
 	private final Consumer<T> setter;
 	private final T newValue;
-	private final Runnable refresh;
 
 	private T oldValue;
 
-	public SetValueOperation(final String label, final Supplier<T> getter, final Consumer<T> setter, final T newValue,
-			final Runnable refresh) {
+	public SetValueOperation(final String label, final Supplier<T> getter, final Consumer<T> setter, final T newValue) {
 		super(label);
 		this.getter = getter;
 		this.setter = setter;
 		this.newValue = newValue;
-		this.refresh = refresh;
 	}
 
 	@Override
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) {
 		oldValue = getter.get();
 		setter.accept(newValue);
-		refresh();
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) {
 		setter.accept(newValue);
-		refresh();
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) {
 		setter.accept(oldValue);
-		refresh();
 		return Status.OK_STATUS;
-	}
-
-	private void refresh() {
-		if (refresh != null) {
-			refresh.run();
-		}
 	}
 
 }

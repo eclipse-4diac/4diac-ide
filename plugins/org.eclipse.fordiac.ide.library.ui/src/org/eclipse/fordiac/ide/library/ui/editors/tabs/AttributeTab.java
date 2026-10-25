@@ -11,9 +11,11 @@
  *   Mario Kastner
  *   	- initial API and implementation and/or initial documentation
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.library.ui.editors.tabs;
 
-import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.common.util.ECollections;
@@ -27,7 +29,6 @@ import org.eclipse.fordiac.ide.library.ui.editors.ManifestEditorPage;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.AddElementOperation;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.RemoveElementOperation;
 import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -56,43 +57,42 @@ public class AttributeTab {
 
 	public void setInput(final Library library) {
 		this.library = library;
-		refresh();
-	}
-
-	public void refresh() {
-		attributeTable.setInput(library != null ? library.getAttribute() : List.of());
+		attributeTable.setInput(getAttributes());
 		attributeTable.setEnabled(library != null);
 	}
 
-	public boolean isValid() {
-		// TODO
-		return true;
+	public void refresh() {
+		attributeTable.getViewer().refresh();
 	}
 
 	private void createColumns() {
-		final TableViewerColumn nameColumn = attributeTable.createColumn(Messages.ManifestEditor_Name, 30);
-		nameColumn.setLabelProvider(TableControl.createLabelProvider(Attribute.class, Attribute::getName));
-		nameColumn.setEditingSupport(
-				TableControl.createEditingSupport(attributeTable.getViewer(), page, Attribute.class, Attribute::getName,
-						this::createModifyNameOperation, new TextCellEditor(attributeTable.getViewer().getTable())));
+		createColumn(Messages.ManifestEditor_Name, 30, Attribute::getName,
+				(attribute, value) -> new SetValueOperation<>("Set attribute name", //$NON-NLS-1$
+						attribute::getName, attribute::setName, value));
 
-		final TableViewerColumn typeColumn = attributeTable.createColumn(Messages.ManifestEditor_Type, 20);
-		typeColumn.setLabelProvider(TableControl.createLabelProvider(Attribute.class, Attribute::getType));
-		typeColumn.setEditingSupport(
-				TableControl.createEditingSupport(attributeTable.getViewer(), page, Attribute.class, Attribute::getType,
-						this::createModifyTypeOperation, new TextCellEditor(attributeTable.getViewer().getTable())));
+		createColumn(Messages.ManifestEditor_Type, 20, Attribute::getType,
+				(attribute, value) -> new SetValueOperation<>("Set attribute type", //$NON-NLS-1$
+						attribute::getType, attribute::setType, value));
 
-		final TableViewerColumn valueColumn = attributeTable.createColumn(Messages.ManifestEditor_Value, 20);
-		valueColumn.setLabelProvider(TableControl.createLabelProvider(Attribute.class, Attribute::getValue));
-		valueColumn.setEditingSupport(TableControl.createEditingSupport(attributeTable.getViewer(), page,
-				Attribute.class, Attribute::getValue, this::createModifyValueOperation,
-				new TextCellEditor(attributeTable.getViewer().getTable())));
+		createColumn(Messages.ManifestEditor_Value, 20, Attribute::getValue,
+				(attribute, value) -> new SetValueOperation<>("Set attribute value", //$NON-NLS-1$
+						attribute::getValue, attribute::setValue, value));
 
-		final TableViewerColumn commentColumn = attributeTable.createColumn(Messages.ManifestEditor_Comment, 40);
-		commentColumn.setLabelProvider(TableControl.createLabelProvider(Attribute.class, Attribute::getComment));
-		commentColumn.setEditingSupport(TableControl.createEditingSupport(attributeTable.getViewer(), page,
-				Attribute.class, Attribute::getComment, this::createModifyCommentOperation,
-				new TextCellEditor(attributeTable.getViewer().getTable())));
+		createColumn(Messages.ManifestEditor_Comment, 40, Attribute::getComment,
+				(attribute, value) -> new SetValueOperation<>("Set attribute comment", //$NON-NLS-1$
+						attribute::getComment, attribute::setComment, value));
+	}
+
+	private void createColumn(final String title, final int weight, final Function<Attribute, String> getter,
+			final BiFunction<Attribute, String, IUndoableOperation> operationFactory) {
+
+		final var column = attributeTable.createColumn(title, weight);
+
+		column.setLabelProvider(TableControl.createLabelProvider(Attribute.class, getter,
+				attribute -> ManifestEditorPage.targets(page.getManifestEditor().getValidationResult(), attribute)));
+
+		column.setEditingSupport(TableControl.createEditingSupport(attributeTable.getViewer(), page, Attribute.class,
+				getter, operationFactory, new TextCellEditor(attributeTable.getViewer().getTable())));
 	}
 
 	private EList<Attribute> getAttributes() {
@@ -100,9 +100,12 @@ public class AttributeTab {
 	}
 
 	private void addAttribute() {
+		if (library == null) {
+			return;
+		}
+
 		page.execute(new AddElementOperation<>("Add attribute", //$NON-NLS-1$
-				getAttributes(), ManifestHelper.createAttribute("attribute1"), //$NON-NLS-1$
-				this::refresh));
+				getAttributes(), ManifestHelper.createAttribute("attribute1"))); //$NON-NLS-1$
 	}
 
 	private void removeAttribute() {
@@ -110,27 +113,7 @@ public class AttributeTab {
 
 		if (selected instanceof final Attribute attribute) {
 			page.execute(new RemoveElementOperation<>("Remove attribute", //$NON-NLS-1$
-					getAttributes(), attribute, this::refresh));
+					getAttributes(), attribute));
 		}
-	}
-
-	private IUndoableOperation createModifyNameOperation(final Attribute attribute, final String value) {
-		return new SetValueOperation<>("Set attribute name", attribute::getName, attribute::setName, value, //$NON-NLS-1$
-				this::refresh);
-	}
-
-	private IUndoableOperation createModifyTypeOperation(final Attribute attribute, final String value) {
-		return new SetValueOperation<>("Set attribute type", attribute::getType, attribute::setType, value, //$NON-NLS-1$
-				this::refresh);
-	}
-
-	private IUndoableOperation createModifyValueOperation(final Attribute attribute, final String value) {
-		return new SetValueOperation<>("Set attribute value", attribute::getValue, attribute::setValue, value, //$NON-NLS-1$
-				this::refresh);
-	}
-
-	private IUndoableOperation createModifyCommentOperation(final Attribute attribute, final String value) {
-		return new SetValueOperation<>("Set attribute comment", attribute::getComment, attribute::setComment, value, //$NON-NLS-1$
-				this::refresh);
 	}
 }
