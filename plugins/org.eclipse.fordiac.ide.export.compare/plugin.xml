@@ -5,7 +5,7 @@
          point="org.eclipse.fordiac.ide.export.openCompareEditor">
       <openCompareEditor
             class="org.eclipse.fordiac.ide.export.compare.DefaultCompareEditorOpener"
-            name="Default Compare Editor">
+            name="%openCompareEditor.default.name">
       </openCompareEditor>
    </extension>
 
