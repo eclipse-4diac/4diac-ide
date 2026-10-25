@@ -25,7 +25,7 @@ public class MemberAccessTreeNode {
 	private boolean visible;
 
 	static MemberAccessTreeNode createTreeNode(final MemberAccessTreeNode parent, final VarDeclaration varDecl) {
-		if (varDecl.getType() instanceof StructuredType) {
+		if (varDecl.getType() instanceof StructuredType && !varDecl.isArray()) {
 			return new StructMemberAccessTreeNode(parent, varDecl);
 		}
 		return new MemberAccessTreeNode(parent, varDecl);

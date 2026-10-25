@@ -20,10 +20,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class VarDeclarationFactory {
 
-	public static VarDeclaration createVarDecl(final DataType type) {
+	public static VarDeclaration createVarDecl(final DataType type, final boolean isArray) {
 		return switch (type) {
-		case final StructuredType _ -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
-		case final ErrorDataType _ -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
+		case final StructuredType _ when !isArray -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
+		case final ErrorDataType _ when !isArray -> LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
 		default -> LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
 		};

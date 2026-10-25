@@ -87,7 +87,7 @@ public final class ConfigurableFBManagement {
 	}
 
 	private static VarDeclaration createNewMovePin(final DataType dataType, final VarDeclaration srcPin) {
-		final VarDeclaration newPin = VarDeclarationFactory.createVarDecl(dataType);
+		final VarDeclaration newPin = VarDeclarationFactory.createVarDecl(dataType, false);
 		copyPinProperties(srcPin, newPin);
 		newPin.setName(srcPin.getName());
 		newPin.setType(dataType);
@@ -119,7 +119,7 @@ public final class ConfigurableFBManagement {
 	}
 
 	private static VarDeclaration copyCachedMember(final VarDeclaration cachedMember) {
-		final VarDeclaration copy = VarDeclarationFactory.createVarDecl(cachedMember.getType());
+		final VarDeclaration copy = VarDeclarationFactory.createVarDecl(cachedMember.getType(), cachedMember.isArray());
 		copy.setName(cachedMember.getName());
 		copy.setType(cachedMember.getType());
 		copy.setIsInput(cachedMember.isIsInput());
