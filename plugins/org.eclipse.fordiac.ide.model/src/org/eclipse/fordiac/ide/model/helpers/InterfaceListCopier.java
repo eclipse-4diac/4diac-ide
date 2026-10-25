@@ -118,7 +118,7 @@ public final class InterfaceListCopier {
 					.forEach(contVar -> copyContVar.getCachedMembers().add(copyVar(contVar, copyValues, copyComments)));
 			return copyContVar;
 		}
-		return VarDeclarationFactory.createVarDecl(variable.getType());
+		return VarDeclarationFactory.createVarDecl(variable.getType(), variable.isArray());
 	}
 
 	private static void copyInterfaceElement(final IInterfaceElement src, final IInterfaceElement dst,

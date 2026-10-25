@@ -69,15 +69,16 @@ public class ContainerVarDeclarationAnnotations {
 			return null;
 		}
 
-		final DataType memberType = getMemberType(contVarDeclaration, memberName);
+		final VarDeclaration memVar = getMember(contVarDeclaration, memberName);
+		final DataType memberType = getMemberType(contVarDeclaration, memVar);
 		if (memberType == null) {
 			return null;
 		}
 
-		final VarDeclaration newVisibleMember = VarDeclarationFactory.createVarDecl(memberType);
+		final VarDeclaration newVisibleMember = VarDeclarationFactory.createVarDecl(memberType,
+				memVar != null ? memVar.isArray() : false);
 		newVisibleMember.setName(memberName);
 		newVisibleMember.setType(memberType);
-		final VarDeclaration memVar = getMember(contVarDeclaration, memberName);
 		if (memVar != null) {
 			setArraySize(newVisibleMember, getArraySize(memVar));
 		}
@@ -89,8 +90,8 @@ public class ContainerVarDeclarationAnnotations {
 		return newVisibleMember;
 	}
 
-	private static DataType getMemberType(final ContainerVarDeclaration contVarDeclaration, final String memberName) {
-		final VarDeclaration memVar = getMember(contVarDeclaration, memberName);
+	private static DataType getMemberType(final ContainerVarDeclaration contVarDeclaration,
+			final VarDeclaration memVar) {
 		if (memVar != null) {
 			return memVar.getType();
 		}
