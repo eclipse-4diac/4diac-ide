@@ -42,6 +42,11 @@
     </genClasses>
     <genClasses ecoreClass="library.ecore#//LibraryElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//LibraryElement/value"/>
+      <genOperations ecoreOperation="library.ecore#//LibraryElement/validatePattern"
+          body="return org.eclipse.fordiac.ide.library.model.impl.LibraryElementAnnotations.validatePattern(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//LibraryElement/validatePattern/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//LibraryElement/validatePattern/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Manifest">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/dependencies"/>

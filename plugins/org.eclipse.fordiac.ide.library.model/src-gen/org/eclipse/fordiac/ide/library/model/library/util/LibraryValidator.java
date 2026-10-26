@@ -43,12 +43,20 @@ public class LibraryValidator extends EObjectValidator {
 	public static final String DIAGNOSTIC_SOURCE = "org.eclipse.fordiac.ide.library.model.library"; //$NON-NLS-1$
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Pattern' of 'Element'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int LIBRARY_ELEMENT__VALIDATE_PATTERN = 1;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Manifest Versions' of 'Manifest'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int MANIFEST__VALIDATE_MANIFEST_VERSIONS = 1;
+	public static final int MANIFEST__VALIDATE_MANIFEST_VERSIONS = 2;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -56,7 +64,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 1;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 2;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -200,7 +208,27 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateLibraryElement(LibraryElement libraryElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(libraryElement, diagnostics, context);
+		if (!validate_NoCircularContainment(libraryElement, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePattern(libraryElement, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validatePattern constraint of '<em>Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateLibraryElement_validatePattern(LibraryElement libraryElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return libraryElement.validatePattern(diagnostics, context);
 	}
 
 	/**
