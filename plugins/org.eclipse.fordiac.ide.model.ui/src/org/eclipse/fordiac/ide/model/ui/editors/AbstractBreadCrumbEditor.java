@@ -27,7 +27,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
@@ -86,7 +85,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	private static final String TAG_GRAPHICAL_VIEWER_HOR_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_HOR_SCROLL"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_VER_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_VER_SCROLL"; //$NON-NLS-1$
 
-	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
+	private Map<EObject, Integer> modelToEditorNum = new HashMap<>();
 
 	private BreadcrumbWidget breadcrumb;
 	// the memento we got for recreating the editor state
@@ -98,7 +97,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		return breadcrumb;
 	}
 
-	protected Map<Object, Integer> getModelToEditorNumMapping() {
+	protected Map<EObject, Integer> getModelToEditorNumMapping() {
 		return modelToEditorNum;
 	}
 
@@ -113,7 +112,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		if (null != memento) {
 			itemPath = memento.getString(TAG_BREADCRUMB_HIERACHY);
 		}
-		final Object initialModel = getInitialModel(itemPath);
+		final EObject initialModel = getInitialModel(itemPath);
 		if (initialModel != null) {
 			setInitialModel(initialModel);
 		}
@@ -127,7 +126,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		getBreadcrumb().setLabelProvider(createBreadcrumbLabelProvider());
 	}
 
-	protected void setInitialModel(final Object model) {
+	protected void setInitialModel(final EObject model) {
 		getBreadcrumb().setInput(model);
 		final int pagenum = modelToEditorNum.computeIfAbsent(model, this::createEditor).intValue();
 		if (-1 != pagenum) {
@@ -162,12 +161,15 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	protected void handleBreadCrumbSelection(final SelectionChangedEvent event) {
 		final Object element = ((StructuredSelection) event.getSelection()).getFirstElement();
-		if (element instanceof final SubApp subapp && subapp.isUnfolded()
-				&& !(event instanceof GoIntoSubappSelectionEvent)) {
-			showAndSelectExpandedSubapp(subapp);
-		} else {
-			openEditor(element);
+		switch (element) {
+		case final SubApp subapp when shouldShowExpandedSubapp(event, subapp) -> showAndSelectExpandedSubapp(subapp);
+		case final EObject eObj -> openEditor(eObj);
+		case null, default -> ILog.get().warn("Invalid object provided by breadcrumb: " + element); //$NON-NLS-1$
 		}
+	}
+
+	private static boolean shouldShowExpandedSubapp(final SelectionChangedEvent event, final SubApp subapp) {
+		return subapp.isUnfolded() && !(event instanceof GoIntoSubappSelectionEvent);
 	}
 
 	private void showAndSelectExpandedSubapp(final SubApp subapp) {
@@ -177,7 +179,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		HandlerHelper.showExpandedSubapp(subapp, this);
 	}
 
-	private void openEditor(final Object element) {
+	private void openEditor(final EObject element) {
 		final int pagenum = modelToEditorNum.computeIfAbsent(element, this::createEditor).intValue();
 		if (-1 != pagenum) {
 			setActivePage(pagenum);
@@ -194,7 +196,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		return this;
 	}
 
-	private int createEditor(final Object model) {
+	private int createEditor(final EObject model) {
 		final EditorPart part = createEditorPart(model);
 		final IEditorInput input = createEditorInput(model);
 		if (part != null && input != null) {
@@ -207,12 +209,11 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		return -1;
 	}
 
-	protected IEditorInput createEditorInput(final Object model) {
-		return switch (model) {
-		case final IFile _ -> getEditorInput();
-		case final EObject subElement -> new SubEditorInput(getEditorInput(), subElement);
-		case null, default -> null;
-		};
+	protected IEditorInput createEditorInput(final EObject model) {
+		if (model == null) {
+			return null;
+		}
+		return new SubEditorInput(getEditorInput(), model);
 	}
 
 	@Override
@@ -234,7 +235,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	}
 
 	private void updateEditorMapping(final int pageIndex) {
-		final Map<Object, Integer> newModelToEditorNum = new HashMap<>();
+		final Map<EObject, Integer> newModelToEditorNum = new HashMap<>();
 
 		modelToEditorNum.forEach((obj, index) -> {
 			final int intIndex = index.intValue();
@@ -451,7 +452,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	public abstract CommandStack getCommandStack();
 
-	protected abstract EditorPart createEditorPart(final Object model);
+	protected abstract EditorPart createEditorPart(final EObject model);
 
 	protected abstract AdapterFactoryContentProvider createBreadcrumbContentProvider();
 
@@ -466,7 +467,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	 *                 provided
 	 * @return the model element for which the first editor should be shown.
 	 */
-	protected abstract Object getInitialModel(String itemPath);
+	protected abstract EObject getInitialModel(String itemPath);
 
 	protected void clearEditorContent() {
 		if (breadcrumb != null) {
