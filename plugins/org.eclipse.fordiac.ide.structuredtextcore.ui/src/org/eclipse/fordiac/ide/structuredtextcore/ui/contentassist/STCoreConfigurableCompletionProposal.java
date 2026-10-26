@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -72,7 +72,7 @@ public class STCoreConfigurableCompletionProposal extends ConfigurableCompletion
 				ui.setExitPosition(viewer, exitPositionOffset, 0, Integer.MAX_VALUE);
 				ui.enter();
 			} catch (final BadLocationException e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
+				ILog.get().warn(e.getMessage(), e);
 			}
 		} else {
 			super.setUpLinkedMode(document);
