@@ -207,9 +207,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	@Override
-	protected EditorPart createEditorPart(final Object model) {
+	protected EditorPart createEditorPart(final EObject model) {
 		return switch (model) {
-		case final IFile _ -> new SystemEditor();
 		case final CFBInstance _ -> new CompositeInstanceViewer();
 		case final TypedSubApp _ -> new SubappInstanceViewer();
 		case final UntypedSubApp subApp when subApp.isContainedInTypedInstance() -> new SubappInstanceViewer();
@@ -223,7 +222,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	@Override
-	protected IEditorInput createEditorInput(final Object model) {
+	protected IEditorInput createEditorInput(final EObject model) {
 		return switch (model) {
 		case final Device device -> new SubEditorInput(getEditorInput(), device.getSystemConfiguration());
 		case null, default -> super.createEditorInput(model);
@@ -264,7 +263,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 	}
 
 	@Override
-	protected Object getInitialModel(final String itemPath) {
+	protected EObject getInitialModel(final String itemPath) {
 		if (null != itemPath) {
 			final String[] nameList = itemPath.split("\\."); //$NON-NLS-1$
 			if (nameList.length > 1) {
