@@ -34,15 +34,15 @@
          point="org.eclipse.ui.commands">
       <command
             id="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace"
-            name="Record Execution Trace for Network">
+            name="%command.recordExecutionTrace.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fb.interpreter.createTestFb"
-            name="Create FB for Test Specification">
+            name="%command.createTestFb.name">
       </command>    
             <command
             id="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB"
-            name="Create monitor FB for Test Specification">
+            name="%command.createMonitorFb.name">
       </command> 
    </extension>
    <extension
@@ -51,21 +51,18 @@
          locationURI="menu:org.eclipse.ui.run">  
       <command
             commandId="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace"
-            label="Record Execution Trace for Network"
             style="push">
             <visibleWhen checkEnabled="true">
             </visibleWhen>
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fb.interpreter.createTestFb"
-            label="Create FB for Test Specification"
             style="push">
             <visibleWhen checkEnabled="true">
             </visibleWhen>
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB"
-            label="Create Composite monitor FB for Test Specification"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -87,7 +84,6 @@
        locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
 		<command
        commandId="org.eclipse.fordiac.ide.fb.interpreter.createMonitorFB"
-            label="Create Monitor FB for Test Specification"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
