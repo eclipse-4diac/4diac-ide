@@ -13,10 +13,10 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IEditorDescriptor;
@@ -36,7 +36,7 @@ public final class STAlgorithmEditorUtils {
 		try {
 			return IDE.openEditor(activePage, editorInput, getEditorId(uri), activate);
 		} catch (final PartInitException partInitException) {
-			FordiacLogHelper.logError("Error while opening editor part for " + uri, partInitException); //$NON-NLS-1$
+			ILog.get().error("Error while opening editor part for " + uri, partInitException); //$NON-NLS-1$
 		}
 		return null;
 	}
