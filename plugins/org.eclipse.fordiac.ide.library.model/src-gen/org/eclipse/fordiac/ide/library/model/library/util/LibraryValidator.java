@@ -59,12 +59,12 @@ public class LibraryValidator extends EObjectValidator {
 	public static final int LIBRARY_ELEMENT__VALIDATE_PATTERN = 2;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Manifest Versions' of 'Manifest'.
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Version Range' of 'Required'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int MANIFEST__VALIDATE_MANIFEST_VERSIONS = 3;
+	public static final int REQUIRED__VALIDATE_VERSION_RANGE = 3;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -265,27 +265,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateManifest(Manifest manifest, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(manifest, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(manifest, diagnostics, context);
-		if (result || diagnostics != null) result &= validateManifest_validateManifestVersions(manifest, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * Validates the validateManifestVersions constraint of '<em>Manifest</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateManifest_validateManifestVersions(Manifest manifest, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return manifest.validateManifestVersions(diagnostics, context);
+		return validate_EveryDefaultConstraint(manifest, diagnostics, context);
 	}
 
 	/**
@@ -303,7 +283,27 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateRequired(Required required, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(required, diagnostics, context);
+		if (!validate_NoCircularContainment(required, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(required, diagnostics, context);
+		if (result || diagnostics != null) result &= validateRequired_validateVersionRange(required, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validateVersionRange constraint of '<em>Required</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateRequired_validateVersionRange(Required required, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return required.validateVersionRange(diagnostics, context);
 	}
 
 	/**
