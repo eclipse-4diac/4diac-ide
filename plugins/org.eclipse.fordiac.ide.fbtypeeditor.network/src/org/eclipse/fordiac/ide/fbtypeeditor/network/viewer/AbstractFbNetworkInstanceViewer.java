@@ -22,20 +22,14 @@ import java.util.EventObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
-import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.GraphicalViewer;
@@ -48,26 +42,6 @@ import org.eclipse.ui.IEditorInput;
 
 public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	private FBNetworkElement fbNetworkElement;
-
-	private final Adapter fbNetworkElementAdapter = new EditorCloserAdapter(this) {
-		@Override
-		public void notifyChanged(final Notification msg) {
-			super.notifyChanged(msg);
-			final Object feature = msg.getFeature();
-			if (((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry().equals(feature))
-					&& (fbNetworkElement.getTypeEntry() == null)) || isSubAppToggledToCollapsed(msg)) {
-				// the subapp/cfb was detached from the type or subapp is being collapsed
-				closeEditor();
-			}
-		}
-
-		private boolean isSubAppToggledToCollapsed(final Notification msg) {
-			return msg.getNewValue() == null && msg.getOldValue() instanceof final Attribute attr
-					&& attr.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED
-					&& "true".equals(attr.getValue()); //$NON-NLS-1$
-		}
-
-	};
 
 	// subclasses need to override this method and return the fbnetwork contained in
 	// fbNetworkElement
@@ -106,29 +80,9 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		if (newElement == null) {
 			throw new IllegalArgumentException("Network viewers only accept FB network elements as valid inputs!"); //$NON-NLS-1$
 		}
-		removeFBNetworkElementAdapter();
 		fbNetworkElement = newElement;
-		addFBNetworkElementAdapter();
 		setPartName(getNameHierarchy());
 		super.setInput(input);
-	}
-
-	@Override
-	public void dispose() {
-		removeFBNetworkElementAdapter();
-		super.dispose();
-	}
-
-	protected void addFBNetworkElementAdapter() {
-		if (fbNetworkElement != null) {
-			fbNetworkElement.eAdapters().add(fbNetworkElementAdapter);
-		}
-	}
-
-	protected void removeFBNetworkElementAdapter() {
-		if (fbNetworkElement != null) {
-			fbNetworkElement.eAdapters().remove(fbNetworkElementAdapter);
-		}
 	}
 
 	@Override
