@@ -12,12 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.model.impl;
 
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryValidator;
@@ -38,7 +40,7 @@ public final class LibraryElementAnnotations {
 		if (diagnostics != null) {
 			diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryValidator.DIAGNOSTIC_SOURCE,
 					LibraryValidator.LIBRARY_ELEMENT__VALIDATE_PATTERN,
-					"Invalid package pattern declaration: " + pattern, //$NON-NLS-1$
+					MessageFormat.format(Messages.LibraryElementAnnotations_InvalidPattern, pattern),
 					FordiacMarkerHelper.getDiagnosticData(element, LibraryPackage.Literals.LIBRARY_ELEMENT__VALUE,
 							pattern)));
 		}

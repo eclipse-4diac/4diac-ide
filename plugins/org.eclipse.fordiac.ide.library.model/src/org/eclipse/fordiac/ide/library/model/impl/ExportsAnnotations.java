@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.model.impl;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
@@ -50,9 +52,8 @@ public final class ExportsAnnotations {
 				if (diagnostics != null) {
 					diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryValidator.DIAGNOSTIC_SOURCE,
 							LibraryValidator.EXPORTS__VALIDATE_UNIQUE_SYMBOLIC_NAMES,
-							"Duplicate library symbolic name: " + name, //$NON-NLS-1$
-							FordiacMarkerHelper.getDiagnosticData(library,
-									LibraryPackage.Literals.LIBRARY__SYMBOLIC_NAME, name)));
+							MessageFormat.format(Messages.ExportAnnotations_DuplicateLibrary, name), FordiacMarkerHelper
+									.getDiagnosticData(library, LibraryPackage.Literals.LIBRARY__SYMBOLIC_NAME, name)));
 				}
 			}
 		}
