@@ -58,11 +58,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/product"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/exports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Manifest/scope"/>
-      <genOperations ecoreOperation="library.ecore#//Manifest/validateManifestVersions"
-          body="return org.eclipse.fordiac.ide.library.model.impl.ManifestAnnotations.validateManifestVersions(this, diagnostics, context);">
-        <genParameters ecoreParameter="library.ecore#//Manifest/validateManifestVersions/diagnostics"/>
-        <genParameters ecoreParameter="library.ecore#//Manifest/validateManifestVersions/context"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Product">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Product/versionInfo"/>
@@ -74,6 +69,11 @@
     <genClasses ecoreClass="library.ecore#//Required">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Required/symbolicName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Required/version"/>
+      <genOperations ecoreOperation="library.ecore#//Required/validateVersionRange"
+          body="return org.eclipse.fordiac.ide.library.model.impl.RequiredAnnotations.validateVersionRange(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//Required/validateVersionRange/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//Required/validateVersionRange/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//VersionInfo/author"/>
