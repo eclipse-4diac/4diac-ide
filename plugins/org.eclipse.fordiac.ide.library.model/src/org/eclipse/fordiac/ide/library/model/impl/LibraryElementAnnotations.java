@@ -14,16 +14,15 @@ package org.eclipse.fordiac.ide.library.model.impl;
 
 import java.text.MessageFormat;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.Optional;
 
-import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.library.model.LibraryDiagnostic;
 import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryValidator;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 
 public final class LibraryElementAnnotations {
@@ -38,21 +37,22 @@ public final class LibraryElementAnnotations {
 		}
 
 		if (diagnostics != null) {
-			diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryValidator.DIAGNOSTIC_SOURCE,
-					LibraryValidator.LIBRARY_ELEMENT__VALIDATE_PATTERN,
-					MessageFormat.format(Messages.LibraryElementAnnotations_InvalidPattern, pattern),
-					FordiacMarkerHelper.getDiagnosticData(element, LibraryPackage.Literals.LIBRARY_ELEMENT__VALUE,
-							pattern)));
+			final String message = MessageFormat.format(Messages.LibraryElementAnnotations_InvalidPattern, pattern);
+			diagnostics.add(LibraryDiagnostic.error(message, LibraryValidator.LIBRARY_ELEMENT__VALIDATE_PATTERN,
+					element, LibraryPackage.Literals.LIBRARY_ELEMENT__VALUE, pattern));
 		}
 
 		return false;
 	}
 
 	private static boolean isValidPattern(final String pattern) {
-		final Pattern packageSegmentPattern = Pattern.compile("(?:\\*{1,2}|\\w+)"); //$NON-NLS-1$
-		final String[] segments = pattern.split(PackageNameHelper.PACKAGE_NAME_DELIMITER);
+		final String[] segments = pattern.split(PackageNameHelper.PACKAGE_NAME_DELIMITER, -1);
 		for (final String segment : segments) {
-			if (!packageSegmentPattern.matcher(segment).matches()) {
+			if ("**".equals(segment) || "*".equals(segment)) { //$NON-NLS-1$ //$NON-NLS-2$
+				continue;
+			}
+			final Optional<String> message = IdentifierVerifier.verifyIdentifier(segment);
+			if (message.isPresent()) {
 				return false;
 			}
 		}

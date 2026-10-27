@@ -17,18 +17,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.library.model.LibraryDiagnostic;
 import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Product;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryValidator;
-import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.osgi.framework.Version;
 
-public class VersionInfoAnnotations {
+public final class VersionInfoAnnotations {
 
 	public static boolean validateVersionInfo(final VersionInfo versionInfo, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
@@ -44,29 +42,38 @@ public class VersionInfoAnnotations {
 			return true;
 		}
 		if (diagnostics != null) {
-			diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryValidator.DIAGNOSTIC_SOURCE,
-					LibraryValidator.VERSION_INFO__VALIDATE_VERSION_INFO,
-					MessageFormat.format(Messages.VersionValidaton_DeclarationError, versionInfo.getVersion(),
-							getProductName(versionInfo)),
-					FordiacMarkerHelper.getDiagnosticData(versionInfo, LibraryPackage.Literals.VERSION_INFO__DATE,
-							versionInfo.getDate())));
+			final String message = MessageFormat.format(Messages.VersionInfoAnnotations_InvalidDate,
+					versionInfo.getDate());
+			diagnostics.add(LibraryDiagnostic.error(message, LibraryValidator.VERSION_INFO__VALIDATE_VERSION_INFO,
+					versionInfo, LibraryPackage.Literals.VERSION_INFO__DATE, versionInfo.getDate()));
 		}
 		return false;
 	}
 
 	private static boolean validateVersion(final VersionInfo versionInfo, final DiagnosticChain diagnostics) {
-		if (versionInfo.getVersion() == null || VersionComparator.isValidRange(versionInfo.getVersion())) {
+		if (versionInfo.getVersion() == null || isValidVersion(versionInfo.getVersion())) {
 			return true;
 		}
 		if (diagnostics != null) {
-			diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryValidator.DIAGNOSTIC_SOURCE,
-					LibraryValidator.VERSION_INFO__VALIDATE_VERSION_INFO,
-					MessageFormat.format(Messages.VersionValidaton_DeclarationError, versionInfo.getVersion(),
-							getProductName(versionInfo)),
-					FordiacMarkerHelper.getDiagnosticData(versionInfo, LibraryPackage.Literals.VERSION_INFO__VERSION,
-							versionInfo.getVersion())));
+			final String message = MessageFormat.format(Messages.VersionValidaton_DeclarationError,
+					versionInfo.getVersion(), getProductName(versionInfo));
+			diagnostics.add(LibraryDiagnostic.error(message, LibraryValidator.VERSION_INFO__VALIDATE_VERSION_INFO,
+					versionInfo, LibraryPackage.Literals.VERSION_INFO__VERSION, versionInfo.getVersion()));
 		}
 		return false;
+	}
+
+	public static boolean isValidVersion(final String value) {
+		if (value.isBlank()) {
+			return false;
+		}
+
+		try {
+			final Version version = new Version(value);
+			return version.getQualifier().isEmpty() && !Version.emptyVersion.equals(version);
+		} catch (final IllegalArgumentException _) {
+			return false;
+		}
 	}
 
 	private static boolean isValidDate(final String value) {
