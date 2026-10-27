@@ -25,7 +25,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.editors.FBNElemEditorCloser;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
@@ -69,8 +68,6 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		}
 
 	};
-
-	private Adapter fbNetworkAdapter;
 
 	// subclasses need to override this method and return the fbnetwork contained in
 	// fbNetworkElement
@@ -125,21 +122,12 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	protected void addFBNetworkElementAdapter() {
 		if (fbNetworkElement != null) {
 			fbNetworkElement.eAdapters().add(fbNetworkElementAdapter);
-			final EObject container = fbNetworkElement.eContainer();
-			if (container != null) {
-				fbNetworkAdapter = new FBNElemEditorCloser(this, fbNetworkElement);
-				container.eAdapters().add(fbNetworkAdapter);
-			}
 		}
 	}
 
 	protected void removeFBNetworkElementAdapter() {
 		if (fbNetworkElement != null) {
 			fbNetworkElement.eAdapters().remove(fbNetworkElementAdapter);
-			final EObject container = fbNetworkElement.eContainer();
-			if (container != null) {
-				container.eAdapters().remove(fbNetworkAdapter);
-			}
 		}
 	}
 
