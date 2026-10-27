@@ -25,7 +25,10 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.ILog;
@@ -33,6 +36,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
@@ -43,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.fordiac.ide.model.ui.editors.internal.BreadcrumbEditorModelWatcher;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.model.ui.widgets.GoIntoSubappSelectionEvent;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
@@ -93,6 +98,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	// the last used (automatically triggered) connection layout command
 	private Command layoutCommand;
 
+	private final BreadcrumbEditorModelWatcher watcher = new BreadcrumbEditorModelWatcher(this::validate);
+
 	public BreadcrumbWidget getBreadcrumb() {
 		return breadcrumb;
 	}
@@ -126,7 +133,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		getBreadcrumb().setLabelProvider(createBreadcrumbLabelProvider());
 	}
 
-	protected void setInitialModel(final EObject model) {
+	private void setInitialModel(final EObject model) {
 		getBreadcrumb().setInput(model);
 		final int pagenum = modelToEditorNum.computeIfAbsent(model, this::createEditor).intValue();
 		if (-1 != pagenum) {
@@ -135,6 +142,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 			if ((null != viewer) && (null != memento)) {
 				restoreGraphicalViewerState(viewer, memento);
 			}
+			updateModelListener();
 		}
 	}
 
@@ -162,10 +170,13 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	protected void handleBreadCrumbSelection(final SelectionChangedEvent event) {
 		final Object element = ((StructuredSelection) event.getSelection()).getFirstElement();
 		switch (element) {
-		case final SubApp subapp when shouldShowExpandedSubapp(event, subapp) -> showAndSelectExpandedSubapp(subapp);
+		case final SubApp subapp
+
+		when shouldShowExpandedSubapp(event, subapp) -> showAndSelectExpandedSubapp(subapp);
 		case final EObject eObj -> openEditor(eObj);
 		case null, default -> ILog.get().warn("Invalid object provided by breadcrumb: " + element); //$NON-NLS-1$
 		}
+
 	}
 
 	private static boolean shouldShowExpandedSubapp(final SelectionChangedEvent event, final SubApp subapp) {
@@ -185,6 +196,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 			setActivePage(pagenum);
 			getSite().getPage().getNavigationHistory().markLocation(getNavigationLocationProvider());
 		}
+		updateModelListener();
 	}
 
 	protected IEditorPart getNavigationLocationProvider() {
@@ -253,6 +265,37 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		modelToEditorNum = newModelToEditorNum;
 	}
 
+	private void validate() {
+		if (getContainer().isDisposed()) {
+			return;
+		}
+
+		final List<EObject> path = breadcrumb.getPath();
+		if (path.isEmpty()) {
+			return;
+		}
+		final EObject root = path.getFirst();
+
+		final List<EObject> toRemove = modelToEditorNum.keySet().stream().filter(k -> !EcoreUtil.isAncestor(root, k))
+				.toList();
+		toRemove.forEach(m -> {
+			final int pageIndex = modelToEditorNum.get(m).intValue();
+			removePage(pageIndex);
+			updateEditorMapping(pageIndex);
+		});
+
+		// find the highest valid model entry in the bread crumb path
+		int valid = 1;
+		while (valid < path.size() && EcoreUtil.isAncestor(root, path.get(valid))) {
+			valid++;
+		}
+		if (valid != path.size()) {
+			breadcrumb.setInput(path.get(valid - 1));
+		} else {
+			updateModelListener();
+		}
+	}
+
 	@Override
 	public boolean isDirty() {
 		return LibraryElementProvider.INSTANCE.canSaveLibraryElement(getEditorInput());
@@ -306,6 +349,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 					getAdapter(LibraryElement.class).getTypeEntry());
 			getCommandStack().removeCommandStackEventListener(this);
 		}
+		watcher.dispose();
+		modelToEditorNum.clear();
 		super.dispose();
 	}
 
@@ -450,6 +495,12 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 				MessageFormat.format(Messages.AutoReloadError_PathNotFound, printPath, whatEditor));
 	}
 
+	private void updateModelListener() {
+		final Set<EObject> modelEntitiesToWatch = new HashSet<>(breadcrumb.getPath());
+		modelEntitiesToWatch.addAll(modelToEditorNum.keySet());
+		watcher.rebuild(modelEntitiesToWatch);
+	}
+
 	public abstract CommandStack getCommandStack();
 
 	protected abstract EditorPart createEditorPart(final EObject model);
@@ -474,5 +525,6 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 			breadcrumb.dispose();
 			breadcrumb = null;
 		}
+		watcher.dispose();
 	}
 }

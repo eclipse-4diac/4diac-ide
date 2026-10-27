@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -112,6 +113,10 @@ public class BreadcrumbWidget implements ISelectionProvider {
 
 	public AdapterFactoryLabelProvider getLabelProvider() {
 		return labelProvider;
+	}
+
+	public List<EObject> getPath() {
+		return items.stream().map(BreadcrumbItem::getModel).filter(EObject.class::isInstance).map(o -> (EObject) o).toList();
 	}
 
 	private static boolean isValidBreadcrumbInput(final Object input) {

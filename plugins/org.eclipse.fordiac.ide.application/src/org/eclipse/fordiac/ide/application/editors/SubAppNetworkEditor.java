@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -49,8 +48,6 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 		}
 	};
 
-	private Adapter fbNetworkAdapter;
-
 	@Override
 	public void dispose() {
 		removeAdapters();
@@ -71,23 +68,16 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	}
 
 	protected void addAdapters() {
-		if (getSubApp() != null) {
-			getSubApp().eAdapters().add(adapter);
-			final EObject container = getSubApp().eContainer();
-			if (container != null) {
-				fbNetworkAdapter = new FBNElemEditorCloser(this, getSubApp());
-				container.eAdapters().add(fbNetworkAdapter);
-			}
+		final SubApp subApp = getSubApp();
+		if (subApp != null) {
+			subApp.eAdapters().add(adapter);
 		}
 	}
 
 	protected void removeAdapters() {
-		if (getSubApp() != null) {
-			getSubApp().eAdapters().remove(adapter);
-			final EObject container = getSubApp().eContainer();
-			if (container != null) {
-				container.eAdapters().remove(fbNetworkAdapter);
-			}
+		final SubApp subApp = getSubApp();
+		if (subApp != null) {
+			subApp.eAdapters().remove(adapter);
 		}
 	}
 
