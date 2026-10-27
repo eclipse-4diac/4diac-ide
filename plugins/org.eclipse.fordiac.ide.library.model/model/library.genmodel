@@ -27,6 +27,11 @@
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Exports">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Exports/library"/>
+      <genOperations ecoreOperation="library.ecore#//Exports/validateUniqueSymbolicNames"
+          body="return org.eclipse.fordiac.ide.library.model.impl.ExportsAnnotations.validateUniqueSymbolicNames(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//Exports/validateUniqueSymbolicNames/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//Exports/validateUniqueSymbolicNames/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Includes">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Includes/libraryElement"/>
