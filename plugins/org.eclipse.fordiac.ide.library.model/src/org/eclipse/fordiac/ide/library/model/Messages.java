@@ -24,6 +24,7 @@ public final class Messages extends NLS {
 	public static String VersionValidaton_DeclarationError;
 	public static String ExportAnnotations_DuplicateLibrary;
 	public static String LibraryElementAnnotations_InvalidPattern;
+	public static String VersionInfoAnnotations_InvalidDate;
 
 	static {
 		// initialize resource bundle

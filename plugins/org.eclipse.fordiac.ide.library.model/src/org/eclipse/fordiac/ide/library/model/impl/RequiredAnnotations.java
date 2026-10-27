@@ -15,15 +15,13 @@ package org.eclipse.fordiac.ide.library.model.impl;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.library.model.LibraryDiagnostic;
 import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryValidator;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 
 public final class RequiredAnnotations {
 
@@ -35,12 +33,10 @@ public final class RequiredAnnotations {
 		}
 
 		if (diagnostics != null) {
-			diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryValidator.DIAGNOSTIC_SOURCE,
-					LibraryValidator.REQUIRED__VALIDATE_VERSION_RANGE,
-					MessageFormat.format(Messages.VersionValidaton_DeclarationError, required.getVersion(),
-							required.getSymbolicName()),
-					FordiacMarkerHelper.getDiagnosticData(required, LibraryPackage.Literals.REQUIRED__VERSION,
-							required.getVersion())));
+			final String message = MessageFormat.format(Messages.VersionValidaton_DeclarationError,
+					required.getVersion(), required.getSymbolicName());
+			diagnostics.add(LibraryDiagnostic.error(message, LibraryValidator.REQUIRED__VALIDATE_VERSION_RANGE,
+					required, LibraryPackage.Literals.REQUIRED__VERSION, required.getVersion()));
 		}
 
 		return false;

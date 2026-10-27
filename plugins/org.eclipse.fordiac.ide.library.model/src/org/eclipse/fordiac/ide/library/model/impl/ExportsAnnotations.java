@@ -13,20 +13,19 @@
 package org.eclipse.fordiac.ide.library.model.impl;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.library.model.LibraryDiagnostic;
 import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryValidator;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 
 public final class ExportsAnnotations {
 
@@ -39,21 +38,21 @@ public final class ExportsAnnotations {
 			return true;
 		}
 
-		final Map<String, Long> counts = libraries.stream()
-				.collect(Collectors.groupingBy(Library::getSymbolicName, HashMap::new, Collectors.counting()));
+		final Map<String, Long> counts = libraries.stream().map(Library::getSymbolicName).filter(Objects::nonNull)
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
 		boolean valid = true;
 
 		for (final Library library : libraries) {
 			final String name = library.getSymbolicName();
 
-			if (counts.get(name).intValue() > 1) {
+			if (counts.getOrDefault(name, Long.valueOf(0)).intValue() > 1) {
 				valid = false;
 				if (diagnostics != null) {
-					diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryValidator.DIAGNOSTIC_SOURCE,
-							LibraryValidator.EXPORTS__VALIDATE_UNIQUE_SYMBOLIC_NAMES,
-							MessageFormat.format(Messages.ExportAnnotations_DuplicateLibrary, name), FordiacMarkerHelper
-									.getDiagnosticData(library, LibraryPackage.Literals.LIBRARY__SYMBOLIC_NAME, name)));
+					final String message = MessageFormat.format(Messages.ExportAnnotations_DuplicateLibrary, name);
+					diagnostics.add(
+							LibraryDiagnostic.error(message, LibraryValidator.EXPORTS__VALIDATE_UNIQUE_SYMBOLIC_NAMES,
+									library, LibraryPackage.Literals.LIBRARY__SYMBOLIC_NAME, name));
 				}
 			}
 		}
