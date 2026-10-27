@@ -2,7 +2,9 @@
  */
 package org.eclipse.fordiac.ide.library.model.library.impl;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -171,6 +173,16 @@ public class VersionInfoImpl extends EObjectImpl implements VersionInfo {
 		version = newVersion;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.VERSION_INFO__VERSION, oldVersion, version));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateVersionInfo(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.library.model.impl.VersionInfoAnnotations.validateVersionInfo(this, diagnostics, context);
 	}
 
 	/**
