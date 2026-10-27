@@ -43,12 +43,20 @@ public class LibraryValidator extends EObjectValidator {
 	public static final String DIAGNOSTIC_SOURCE = "org.eclipse.fordiac.ide.library.model.library"; //$NON-NLS-1$
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Unique Symbolic Names' of 'Exports'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int EXPORTS__VALIDATE_UNIQUE_SYMBOLIC_NAMES = 1;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Pattern' of 'Element'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int LIBRARY_ELEMENT__VALIDATE_PATTERN = 1;
+	public static final int LIBRARY_ELEMENT__VALIDATE_PATTERN = 2;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Manifest Versions' of 'Manifest'.
@@ -56,7 +64,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int MANIFEST__VALIDATE_MANIFEST_VERSIONS = 2;
+	public static final int MANIFEST__VALIDATE_MANIFEST_VERSIONS = 3;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -64,7 +72,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 2;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 3;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -181,7 +189,27 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateExports(Exports exports, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(exports, diagnostics, context);
+		if (!validate_NoCircularContainment(exports, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(exports, diagnostics, context);
+		if (result || diagnostics != null) result &= validateExports_validateUniqueSymbolicNames(exports, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validateUniqueSymbolicNames constraint of '<em>Exports</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateExports_validateUniqueSymbolicNames(Exports exports, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return exports.validateUniqueSymbolicNames(diagnostics, context);
 	}
 
 	/**
