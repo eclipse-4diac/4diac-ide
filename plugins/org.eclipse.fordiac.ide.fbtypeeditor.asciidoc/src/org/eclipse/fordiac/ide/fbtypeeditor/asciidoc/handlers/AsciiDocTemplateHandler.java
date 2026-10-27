@@ -19,6 +19,11 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExecutableExtension;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
@@ -36,9 +41,25 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-public class AsciiDocTemplateHandler extends AbstractHandler {
+public class AsciiDocTemplateHandler extends AbstractHandler implements IExecutableExtension {
 
 	private static final String PARAM_TEMPLATE_NAME = "org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name"; //$NON-NLS-1$
+	private String templateName;
+
+	@Override
+	public void setInitializationData(final IConfigurationElement config, final String propertyName, final Object data)
+			throws CoreException {
+		if (data instanceof final Map<?, ?> map) {
+			templateName = (String) map.get(PARAM_TEMPLATE_NAME);
+		} else if (data instanceof final String str) {
+			templateName = str;
+		}
+
+		if (templateName == null || templateName.isBlank()) {
+			throw new CoreException(new Status(IStatus.ERROR, config.getContributor().getName(),
+					"Missing template name for command " + config.getAttribute("commandId"))); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
 
 	// Maps XML semantic values to the actual template names declared in Mylyn's
 	// wikitext plugin.xml
@@ -65,7 +86,11 @@ public class AsciiDocTemplateHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final String parameterValue = event.getParameter(PARAM_TEMPLATE_NAME);
+		String parameterValue = templateName;
+		if (parameterValue == null || parameterValue.isEmpty()) {
+			parameterValue = event.getParameter(PARAM_TEMPLATE_NAME);
+		}
+
 		if (parameterValue == null || parameterValue.isEmpty()) {
 			throw new ExecutionException("Template name parameter is missing."); //$NON-NLS-1$
 		}
