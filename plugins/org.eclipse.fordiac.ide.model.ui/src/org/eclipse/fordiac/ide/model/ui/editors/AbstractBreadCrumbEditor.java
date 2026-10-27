@@ -50,7 +50,7 @@ import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.editors.internal.BreadcrumbEditorModelWatcher;
 import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.model.ui.widgets.GoIntoSubappSelectionEvent;
-import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
+import org.eclipse.fordiac.ide.ui.editors.FordiacFormEditor;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -82,7 +82,7 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
-public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor implements CommandStackEventListener,
+public abstract class AbstractBreadCrumbEditor extends FordiacFormEditor implements CommandStackEventListener,
 		ITabbedPropertySheetPageContributor, IGotoMarker, INavigationLocationProvider, IPersistableEditor {
 
 	private static final String TAG_BREADCRUMB_HIERACHY = "FORDIAC_BREADCRUMB_HIERACHY"; //$NON-NLS-1$
@@ -170,9 +170,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	protected void handleBreadCrumbSelection(final SelectionChangedEvent event) {
 		final Object element = ((StructuredSelection) event.getSelection()).getFirstElement();
 		switch (element) {
-		case final SubApp subapp
-
-		when shouldShowExpandedSubapp(event, subapp) -> showAndSelectExpandedSubapp(subapp);
+		case final SubApp subapp when shouldShowExpandedSubapp(event, subapp) -> showAndSelectExpandedSubapp(subapp);
 		case final EObject eObj -> openEditor(eObj);
 		case null, default -> ILog.get().warn("Invalid object provided by breadcrumb: " + element); //$NON-NLS-1$
 		}
@@ -226,24 +224,6 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 			return null;
 		}
 		return new SubEditorInput(getEditorInput(), model);
-	}
-
-	@Override
-	public boolean closeChildEditor(final IEditorPart childEditor) {
-		if (pages == null) {
-			return false;
-		}
-		final int pageIndex = pages.indexOf(childEditor);
-		if (pageIndex != -1) {
-			final boolean wasActive = getActiveEditor() == childEditor;
-			removePage(pageIndex);
-			updateEditorMapping(pageIndex);
-			if (wasActive) {
-				breadcrumb.openParent();
-			}
-			return true;
-		}
-		return false;
 	}
 
 	private void updateEditorMapping(final int pageIndex) {

@@ -50,7 +50,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementActivationListener
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.typeeditor.internal.TypeEditorPageFactory;
-import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
+import org.eclipse.fordiac.ide.ui.editors.FordiacFormEditor;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.fordiac.ide.util.FordiacLogHelper;
@@ -86,7 +86,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
-public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
+public abstract class AbstractTypeEditor extends FordiacFormEditor
 		implements IGotoMarker, ITabbedPropertySheetPageContributor, ISelectionListener {
 
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();

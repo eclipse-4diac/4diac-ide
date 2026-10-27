@@ -20,32 +20,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
-/* extension of the form editor allowing to close an child editor by providing the editor instance
+/* extension of the form editor for saver getEditor and global notifications on page changes
  *
  */
-public abstract class AbstractCloseAbleFormEditor extends FormEditor {
-
-	public boolean closeChildEditor(final IEditorPart childEditor) {
-		if (pages == null) {
-			return false;
-		}
-		final int pageIndex = pages.indexOf(childEditor);
-		if (pageIndex != -1) {
-			removePage(pageIndex);
-			return true;
-		}
-		return closeInChildren(childEditor);
-	}
-
-	private boolean closeInChildren(final IEditorPart childEditor) {
-		for (final Object child : pages) {
-			if (child instanceof final AbstractCloseAbleFormEditor closeableFormEditor
-					&& closeableFormEditor.closeChildEditor(childEditor)) {
-				return true;
-			}
-		}
-		return false;
-	}
+public abstract class FordiacFormEditor extends FormEditor {
 
 	/**
 	 * This is a re-implementation of {@link MultiPageEditorPart#getEditor(int)}.

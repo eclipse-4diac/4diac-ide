@@ -86,12 +86,6 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		}
 	}
 
-	public void openParent() {
-		if (items.size() > 1) {
-			setInput(items.get(items.size() - 2).getModel());
-		}
-	}
-
 	private void createBreadcrumbItems(final Object input) {
 		final ArrayList<Object> parentObjects = new ArrayList<>();
 		createItems(input, parentObjects);
@@ -116,7 +110,8 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	}
 
 	public List<EObject> getPath() {
-		return items.stream().map(BreadcrumbItem::getModel).filter(EObject.class::isInstance).map(o -> (EObject) o).toList();
+		return items.stream().map(BreadcrumbItem::getModel).filter(EObject.class::isInstance).map(o -> (EObject) o)
+				.toList();
 	}
 
 	private static boolean isValidBreadcrumbInput(final Object input) {
