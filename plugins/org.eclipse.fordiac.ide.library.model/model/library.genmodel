@@ -79,6 +79,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//VersionInfo/author"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//VersionInfo/date"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//VersionInfo/version"/>
+      <genOperations ecoreOperation="library.ecore#//VersionInfo/validateVersionInfo"
+          body="return org.eclipse.fordiac.ide.library.model.impl.VersionInfoAnnotations.validateVersionInfo(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//VersionInfo/validateVersionInfo/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//VersionInfo/validateVersionInfo/context"/>
+      </genOperations>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -67,12 +67,20 @@ public class LibraryValidator extends EObjectValidator {
 	public static final int REQUIRED__VALIDATE_VERSION_RANGE = 3;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Version Info' of 'Version Info'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int VERSION_INFO__VALIDATE_VERSION_INFO = 4;
+
+	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 3;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 4;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -312,7 +320,27 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateVersionInfo(VersionInfo versionInfo, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(versionInfo, diagnostics, context);
+		if (!validate_NoCircularContainment(versionInfo, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(versionInfo, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVersionInfo_validateVersionInfo(versionInfo, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validateVersionInfo constraint of '<em>Version Info</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVersionInfo_validateVersionInfo(VersionInfo versionInfo, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return versionInfo.validateVersionInfo(diagnostics, context);
 	}
 
 	/**
