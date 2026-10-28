@@ -27,6 +27,11 @@
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Exports">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Exports/library"/>
+      <genOperations ecoreOperation="library.ecore#//Exports/validateUniqueSymbolicNames"
+          body="return org.eclipse.fordiac.ide.library.model.impl.ExportsAnnotations.validateUniqueSymbolicNames(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//Exports/validateUniqueSymbolicNames/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//Exports/validateUniqueSymbolicNames/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Includes">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Includes/libraryElement"/>
@@ -42,17 +47,17 @@
     </genClasses>
     <genClasses ecoreClass="library.ecore#//LibraryElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//LibraryElement/value"/>
+      <genOperations ecoreOperation="library.ecore#//LibraryElement/validatePattern"
+          body="return org.eclipse.fordiac.ide.library.model.impl.LibraryElementAnnotations.validatePattern(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//LibraryElement/validatePattern/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//LibraryElement/validatePattern/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Manifest">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/dependencies"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/product"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Manifest/exports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Manifest/scope"/>
-      <genOperations ecoreOperation="library.ecore#//Manifest/validateManifestVersions"
-          body="return org.eclipse.fordiac.ide.library.model.impl.ManifestAnnotations.validateManifestVersions(this, diagnostics, context);">
-        <genParameters ecoreParameter="library.ecore#//Manifest/validateManifestVersions/diagnostics"/>
-        <genParameters ecoreParameter="library.ecore#//Manifest/validateManifestVersions/context"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//Product">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference library.ecore#//Product/versionInfo"/>
@@ -64,11 +69,21 @@
     <genClasses ecoreClass="library.ecore#//Required">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Required/symbolicName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//Required/version"/>
+      <genOperations ecoreOperation="library.ecore#//Required/validateVersionRange"
+          body="return org.eclipse.fordiac.ide.library.model.impl.RequiredAnnotations.validateVersionRange(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//Required/validateVersionRange/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//Required/validateVersionRange/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="library.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//VersionInfo/author"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//VersionInfo/date"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute library.ecore#//VersionInfo/version"/>
+      <genOperations ecoreOperation="library.ecore#//VersionInfo/validateVersionInfo"
+          body="return org.eclipse.fordiac.ide.library.model.impl.VersionInfoAnnotations.validateVersionInfo(this, diagnostics, context);">
+        <genParameters ecoreParameter="library.ecore#//VersionInfo/validateVersionInfo/diagnostics"/>
+        <genParameters ecoreParameter="library.ecore#//VersionInfo/validateVersionInfo/context"/>
+      </genOperations>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
