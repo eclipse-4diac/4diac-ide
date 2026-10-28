@@ -35,16 +35,16 @@ public class StringTransformer implements ITransformer {
 			switch (c) {
 			case '/' -> {
 				if (i + 1 < str.length() && str.charAt(i + 1) == '*') {
-					i = skipMultiLineComment(str, i, '/');
+					i = skipMultiLineComment(str, i, '/', result);
 				} else if (i + 1 < str.length() && str.charAt(i + 1) == '/') {
-					i = skipSingleLineComment(str, i);
+					i = skipSingleLineComment(str, i, result);
 				} else {
 					result.append(c);
 				}
 			}
 			case '(' -> {
 				if (i + 1 < str.length() && str.charAt(i + 1) == '*') {
-					i = skipMultiLineComment(str, i, ')');
+					i = skipMultiLineComment(str, i, ')', result);
 				} else {
 					result.append(c);
 				}
@@ -61,35 +61,39 @@ public class StringTransformer implements ITransformer {
 	}
 
 	private static int skipWhitespace(final String str, int i, final StringBuilder result) {
-		final boolean startsWithIdentifier = (i > 0 && isIdentifierChar(str.charAt(i - 1)));
 		while (i < str.length() && Character.isWhitespace(str.charAt(i))) {
 			i++;
 		}
-		if (i < str.length() && isIdentifierChar(str.charAt(i)) && startsWithIdentifier) {
-			// if we have whitespaces between two identifier characters insert a single
-			// space
-			result.append(' ');
-		}
+		appendSpaceBetweenIdentifiersIfNeeded(str, i, result);
 		return i;
 	}
 
-	private static int skipMultiLineComment(final String str, int i, final char delimiter) {
+	private static int skipMultiLineComment(final String str, int i, final char delimiter, final StringBuilder result) {
 		i += 2; // Skip the opening chars
-		while (i < str.length() - 1) {
-			if (str.charAt(i) == '*' && str.charAt(i + 1) == delimiter) {
-				return i + 1;
-			}
+		while (i < str.length() - 1 && (str.charAt(i) != '*' || str.charAt(i + 1) != delimiter)) {
 			i++;
 		}
-		return i;
+		appendSpaceBetweenIdentifiersIfNeeded(str, i + 2, result);
+		return i + 1;
 	}
 
-	private static int skipSingleLineComment(final String str, int i) {
+	private static int skipSingleLineComment(final String str, int i, final StringBuilder result) {
 		i += 2; // Skip the opening chars
 		while (i < str.length() && str.charAt(i) != '\n' && str.charAt(i) != '\r') {
 			i++;
 		}
+		appendSpaceBetweenIdentifiersIfNeeded(str, i + 1, result);
 		return i;
+	}
+
+	private static void appendSpaceBetweenIdentifiersIfNeeded(final String str, final int i,
+			final StringBuilder result) {
+		if (i < str.length() && isIdentifierChar(str.charAt(i)) && !result.isEmpty()
+				&& isIdentifierChar(result.charAt(result.length() - 1))) {
+			// if we have whitespaces between two identifier characters insert a single
+			// space
+			result.append(' ');
+		}
 	}
 
 	private static int processStringLiteral(final String str, int i, final StringBuilder result, final char delimiter) {
