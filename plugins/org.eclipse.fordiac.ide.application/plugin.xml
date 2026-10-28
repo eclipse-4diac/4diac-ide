@@ -1171,7 +1171,7 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="%commands_ungroup_label"
-               tooltip="Remove group">
+               tooltip="%menu.ungroup.tooltip">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.changeType"
                label="%commands_changeType_label">
@@ -1224,13 +1224,13 @@
         <command commandId="org.eclipse.fordiac.ide.application.commands.hideEventConnections"
                  icon="fordiacimage://ICON_HIDE_EVENT"
                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
-                 tooltip="Hide Event Connections"
+                 tooltip="%menu.hideEventConnections.tooltip"
                  style="toggle">
         </command>
         <command commandId="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
                  icon="fordiacimage://ICON_HIDE_DATA"
                  id="org.eclipse.fordiac.ide.application.toolbars.fordiacToolbar"
-                 tooltip="Hide Data Connections"
+                 tooltip="%menu.hideDataConnections.tooltip"
                  style="toggle">
         </command>
       </toolbar>
@@ -1240,7 +1240,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.gotochild"/>
       <command 
       	commandId="org.eclipse.fordiac.ide.application.commands.toggleJumpStep"
-      	tooltip="Toggle Step Mode"
+        tooltip="%menu.toggleJumpStep.tooltip"
       	icon="platform:/plugin/org.eclipse.egit.ui/icons/elcl16/skip.png"
       	style="toggle"/>
     </menuContribution>
@@ -1466,7 +1466,7 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="%commands_ungroup_label"
-               tooltip="Remove group">
+               tooltip="%menu.ungroup.tooltip">
         <visibleWhen checkEnabled="false">
           <with variable="selection">
             <count value="1" />
@@ -1742,7 +1742,7 @@
   
   <extension point="org.eclipse.ui.ide.markerSupport">
     <markerTypeCategory
-          name="4diac IDE Problem">
+          name="%markerTypeCategory.problem.name">
        <markerTypeReference
              id="org.eclipse.fordiac.ide.model.problem">
        </markerTypeReference>
@@ -1997,145 +1997,145 @@
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.1"
-          label="Chart Series 1"
+          label="%chart.series.1.label"
           value="1, 34, 105"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.2"
-          label="Chart Series 2"
+          label="%chart.series.2.label"
           value="224, 130, 12"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.3"
-          label="Chart Series 3"
+          label="%chart.series.3.label"
           value="0, 158, 115"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.4"
-          label="Chart Series 4"
+          label="%chart.series.4.label"
           value="94, 60, 153"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.5"
-          label="Chart Series 5"
+          label="%chart.series.5.label"
           value="44, 160, 44"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.6"
-          label="Chart Series 6"
+          label="%chart.series.6.label"
           value="214, 39, 40"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.7"
-          label="Chart Series 7"
+          label="%chart.series.7.label"
           value="230, 159, 0"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.8"
-          label="Chart Series 8"
+          label="%chart.series.8.label"
           value="86, 180, 233"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.9"
-          label="Chart Series 9"
+          label="%chart.series.9.label"
           value="110, 161, 31"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.10"
-          label="Chart Series 10"
+          label="%chart.series.10.label"
           value="117, 112, 179"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.11"
-          label="Chart Series 11"
+          label="%chart.series.11.label"
           value="0, 83, 138"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.12"
-          label="Chart Series 12"
+          label="%chart.series.12.label"
           value="127, 127, 127"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.13"
-          label="Chart Series 13"
+          label="%chart.series.13.label"
           value="251, 128, 114"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.14"
-          label="Chart Series 14"
+          label="%chart.series.14.label"
           value="128, 128, 0"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.15"
-          label="Chart Series 15"
+          label="%chart.series.15.label"
           value="213, 94, 0"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.16"
-          label="Chart Series 16"
+          label="%chart.series.16.label"
           value="0, 150, 150"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.17"
-          label="Chart Series 17"
+          label="%chart.series.17.label"
           value="159, 105, 0"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.18"
-          label="Chart Series 18"
+          label="%chart.series.18.label"
           value="148, 0, 0"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.19"
-          label="Chart Series 19"
+          label="%chart.series.19.label"
           value="166, 206, 227"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.20"
-          label="Chart Series 20"
+          label="%chart.series.20.label"
           value="199, 134, 57"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.21"
-          label="Chart Series 21"
+          label="%chart.series.21.label"
           value="178, 223, 138"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.22"
-          label="Chart Series 22"
+          label="%chart.series.22.label"
           value="255, 255, 153"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.23"
-          label="Chart Series 23"
+          label="%chart.series.23.label"
           value="0, 0, 0"
           isEditable="false"/>
     <colorDefinition
           categoryId="org.eclipse.fordiac.ide.themeCategory"
           id="org.eclipse.fordiac.ide.application.chart.series.24"
-          label="Chart Series 24"
+          label="%chart.series.24.label"
           value="217, 217, 217"
           isEditable="false"/>
   </extension>

@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -24,7 +25,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fbrtlauncher.preferences.FbrtPreferenceConstants;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -92,7 +92,7 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 					getSelectedDevTypeIndex(configuration.getAttribute(ATTR_FBRT_DEV_TYPE, DEFAULT_FBRT_DEV_TYPE)));
 			setPortValue(configuration.getAttribute(ATTR_FBRT_PORT, DEFAULT_FBRT_PORT));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 			configuration.setAttribute(ATTR_TOOL_ARGUMENTS, arguments);
 
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 	}
 

@@ -7,7 +7,7 @@
 			category="org.eclipse.fordiac.ide.export.ui"
 			class="org.eclipse.fordiac.ide.deployment.bootfile.wizard.CreateBootfilesWizard"
 			id="org.eclipse.fordiac.ide.deployment.bootfile.CreateBootfiles"
-			name="Create FORTE boot files">
+			name="%wizard.createBootfiles.name">
 		</wizard>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -16,7 +16,7 @@
 			locationURI="popup:org.eclipse.ui.popup.any?after=additions">
 			<command
 				commandId="org.eclipse.ui.file.export"
-				label="Create boot-files">
+				label="%menu.createBootfiles.label">
 				<parameter
 					name="exportWizardId"
 					value="org.eclipse.fordiac.ide.deployment.bootfile.CreateBootfiles">
@@ -49,7 +49,7 @@
 			</separator>
 			<command
 				commandId="org.eclipse.ui.file.export"
-				label="Create boot-files">
+				label="%menu.createBootfiles.label">
 				<parameter
 					name="exportWizardId"
 					value="org.eclipse.fordiac.ide.deployment.bootfile.CreateBootfiles">

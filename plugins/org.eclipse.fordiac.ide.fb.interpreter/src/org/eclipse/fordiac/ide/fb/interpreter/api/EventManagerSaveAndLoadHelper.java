@@ -19,13 +19,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class EventManagerSaveAndLoadHelper {
 	public static void saveEventManagerToFile(final FBType fbtype, final EventManager evntMngr) {
@@ -36,7 +36,7 @@ public class EventManagerSaveAndLoadHelper {
 			try {
 				folder.create(false, false, null);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage());
+				ILog.get().error(e.getMessage());
 			}
 		}
 		final IFile file = folder.getFile(fbtype.getName() + ".EvntMngr.opsem"); //$NON-NLS-1$
@@ -48,7 +48,7 @@ public class EventManagerSaveAndLoadHelper {
 		try {
 			res.save(Collections.emptyMap());
 		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage());
+			ILog.get().error(e.getMessage());
 		}
 	}
 

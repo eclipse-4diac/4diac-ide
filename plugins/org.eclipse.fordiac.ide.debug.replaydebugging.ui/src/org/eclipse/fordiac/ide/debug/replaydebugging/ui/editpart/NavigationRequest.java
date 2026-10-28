@@ -27,12 +27,14 @@ public class NavigationRequest extends Request {
 
 	private final Direction direction;
 	private final boolean jump;
+	private final boolean skipHighlighted;
 	private Set<Integer> highlighted = new HashSet<>();
 
-	public NavigationRequest(final Direction direction, final boolean jump) {
+	public NavigationRequest(final Direction direction, final boolean jump, final boolean skipHighlighted) {
 		super(Messages.NavigationRequest_Type);
 		this.direction = direction;
 		this.jump = jump;
+		this.skipHighlighted = skipHighlighted;
 	}
 
 	public Direction getDirection() {
@@ -49,6 +51,10 @@ public class NavigationRequest extends Request {
 
 	public void setHighlighted(final Set<Integer> highlighted) {
 		this.highlighted = highlighted;
+	}
+
+	public boolean isSkipHighlighted() {
+		return skipHighlighted;
 	}
 
 }

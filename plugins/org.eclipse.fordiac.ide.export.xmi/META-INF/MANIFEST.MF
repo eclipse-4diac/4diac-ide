@@ -24,3 +24,4 @@ Require-Bundle: com.google.guava,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui,
  org.eclipse.fordiac.ide.globalconstantseditor.ui
 Export-Package: org.eclipse.fordiac.ide.export.xmi
+Bundle-Localization: plugin

@@ -17,7 +17,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
@@ -34,7 +34,7 @@ public abstract class AbstractHierarchyHandler extends AbstractHandler {
 			operationHistory.execute(cmd, null,
 					WorkspaceUndoUtil.getUIInfoAdapter(workbench.getActiveWorkbenchWindow().getShell()));
 		} catch (final ExecutionException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 

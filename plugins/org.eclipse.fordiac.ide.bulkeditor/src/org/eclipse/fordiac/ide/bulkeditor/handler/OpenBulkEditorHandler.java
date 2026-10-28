@@ -24,14 +24,15 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorInput;
+import org.eclipse.fordiac.ide.bulkeditor.search.SearchHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -40,33 +41,40 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		if (HandlerUtil.getCurrentStructuredSelection(event) instanceof final TreeSelection treeSelection) {
-			final Map<IProject, List<URI>> projectMap = new HashMap<>();
+			final Map<IProject, List<String>> projectMap = new HashMap<>();
 			Arrays.stream(treeSelection.getPaths()).forEach(treePath -> {
 				final IProject project = getProjectFromPath(treePath);
 				if (project == null) {
 					return;
 				}
-				projectMap.computeIfAbsent(project, _ -> new ArrayList<URI>());
+				projectMap.computeIfAbsent(project, _ -> new ArrayList<String>());
 
 				if (treePath.getLastSegment() instanceof final UntypedSubApp untypedSubapp) {
-					projectMap.get(project).add(EcoreUtil.getURI(untypedSubapp));
+					projectMap.get(project).add(SearchHelper.getSubappHierarchyName(untypedSubapp));
 				} else if (treePath.getLastSegment() instanceof final IFile file && TypeLibraryManager.INSTANCE
 						.getTypeEntryForFile(file) instanceof final SubAppTypeEntry typeEntry) {
-					projectMap.get(project).add(EcoreUtil.getURI(typeEntry.getType()));
+					projectMap.get(project).add(SearchHelper.getSubappHierarchyName(typeEntry.getType()));
 				}
 			});
 
-			projectMap.forEach((project, subAppList) -> {
-				final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				try {
-					window.getActivePage().openEditor(new BulkEditorInput(project, subAppList),
-							"org.eclipse.fordiac.ide.bulkeditor.BulkEditor"); //$NON-NLS-1$
-				} catch (final Exception e) {
-					ILog.get().warn("Couldn't open Bulk Editor", e); //$NON-NLS-1$
-				}
-			});
+			openEditor(projectMap);
 		}
 		return null;
+	}
+
+	private static void openEditor(final Map<IProject, List<String>> projectMap) {
+		projectMap.forEach((project, subAppList) -> {
+			final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			try {
+				final IEditorPart editor = window.getActivePage().openEditor(new BulkEditorInput(project),
+						BulkEditor.ID);
+				if (!subAppList.isEmpty() && editor instanceof final BulkEditor bulkEditor) {
+					bulkEditor.showSubappHierarchyScope(subAppList);
+				}
+			} catch (final Exception e) {
+				ILog.get().warn("Couldn't open Bulk Editor", e); //$NON-NLS-1$
+			}
+		});
 	}
 
 	private static IProject getProjectFromPath(final TreePath treePath) {
@@ -75,7 +83,6 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 				return project;
 			}
 		}
-
 		return null;
 	}
 }

@@ -25,7 +25,7 @@
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="false"
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
-            name="Service Sequence Editor">
+            name="%editor.serviceSequenceEditor.name">
       </editor>
    </extension>
    <extension
@@ -36,31 +36,31 @@
                category="serviceSequence"
                id="property.tab.service"
                image="fordiacimage://ICON_SERVICE"
-               label="Service">
+               label="%propertyTab.service.label">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.serviceSequence"
                image="fordiacimage://ICON_SERVICE_SEQUENCE"
-               label="Service Sequence">
+               label="%propertyTab.serviceSequence.label">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.inputPrimitive"
                image="fordiacimage://ICON_RIGHT_INPUT_PRIMITIVE"
-               label="Input Primitive">
+               label="%propertyTab.inputPrimitive.label">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.outputPrimitive"
                image="fordiacimage://ICON_RIGHT_OUTPUT_PRIMITIVE"
-               label="Output Primitive">
+               label="%propertyTab.outputPrimitive.label">
          </propertyTab>
          <propertyTab
                category="serviceSequence"
                id="property.tab.transaction"
                image="fordiacimage://ICON_TRANSACTION"
-               label="Transaction">
+               label="%propertyTab.transaction.label">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -160,35 +160,35 @@
          point="org.eclipse.ui.commands">
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
-            name="Expand/Collapse Service Sequence">
+            name="%command.expandSequence.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
-            name="Run Service Sequence">
+            name="%command.runSequence.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
-            name="Record Service Sequence">
+            name="%command.recordSequence.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
-            name="Create all Service Sequences">
+            name="%command.createAllSequences.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
-            name="Create max Coverage Sequences">
+            name="%command.createMaxCoverageSequences.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences"
-            name="Load Service Sequences from File">
+            name="%command.loadSequences.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
-            name="Get Coverage">
+            name="%command.getCoverage.name">
       </command>
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
-            name="Export Service Sequences as C++ Boost Test">
+            name="%command.exportServiceSequencesAsTest.name">
       </command>       
    </extension>
    <extension
@@ -197,7 +197,7 @@
          locationURI="popup:org.eclipse.ui.popup.any?after=editGroup">  
       <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
-            label="Expand Service Sequence"
+            label="%menu.expandSequence.label"
             style="push">
             <visibleWhen checkEnabled="false">
 					<with variable="selection">
@@ -215,7 +215,6 @@
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
-            label="Run Service Sequence"
             style="push">
             <visibleWhen checkEnabled="false">
 					<with variable="selection">
@@ -236,7 +235,7 @@
             locationURI="menu:navigate?after=additions">
     <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
-            label="Expand Service Sequence"
+            label="%menu.expandSequence.label"
             style="push">
             <visibleWhen checkEnabled="false">
 					<with variable="selection">
@@ -257,7 +256,7 @@
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
     <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
-            label="Expand/Collapse"
+            label="%menu.expandCollapse.label"
             style="push">
             <visibleWhen checkEnabled="false">
 					<with variable="selection">
@@ -278,7 +277,6 @@
             locationURI="menu:org.eclipse.4diac.ide.source.menu">
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
-            label="Run Service Sequence"
             style="push">
             <visibleWhen checkEnabled="true">
 					<with variable="selection">
@@ -295,7 +293,6 @@
        </command>
 	       <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
-            label="Record Service Sequence"
             style="push">
             <visibleWhen checkEnabled="true">
 					<with variable="selection">
@@ -316,7 +313,6 @@
        locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
 	       <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
-            label="Record Service Sequence"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -335,7 +331,7 @@
        </command>
 	   <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
-            label="Get Test Coverage"
+            label="%menu.getTestCoverage.label"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -352,7 +348,6 @@
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
-            label="Run Service Sequence"
             style="push">
             <visibleWhen checkEnabled="true">
 					<with variable="selection">
@@ -369,7 +364,6 @@
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences"
-            label="Load Service Sequences from File"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -384,7 +378,6 @@
        </command>
 	   <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
-            label="Create all Service Sequences"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -399,7 +392,6 @@
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
-            label="Create max Coverage Sequences"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -414,7 +406,6 @@
        </command>
        <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
-            label="Export Service Sequences as C++ Boost Test"
             style="push">
             <visibleWhen checkEnabled="true">
             	<with variable="selection">
@@ -431,25 +422,25 @@
 	<menuContribution
        allPopups="false"
        locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
-       <menu id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.settype" label="Set Type">
+       <menu id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.settype" label="%menu.setType.label">
        	<command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setPossible"
-            label="Possible"
+            label="%menu.setPossible.label"
             style="push">
        </command>
 	       <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setAlways"
-            label="Always"
+            label="%menu.setAlways.label"
             style="push">
        </command>
 	  <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setForbidden"
-            label="Forbidden"
+            label="%menu.setForbidden.label"
             style="push">
        </command>
 	   <command
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setConditional"
-            label="Conditional"
+            label="%menu.setConditional.label"
             style="push">
        </command>
        <visibleWhen checkEnabled="true">
@@ -471,7 +462,7 @@
        locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
     <command
           commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.newServiceSequence"
-          label="New Service Sequence"
+          label="%menu.newServiceSequence.label"
           style="push">
        <visibleWhen
              checkEnabled="true">
@@ -502,7 +493,7 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
             icon="fordiacimage://ICON_FB"
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
-            name="SSAV"
+            name="%view.serviceSequenceAssign.name"
             restorable="true">
       </view>
    </extension>

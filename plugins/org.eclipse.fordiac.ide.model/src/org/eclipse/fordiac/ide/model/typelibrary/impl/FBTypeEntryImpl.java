@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -28,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class FBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<FBType> implements FBTypeEntry {
 
@@ -82,7 +82,7 @@ public class FBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<FBType> impl
 				}
 				return LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE;
 			} catch (final Exception e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
+				ILog.get().warn(e.getMessage(), e);
 			}
 		}
 		return LibraryElementPackage.Literals.FB_TYPE;

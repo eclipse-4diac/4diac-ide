@@ -17,13 +17,13 @@
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
@@ -69,7 +69,6 @@ public final class OpenStructMenu {
 		viewer.getControl().setMenu(menu);
 	}
 
-
 	private static MenuItem createMenuItem(final TableViewer viewer, final Menu menu) {
 		final MenuItem openItem = new MenuItem(menu, SWT.NONE);
 		openItem.addSelectionListener(new SelectionListener() {
@@ -107,17 +106,19 @@ public final class OpenStructMenu {
 			if (null != activeWorkbenchWindow) {
 
 				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+				final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+						.getDefaultEditor(file.getName());
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
 				} catch (final PartInitException e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
+					ILog.get().error(e.getMessage(), e);
 				}
 			}
 		}
 	}
 
-	public static void addTo(final Control control, final MenuListener listener, final SelectionListener selectionListener) {
+	public static void addTo(final Control control, final MenuListener listener,
+			final SelectionListener selectionListener) {
 		final Menu menu = new Menu(control);
 		final MenuItem openItem = new MenuItem(menu, SWT.NONE);
 		openItem.addSelectionListener(selectionListener);

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.IntType;
@@ -38,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 @SuppressWarnings("nls")
 public class ExportServiceSequenceToCppTest {
@@ -63,7 +63,7 @@ public class ExportServiceSequenceToCppTest {
 			try {
 				Files.createFile(path);
 			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		}
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
@@ -72,7 +72,7 @@ public class ExportServiceSequenceToCppTest {
 			addDataStruct(writer);
 			addTestSuite(writer);
 		} catch (final IOException ex) {
-			FordiacLogHelper.logError(ex.getMessage(), ex);
+			ILog.get().error(ex.getMessage(), ex);
 		}
 	}
 

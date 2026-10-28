@@ -26,9 +26,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.fordiac.ide.Activator;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
@@ -130,7 +130,8 @@ public class GitIssueCreator {
 		final String uri = "%s/api/v4/projects/%s/issues"; //$NON-NLS-1$
 		final String reportingURI = uri.formatted(baseURI, URLEncoder.encode(projectPath, StandardCharsets.UTF_8));
 		final Gson gson = new Gson();
-		// send the issue data in the request body, as long descriptions exceed the URL length limit of servers
+		// send the issue data in the request body, as long descriptions exceed the URL
+		// length limit of servers
 		final String jsonBody = gson.toJson(new GitLabRequest(info.title(), info.body(), labels));
 
 		try {
@@ -177,9 +178,9 @@ public class GitIssueCreator {
 				return Optional.of(response.body());
 			}
 		} catch (final IOException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		} catch (final InterruptedException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 			Thread.currentThread().interrupt();
 		}
 		return Optional.empty();
@@ -202,4 +203,3 @@ public class GitIssueCreator {
 		return url.substring(0, idx).concat(epilogue);
 	}
 }
-

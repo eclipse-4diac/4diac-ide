@@ -14,10 +14,10 @@ package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FbtMacroProcessor;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
@@ -63,7 +63,7 @@ final class ModelLocationListener extends LocationAdapter {
 		try {
 			return page.openEditor(new FileEditorInput(targetFile), desc.getId());
 		} catch (final PartInitException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 		return null;
 	}

@@ -20,13 +20,13 @@ import java.util.Collections;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.export.LibraryExporter;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -52,7 +52,8 @@ public class LibraryExportWizard extends Wizard implements IExportWizard {
 		}
 
 		final LibraryExporter exporter = new LibraryExporter(selectionPage.getOutputDirectory(),
-				selectionPage.getTypeSelection(), selectionPage.getSelectedLibrary(), version, project);
+				selectionPage.getTypeSelection(), selectionPage.exportTypesAsSIFB(),
+				selectionPage.getSelectedLibrary(), version, project);
 
 		try {
 			getContainer().run(true, true, progress -> {
@@ -64,7 +65,7 @@ public class LibraryExportWizard extends Wizard implements IExportWizard {
 			});
 		} catch (final InvocationTargetException e) {
 			final Throwable cause = e.getCause();
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 
 			MessageDialog.openError(getShell(), Messages.LibraryExporter_ErrorTitle,
 					MessageFormat.format(Messages.LibraryExporter_ErrorMessage, cause.getMessage()));

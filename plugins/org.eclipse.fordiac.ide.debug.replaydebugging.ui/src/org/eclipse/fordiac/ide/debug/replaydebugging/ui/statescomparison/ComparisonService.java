@@ -29,7 +29,12 @@ import org.eclipse.swt.widgets.Display;
 public class ComparisonService {
 
 	public interface Listener {
-		void columnsChanged(List<ComparisonColumn> columns);
+		enum Event {
+			COLUMN_ADDED, COLUMN_REMOVED, INFORMATION_CHANGED,
+
+		}
+
+		void columnsChanged(List<ComparisonColumn> columns, Event event);
 	}
 
 	private long id = 0; // for generating unique column IDs
@@ -53,28 +58,29 @@ public class ComparisonService {
 
 	public synchronized void addColumn(final ComparisonColumn column) {
 		columns.put(column.getColumnId(), column);
-		notifyListeners();
+		notifyListeners(Listener.Event.COLUMN_ADDED);
 	}
 
 	public synchronized void replaceColumn(final ComparisonColumn column) {
-		addColumn(column); // same logic as add, but clearer intent
+		columns.put(column.getColumnId(), column);
+		notifyListeners(Listener.Event.INFORMATION_CHANGED);
 	}
 
 	public synchronized void removeColumn(final String columnId) {
 		columns.remove(columnId);
-		notifyListeners();
+		notifyListeners(Listener.Event.COLUMN_REMOVED);
 	}
 
 	public synchronized void clearAll() {
 		columns.clear();
-		notifyListeners();
+		notifyListeners(Listener.Event.COLUMN_REMOVED);
 	}
 
 	public synchronized void updateColumnLabel(final EventPosition eventPosition, final String newLabel) {
 		for (final var column : columns.values()) {
 			if (column.getEventPosition().equals(eventPosition)) {
 				column.setLabel(newLabel);
-				notifyListeners();
+				notifyListeners(Listener.Event.INFORMATION_CHANGED);
 				break;
 			}
 		}
@@ -87,16 +93,16 @@ public class ComparisonService {
 	public void addListener(final Listener l) {
 		final List<ComparisonColumn> snapshot = List.copyOf(columns.values());
 		listeners.add(l);
-		l.columnsChanged(snapshot); // initial notification with current state
+		l.columnsChanged(snapshot, Listener.Event.INFORMATION_CHANGED); // initial notification with current state
 	}
 
 	public void removeListener(final Listener l) {
 		listeners.remove(l);
 	}
 
-	private void notifyListeners() {
+	private void notifyListeners(final Listener.Event event) {
 		final List<ComparisonColumn> snapshot = List.copyOf(columns.values());
 		// Always fire on UI thread
-		Display.getDefault().asyncExec(() -> listeners.forEach(l -> l.columnsChanged(snapshot)));
+		Display.getDefault().asyncExec(() -> listeners.forEach(l -> l.columnsChanged(snapshot, event)));
 	}
 }

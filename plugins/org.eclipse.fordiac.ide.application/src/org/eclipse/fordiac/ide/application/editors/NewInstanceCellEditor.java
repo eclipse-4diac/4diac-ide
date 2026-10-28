@@ -42,6 +42,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -63,7 +64,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	protected Text textControl;
 
 	private ResultListLabelProvider resultListLabelProvider;
-	private Listener repositionListener;
 
 	public NewInstanceCellEditor(final Composite parent) {
 		super(parent, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
@@ -97,7 +97,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		// initial population of the selection list
 		updateSelectionList();
 
-		repositionListener = _ -> repositionPopup();
+		final Listener repositionListener = _ -> repositionPopup();
 		parent.addListener(SWT.Paint, repositionListener);
 		parent.getShell().addListener(SWT.Move, repositionListener);
 		parent.getShell().addListener(SWT.Resize, repositionListener);
@@ -147,10 +147,13 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	}
 
 	public boolean insideAnyEditorArea() {
-		final Point cursorLocation = popupShell.getDisplay().getCursorLocation();
-		final Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
-		return container.getBounds().contains(containerRelativeCursor)
-				|| popupShell.getBounds().contains(cursorLocation);
+		final Point cursorLocation = Display.getDefault().getCursorLocation();
+		boolean cursorInContainer = false;
+		if (!container.isDisposed()) {
+			final Point containerRelativeCursor = container.getParent().toControl(cursorLocation);
+			cursorInContainer = container.getBounds().contains(containerRelativeCursor);
+		}
+		return cursorInContainer || (!popupShell.isDisposed() && popupShell.getBounds().contains(cursorLocation));
 	}
 
 	protected Composite createContainer(final Composite parent) {

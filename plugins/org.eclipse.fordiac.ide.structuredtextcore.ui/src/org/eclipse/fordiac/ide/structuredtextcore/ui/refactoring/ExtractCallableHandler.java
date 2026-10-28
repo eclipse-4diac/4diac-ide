@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.xtext.ui.editor.XtextEditor;
@@ -44,7 +44,7 @@ public class ExtractCallableHandler extends AbstractHandler {
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Error during refactoring", e); //$NON-NLS-1$
+			ILog.get().error("Error during refactoring", e); //$NON-NLS-1$
 		}
 		return null;
 	}

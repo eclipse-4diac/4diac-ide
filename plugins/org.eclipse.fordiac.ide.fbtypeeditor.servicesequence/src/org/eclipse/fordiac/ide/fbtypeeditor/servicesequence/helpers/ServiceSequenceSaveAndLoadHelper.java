@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -30,7 +31,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class ServiceSequenceSaveAndLoadHelper {
 
@@ -48,7 +48,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 			try {
 				folder.create(false, false, null);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage());
+				ILog.get().error(e.getMessage());
 			}
 		}
 		final IFile file = folder.getFile(fbtype.getName() + FILE_EXTENSION);
@@ -72,7 +72,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 			try {
 				folder.create(false, false, null);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage());
+				ILog.get().error(e.getMessage());
 			}
 		}
 		final IFile file = folder.getFile(fbtype.getName() + FILE_EXTENSION);
@@ -84,7 +84,7 @@ public class ServiceSequenceSaveAndLoadHelper {
 		try {
 			res.save(Collections.emptyMap());
 		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage());
+			ILog.get().error(e.getMessage());
 		}
 	}
 

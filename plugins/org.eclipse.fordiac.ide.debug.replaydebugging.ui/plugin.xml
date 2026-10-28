@@ -21,6 +21,12 @@
             id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.StatesComparisonView"
             name="%statesComparisonView.name">
       </view>
+      <view
+			class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView"
+			id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView"
+			name="%commentsView.name"
+			restorable="true">
+	  </view>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -42,28 +48,47 @@
 	</extension>
 
    <extension point="org.eclipse.ui.commands">
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"  name="Move Left"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight" name="Move Right"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"  name="Jump Left"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight" name="Jump Right"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"    name="Move Up"/>
-    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"  name="Move Down"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"  name="%command.moveLeft.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveRight" name="%command.moveRight.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"  name="%command.jumpLeft.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight" name="%command.jumpRight.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"    name="%command.moveUp.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveDown"  name="%command.moveDown.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpBeginning"  name="%command.jumpBeginning.name"/>
+    <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpEnd"  name="%command.jumpEnd.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
-             name="Delete Event"/>
+             name="%command.deleteEvent.name"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteTimeline"
-             name="Delete Timeline"/>
+             name="%command.deleteTimeline.name"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
-             name="Add To Comparison"/>
+             name="%command.addToComparison.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeFromComparison"
-             name="Remove From Comparison"/>
+             name="%command.removeFromComparison.name"/>
+  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.toggleComparison"
+             name="%command.toggleComparison.name"/>
     <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
-             name="Add/edit event comment"/>
+             name="%command.addEventComment.name">
+     <commandParameter
+         id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.commentText"
+         name="%command.commentText.name"
+         optional="true">
+     </commandParameter>
+    </command>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeEventComment"
-             name="Remove event comment"/>
+             name="%command.removeEventComment.name"/>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addTimelineComment"
-             name="Add/edit timeline comment"/>
+             name="%command.addTimelineComment.name">
+	    <commandParameter
+             id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.commentText"
+             name="%command.commentText.name"
+             optional="true">
+	   </commandParameter>
+     </command>
      <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.removeTimelineComment"
-             name="Remove timeline comment"/>
+             name="%command.removeTimelineComment.name"/>
+	 <command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.commands.goToEvent"
+              name="%command.goToEvent.name">
+     </command>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
@@ -96,6 +121,24 @@
 
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
          class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpRightHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpBeginning"
+         class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpBeginningHandler">
+        <activeWhen>
+            <with variable="activePartId">
+                <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            </with>
+        </activeWhen>
+    </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpEnd"
+         class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.JumpEndHandler">
         <activeWhen>
             <with variable="activePartId">
                 <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
@@ -157,11 +200,23 @@
       </activeWhen>
     </handler>
 
+   <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.toggleComparison"
+     		class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.ToggleComparisonHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
+
     <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
              class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.AddEventCommentHandler">
       <activeWhen>
         <with variable="activePartId">
-          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+          <or>
+            <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView"/>
+          </or>
         </with>
       </activeWhen>
     </handler>
@@ -170,7 +225,10 @@
              class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveEventCommentHandler">
       <activeWhen>
         <with variable="activePartId">
-          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+          <or>
+            <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+            <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView"/>
+          </or>
         </with>
       </activeWhen>
     </handler>
@@ -179,7 +237,10 @@
              class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.AddTimelineCommentHandler">
       <activeWhen>
         <with variable="activePartId">
+        <or>
           <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView"/>
+        </or>
         </with>
       </activeWhen>
     </handler>
@@ -188,10 +249,23 @@
              class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.RemoveTimelineCommentHandler">
       <activeWhen>
         <with variable="activePartId">
+        <or>
           <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView"/>
+        </or>
         </with>
       </activeWhen>
     </handler>
+
+   <handler
+         class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.GoToEventHandler"
+         commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.commands.goToEvent">
+      <activeWhen>
+         <with variable="activePartId">
+            <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommentsView"/>
+         </with>
+      </activeWhen>
+   </handler>
 
   </extension>
 
@@ -264,6 +338,7 @@
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.CommentMarkerEditPart"/>
               </or>
             </iterate>
           </with>
@@ -277,16 +352,12 @@
             <iterate ifEmpty="false">
               <or>
                 <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.CommentMarkerEditPart"/>
               </or>
             </iterate>
           </with>
         </visibleWhen>
       </command>
-
-
-
-
-
 
        <separator name="org.eclipse.fordiac.ide.debug.replaydebugging.ui.timelineCommentsSeparator" visible="true"/>
 
@@ -336,6 +407,7 @@
 
     <!-- Key bindings -->
 <extension point="org.eclipse.ui.bindings">
+	<!-- Single step (up, down, right, left) -->
     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveLeft"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
@@ -344,14 +416,6 @@
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="ARROW_RIGHT"/>
-    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
-         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
-         sequence="M1+ARROW_LEFT"/>
-    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
-         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
-         sequence="M1+ARROW_RIGHT"/>
     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.moveUp"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
@@ -360,6 +424,76 @@
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
          sequence="ARROW_DOWN"/>
+
+     <!-- Jump left - Use all modifier keys -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_LEFT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M2+ARROW_LEFT"/>
+     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M3+ARROW_LEFT"/>
+     <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpLeft"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M4+ARROW_LEFT"/>
+
+     <!-- Jump right - Use all modifier keys -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M1+ARROW_RIGHT"/>
+ 	<key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M2+ARROW_RIGHT"/>
+	 <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M3+ARROW_RIGHT"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpRight"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="M4+ARROW_RIGHT"/>
+
+     <!-- Jump to the beginning and end -->
+	<key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpBeginning"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="HOME"/>
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.jumpEnd"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="END"/>
+
+     <!-- Delete events - Delete and backspace -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="DEL"/>
+
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteEvent"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="BS"/>
+
+	<!-- Add comment - c from comment -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addEventComment"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="C"/>
+
+	<!-- toggle comparison - Enter -->
+    <key commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.toggleComparison"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         contextId="org.eclipse.fordiac.ide.debug.replaydebugging.context"
+         sequence="CR"/>
+
 </extension>
 
 </plugin>

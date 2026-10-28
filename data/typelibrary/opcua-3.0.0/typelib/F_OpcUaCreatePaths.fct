@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="F_OpcUaCreatePaths" Comment="Creates a browse name and a nodeId for OPC UA communication">
+	<Identification Standard="61499-2" Description="Copyright (c) 2026 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2026-10-14">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::opcua">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="browsePrefix"/>
+				<With Var="nodePrefix"/>
+				<With Var="containerName"/>
+				<With Var="objectPrefix"/>
+				<With Var="objectName"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="browseName"/>
+				<With Var="nodeId"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="browsePrefix" Type="WSTRING"/>
+			<VarDeclaration Name="nodePrefix" Type="WSTRING"/>
+			<VarDeclaration Name="containerName" Type="WSTRING"/>
+			<VarDeclaration Name="objectPrefix" Type="WSTRING"/>
+			<VarDeclaration Name="objectName" Type="WSTRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="browseName" Type="WSTRING"/>
+			<VarDeclaration Name="nodeId" Type="WSTRING"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE eclipse4diac::opcua;
+
+(* Creates a browse name and a nodeId for OPC UA communication *)
+FUNCTION F_OpcUaCreatePaths
+VAR_INPUT
+	browsePrefix : WSTRING;
+	nodePrefix : WSTRING;
+	containerName : WSTRING;
+	objectPrefix : WSTRING;
+	objectName : WSTRING;
+END_VAR
+VAR_OUTPUT
+	browseName : WSTRING;
+	nodeId : WSTRING;
+END_VAR
+VAR CONSTANT
+	BROWSE_SEPARATOR : WSTRING := "/";
+	NODE_SEPARATOR : WSTRING := ".";
+END_VAR
+IF EQ(objectPrefix, "") THEN
+	browseName := CONCAT(browsePrefix, containerName, BROWSE_SEPARATOR, objectName);
+	nodeId := CONCAT(nodePrefix, containerName, NODE_SEPARATOR, objectName);
+ELSE
+	browseName := CONCAT(browsePrefix, containerName, BROWSE_SEPARATOR, objectPrefix, BROWSE_SEPARATOR, objectName);
+	nodeId := CONCAT(nodePrefix, containerName, NODE_SEPARATOR, objectPrefix, NODE_SEPARATOR, objectName);
+END_IF;
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
+</Function>

@@ -20,12 +20,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.ISynchronizable;
@@ -230,7 +230,7 @@ public class LibraryElementXtextDocument extends XtextDocument implements IAdapt
 			final boolean isCancelable = work instanceof CancelableUnitOfWork;
 			if (isCancelReaders) {
 				if (Display.getCurrent() == null) {
-					FordiacLogHelper.logError("Priority read only called from non UI-thread.", //$NON-NLS-1$
+					ILog.get().error("Priority read only called from non UI-thread.", //$NON-NLS-1$
 							new IllegalStateException());
 				}
 				cancelReaders(getState());

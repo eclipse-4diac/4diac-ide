@@ -19,10 +19,12 @@ package org.eclipse.fordiac.ide.model.data.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
@@ -90,6 +92,7 @@ import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 
+import org.eclipse.fordiac.ide.model.data.util.DataValidator;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl;
@@ -571,6 +574,16 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		theDataPackage.initializePackageContents();
 		theLibraryElementPackage.initializePackageContents();
 		theBuildpathPackage.initializePackageContents();
+
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(theDataPackage,
+			 new EValidator.Descriptor() {
+				 @Override
+				 public EValidator getEValidator() {
+					 return DataValidator.INSTANCE;
+				 }
+			 });
 
 		// Mark meta-data to indicate it can't be changed
 		theDataPackage.freeze();
@@ -1590,6 +1603,15 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		op = addEOperation(structuredTypeEClass, theLibraryElementPackage.getVarDeclaration(), "getMemberVar", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(structuredTypeEClass, ecorePackage.getEBoolean(), "validateNoCircularReferences", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
+		EGenericType g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(subrangeEClass, Subrange.class, "Subrange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSubrange_LowerLimit(), theXMLTypePackage.getInt(), "lowerLimit", null, 1, 1, Subrange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getSubrange_UpperLimit(), theXMLTypePackage.getInt(), "upperLimit", null, 1, 1, Subrange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1877,6 +1899,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		// Create annotations
 		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
 		createExtendedMetaDataAnnotations();
+		// http://www.eclipse.org/emf/2002/Ecore
+		createEcoreAnnotations();
 		// http://www.obeo.fr/dsl/dnc/archetype
 		createArchetypeAnnotations();
 	}
@@ -1941,6 +1965,22 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "Subrange", //$NON-NLS-1$ //$NON-NLS-2$
 			   "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createEcoreAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+		addAnnotation
+		  (structuredTypeEClass.getEOperations().get(2),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

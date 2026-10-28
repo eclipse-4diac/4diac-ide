@@ -29,6 +29,7 @@ import java.util.regex.PatternSyntaxException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
@@ -54,7 +55,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -372,7 +372,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		try {
 			Files.delete(Paths.get(path.getAbsolutePath()));
 		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return false;
 		}
 
@@ -386,7 +386,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		try {
 			Files.delete(Paths.get(file.getAbsolutePath()));
 		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return false;
 		}
 		return true;
@@ -501,7 +501,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				zos.closeEntry();
 
 			} catch (PatternSyntaxException | IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 
 		}
@@ -738,7 +738,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			try {
 				initialValue = DeploymentHelper.getVariableValue(variable);
 			} catch (final DeploymentException e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
+				ILog.get().warn(e.getMessage(), e);
 			}
 			if (-1 != initialValue.indexOf('#')) {
 				if (FMUInputOutput.variableType.UNKNOWN == type) {

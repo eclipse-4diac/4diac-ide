@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typeeditor.AbstractTypeEditor;
 import org.eclipse.fordiac.ide.ui.contentoutline.MultiPageEditorContentOutlinePage;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -68,7 +68,7 @@ public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocat
 					fbtValidation.invokeValidation(getType());
 				}
 			} catch (final CoreException ex) {
-				FordiacLogHelper.logError(ex.getMessage(), ex);
+				ILog.get().error(ex.getMessage(), ex);
 			}
 		}
 	}

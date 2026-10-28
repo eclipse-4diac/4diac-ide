@@ -19,13 +19,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -77,7 +77,7 @@ public final class GitLabEndpointsStore {
 				}
 			}
 		} catch (final BackingStoreException e) {
-			FordiacLogHelper.logWarning("Loading GitLab endpoints failed", e); //$NON-NLS-1$
+			ILog.get().warn("Loading GitLab endpoints failed", e); //$NON-NLS-1$
 		}
 
 		return result;
@@ -103,7 +103,7 @@ public final class GitLabEndpointsStore {
 			prefs.flush();
 			SecurePreferencesFactory.getDefault().flush();
 		} catch (final BackingStoreException | IOException e) {
-			FordiacLogHelper.logWarning("Saving GitLab endpoints failed", e); //$NON-NLS-1$
+			ILog.get().warn("Saving GitLab endpoints failed", e); //$NON-NLS-1$
 		}
 	}
 
@@ -146,7 +146,7 @@ public final class GitLabEndpointsStore {
 			getSecureEndpointsRoot().node(endpointName).removeNode();
 			SecurePreferencesFactory.getDefault().flush();
 		} catch (final IOException e) {
-			FordiacLogHelper.logWarning("Removing secure token failed", e); //$NON-NLS-1$
+			ILog.get().warn("Removing secure token failed", e); //$NON-NLS-1$
 		}
 	}
 
@@ -179,7 +179,7 @@ public final class GitLabEndpointsStore {
 			try {
 				endpointName = findLegacyEndpointName(result, legacyUrl, legacyToken);
 			} catch (final StorageException | RuntimeException e) {
-				FordiacLogHelper.logWarning("Finding a name for the migrated GitLab endpoint failed", e); //$NON-NLS-1$
+				ILog.get().warn("Finding a name for the migrated GitLab endpoint failed", e); //$NON-NLS-1$
 				return result;
 			}
 		}
@@ -201,9 +201,8 @@ public final class GitLabEndpointsStore {
 
 	private static GitLabEndpoint findMatchingEndpoint(final List<GitLabEndpoint> endpoints, final String legacyUrl,
 			final String legacyToken) {
-		return endpoints.stream().filter(endpoint -> endpoint.url().equals(legacyUrl))
-				.filter(endpoint -> legacyToken.isBlank() || endpoint.token().isBlank()
-						|| endpoint.token().equals(legacyToken))
+		return endpoints.stream().filter(endpoint -> endpoint.url().equals(legacyUrl)).filter(
+				endpoint -> legacyToken.isBlank() || endpoint.token().isBlank() || endpoint.token().equals(legacyToken))
 				.findFirst().orElse(null);
 	}
 
@@ -217,7 +216,7 @@ public final class GitLabEndpointsStore {
 		try {
 			prefs.flush();
 		} catch (final BackingStoreException e) {
-			FordiacLogHelper.logWarning("Saving migrated GitLab endpoint failed", e); //$NON-NLS-1$
+			ILog.get().warn("Saving migrated GitLab endpoint failed", e); //$NON-NLS-1$
 		}
 	}
 
@@ -228,7 +227,8 @@ public final class GitLabEndpointsStore {
 		for (int suffix = 0; suffix < Integer.MAX_VALUE; suffix++) {
 			final String candidateName = createLegacyEndpointName(suffix);
 			final GitLabEndpoint existingEndpoint = findEndpoint(endpoints, candidateName);
-			final String existingToken = readExistingSecureToken(secureEndpointsRoot, existingSecureNames, candidateName);
+			final String existingToken = readExistingSecureToken(secureEndpointsRoot, existingSecureNames,
+					candidateName);
 			if (canUseLegacyEndpointName(existingEndpoint, existingToken, legacyUrl, legacyToken)) {
 				return candidateName;
 			}
@@ -248,8 +248,8 @@ public final class GitLabEndpointsStore {
 		return secureEndpointsRoot.node(endpointName).get(TOKEN_KEY, ""); //$NON-NLS-1$
 	}
 
-	private static boolean canUseLegacyEndpointName(final GitLabEndpoint existingEndpoint,
-			final String existingToken, final String legacyUrl, final String legacyToken) {
+	private static boolean canUseLegacyEndpointName(final GitLabEndpoint existingEndpoint, final String existingToken,
+			final String legacyUrl, final String legacyToken) {
 		final boolean urlIsCompatible = existingEndpoint == null || existingEndpoint.url().equals(legacyUrl);
 		final boolean tokenIsCompatible = existingToken.isBlank() || existingToken.equals(legacyToken);
 		return urlIsCompatible && tokenIsCompatible;
@@ -277,7 +277,7 @@ public final class GitLabEndpointsStore {
 			prefs.flush();
 			return true;
 		} catch (final BackingStoreException | RuntimeException e) {
-			FordiacLogHelper.logWarning("Saving migrated GitLab endpoint failed", e); //$NON-NLS-1$
+			ILog.get().warn("Saving migrated GitLab endpoint failed", e); //$NON-NLS-1$
 			return false;
 		}
 	}
@@ -291,7 +291,7 @@ public final class GitLabEndpointsStore {
 			SecurePreferencesFactory.getDefault().flush();
 			return true;
 		} catch (final StorageException | IOException | RuntimeException e) {
-			FordiacLogHelper.logWarning("Saving secure token failed", e); //$NON-NLS-1$
+			ILog.get().warn("Saving secure token failed", e); //$NON-NLS-1$
 			return false;
 		}
 	}

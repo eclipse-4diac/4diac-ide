@@ -21,10 +21,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod;
-import org.eclipse.fordiac.ide.structuredtextcore.scoping.STCoreScopeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -41,23 +39,25 @@ public class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE) {
-			final IScope globalScope = this.delegateGetScope(context, reference);
+			final IScope globalScope = delegateGetScope(context, reference);
 			return scopeForNonUserDefinedDataTypes(globalScope);
 		}
-		if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
-			final STExpression receiver = STCoreScopeProvider.getReceiver(context);
-			if (receiver instanceof final STBuiltinFeatureExpression builtinFeatureExpression) {
-				final STBuiltinFeature feature = builtinFeatureExpression.getFeature();
-				if (feature == STBuiltinFeature.THIS) {
-					final STAlgorithmSource source = EcoreUtil2.getContainerOfType(context, STAlgorithmSource.class);
-					if (source != null) {
-						return qualifiedScope(source.getElements().stream().filter(STMethod.class::isInstance).toList(),
-								reference, super.getScope(context, reference));
-					}
+		return super.getScope(context, reference);
+	}
+
+	@Override
+	protected IScope getReceiverScope(final STExpression receiver, final EObject context, final EReference reference) {
+		if (receiver instanceof final STBuiltinFeatureExpression builtinFeatureExpression) {
+			final STBuiltinFeature feature = builtinFeatureExpression.getFeature();
+			if (feature == STBuiltinFeature.THIS) {
+				final STAlgorithmSource source = EcoreUtil2.getContainerOfType(context, STAlgorithmSource.class);
+				if (source != null) {
+					return qualifiedScope(source.getElements().stream().filter(STMethod.class::isInstance).toList(),
+							reference, super.getReceiverScope(receiver, context, reference));
 				}
 			}
 		}
-		return super.getScope(context, reference);
+		return super.getReceiverScope(receiver, context, reference);
 	}
 
 	@Override

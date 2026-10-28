@@ -13,11 +13,11 @@
             </description>
         </themeElementCategory>
         <fontDefinition
-                label="Diagram Font"
+                label="%font.diagram.label"
                 categoryId="org.eclipse.fordiac.ide.themeCategory"
                 id="org.eclipse.fordiac.ide.preferences.diagramFontDefinition">
             <description>
-                Font to be used in all 4diac IDE graphical editors and diagrams
+                %font.diagram.description
             </description>
             <!--These font values are based on the current setting for Eclipse Platform JFace Text Editor Font-->
             <fontValue
@@ -37,19 +37,19 @@
         <colorDefinition
               categoryId="org.eclipse.fordiac.ide.themeCategory"
               id="org.eclipse.fordiac.ide.gef.errorColor"
-              label="Error Color"
+              label="%color.error.label"
               value="255,0,128">
         </colorDefinition>
         <colorDefinition
               categoryId="org.eclipse.fordiac.ide.themeCategory"
               id="org.eclipse.fordiac.ide.gef.warningColor"
-              label="Warning Color"
+              label="%color.warning.label"
               value="244,200,45">
         </colorDefinition>
         <colorDefinition
               categoryId="org.eclipse.fordiac.ide.themeCategory"
               id="org.eclipse.fordiac.ide.gef.infoColor"
-              label="Info Color"
+              label="%color.info.label"
               value="130,160,190">
         </colorDefinition>
     </extension>
@@ -59,13 +59,13 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage"
             id="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"
-            name="Diagram">
+            name="%diagram.name">
       </page>
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.gef.preferences.GridPreferencePage"
             id="org.eclipse.fordiac.ide.gef.preferences.GridPreferences"
-            name="Grid">
+            name="%grid.name">
       </page>
    </extension>
    <extension
@@ -74,7 +74,7 @@
             category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
             class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage"
             id="org.eclipse.fordiac.ide.gef.properties.DiagramPreferences"
-            name="Diagram">
+            name="%diagram.name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -112,12 +112,12 @@
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.gef.zoom100"
-            name="Zoom to 100%">
+            name="%command.zoom100.name">
       </command>
       <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             id="org.eclipse.fordiac.ide.gef.zoomfitpage"
-            name="Zoom fit Page">
+            name="%command.zoomFitPage.name">
       </command>
 	</extension> 
 	<extension
@@ -233,13 +233,13 @@
 	            		commandId="org.eclipse.fordiac.ide.gef.zoom100"
 	                  	icon="fordiacimage://ICON_ZOOM_100"
 	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
-	                  	tooltip="Set zoom level to 100%">
+	                  	tooltip="%command.zoom100.tooltip">
 	            </command>
 				<command
 	            		commandId="org.eclipse.fordiac.ide.gef.zoomfitpage"
 	                  	icon="fordiacimage://ICON_ZOOM_PAGE"
 	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
-	                  	tooltip="Set zoom level to fit the page">
+	                  	tooltip="%command.zoomFitPage.tooltip">
 	            </command>
 			</toolbar>
 		</menuContribution>	

@@ -7,7 +7,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferencePage"
             id="org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferencePage"
-            name="FORTE Preferences">
+            name="%preferencePage.forte.name">
       </page>
    </extension>
    <extension
@@ -20,21 +20,21 @@
 	<extension point="org.eclipse.debug.core.launchConfigurationTypes">
 		<launchConfigurationType
 			allowPrototypes="true"
-    		name="Local 4diac FORTE"
+    		name="%launchConfiguration.runLocalFORTE.name"
     		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
     		modes="run"               
     		id="org.eclipse.fordiac.ide.runLocalFORTE">        
 		</launchConfigurationType>
 		<launchConfigurationType
 			allowPrototypes="true"
-    		name="Build 4diac FORTE"
+    		name="%launchConfiguration.buildFORTE.name"
     		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
     		modes="run"               
     		id="org.eclipse.fordiac.ide.buildFORTE">        
 		</launchConfigurationType>
 		<launchConfigurationType
 			allowPrototypes="true"
-    		name="Stop 4diac FORTEs"
+    		name="%launchConfiguration.stopFORTE.name"
     		delegate="org.eclipse.fordiac.ide.fortelauncher.StopForteLaunchDelegate"
     		modes="run"               
     		id="org.eclipse.fordiac.ide.stopFORTE">        

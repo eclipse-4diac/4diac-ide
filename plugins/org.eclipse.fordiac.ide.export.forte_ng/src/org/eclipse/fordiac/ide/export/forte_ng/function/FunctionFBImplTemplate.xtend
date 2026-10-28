@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.function
 
 import java.nio.file.Path
 import java.util.Map
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 
@@ -21,7 +22,7 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 
 class FunctionFBImplTemplate extends FunctionFBTemplate {
 
-	new(FunctionFBType type, String name, Path prefix, Map<?,?> options) {
+	new(FunctionFBType type, String name, Path prefix, Map<?, ?> options) {
 		super(type, name, prefix, "CFunctionBlock", options)
 	}
 
@@ -36,6 +37,8 @@ class FunctionFBImplTemplate extends FunctionFBTemplate {
 		
 		    «generateFBInterfaceDefinition»
 		    «generateFBInterfaceSpecDefinition»
+		    
+		    «bodyLanguageSupport?.generate(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE, ForteNgExportFilter.OPTION_FUNCTION_IMPL -> Boolean.TRUE})»
 		  }
 		
 		  «generateFBDefinition»
@@ -65,7 +68,7 @@ class FunctionFBImplTemplate extends FunctionFBTemplate {
 	'''
 
 	def protected generateBodyCall() //
-	'''«IF bodyReturnVariable !== null»«bodyReturnVariable.generateName» = «ENDIF»func_«type.name»(«generateBodyCallArguments»);'''
+	'''«IF bodyReturnVariable !== null»«bodyReturnVariable.generateName» = «ENDIF»func_«type.name»__impl(«generateBodyCallArguments»);'''
 
 	def protected CharSequence generateBodyCallArguments() //
 	'''«FOR variable : bodyCallArguments SEPARATOR ", "»«variable.generateName»«ENDFOR»'''
@@ -82,7 +85,7 @@ class FunctionFBImplTemplate extends FunctionFBTemplate {
 
 	def protected generateBody() {
 		if (bodyLanguageSupport !== null)
-			bodyLanguageSupport.generate(emptyMap)
+			bodyLanguageSupport.generate(#{ForteNgExportFilter.OPTION_FUNCTION_IMPL -> Boolean.TRUE})
 		else
 			'''
 				«generateFunctionSignature» {

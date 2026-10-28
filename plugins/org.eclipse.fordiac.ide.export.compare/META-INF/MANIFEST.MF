@@ -7,6 +7,7 @@ Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.1.300.qualifier
 Bundle-Name: Compare exported FBs
+Bundle-Localization: plugin
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.compare;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-25

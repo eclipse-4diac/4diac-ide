@@ -19,11 +19,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.typelibrary.ITypeEntryCreator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public enum TypeEntryFactory {
 	INSTANCE;
@@ -73,7 +73,7 @@ public enum TypeEntryFactory {
 					numTypeCreators++;
 				}
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		}
 		return Arrays.copyOf(typeCreators, numTypeCreators);

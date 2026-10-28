@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
@@ -38,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
@@ -184,7 +184,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 					childProviders.add(childrenProvider);
 				}
 			} catch (final CoreException corex) {
-				FordiacLogHelper.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", //$NON-NLS-1$
+				ILog.get().error("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", //$NON-NLS-1$
 						corex);
 			}
 		}

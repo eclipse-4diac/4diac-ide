@@ -7,7 +7,7 @@
             delegate="org.eclipse.fordiac.ide.debug.replaydebugging.LaunchConfigurationDelegate"
             id="org.eclipse.fordiac.ide.debug.replaydebugging.launchConfigurationType"
             modes="debug"
-            name="Replay Debugging"
+            name="%replayDebugging.name"
             public="true">
       </launchConfigurationType>
    </extension>

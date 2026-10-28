@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.Label;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Text;
@@ -125,7 +125,7 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 				text.removeVerifyListener(aditionalVerify);
 			}
 		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 }

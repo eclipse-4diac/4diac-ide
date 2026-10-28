@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -32,7 +33,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDocumentationCommand;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -146,7 +146,7 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 								.asyncExec(() -> editor.insertHTML("<img src= data:image/png;base64," + base64 + ">")); //$NON-NLS-1$ //$NON-NLS-2$
 						return Status.OK_STATUS;
 					} catch (final IOException e) {
-						FordiacLogHelper.logError(e.getMessage(), e);
+						ILog.get().error(e.getMessage(), e);
 					}
 					return Status.CANCEL_STATUS;
 				}

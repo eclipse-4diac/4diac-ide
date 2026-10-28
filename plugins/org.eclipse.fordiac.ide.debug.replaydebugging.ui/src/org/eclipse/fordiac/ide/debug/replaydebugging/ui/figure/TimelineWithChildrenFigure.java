@@ -26,6 +26,16 @@ import org.eclipse.draw2d.geometry.Rectangle;
  */
 public class TimelineWithChildrenFigure extends Figure {
 
+	/**
+	 * First row: the comment row above the timeline row, without spacing between
+	 * them.
+	 */
+	private final Figure timelineBlock;
+	/**
+	 * Holds one comment icon per commented event; has height 0 while no event is
+	 * commented.
+	 */
+	private final Figure commentRow;
 	private final Figure timelineFigure;
 	private final LineFigure lineFigure;
 	private final Figure childrenFigure;
@@ -54,12 +64,24 @@ public class TimelineWithChildrenFigure extends Figure {
 		timelineFigure.add(lineFigure,
 				new Rectangle(startPosition * CommonFigureConstants.TOTAL_MARKER_SPACE, 0, figureWidth, figureHeight));
 
+		// An XYLayout without children has preferred size 0x0, so the row takes no
+		// space until an icon is added.
+		commentRow = new Figure();
+		commentRow.setLayoutManager(new XYLayout());
+
+		timelineBlock = new Figure();
+		final var blockLayout = new ToolbarLayout(false); // no spacing: an empty comment row must vanish completely
+		blockLayout.setStretchMinorAxis(true);
+		timelineBlock.setLayoutManager(blockLayout);
+		timelineBlock.add(commentRow);
+		timelineBlock.add(timelineFigure);
+
 		childrenFigure = new Figure();
 
 		childrenFigure.setLayoutManager(new ToolbarLayout(false));
 		childrenFigure.setOpaque(true);
 
-		add(timelineFigure); // first row
+		add(timelineBlock); // first row: comment icons above the timeline
 		add(childrenFigure); // spawned timelines stacked below
 	}
 
@@ -83,6 +105,26 @@ public class TimelineWithChildrenFigure extends Figure {
 		}
 	}
 
+	/**
+	 * Adds the icon of the commented event with the given index to the comment row.
+	 */
+	public void addCommentIcon(final IFigure icon, final int eventIndex) {
+		commentRow.add(icon,
+				new Rectangle(getCommentIconX(eventIndex), 0, CommentIconFigure.WIDTH, CommentIconFigure.HEIGHT));
+	}
+
+	public void removeCommentIcon(final IFigure icon) {
+		if (icon.getParent() == commentRow) {
+			commentRow.remove(icon);
+		}
+	}
+
+	/** Left edge of the icon of an event: centered over the event's marker. */
+	private int getCommentIconX(final int eventIndex) {
+		return (startPosition + eventIndex) * CommonFigureConstants.TOTAL_MARKER_SPACE
+				+ (CommonFigureConstants.MARKER_SIZE - CommentIconFigure.WIDTH) / 2;
+	}
+
 	public void updateMaxNumberOfEvents(final int maxNumberOfEvents) {
 		lineFigure.setMaxNumberOfEvents(maxNumberOfEvents);
 
@@ -101,7 +143,8 @@ public class TimelineWithChildrenFigure extends Figure {
 
 		final int width = Math.max(startPosition * CommonFigureConstants.TOTAL_MARKER_SPACE + timelineSize.width,
 				contentSize.width);
-		final int height = timelineSize.height + contentSize.height + SPACING_BETWEEN_TIMELINES;
+		final int height = commentRow.getPreferredSize().height + timelineSize.height + contentSize.height
+				+ SPACING_BETWEEN_TIMELINES;
 
 		return new Dimension(width, height);
 	}

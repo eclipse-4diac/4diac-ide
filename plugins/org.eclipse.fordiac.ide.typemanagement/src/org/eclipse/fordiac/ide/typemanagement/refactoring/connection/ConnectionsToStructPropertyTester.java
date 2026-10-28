@@ -16,7 +16,7 @@ import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
@@ -62,8 +62,13 @@ public class ConnectionsToStructPropertyTester extends PropertyTester {
 				return false;
 			}
 		}
-		return src != null && !(src instanceof SubApp) && !(src.getType() instanceof ServiceInterfaceFBType)
-				&& dest != null && !(dest instanceof SubApp) && !(dest.getType() instanceof ServiceInterfaceFBType);
+		return src != null && !(src instanceof SubApp) && !isSIFB(src) //
+				&& dest != null && !(dest instanceof SubApp) && !isSIFB(dest);
+	}
+
+	private static boolean isSIFB(final FBNetworkElement src) {
+		return src.getTypeEntry() != null
+				&& src.getTypeEntry().getTypeEClass() == LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE;
 	}
 
 	private static DataConnection checkCon(final Object sel) {

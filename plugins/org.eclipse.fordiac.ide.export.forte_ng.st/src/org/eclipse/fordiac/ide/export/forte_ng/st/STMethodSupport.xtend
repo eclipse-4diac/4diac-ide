@@ -65,6 +65,7 @@ class STMethodSupport extends StructuredTextSupport {
 
 	def private CharSequence generateStructuredTextMethodImpl(STMethod method) '''
 		«method.generateStructuredTextMethodDeclaration(false)» {
+		  «method.body.varDeclarations.filter(STVarOutputDeclarationBlock).generateOutputGuard»
 		  «method.generateStructuredTextMethodBody»
 		}
 		
@@ -83,7 +84,6 @@ class STMethodSupport extends StructuredTextSupport {
 	}
 
 	def private CharSequence generateStructuredTextMethodBody(STMethod method) '''
-		«method.body.varDeclarations.filter(STVarOutputDeclarationBlock).generateOutputGuard»
 		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val = «method.returnType.generateTypeDefaultValue»;«ENDIF»
 		«method.body.varDeclarations.filter(STVarOutputDeclarationBlock).generateVariables(false)»
 		«method.body.varDeclarations.filter(STVarTempDeclarationBlock).generateVariables(true)»

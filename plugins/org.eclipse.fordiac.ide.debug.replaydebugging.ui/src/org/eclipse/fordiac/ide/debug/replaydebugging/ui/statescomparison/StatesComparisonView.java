@@ -14,16 +14,22 @@
 
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.Messages;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.SelectionService;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonSorter.SortMode;
+import org.eclipse.fordiac.ide.model.helpers.ColorHelper;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
@@ -35,10 +41,15 @@ import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -49,7 +60,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public class StatesComparisonView extends ViewPart implements ComparisonService.Listener {
+public class StatesComparisonView extends ViewPart implements ComparisonService.Listener, PropertyChangeListener {
 
 	public static final String VIEW_ID = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.StatesComparisonView"; //$NON-NLS-1$
 
@@ -59,22 +70,49 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			.get("org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDiffColor"); //$NON-NLS-1$
 	private static final Color DISABLED_TEXT_COLOR = JFaceResources.getColorRegistry()
 			.get("org.eclipse.fordiac.ide.debug.replaydebugging.ui.comparisonDisabledColor"); //$NON-NLS-1$
+	private static final Color BLACK_TEXT = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	private static final Color WHITE_TEXT = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 
 	private static final int KEY_COLUMN_WIDTH_DEFAULT = 200;
-	private static final int DATA_COLUMN_WIDTH_DEFAULT = 100;
+
+	/** Narrowest a data column may get before a horizontal scrollbar appears. */
+	private static final int DATA_COLUMN_MIN_WIDTH = 20;
+
+	/**
+	 * All data columns have the same weight, so they share the free space equally.
+	 */
+	private static final int DATA_COLUMN_WEIGHT = 100;
+
+	/** Edge length in pixels of the color swatch shown in a column header. */
+	private static final int SWATCH_SIZE = 12;
+
+	/**
+	 * The swatch images in the current headers; they are not owned by the columns,
+	 * so we dispose them.
+	 */
+	private final List<Image> swatchImages = new ArrayList<>();
 
 	// ── State ────────────────────────────────────────────────────────────
 
 	private TableViewer tableViewer;
 	private Composite tableComposite;
-	private TableViewerColumn fillerColumn;
 	private final List<ColumnState> columnStates = new ArrayList<>();
 	private final List<TableViewerColumn> viewerColumns = new ArrayList<>();
 	private Listener headerMenuListener;
 
+	private Set<String> highlightedDatapoints = new HashSet<>();
+
 	private final ComparisonSorter sorter = new ComparisonSorter();
 	private final UniquenessFilter uniquenessFilter = new UniquenessFilter();
 	private boolean hideNonUnique = false;
+	private boolean showOnlyHighlighted = false;
+
+	private final ViewerFilter highlightFilter = new ViewerFilter() {
+		@Override
+		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+			return isHighlighted(element);
+		}
+	};
 
 	// Toolbar action references — kept to update checked/icon state
 	private Action alphaAscAction;
@@ -102,12 +140,14 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		contributeToActionBars();
 
 		ComparisonService.getInstance().addListener(this);
-		columnsChanged(ComparisonService.getInstance().getColumns());
+		SelectionService.getDefault().addPropertyChangeListener(this);
+		highlightedDatapoints = new HashSet<>(SelectionService.getDefault().getSelectedElements());
 	}
 
 	@Override
 	public void dispose() {
 		ComparisonService.getInstance().removeListener(this);
+		SelectionService.getDefault().removePropertyChangeListener(this);
 		super.dispose();
 	}
 
@@ -119,7 +159,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 	// ── Service Listener ─────────────────────────────────────────────────
 
 	@Override
-	public void columnsChanged(final List<ComparisonColumn> incoming) {
+	public void columnsChanged(final List<ComparisonColumn> incoming, final ComparisonService.Listener.Event event) {
 		if (tableViewer == null || tableViewer.getTable().isDisposed()) {
 			return;
 		}
@@ -138,6 +178,16 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		rebuildTable();
 	}
 
+	@Override
+	public void propertyChange(final PropertyChangeEvent evt) {
+		if (SelectionService.PROPERTY_SELECTION.equals(evt.getPropertyName())) {
+			highlightedDatapoints = new HashSet<>(SelectionService.getDefault().getSelectedElements());
+			if (tableViewer != null && !tableViewer.getTable().isDisposed()) {
+				tableViewer.refresh();
+			}
+		}
+	}
+
 	// ── Table Rebuild ────────────────────────────────────────────────────
 
 	private void rebuildTable() {
@@ -146,11 +196,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		try {
 			viewerColumns.forEach(vc -> vc.getColumn().dispose());
 			viewerColumns.clear();
-
-			if (fillerColumn != null && !fillerColumn.getColumn().isDisposed()) {
-				fillerColumn.getColumn().dispose();
-				fillerColumn = null;
-			}
+			disposeSwatches(); // after the old columns are disposed, so none still references an image
 
 			if (columnStates.isEmpty()) {
 				tableViewer.setInput(Collections.emptyList());
@@ -173,54 +219,13 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			tableViewer.setInput(rows);
 			tableViewer.refresh();
 
-			viewerColumns.forEach(TableViewerColumn::getColumn);
-
-			applyColumnWidths();
-
 			attachHeaderMenuListener();
-
-			addFillerColumn();
 
 		} finally {
 			table.setRedraw(true);
 		}
-	}
-
-	private void addFillerColumn() {
-		// Dispose previous filler if present
-		if (fillerColumn != null && !fillerColumn.getColumn().isDisposed()) {
-			fillerColumn.getColumn().dispose();
-		}
-
-		fillerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		fillerColumn.getColumn().setResizable(false);
-		fillerColumn.getColumn().setMoveable(false);
-		fillerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return EMPTY;
-			}
-		});
-
-		// Give it weight=1 via ColumnWeightData so it absorbs all remaining
-		// space — real columns use ColumnPixelData so they are unaffected
-		final TableColumnLayout layout = (TableColumnLayout) tableComposite.getLayout();
-		layout.setColumnData(fillerColumn.getColumn(), new ColumnWeightData(1, 0, false)); // weight=1, minWidth=0,
-																							// resizable=false
-
 		tableComposite.layout(true, true);
-	}
-
-	private void applyColumnWidths() {
-		final TableColumnLayout layout = (TableColumnLayout) tableComposite.getLayout();
-
-		for (int i = 0; i < viewerColumns.size(); i++) {
-			final int width = (i == 0) ? KEY_COLUMN_WIDTH_DEFAULT : DATA_COLUMN_WIDTH_DEFAULT;
-
-			layout.setColumnData(viewerColumns.get(i).getColumn(), new ColumnPixelData(width, true, false));
-		}
-
-		tableComposite.layout(true, true);
+		table.redraw();
 	}
 
 	// ── Column Factory ───────────────────────────────────────────────────
@@ -234,7 +239,14 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			public String getText(final Object e) {
 				return e instanceof final RowEntry r ? r.rowKey() : EMPTY;
 			}
+
+			@Override
+			public Color getForeground(final Object e) {
+				return isHighlighted(e) ? getHighlightColor() : null;
+			}
 		});
+		// fixed (but user-resizable) width; the data columns share what is left
+		getTableLayout().setColumnData(col.getColumn(), new ColumnPixelData(KEY_COLUMN_WIDTH_DEFAULT, true, false));
 		viewerColumns.add(col);
 	}
 
@@ -242,16 +254,58 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		final TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.NONE);
 		styleColumnHeader(col, columnState);
 		col.setLabelProvider(buildLabelProvider(columnState));
+		// shrink/grow with the view, but never below the minimum width
+		getTableLayout().setColumnData(col.getColumn(),
+				new ColumnWeightData(DATA_COLUMN_WEIGHT, DATA_COLUMN_MIN_WIDTH, true));
 		viewerColumns.add(col);
 	}
 
+	private TableColumnLayout getTableLayout() {
+		return (TableColumnLayout) tableComposite.getLayout();
+	}
+
+	private boolean isHighlighted(final Object element) {
+		return element instanceof final RowEntry r && highlightedDatapoints.contains(r.rowKey());
+	}
+
+	private static Color getHighlightColor() {
+		return ColorConstants.red;
+	}
+
 	/**
-	 * Sets the column header text and greys it out when disabled.
+	 * Sets the column header text, and the column color as a swatch next to it. SWT
+	 * cannot color a single header, hence the swatch.
 	 */
-	private static void styleColumnHeader(final TableViewerColumn col, final ColumnState columnState) {
+	private void styleColumnHeader(final TableViewerColumn col, final ColumnState columnState) {
 		col.getColumn().setText(columnState.getColumn().getLabel());
 		col.getColumn().setResizable(true);
 		col.getColumn().setMoveable(true);
+
+		final Color color = columnState.getColumn().getColor();
+		if (columnState.isShowColor() && color != null) {
+			col.getColumn().setImage(createSwatch(color));
+		}
+	}
+
+	private Image createSwatch(final Color color) {
+		final Image image = new Image(Display.getDefault(), SWATCH_SIZE, SWATCH_SIZE);
+		final GC gc = new GC(image);
+		try {
+			gc.setBackground(color);
+			gc.fillRectangle(0, 0, SWATCH_SIZE, SWATCH_SIZE);
+			// thin border so similar colors stay distinguishable from the header
+			gc.setForeground(BLACK_TEXT);
+			gc.drawRectangle(0, 0, SWATCH_SIZE - 1, SWATCH_SIZE - 1);
+		} finally {
+			gc.dispose();
+		}
+		swatchImages.add(image);
+		return image;
+	}
+
+	private void disposeSwatches() {
+		swatchImages.forEach(Image::dispose);
+		swatchImages.clear();
 	}
 
 	private ColumnLabelProvider buildLabelProvider(final ColumnState columnState) {
@@ -270,7 +324,11 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 				if (columnState.isDisabled()) {
 					return DISABLED_TEXT_COLOR;
 				}
-				return null;
+				final Color background = getBackground(element);
+				if (background == null) {
+					return null; // no custom background: keep the theme's default text color
+				}
+				return ColorHelper.prefersWhiteText(background.getRGB()) ? WHITE_TEXT : BLACK_TEXT;
 			}
 
 			@Override
@@ -279,13 +337,7 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 				if (columnState.isDisabled() || !(element instanceof final RowEntry r)) {
 					return null;
 				}
-				if (isUnique(r.rowKey(), columnState)) {
-					return DIFF_HIGHLIGHT_COLOR;
-				}
-				if (columnState.isShowColor()) {
-					return columnState.getColumn().getColor();
-				}
-				return null;
+				return isUnique(r.rowKey(), columnState) ? DIFF_HIGHLIGHT_COLOR : null;
 			}
 		};
 	}
@@ -444,6 +496,17 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 			}
 		};
 		toolbar.add(hideNonUniqueAction);
+
+		final var showOnlyHighlightedAction = new Action(Messages.StatesComparisonView_ShowOnlyHighlightedLabel,
+				IAction.AS_CHECK_BOX) {
+			@Override
+			public void run() {
+				showOnlyHighlighted = isChecked();
+				updateSorterAndFilter();
+				tableViewer.refresh();
+			}
+		};
+		toolbar.add(showOnlyHighlightedAction);
 	}
 
 	/**
@@ -475,11 +538,15 @@ public class StatesComparisonView extends ViewPart implements ComparisonService.
 		sorter.setActiveColumns(enabled);
 		uniquenessFilter.setActiveColumns(enabled);
 
+		final List<ViewerFilter> filters = new ArrayList<>();
 		if (hideNonUnique) {
-			tableViewer.setFilters(uniquenessFilter);
-		} else {
-			tableViewer.setFilters(); // remove all filters
+			filters.add(uniquenessFilter);
 		}
+		if (showOnlyHighlighted) {
+			filters.add(highlightFilter);
+		}
+		tableViewer.setFilters(filters.toArray(ViewerFilter[]::new)); // empty array = no filters
+
 	}
 
 	// ── Uniqueness Helper ────────────────────────────────────────────────

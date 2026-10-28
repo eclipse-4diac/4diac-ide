@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.nattable.PasteFromClipboardDataCommandHandler;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -58,6 +59,7 @@ public class BulkEditorNatTable {
 
 	private final CommandExecutor commandExecutor;
 	private final Composite parent;
+	private ISelectionProvider currentProvider;
 
 	private BulkEditorMode currentMode;
 	private NatTable natTable;
@@ -67,7 +69,6 @@ public class BulkEditorNatTable {
 	private ChangeableListDataProvider<? extends EObject> provider;
 	private SorterModel<? extends EObject> sorterModel;
 
-	private final DelegatingSelectionProvider selectionProviderDelegate = new DelegatingSelectionProvider();
 	private final MenuManager contextMenuManager = new MenuManager();
 
 	private List<Attribute> currentAttributeList = Collections.emptyList();
@@ -83,14 +84,14 @@ public class BulkEditorNatTable {
 	}
 
 	public BulkEditorNatTable(final Composite parent, final CommandExecutor commandExecutor,
-			final BulkEditorMode initialMode, final IWorkbenchPartSite site) {
+			final BulkEditorMode initialMode, final IWorkbenchPartSite site,
+			final DelegatingSelectionProvider selectionProviderDelegate) {
 		this.parent = parent;
 		this.commandExecutor = commandExecutor;
 		createSearchButtonRow(parent);
 
 		this.contextMenuManager.setRemoveAllWhenShown(true);
 		site.registerContextMenu(CONTEXT_MENU_ID, contextMenuManager, selectionProviderDelegate);
-		site.setSelectionProvider(selectionProviderDelegate);
 
 		changeNatTable(initialMode, null);
 	}
@@ -161,9 +162,12 @@ public class BulkEditorNatTable {
 		parent.layout();
 	}
 
+	public ISelectionProvider getCurrentProvider() {
+		return currentProvider;
+	}
+
 	private void addContextMenu() {
-		final var selectionProvider = getSelectionProvider(this.provider);
-		selectionProviderDelegate.setActiveProvider(selectionProvider);
+		currentProvider = getSelectionProvider(this.provider);
 		natTable.addConfiguration(new ContextMenuConfiguration(natTable, contextMenuManager));
 	}
 

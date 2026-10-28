@@ -25,7 +25,7 @@
 			class="org.eclipse.fordiac.ide.hierarchymanager.ui.view.PlantHierarchyView"
 			icon="platform:/plugin/org.eclipse.ui/icons/full/eview16/filenav_nav.png"
 			id="org.eclipse.fordiac.ide.hierarchymanager.view"
-			name="Plant Hierarchy">
+			name="%view.plantHierarchy.name">
   		</view>
 	</extension>
 	
@@ -70,7 +70,7 @@
 		        id="org.eclipse.fordiac.ide.hierarchymanager.ui.hierarchycontent"
 		        contentProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyContentProvider"
 		        labelProvider="org.eclipse.fordiac.ide.hierarchymanager.ui.providers.HierarchyLabelProvider"
-		        name="Plant Hierachy Content"
+		        name="%navigatorContent.hierarchy.name"
 		        priority="highest">
             <possibleChildren>
             	<or>
@@ -152,17 +152,17 @@
     <extension point="org.eclipse.ui.commands">
     	<category
         	id="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
-            name="4diac IDE Plant Hierarchy Commands" />
+            name="%commands.category.name" />
        	<command
         	categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.ExpandAll"
             id="org.eclipse.fordiac.ide.hierarchymanager.ui.expandAll"
-            name="Expand All" />
+            name="%command.expandAll.name" />
        	<command
         	categoryId="org.eclipse.fordiac.ide.hierarchymanager.ui.plantHierarchy"
             defaultHandler="org.eclipse.fordiac.ide.hierarchymanager.ui.handlers.CreateLevel"
             id="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
-            name="Create Level" />
+            name="%command.createLevel.name" />
     </extension>
     
 	<extension point="org.eclipse.ui.menus">
@@ -176,7 +176,7 @@
 		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
          	<command
                	commandId="org.eclipse.fordiac.ide.hierarchymanager.ui.createLevel"
-         		tooltip="Create a new level">
+         		tooltip="%menu.createLevel.tooltip">
 				<visibleWhen checkEnabled="false">
 					<with variable="activePartId">
 						<equals value="org.eclipse.fordiac.ide.hierarchymanager.view" />
@@ -185,7 +185,7 @@
 			</command>
          	<command
             	commandId="org.eclipse.ui.edit.rename"
-               	tooltip="Rename selected level">
+               	tooltip="%menu.rename.tooltip">
             	<visibleWhen checkEnabled="false">
                		<iterate operator="or">
                   		<instanceof value="org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level" />
@@ -194,7 +194,7 @@
          	</command>
          	<command
             	commandId="org.eclipse.ui.edit.delete"
-               	tooltip="Delete selected node">  
+               	tooltip="%menu.delete.tooltip">  
                	<visibleWhen checkEnabled="false">
 	               	<with variable="selection">
 	            		<count value="1" />
@@ -220,7 +220,7 @@
           <propertyTab
                 category="level"
                 id="org.eclipse.fordiac.ide.hierarchymanager.ui.levelPropertyTab"
-                label="Level">
+                label="%propertyTab.level.label">
           </propertyTab>
        </propertyTabs>
     </extension>
@@ -240,7 +240,7 @@
 		<decorator
 	            class="org.eclipse.fordiac.ide.hierarchymanager.ui.decorator.NodeCommentDecorator"
 	            id="org.eclipse.fordiac.ide.hierarchymanager.ui.NodeCommentDecorator"
-	            label="Node comment decoration"
+	            label="%decorator.nodeComment.label"
 	            lightweight="true"
 	            state="true">
             <enablement>
@@ -249,7 +249,7 @@
                	</or>
             </enablement>
             <description>
-               Show comments beside nodes.
+               %decorator.nodeComment.description
         	</description>
       	</decorator>
 	</extension>
@@ -262,7 +262,7 @@
 		<deleteParticipant
 				class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.DeleteLibraryElementParticipant"
 				id="org.eclipse.fordiac.ide.hierarchymanager.ui.deleteLibraryElementParticipant"
-				name="deletePlantElement">
+				name="%participant.deletePlantElement.name">
 			<enablement>
 				<or>
 					<instanceof value="org.eclipse.core.resources.IFolder"/>
@@ -288,7 +288,7 @@
 		<moveParticipant
 	    		class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.MoveFileParticipant"
 	    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.moveFileParticipant"
-	    		name="moveFileRefactor" >
+	    		name="%participant.moveFileRefactor.name" >
 			<enablement>
 				<or>
 					<instanceof value="org.eclipse.core.resources.IFolder"/>
@@ -314,7 +314,7 @@
  		<renameParticipant
 				class="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.RenameFileParticipant"
     			id="org.eclipse.fordiac.ide.hierarchymanager.ui.refactoring.renameFileParticipant"
-    			name="renameFileRefactor" >
+    			name="%participant.renameFileRefactor.name" >
 			<enablement>
 				<or>
 					<instanceof value="org.eclipse.core.resources.IFolder"/>

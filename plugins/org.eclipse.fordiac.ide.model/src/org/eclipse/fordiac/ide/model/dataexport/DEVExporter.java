@@ -63,12 +63,12 @@ public class DEVExporter extends AbstractTypeExporter {
 	private void addResources(final EList<Resource> resourceList) throws XMLStreamException {
 		for (final Resource resource : resourceList) {
 			addStartElement(LibraryElementTags.RESOURCE_ELEMENT);
-			addNameTypeCommentAttribute(resource, resource.getType());
+			addNameTypeCommentAttribute(resource, resource.getTypeEntry());
 			addParamsConfig(resource.getVarDeclarations());
 
 			new FBNetworkExporter(this).createFBNetworkElement(resource.getFBNetwork());
 
-			addAttributes(getType().getAttributes());
+			addAttributes(resource.getAttributes());
 			addEndElement();
 		}
 	}

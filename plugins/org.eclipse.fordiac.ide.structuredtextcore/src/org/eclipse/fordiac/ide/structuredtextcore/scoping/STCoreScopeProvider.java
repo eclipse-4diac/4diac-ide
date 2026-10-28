@@ -25,12 +25,14 @@ package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -63,7 +65,6 @@ import org.eclipse.xtext.scoping.impl.ScopeBasedSelectable;
 import org.eclipse.xtext.scoping.impl.SelectableBasedScope;
 import org.eclipse.xtext.scoping.impl.SimpleScope;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
@@ -91,23 +92,26 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			STCorePackage.Literals.ST_TIME_LITERAL__TYPE, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL__TYPE,
 			STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE, STCorePackage.Literals.ST_STRING_LITERAL__TYPE);
 
-	private static final List<EReference> APPLICABLE_FB_OUTPUT_PARAMETERS = List
+	private static final Set<EReference> APPLICABLE_FB_OUTPUT_PARAMETERS = Set
 			.of(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
 
-	private static final List<EReference> APPLICABLE_FB_INPUT_PARAMETERS = List.of(
+	private static final Set<EReference> APPLICABLE_FB_INPUT_PARAMETERS = Set.of(
 			LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS);
 
-	private static final List<EReference> APPLICABLE_FB_FEATURES = List.of(
+	private static final Set<EReference> APPLICABLE_FB_FEATURES = Set.of(
 			LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__EVENT_INPUTS);
 
-	private static final List<EReference> APPLICABLE_ADAPTER_FEATURES = List.of(
+	private static final Set<EReference> APPLICABLE_ADAPTER_FEATURES = Set.of(
 			LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 			LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS);
+
+	private static final Set<EReference> APPLICABLE_STRUCT_FEATURES = Set
+			.of(DataPackage.Literals.STRUCTURED_TYPE__MEMBER_VARIABLES);
 
 	@Inject
 	IQualifiedNameProvider qualifiedNameProvider;
@@ -121,77 +125,26 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STCorePackage.Literals.ST_VAR_DECLARATION__TYPE
 				|| reference == STCorePackage.Literals.ST_TYPE_DECLARATION__TYPE) {
-			final IScope globalScope = super.getScope(context, reference);
+			final IScope globalScope = delegateGetScope(context, reference);
 			return scopeForNonUserDefinedDataTypes(filterScope(globalScope, this::isApplicableForTypeReference));
 		}
 		if (isAnyElementaryLiteral(reference)) {
 			return new SimpleScope(LITERAL_TYPES_DESCRIPTIONS, true);
 		}
 		if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
-			final var receiver = getReceiver(context);
-			// if there is a receiver, which is not the same EObject as the context
-			if (receiver != null && receiver != context) {
-				final var receiverType = receiver.getResultType();
-				if (receiverType != null) {
-					if (receiverType instanceof final StructuredType structuredVarType) {
-						return qualifiedScope(structuredVarType.getMemberVariables(), reference);
-					}
-					if (receiverType instanceof final AdapterType adapterType) {
-						if (adapterType.eContainer() instanceof final AdapterType primaryAdapterType) {
-							return typeScope(primaryAdapterType, context, reference,
-									this::isApplicableForAdapterFeatureReference);
-						}
-						return typeScope(adapterType, context, reference, this::isApplicableForAdapterFeatureReference);
-					}
-					if (receiverType instanceof final FBType fbType) {
-						return typeScope(fbType, context, reference, this::isApplicableForFBFeatureReference);
-					}
-				}
-				return IScope.NULLSCOPE;
-			}
-			if (context instanceof final STFeatureExpression expression && expression.isCall()) {
-				final List<DataType> argumentTypes = expression.getParameters().stream()
-						.map(STCallArgument::getDeclaredResultType)
-						.map(type -> type instanceof final DataType dt ? dt : GenericTypes.ANY).toList();
-				return new STStandardFunctionScope(
-						filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference),
-						standardFunctionProvider, argumentTypes, true);
-			}
-			return new STStandardFunctionScope(
-					filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference),
-					standardFunctionProvider, Collections.emptyList(), true);
+			return getFeatureScope(context, reference);
 		}
 		if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) {
-			final var feature = getFeature(context);
-			if (feature instanceof final FB fb) {
-				return typeScope(fb.getType(), context, reference, this::isApplicableForFBInputParameterReference);
-			}
-			if (feature instanceof final ICallable callable) {
-				return qualifiedScope(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()),
-						reference);
-			}
-			return IScope.NULLSCOPE;
+			return getInputParameterScope(context, reference);
 		}
 		if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER) {
-			final var feature = getFeature(context);
-			if (feature instanceof final FB fb) {
-				return typeScope(fb.getType(), context, reference, this::isApplicableForFBOutputParameterReference);
-			}
-			if (feature instanceof final ICallable callable) {
-				return qualifiedScope(callable.getOutputParameters(), reference);
-			}
-			return IScope.NULLSCOPE;
+			return getOutputParameterScope(context, reference);
 		}
 		if (reference == STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE) {
 			return filterScope(super.getScope(context, reference), this::isApplicableForVariableReference);
 		}
 		if (reference == STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE) {
-			final var container = context.eContainer();
-			if (container instanceof final STStructInitializerExpression structInitializerExpression
-					&& structInitializerExpression.getResultType() instanceof final StructuredType structType) {
-				return qualifiedScope(structType.getMemberVariables(), reference);
-			}
-			return IScope.NULLSCOPE;
+			return getStructInitScope(context, reference);
 		}
 		if (reference == STCorePackage.Literals.ST_ATTRIBUTE__DECLARATION) {
 			return super.getScope(context, reference);
@@ -199,14 +152,94 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		return super.getScope(context, reference);
 	}
 
+	private IScope getFeatureScope(final EObject context, final EReference reference) {
+		final var receiver = getReceiver(context);
+		// if there is a receiver, which is not the same EObject as the context
+		if (receiver != null && receiver != context) {
+			return getReceiverScope(receiver, context, reference);
+		}
+		if (context instanceof final STFeatureExpression expression && expression.isCall()) {
+			final List<DataType> argumentTypes = expression.getParameters().stream()
+					.map(STCallArgument::getDeclaredResultType)
+					.map(type -> type instanceof final DataType dt ? dt : GenericTypes.ANY).toList();
+			return new STStandardFunctionScope(
+					filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference),
+					standardFunctionProvider, argumentTypes, true);
+		}
+		return new STStandardFunctionScope(
+				filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference),
+				standardFunctionProvider, Collections.emptyList(), true);
+	}
+
+	protected IScope getReceiverScope(final STExpression receiver, final EObject context, final EReference reference) {
+		final var receiverType = receiver.getResultType();
+		if (receiverType != null) {
+			if (receiverType instanceof final StructuredType structType) {
+				return typeScope(structType, context, reference, this::isApplicableForStructFeatureReference);
+			}
+			if (receiverType instanceof final AdapterType adapterType) {
+				if (adapterType.eContainer() instanceof final AdapterType primaryAdapterType) {
+					return typeScope(primaryAdapterType, context, reference,
+							this::isApplicableForAdapterFeatureReference);
+				}
+				return typeScope(adapterType, context, reference, this::isApplicableForAdapterFeatureReference);
+			}
+			if (receiverType instanceof final FBType fbType) {
+				return typeScope(fbType, context, reference, this::isApplicableForFBFeatureReference);
+			}
+		}
+		return IScope.NULLSCOPE;
+	}
+
+	protected IScope getInputParameterScope(final EObject context, final EReference reference) {
+		final var feature = getFeature(context);
+		if (feature instanceof final FB fb) {
+			return typeScope(fb.getType(), context, reference, this::isApplicableForFBInputParameterReference);
+		}
+		if (feature instanceof final ICallable callable) {
+			return qualifiedScope(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()),
+					reference);
+		}
+		return IScope.NULLSCOPE;
+	}
+
+	protected IScope getOutputParameterScope(final EObject context, final EReference reference) {
+		final var feature = getFeature(context);
+		if (feature instanceof final FB fb) {
+			return typeScope(fb.getType(), context, reference, this::isApplicableForFBOutputParameterReference);
+		}
+		if (feature instanceof final ICallable callable) {
+			return qualifiedScope(callable.getOutputParameters(), reference);
+		}
+		return IScope.NULLSCOPE;
+	}
+
+	private IScope getStructInitScope(final EObject context, final EReference reference) {
+		final var container = context.eContainer();
+		if (container instanceof final STStructInitializerExpression structInitializerExpression
+				&& structInitializerExpression.getResultType() instanceof final StructuredType structType) {
+			return typeScope(structType, context, reference, this::isApplicableForStructFeatureReference);
+		}
+		return IScope.NULLSCOPE;
+	}
+
 	protected static IScope scopeForNonUserDefinedDataTypes(final IScope parent) {
 		return new SimpleScope(parent, NON_USER_DEFINED_TYPES_DESCRIPTIONS, true);
 	}
 
-	public ImportScope typeScope(final EObject type, final EObject context, final EReference reference,
+	public IScope typeScope(final EObject type, final EObject context, final EReference reference,
 			final Predicate<IEObjectDescription> filter) {
-		return new ImportScope(List.of(createImportNormalizer(qualifiedNameProvider.getFullyQualifiedName(type))),
-				IScope.NULLSCOPE, new ScopeBasedSelectable(filterScope(delegateGetScope(context, reference), filter)),
+		if (type == null) {
+			return IScope.NULLSCOPE;
+		}
+
+		final QualifiedName typeName = qualifiedNameProvider.getFullyQualifiedName(type);
+		if (typeName == null || typeName.isEmpty()) {
+			return IScope.NULLSCOPE;
+		}
+
+		return new ImportScope(List.of(createImportNormalizer(typeName)), IScope.NULLSCOPE,
+				new ScopeBasedSelectable(filterScope(delegateGetScope(context, reference), filter)),
 				reference.getEReferenceType(), true);
 	}
 
@@ -236,7 +269,7 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	}
 
 	protected static IScope filterScope(final IScope scope, final Predicate<IEObjectDescription> filter) {
-		return new FilteringScope(scope, filter);
+		return new FilteringScope(scope, filter::test);
 	}
 
 	protected boolean isApplicableForTypeReference(final IEObjectDescription description) {
@@ -290,8 +323,12 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		return isApplicable(description, LibraryElementPackage.Literals.INTERFACE_LIST, APPLICABLE_ADAPTER_FEATURES);
 	}
 
+	protected boolean isApplicableForStructFeatureReference(final IEObjectDescription description) {
+		return isApplicable(description, DataPackage.Literals.STRUCTURED_TYPE, APPLICABLE_STRUCT_FEATURES);
+	}
+
 	protected static boolean isApplicable(final IEObjectDescription description, final EClass containerClass,
-			final List<EReference> containmentFeatures) {
+			final Set<EReference> containmentFeatures) {
 		final String containerName = description.getUserData(STCoreResourceDescriptionStrategy.CONTAINER_ECLASS_NAME);
 		final String featureName = description.getUserData(STCoreResourceDescriptionStrategy.CONTAINMENT_FEATURE_NAME);
 		if (containerName != null && featureName != null) {

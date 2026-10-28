@@ -29,6 +29,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -42,7 +43,6 @@ import org.eclipse.fordiac.ide.model.buildpath.DocumentRoot;
 import org.eclipse.fordiac.ide.model.buildpath.Pattern;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.util.XMLResourceOptions;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class BuildpathUtil {
 
@@ -92,7 +92,7 @@ public final class BuildpathUtil {
 					return documentRoot.getBuildpath();
 				}
 			} catch (final Exception e) {
-				FordiacLogHelper.logWarning(
+				ILog.get().warn(
 						"Exception loading buildpath file " + getBuildpathFile(project).getFullPath().toString(), e); //$NON-NLS-1$
 			}
 		}

@@ -202,12 +202,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 			}
 			for (final FB fb : fbList) {
 				addStartElement(LibraryElementTags.FB_ELEMENT);
-				addNameAttribute(fb.getName());
-				if (null != fb.getType()) {
-					addTypeAttribute(fb.getType());
-				}
-				addCommentAttribute(fb.getComment());
-
+				addNameTypeCommentAttribute(fb, fb.getTypeEntry());
 				addAttributes(fb.getAttributes());
 				addEndElement();
 			}

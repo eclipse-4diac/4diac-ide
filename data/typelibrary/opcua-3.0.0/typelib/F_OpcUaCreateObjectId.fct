@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="F_OpcUaCreateObjectId" Comment="Creates an OPC UA identifier for an object node type">
+	<Identification Standard="61499-2" Description="Copyright (c) 2026 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Monika Wenger" Date="2026-10-14">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::opcua">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="instanceBrowseName"/>
+				<With Var="instanceNodeId"/>
+				<With Var="typeBrowseName"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="instanceBrowseName" Type="WSTRING"/>
+			<VarDeclaration Name="instanceNodeId" Type="WSTRING"/>
+			<VarDeclaration Name="typeBrowseName" Type="WSTRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="WSTRING"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE eclipse4diac::opcua;
+
+(* Creates an OPC UA identifier for an object node type *)
+FUNCTION F_OpcUaCreateObjectId : WSTRING
+VAR_INPUT
+	instanceBrowseName : WSTRING;
+	instanceNodeId : WSTRING;
+	typeBrowseName : WSTRING;
+END_VAR
+VAR CONSTANT
+	PREFIX : WSTRING := "opc_ua[CREATE_OBJECT;";
+	NODEID_TYPE : WSTRING := ",s=";
+	SUFFIX : WSTRING := "]";
+	SEPARATOR_PAIR : WSTRING := ";";
+END_VAR
+F_OpcUaCreateObjectId := CONCAT(PREFIX, typeBrowseName, SEPARATOR_PAIR, instanceBrowseName, NODEID_TYPE, instanceNodeId,
+	SUFFIX);
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
+</Function>

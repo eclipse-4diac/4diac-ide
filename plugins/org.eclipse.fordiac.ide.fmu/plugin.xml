@@ -8,7 +8,7 @@
             class="org.eclipse.fordiac.ide.fmu.wizard.CreateFMUWizard"
             icon="fordiacimage://ICON_FMU"
             id="org.eclipse.fordiac.ide.fmu.wizard.CreateFMU"
-            name="Create FMU">
+            name="%wizard.createFMU.name">
       </wizard>
    </extension>
 <extension
@@ -23,7 +23,7 @@
          category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
          class="org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage"
          id="org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage"
-         name="FMU Preferences">
+         name="%preferencePage.fmu.name">
    </page>
 </extension>
 </plugin>

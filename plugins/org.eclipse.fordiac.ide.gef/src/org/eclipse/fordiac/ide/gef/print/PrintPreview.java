@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.gef.print;
 
 import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -22,7 +23,6 @@ import org.eclipse.draw2d.PrintFigureOperation;
 import org.eclipse.draw2d.PrinterGraphics;
 import org.eclipse.draw2d.SWTGraphics;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.LayerManager;
@@ -415,7 +415,7 @@ public class PrintPreview extends Dialog {
 	void print(final Printer printer) {
 
 		if (!printer.startJob(printName)) {
-			FordiacLogHelper.logError(Messages.PrintPreview_ERROR_StartingPrintJob);
+			ILog.get().error(Messages.PrintPreview_ERROR_StartingPrintJob);
 			return;
 		}
 
@@ -434,7 +434,7 @@ public class PrintPreview extends Dialog {
 
 		for (int i = 1; i <= numberOfPages; i++) {
 			if (!printer.startPage()) {
-				FordiacLogHelper.logError(Messages.PrintPreview_ERROR_StartingNewPage);
+				ILog.get().error(Messages.PrintPreview_ERROR_StartingNewPage);
 				return;
 			}
 			graphics.pushState();

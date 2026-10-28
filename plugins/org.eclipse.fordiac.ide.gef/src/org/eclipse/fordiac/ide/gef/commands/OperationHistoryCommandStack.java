@@ -27,13 +27,13 @@ import org.eclipse.core.commands.operations.OperationHistoryEvent;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.commands.operations.UndoContext;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.ScopedOperation;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -112,7 +112,7 @@ public class OperationHistoryCommandStack extends CommandStack {
 		try {
 			opHistory.execute(cmd, null, null);
 		} catch (final ExecutionException e) {
-			FordiacLogHelper.logError("Couldn't execute command: ", e); //$NON-NLS-1$
+			ILog.get().error("Couldn't execute command: ", e); //$NON-NLS-1$
 		}
 	}
 
@@ -186,7 +186,7 @@ public class OperationHistoryCommandStack extends CommandStack {
 		try {
 			opHistory.redo(undoContext, null, null);
 		} catch (final ExecutionException e) {
-			FordiacLogHelper.logError("Couldn't redo command: ", e); //$NON-NLS-1$
+			ILog.get().error("Couldn't redo command: ", e); //$NON-NLS-1$
 		}
 	}
 
@@ -225,7 +225,7 @@ public class OperationHistoryCommandStack extends CommandStack {
 		try {
 			opHistory.undo(undoContext, null, null);
 		} catch (final ExecutionException e) {
-			FordiacLogHelper.logError("Couldn't undo command: ", e); //$NON-NLS-1$
+			ILog.get().error("Couldn't undo command: ", e); //$NON-NLS-1$
 		}
 	}
 

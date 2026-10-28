@@ -33,14 +33,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 
 public class LibraryExporter {
 
@@ -53,11 +56,13 @@ public class LibraryExporter {
 	private final Library library;
 	private final String version;
 	private final IProject project;
+	private final boolean exportAsSIFB;
 
-	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final Library library,
-			final String version, final IProject project) {
+	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final boolean exportSIFB,
+			final Library library, final String version, final IProject project) {
 		this.outputDirectory = outputDirectory;
 		this.exportType = exportType;
+		this.exportAsSIFB = exportSIFB;
 		this.library = library;
 		this.version = version;
 		this.project = project;
@@ -105,11 +110,20 @@ public class LibraryExporter {
 		}
 	}
 
-	private static void exportType(final TypeEntry typeEntry, final Path targetFolder) throws IOException {
+	private void exportType(final TypeEntry typeEntry, final Path targetFolder) throws IOException {
 		final IFile sourceFile = typeEntry.getFile();
 		final Path targetFile = targetFolder.resolve(getTargetPath(typeEntry));
 
 		Files.createDirectories(targetFile.getParent());
+
+		if (exportAsSIFB && canExportAsSIFB(typeEntry)) {
+			try {
+				LibraryExportUtil.exportTypeAsSIFB(typeEntry, targetFile.getParent().toFile());
+				return;
+			} catch (final LibraryElementHashException e) {
+				throw new IOException(e);
+			}
+		}
 
 		try (InputStream input = sourceFile.getContents()) {
 			Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);
@@ -117,6 +131,14 @@ public class LibraryExporter {
 			throw new IOException(MessageFormat.format(Messages.LibraryExporter_ErrorFile, sourceFile.getFullPath()),
 					e);
 		}
+	}
+
+	private static boolean canExportAsSIFB(final TypeEntry typeEntry) {
+		final EClass eclass = typeEntry.getTypeEClass();
+		return eclass == LibraryElementPackage.Literals.SIMPLE_FB_TYPE
+				|| eclass == LibraryElementPackage.Literals.COMPOSITE_FB_TYPE
+				|| eclass == LibraryElementPackage.Literals.BASIC_FB_TYPE
+				|| eclass == LibraryElementPackage.Literals.FUNCTION_FB_TYPE;
 	}
 
 	private static Path getTargetPath(final TypeEntry typeEntry) {

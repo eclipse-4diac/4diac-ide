@@ -73,6 +73,7 @@ class ForteNgExportFilter extends TemplateExportFilter {
 	public static final String OPTION_TYPE_OUT_PARAM = "type_out_param"
 	public static final String OPTION_TYPE_IN_OUT_PARAM = "type_in_out_param"
 	public static final String OPTION_HEADER = "header"
+	public static final String OPTION_FUNCTION_IMPL = "function_impl"
 
 	override protected getTemplates(String name, EObject source) {
 		val cache = newHashMap

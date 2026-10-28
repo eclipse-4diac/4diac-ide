@@ -15,11 +15,11 @@ package org.eclipse.fordiac.ide.model.search.plugin;
 import java.text.MessageFormat;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.search.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class SearchFactoryRegistryReader {
 	private static final String FACTORY_ID = "factory"; //$NON-NLS-1$
@@ -60,15 +60,17 @@ public final class SearchFactoryRegistryReader {
 	}
 
 	private static void log(final IConfigurationElement element, final String message) {
-		FordiacLogHelper.logError(MessageFormat.format(Messages.SearchFactoryRegistryReader_LogMessage, message,
-				element.getDeclaringExtension().getExtensionPointUniqueIdentifier(),
-				element.getDeclaringExtension().getContributor().getName()));
+		ILog.get()
+				.error(MessageFormat.format(Messages.SearchFactoryRegistryReader_LogMessage, message,
+						element.getDeclaringExtension().getExtensionPointUniqueIdentifier(),
+						element.getDeclaringExtension().getContributor().getName()));
 	}
 
 	private static void log(final IConfigurationElement element, final String message, final Throwable t) {
-		FordiacLogHelper.logError(MessageFormat.format(Messages.SearchFactoryRegistryReader_LogMessage, message,
-				element.getDeclaringExtension().getExtensionPointUniqueIdentifier(),
-				element.getDeclaringExtension().getContributor().getName()), t);
+		ILog.get()
+				.error(MessageFormat.format(Messages.SearchFactoryRegistryReader_LogMessage, message,
+						element.getDeclaringExtension().getExtensionPointUniqueIdentifier(),
+						element.getDeclaringExtension().getContributor().getName()), t);
 	}
 
 	private SearchFactoryRegistryReader() {

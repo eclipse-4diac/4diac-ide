@@ -41,22 +41,4 @@ public enum BulkEditorMode {
 	public static boolean isAdvancedMode(final BulkEditorMode mode) {
 		return mode == VARIABLE || mode == ADVANCED_ATTRIBUTE;
 	}
-
-	public static BulkEditorMode fromMemento(final String value, final boolean legacyAdvancedMode) {
-		if (value == null) {
-			return VARIABLE;
-		}
-
-		try {
-			return valueOf(value);
-		} catch (final IllegalArgumentException e) {
-			// fall through to legacy handling.
-		}
-
-		try {
-			return resolve(Integer.parseInt(value), legacyAdvancedMode);
-		} catch (final NumberFormatException e) {
-			return VARIABLE;
-		}
-	}
 }

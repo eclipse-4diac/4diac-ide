@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.fortelauncher;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -20,7 +21,6 @@ import org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferenceConstant
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
 import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -82,7 +82,7 @@ public class ForteLaunchTab extends RuntimeLaunchTab {
 			setPortValue(configuration.getAttribute(ATTR_FORTE_PORT, DEFAULT_FORTE_PORT));
 			argumentsField.setText(configuration.getAttribute(ATTR_FORTE_ARGUMENTS, "")); //$NON-NLS-1$
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ILog.get().warn(e.getMessage(), e);
 		}
 	}
 

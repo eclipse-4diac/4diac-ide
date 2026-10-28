@@ -25,6 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
@@ -35,7 +36,6 @@ import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.DownloadResult.Status;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibraryTreeNode;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -96,8 +96,7 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 			final Map<String, List<LeafNode>> packagesAndLeaves) {
 		final LibraryTreeNode projectNode = new LibraryTreeNode(project, project.name());
 		packages.stream().sorted(Comparator.comparing(Package::name))
-				.collect(Collectors.toMap(Package::name, Function.identity(), (first, _) -> first,
-						LinkedHashMap::new))
+				.collect(Collectors.toMap(Package::name, Function.identity(), (first, _) -> first, LinkedHashMap::new))
 				.values().forEach(pack -> {
 					final LibraryTreeNode packageNode = new LibraryTreeNode(pack, pack.name());
 					packagesAndLeaves.getOrDefault(pack.name(), List.of()).stream()
@@ -151,7 +150,7 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 				try {
 					Files.deleteIfExists(p);
 				} catch (final Exception e) {
-					FordiacLogHelper.logError("Deletion of downloaded zip failed", e); //$NON-NLS-1$
+					ILog.get().error("Deletion of downloaded zip failed", e); //$NON-NLS-1$
 				}
 			});
 		}

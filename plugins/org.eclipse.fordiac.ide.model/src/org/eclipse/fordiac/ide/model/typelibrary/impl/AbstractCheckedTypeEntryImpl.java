@@ -13,9 +13,9 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends AbstractTypeEntryImpl {
 
@@ -40,7 +40,7 @@ abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends Ab
 		if (typeClass.isInstance(toSave)) {
 			super.save(toSave, monitor);
 		} else {
-			FordiacLogHelper.logError("Tried to save wrong type entry for " + getClass().getName());//$NON-NLS-1$
+			ILog.get().error("Tried to save wrong type entry for " + getClass().getName());//$NON-NLS-1$
 		}
 	}
 
@@ -51,7 +51,7 @@ abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends Ab
 		} else {
 			super.setType(null);
 			if (null != type) {
-				FordiacLogHelper.logError("Tried to set wrong type entry for " + getClass().getName()); //$NON-NLS-1$
+				ILog.get().error("Tried to set wrong type entry for " + getClass().getName()); //$NON-NLS-1$
 			}
 		}
 	}

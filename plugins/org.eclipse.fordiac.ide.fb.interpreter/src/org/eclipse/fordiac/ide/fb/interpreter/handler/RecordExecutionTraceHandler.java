@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -46,7 +47,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -109,7 +109,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 				try {
 					folder.create(false, false, null);
 				} catch (final CoreException e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
+					ILog.get().error(e.getMessage(), e);
 				}
 			}
 
@@ -128,7 +128,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 				res.save(Collections.emptyMap());
 				openEditorForGeneratedFile(event, file);
 			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 			}
 		}
 		return Status.OK_STATUS;
@@ -181,7 +181,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 			page.openEditor(new FileEditorInput(file), desc.getId());
 		} catch (final PartInitException e) {
 
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 

@@ -83,11 +83,11 @@ public class ReplayNavigator implements Timeline.StructureListener {
 
 	private final List<NavigatorConfigListener> navigatorConfigListeners = new ArrayList<>();
 
-	public ReplayNavigator(final Identifier identifier, final DatapointsState initialState) {
+	public ReplayNavigator(final Identifier identifier, final DatapointsState initialState,
+			final List<DataPointChange> newValues) {
 		this.identifier = identifier;
 		this.currentState = initialState;
-		rootTimeline.addEventChange(initialState.entrySet().stream()
-				.map(entry -> new DataPointChange(entry.getKey(), entry.getValue(), entry.getValue())).toList());
+		rootTimeline.addEventChange(newValues);
 		rootTimeline.addStructureListener(this);
 	}
 

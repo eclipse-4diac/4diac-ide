@@ -4,6 +4,7 @@ Bundle-Name: Type Documentation Editor
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypeeditor.asciidoc;singleton:=true
 Bundle-Localization: fbtasciidoc
 Bundle-Version: 3.1.100.qualifier
+Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors;x-internal:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.ftypeeditor.asciidoc
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Require-Bundle: org.eclipse.ui,
@@ -23,8 +24,9 @@ Import-Package: org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.model.ui.editors,
  org.eclipse.fordiac.ide.typeeditor,
  org.eclipse.fordiac.ide.ui.imageprovider,
- org.eclipse.fordiac.ide.util,
  org.eclipse.jface.text,
+ org.eclipse.jface.text.source,
+ org.eclipse.jface.text.templates,
  org.eclipse.mylyn.wikitext.asciidoc,
  org.eclipse.mylyn.wikitext.html,
  org.eclipse.mylyn.wikitext.parser,

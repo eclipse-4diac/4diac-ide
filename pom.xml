@@ -23,6 +23,7 @@
 	<packaging>pom</packaging>
 	<name>Eclipse 4diac IDE Parent Project</name>
 	<modules>
+		<module>releng</module>
 		<module>plugins</module>
 		<module>tests</module>
 		<module>features</module>
@@ -34,8 +35,7 @@
 		<maven.compiler.target>25</maven.compiler.target>
 		<maven.compiler.release/>
 		<tycho.version>5.0.4</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
-		<tycho-repo.url>https://download.eclipse.org/releases/2026-09</tycho-repo.url>
-		<sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
+		<sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>25</sonar.java.source>
@@ -45,19 +45,14 @@
 		<xtend-version>2.44.0</xtend-version>
 		<xtend-maven-plugin.version>2.44.0</xtend-maven-plugin.version>
 		<xtend-java-version>25</xtend-java-version>
-		<eclipse.cbi.version>1.5.4</eclipse.cbi.version>
-		<build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+		<eclipse.cbi.version>1.5.7</eclipse.cbi.version>
+		<build-helper-maven-plugin.version>3.6.2</build-helper-maven-plugin.version>
 		<maven-resources-plugin-version>3.5.0</maven-resources-plugin-version>
 		<maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
 		<maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
 	</properties>
 
 	<repositories>
-		<repository>
-			<id>tycho-latest</id>
-			<url>${tycho-repo.url}</url>
-			<layout>p2</layout>
-		</repository>
 		<repository>
 			<id>jre-updates</id>
 			<url>${org.eclipse.justj.jre.repository}</url>
@@ -75,10 +70,6 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>tycho-snapshots</id>
-			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
 		</pluginRepository>
 	</pluginRepositories>
 
@@ -149,7 +140,7 @@
 					<target>
 						<artifact>
 							<groupId>org.eclipse.fordiac</groupId>
-							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
+							<artifactId>org.eclipse.fordiac.ide.target</artifactId>
 							<version>3.4.0-SNAPSHOT</version>
 						</artifact>
 					</target>
@@ -270,7 +261,7 @@
 									<filtering>true</filtering>
 								</resource>
 							</resources>
-							<overwrite>true</overwrite>
+							<changeDetection>always</changeDetection>
 						</configuration>
 					</execution>
 				</executions>
@@ -282,14 +273,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtend.lib</artifactId>
-			<version>${xtend-version}</version>
-		</dependency>
-	</dependencies>
 
 	<profiles>
 		<profile>

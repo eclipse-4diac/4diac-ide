@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
@@ -51,7 +52,6 @@ import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
@@ -212,7 +212,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 					MessageFormat.format(Messages.Manifest_Not_Found, manifestUrl));
 		} catch (final IOException e) {
 			final String errorMessage = MessageFormat.format(Messages.Manifest_Download_Failed, manifestUrl);
-			FordiacLogHelper.logError(errorMessage, e);
+			ILog.get().error(errorMessage, e);
 			return new DownloadResult<>(DownloadResult.Status.ERROR,
 					MessageFormat.format(Messages.Download_Error, errorMessage));
 		}
@@ -313,7 +313,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 					projectAndPackageMap.put(project, new ArrayList<>());
 				}
 			} catch (final IOException e) {
-				FordiacLogHelper.logWarning(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+				ILog.get().warn(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
 						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
 				return;
 			} finally {
@@ -352,7 +352,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 					}
 				}
 			} catch (final IOException e) {
-				FordiacLogHelper.logWarning(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
+				ILog.get().warn(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
 						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
 				return;
 			} finally {
@@ -460,7 +460,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 		try {
 			return new DownloadResult<>(packageDownloader(node.getProject(), node.getPackage(), FileFilter.ZIP));
 		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return new DownloadResult<>(DownloadResult.Status.ERROR,
 					MessageFormat.format(Messages.Download_Error, e.getMessage()));
 		}

@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
@@ -28,10 +29,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.subapptypeeditor.Messages;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
@@ -62,7 +66,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
-		setPartName("FB Network"); //$NON-NLS-1$
+		setPartName(Messages.SubAppNetworkBreadCrumbEditor_FBNetwork);
 	}
 
 	@Override
@@ -100,19 +104,14 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	protected EditorPart createEditorPart(final Object model) {
-		if (model instanceof final SubApp subApp) {
-			if (subApp.isTyped()) {
-				return new SubappInstanceViewer();
-			}
-			return new UnTypedSubAppNetworkEditor();
-		}
-
-		if (model instanceof CFBInstance) {
-			return new CompositeInstanceViewer();
-		}
-
-		return null;
+	protected EditorPart createEditorPart(final EObject model) {
+		return switch (model) {
+		case final CFBInstance _ -> new CompositeInstanceViewer();
+		case final TypedSubApp _ -> new SubappInstanceViewer();
+		case final UntypedSubApp subApp when subApp.isContainedInTypedInstance() -> new SubappInstanceViewer();
+		case final UntypedSubApp _ -> new SubAppNetworkEditor();
+		case null, default -> null;
+		};
 	}
 
 	@Override
@@ -126,7 +125,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	protected Object getInitialModel(final String itemPath) {
+	protected EObject getInitialModel(final String itemPath) {
 		// FIXME implement path analysis for typed subapps
 		return getType();
 	}
@@ -218,7 +217,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			createPages();
 			if (!getBreadcrumb().openPath(path, subAppType)) {
 				getBreadcrumb().setInput(subAppType);
-				showReloadErrorMessage(path, "Showing subapp root.");
+				showReloadErrorMessage(path, Messages.SubAppNetworkBreadCrumbEditor_ShowingSubappRoot);
 			}
 		} else {
 			EditorUtils.CloseEditor.run(this);

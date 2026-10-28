@@ -29,49 +29,413 @@
   </extension>
 
 
-<!-- toolbar -->
+<!-- == TOOLBAR == -->
   <extension point="org.eclipse.ui.commands">
     <command
-      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
-      name="%command.formatAsciidocText">
-      <commandParameter
-        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter"
-        name="%command.parameter.formattingDelimiter"
-        optional="false">
-      </commandParameter>
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.title"
+        name="%command.title.name">
     </command>
     <command
-      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list"
-      name="%command.lists">
-      <commandParameter
-        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list.prefix"
-        name="%command.parameter.listPrefix"
-        optional="false">
-      </commandParameter>
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading1"
+        name="%command.heading1.name">
     </command>
     <command
-      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
-      name="%command.headings">
-      <commandParameter
-        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level"
-        name="%command.parameter.headingLevel"
-        optional="false">
-      </commandParameter>
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading2"
+        name="%command.heading2.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading3"
+        name="%command.heading3.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading4"
+        name="%command.heading4.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading5"
+        name="%command.heading5.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.bold"
+        name="%command.bold.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.italic"
+        name="%command.italic.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.monospace"
+        name="%command.monospace.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.subscript"
+        name="%command.subscript.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.superscript"
+        name="%command.superscript.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.unorderedList"
+        name="%command.unorderedList.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.orderedList"
+        name="%command.orderedList.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.link"
+        name="%command.link.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.source"
+        name="%command.source.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.note"
+        name="%command.admonition.note.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.important"
+        name="%command.admonition.important.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tip"
+        name="%command.admonition.tip.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.caution"
+        name="%command.admonition.caution.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warning"
+        name="%command.admonition.warning.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.noteBlock"
+        name="%command.admonition.noteBlock.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.importantBlock"
+        name="%command.admonition.importantBlock.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tipBlock"
+        name="%command.admonition.tipBlock.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.cautionBlock"
+        name="%command.admonition.cautionBlock.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warningBlock"
+        name="%command.admonition.warningBlock.name">
+    </command>
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.fbt"
+        name="%command.fbt.name">
+    </command> 
+    <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage"
+        name="%command.image.name">
     </command>
   </extension>
 
   <extension point="org.eclipse.ui.handlers">
-    <handler
-      class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.FormatHandler"
-      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format">
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.title">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading0" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
     </handler>
-    <handler
-      class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.ListFormatHandler"
-      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list">
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading1">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading1" />
+      </class>
+      <activeWhen>
+       <reference
+           definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+       </reference>
+      </activeWhen>
     </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading2">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading2" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading3">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading3" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading4">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading4" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading5">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="heading5" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.bold">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="bold" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.italic">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="italic" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.monospace">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="monospace" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.subscript">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="subscript" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.superscript">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="superscript" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.unorderedList">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="unorderedList" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.orderedList">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="orderedList" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.link">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="link" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.source">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="source" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.note">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="NOTE" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.important">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="IMPORTANT" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tip">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="TIP" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.caution">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="CAUTION" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warning">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="WARNING" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.noteBlock">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="NOTE Block" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.importantBlock">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="IMPORTANT Block" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tipBlock">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="TIP Block" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.cautionBlock">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="CAUTION Block" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warningBlock">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="WARNING Block" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>    
+    <handler 
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.fbt">
+      <class class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.AsciiDocTemplateHandler">
+        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.template.name" value="fbt" />
+      </class>
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
+    </handler>        
     <handler
-      class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.HeadingHandler"
-      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading">
+        class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.UploadImageHandler"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage">
+      <activeWhen>
+        <reference
+            definitionId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+        </reference>
+      </activeWhen>
     </handler>
   </extension>
 
@@ -79,110 +443,412 @@
     <menuContribution
       locationURI="toolbar:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar">
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.headings"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading1"
         icon="icons/heading.svg"
-        label="%toolbar.headings.label"
-        tooltip="%toolbar.headings.tooltip"
         style="pulldown">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="==" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.bold"
         icon="icons/bold.svg"
-        label="%toolbar.bold.label"
-        tooltip="%toolbar.bold.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="*" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.italic"
         icon="icons/italic.svg"
-        label="%toolbar.italic.label"
-        tooltip="%toolbar.italic.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="_" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.monospace"
         icon="icons/monospace.svg"
-        label="%toolbar.monospace.label"
-        tooltip="%toolbar.monospace.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="`" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.subscript"
         icon="icons/subscript.svg"
-        label="%toolbar.subscript.label"
-        tooltip="%toolbar.subscript.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="~" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.superscript"
         icon="icons/superscript.svg"
-        label="%toolbar.superscript.label"
-        tooltip="%toolbar.superscript.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.format.delimiter" value="^" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.unorderedList"
         icon="icons/listUnordered.svg"
-        label="%toolbar.unorderedList.label"
-        tooltip="%toolbar.unorderedList.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list.prefix" value="*" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.orderedList"
         icon="icons/listOrdered.svg"
-        label="%toolbar.orderedList.label"
-        tooltip="%toolbar.orderedList.tooltip"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.list.prefix" value="." />
       </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.link"
+        icon="icons/link.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.source"
+        icon="icons/code_block.svg"
+        style="push">
+      </command>
+      <command
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.admonitions"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.note"
+        icon="icons/admonition_note.svg"
+        style="pulldown">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.fbt"
+        icon="icons/fbt.svg"
+        style="push">
+      </command>   
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage"
+        icon="icons/image.svg"
+        style="push">
+      </command>      
     </menuContribution>
+    
     <!-- Dropdown content for headings -->
     <menuContribution
-      locationURI="menu:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading">
+      locationURI="menu:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.headings">
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
-        label="%toolbar.heading0.label"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.title"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="=" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
-        label="%toolbar.heading1.label"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading1"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="==" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
-        label="%toolbar.heading2.label"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading2"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="===" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
-        label="%toolbar.heading3.label"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading3"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="====" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
-        label="%toolbar.heading4.label"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading4"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="=====" />
       </command>
       <command
-        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading"
-        label="%toolbar.heading5.label"
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading5"
         style="push">
-        <parameter name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.heading.level" value="======" />
+      </command>
+    </menuContribution>
+    
+    <!-- Dropdown content for admonition -->
+    <menuContribution
+      locationURI="menu:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.admonitions">
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.note"
+        icon="icons/admonition_note.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.important"
+        icon="icons/admonition_important.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tip"
+        icon="icons/admonition_tip.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.caution"
+        icon="icons/admonition_caution.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warning"
+        icon="icons/admonition_warning.svg"
+        style="push">
+      </command>
+      <separator
+        name="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar.admonition.separator"
+        visible="true" 
+      />
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.noteBlock"
+        icon="icons/admonition_note.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.importantBlock"
+        icon="icons/admonition_important.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tipBlock"
+        icon="icons/admonition_tip.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.cautionBlock"
+        icon="icons/admonition_caution.svg"
+        style="push">
+      </command>
+      <command
+        commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warningBlock"
+        icon="icons/admonition_warning.svg"
+        style="push">
       </command>
     </menuContribution>
   </extension>
+  
+  <!-- == SHORTCUTS == -->
+  <extension point="org.eclipse.ui.contexts">
+    <context
+      id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context"
+      parentId="org.eclipse.ui.textEditorScope"
+      name="%asciidoc.context.name">
+    </context>
+  </extension>
+  
+  <!-- KEY BINDINGS -->
+  <!-- M1 = Ctrl on Windows/Linux or Command on macOS -->
+  <!-- M2 = Shift -->
+  <!-- M3 = Alt/Option -->
+  <extension point="org.eclipse.ui.bindings">
+    <!-- Title/Heading 0 (press Ctrl+Shift+H, release all, press 0) -->
+    <key
+      sequence="M1+M2+H 0"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.title"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Heading 1 (Ctrl+Shift+H, 1) -->
+    <key
+      sequence="M1+M2+H 1"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading1"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Heading 2 (Ctrl+Shift+H, 2) -->
+    <key
+      sequence="M1+M2+H 2"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading2"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Heading 3 (Ctrl+Shift+H, 3) -->
+    <key
+      sequence="M1+M2+H 3"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading3"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Heading 4 (Ctrl+Shift+H, 4) -->
+    <key
+      sequence="M1+M2+H 4"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading4"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Heading 5 (Ctrl+Shift+H, 5) -->
+    <key
+      sequence="M1+M2+H 5"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.headings.heading5"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>  
+ 
+    <!-- Bold (Ctrl+B) -->
+    <key
+      sequence="M1+B"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.bold"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+
+    </key>
+
+    <!-- Italic (Ctrl+I) -->
+    <key
+      sequence="M1+I"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.italic"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+  
+    <!-- Monospace (Ctrl+M) -->
+    <key
+      sequence="M1+M"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.monospace"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Subscript (Ctrl+Shift+Arrow_down) -->
+    <key
+      sequence="M1+M2+ARROW_DOWN"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.subscript"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Superscript (Ctrl+Shift+Arrow_up) -->
+    <key
+      sequence="M1+M2+ARROW_UP"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.superscript"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Unordered List (Ctrl+Shift+U) -->
+    <key
+      sequence="M1+M2+U"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.unorderedList"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Ordered List (Ctrl+Shift+O) -->
+    <key
+      sequence="M1+M2+O"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.orderedList"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Link (Ctrl+K) -->
+    <key
+      sequence="M1+K"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.link"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Short Note (Ctrl+Shift+N) -->
+    <key
+      sequence="M1+M2+N"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.note"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Short Tip (Ctrl+Shift+T) -->
+    <key
+      sequence="M1+M2+T"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tip"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+    
+     <!-- Short Important (Ctrl+Shift+I) -->
+    <key
+      sequence="M1+M2+I"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.important"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Short Caution (Ctrl+Shift+C) -->
+    <key
+      sequence="M1+M2+C"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.caution"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Short Warning (Ctrl+Shift+W) -->
+    <key
+      sequence="M1+M2+W"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warning"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Block Note (Ctrl+Shift+Alt+N) -->
+    <key
+      sequence="M1+M2+M3+N"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.noteBlock"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Block Tip (Ctrl+Shift+Alt+T) -->
+    <key
+      sequence="M1+M2+M3+T"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.tipBlock"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Block Important (Ctrl+Shift+Alt+I) -->
+    <key
+      sequence="M1+M2+M3+I"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.importantBlock"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+    
+    <!-- Block Caution (Ctrl+Shift+Alt+C) -->
+    <key
+      sequence="M1+M2+M3+C"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.cautionBlock"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Block Warning (Ctrl+Shift+Alt+W) -->
+    <key
+      sequence="M1+M2+M3+W"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.admonition.warningBlock"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+
+    <!-- Source Block Code (Ctrl+Alt+S) -->
+    <key
+      sequence="M1+M3+S"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.source"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+    
+    <!-- Macro FB Type (Ctrl+Shirt+F) -->
+    <key
+      sequence="M1+M2+F"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.fbt"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+    
+    <!-- Image (Ctrl+Shift+P) -->
+    <key
+      sequence="M1+M2+P"
+      commandId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.commands.uploadImage"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      contextId="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context">
+    </key>
+    
+  </extension>
+  
+  <extension
+      point="org.eclipse.core.expressions.definitions">
+    <definition
+        id="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor.opened">
+      <and>
+        <with
+            variable="activeEditor">
+          <adapt
+          type="org.eclipse.ui.texteditor.ITextEditor">
+            <instanceof
+                value="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor">
+            </instanceof>
+          </adapt>
+        </with>
+      </and>
+    </definition>
+  </extension>  
   
 </plugin>

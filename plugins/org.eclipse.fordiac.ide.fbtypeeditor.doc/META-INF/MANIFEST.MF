@@ -18,4 +18,3 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.typeeditor
-Import-Package: org.eclipse.fordiac.ide.util

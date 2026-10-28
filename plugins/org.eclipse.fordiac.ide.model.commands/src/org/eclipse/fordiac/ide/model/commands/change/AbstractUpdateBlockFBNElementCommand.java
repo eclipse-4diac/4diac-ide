@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -62,7 +63,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -435,7 +435,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 			yield v;
 		}
 		case null, default -> {
-			FordiacLogHelper.logWarning("Update FB wants to set a value to a non value holding interface element!"); //$NON-NLS-1$
+			ILog.get().warn("Update FB wants to set a value to a non value holding interface element!"); //$NON-NLS-1$
 			yield null;
 		}
 		};

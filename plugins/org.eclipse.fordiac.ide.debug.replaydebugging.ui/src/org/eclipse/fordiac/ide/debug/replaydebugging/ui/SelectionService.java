@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchValueAnnotation;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
@@ -30,6 +31,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class SelectionService implements ISelectionListener {
+
+	private static String SYSTEM_EDITOR_PAGE_ID = "org.eclipse.fordiac.ide.editors.SystemEditor"; //$NON-NLS-1$
 
 	private SelectionService() {
 		// singleton
@@ -55,11 +58,9 @@ public class SelectionService implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (part instanceof ReplayDebuggingView) {
-			return; // ignore own view
-		}
-		if (!(selection instanceof final IStructuredSelection sel)) {
-			return;
+		if (!part.getSite().getId().equals(SYSTEM_EDITOR_PAGE_ID)
+				|| !(selection instanceof final IStructuredSelection sel)) {
+			return; // accept only selections in the system editor
 		}
 
 		final var it = sel.iterator();
@@ -71,7 +72,8 @@ public class SelectionService implements ISelectionListener {
 			}
 
 			switch (ep.getModel()) {
-			case final IInterfaceElement interf -> lastSelectedDatapoints.add(interf.getQualifiedName());
+			case final IInterfaceElement interf ->
+				lastSelectedDatapoints.add(removeDeviceAndResourceNamesIfPresent(interf));
 			case final FBNetworkElement fb -> {
 				// find all interfaces and variables from a FB block
 				// omit non interface elements, or interface from subApps
@@ -81,12 +83,19 @@ public class SelectionService implements ISelectionListener {
 					if (!(obj instanceof final IInterfaceElement interfaceElement)) {
 						continue;
 					}
-					lastSelectedDatapoints.add(interfaceElement.getQualifiedName());
+					lastSelectedDatapoints.add(removeDeviceAndResourceNamesIfPresent(interfaceElement));
+				}
+				if (fb.getType() instanceof BasicFBType) {
+					// add also the ECC current state
+					lastSelectedDatapoints.add(removeDeviceAndResourceNamesIfPresent(fb) + ".!ECC");
 				}
 			}
 			case final org.eclipse.fordiac.ide.model.libraryElement.Connection conn -> {
 				lastSelectedDatapoints.add(conn.getSource().getQualifiedName());
 				lastSelectedDatapoints.add(conn.getDestination().getQualifiedName());
+				// add also the connection data
+				lastSelectedDatapoints.add(removeDeviceAndResourceNamesIfPresent(conn.getSource()) + "!"
+						+ removeDeviceAndResourceNamesIfPresent(conn.getDestination()));
 			}
 			case final WatchValueAnnotation watch -> lastSelectedDatapoints.add(watch.getElement().getQualifiedName());
 			default -> {
@@ -97,6 +106,24 @@ public class SelectionService implements ISelectionListener {
 
 		pcs.firePropertyChange(PROPERTY_SELECTION, null, null);
 
+	}
+
+	private static String removeDeviceAndResourceNamesIfPresent(final IInterfaceElement element) {
+		if (element.getQualifiedName()
+				.startsWith(element.getBlockFBNetworkElement().getResource().getQualifiedName())) {
+			return element.getQualifiedName()
+					.substring(element.getBlockFBNetworkElement().getResource().getQualifiedName().length() + 1); // extra
+																													// dot
+		}
+		return element.getQualifiedName();
+	}
+
+	private static String removeDeviceAndResourceNamesIfPresent(final FBNetworkElement element) {
+		if (element.getQualifiedName().startsWith(element.getResource().getQualifiedName())) {
+			return element.getQualifiedName().substring(element.getResource().getQualifiedName().length() + 1); // extra
+																												// dot
+		}
+		return element.getQualifiedName();
 	}
 
 	public List<String> getSelectedElements() {

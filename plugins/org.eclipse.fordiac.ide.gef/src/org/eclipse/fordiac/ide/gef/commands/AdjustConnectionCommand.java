@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.gef.commands;
 
 import java.text.MessageFormat;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
@@ -24,7 +25,6 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 public class AdjustConnectionCommand extends Command {
@@ -86,7 +86,7 @@ public class AdjustConnectionCommand extends Command {
 			newRoutingData.setDx2(fromScreen(newDx2));
 			break;
 		default:
-			FordiacLogHelper.logError(MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex,
+			ILog.get().error(MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex,
 					Integer.valueOf(index)));
 			break;
 		}

@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -46,7 +47,6 @@ import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.ManageLibraryWizard;
 import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
@@ -236,7 +236,7 @@ class ManifestEditorDependencyPage extends FormPage {
 			LinkedLibrary.getAll(project, null)
 					.forEach(lib -> linkedLibVersions.putIfAbsent(lib.getSymbolicName(), lib.getVersion().toString()));
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 
 	}

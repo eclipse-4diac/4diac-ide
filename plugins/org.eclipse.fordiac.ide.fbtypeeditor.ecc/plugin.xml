@@ -27,41 +27,41 @@
          <propertyTab
                category="ecc"
                id="property.tab.transition"
-               label="Transition">
+               label="%propertyTab.transition.label">
          </propertyTab>
          <propertyTab
                category="ecc"
                id="property.tab.state"
-               label="State">
+               label="%propertyTab.state.label">
          </propertyTab>
          <propertyTab
                category="ecc"
                id="property.tab.action"
-               label="Action">
+               label="%propertyTab.action.label">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.action"
                category="ecc"
                id="property.tab.algorithms"
-               label="Algorithms">
+               label="%propertyTab.algorithms.label">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.algorithms"
                category="ecc"
                id="property.tab.ivars"
-               label="Var Internals">
+               label="%propertyTab.varInternals.label">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.ivars"
                category="ecc"
                id="property.tab.icvars"
-               label="Constants">
+               label="%propertyTab.constants.label">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.icvars"
                category="ecc"
                id="property.tab.ifbs"
-               label="Function Blocks">
+               label="%propertyTab.functionBlocks.label">
          </propertyTab>
       </propertyTabs>
    </extension>

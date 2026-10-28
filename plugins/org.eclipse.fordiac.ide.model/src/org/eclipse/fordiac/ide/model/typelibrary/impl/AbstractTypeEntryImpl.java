@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
@@ -58,7 +59,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHasher;
 import org.eclipse.fordiac.ide.model.value.StringValueConverter;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl implements TypeEntry, Adapter.Internal {
 
@@ -357,7 +357,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	private LibraryElement loadType() {
 		if (loading) {
-			FordiacLogHelper.logWarning("Circular dependency when loading type " + getFile().getName()); //$NON-NLS-1$
+			ILog.get().warn("Circular dependency when loading type " + getFile().getName()); //$NON-NLS-1$
 			return null;
 		}
 		try {
@@ -663,7 +663,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		if (e instanceof CoreException || e.getCause() instanceof CoreException) {
 			return;
 		}
-		FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+		ILog.get().warn("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected CoreException handleSaveException(final Throwable t) throws CoreException {

@@ -3,8 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Gitlab
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gitlab;singleton:=true
 Bundle-Version: 3.3.100.qualifier
-Import-Package: org.eclipse.fordiac.ide.util,
- org.eclipse.ui.preferences
+Import-Package: org.eclipse.ui.preferences
 Require-Bundle: 
  org.eclipse.equinox.security,
  org.eclipse.equinox.security.ui,
@@ -22,3 +21,4 @@ Export-Package: org.eclipse.fordiac.ide.gitlab,
  org.eclipse.fordiac.ide.gitlab.management,
  org.eclipse.fordiac.ide.gitlab.preferences,
  org.eclipse.fordiac.ide.gitlab.treeviewer
+Bundle-Localization: plugin

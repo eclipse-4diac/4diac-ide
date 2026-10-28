@@ -31,6 +31,7 @@ import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
@@ -63,7 +64,6 @@ import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurat
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class SystemImporter extends CommonElementImporter {
 
@@ -86,7 +86,7 @@ public class SystemImporter extends CommonElementImporter {
 		super.loadElement();
 		finalizeMappingModel();
 		final long elapsed = System.nanoTime() - start;
-		FordiacLogHelper.logInfo("System \"" + getElement().getName() + "\" load time: " + elapsed / 1_000_000 + "ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		ILog.get().info("System \"" + getElement().getName() + "\" load time: " + elapsed / 1_000_000 + "ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override

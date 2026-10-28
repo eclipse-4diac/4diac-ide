@@ -38,6 +38,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
@@ -59,13 +60,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public class CommonElementExporter {
 
@@ -265,7 +265,7 @@ public class CommonElementExporter {
 			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0"); //$NON-NLS-1$
 			return newWriter;
 		} catch (final XMLStreamException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -383,10 +383,17 @@ public class CommonElementExporter {
 		addCommentAttribute(namedElement.getComment());
 	}
 
-	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final LibraryElement type)
+	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final TypeEntry typeEntry)
 			throws XMLStreamException {
 		addNameAttribute(namedElement.getName());
-		addTypeAttribute(type);
+		addTypeAttribute(typeEntry);
+		addCommentAttribute(namedElement.getComment());
+	}
+
+	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final DataType dt)
+			throws XMLStreamException {
+		addNameAttribute(namedElement.getName());
+		addTypeAttribute(dt);
 		addCommentAttribute(namedElement.getComment());
 	}
 
@@ -441,8 +448,12 @@ public class CommonElementExporter {
 		return escapedValue;
 	}
 
-	protected void addTypeAttribute(final LibraryElement type) throws XMLStreamException {
+	protected void addTypeAttribute(final DataType type) throws XMLStreamException {
 		addTypeAttribute(PackageNameHelper.getFullTypeName(addDependency(type)));
+	}
+
+	protected void addTypeAttribute(final TypeEntry typeEntry) throws XMLStreamException {
+		addTypeAttribute(typeEntry != null ? addDependency(typeEntry).getFullTypeName() : null);
 	}
 
 	protected void addTypeAttribute(final String type) throws XMLStreamException {

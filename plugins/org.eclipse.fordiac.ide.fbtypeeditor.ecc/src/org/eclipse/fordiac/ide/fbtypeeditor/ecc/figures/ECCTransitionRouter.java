@@ -12,7 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 import org.eclipse.draw2d.Bendpoint;
 import org.eclipse.draw2d.BendpointConnectionRouter;
@@ -24,6 +29,7 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Vector;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
 public class ECCTransitionRouter extends BendpointConnectionRouter {
 
@@ -32,15 +38,37 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 	private static final double EPSILON = 0.001;
 	private static final double MAX_HANDLE_DISTANCE = 150.0;
 	private static final double SELF_LOOP_ARC_FACTOR = 1.1;
+	private static final int OBSTACLE_CLEARANCE = 6;
+	private static final double BEND_STEP = 8.0;
+	private static final double MAX_BEND_SHIFT = 1500.0;
+	private static final int SAMPLES_PER_HALF = 16;
+	private static final int ANCHOR_SAMPLES = 2;
+
+	public static final int BENDPOINT_INDEX = 3;
+
+	private final Map<Connection, RouteCache> routeCache = new WeakHashMap<>();
+	private final Set<Connection> routedConnections = Collections.newSetFromMap(new WeakHashMap<>());
+
+	private static final Map<ECTransition, EffectiveEdges> effectiveEdges = new WeakHashMap<>();
+
+	private boolean updatingRelatedConnections;
+
+	private record RouteCache(Point p1, Point p4, Point p7, List<Rectangle> obstacles, List<Rectangle> endpoints,
+			PointList curve) {
+	}
+
+	private record EffectiveEdges(EdgeDirection source, EdgeDirection target, Point bend) {
+	}
 
 	@Override
 	public void route(final Connection conn) {
-
 		if (!(conn instanceof ECTransitionFigure) || !isValidAnchor(conn.getSourceAnchor())
 				|| !isValidAnchor(conn.getTargetAnchor())) {
 			super.route(conn);
 			return;
 		}
+
+		routedConnections.add(conn);
 
 		final Object constraint = getConstraint(conn);
 		if (!(constraint instanceof final List<?> bendpoints) || bendpoints.isEmpty()
@@ -59,7 +87,291 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 		conn.translateToRelative(p4);
 		conn.translateToRelative(p7);
 
-		conn.setPoints(isSelfLoop(conn) ? routeSelfLoop(conn, p1, p4, p7) : routeTransition(conn, p1, p4, p7));
+		final PointList curve = routeAroundStatesCached(conn, p1, p4, p7);
+
+		conn.setPoints(curve);
+		updateEffectiveEdges(conn, curve);
+	}
+
+	private PointList routeAroundStatesCached(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7) {
+		final List<Rectangle> obstacles = collectObstacles(conn);
+		final List<Rectangle> endpoints = List.of(getEndpointBounds(conn, conn.getSourceAnchor().getOwner()),
+				getEndpointBounds(conn, conn.getTargetAnchor().getOwner()));
+
+		final Point key1 = toPoint(p1);
+		final Point key4 = toPoint(p4);
+		final Point key7 = toPoint(p7);
+
+		final RouteCache cached = routeCache.get(conn);
+
+		if (cached != null && cached.p1().equals(key1) && cached.p4().equals(key4) && cached.p7().equals(key7)
+				&& cached.obstacles().equals(obstacles) && cached.endpoints().equals(endpoints)) {
+			updateEffectiveEdges(conn, cached.curve());
+			return cached.curve();
+		}
+
+		final PointList curve = routeAroundStates(conn, p1, p4, p7, obstacles, endpoints);
+
+		routeCache.put(conn, new RouteCache(key1, key4, key7, obstacles, endpoints, curve));
+		updateEffectiveEdges(conn, curve);
+
+		return curve;
+	}
+
+	public static EdgeDirection getEffectiveEdge(final ECTransition transition, final boolean sourceEnd) {
+		if (transition == null) {
+			return null;
+		}
+
+		final EffectiveEdges edges = effectiveEdges.get(transition);
+
+		if (edges == null) {
+			return null;
+		}
+
+		return sourceEnd ? edges.source() : edges.target();
+	}
+
+	public static Integer getEffectiveCoordinate(final ECTransition transition, final boolean horizontal) {
+		if (transition == null) {
+			return null;
+		}
+
+		final EffectiveEdges edges = effectiveEdges.get(transition);
+
+		if (edges == null || edges.bend() == null) {
+			return null;
+		}
+
+		return horizontal ? edges.bend().x : edges.bend().y;
+	}
+
+	private void updateEffectiveEdges(final Connection conn, final PointList curve) {
+		if (!(conn.getSourceAnchor() instanceof final ECStateConnectionAnchor sourceAnchor)
+				|| !(conn.getTargetAnchor() instanceof final ECStateConnectionAnchor targetAnchor) || curve == null
+				|| curve.size() <= 5) {
+			return;
+		}
+
+		final Point sourceReference = curve.getPoint(1).getCopy();
+		conn.translateToAbsolute(sourceReference);
+
+		final Point targetReference = curve.getPoint(5).getCopy();
+		conn.translateToAbsolute(targetReference);
+
+		final EdgeDirection sourceEdge = sourceAnchor.getEdgeForReference(sourceReference);
+		final EdgeDirection targetEdge = targetAnchor.getEdgeForReference(targetReference);
+
+		final ECTransition transition = sourceAnchor.getTransition();
+
+		if (transition == null || sourceEdge == null || targetEdge == null) {
+			return;
+		}
+
+		final Point bend = curve.getPoint(BENDPOINT_INDEX).getCopy();
+		conn.translateToAbsolute(bend);
+
+		final EffectiveEdges newEdges = new EffectiveEdges(sourceEdge, targetEdge, bend);
+		final EffectiveEdges oldEdges = effectiveEdges.put(transition, newEdges);
+
+		if (!newEdges.equals(oldEdges)) {
+			revalidateRelatedConnections(conn);
+		}
+	}
+
+	private void revalidateRelatedConnections(final Connection changedConnection) {
+		if (updatingRelatedConnections) {
+			return;
+		}
+
+		updatingRelatedConnections = true;
+
+		try {
+			final Object sourceOwner = changedConnection.getSourceAnchor().getOwner();
+			final Object targetOwner = changedConnection.getTargetAnchor().getOwner();
+
+			for (final Connection connection : new ArrayList<>(routedConnections)) {
+				if (connection == changedConnection || connection.getParent() == null) {
+					continue;
+				}
+
+				final Object connectionSource = connection.getSourceAnchor().getOwner();
+				final Object connectionTarget = connection.getTargetAnchor().getOwner();
+
+				final boolean sharesState = connectionSource == sourceOwner || connectionSource == targetOwner
+						|| connectionTarget == sourceOwner || connectionTarget == targetOwner;
+
+				if (sharesState) {
+					routeCache.remove(connection);
+					connection.invalidate();
+					connection.revalidate();
+				}
+			}
+		} finally {
+			updatingRelatedConnections = false;
+		}
+	}
+
+	@Override
+	public void remove(final Connection connection) {
+		routedConnections.remove(connection);
+		routeCache.remove(connection);
+
+		if (connection.getSourceAnchor() instanceof final ECStateConnectionAnchor sourceAnchor) {
+			final ECTransition transition = sourceAnchor.getTransition();
+
+			if (transition != null) {
+				effectiveEdges.remove(transition);
+			}
+		}
+
+		super.remove(connection);
+	}
+
+	private static PointList routeAroundStates(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7, final List<Rectangle> obstacles, final List<Rectangle> endpoints) {
+		final PointList original = routeShape(conn, p1, p4, p7);
+		final Vector chord = new Vector(p1, p7);
+
+		if (obstacles.isEmpty() || chord.getLength() < EPSILON || !hitsAny(flatten(original), obstacles)) {
+			return original;
+		}
+
+		final Vector preferredAway = getBendSide(chord, p1, p4);
+		final Vector oppositeAway = new Vector(-preferredAway.x, -preferredAway.y);
+
+		for (double shift = BEND_STEP; shift <= MAX_BEND_SHIFT; shift += BEND_STEP) {
+			for (final Vector away : List.of(preferredAway, oppositeAway)) {
+				final PointList curve = routeVia(conn, translate(p4, away, shift));
+
+				if (isClear(curve, obstacles, endpoints)) {
+					return curve;
+				}
+			}
+		}
+
+		return original;
+	}
+
+	private static PointList routeVia(final Connection conn, final PrecisionPoint bend) {
+		return routeShape(conn, getAnchorLocation(conn, conn.getSourceAnchor(), bend), bend,
+				getAnchorLocation(conn, conn.getTargetAnchor(), bend));
+	}
+
+	private static PointList routeShape(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
+			final PrecisionPoint p7) {
+		return isSelfLoop(conn) ? routeSelfLoop(conn, p1, p4, p7) : routeTransition(conn, p1, p4, p7);
+	}
+
+	private static PrecisionPoint getAnchorLocation(final Connection conn, final ConnectionAnchor anchor,
+			final PrecisionPoint bend) {
+		final PrecisionPoint reference = new PrecisionPoint(bend);
+		conn.translateToAbsolute(reference);
+
+		final PrecisionPoint location = new PrecisionPoint(anchor.getLocation(reference));
+		conn.translateToRelative(location);
+
+		return location;
+	}
+
+	private static boolean isClear(final PointList curve, final List<Rectangle> obstacles,
+			final List<Rectangle> endpoints) {
+		final PointList path = flatten(curve);
+		return !hitsAny(path, obstacles) && !entersAny(path, endpoints);
+	}
+
+	private static Vector getBendSide(final Vector chord, final PrecisionPoint p1, final PrecisionPoint p4) {
+		final Vector unitChord = getNormalized(chord);
+		final Vector normal = new Vector(-unitChord.y, unitChord.x);
+
+		final double offset = ((p4.preciseX() - p1.preciseX()) * normal.x)
+				+ ((p4.preciseY() - p1.preciseY()) * normal.y);
+
+		return offset >= 0 ? normal : new Vector(unitChord.y, -unitChord.x);
+	}
+
+	private static List<Rectangle> collectObstacles(final Connection conn) {
+		final IFigure source = conn.getSourceAnchor().getOwner();
+		final IFigure target = conn.getTargetAnchor().getOwner();
+		final List<Rectangle> obstacles = new ArrayList<>();
+
+		if (source.getParent() == null) {
+			return obstacles;
+		}
+
+		for (final Object child : source.getParent().getChildren()) {
+			if (!(child instanceof final ECStateFigure state)) {
+				continue;
+			}
+
+			if (state != source && state != target) {
+				obstacles.add(getBounds(conn, state).expand(OBSTACLE_CLEARANCE, OBSTACLE_CLEARANCE));
+			} else {
+				final IFigure actionPane = state.getContentPane();
+
+				if (actionPane != null && actionPane.isVisible() && !actionPane.getBounds().isEmpty()) {
+					obstacles.add(getBounds(conn, actionPane).expand(OBSTACLE_CLEARANCE, OBSTACLE_CLEARANCE));
+				}
+			}
+		}
+
+		return obstacles;
+	}
+
+	private static Rectangle getBounds(final Connection conn, final IFigure figure) {
+		final Rectangle bounds = figure.getBounds().getCopy();
+		figure.translateToAbsolute(bounds);
+		conn.translateToRelative(bounds);
+		return bounds;
+	}
+
+	private static Rectangle getEndpointBounds(final Connection conn, final IFigure owner) {
+		return getBounds(conn, owner instanceof final ECStateFigure state ? state.getNameLabel() : owner);
+	}
+
+	private static boolean hitsAny(final PointList path, final List<Rectangle> obstacles) {
+		return obstacles.stream().anyMatch(path::intersects);
+	}
+
+	private static boolean entersAny(final PointList path, final List<Rectangle> bodies) {
+		for (int i = ANCHOR_SAMPLES; i < path.size() - ANCHOR_SAMPLES; i++) {
+			final Point sample = path.getPoint(i);
+
+			if (bodies.stream().anyMatch(body -> body.contains(sample))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static PointList flatten(final PointList curve) {
+		final PointList path = new PointList(2 * (SAMPLES_PER_HALF + 1));
+
+		for (int start = 0; start <= 3; start += 3) {
+			for (int i = 0; i <= SAMPLES_PER_HALF; i++) {
+				path.addPoint(bezier(curve, start, (double) i / SAMPLES_PER_HALF));
+			}
+		}
+
+		return path;
+	}
+
+	private static Point bezier(final PointList curve, final int start, final double t) {
+		final double u = 1 - t;
+		final double[] weights = { u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t };
+
+		double x = 0;
+		double y = 0;
+
+		for (int i = 0; i < weights.length; i++) {
+			final Point control = curve.getPoint(start + i);
+			x += weights[i] * control.x;
+			y += weights[i] * control.y;
+		}
+
+		return toPoint(new PrecisionPoint(x, y));
 	}
 
 	private static PointList routeTransition(final Connection conn, final PrecisionPoint p1, final PrecisionPoint p4,
@@ -97,8 +409,8 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 			final PrecisionPoint p7) {
 		final double reach = Math.max(MIN_LENGTH,
 				Math.max(new Vector(p1, p4).getLength(), new Vector(p7, p4).getLength()));
-		final double handle = Math.min(SELF_LOOP_ARC_FACTOR * reach, MAX_HANDLE_DISTANCE);
 
+		final double handle = Math.min(SELF_LOOP_ARC_FACTOR * reach, MAX_HANDLE_DISTANCE);
 		final Vector axis = getNormalized(new Vector(p1, p7));
 
 		final PrecisionPoint p2 = calcOrthogonalControlPoint(p1, conn.getSourceAnchor().getOwner(), handle, conn);
@@ -125,18 +437,8 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 
 	private static PrecisionPoint calcOrthogonalControlPoint(final PrecisionPoint anchor, final IFigure owner,
 			final double distance, final Connection conn) {
-		final Rectangle bounds;
-		if (owner instanceof final ECStateFigure stateFigure) {
-			bounds = stateFigure.getNameLabel().getBounds().getCopy();
-			stateFigure.getNameLabel().translateToAbsolute(bounds);
-		} else {
-			bounds = owner.getBounds().getCopy();
-			owner.translateToAbsolute(bounds);
-		}
+		final Vector normal = EdgeDirection.of(toPoint(anchor), getEndpointBounds(conn, owner)).toNormal();
 
-		conn.translateToRelative(bounds);
-
-		final Vector normal = EdgeDirection.of(toPoint(anchor), bounds).toNormal();
 		return translate(anchor, normal, distance);
 	}
 
@@ -146,19 +448,22 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 
 	private static Vector getNormalized(final Vector v) {
 		final double len = v.getLength();
+
 		if (len < EPSILON) {
 			return new Vector(0, 0);
 		}
+
 		return v.getDivided(len);
 	}
 
 	private static Vector calcAverageTangent(final Vector seg1, final Vector seg2) {
-
 		final Vector tangent = getNormalized(seg1).getAdded(getNormalized(seg2));
 		final double len = tangent.getLength();
+
 		if (len < EPSILON) {
 			return getNormalized(seg2);
 		}
+
 		return tangent.getDivided(len);
 	}
 

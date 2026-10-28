@@ -10,6 +10,14 @@
             id="org.eclipse.fordiac.ide.bulkeditor.BulkEditor"
             name="%BulkEditor">
       </editor>
+      <editor
+            default="true"
+            extensions="query"
+            icon="fordiacimage://ICON_BULK_EDITOR"
+            id="org.eclipse.fordiac.ide.bulkeditor.QueryFileLauncher"
+            launcher="org.eclipse.fordiac.ide.bulkeditor.handler.QueryFileLauncher"
+            name="%BulkEditor">
+      </editor>
 	</extension>
 	
 	<extension
@@ -117,6 +125,13 @@
 			id="org.eclipse.fordiac.ide.bulkeditor.query.headerBackgroundColor"
 			label="Query viewer node header background color"
 			value="70, 130, 180"
+			isEditable="false">
+		</colorDefinition>
+		<colorDefinition
+			categoryId="org.eclipse.fordiac.ide.themeCategory"
+			id="org.eclipse.fordiac.ide.bulkeditor.query.negatedHeaderBackgroundColor"
+			label="Query viewer node negated header background color"
+			value="200, 40, 40"
 			isEditable="false">
 		</colorDefinition>
 		<colorDefinition
