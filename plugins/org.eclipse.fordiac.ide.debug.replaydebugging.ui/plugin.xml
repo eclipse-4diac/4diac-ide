@@ -70,7 +70,7 @@
              name="%command.addEventComment.name">
      <commandParameter
          id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.commentText"
-         name="Text"
+         name="%command.commentText.name"
          optional="true">
      </commandParameter>
     </command>
@@ -80,7 +80,7 @@
              name="%command.addTimelineComment.name">
 	    <commandParameter
              id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.commentText"
-             name="Text"
+             name="%command.commentText.name"
              optional="true">
 	   </commandParameter>
      </command>
