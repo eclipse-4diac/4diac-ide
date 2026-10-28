@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BasicHashTest" Comment="Basic FB with an ECC">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2026-10-28">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Request">
+				<With Var="DI1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation">
+				<With Var="DO1"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="DINT" InitialValue="DINT#1"/>
+			<VarDeclaration Name="Enable" Type="BOOL" InitialValue="TRUE"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="DINT" InitialValue="DINT#0"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="counter" Type="DINT" InitialValue="DINT#0"/>
+		</InternalVars>
+		<InternalConstVars>
+			<VarDeclaration Name="limit" Type="DINT" InitialValue="DINT#10"/>
+		</InternalConstVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="0" y="0">
+			</ECState>
+			<ECState Name="RUN" x="100" y="0">
+				<ECAction Algorithm="RUN" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="RUN" Condition="REQ" x="50" y="0"/>
+			<ECTransition Source="RUN" Destination="START" Condition="1" x="50" y="50"/>
+		</ECC>
+		<Algorithm Name="RUN">
+			<ST><![CDATA[
+/* ignored algorithm comment */
+ALGORITHM RUN
+	IF Enable THEN
+		counter := counter + DI1;
+	END_IF;
+	DO1 := MIN(counter, limit); // use minimum
+END_ALGORITHM
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::test::ExpectedTypeHash" Value="'v2:SHA3-512:zn56h4sKQR5vV-f_BH7Tjan4-WtxNUIsLKK6LWTy1jIIMpOWoUl-3d3QU5lxZSXJuZ-JlWgPEk9RLzCsbnKovA=='"/>
+</FBType>
