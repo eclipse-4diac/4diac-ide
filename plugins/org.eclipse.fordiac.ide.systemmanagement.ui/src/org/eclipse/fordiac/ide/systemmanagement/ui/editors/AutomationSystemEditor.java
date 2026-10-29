@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -371,6 +372,11 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor {
 		}
 		LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
 		LibraryElementProvider.INSTANCE.removeLibraryElementStateListener(elementStateListener);
+	}
+
+	@Override
+	protected INamedElement getModelRoot() {
+		return system;
 	}
 
 	private SystemEntry getTypeEntry() {
