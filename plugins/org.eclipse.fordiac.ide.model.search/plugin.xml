@@ -49,7 +49,7 @@
        <!-- Note: The menu (re-) definition has to be here due to bug: -->
        <!--       See https://bugs.eclipse.org/bugs/show_bug.cgi?id=213385 for details-->
        <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=navigate">
-        <menu label="Search"
+        <menu label="%menu.search.label"
               mnemonic="a"
               id="org.eclipse.search.menu">
            <separator name="internalDialogGroup" visible="false" />
