@@ -7,9 +7,9 @@
     <extension point="org.eclipse.ui.themes">
         <themeElementCategory
             id="org.eclipse.fordiac.ide.themeCategory"
-            label="4diac IDE">
+            label="%theme.category.label">
             <description>
-                The theme settings for 4diac IDE.
+                %theme.category.description
             </description>
         </themeElementCategory>
         <fontDefinition
