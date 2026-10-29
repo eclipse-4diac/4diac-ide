@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,12 +17,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
-import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpoint;
-import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsStore;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.LibraryRecord;
+import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibGroupNode;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibraryTreeNode;
@@ -39,8 +40,14 @@ public final class LibrarySourceBuilder {
 		res.add(new WorkspaceLibrariesSource());
 		res.add(new FileSystemLibrariesSource());
 
-		final List<GitLabEndpoint> endpoints = GitLabEndpointsStore.loadEndpoints();
-		endpoints.forEach(ep -> res.add(new GitLabEndpointSource(ep)));
+		// offer the same GitLab endpoints that are used for library downloads
+		final var sources = new LibraryPackageDownloaderProvider().getActiveDownloaders();
+		if (!sources.status().isOK()) {
+			ILog.get().log(sources.status());
+		}
+		sources.downloaders().stream().filter(GitLabDownloader.class::isInstance)
+				.map(GitLabDownloader.class::cast)
+				.forEach(downloader -> res.add(new GitLabEndpointSource(downloader.getEndpoint())));
 		return res;
 	}
 

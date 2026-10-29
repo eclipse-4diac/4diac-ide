@@ -2,9 +2,12 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension
-         point="org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension">
+         point="org.eclipse.fordiac.ide.library.LibraryPackageDownloader">
       <client
             class="org.eclipse.fordiac.ide.test.library.MockDownloader">
       </client>
+      <provider
+            class="org.eclipse.fordiac.ide.test.library.MockDownloaderProvider">
+      </provider>
    </extension>
 </plugin>
