@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -242,4 +243,8 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		return super.getAdapter(adapter);
 	}
 
+	@Override
+	protected INamedElement getModelRoot() {
+		return getType();
+	}
 }

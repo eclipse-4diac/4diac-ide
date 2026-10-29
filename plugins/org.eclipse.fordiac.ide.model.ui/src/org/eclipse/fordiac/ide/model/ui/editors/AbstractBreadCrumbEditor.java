@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -111,7 +112,7 @@ public abstract class AbstractBreadCrumbEditor extends FordiacFormEditor impleme
 	@Override
 	public void createPartControl(final Composite parent) {
 		parent.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true).spacing(0, 0).create());
-		breadcrumb = new BreadcrumbWidget(parent);
+		breadcrumb = new BreadcrumbWidget(parent, this::getModelRoot);
 		super.createPartControl(parent);
 		((CTabFolder) getContainer()).setTabHeight(0); // we don't want the tabs to be seen
 		initializeBreadcrumb();
@@ -488,6 +489,8 @@ public abstract class AbstractBreadCrumbEditor extends FordiacFormEditor impleme
 	protected abstract AdapterFactoryContentProvider createBreadcrumbContentProvider();
 
 	protected abstract AdapterFactoryLabelProvider createBreadcrumbLabelProvider();
+
+	protected abstract INamedElement getModelRoot();
 
 	/**
 	 * retrieve the model element that this bread crumb editor should how after
