@@ -18,7 +18,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -28,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STRecoveringPartitioner;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
@@ -69,13 +69,13 @@ public class STFunctionPartitioner extends STRecoveringPartitioner<STFunction> {
 			builder.append(" : "); //$NON-NLS-1$
 			builder.append(returnType.getName());
 		}
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(STCorePartitioner.LINE_END);
 		generateFunctionParameters("INPUT", fbType.getInputParameters(), builder); //$NON-NLS-1$
 		generateFunctionParameters("IN_OUT", fbType.getInOutParameters(), builder); //$NON-NLS-1$
 		generateFunctionParameters("OUTPUT", fbType.getOutputParameters(), builder); //$NON-NLS-1$
 		builder.append("END_FUNCTION"); //$NON-NLS-1$
-		builder.append(CommonElementExporter.LINE_END);
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(STCorePartitioner.LINE_END);
+		builder.append(STCorePartitioner.LINE_END);
 		return builder.toString();
 	}
 
@@ -86,14 +86,14 @@ public class STFunctionPartitioner extends STRecoveringPartitioner<STFunction> {
 		}
 		builder.append("VAR_"); //$NON-NLS-1$
 		builder.append(type);
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(STCorePartitioner.LINE_END);
 		parameters.stream().filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(param -> {
 			builder.append("    "); //$NON-NLS-1$
 			generateVariable(param, builder);
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(STCorePartitioner.LINE_END);
 		});
 		builder.append("END_VAR"); //$NON-NLS-1$
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(STCorePartitioner.LINE_END);
 	}
 
 	@Override

@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
+import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartitioner;
 import org.eclipse.xtext.resource.FileExtensionProvider;
 import org.eclipse.xtext.ui.editor.formatting.PreferenceStoreWhitespaceInformationProvider;
 
@@ -27,7 +27,7 @@ public class STCoreWhitespaceInformationProvider extends PreferenceStoreWhitespa
 	@Override
 	protected String getLineSeparatorPreference(final URI uri) {
 		if (!fileExtensionProvider.getPrimaryFileExtension().equalsIgnoreCase(uri.fileExtension())) {
-			return CommonElementExporter.LINE_END; // force fixed line ending for XML format
+			return STCorePartitioner.LINE_END; // force fixed line ending for XML format
 		}
 		return super.getLineSeparatorPreference(uri);
 	}

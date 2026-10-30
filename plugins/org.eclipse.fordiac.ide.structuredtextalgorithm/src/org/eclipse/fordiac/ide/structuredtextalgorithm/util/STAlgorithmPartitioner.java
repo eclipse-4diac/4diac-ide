@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -66,7 +65,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 		}
 		// ensure newline at the end
 		if (!builder.isEmpty() && !isLineDelimiter(builder.charAt(builder.length() - 1))) {
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		}
 		return builder.toString();
 	}
@@ -78,16 +77,16 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 		}
 		if (!isLostAndFoundOrComment(current) && !isLostAndFoundOrComment(previous)) {
 			// add empty line, except around lost+found or comments
-			builder.append(CommonElementExporter.LINE_END);
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
+			builder.append(LINE_END);
 		} else if (isLostAndFoundOrComment(previous) && !isLostAndFoundOrComment(current)
 				&& !isLineDelimiter(builder.charAt(builder.length() - 1))) {
 			// ensure line delimiter after previous lost+found or comment element
 			// and before appending a regular ST element
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		} else if (isWordCharacter(builder.charAt(builder.length() - 1)) && isWordCharacter(text.charAt(0))) {
 			// add line separator if appended text has no word boundary
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		}
 	}
 

@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
@@ -182,8 +181,8 @@ public abstract class STAbstractCorePartitioner implements STCorePartitioner {
 			builder.append("PACKAGE "); //$NON-NLS-1$
 			builder.append(packageName);
 			builder.append(";"); //$NON-NLS-1$
-			builder.append(CommonElementExporter.LINE_END);
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
+			builder.append(LINE_END);
 		}
 	}
 
@@ -192,10 +191,10 @@ public abstract class STAbstractCorePartitioner implements STCorePartitioner {
 			builder.append("IMPORT "); //$NON-NLS-1$
 			builder.append(imp.getImportedNamespace());
 			builder.append(";"); //$NON-NLS-1$
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		});
 		if (!ImportHelper.getImports(libraryElement).isEmpty()) {
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		}
 	}
 

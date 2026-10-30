@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
@@ -122,7 +121,7 @@ class STAlgorithmPartitionerTest {
 				END_METHOD
 				""";
 		fbType.getSourceElements().add(createSTMethod("TEST", ""));
-		assertEquals(algorithm + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
+		assertEquals(algorithm + STCorePartitioner.LINE_END + method, partitioner.combine(fbType));
 	}
 
 	@Test
@@ -138,7 +137,7 @@ class STAlgorithmPartitionerTest {
 				END_METHOD
 				""";
 		fbType.getSourceElements().add(createSTMethod("TEST", method));
-		assertEquals(algorithm + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
+		assertEquals(algorithm + STCorePartitioner.LINE_END + method, partitioner.combine(fbType));
 	}
 
 	@Test
@@ -195,7 +194,7 @@ class STAlgorithmPartitionerTest {
 				END_METHOD
 				""";
 		fbType.getSourceElements().add(createSTMethod("TEST", method));
-		assertEquals(algorithm + lostAndFound + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
+		assertEquals(algorithm + lostAndFound + STCorePartitioner.LINE_END + method, partitioner.combine(fbType));
 	}
 
 	@Test
@@ -234,7 +233,7 @@ class STAlgorithmPartitionerTest {
 				METHOD TEST
 				END_METHOD
 				""";
-		assertCallablesEquals(List.of("", ""), partition(algorithm + CommonElementExporter.LINE_END + method));
+		assertCallablesEquals(List.of("", ""), partition(algorithm + STCorePartitioner.LINE_END + method));
 	}
 
 	@Test
