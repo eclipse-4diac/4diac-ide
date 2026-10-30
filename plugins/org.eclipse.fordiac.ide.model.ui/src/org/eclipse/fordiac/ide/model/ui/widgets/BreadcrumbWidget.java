@@ -106,7 +106,7 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		if (qualifiedName.indexOf('.') == -1) {
 			return root;
 		}
-		return root.findByQualifiedName(qualifiedName);
+		return root.findByQualifiedName(qualifiedName).findFirst().orElse(null);
 	}
 
 	private void createBreadcrumbItems(final Object input) {
