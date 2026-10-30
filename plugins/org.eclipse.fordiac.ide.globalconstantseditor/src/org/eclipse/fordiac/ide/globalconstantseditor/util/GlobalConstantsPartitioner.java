@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalCon
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.lexer.InternalGlobalConstantsLexer;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
@@ -61,18 +60,18 @@ public class GlobalConstantsPartitioner extends STAbstractCorePartitioner {
 		generatePackage(globalConstants, builder);
 		generateImports(globalConstants, builder);
 		builder.append("GLOBALCONSTANTS ").append(globalConstants.getName()); //$NON-NLS-1$
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(LINE_END);
 		builder.append("    VAR_GLOBAL CONSTANT"); //$NON-NLS-1$
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(LINE_END);
 		globalConstants.getConstants().forEach(constant -> {
 			builder.append("        "); //$NON-NLS-1$
 			generateVariable(constant, builder);
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		});
 		builder.append("    END_VAR"); //$NON-NLS-1$
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(LINE_END);
 		builder.append("END_GLOBALCONSTANTS"); //$NON-NLS-1$
-		builder.append(CommonElementExporter.LINE_END);
+		builder.append(LINE_END);
 		return builder.toString();
 	}
 

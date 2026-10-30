@@ -21,7 +21,6 @@ import java.util.SequencedMap;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
@@ -113,7 +112,7 @@ public abstract class STRecoveringPartitioner<S extends EObject> extends STAbstr
 	}
 
 	private static boolean isNonCanonicalSeparator(final String text) {
-		return !text.equals(CommonElementExporter.LINE_END + CommonElementExporter.LINE_END);
+		return !text.equals(LINE_END + LINE_END);
 	}
 
 	protected static STSourceElement createLostAndFound(final String text) {
@@ -126,14 +125,14 @@ public abstract class STRecoveringPartitioner<S extends EObject> extends STAbstr
 		final String comment = element.getComment();
 		if (comment != null && !comment.isBlank()) {
 			builder.append("(*"); //$NON-NLS-1$
-			builder.append(CommonElementExporter.LINE_END);
-			for (final String s : comment.trim().split(CommonElementExporter.LINE_END)) {
+			builder.append(LINE_END);
+			for (final String s : comment.trim().split(LINE_END)) {
 				builder.append(" * "); //$NON-NLS-1$
 				builder.append(s);
-				builder.append(CommonElementExporter.LINE_END);
+				builder.append(LINE_END);
 			}
 			builder.append(" *)"); //$NON-NLS-1$
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		}
 	}
 
@@ -143,11 +142,11 @@ public abstract class STRecoveringPartitioner<S extends EObject> extends STAbstr
 
 	protected static void appendText(final String text, final StringBuilder builder) {
 		if (text.isEmpty() || !Character.isWhitespace(text.charAt(0))) {
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		}
 		builder.append(text);
 		if (!text.isEmpty() && !isLineDelimiter(text.charAt(text.length() - 1))) {
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		}
 	}
 
