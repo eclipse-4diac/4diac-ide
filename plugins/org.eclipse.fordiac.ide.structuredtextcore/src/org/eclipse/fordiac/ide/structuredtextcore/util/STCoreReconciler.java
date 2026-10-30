@@ -12,11 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.util;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
 
 public interface STCoreReconciler {
 
 	void reconcile(LibraryElement dest, Optional<? extends STCorePartition> source);
+
+	static boolean hasDuplicates(final Stream<? extends SourceElement> sourceElements) {
+		return !sourceElements.filter(INamedElement.class::isInstance).map(INamedElement.class::cast)
+				.map(INamedElement::getName).allMatch(new HashSet<>()::add);
+	}
 }

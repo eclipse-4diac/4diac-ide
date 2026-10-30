@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
@@ -51,7 +50,7 @@ import org.eclipse.xtext.util.Triple;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-public abstract class STAbstractCorePartitioner<E extends INamedElement> implements STCorePartitioner {
+public abstract class STAbstractCorePartitioner implements STCorePartitioner {
 
 	@Inject
 	private IEObjectDocumentationProvider documentationProvider;
@@ -182,8 +181,8 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 			builder.append("PACKAGE "); //$NON-NLS-1$
 			builder.append(packageName);
 			builder.append(";"); //$NON-NLS-1$
-			builder.append(CommonElementExporter.LINE_END);
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
+			builder.append(LINE_END);
 		}
 	}
 
@@ -192,10 +191,10 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 			builder.append("IMPORT "); //$NON-NLS-1$
 			builder.append(imp.getImportedNamespace());
 			builder.append(";"); //$NON-NLS-1$
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		});
 		if (!ImportHelper.getImports(libraryElement).isEmpty()) {
-			builder.append(CommonElementExporter.LINE_END);
+			builder.append(LINE_END);
 		}
 	}
 
@@ -215,9 +214,11 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 		}
 	}
 
-	protected static void handleDuplicates(final List<? extends INamedElement> result) {
-		result.stream().collect(Collectors.groupingBy(INamedElement::getName)).forEach((name, duplicates) -> IntStream
-				.range(1, duplicates.size()).forEach(index -> duplicates.get(index).setName(name + "_" + index))); //$NON-NLS-1$
+	protected static void handleDuplicates(final List<? extends EObject> result) {
+		result.stream().filter(INamedElement.class::isInstance).map(INamedElement.class::cast)
+				.collect(Collectors.groupingBy(INamedElement::getName))
+				.forEach((name, duplicates) -> IntStream.range(1, duplicates.size())
+						.forEach(index -> duplicates.get(index).setName(name + "_" + index))); //$NON-NLS-1$
 	}
 
 	public boolean containsToken(final String input, final int token) {

@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @model abstract="true"
  * @generated
  */
-public interface Algorithm extends ICallable {
+public interface Algorithm extends ICallable, SourceElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

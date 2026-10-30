@@ -20,14 +20,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
+import org.eclipse.fordiac.ide.model.libraryElement.STSourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -204,7 +203,7 @@ class STFunctionPartitionerTest {
 				END_FUNCTION
 				""";
 		assertFunctionsEquals(List.of(function, function2),
-				partition(function + CommonElementExporter.LINE_END + function2));
+				partition(function + STCorePartitioner.LINE_END + function2));
 	}
 
 	private static FunctionFBType createFunctionFBType() {
@@ -257,6 +256,6 @@ class STFunctionPartitionerTest {
 
 	private static void assertFunctionsEquals(final List<String> expected, final STFunctionPartition actual) {
 		assertIterableEquals(expected.stream().map(String::trim).toList(),
-				actual.getFunctions().stream().map(STFunction::getText).map(String::trim).toList());
+				actual.getSourceElements().stream().map(STSourceElement::getText).map(String::trim).toList());
 	}
 }
