@@ -31,8 +31,18 @@ class StringTransformTest {
 				Arguments.of("Test:='Hello   World! $\' ';", "Test:='Hello   World! $' ';"), //$NON-NLS-1$ //$NON-NLS-2$
 				Arguments.of("(* This is a multi-line \n \n comment *)", ""), //$NON-NLS-1$ //$NON-NLS-2$
 				Arguments.of("/* This is a multi-line \n \n comment */", ""), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first(* removed *)    second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first/* removed */    second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first   (* removed *)second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first   /* removed */second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first   (*) removed *)second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first   /*/ removed */second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
 				Arguments.of("// This is a single-line   ", ""), //$NON-NLS-1$ //$NON-NLS-2$
 				Arguments.of("// This is a single-line  \ntest", "test"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first // removed\n    second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first // removed\r\n    second", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first // removed\nsecond", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
+				Arguments.of("first // removed\r\nsecond", "first second"), //$NON-NLS-1$ //$NON-NLS-2$
 				Arguments.of("""
 						// This is a comment
 						x :=  10;
