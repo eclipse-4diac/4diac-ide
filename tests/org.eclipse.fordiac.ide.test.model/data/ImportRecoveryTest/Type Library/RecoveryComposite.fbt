@@ -7,6 +7,14 @@
 	<CompilerInfo>
 	</CompilerInfo>
 	<InterfaceList>
+		<Plugs>
+			<AdapterDeclaration Name="EVENT" Type="EventAdapter" Comment="Event/data adapter">
+				<Attribute Name="AdapterAttribute" Type="STRING" Value="AdapterValue"/>
+				<Attribute Name="PinComment" Value="REQD:legacy adapter pin comment"/>
+				<Attribute Name="Visible" Value="REQD:true"/>
+				<Attribute Name="VarConfig" Value="REQD:true"/>
+			</AdapterDeclaration>
+		</Plugs>
 	</InterfaceList>
 	<FBNetwork>
 		<FB Name="Recoverable" Type="RecoveryTarget" x="invalid" y="100">

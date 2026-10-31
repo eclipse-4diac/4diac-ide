@@ -34,6 +34,7 @@
 		</OutputVars>
 		<Plugs>
 			<AdapterDeclaration Name="EVENT" Type="EventAdapter" Comment="Event/data adapter">
+				<Attribute Name="AdapterAttribute" Type="STRING" Value="AdapterValue"/>
 				<Parameter Name="REQD" Value="WSTRING#'request'"/>
 			</AdapterDeclaration>
 		</Plugs>
