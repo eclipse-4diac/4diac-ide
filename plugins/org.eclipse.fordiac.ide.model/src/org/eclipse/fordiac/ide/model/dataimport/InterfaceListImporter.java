@@ -192,9 +192,19 @@ public class InterfaceListImporter extends TypeImporter {
 		createAdapterFB(a);
 		getXandY(a.getAdapterFB());
 
-		parseFBChildren(a.getAdapterFB(), LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
+		processChildren(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT, name -> switch (name) {
+		case LibraryElementTags.PARAMETER_ELEMENT -> {
+			parseParameter(a.getAdapterFB());
+			yield true;
+		}
+		case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
+			parseGenericAttributeNode(a);
+			proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+			yield true;
+		}
+		default -> false;
+		});
 
-		proceedToEndElementNamed(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 		return a;
 	}
 
