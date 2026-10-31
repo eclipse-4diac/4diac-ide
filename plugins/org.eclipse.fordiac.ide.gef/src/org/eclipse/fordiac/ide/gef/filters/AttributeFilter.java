@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.gef.filters;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -46,15 +47,11 @@ public class AttributeFilter implements IFilter {
 			null;
 		// handle exception: struct of MUX/DEMUX
 		case final EditPart editpart when editpart.getModel() instanceof StructuredType -> null;
+		case final AdapterFB adapterFB when adapterFB.getAdapterDecl() != null -> adapterFB.getAdapterDecl();
 		case final ConfigurableObject configurableObject -> configurableObject;
 		case final FBNetwork fbNetwork -> parseObject(fbNetwork.eContainer());
 		case final EditPart editpart -> parseObject(editpart.getModel());
-		// handle exception: typefield of interface elements of functions
-		case final IAdaptable adaptable when adaptable
-				.getAdapter(ConfigurableObject.class) instanceof final IInterfaceElement ie
-				&& ie.getFBType() instanceof FunctionFBType ->
-			null;
-		case final IAdaptable adaptable -> adaptable.getAdapter(ConfigurableObject.class);
+		case final IAdaptable adaptable -> parseObject(adaptable.getAdapter(ConfigurableObject.class));
 		case final TextSelection _ -> getConfObjectFromActiveEditor();
 		case null, default -> null;
 		};
