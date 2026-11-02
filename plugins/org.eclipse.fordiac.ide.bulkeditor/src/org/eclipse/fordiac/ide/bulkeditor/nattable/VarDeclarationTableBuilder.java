@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.nattable;
 
+import java.util.Objects;
+
+import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeFunctionParameterValueCommand;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.SorterModel;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -25,6 +28,7 @@ import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
@@ -39,7 +43,17 @@ public class VarDeclarationTableBuilder {
 	public static BuiltNatTable<VarDeclaration> create(final Composite parent, final CommandExecutor commandExecutor) {
 		final var columns = VarDeclarationTableColumn.defaultColumnsWithPrepended(VarDeclarationTableColumn.FILE_PATH,
 				VarDeclarationTableColumn.LOCATION);
-		final var accessor = new VarDeclarationColumnAccessor(commandExecutor, columns);
+		final var accessor = new VarDeclarationColumnAccessor(commandExecutor, columns) {
+			@Override
+			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
+					final Object newValue) {
+				if (column == VarDeclarationTableColumn.INITIAL_VALUE) {
+					return ChangeFunctionParameterValueCommand.forValue(rowObject,
+							Objects.toString(newValue, NULL_DEFAULT));
+				}
+				return super.createCommand(rowObject, column, newValue);
+			}
+		};
 		final ChangeableListDataProvider<VarDeclaration> provider = new ChangeableListDataProvider<>(accessor);
 		final SorterModel<VarDeclaration> sorterModel = new SorterModel<>(accessor);
 
