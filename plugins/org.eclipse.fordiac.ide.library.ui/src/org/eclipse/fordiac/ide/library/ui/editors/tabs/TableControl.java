@@ -32,7 +32,6 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TableViewerEditor;
@@ -220,7 +219,6 @@ public final class TableControl {
 				if (type.isInstance(element)) {
 					final T typedElement = type.cast(element);
 					page.execute(operationFactory.apply(typedElement, Objects.toString(value, ""))); //$NON-NLS-1$
-					viewer.setSelection(StructuredSelection.EMPTY);
 				}
 			}
 		};
