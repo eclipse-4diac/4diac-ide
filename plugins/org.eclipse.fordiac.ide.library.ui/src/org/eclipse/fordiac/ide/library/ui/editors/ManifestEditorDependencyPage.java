@@ -54,6 +54,9 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -62,6 +65,7 @@ import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -208,6 +212,18 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 				return new Object[0];
 			}
 		});
+
+		final ColumnViewerEditorActivationStrategy activationStrategy = new ColumnViewerEditorActivationStrategy(
+				treeViewer) {
+			@Override
+			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+				return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL)
+						|| (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+						|| (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC);
+			}
+		};
+
+		TreeViewerEditor.create(treeViewer, activationStrategy, ColumnViewerEditor.DEFAULT);
 
 		treeViewer.setInput(createViewerInput());
 		treeViewer.getTree().setLinesVisible(true);

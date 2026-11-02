@@ -27,11 +27,15 @@ import org.eclipse.jface.resource.JFaceColors;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -91,6 +95,18 @@ public final class TableControl {
 
 		removeButton = toolkit.createButton(buttons, "Remove", SWT.PUSH); //$NON-NLS-1$
 		removeButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		final ColumnViewerEditorActivationStrategy activationStrategy = new ColumnViewerEditorActivationStrategy(
+				viewer) {
+			@Override
+			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+				return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL)
+						|| (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+						|| (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC);
+			}
+		};
+
+		TableViewerEditor.create(viewer, activationStrategy, ColumnViewerEditor.DEFAULT);
 
 		hookListeners();
 		updateButtonEnablement();
