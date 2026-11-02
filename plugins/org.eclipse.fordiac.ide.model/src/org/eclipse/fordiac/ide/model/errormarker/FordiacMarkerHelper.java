@@ -182,6 +182,22 @@ public final class FordiacMarkerHelper {
 		return null;
 	}
 
+	public static EStructuralFeature getDiagnosticFeature(final Diagnostic diagnostic) {
+		final List<?> data = diagnostic.getData();
+
+		if (data == null || data.size() <= 4 || !(data.get(4) instanceof final String featureUri)) {
+			return null;
+		}
+
+		final EObject target = getDiagnosticTarget(diagnostic);
+		if (target == null) {
+			return null;
+		}
+
+		return target.eClass().getEAllStructuralFeatures().stream()
+				.filter(feature -> featureUri.equals(EcoreUtil.getURI(feature).toString())).findFirst().orElse(null);
+	}
+
 	/**
 	 * Get the marker attributes for a diagnostic
 	 *

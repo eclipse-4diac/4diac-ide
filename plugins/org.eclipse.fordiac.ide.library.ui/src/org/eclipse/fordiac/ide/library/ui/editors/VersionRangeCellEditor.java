@@ -18,13 +18,14 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-class VersionRangeCellEditor extends CellEditor {
+public class VersionRangeCellEditor extends CellEditor {
 
 	private Text text;
 
@@ -60,6 +61,18 @@ class VersionRangeCellEditor extends CellEditor {
 				event.doit = false;
 			}
 		});
+
+		text.addFocusListener(FocusListener.focusLostAdapter(_ -> {
+			if (!dialogButton.isFocusControl()) {
+				focusLost();
+			}
+		}));
+
+		dialogButton.addFocusListener(FocusListener.focusLostAdapter(_ -> {
+			if (!text.isFocusControl()) {
+				focusLost();
+			}
+		}));
 
 		return container;
 	}
