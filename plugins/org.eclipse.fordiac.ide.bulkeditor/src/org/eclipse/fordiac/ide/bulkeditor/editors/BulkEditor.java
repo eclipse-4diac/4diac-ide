@@ -402,11 +402,6 @@ public class BulkEditor extends MultiPageEditorPart
 	}
 
 	@Override
-	public void setFocus() {
-		// nothing to be done
-	}
-
-	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// the workbench saves the saveables of the shown page, this saves all of them
 		final List<Saveable> dirtySaveables = Arrays.stream(getSaveables()).filter(Saveable::isDirty).toList();
