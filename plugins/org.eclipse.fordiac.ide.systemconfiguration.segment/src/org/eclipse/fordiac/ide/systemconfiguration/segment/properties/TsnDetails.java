@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.segment.properties;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.widget.MappedFbMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -87,7 +87,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 				final int newCycleTimeValue = Integer.parseInt(cycleTimeValue.getText());
 				executor.executeCommand(new ChangeTsnCycleTimeCommand(tsnConfig, newCycleTimeValue));
 			} catch (final NumberFormatException e) {
-				FordiacLogHelper.logWarning("Could not parse cycle time value!", e); //$NON-NLS-1$
+				ILog.get().warn("Could not parse cycle time value!", e); //$NON-NLS-1$
 			}
 		});
 	}
