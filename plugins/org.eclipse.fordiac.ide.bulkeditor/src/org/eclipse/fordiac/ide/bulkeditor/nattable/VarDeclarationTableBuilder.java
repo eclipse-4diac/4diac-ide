@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.bulkeditor.nattable;
 
 import java.util.Objects;
 
-import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeFunctionParameterValueCommand;
+import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeFunctionParameterCommand;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.SorterModel;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -47,11 +47,13 @@ public class VarDeclarationTableBuilder {
 			@Override
 			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 					final Object newValue) {
-				if (column == VarDeclarationTableColumn.INITIAL_VALUE) {
-					return ChangeFunctionParameterValueCommand.forValue(rowObject,
-							Objects.toString(newValue, NULL_DEFAULT));
-				}
-				return super.createCommand(rowObject, column, newValue);
+				return switch (column) {
+				case INITIAL_VALUE ->
+					ChangeFunctionParameterCommand.forValue(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				case COMMENT ->
+					ChangeFunctionParameterCommand.forComment(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
 			}
 		};
 		final ChangeableListDataProvider<VarDeclaration> provider = new ChangeableListDataProvider<>(accessor);
