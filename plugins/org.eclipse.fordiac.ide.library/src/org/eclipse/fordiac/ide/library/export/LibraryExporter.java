@@ -21,9 +21,11 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.MessageFormat;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -51,30 +53,67 @@ public class LibraryExporter {
 		ALL_TYPES, INCLUDE_EXCLUDE_PATTERNS
 	}
 
+	public record TypeSelectionResult(List<TypeEntry> included, List<TypeEntry> excluded) {
+		public int getIncludedCount() {
+			return included.size();
+		}
+
+		public int getExcludedCount() {
+			return excluded.size();
+		}
+	}
+
 	private final String outputDirectory;
-	private final TypeSelection exportType;
 	private final Library library;
 	private final String version;
-	private final IProject project;
 	private final boolean exportAsSIFB;
 
-	public LibraryExporter(final String outputDirectory, final TypeSelection exportType, final boolean exportSIFB,
-			final Library library, final String version, final IProject project) {
+	public static TypeSelectionResult getTypes(final IProject project, final Library library,
+			final TypeSelection selection) {
+
+		final IPath typeLibraryPath = project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).getFullPath();
+
+		final Predicate<TypeEntry> filter = switch (selection) {
+		case ALL_TYPES -> _ -> true;
+		case INCLUDE_EXCLUDE_PATTERNS -> createPackageFilter(library);
+		};
+
+		final Map<Boolean, List<TypeEntry>> partition = TypeLibraryManager.INSTANCE.getTypeLibrary(project)
+				.getAllTypes().filter(type -> type.getFile() != null)
+				.filter(type -> typeLibraryPath.isPrefixOf(type.getFile().getFullPath()))
+				.collect(Collectors.partitioningBy(filter));
+
+		return new TypeSelectionResult(partition.get(Boolean.TRUE), partition.get(Boolean.FALSE));
+	}
+
+	public static TypeSelectionResult getTypesSorted(final IProject project, final Library library,
+			final TypeSelection selection) {
+
+		final Comparator<TypeEntry> comparator = Comparator
+				.comparing(TypeEntry::getPackageName, Comparator.nullsLast(PACKAGE_NAME_COMPARATOR))
+				.thenComparing(TypeEntry::getFullTypeName);
+
+		final TypeSelectionResult result = getTypes(project, library, selection);
+
+		return new TypeSelectionResult(result.included().stream().sorted(comparator).toList(),
+				result.excluded().stream().sorted(comparator).toList());
+	}
+
+	public LibraryExporter(final String outputDirectory, final boolean exportSIFB, final Library library,
+			final String version) {
 		this.outputDirectory = outputDirectory;
-		this.exportType = exportType;
 		this.exportAsSIFB = exportSIFB;
 		this.library = library;
 		this.version = version;
-		this.project = project;
 	}
 
-	public void export(final IProgressMonitor monitor) throws IOException {
+	public void export(final List<TypeEntry> types, final IProgressMonitor monitor) throws IOException {
 		final SubMonitor progress = SubMonitor.convert(monitor,
 				MessageFormat.format(Messages.LibraryExporter_ExportingLibrary, library.getSymbolicName()), 2);
 
 		final Path rootDir = createLibraryRoot();
 		createLibraryManifest(rootDir, progress.split(1));
-		exportTypes(rootDir, progress.split(1));
+		exportTypes(rootDir, types, progress.split(1));
 	}
 
 	private Path createLibraryRoot() throws IOException {
@@ -86,9 +125,8 @@ public class LibraryExporter {
 		progress.worked(1);
 	}
 
-	private void exportTypes(final Path rootDir, final SubMonitor monitor) throws IOException {
-		final List<TypeEntry> types = getTypes(project).toList();
-
+	private void exportTypes(final Path rootDir, final List<TypeEntry> types, final SubMonitor monitor)
+			throws IOException {
 		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryExporter_ExportingTypes, types.size());
 
 		final Path targetFolder = rootDir.resolve("typelib"); //$NON-NLS-1$
@@ -96,7 +134,6 @@ public class LibraryExporter {
 		// re-export has to clear directory because -> export all types ->
 		// export with pattern -> old files remain
 		deleteDirectory(targetFolder);
-
 		Files.createDirectories(targetFolder);
 
 		for (final TypeEntry typeEntry : types) {
@@ -156,20 +193,6 @@ public class LibraryExporter {
 		return MessageFormat.format("{0}-{1}", library.getSymbolicName(), version); //$NON-NLS-1$
 	}
 
-	private Stream<TypeEntry> getTypes(final IProject project) {
-		return switch (exportType) {
-		case ALL_TYPES: {
-			yield getLocalTypes(project);
-		}
-		case INCLUDE_EXCLUDE_PATTERNS: {
-			yield getLocalTypes(project).filter(createPackageFilter(library));
-		}
-		default: {
-			yield Stream.empty();
-		}
-		};
-	}
-
 	private static Predicate<TypeEntry> createPackageFilter(final Library library) {
 		final Predicate<TypeEntry> included = library.getIncludes() == null
 				|| library.getIncludes().getLibraryElement().isEmpty() ? _ -> true
@@ -179,16 +202,6 @@ public class LibraryExporter {
 				: matchesAny(library.getExcludes().getLibraryElement());
 
 		return included.and(Predicate.not(excluded));
-	}
-
-	private static Stream<TypeEntry> getLocalTypes(final IProject project) {
-		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getAllTypes().filter(te -> isLocalType(te, project));
-	}
-
-	private static boolean isLocalType(final TypeEntry entry, final IProject project) {
-		final IFile file = entry.getFile();
-		final IPath typeLibraryFolder = project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).getFullPath();
-		return file != null && typeLibraryFolder.isPrefixOf(file.getFullPath());
 	}
 
 	private static Predicate<TypeEntry> matchesAny(final EList<LibraryElement> patterns) {
@@ -219,5 +232,19 @@ public class LibraryExporter {
 			}
 		});
 	}
+
+	private static final Comparator<String> PACKAGE_NAME_COMPARATOR = (left, right) -> {
+		final String[] leftSegments = left.split(PackageNameHelper.PACKAGE_NAME_DELIMITER);
+		final String[] rightSegments = right.split(PackageNameHelper.PACKAGE_NAME_DELIMITER);
+
+		for (int i = 0; i < Math.min(leftSegments.length, rightSegments.length); i++) {
+			final int result = leftSegments[i].compareTo(rightSegments[i]);
+			if (result != 0) {
+				return result;
+			}
+		}
+
+		return Integer.compare(leftSegments.length, rightSegments.length);
+	};
 
 }
