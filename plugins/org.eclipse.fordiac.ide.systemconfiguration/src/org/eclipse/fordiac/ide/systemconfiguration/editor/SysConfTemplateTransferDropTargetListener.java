@@ -15,13 +15,13 @@
 package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -105,7 +105,7 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 		if (template instanceof TemplateCreationFactory) {
 			return super.getFactory(template);
 		}
-		FordiacLogHelper.logError("Type not in list: " + ((template != null) ? template.getClass().getName() : "null")); //$NON-NLS-1$ //$NON-NLS-2$
+		ILog.get().error("Type not in list: " + ((template != null) ? template.getClass().getName() : "null")); //$NON-NLS-1$ //$NON-NLS-2$
 		return null;
 	}
 
