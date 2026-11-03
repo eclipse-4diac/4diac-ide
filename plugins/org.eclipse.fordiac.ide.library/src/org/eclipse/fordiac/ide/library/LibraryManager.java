@@ -11,6 +11,7 @@
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *   Alexander Fedorov (ArSysOp) - fix "Uncontrolled data used in path expression"
  *   Michael Oberlehner - use configured library package downloader providers
+ *   Kaavya Manimathavan - remove stale library cache entries on polling file watchers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -517,6 +518,10 @@ public enum LibraryManager {
 	public Map<String, List<LibraryRecord>> getExtractedLibraries() {
 		checkLibChanges(SubMonitor.convert(null));
 		synchronized (libraries) {
+			// The polling WatchService (e.g. on macOS) can miss folders that are created and deleted
+			// between two scans, so drop cached libraries whose folder no longer exists.
+			libraries.values().forEach(records -> records.removeIf(r -> !Files.isDirectory(r.path())));
+			libraries.values().removeIf(List::isEmpty);
 			final Map<String, List<LibraryRecord>> snapshot = new HashMap<>();
 			libraries.forEach((name, records) -> snapshot.put(name, new ArrayList<>(records)));
 			return snapshot;
