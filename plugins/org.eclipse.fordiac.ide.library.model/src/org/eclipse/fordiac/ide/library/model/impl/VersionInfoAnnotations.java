@@ -51,15 +51,22 @@ public final class VersionInfoAnnotations {
 	}
 
 	private static boolean validateVersion(final VersionInfo versionInfo, final DiagnosticChain diagnostics) {
-		if (versionInfo.getVersion() == null || isValidVersion(versionInfo.getVersion())) {
+		final String version = versionInfo.getVersion();
+
+		if (version != null && isValidVersion(version)) {
 			return true;
 		}
+
 		if (diagnostics != null) {
-			final String message = MessageFormat.format(Messages.VersionValidaton_DeclarationError,
-					versionInfo.getVersion(), getProductName(versionInfo));
+			final String productName = getProductName(versionInfo);
+			final String message = version == null
+					? MessageFormat.format(Messages.VersionValidation_MissingDeclaration, productName)
+					: MessageFormat.format(Messages.VersionValidaton_DeclarationError, version, productName);
+
 			diagnostics.add(LibraryDiagnostic.error(message, LibraryValidator.VERSION_INFO__VALIDATE_VERSION_INFO,
-					versionInfo, LibraryPackage.Literals.VERSION_INFO__VERSION, versionInfo.getVersion()));
+					versionInfo, LibraryPackage.Literals.VERSION_INFO__VERSION, version));
 		}
+
 		return false;
 	}
 
