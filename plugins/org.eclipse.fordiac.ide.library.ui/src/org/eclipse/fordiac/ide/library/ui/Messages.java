@@ -117,12 +117,18 @@ public class Messages extends NLS {
 
 	public static String LibraryExporter_Title;
 	public static String LibraryExporter_Description;
+	public static String LibraryExporter_Preview_Title;
+	public static String LibraryExporter_Preview_Description;
 	public static String LibraryExporter_OutputDirectory;
 	public static String LibraryExporter_Browse;
 	public static String LibraryExporter_BrowseText;
 	public static String LibraryExporter_BrowseMessage;
 	public static String LibraryExporter_ErrorTitle;
 	public static String LibraryExporter_ErrorMessage;
+	public static String LibraryExporter_IncludedTypes;
+	public static String LibraryExporter_UnusedTypes;
+	public static String LibraryExporter_PackageName;
+	public static String LibraryExporter_TypeName;
 	public static String LibraryExporter_TypeSelection;
 	public static String LibraryExporter_UseIncludeExclude;
 	public static String LibraryExporter_ExportAllTypes;
