@@ -37,7 +37,7 @@
 			<VarDeclaration Name="QI" Type="BOOL" Comment="Event input qualifier"/>
 			<VarDeclaration Name="Enable" Type="BOOL" Comment="TRUE starts cyclic EtherCAT I/O"/>
 			<VarDeclaration Name="ControllerId" Type="UINT" Comment="IgH EtherCAT master index"/>
-			<VarDeclaration Name="UpdateInterval" Type="TIME" InitialValue="T#30us" Comment="Cyclic task period"/>
+			<VarDeclaration Name="UpdateInterval" Type="TIME" InitialValue="T#1ms" Comment="Cyclic task period"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="QO" Type="BOOL" Comment="Event output qualifier"/>
