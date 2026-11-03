@@ -99,9 +99,14 @@ public final class VersionInfoAnnotations {
 
 	private static String getProductName(final VersionInfo versionInfo) {
 		if (versionInfo.eContainer() instanceof final Product product) {
-			return product.getSymbolicName();
+			if (product.getName() != null && !product.getName().isBlank()) {
+				return product.getName();
+			}
+			if (product.getSymbolicName() != null && !product.getSymbolicName().isBlank()) {
+				return product.getSymbolicName();
+			}
 		}
-		return ""; //$NON-NLS-1$
+		return Messages.VersionValidation_UnknownProduct;
 	}
 
 	private VersionInfoAnnotations() {
