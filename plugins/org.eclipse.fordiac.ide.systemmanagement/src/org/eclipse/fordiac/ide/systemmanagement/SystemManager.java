@@ -28,10 +28,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /**
@@ -84,7 +84,7 @@ public enum SystemManager {
 			return project != null && project.isAccessible()
 					&& project.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(
+			ILog.get().error(
 					MessageFormat.format(Messages.FordiacSystemManagement_ErrorLoadingProjectNature, e.getMessage()),
 					e);
 		}
@@ -100,7 +100,7 @@ public enum SystemManager {
 				}
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(
+			ILog.get().error(
 					MessageFormat.format(Messages.FordiacSystemManagement_ErrorLoadingProjectNature, e.getMessage()),
 					e);
 		}
