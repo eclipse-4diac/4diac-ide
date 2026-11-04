@@ -16,13 +16,14 @@ package org.eclipse.fordiac.ide.library.provider;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -93,20 +94,36 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 	private static Map<String, List<LibraryDescriptor>> toLibraryDescriptors(final Map<String, List<String>> versions,
 			final boolean fetchDependencies, final ILibraryPackageDownloader downloader, final IProgressMonitor monitor,
 			final MultiStatus status) {
-		return versions.entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().map(version -> {
-					final Version parsedVersion;
-					try {
-						parsedVersion = Version.valueOf(version);
-					} catch (final IllegalArgumentException e) {
-						return null;
-					}
-					final Map<String, VersionRange> dependencies = fetchDependencies
-							? getDependencies(downloader, entry.getKey(), parsedVersion, monitor, status)
-							: Map.of();
+		final Map<String, List<LibraryDescriptor>> descriptors = new HashMap<>();
+		for (final Map.Entry<String, List<String>> library : versions.entrySet()) {
+			final List<LibraryDescriptor> offered = new ArrayList<>();
+			for (final String version : library.getValue()) {
+				toLibraryDescriptor(library.getKey(), version, fetchDependencies, downloader, monitor, status)
+						.ifPresent(offered::add);
+			}
+			descriptors.put(library.getKey(), List.copyOf(offered));
+		}
+		return descriptors;
+	}
 
-					return new LibraryDescriptor(entry.getKey(), parsedVersion, dependencies);
-				}).filter(Objects::nonNull).toList()));
+	/**
+	 * Describes one version offered by the downloader. Nothing is returned for a
+	 * version that cannot be parsed.
+	 */
+	private static Optional<LibraryDescriptor> toLibraryDescriptor(final String symbolicName, final String version,
+			final boolean fetchDependencies, final ILibraryPackageDownloader downloader, final IProgressMonitor monitor,
+			final MultiStatus status) {
+		final Version parsedVersion;
+		try {
+			parsedVersion = Version.valueOf(version);
+		} catch (final IllegalArgumentException e) {
+			return Optional.empty();
+		}
+		if (!fetchDependencies) {
+			return Optional.of(new LibraryDescriptor(symbolicName, parsedVersion, Map.of()));
+		}
+		return Optional.of(new LibraryDescriptor(symbolicName, parsedVersion,
+				getDependencies(downloader, symbolicName, parsedVersion, monitor, status)));
 	}
 
 	private static Map<String, VersionRange> getDependencies(final ILibraryPackageDownloader downloader,
