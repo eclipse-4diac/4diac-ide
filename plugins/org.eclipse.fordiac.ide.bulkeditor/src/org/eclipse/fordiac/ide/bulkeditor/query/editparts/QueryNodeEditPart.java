@@ -111,6 +111,8 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected void refreshVisuals() {
+		getFigure().setCollapsed(
+				getDiagram().isCollapsed(getModel()) && QueryModelHelper.hasCollapsibleChildren(getModel()));
 		getFigure().refresh();
 	}
 
@@ -236,6 +238,7 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 	private void toggleCollapsed() {
 		if (QueryModelHelper.hasCollapsibleChildren(getModel())) {
 			getDiagram().toggleCollapsed(getModel());
+			refreshVisuals();
 			getParent().refresh();
 			refreshSourceConnections();
 		}

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
@@ -22,6 +23,7 @@ import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
 import org.eclipse.swt.SWT;
@@ -44,10 +46,12 @@ public class QueryNodeFigure extends Figure {
 	private static final Color COLOR_HEADER_BG = QueryUIPreferenceConstants.getHeaderBackgroundColor();
 	private static final Color COLOR_HEADER_FG = QueryUIPreferenceConstants.getHeaderForegroundColor();
 	private static final Font BOLD_FONT = QueryUIPreferenceConstants.getHeaderFont();
+	private static final int COLLAPSED_INDICATOR_SIZE = 8;
 
 	private final EObject element;
 	private final Figure header;
 	private FeatureChangeHandler featureChangeHandler;
+	private boolean collapsed;
 
 	public QueryNodeFigure(final EObject element) {
 		this.element = element;
@@ -68,7 +72,14 @@ public class QueryNodeFigure extends Figure {
 		this.featureChangeHandler = featureChangeHandler;
 	}
 
-	/** Updates the figure to the current state of its element. */
+	public void setCollapsed(final boolean collapsed) {
+		if (this.collapsed != collapsed) {
+			this.collapsed = collapsed;
+			revalidate();
+			repaint();
+		}
+	}
+
 	public void refresh() {
 		final Color color = getBackgroundColor();
 		header.setBackgroundColor(color);
@@ -76,7 +87,6 @@ public class QueryNodeFigure extends Figure {
 		repaint();
 	}
 
-	/** @return the editable value shown at the given absolute location or null */
 	public EditableValue getEditableValueAt(final Point location) {
 		if (location == null) {
 			return null;
@@ -93,6 +103,14 @@ public class QueryNodeFigure extends Figure {
 		return COLOR_HEADER_BG;
 	}
 
+	@Override
+	protected void paintClientArea(final Graphics graphics) {
+		super.paintClientArea(graphics);
+		if (collapsed) {
+			paintCollapsedIndicator(graphics);
+		}
+	}
+
 	@SuppressWarnings("static-method") // allow subclasses to provide their editable values
 	protected List<EditableValue> getEditableValues() {
 		return List.of();
@@ -102,7 +120,6 @@ public class QueryNodeFigure extends Figure {
 		featureChangeHandler.changeFeature(featureOwner, featureName, value);
 	}
 
-	/** @return a container for the content shown below the header */
 	protected static Figure createBody() {
 		final Figure body = new Figure();
 		final ToolbarLayout layout = new ToolbarLayout(false);
@@ -114,7 +131,6 @@ public class QueryNodeFigure extends Figure {
 		return body;
 	}
 
-	/** @return a row showing the name of a feature and the label with its value */
 	protected static Figure createValueRow(final String featureName, final Label valueLabel) {
 		final Figure row = new Figure();
 		final GridLayout layout = new GridLayout(2, false);
@@ -124,6 +140,16 @@ public class QueryNodeFigure extends Figure {
 		row.add(new Label(featureName + ":"), new GridData(SWT.BEGINNING, SWT.CENTER, false, false)); //$NON-NLS-1$
 		row.add(valueLabel, new GridData(SWT.FILL, SWT.CENTER, true, false));
 		return row;
+	}
+
+	private void paintCollapsedIndicator(final Graphics graphics) {
+		final Rectangle area = getClientArea();
+		final int right = area.right();
+		final int bottom = area.bottom();
+
+		graphics.setBackgroundColor(getChildren().size() > 1 ? getBackgroundColor() : COLOR_HEADER_FG);
+		graphics.fillPolygon(new int[] { right, bottom - COLLAPSED_INDICATOR_SIZE, right, bottom,
+				right - COLLAPSED_INDICATOR_SIZE, bottom });
 	}
 
 	private Figure createHeader(final String name) {
