@@ -58,16 +58,32 @@ public class MockDownloader implements ILibraryPackageDownloader {
 	private static final String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
 	private static final String MANIFEST_DIRECTORY_PREFIX = "fordiac-mock-manifests"; //$NON-NLS-1$
 
-	private static Path manifestDirectory;
-
-	private final VersionComparator versionComparator = new VersionComparator();
-
 	@SuppressWarnings("nls")
-	private final Map<String, List<String>> archiveMap = Map.ofEntries(
+	private static final Map<String, List<String>> ARCHIVES = Map.ofEntries(
 			Map.entry("test01", List.of("1.0.0", "1.1.0", "1.5.0", "2.0.0")),
 			Map.entry("test02", List.of("1.0.0", "1.1.0")), Map.entry("test03", List.of("1.0.0", "1.1.0")),
 			Map.entry("test04", List.of("1.0.0", "1.1.0")), Map.entry("test05", List.of("1.0.0")),
 			Map.entry("test06", List.of("1.0.0")), Map.entry("test07", List.of("1.0.0")));
+
+	private static Path manifestDirectory;
+
+	private final VersionComparator versionComparator = new VersionComparator();
+
+	private final Map<String, List<String>> archiveMap;
+
+	public MockDownloader() {
+		this(ARCHIVES);
+	}
+
+	/**
+	 * Creates a downloader serving only some of the test archives.
+	 *
+	 * @param archiveMap the served versions by symbolic name, all of them have to
+	 *                   exist in the {@code data} folder
+	 */
+	protected MockDownloader(final Map<String, List<String>> archiveMap) {
+		this.archiveMap = Map.copyOf(archiveMap);
+	}
 
 	@Override
 	public String getName() {

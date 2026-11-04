@@ -24,9 +24,10 @@ import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
 /**
- * Endpoint of the {@link MockDownloaderProvider}. Serves the same test archives
- * as the {@link MockDownloader}, but has its own name and activation state, can
- * stand for an endpoint with a missing or incomplete configuration.
+ * Endpoint of the {@link MockDownloaderProvider}. Serves the test archives of
+ * the {@link MockDownloader} or some of them, but has its own name and
+ * activation state, can stand for an endpoint with a missing or incomplete
+ * configuration.
  */
 public class MockEndpoint extends MockDownloader {
 	private final String name;
@@ -53,6 +54,18 @@ public class MockEndpoint extends MockDownloader {
 	public MockEndpoint(final String name, final DownloadResult.Status configuration) {
 		this.name = name;
 		this.configuration = configuration;
+	}
+
+	/**
+	 * Creates a configured endpoint serving only some of the test archives.
+	 *
+	 * @param name     name of the endpoint
+	 * @param archives the served versions by symbolic name
+	 */
+	public MockEndpoint(final String name, final Map<String, List<String>> archives) {
+		super(archives);
+		this.name = name;
+		this.configuration = DownloadResult.Status.OK;
 	}
 
 	@Override

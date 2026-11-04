@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,8 +32,10 @@ import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
+import org.eclipse.fordiac.ide.library.provider.ILibraryProvider.LibraryDescriptor;
 import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.junit.jupiter.api.Test;
+import org.osgi.framework.Version;
 
 /**
  * Exercises discovery and catalogue consumers with independently configured
@@ -46,6 +49,9 @@ class LibraryPackageDownloaderProviderTest {
 	private static final String ENDPOINT_B = "Endpoint B"; //$NON-NLS-1$
 	private static final String UNCONFIGURED = "Unconfigured endpoint"; //$NON-NLS-1$
 	private static final String INCOMPLETE = "Incomplete endpoint"; //$NON-NLS-1$
+	private static final String V1_0_0 = "1.0.0"; //$NON-NLS-1$
+	private static final String V1_1_0 = "1.1.0"; //$NON-NLS-1$
+	private static final String V2_0_0 = "2.0.0"; //$NON-NLS-1$
 
 	private final MockEndpoint endpointA = new MockEndpoint(ENDPOINT_A);
 	private final MockEndpoint endpointB = new MockEndpoint(ENDPOINT_B);
@@ -254,6 +260,31 @@ class LibraryPackageDownloaderProviderTest {
 	}
 
 	@Test
+	void catalogueKeepsLibrariesOfAllSources() {
+		source.configure(new MockEndpoint(ENDPOINT_A, Map.of(TEST01, List.of(V1_0_0, V1_1_0))),
+				new MockEndpoint(ENDPOINT_B, Map.of(TEST01, List.of(V2_0_0))));
+		final OnlineLibraryProvider catalogue = new OnlineLibraryProvider(provider);
+
+		final IStatus status = catalogue.refresh(new NullProgressMonitor(), false);
+
+		assertTrue(status.getSeverity() < IStatus.WARNING, status::toString);
+		assertEquals(List.of(V1_0_0, V1_1_0, V2_0_0), getVersions(catalogue));
+		assertThrows(UnsupportedOperationException.class, () -> catalogue.getAll(TEST01).clear());
+	}
+
+	@Test
+	void catalogueListsVersionOfferedBySeveralSourcesOncePerSource() {
+		source.configure(new MockEndpoint(ENDPOINT_A, Map.of(TEST01, List.of(V1_0_0))),
+				new MockEndpoint(ENDPOINT_B, Map.of(TEST01, List.of(V1_0_0, V2_0_0))));
+		final OnlineLibraryProvider catalogue = new OnlineLibraryProvider(provider);
+
+		final IStatus status = catalogue.refresh(new NullProgressMonitor(), false);
+
+		assertTrue(status.getSeverity() < IStatus.WARNING, status::toString);
+		assertEquals(List.of(V1_0_0, V1_0_0, V2_0_0), getVersions(catalogue));
+	}
+
+	@Test
 	void catalogueReportsMissingSource() {
 		final OnlineLibraryProvider catalogue = new OnlineLibraryProvider(provider);
 		assertMissingSource(catalogue.refresh(new NullProgressMonitor(), false));
@@ -271,5 +302,10 @@ class LibraryPackageDownloaderProviderTest {
 
 	private static List<String> getMessages(final IStatus status) {
 		return Stream.of(status.getChildren()).map(IStatus::getMessage).toList();
+	}
+
+	private static List<String> getVersions(final OnlineLibraryProvider catalogue) {
+		return catalogue.getAll(TEST01).stream().map(LibraryDescriptor::version).sorted().map(Version::toString)
+				.toList();
 	}
 }
