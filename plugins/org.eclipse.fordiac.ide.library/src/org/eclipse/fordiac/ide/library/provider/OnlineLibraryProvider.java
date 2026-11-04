@@ -10,6 +10,7 @@
  * Contributors:
  *   Mario Kastner - initial API and implementation and/or initial documentation
  *   Michael Oberlehner - use the shared downloader lookup
+ *   Michael Oberlehner - keep the libraries of all sources in the catalogue
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.provider;
 
@@ -69,8 +70,10 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 
 			switch (downloadResult.status()) {
 			case OK -> {
-				refreshedLibs.putAll(
-						toLibraryDescriptors(downloadResult.result(), fetchDependencies, downloader, monitor, status));
+				// a version offered by several sources is listed once per source, in lookup order
+				toLibraryDescriptors(downloadResult.result(), fetchDependencies, downloader, monitor, status)
+						.forEach((symbolicName, descriptors) -> refreshedLibs
+								.computeIfAbsent(symbolicName, _ -> new ArrayList<>()).addAll(descriptors));
 				status.add(Status.info(downloader.getName() + ": OK")); //$NON-NLS-1$
 				sourceConfigured = true;
 			}
@@ -87,6 +90,7 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 		if (!sourceConfigured && status.isOK()) {
 			status.add(Status.info(Messages.OnlineLibraryProvider_NoLibrarySource));
 		}
+		refreshedLibs.replaceAll((_, descriptors) -> List.copyOf(descriptors));
 		availableLibs.set(Map.copyOf(refreshedLibs));
 
 		return status;
