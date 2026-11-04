@@ -16,20 +16,24 @@ package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -43,8 +47,28 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 public class UploadImageHandler extends AbstractHandler {
 
+	static final String[] FILE_EXTENSIONS = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+
 	private static String lastSourceDirectory = null;
-	private static final String[] fileExtensions = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+
+	/**
+	 * Validates that the dropped file aligns with the permitted extensions defined
+	 * in the handler.
+	 */
+	public static boolean isSupportedImage(final File file) {
+		if (file == null) {
+			return false;
+		}
+		final String name = file.getName().toLowerCase(java.util.Locale.ROOT);
+		for (final String ext : FILE_EXTENSIONS) {
+			// Strip "*" prefix from wildcard definition (e.g. "*.png" -> ".png")
+			final String cleanExtension = ext.substring(1);
+			if (name.endsWith(cleanExtension)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -85,7 +109,7 @@ public class UploadImageHandler extends AbstractHandler {
 	 * Resolves the corresponding workspace assets folder based on the currently
 	 * open editor file.
 	 */
-	private static IContainer resolveAssetsFolder(final ITextEditor textEditor) {
+	public static IContainer resolveAssetsFolder(final ITextEditor textEditor) {
 		final IEditorInput editorInput = textEditor.getEditorInput();
 		if (editorInput instanceof final IFileEditorInput fileEditorInput) {
 			final IFile docFile = fileEditorInput.getFile();
@@ -108,7 +132,7 @@ public class UploadImageHandler extends AbstractHandler {
 			fileDialog.setFilterPath(assetsFolder.getLocation().toOSString()); // Fallback default path
 		}
 
-		fileDialog.setFilterExtensions(fileExtensions);
+		fileDialog.setFilterExtensions(FILE_EXTENSIONS);
 
 		final String selectedPath = fileDialog.open();
 		return (selectedPath != null) ? new File(selectedPath) : null;
@@ -118,9 +142,9 @@ public class UploadImageHandler extends AbstractHandler {
 	 * Handles copying/saving the local file system resource into the hidden assets
 	 * folder of the Type Library.
 	 */
-	private static boolean uploadImage(final Shell shell, final IContainer assetsFolder, final File localFile)
+	public static boolean uploadImage(final Shell shell, final IContainer assetsFolder, final File localFile)
 			throws ExecutionException {
-		if (!(assetsFolder instanceof final org.eclipse.core.resources.IFolder folder)) {
+		if (!(assetsFolder instanceof final IFolder folder)) {
 			return false;
 		}
 
@@ -130,7 +154,7 @@ public class UploadImageHandler extends AbstractHandler {
 		// Refresh target resource before existence and overwrite checks
 		try {
 			targetFile.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
-		} catch (final org.eclipse.core.runtime.CoreException e) {
+		} catch (final CoreException e) {
 			throw new ExecutionException(e.getLocalizedMessage(), e);
 		}
 
@@ -173,7 +197,7 @@ public class UploadImageHandler extends AbstractHandler {
 	 * Replaces spaces, brackets, parentheses, and other special characters with
 	 * underscores.
 	 */
-	private static String getSafeFileName(final String originalName) {
+	public static String getSafeFileName(final String originalName) {
 		if (originalName == null) {
 			return ""; //$NON-NLS-1$
 		}
@@ -195,7 +219,7 @@ public class UploadImageHandler extends AbstractHandler {
 		}
 		try {
 			final File targetLocalFile = targetFile.getLocation().toFile();
-			return java.nio.file.Files.isSameFile(localFile.toPath(), targetLocalFile.toPath());
+			return Files.isSameFile(localFile.toPath(), targetLocalFile.toPath());
 		} catch (final Exception e) {
 			// Fallback case-insensitive path comparison (ideal on Windows/macOS)
 			return localFile.getAbsolutePath().equalsIgnoreCase(targetFile.getLocation().toOSString());
@@ -226,7 +250,7 @@ public class UploadImageHandler extends AbstractHandler {
 	 * dynamically prepending/appending line delimiters if necessary to keep the
 	 * block stand-alone.
 	 */
-	private static void insertImageMarkup(final ITextEditor textEditor, final String fileName)
+	public static void insertImageMarkup(final ITextEditor textEditor, final String fileName)
 			throws ExecutionException {
 		final IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
 		final ISelection selection = textEditor.getSelectionProvider().getSelection();
@@ -237,7 +261,7 @@ public class UploadImageHandler extends AbstractHandler {
 
 			try {
 				// Retrieve the native line delimiter used by this document (e.g., \r\n or \n)
-				final String lineDelim = org.eclipse.jface.text.TextUtilities.getDefaultLineDelimiter(document);
+				final String lineDelim = TextUtilities.getDefaultLineDelimiter(document);
 				final StringBuilder markupBuilder = new StringBuilder();
 
 				// Prepend delimiter if preceding text is on the same line

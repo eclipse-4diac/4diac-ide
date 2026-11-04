@@ -14,7 +14,9 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -25,6 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.Messages;
+import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.UploadImageHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
@@ -38,13 +41,21 @@ import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -64,7 +75,6 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	// The editor input of the type file given to us.
 	private IEditorInput originEditorInput;
-	private Composite toolbarContainer;
 	private IMenuService menuService;
 	private ToolBarManager toolBarManager;
 
@@ -91,7 +101,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	public void createPartControl(final Composite parent) {
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(parent);
 
-		toolbarContainer = new Composite(parent, SWT.NONE);
+		final Composite toolbarContainer = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(1).spacing(0, 0).applyTo(toolbarContainer);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarContainer);
 
@@ -117,6 +127,11 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		final Browser browser = findBrowser(parent);
 		if (browser != null) {
 			browser.addLocationListener(new ModelLocationListener());
+		}
+
+		final StyledText styledText = findStyledText(newParent);
+		if (styledText != null) {
+			setupDragAndDrop(styledText);
 		}
 
 		// Find the Mylyn tab folder and dynamically toggle toolbar visibility on switch
@@ -199,7 +214,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 				}
 				return new FileEditorInput(docFile);
 			} catch (final CoreException e) {
-				ILog.get().error("Cann not get ascii doc file!", e); //$NON-NLS-1$
+				ILog.get().error("Cannot get AsciiDoc file!", e); //$NON-NLS-1$
 			}
 		}
 		return null;
@@ -227,6 +242,152 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 			markupLanguage.configure(new FordiacAsciiDocLanguageConfiguration(getType()));
 		}
 		super.setMarkupLanguage(markupLanguage, persistSetting);
+	}
+
+	/**
+	 * Traverses the composite tree recursively to retrieve the native editor text
+	 * widget.
+	 */
+	private StyledText findStyledText(final Control control) {
+		if (control instanceof final StyledText styledText) {
+			return styledText;
+		}
+		if (control instanceof final Composite comp) {
+			for (final Control child : comp.getChildren()) {
+				final StyledText styledText = findStyledText(child);
+				if (styledText != null) {
+					return styledText;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Safely registers File Drag-and-Drop onto the StyledText control. Disposes of
+	 * the editor's default DropTarget to completely prevent focus-stealing and
+	 * auto-opening of the dropped image file.
+	 *
+	 * Since Mylyn’s base MarkupEditor already registers a default DropTarget on the
+	 * editor's text control, registering a second target would cause a crash during
+	 * the editor's creation. To prevent this, setupDragAndDrop() retrieves the
+	 * existing target, disposes of it, and configures a clean, custom DropTarget
+	 * matching FileTransfer types. This ensures we intercept file drops cleanly
+	 * without letting Mylyn trigger its default file-opening procedures.
+	 */
+	private void setupDragAndDrop(final StyledText styledText) {
+		// Retrieve the existing DropTarget registered by Mylyn
+		final DropTarget existingTarget = (DropTarget) styledText.getData("DropTarget"); //$NON-NLS-1$
+
+		// Dispose of it to completely disable Mylyn's default file-drop/open
+		// behavior
+		if (existingTarget != null && !existingTarget.isDisposed()) {
+			existingTarget.dispose();
+		}
+
+		// Create a brand new, clean DropTarget on the StyledText control
+		final int operations = DND.DROP_COPY | DND.DROP_DEFAULT;
+		final DropTarget target = new DropTarget(styledText, operations);
+		target.setTransfer(FileTransfer.getInstance());
+		target.addDropListener(createDropListener(styledText));
+
+		// Update the widget data association
+		styledText.setData("DropTarget", target); //$NON-NLS-1$
+	}
+
+	/**
+	 * Constructs the SWT drop adapter listener.
+	 */
+	private DropTargetAdapter createDropListener(final StyledText styledText) {
+		return new DropTargetAdapter() {
+			@Override
+			public void dragEnter(final DropTargetEvent event) {
+				dragOperationChanged(event);
+			}
+
+			@Override
+			public void dragOperationChanged(final DropTargetEvent event) {
+				if (event.detail == DND.DROP_DEFAULT) {
+					event.detail = (event.operations & DND.DROP_COPY) != 0 ? DND.DROP_COPY : DND.DROP_NONE;
+				}
+			}
+
+			@Override
+			public void dragOver(final DropTargetEvent event) {
+				event.feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_SELECT;
+			}
+
+			@Override
+			public void drop(final DropTargetEvent event) {
+				if (FileTransfer.getInstance().isSupportedType(event.currentDataType)) {
+					final String[] files = (String[]) event.data;
+					handleFileDrop(styledText, files, event.x, event.y);
+				}
+			}
+		};
+	}
+
+	/**
+	 * Coordinates parsing the dropped files and triggering the drop operations.
+	 */
+	private void handleFileDrop(final StyledText styledText, final String[] files, final int x, final int y) {
+		if (files == null || files.length == 0) {
+			return;
+		}
+
+		final File imageFile = findFirstSupportedImage(files);
+		if (imageFile != null) {
+			updateCursorLocation(styledText, x, y);
+			processAndUploadImage(styledText.getShell(), imageFile);
+		}
+	}
+
+	/**
+	 * Inspects dropped file paths and returns the first file matching the
+	 * centralized validation criteria.
+	 */
+	private static File findFirstSupportedImage(final String[] files) {
+		for (final String filePath : files) {
+			final File file = new File(filePath);
+			if (UploadImageHandler.isSupportedImage(file)) { // Clean consolidation of file check logic
+				return file;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Moves the carets position inside the editor to the target screen-drop
+	 * coordinates.
+	 */
+	private static void updateCursorLocation(final StyledText styledText, final int x, final int y) {
+		try {
+			final Point pt = styledText.getDisplay().map(null, styledText, x, y);
+			final int offset = styledText.getOffsetAtPoint(pt);
+			if (offset != -1) {
+				styledText.setSelection(offset, offset);
+			}
+		} catch (final IllegalArgumentException e) {
+			// Quiet fallback if dropping outside character boundaries
+		}
+	}
+
+	/**
+	 * Performs the upload and markup operations via the centralized Handler APIs.
+	 */
+	private void processAndUploadImage(final Shell shell, final File imageFile) {
+		final IContainer assetsFolder = UploadImageHandler.resolveAssetsFolder(this);
+		if (assetsFolder != null && assetsFolder.exists()) {
+			try {
+				final boolean uploadSuccessful = UploadImageHandler.uploadImage(shell, assetsFolder, imageFile);
+				if (uploadSuccessful) {
+					final String safeFileName = UploadImageHandler.getSafeFileName(imageFile.getName());
+					UploadImageHandler.insertImageMarkup(this, safeFileName);
+				}
+			} catch (final ExecutionException e) {
+				ILog.get().error("Failed to process dropped image", e); //$NON-NLS-1$
+			}
+		}
 	}
 
 	@Override
