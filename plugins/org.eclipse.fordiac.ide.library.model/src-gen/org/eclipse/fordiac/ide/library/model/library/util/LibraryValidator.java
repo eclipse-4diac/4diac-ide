@@ -43,12 +43,20 @@ public class LibraryValidator extends EObjectValidator {
 	public static final String DIAGNOSTIC_SOURCE = "org.eclipse.fordiac.ide.library.model.library"; //$NON-NLS-1$
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Unique Symbolic Names' of 'Dependencies'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int DEPENDENCIES__VALIDATE_UNIQUE_SYMBOLIC_NAMES = 1;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Unique Symbolic Names' of 'Exports'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int EXPORTS__VALIDATE_UNIQUE_SYMBOLIC_NAMES = 1;
+	public static final int EXPORTS__VALIDATE_UNIQUE_SYMBOLIC_NAMES = 2;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Pattern' of 'Element'.
@@ -56,7 +64,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int LIBRARY_ELEMENT__VALIDATE_PATTERN = 2;
+	public static final int LIBRARY_ELEMENT__VALIDATE_PATTERN = 3;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Version Range' of 'Required'.
@@ -64,7 +72,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int REQUIRED__VALIDATE_VERSION_RANGE = 3;
+	public static final int REQUIRED__VALIDATE_VERSION_RANGE = 4;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Version Info' of 'Version Info'.
@@ -72,7 +80,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VERSION_INFO__VALIDATE_VERSION_INFO = 4;
+	public static final int VERSION_INFO__VALIDATE_VERSION_INFO = 5;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -80,7 +88,7 @@ public class LibraryValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 4;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 5;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -179,7 +187,27 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateDependencies(Dependencies dependencies, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(dependencies, diagnostics, context);
+		if (!validate_NoCircularContainment(dependencies, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(dependencies, diagnostics, context);
+		if (result || diagnostics != null) result &= validateDependencies_validateUniqueSymbolicNames(dependencies, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validateUniqueSymbolicNames constraint of '<em>Dependencies</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDependencies_validateUniqueSymbolicNames(Dependencies dependencies, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return dependencies.validateUniqueSymbolicNames(diagnostics, context);
 	}
 
 	/**
