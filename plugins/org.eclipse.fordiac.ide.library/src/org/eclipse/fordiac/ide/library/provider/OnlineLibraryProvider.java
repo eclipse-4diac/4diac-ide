@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
+import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Version;
@@ -108,7 +109,8 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 
 	/**
 	 * Describes one version offered by the downloader. Nothing is returned for a
-	 * version that cannot be parsed.
+	 * version that cannot be parsed or whose manifest has an invalid dependency
+	 * range.
 	 */
 	private static Optional<LibraryDescriptor> toLibraryDescriptor(final String symbolicName, final String version,
 			final boolean fetchDependencies, final ILibraryPackageDownloader downloader, final IProgressMonitor monitor,
@@ -122,8 +124,9 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 		if (!fetchDependencies) {
 			return Optional.of(new LibraryDescriptor(symbolicName, parsedVersion, Map.of()));
 		}
-		return Optional.of(new LibraryDescriptor(symbolicName, parsedVersion,
-				getDependencies(downloader, symbolicName, parsedVersion, monitor, status)));
+		// null if the manifest has an invalid dependency range, the error is already reported
+		return Optional.ofNullable(getDependencies(downloader, symbolicName, parsedVersion, monitor, status))
+				.map(dependencies -> new LibraryDescriptor(symbolicName, parsedVersion, dependencies));
 	}
 
 	private static Map<String, VersionRange> getDependencies(final ILibraryPackageDownloader downloader,
@@ -146,8 +149,15 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 
 		final Map<String, VersionRange> dependencies = new HashMap<>();
 		if (manifest != null && manifest.getDependencies() != null) {
-			manifest.getDependencies().getRequired().forEach(req -> dependencies.put(req.getSymbolicName(),
-					VersionComparator.parseVersionRange(req.getVersion())));
+			for (final Required req : manifest.getDependencies().getRequired()) {
+				try {
+					dependencies.put(req.getSymbolicName(), VersionComparator.parseVersionRange(req.getVersion()));
+				} catch (final IllegalArgumentException e) {
+					status.add(Status.error(MessageFormat.format(Messages.OnlineLibraryProvider_InvalidDependencyRange,
+							downloader.getName(), symbolicName, version, req.getSymbolicName(), req.getVersion())));
+					return null;
+				}
+			}
 		}
 
 		return dependencies;
