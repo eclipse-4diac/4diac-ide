@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -52,7 +52,7 @@ public class New4diacExampleWizard extends Wizard implements INewWizard {
 		try {
 			getContainer().run(false, true, operation);
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError("Couldn't create example", e); //$NON-NLS-1$
+			ILog.get().error("Couldn't create example", e); //$NON-NLS-1$
 			return false;
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
