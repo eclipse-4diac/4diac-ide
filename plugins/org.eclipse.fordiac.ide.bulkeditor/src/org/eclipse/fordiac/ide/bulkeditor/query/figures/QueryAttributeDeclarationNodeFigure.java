@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 
 /** Node of an attribute declaration showing the attribute name. */
 public class QueryAttributeDeclarationNodeFigure extends QueryNodeFigure {
@@ -26,21 +26,26 @@ public class QueryAttributeDeclarationNodeFigure extends QueryNodeFigure {
 
 	private final Label nameLabel = QueryValueLabel.createGrowing(MIN_VALUE_WIDTH);
 
-	public QueryAttributeDeclarationNodeFigure(final EObject attributeDeclaration) {
+	public QueryAttributeDeclarationNodeFigure(final AttributeDeclaration attributeDeclaration) {
 		super(attributeDeclaration);
 		final Figure body = createBody();
-		body.add(createValueRow(QueryModelHelper.FEATURE_NAME, nameLabel));
+		body.add(createValueRow(QueryPackage.Literals.ATTRIBUTE_DECLARATION__NAME.getName(), nameLabel));
 		add(body);
+	}
+
+	@Override
+	public AttributeDeclaration getElement() {
+		return (AttributeDeclaration) super.getElement();
 	}
 
 	@Override
 	public void refresh() {
 		super.refresh();
-		nameLabel.setText(QueryModelHelper.getFeatureText(getElement(), QueryModelHelper.FEATURE_NAME));
+		nameLabel.setText(getElement().getName());
 	}
 
 	@Override
 	protected List<EditableValue> getEditableValues() {
-		return List.of(new EditableValue(nameLabel, getElement(), QueryModelHelper.FEATURE_NAME));
+		return List.of(new EditableValue(nameLabel, getElement(), QueryPackage.Literals.ATTRIBUTE_DECLARATION__NAME));
 	}
 }

@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.bulkeditor.commands.DeleteAttributeBulkEditorComm
 import org.eclipse.fordiac.ide.bulkeditor.nattable.BulkEditorNatTable;
 import org.eclipse.fordiac.ide.bulkeditor.nattable.DelegatingSelectionProvider;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
 import org.eclipse.fordiac.ide.bulkeditor.search.EditorSearchExecutor;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.QuerySearchAdapter;
@@ -233,14 +234,14 @@ public class BulkEditor extends MultiPageEditorPart
 	}
 
 	private boolean performSearch() {
-		final EObject queryRoot = queryViewer.getQueryRoot();
-		if (queryRoot == null) {
+		final Query query = queryViewer.getQuery();
+		if (query == null) {
 			return false;
 		}
 
-		final var mode = QuerySearchAdapter.resolveTargetMode(queryRoot);
+		final var mode = QuerySearchAdapter.resolveTargetMode(query);
 
-		final EditorSearchExecutor.Result result = EditorSearchExecutor.search(queryRoot, project);
+		final EditorSearchExecutor.Result result = EditorSearchExecutor.search(query, project);
 		if (result == null) {
 			return false;
 		}
