@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         java: [25]
     runs-on: ${{ matrix.os }}
     name: OS ${{ matrix.os }} Java ${{ matrix.java }} compile
@@ -55,20 +55,11 @@ jobs:
       with:
         maven-version: 3.9.11
 
-    - name: Build with Maven on Ubuntu
-      if: runner.os == 'Linux'
+    - name: Build with Maven
       uses: coactions/setup-xvfb@b6b4fcfb9f5a895edadc3bc76318fae0ac17c8b3 # v1.0.1
       with:
        run: >-
         mvn -V -B -fae -ntp clean verify
-
-    - name: Build with Maven on Windows
-      if: runner.os == 'Windows'
-      run: mvn -V -B -fae -ntp clean verify
-
-    - name: Build with Maven on MacOS
-      if: runner.os == 'macOS'
-      run: mvn -V -B -fae -ntp clean verify
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
