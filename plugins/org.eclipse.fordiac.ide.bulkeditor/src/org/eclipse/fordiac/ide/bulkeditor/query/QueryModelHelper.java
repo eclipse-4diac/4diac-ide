@@ -25,6 +25,7 @@ public final class QueryModelHelper {
 
 	public static final String QUERY = "Query"; //$NON-NLS-1$
 	public static final String CONSTRAINT = "Constraint"; //$NON-NLS-1$
+	public static final String PROPERTY_CONSTRAINT = "PropertyConstraint"; //$NON-NLS-1$
 	public static final String ATTRIBUTE_CONSTRAINT = "AttributeConstraint"; //$NON-NLS-1$
 	public static final String FIELD_CONSTRAINT = "FieldConstraint"; //$NON-NLS-1$
 	public static final String PLACE = "Place"; //$NON-NLS-1$
@@ -102,7 +103,7 @@ public final class QueryModelHelper {
 	}
 
 	public static boolean isConstraint(final EObject eObj) {
-		return isOfType(eObj, CONSTRAINT) || isOfType(eObj, ATTRIBUTE_CONSTRAINT);
+		return eObj != null && isConstraintClass(eObj.eClass());
 	}
 
 	public static boolean isAttributeConstraint(final EObject eObj) {
@@ -110,7 +111,7 @@ public final class QueryModelHelper {
 	}
 
 	public static boolean isConstraintClass(final EClass eClass) {
-		return CONSTRAINT.equals(eClass.getName()) || ATTRIBUTE_CONSTRAINT.equals(eClass.getName());
+		return CONSTRAINT.equals(eClass.getName()) || isSubtypeOf(eClass, CONSTRAINT);
 	}
 
 	public static boolean isSubtypeOf(final EClass eClass, final String superTypeName) {
@@ -302,7 +303,7 @@ public final class QueryModelHelper {
 	// child creation
 	public static List<EClass> getAddableClasses(final EPackage queryPackage, final EObject parent, final EClass type) {
 		if (isConstraintClass(type)) {
-			// a constraint slot accepts both Constraint and AttributeConstraint
+			// a constraint slot accepts every concrete constraint class
 			return getConcreteSubclasses(queryPackage, type).stream().filter(cls -> isChildTypeAllowed(parent, cls))
 					.toList();
 		}

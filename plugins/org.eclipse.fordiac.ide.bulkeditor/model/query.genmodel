@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA;Copyright (c) 2026 Primetals Technologies Austria GmbH&#xA;&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;  Sebastian Hollersbacher - initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
+    modelDirectory="/org.eclipse.fordiac.ide.bulkeditor/src-gen" modelPluginID="org.eclipse.fordiac.ide.bulkeditor"
+    modelName="Query" updateClasspath="false" nonNLSMarkers="true" commentFormatting="true"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="25.0" copyrightFields="false"
+    importOrganizing="true">
+  <foreignModel>query.ecore</foreignModel>
+  <genPackages prefix="Query" basePackage="org.eclipse.fordiac.ide.bulkeditor.query"
+      disposableProviderFactory="true" ecorePackage="query.ecore#/">
+    <genClasses image="false" ecoreClass="query.ecore#//Constraint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Constraint/negate"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Constraint/orConstraint"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Constraint/andConstraint"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//PropertyConstraint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//PropertyConstraint/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//PropertyConstraint/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//PropertyConstraint/comment"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//PropertyConstraint/value"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//FieldConstraint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//FieldConstraint/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//FieldConstraint/caseSensitive"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//FieldConstraint/wholeWord"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//FieldConstraint/entire"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//FieldConstraint/regex"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//AttributeConstraint"/>
+    <genClasses image="false" ecoreClass="query.ecore#//Occurrence">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Occurrence/constraint"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//ApplicationOccurrence"/>
+    <genClasses ecoreClass="query.ecore#//CompositeFBOccurrence"/>
+    <genClasses ecoreClass="query.ecore#//TypedSubappOccurrence"/>
+    <genClasses ecoreClass="query.ecore#//Query">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Query/placeholder"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Query/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Query/place"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//Placeholder">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Placeholder/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Placeholder/val"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//Target">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Target/target"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="query.ecore#//TargetOption"/>
+    <genClasses ecoreClass="query.ecore#//Place">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Place/ignoreLinkedLibraries"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Place/subappHierarchy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Place/subappHierarchyElements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/simpleFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/basicFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/compositeFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/serviceInterfaceFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/functionFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/typedSubapp"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/untypedSubapp"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/connection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/simpleType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/basicType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/compositeType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/serviceInterfaceType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/functionType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/subappType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/structType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/attributeType"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="query.ecore#//SearchTarget">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//SearchTarget/constraint"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="query.ecore#//Type">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Type/pin"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//SimpleType"/>
+    <genClasses ecoreClass="query.ecore#//BasicType"/>
+    <genClasses ecoreClass="query.ecore#//CompositeType"/>
+    <genClasses ecoreClass="query.ecore#//ServiceInterfaceType"/>
+    <genClasses ecoreClass="query.ecore#//FunctionType"/>
+    <genClasses ecoreClass="query.ecore#//SubappType"/>
+    <genClasses ecoreClass="query.ecore#//StructType"/>
+    <genClasses ecoreClass="query.ecore#//AttributeType"/>
+    <genClasses image="false" ecoreClass="query.ecore#//NetworkElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//NetworkElement/applicationOccurrence"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//NetworkElement/compositeFBOccurrence"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//NetworkElement/typedSubappOccurrence"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="query.ecore#//Instance">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Instance/pin"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//SimpleFB"/>
+    <genClasses ecoreClass="query.ecore#//BasicFB"/>
+    <genClasses ecoreClass="query.ecore#//CompositeFB"/>
+    <genClasses ecoreClass="query.ecore#//ServiceInterfaceFB"/>
+    <genClasses ecoreClass="query.ecore#//FunctionFB"/>
+    <genClasses ecoreClass="query.ecore#//TypedSubapp"/>
+    <genClasses ecoreClass="query.ecore#//UntypedSubapp"/>
+    <genClasses ecoreClass="query.ecore#//Connection"/>
+    <genClasses ecoreClass="query.ecore#//PIN"/>
+    <genClasses ecoreClass="query.ecore#//PinTarget">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//PinTarget/constraint"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//Attribute">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Attribute/constraint"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//AttributeDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//AttributeDeclaration/name"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

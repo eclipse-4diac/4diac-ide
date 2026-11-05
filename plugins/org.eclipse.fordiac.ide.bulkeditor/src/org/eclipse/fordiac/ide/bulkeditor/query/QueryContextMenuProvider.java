@@ -122,7 +122,7 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 			Map.entry(QueryModelHelper.FEATURE_TYPE, Messages.QueryMenu_Type),
 			Map.entry(QueryModelHelper.FEATURE_COMMENT, Messages.QueryMenu_Comment),
 			Map.entry(QueryModelHelper.FEATURE_VALUE, Messages.QueryMenu_Value),
-			Map.entry(QueryModelHelper.CONSTRAINT, Messages.QueryMenu_Constraint),
+			Map.entry(QueryModelHelper.PROPERTY_CONSTRAINT, Messages.QueryMenu_PropertyConstraint),
 			Map.entry(QueryModelHelper.ATTRIBUTE_CONSTRAINT, Messages.QueryMenu_AttributeConstraint),
 			Map.entry(QueryModelHelper.REF_SIMPLE_FB, Messages.QueryMenu_SimpleFB),
 			Map.entry(QueryModelHelper.REF_BASIC_FB, Messages.QueryMenu_BasicFB),

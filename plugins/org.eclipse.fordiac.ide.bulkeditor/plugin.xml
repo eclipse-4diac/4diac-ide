@@ -186,5 +186,13 @@
 			</themeid>
 		</stylesheet>
 	</extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated query -->
+      <package
+            uri="org.eclipse.fordiac.ide.bulkeditor.query"
+            class="org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage"
+            genModel="model/query.genmodel"/>
+   </extension>
 		
 </plugin>

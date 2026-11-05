@@ -70,7 +70,7 @@ public final class Messages extends NLS {
 	public static String QueryMenu_Type;
 	public static String QueryMenu_Comment;
 	public static String QueryMenu_Value;
-	public static String QueryMenu_Constraint;
+	public static String QueryMenu_PropertyConstraint;
 	public static String QueryMenu_AttributeConstraint;
 	public static String QueryMenu_SimpleFB;
 	public static String QueryMenu_BasicFB;

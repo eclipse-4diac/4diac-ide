@@ -325,8 +325,8 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 		OpenListenerManager.openEditor(subApp);
 	}
 
-	private boolean subAppIsMapped(final SubApp subApp) {
-		return (null == getModel().getTypeEntry()) && (null == subApp.getSubAppNetwork()) && subApp.isMapped();
+	private static boolean subAppIsMapped(final SubApp subApp) {
+		return subApp.getSubAppNetwork() == null && subApp.isMapped();
 	}
 
 	@Override

@@ -38,14 +38,23 @@ public class OpenCompositeInstanceViewerOpenListener extends AbstractOpenSystemE
 
 	@Override
 	public void run(final IAction action) {
-		final EObject root = EcoreUtil.getRootContainer(compositeFBInstance);
+		final FB toOpen = getFBToOpen(compositeFBInstance);
+		final EObject root = EcoreUtil.getRootContainer(toOpen);
 		if (root instanceof final AutomationSystem as) {
-			openInSystemEditor(as.getTypeEntry().getFile(), compositeFBInstance);
+			openInSystemEditor(as.getTypeEntry().getFile(), toOpen);
 		} else if (root instanceof final SubAppType subAppType) {
-			openInSubappTypeEditor(subAppType, compositeFBInstance);
+			openInSubappTypeEditor(subAppType, toOpen);
 		} else if (root instanceof final CompositeFBType cfbType) {
-			openInFBTypeEditor(cfbType, compositeFBInstance);
+			openInFBTypeEditor(cfbType, toOpen);
 		}
+	}
+
+	public static FB getFBToOpen(final FB fb) {
+		if (fb != null && fb.isMapped() && fb.getMapping().getTo() == fb
+				&& fb.getOpposite() instanceof final FB opposite) {
+			return opposite;
+		}
+		return fb;
 	}
 
 	@Override

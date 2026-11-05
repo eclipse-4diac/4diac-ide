@@ -46,7 +46,7 @@ public abstract class AbstractFollowTargetPinConnectionHandler extends FollowCon
 			selectInterfaceElement(targetIEEditPart.getModel().getRefElement(), editor);
 		} else {
 			// Select next pin (Step mode)
-			selectOpposites(event, viewer, null,
+			selectOpposites(event, viewer, targetIEEditPart.getModel().getHost(),
 					getConnectionOpposites((IInterfaceElement) targetIEEditPart.getParent().getModel()), editor);
 		}
 
