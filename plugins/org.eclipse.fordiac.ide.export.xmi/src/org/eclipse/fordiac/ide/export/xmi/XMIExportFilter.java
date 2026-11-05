@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Kaavya Manimathavan - skip non-type files during XMI export
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.xmi;
 
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
@@ -84,6 +86,11 @@ public class XMIExportFilter extends ExportFilter {
 		if (typeFile == null || !typeFile.exists()) {
 			getErrors().add(Messages.XMIExportFilter_UnknownFile);
 			return;
+		}
+
+		if (element == null && TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile) == null) {
+			getInfos().add(MessageFormat.format(Messages.XMIExportFilter_FileIgnored, typeFile.getFullPath()));
+			return; // Do not export files passed to the export that are not in the TypeLibrary
 		}
 
 		final URI sourceUri = URI.createPlatformResourceURI(typeFile.getFullPath().toString(), true);
