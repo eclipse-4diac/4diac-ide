@@ -4,7 +4,9 @@ package org.eclipse.fordiac.ide.library.model.library.impl;
 
 import java.util.Collection;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -69,6 +71,16 @@ public class DependenciesImpl extends EObjectImpl implements Dependencies {
 			required = new EObjectContainmentEList<Required>(Required.class, this, LibraryPackage.DEPENDENCIES__REQUIRED);
 		}
 		return required;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateUniqueSymbolicNames(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.library.model.impl.DependenciesAnnotations.validateUniqueSymbolicNames(this, diagnostics, context);
 	}
 
 	/**
