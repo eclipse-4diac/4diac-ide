@@ -19,12 +19,12 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.Label;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper.FieldConstraintData;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure.EditableValue;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure.FeatureChangeHandler;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.FieldConstraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -38,7 +38,7 @@ public class FieldConstraintFigure extends Figure {
 	private static final String EXACT_MATCH_IMAGE = "icons/full/elcl16/whole_word.png"; //$NON-NLS-1$
 	private static final String REGULAR_EXPRESSION_IMAGE = "icons/full/elcl16/regex.png"; //$NON-NLS-1$
 
-	private final EObject fieldConstraint;
+	private final FieldConstraint fieldConstraint;
 	private final FeatureChangeHandler changeHandler;
 	private final Label valueLabel = QueryValueLabel.createFixedWidth(VALUE_WIDTH);
 	private final QueryButton caseSensitive;
@@ -46,7 +46,7 @@ public class FieldConstraintFigure extends Figure {
 	private final QueryButton exactMatch;
 	private final QueryButton regularExpression;
 
-	public FieldConstraintFigure(final EObject fieldConstraint, final FeatureChangeHandler changeHandler) {
+	public FieldConstraintFigure(final FieldConstraint fieldConstraint, final FeatureChangeHandler changeHandler) {
 		this.fieldConstraint = fieldConstraint;
 		this.changeHandler = changeHandler;
 		final GridLayout layout = new GridLayout(6, false);
@@ -58,40 +58,39 @@ public class FieldConstraintFigure extends Figure {
 		add(new Label(fieldName + ":"), new GridData(SWT.BEGINNING, SWT.CENTER, false, false)); //$NON-NLS-1$
 		add(valueLabel, new GridData(SWT.FILL, SWT.CENTER, false, false));
 		caseSensitive = addToggle(getTextEditorImage(CASE_SENSITIVE_IMAGE), Messages.CaseSensitive,
-				QueryModelHelper.FEATURE_CASE_SENSITIVE);
+				QueryPackage.Literals.FIELD_CONSTRAINT__CASE_SENSITIVE);
 		wholeWord = addToggle(FordiacImage.ICON_WHOLE_WORD.getImageDescriptor(), Messages.WholeWord,
-				QueryModelHelper.FEATURE_WHOLE_WORD);
+				QueryPackage.Literals.FIELD_CONSTRAINT__WHOLE_WORD);
 		exactMatch = addToggle(getTextEditorImage(EXACT_MATCH_IMAGE), Messages.ExactMatch,
-				QueryModelHelper.FEATURE_ENTIRE);
+				QueryPackage.Literals.FIELD_CONSTRAINT__ENTIRE);
 		regularExpression = addToggle(getTextEditorImage(REGULAR_EXPRESSION_IMAGE), Messages.RegularExpression,
-				QueryModelHelper.FEATURE_REGEX);
+				QueryPackage.Literals.FIELD_CONSTRAINT__REGEX);
 	}
 
-	public EObject getFieldConstraint() {
+	public FieldConstraint getFieldConstraint() {
 		return fieldConstraint;
 	}
 
 	public EditableValue getEditableValue() {
-		return new EditableValue(valueLabel, fieldConstraint, QueryModelHelper.FEATURE_VALUE);
+		return new EditableValue(valueLabel, fieldConstraint, QueryPackage.Literals.FIELD_CONSTRAINT__VALUE);
 	}
 
 	/** Updates the figure to the current state of its field constraint. */
 	public void refresh() {
-		final FieldConstraintData data = QueryModelHelper.readFieldConstraint(fieldConstraint);
-		valueLabel.setText(data.value());
-		caseSensitive.setSelected(data.caseSensitive());
-		wholeWord.setSelected(data.wholeWord());
-		exactMatch.setSelected(data.entire());
-		regularExpression.setSelected(data.regex());
+		valueLabel.setText(fieldConstraint.getValue());
+		caseSensitive.setSelected(fieldConstraint.isCaseSensitive());
+		wholeWord.setSelected(fieldConstraint.isWholeWord());
+		exactMatch.setSelected(fieldConstraint.isEntire());
+		regularExpression.setSelected(fieldConstraint.isRegex());
 		updateEnablement();
 	}
 
-	private QueryButton addToggle(final ImageDescriptor image, final String tooltip, final String featureName) {
+	private QueryButton addToggle(final ImageDescriptor image, final String tooltip, final EAttribute attribute) {
 		final QueryButton toggle = QueryButton.createToggle(image);
 		toggle.setToolTip(new Label(tooltip));
 		toggle.addActionListener(_ -> {
 			updateEnablement();
-			changeHandler.changeFeature(fieldConstraint, featureName, Boolean.valueOf(toggle.isSelected()));
+			changeHandler.changeFeature(fieldConstraint, attribute, Boolean.valueOf(toggle.isSelected()));
 		});
 		add(toggle, new GridData(SWT.CENTER, SWT.CENTER, false, false));
 		return toggle;

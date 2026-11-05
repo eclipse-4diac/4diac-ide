@@ -12,46 +12,44 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 
 /** Node of a placeholder showing its key and its value. */
 public class QueryPlaceholderNodeFigure extends QueryNodeFigure {
 
 	private static final int VALUE_WIDTH = 120;
 
-	private final Map<String, Label> valueLabels = new LinkedHashMap<>();
+	private final Label keyLabel = QueryValueLabel.createFixedWidth(VALUE_WIDTH);
+	private final Label valLabel = QueryValueLabel.createFixedWidth(VALUE_WIDTH);
 
-	public QueryPlaceholderNodeFigure(final EObject placeholder) {
+	public QueryPlaceholderNodeFigure(final Placeholder placeholder) {
 		super(placeholder);
 		final Figure body = createBody();
-		addValueRow(body, QueryModelHelper.FEATURE_KEY);
-		addValueRow(body, QueryModelHelper.FEATURE_VAL);
+		body.add(createValueRow(QueryPackage.Literals.PLACEHOLDER__KEY.getName(), keyLabel));
+		body.add(createValueRow(QueryPackage.Literals.PLACEHOLDER__VAL.getName(), valLabel));
 		add(body);
+	}
+
+	@Override
+	public Placeholder getElement() {
+		return (Placeholder) super.getElement();
 	}
 
 	@Override
 	public void refresh() {
 		super.refresh();
-		valueLabels.forEach((featureName, valueLabel) -> valueLabel
-				.setText(QueryModelHelper.getFeatureText(getElement(), featureName)));
+		keyLabel.setText(getElement().getKey());
+		valLabel.setText(getElement().getVal());
 	}
 
 	@Override
 	protected List<EditableValue> getEditableValues() {
-		return valueLabels.entrySet().stream()
-				.map(entry -> new EditableValue(entry.getValue(), getElement(), entry.getKey())).toList();
-	}
-
-	private void addValueRow(final Figure body, final String featureName) {
-		final Label valueLabel = QueryValueLabel.createFixedWidth(VALUE_WIDTH);
-		valueLabels.put(featureName, valueLabel);
-		body.add(createValueRow(featureName, valueLabel));
+		return List.of(new EditableValue(keyLabel, getElement(), QueryPackage.Literals.PLACEHOLDER__KEY),
+				new EditableValue(valLabel, getElement(), QueryPackage.Literals.PLACEHOLDER__VAL));
 	}
 }

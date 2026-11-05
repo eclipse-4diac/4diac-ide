@@ -18,9 +18,10 @@ import java.util.Objects;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceNodeFigure;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 import org.eclipse.fordiac.ide.bulkeditor.search.SearchHelper;
 
 /** Edit part of the query place, whose node selects the scope of the search. */
@@ -28,6 +29,11 @@ public class QueryPlaceEditPart extends QueryNodeEditPart {
 
 	public QueryPlaceEditPart(final IProject project) {
 		super(project);
+	}
+
+	@Override
+	public Place getModel() {
+		return (Place) super.getModel();
 	}
 
 	@Override
@@ -40,7 +46,7 @@ public class QueryPlaceEditPart extends QueryNodeEditPart {
 	}
 
 	private void selectSubappHierarchy() {
-		final List<EObject> selectedElements = QueryModelHelper.getSubappHierarchy(getModel()).stream()
+		final List<EObject> selectedElements = getModel().getSubappHierarchyElements().stream()
 				.<EObject>map(name -> SearchHelper.resolveSubappHierarchyElement(getTypeLibrary(), name))
 				.filter(Objects::nonNull).toList();
 		final Object[] result = new SubAppHierarchyDialog(getProject(), selectedElements).open();
@@ -48,7 +54,7 @@ public class QueryPlaceEditPart extends QueryNodeEditPart {
 			final List<String> names = SubAppHierarchyDialog.mapResultToURIs(result).stream()
 					.map(SearchHelper::resolveElement).filter(Objects::nonNull)
 					.map(SearchHelper::getSubappHierarchyName).toList();
-			changeFeature(getModel(), QueryModelHelper.FEATURE_SUBAPP_HIERARCHY_ELEMENTS, names);
+			changeFeature(getModel(), QueryPackage.Literals.PLACE__SUBAPP_HIERARCHY_ELEMENTS, names);
 		}
 	}
 }

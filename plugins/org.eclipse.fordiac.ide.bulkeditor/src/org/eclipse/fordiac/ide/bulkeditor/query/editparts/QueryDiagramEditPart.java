@@ -21,9 +21,9 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConnectionRouter;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryTreeLayout;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.FieldConstraint;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.SnapToGrid;
@@ -52,8 +52,7 @@ public class QueryDiagramEditPart extends AbstractDiagramEditPart {
 
 		private static EObject getNodeElement(final EObject element) {
 			// field constraints are shown in the node of their constraint
-			return QueryModelHelper.isOfType(element, QueryModelHelper.FIELD_CONSTRAINT) ? element.eContainer()
-					: element;
+			return element instanceof FieldConstraint ? element.eContainer() : element;
 		}
 	};
 
@@ -66,9 +65,7 @@ public class QueryDiagramEditPart extends AbstractDiagramEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			if (getModel().getQueryRoot() != null) {
-				getModel().getQueryRoot().eAdapters().add(contentAdapter);
-			}
+			getModel().getQuery().eAdapters().add(contentAdapter);
 		}
 	}
 
@@ -76,9 +73,7 @@ public class QueryDiagramEditPart extends AbstractDiagramEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			if (getModel().getQueryRoot() != null) {
-				getModel().getQueryRoot().eAdapters().remove(contentAdapter);
-			}
+			getModel().getQuery().eAdapters().remove(contentAdapter);
 		}
 	}
 
