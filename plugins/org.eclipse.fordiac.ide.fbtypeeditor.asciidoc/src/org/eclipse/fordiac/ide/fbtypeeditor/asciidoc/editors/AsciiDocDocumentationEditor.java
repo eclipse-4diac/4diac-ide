@@ -9,12 +9,13 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Andrea Zoitl - added toolbar
+ *   Andrea Zoitl - added toolbar and changed editor to side-by-side layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.StringWriter;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
@@ -35,28 +36,40 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor;
+import org.eclipse.mylyn.wikitext.asciidoc.AsciiDocLanguage;
+import org.eclipse.mylyn.wikitext.html.HtmlLanguage;
+import org.eclipse.mylyn.wikitext.parser.MarkupParser;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -65,18 +78,42 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 @SuppressWarnings("restriction")
 public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEditorPage {
 
 	public static final String ASCIIDOC_CONTEXT = "org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context"; //$NON-NLS-1$
-
 	public static final String TOOLBAR_LOCATION = "toolbar:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar"; //$NON-NLS-1$
 
 	// The editor input of the type file given to us.
 	private IEditorInput originEditorInput;
 	private IMenuService menuService;
-	private ToolBarManager toolBarManager;
+	private ToolBarManager formattingToolBarManager;
+
+	// Layout composites and widgets
+	private Composite headerComposite;
+	private Composite formattingToolbarComposite;
+	private GridData formattingGridData;
+	private SashForm sashForm;
+	private Composite editorParent;
+	private Composite previewParent;
+	private Browser liveBrowser;
+
+	// Layout Mode Switch Items
+	private ToolItem editOnlyModeItem;
+	private ToolItem splitModeItem;
+	private ToolItem previewOnlyModeItem;
+
+	// Allocated SWT Images (Must be manually disposed to prevent native OS handle
+	// leaks)
+	private Image editOnlyImage;
+	private Image splitImage;
+	private Image previewOnlyImage;
+
+	// Document Listener tracking (Must be unregistered to prevent memory leaks)
+	private IDocument currentDocument;
+	private IDocumentListener documentListener;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -101,63 +138,266 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	public void createPartControl(final Composite parent) {
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(parent);
 
-		final Composite toolbarContainer = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(1).spacing(0, 0).applyTo(toolbarContainer);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarContainer);
+		// 1. Initialize top formatting and layout mode controls
+		createHeader(parent);
 
-		toolBarManager = new ToolBarManager(SWT.FLAT | SWT.HORIZONTAL);
-		final ToolBar toolbarControl = toolBarManager.createControl(toolbarContainer);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(toolbarControl);
+		// 2. Setup the Side-by-Side split view
+		createSashFormLayout(parent);
+
+		// 3. Setup dynamic resizing & visibility behaviors
+		bindFormattingToolbarWidth();
+		setupLayoutModeListeners();
+
+		// 4. Hook up drag-and-drop and live updates
+		setupDragAndDropSupport();
+		setupLivePreviewSupport();
+
+		// 5. Apply the multi-page framework tab height workaround
+		hideObsoleteTabs();
+	}
+
+	/**
+	 * Setup Top Horizontal Toolbar Container (2 Columns: Formatting on left,
+	 * display modes on right)
+	 *
+	 * @param parent
+	 */
+	private void createHeader(final Composite parent) {
+
+		editOnlyImage = loadImage("icons/display_source.svg"); //$NON-NLS-1$
+		splitImage = loadImage("icons/display_source_preview.svg"); //$NON-NLS-1$
+		previewOnlyImage = loadImage("icons/display_preview.svg"); //$NON-NLS-1$
+
+		headerComposite = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).spacing(0, 0).applyTo(headerComposite);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(headerComposite);
+
+		// Left Column: Holder for the Formatting Toolbar (Dynamically sized to match
+		// editor)
+		formattingToolbarComposite = new Composite(headerComposite, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(1).spacing(0, 0).applyTo(formattingToolbarComposite);
+		formattingGridData = GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).create();
+		formattingToolbarComposite.setLayoutData(formattingGridData);
+
+		formattingToolBarManager = new ToolBarManager(SWT.FLAT | SWT.HORIZONTAL);
+		final ToolBar toolbarControl = formattingToolBarManager.createControl(formattingToolbarComposite);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(toolbarControl);
 
 		menuService = getSite().getService(IMenuService.class);
 		if (menuService != null) {
-			menuService.populateContributionManager(toolBarManager, TOOLBAR_LOCATION);
+			menuService.populateContributionManager(formattingToolBarManager, TOOLBAR_LOCATION);
 		}
-		toolBarManager.update(true);
+		formattingToolBarManager.update(true);
 
-		final Label separator = new Label(toolbarContainer, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(separator);
+		// Right Column: Layout Mode Toggle switches
+		final Composite displayModeComposite = new Composite(headerComposite, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(1).spacing(0, 0).applyTo(displayModeComposite);
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(false, false).applyTo(displayModeComposite);
 
-		final Composite newParent = new Composite(parent, SWT.NONE);
-		newParent.setLayout(new FillLayout());
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(newParent);
+		final ToolBar displayModeToolBar = new ToolBar(displayModeComposite, SWT.FLAT | SWT.HORIZONTAL | SWT.RIGHT);
+		GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(displayModeToolBar);
 
-		super.createPartControl(newParent);
-
-		final Browser browser = findBrowser(parent);
-		if (browser != null) {
-			browser.addLocationListener(new ModelLocationListener());
+		editOnlyModeItem = new ToolItem(displayModeToolBar, SWT.RADIO);
+		if (editOnlyImage != null) {
+			editOnlyModeItem.setImage(editOnlyImage);
+		} else {
+			editOnlyModeItem.setText("Edit Only"); //$NON-NLS-1$
 		}
+		editOnlyModeItem.setToolTipText(Messages.Display_EditOnly_Tooltip);
 
-		final StyledText styledText = findStyledText(newParent);
+		splitModeItem = new ToolItem(displayModeToolBar, SWT.RADIO);
+		if (splitImage != null) {
+			splitModeItem.setImage(splitImage);
+		} else {
+			splitModeItem.setText("Side-by-Side"); //$NON-NLS-1$
+		}
+		splitModeItem.setToolTipText(Messages.Display_SideBySide_Tooltip);
+		splitModeItem.setSelection(true); // Default mode
+
+		previewOnlyModeItem = new ToolItem(displayModeToolBar, SWT.RADIO);
+		if (previewOnlyImage != null) {
+			previewOnlyModeItem.setImage(previewOnlyImage);
+		} else {
+			previewOnlyModeItem.setText("Preview Only"); //$NON-NLS-1$
+		}
+		previewOnlyModeItem.setToolTipText(Messages.Display_SideBySide_Tooltip);
+
+		// Divider Line spanning both columns beneath the toolbar
+		final Label separator = new Label(headerComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).span(2, 1).applyTo(separator);
+	}
+
+	private void createSashFormLayout(final Composite parent) {
+		sashForm = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
+		sashForm.setSashWidth(5); // vertical visible divider
+		sashForm.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(sashForm);
+
+		// Left Pane: The Editor Canvas
+		editorParent = new Composite(sashForm, SWT.NONE);
+		editorParent.setLayout(new FillLayout());
+		super.createPartControl(editorParent);
+
+		// Right Pane: Rendered live browser view
+		previewParent = new Composite(sashForm, SWT.NONE);
+		previewParent.setLayout(new FillLayout());
+		liveBrowser = new Browser(previewParent, SWT.NONE);
+		liveBrowser.addLocationListener(new ModelLocationListener());
+
+		sashForm.setWeights(50, 50);
+	}
+
+	/**
+	 * Bind left toolbar column width dynamically to the editor's pixel width
+	 */
+	private void bindFormattingToolbarWidth() {
+		editorParent.addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(final ControlEvent e) {
+				if (!editorParent.isDisposed() && !headerComposite.isDisposed()) {
+					final int width = editorParent.getSize().x;
+					if (sashForm.getMaximizedControl() == editorParent) {
+						// Edit Only: let formatting toolbar take standard layout space
+						formattingGridData.widthHint = SWT.DEFAULT;
+						formattingToolbarComposite.setVisible(true);
+					} else
+					// Side-by-Side or Preview Only: Limit width strictly to editor pane width
+					if (width <= 0) {
+						// Preview Only: Collapse the width hint to 0, but do not exclude to pin the 3
+						// buttons (source, both, preview) to the right.
+						formattingGridData.widthHint = 0;
+						formattingToolbarComposite.setVisible(false);
+					} else {
+						// Side-by-Side: Align formatting toolbar perfectly with the editor's width
+						formattingGridData.widthHint = width;
+						formattingToolbarComposite.setVisible(true);
+					}
+					// Always keep Column 1 in the layout calculations to prevent column-shifting
+					formattingGridData.exclude = false;
+					headerComposite.layout(true, true);
+				}
+			}
+		});
+	}
+
+	private void setupLayoutModeListeners() {
+		final SelectionAdapter layoutSelector = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				// Discard the deselection event from the deactivated radio item
+				if (e.widget instanceof final ToolItem item && !item.getSelection()) {
+					return;
+				}
+				if (editOnlyModeItem.getSelection()) {
+					sashForm.setMaximizedControl(editorParent);
+				} else if (previewOnlyModeItem.getSelection()) {
+					sashForm.setMaximizedControl(previewParent);
+				} else if (splitModeItem.getSelection()) {
+					sashForm.setMaximizedControl(null); // Restore Side-by-Side Split
+				}
+			}
+		};
+		editOnlyModeItem.addSelectionListener(layoutSelector);
+		splitModeItem.addSelectionListener(layoutSelector);
+		previewOnlyModeItem.addSelectionListener(layoutSelector);
+	}
+
+	private void setupDragAndDropSupport() {
+		final StyledText styledText = findStyledText(editorParent);
 		if (styledText != null) {
 			setupDragAndDrop(styledText);
 		}
+	}
 
-		// Find the Mylyn tab folder and dynamically toggle toolbar visibility on switch
-		final CTabFolder tabFolder = findTabFolder(newParent);
-		if (tabFolder != null) {
+	/**
+	 * Register IDocumentListener for instantaneous text and formatting updates
+	 */
+	private void setupLivePreviewSupport() {
+		final IDocument document = getDocumentProvider().getDocument(getEditorInput());
+		if (document != null) {
+			currentDocument = document; // Retained for unregistering in dispose()
+			refreshLivePreview(liveBrowser, document.get());
 
-			final Runnable updateToolbarVisibility = () -> {
-				if (toolbarContainer != null && !toolbarContainer.isDisposed()) {
-					// Index 0 represents the "Source" tab, Index 1 is the "Preview" tab
-					final boolean isSourcePage = tabFolder.getSelectionIndex() == 0;
-					toolbarContainer.setVisible(isSourcePage);
-					if (toolbarContainer.getLayoutData() instanceof final GridData gridData) {
-						gridData.exclude = !isSourcePage;
-					}
-					// Request parent to adjust bounds immediately to reclaim/release space
-					parent.layout(true, true);
+			documentListener = new IDocumentListener() {
+				@Override
+				public void documentAboutToBeChanged(final DocumentEvent event) {
+					// Do nothing
+				}
+
+				@Override
+				public void documentChanged(final DocumentEvent event) {
+					// Safe thread transition back to the main UI thread to access SWT elements
+					// safely
+					Display.getDefault().asyncExec(() -> {
+						if (liveBrowser != null && !liveBrowser.isDisposed() && editOnlyModeItem != null
+								&& !editOnlyModeItem.isDisposed() && !editOnlyModeItem.getSelection()) {
+							refreshLivePreview(liveBrowser, event.getDocument().get());
+						}
+					});
 				}
 			};
+			document.addDocumentListener(documentListener);
+		}
+	}
 
-			tabFolder.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					updateToolbarVisibility.run();
+	/**
+	 * Programmatically hide obsolete Source/Preview tabs to preserve Eclipse
+	 * multi-page framework. Its core functionality—such as saving changes, tracking
+	 * the "dirty" state, managing undo/redo stacks, and syncing selections—is
+	 * tightly coupled to the existence of these two tab pages (page 0 for editing,
+	 * page 1 for the preview). We altered the editor's visual presentation from the
+	 * 2 tabs to a side-by-side layout but we do not want to loose the complex
+	 * underlying infrastructure of the parent framework, so we set the height to 0.
+	 */
+	private void hideObsoleteTabs() {
+
+		final CTabFolder tabFolder = findTabFolder(editorParent);
+		if (tabFolder != null) {
+			tabFolder.setSelection(0);
+			tabFolder.setTabHeight(0);
+		}
+	}
+
+	/**
+	 * Parses current editor markdown text to HTML dynamically and loads it into the
+	 * Browser. Injects a base URL tag pointing to the assets folder to render local
+	 * images
+	 */
+	private void refreshLivePreview(final Browser browser, final String text) {
+		if (browser == null || browser.isDisposed()) {
+			return;
+		}
+		try {
+			final StringWriter writer = new StringWriter();
+			final AsciiDocLanguage language = new AsciiDocLanguage();
+			language.configure(new FordiacAsciiDocLanguageConfiguration(getType()));
+
+			final MarkupParser parser = new MarkupParser(language);
+			parser.setBuilder(new HtmlLanguage().createDocumentBuilder(writer));
+			parser.parse(text);
+
+			String htmlContent = writer.toString();
+
+			// Dynamically inject the base href of the hidden .assets folder
+			if (getEditorInput() instanceof final IFileEditorInput fileEI) {
+				final IFile docFile = fileEI.getFile();
+				if (docFile.getLocation() != null) {
+					// Determine the absolute local URI of the parent (.assets) directory
+					final String baseUri = docFile.getParent().getLocation().toFile().toURI().toString();
+					final String baseTag = "<base href=\"" + baseUri + "\"/>"; //$NON-NLS-1$ //$NON-NLS-2$
+
+					// Inject the base tag into the head if it exists, otherwise prepend it
+					final String head = "<head>"; //$NON-NLS-1$
+					if (htmlContent.contains(head)) {
+						htmlContent = htmlContent.replace(head, head + baseTag);
+					} else {
+						htmlContent = baseTag + htmlContent;
+					}
 				}
-			});
-			updateToolbarVisibility.run();
+			}
+			browser.setText(htmlContent);
+		} catch (final Exception e) {
+			browser.setText("<html><body><p>Error rendering preview: " + e.getMessage() + "</p></body></html>"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -179,28 +419,32 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	@Override
 	public void dispose() {
-		if (toolBarManager != null) {
+		// Unregister the document listener to prevent memory leaks
+		if (currentDocument != null && documentListener != null) {
+			currentDocument.removeDocumentListener(documentListener);
+			documentListener = null;
+			currentDocument = null;
+		}
+
+		// Dispose of custom loaded SWT Images to free native OS resources
+		if (editOnlyImage != null && !editOnlyImage.isDisposed()) {
+			editOnlyImage.dispose();
+		}
+		if (splitImage != null && !splitImage.isDisposed()) {
+			splitImage.dispose();
+		}
+		if (previewOnlyImage != null && !previewOnlyImage.isDisposed()) {
+			previewOnlyImage.dispose();
+		}
+
+		// Dispose of standard components
+		if (formattingToolBarManager != null) {
 			if (menuService != null) {
-				menuService.releaseContributions(toolBarManager);
+				menuService.releaseContributions(formattingToolBarManager);
 			}
-			toolBarManager.dispose();
+			formattingToolBarManager.dispose();
 		}
 		super.dispose();
-	}
-
-	private Browser findBrowser(final Control control) {
-		if (control instanceof final Browser browser) {
-			return browser;
-		}
-		if (control instanceof final Composite comp) {
-			for (final Control child : comp.getChildren()) {
-				final Browser b = findBrowser(child);
-				if (b != null) {
-					return b;
-				}
-			}
-		}
-		return null;
 	}
 
 	private static IEditorInput getDocumentationEditorInput(final IEditorInput input) {
@@ -407,6 +651,14 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		// template
 		final ByteArrayInputStream emptyStream = new ByteArrayInputStream(new byte[0]);
 		docFile.create(emptyStream, true, null);
+	}
+
+	/**
+	 * Helper method to load images cleanly from the plugin directory.
+	 */
+	private static Image loadImage(final String path) {
+		return AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.fordiac.ide.fbtypeeditor.asciidoc", path) //$NON-NLS-1$
+				.createImage();
 	}
 
 	@Override
