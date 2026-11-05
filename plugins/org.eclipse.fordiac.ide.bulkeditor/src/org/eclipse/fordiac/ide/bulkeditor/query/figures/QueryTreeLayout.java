@@ -23,8 +23,11 @@ import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 
 /**
@@ -91,9 +94,9 @@ public class QueryTreeLayout extends AbstractLayout {
 		final Size size;
 		if (children.isEmpty()) {
 			size = nodeSize;
-		} else if (QueryModelHelper.isPlace(element)) {
+		} else if (element instanceof Place) {
 			size = computeHorizontalSize(nodeSize, children);
-		} else if (QueryModelHelper.isConstraint(element)) {
+		} else if (element instanceof Constraint) {
 			size = computeConstraintSize(nodeSize, children);
 		} else {
 			size = computeVerticalSize(nodeSize, children);
@@ -138,9 +141,9 @@ public class QueryTreeLayout extends AbstractLayout {
 
 		final Size nodeSize = getNodeSize(element);
 		final List<EObject> children = getLaidOutChildren(element);
-		if (QueryModelHelper.isPlace(element)) {
+		if (element instanceof Place) {
 			positionHorizontal(children, x + getPlaceChildrenOffset(nodeSize), y + nodeSize.height() + VERTICAL_GAP);
-		} else if (QueryModelHelper.isConstraint(element)) {
+		} else if (element instanceof Constraint) {
 			positionConstraintChildren(children, x, y, nodeSize);
 		} else {
 			positionVertical(children, x + nodeSize.width() / 2 + CHILD_INDENT, y + nodeSize.height() + VERTICAL_GAP);
@@ -202,7 +205,7 @@ public class QueryTreeLayout extends AbstractLayout {
 	private List<EObject> getLaidOutChildren(final EObject element) {
 		// the placeholders are laid out in rows above the tree
 		return QueryModelHelper.getChildNodes(element).stream().filter(nodeFigures::containsKey)
-				.filter(child -> !QueryModelHelper.isPlaceholder(child)).toList();
+				.filter(child -> !(child instanceof Placeholder)).toList();
 	}
 
 	/** @return the width of the drawing area around a tree ending at treeRight */
@@ -220,7 +223,7 @@ public class QueryTreeLayout extends AbstractLayout {
 
 	private List<EObject> getPlaceholders(final EObject root) {
 		return QueryModelHelper.getChildNodes(root).stream().filter(nodeFigures::containsKey)
-				.filter(QueryModelHelper::isPlaceholder).toList();
+				.filter(Placeholder.class::isInstance).toList();
 	}
 
 	private Size getNodeSize(final EObject element) {
@@ -253,7 +256,6 @@ public class QueryTreeLayout extends AbstractLayout {
 	}
 
 	private static boolean isAndConstraint(final EObject constraint) {
-		final EReference containment = constraint.eContainmentFeature();
-		return containment != null && QueryModelHelper.REF_AND_CONSTRAINTS.equals(containment.getName());
+		return constraint.eContainmentFeature() == QueryPackage.Literals.CONSTRAINT__AND_CONSTRAINT;
 	}
 }
