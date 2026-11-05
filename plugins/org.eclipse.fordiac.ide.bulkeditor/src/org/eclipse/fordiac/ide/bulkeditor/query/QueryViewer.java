@@ -26,14 +26,11 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -42,6 +39,8 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryFactory;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -55,7 +54,6 @@ import org.eclipse.swt.widgets.FileDialog;
 
 /** Query page of the bulk editor, which loads, saves and shows the query. */
 public class QueryViewer {
-	private static final String QUERY_ECORE_URI = "/org.eclipse.fordiac.ide.model/model/searchQuery.ecore"; //$NON-NLS-1$
 	private static final String QUERY_FILE_EXTENSION = "query"; //$NON-NLS-1$
 
 	public record QuerySnapshot(String xmi, URI queryFile, boolean dirty) {
@@ -74,7 +72,7 @@ public class QueryViewer {
 		this.project = project;
 		this.editor = editor;
 		editingDomain = createEditingDomain(createAdapterFactory());
-		queryPackage = loadQueryPackage(getResourceSet());
+		queryPackage = QueryPackage.eINSTANCE;
 
 		graphicalViewer = new QueryGraphicalViewer(parent, editor, project);
 		graphicalViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -283,8 +281,7 @@ public class QueryViewer {
 
 	private Resource createEmptyQuery() {
 		final Resource resource = getResourceSet().createResource(URI.createURI("temp:/query.query")); //$NON-NLS-1$
-		resource.getContents().add(queryPackage.getEFactoryInstance()
-				.create((EClass) queryPackage.getEClassifier(QueryModelHelper.QUERY)));
+		resource.getContents().add(QueryFactory.eINSTANCE.createQuery());
 		return resource;
 	}
 
@@ -307,7 +304,6 @@ public class QueryViewer {
 		final ComposedAdapterFactory factory = new ComposedAdapterFactory(
 				ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		factory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		factory.addAdapterFactory(new EcoreItemProviderAdapterFactory());
 		factory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		return factory;
 	}
@@ -317,16 +313,7 @@ public class QueryViewer {
 				new BasicCommandStack(), new HashMap<>());
 		final Map<String, Object> factories = domain.getResourceSet().getResourceFactoryRegistry()
 				.getExtensionToFactoryMap();
-		factories.put("ecore", new EcoreResourceFactoryImpl()); //$NON-NLS-1$
 		factories.put(QUERY_FILE_EXTENSION, new XMIResourceFactoryImpl());
 		return domain;
-	}
-
-	private static EPackage loadQueryPackage(final ResourceSet resourceSet) {
-		final Resource ecoreResource = resourceSet.getResource(URI.createPlatformPluginURI(QUERY_ECORE_URI, true),
-				true);
-		final EPackage queryPackage = (EPackage) ecoreResource.getContents().get(0);
-		resourceSet.getPackageRegistry().put(queryPackage.getNsURI(), queryPackage);
-		return queryPackage;
 	}
 }
