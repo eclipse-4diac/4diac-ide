@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.bulkeditor.query.policies;
 
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure.EditableValue;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
@@ -25,9 +24,9 @@ public class QueryDirectEditPolicy extends DirectEditPolicy {
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		if (request.getDirectEditFeature() instanceof final EditableValue editableValue
-				&& request.getCellEditor().getValue() instanceof final String value && !value.equals(
-						QueryModelHelper.getFeatureText(editableValue.element(), editableValue.featureName()))) {
-			return new ChangeQueryFeatureCommand(editableValue.element(), editableValue.featureName(), value);
+				&& request.getCellEditor().getValue() instanceof final String value
+				&& !value.equals(editableValue.getText())) {
+			return new ChangeQueryFeatureCommand(editableValue.element(), editableValue.attribute(), value);
 		}
 		return null;
 	}

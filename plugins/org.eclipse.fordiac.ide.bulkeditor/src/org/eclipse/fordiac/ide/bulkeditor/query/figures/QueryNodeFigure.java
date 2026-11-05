@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -24,7 +25,9 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.bulkeditor.QueryUIPreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -36,11 +39,14 @@ public class QueryNodeFigure extends Figure {
 	/** Performs the changes of query elements requested in the figures. */
 	@FunctionalInterface
 	public interface FeatureChangeHandler {
-		void changeFeature(EObject element, String featureName, Object value);
+		void changeFeature(EObject element, EStructuralFeature feature, Object value);
 	}
 
-	/** Feature value shown in a label that can be edited directly. */
-	public record EditableValue(Label label, EObject element, String featureName) {
+	/** Attribute value shown in a label that can be edited directly. */
+	public record EditableValue(Label label, EObject element, EAttribute attribute) {
+		public String getText() {
+			return Objects.toString(element.eGet(attribute), ""); //$NON-NLS-1$
+		}
 	}
 
 	private static final Color COLOR_HEADER_BG = QueryUIPreferenceConstants.getHeaderBackgroundColor();
@@ -116,8 +122,8 @@ public class QueryNodeFigure extends Figure {
 		return List.of();
 	}
 
-	protected void changeFeature(final EObject featureOwner, final String featureName, final Object value) {
-		featureChangeHandler.changeFeature(featureOwner, featureName, value);
+	protected void changeFeature(final EObject featureOwner, final EStructuralFeature feature, final Object value) {
+		featureChangeHandler.changeFeature(featureOwner, feature, value);
 	}
 
 	protected static Figure createBody() {
