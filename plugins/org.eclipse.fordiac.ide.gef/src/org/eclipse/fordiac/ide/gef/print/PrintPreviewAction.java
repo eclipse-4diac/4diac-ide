@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Profactor GbmH, Johannes Kepler University
+ * Copyright (c) 2019 Profactor GbmH, Johannes Kepler University, HR Agrartechnik
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl - initial API and implementation and/or
  *   								  initial documentation
+ *   Moritz Ortmeier - print the currently visible page of multi-page and
+ *                     breadcrumb editors (e.g. the FB network of a Subapp)
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.print;
 
@@ -63,9 +65,14 @@ public class PrintPreviewAction extends Action {
 	/** opens the IEC61499PrintDialog. */
 	@Override
 	public void run() {
-		if (null != viewer) {
-			final Shell shell = viewer.getControl().getShell();
-			final PrintPreview preview = new PrintPreview(shell, viewer, Messages.PrintPreviewAction_LABEL_PrintPreview);
+		// print the viewer of the active editor, which is the visible page of multi-page editors, and not the one the
+		// action was created with
+		final GraphicalViewer activeViewer = getViewer();
+		final GraphicalViewer viewerToPrint = null != activeViewer ? activeViewer : viewer;
+		if (null != viewerToPrint) {
+			final Shell shell = viewerToPrint.getControl().getShell();
+			final PrintPreview preview = new PrintPreview(shell, viewerToPrint,
+					Messages.PrintPreviewAction_LABEL_PrintPreview);
 			preview.setBlockOnOpen(true);
 			preview.open();
 		}
