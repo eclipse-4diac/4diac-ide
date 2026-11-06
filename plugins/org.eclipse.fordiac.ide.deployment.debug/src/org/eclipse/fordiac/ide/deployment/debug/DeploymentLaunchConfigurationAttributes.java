@@ -238,7 +238,7 @@ public final class DeploymentLaunchConfigurationAttributes {
 			if (targetName == null || targetName.isEmpty() || targetType == null) {
 				return Stream.empty();
 			}
-			return system.findByQualifiedName(targetName).filter(element -> targetType.equals(element.eClass()));
+			return DeploymentDebugWatchUtils.findByQualifiedName(system, targetName).filter(element -> targetType.equals(element.eClass()));
 		}
 
 		public boolean isForceEnabled() {

@@ -24,10 +24,12 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugElement;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugStackFrame;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugTarget;
+import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchUtils;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IContainerWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IInterfaceElementWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -119,8 +121,10 @@ public class WatchValueAnnotationProvider implements GraphicalAnnotationProvider
 	}
 
 	private <T extends INamedElement> Optional<T> findTarget(final IWatch watch, final Class<T> targetClass) {
-		return model.getLibraryElement().findByQualifiedName(watch.getQualifiedName()).filter(targetClass::isInstance)
-				.map(targetClass::cast).findFirst();
+		final Stream<INamedElement> found = model.getLibraryElement() instanceof final AutomationSystem system
+				? DeploymentDebugWatchUtils.findByQualifiedName(system, watch.getQualifiedName())
+				: model.getLibraryElement().findByQualifiedName(watch.getQualifiedName());
+		return found.filter(targetClass::isInstance).map(targetClass::cast).findFirst();
 	}
 
 	private Optional<WatchValueAnnotation> findAnnotation(final FBNetwork network, final IInterfaceElement element) {
