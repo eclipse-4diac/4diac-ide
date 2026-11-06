@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - move the mapping of the element URI to the helper
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
@@ -17,8 +18,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -37,7 +36,7 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 	@Override
 	protected boolean initialize(final Object element) {
 		if (element instanceof final IRenameElementContext context && isRelevant(context)) {
-			elementURI = getCanonicalURI(context.getTargetElementURI());
+			elementURI = RenameElementRefactoringHelper.getCanonicalURI(context.getTargetElementURI());
 			return true;
 		}
 		return false;
@@ -45,9 +44,7 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 
 	@SuppressWarnings("static-method") // subclasses may override
 	protected boolean isRelevant(final IRenameElementContext context) {
-		return LibraryElementPackage.Literals.INAMED_ELEMENT.isSuperTypeOf(context.getTargetElementEClass())
-				&& (isTypeURI(context.getTargetElementURI()) || isDataTypeURI(context.getTargetElementURI())
-						|| isAttributeTypeURI(context.getTargetElementURI()));
+		return RenameElementRefactoringHelper.isRelevant(context);
 	}
 
 	@Override
@@ -61,25 +58,6 @@ public class RenameElementRefactoringParticipant extends RenameParticipant {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		return RenameElementRefactoringHelper.createRenameChange(getName(), elementURI, getArguments().getNewName());
-	}
-
-	protected static URI getCanonicalURI(final URI uri) {
-		if (isTypeURI(uri)) {
-			return uri.trimFragment().appendFragment("/" + uri.fragment().substring(2)); //$NON-NLS-1$
-		}
-		return uri;
-	}
-
-	protected static boolean isTypeURI(final URI uri) {
-		return uri != null && uri.hasFragment() && uri.fragment().startsWith("/1"); //$NON-NLS-1$
-	}
-
-	protected static boolean isDataTypeURI(final URI uri) {
-		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
-	}
-
-	protected static boolean isAttributeTypeURI(final URI uri) {
-		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
 	}
 
 	@Override
