@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -33,7 +34,7 @@ import org.osgi.service.prefs.BackingStoreException;
 public class MostRecentlyUsedTracker {
 
 	/** Preference node ID for storing MRU data */
-	private static final String PREF_NODE = "org.eclipse.fordiac.ide.gef";
+	private static final String PREF_NODE = "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
 
 	/** Preference key for MRU list */
 	private static final String PREF_KEY = "mru_fb_types"; //$NON-NLS-1$
@@ -68,10 +69,6 @@ public class MostRecentlyUsedTracker {
 			final ProjectScope projectScope = new ProjectScope(project);
 			this.preferences = projectScope.getNode(PREF_NODE);
 			loadFromPreferences();
-
-			// TODO: Remove debug output after UI integration is complete
-			System.out.println("[MRU] Initialized for project: " + project.getName());
-			System.out.println("[MRU] Loaded " + mruList.size() + " items: " + mruList);
 		} else {
 			this.preferences = null;
 			this.mruList = new LinkedList<>();
@@ -109,10 +106,6 @@ public class MostRecentlyUsedTracker {
 		}
 
 		saveToPreferences();
-
-		// TODO: Remove debug output after UI integration is complete
-		System.out.println("[MRU] Recorded usage: " + fbTypeName);
-		System.out.println("[MRU] Current list: " + mruList);
 	}
 
 	/**
@@ -164,7 +157,7 @@ public class MostRecentlyUsedTracker {
 		}
 
 		try {
-			final String stored = preferences.get(PREF_KEY, "");
+			final String stored = preferences.get(PREF_KEY, ""); //$NON-NLS-1$
 
 			if (stored != null && !stored.isEmpty()) {
 				final String[] items = stored.split(DELIMITER);
@@ -175,10 +168,9 @@ public class MostRecentlyUsedTracker {
 				}
 			}
 		} catch (final IllegalStateException e) {
-			// TODO: Remove debug output after UI integration is complete
-			System.out.println("[MRU] Preference node removed, cannot load");
+			// preference node has been removed (project is being deleted)
 		} catch (final Exception e) {
-			System.err.println("[MRU] Failed to load preferences: " + e.getMessage());
+			FordiacLogHelper.logWarning("Failed to load MRU preferences", e); //$NON-NLS-1$
 		}
 	}
 
@@ -207,15 +199,10 @@ public class MostRecentlyUsedTracker {
 			preferences.flush();
 
 		} catch (final IllegalStateException e) {
-			// Preference node has been removed (project is being deleted)
-			// TODO: Remove debug output after UI integration is complete
-			System.out.println("[MRU] Preference node removed, cannot save");
+			// preference node has been removed (project is being deleted)
 			disposed = true;
-		} catch (final BackingStoreException e) {
-			System.err.println("[MRU] Failed to save preferences: " + e.getMessage());
-		} catch (final Exception e) {
-			System.err.println("Unexpected error saving MRU: " + e.getMessage());
-			e.printStackTrace();
+		} catch (final BackingStoreException | RuntimeException e) {
+			FordiacLogHelper.logWarning("Failed to save MRU preferences", e); //$NON-NLS-1$
 		}
 	}
 
