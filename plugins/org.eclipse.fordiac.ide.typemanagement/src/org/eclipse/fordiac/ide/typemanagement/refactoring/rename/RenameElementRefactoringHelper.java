@@ -22,17 +22,21 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
+import org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext;
 
+@SuppressWarnings("restriction")
 public final class RenameElementRefactoringHelper {
 
 	public static Change createRenameChange(final String name, final URI elementURI, final String newName) {
@@ -50,6 +54,38 @@ public final class RenameElementRefactoringHelper {
 		result.add(ModelEditChange.fromModelEdits(name, instanceModelEdits));
 		result.add(ModelEditChange.fromModelEdits(name, List.of(typeModelEdit)));
 		return result;
+	}
+
+	public static URI getElementURI(final Object element) {
+		if (element instanceof final IRenameElementContext context) {
+			return isRelevant(context) ? getCanonicalURI(context.getTargetElementURI()) : null;
+		}
+		return element instanceof final URI uri && uri.hasFragment() ? uri : null;
+	}
+
+	public static boolean isRelevant(final IRenameElementContext context) {
+		return LibraryElementPackage.Literals.INAMED_ELEMENT.isSuperTypeOf(context.getTargetElementEClass())
+				&& (isTypeURI(context.getTargetElementURI()) || isDataTypeURI(context.getTargetElementURI())
+						|| isAttributeTypeURI(context.getTargetElementURI()));
+	}
+
+	public static URI getCanonicalURI(final URI uri) {
+		if (isTypeURI(uri)) {
+			return uri.trimFragment().appendFragment("/" + uri.fragment().substring(2)); //$NON-NLS-1$
+		}
+		return uri;
+	}
+
+	private static boolean isTypeURI(final URI uri) {
+		return uri != null && uri.hasFragment() && uri.fragment().startsWith("/1"); //$NON-NLS-1$
+	}
+
+	private static boolean isDataTypeURI(final URI uri) {
+		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
+	}
+
+	private static boolean isAttributeTypeURI(final URI uri) {
+		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING.equalsIgnoreCase(uri.fileExtension());
 	}
 
 	private static void createChildChanges(final List<ModelEdit<?>> modelEdits, final URI elementURI,
