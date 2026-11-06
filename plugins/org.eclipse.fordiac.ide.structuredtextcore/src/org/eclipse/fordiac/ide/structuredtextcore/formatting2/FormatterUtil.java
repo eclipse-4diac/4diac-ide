@@ -34,7 +34,7 @@ public final class FormatterUtil {
 	}
 
 	public static String wrapLines(final String lines, final int wrapLength, final String lineSeparator) {
-		final Matcher matcher = Pattern.compile("(.{0," + wrapLength + "})(?:\\s|$)").matcher(lines); //$NON-NLS-1$ //$NON-NLS-2$
+		final Matcher matcher = Pattern.compile("(.{0," + wrapLength + "})(?:\\R|\\s|$)").matcher(lines); //$NON-NLS-1$ //$NON-NLS-2$
 		final StringBuilder result = new StringBuilder(lines.length() + 4); // reserve some space for added line breaks
 		int last = 0;
 		while (matcher.find()) {

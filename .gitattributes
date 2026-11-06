@@ -1,4 +1,4 @@
-*               text=auto
+*               text=auto eol=lf
 
 # plain text files
 *.md            text
@@ -90,4 +90,3 @@
 *.xpm           binary
 *.jpg           binary
 *.bmp           binary
-
