@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GbmH, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GbmH, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added preference driven max width for value edit parts
+ *   Franz Höpfinger - grow the value direct-edit box to fit its content
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -22,6 +23,7 @@ import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
@@ -125,7 +127,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return new Point(0, 0);
 	}
 
-	protected void refreshPosition() {
+	public void refreshPosition() {
 		if (getParent() != null) {
 			Rectangle bounds = null;
 			final Point p = calculatePos();
@@ -175,6 +177,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/** The Class ValueFigure. */
 	private static class ValueFigure extends Label {
+		private static final int MIN_CHARS = 5;
 
 		/** Instantiates a new value figure. */
 		public ValueFigure(final boolean input) {
@@ -192,6 +195,15 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		@Override
 		protected String getTruncationString() {
 			return "\u2026"; //$NON-NLS-1$
+		}
+
+		@Override
+		public Dimension getPreferredSize(final int wHint, final int hHint) {
+			final Dimension preferred = super.getPreferredSize(wHint, hHint);
+			final int minWidth = (int) Math
+					.ceil(MIN_CHARS * FigureUtilities.getFontMetrics(getFont()).getAverageCharacterWidth());
+			preferred.width = Math.max(preferred.width, minWidth);
+			return preferred;
 		}
 	}
 
