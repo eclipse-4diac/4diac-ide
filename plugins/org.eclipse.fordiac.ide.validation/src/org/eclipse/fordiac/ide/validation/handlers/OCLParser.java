@@ -28,9 +28,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
 import org.eclipse.ocl.OCLInput;
 import org.eclipse.ocl.ParserException;
@@ -71,7 +71,7 @@ public final class OCLParser {
 		try (InputStream inputStream = FileLocator.toFileURL(url).openStream()) {
 			return parse(inputStream, ocl).stream().map(constraint -> new LoadedConstraint(constraint, null)).toList();
 		} catch (ParserException | IOException | RuntimeException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 		return List.of();
 	}
@@ -91,7 +91,7 @@ public final class OCLParser {
 		try (InputStream inputStream = file.getContents()) {
 			parse(inputStream, ocl).forEach(constraint -> constraints.add(new LoadedConstraint(constraint, file)));
 		} catch (final ParserException | IOException | RuntimeException | CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			problems.add(new ParseProblem(file, e.getMessage()));
 		}
 	}

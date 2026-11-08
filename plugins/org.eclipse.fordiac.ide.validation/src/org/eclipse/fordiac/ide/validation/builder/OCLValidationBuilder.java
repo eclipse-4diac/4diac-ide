@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
@@ -30,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.ocl.OCLMarkerManager;
 import org.eclipse.fordiac.ide.validation.ocl.OCLSourceScanner;
 import org.eclipse.fordiac.ide.validation.ocl.OCLValidationSession;
@@ -130,9 +130,8 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 	}
 
 	private static boolean hasProjectStateChanged(final IResourceDelta delta) {
-		return delta.getResource() instanceof IProject
-				&& (delta.getKind() != IResourceDelta.CHANGED
-						|| (delta.getFlags() & (IResourceDelta.DESCRIPTION | IResourceDelta.OPEN)) != 0);
+		return delta.getResource() instanceof IProject && (delta.getKind() != IResourceDelta.CHANGED
+				|| (delta.getFlags() & (IResourceDelta.DESCRIPTION | IResourceDelta.OPEN)) != 0);
 	}
 
 	private static INamedElement loadValidationTarget(final IFile file) {
@@ -145,7 +144,7 @@ public class OCLValidationBuilder extends IncrementalProjectBuilder {
 				return namedElement;
 			}
 		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 		return null;
 	}

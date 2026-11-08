@@ -24,13 +24,13 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 
 public final class OCLSourceScanner {
 
@@ -48,8 +48,7 @@ public final class OCLSourceScanner {
 	}
 
 	public static List<IFile> findValidationTargets(final IProject project) {
-		return findBuildpathFiles(project, BuildpathAttributes.OCL_TARGET,
-				OCLSourceScanner::isValidationTargetFile);
+		return findBuildpathFiles(project, BuildpathAttributes.OCL_TARGET, OCLSourceScanner::isValidationTargetFile);
 	}
 
 	public static List<IProject> findReferencedProjects(final IProject project) {
@@ -88,7 +87,7 @@ public final class OCLSourceScanner {
 				collectProjects(referencedProject, result);
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
@@ -108,7 +107,7 @@ public final class OCLSourceScanner {
 				}
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
