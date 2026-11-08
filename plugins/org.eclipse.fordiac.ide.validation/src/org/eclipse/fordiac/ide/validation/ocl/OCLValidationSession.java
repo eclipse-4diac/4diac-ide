@@ -24,6 +24,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
@@ -35,10 +36,9 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
-import org.eclipse.fordiac.ide.validation.handlers.ValidationMarkerConstants;
 import org.eclipse.fordiac.ide.validation.handlers.OCLParser;
 import org.eclipse.fordiac.ide.validation.handlers.ValidationHelper;
+import org.eclipse.fordiac.ide.validation.handlers.ValidationMarkerConstants;
 import org.eclipse.ocl.ecore.EcoreEnvironmentFactory;
 import org.eclipse.ocl.ecore.OCL;
 
@@ -138,7 +138,7 @@ public final class OCLValidationSession implements AutoCloseable {
 	}
 
 	private void addConstraintProblem(final IFile source, final String message, final RuntimeException exception) {
-		FordiacLogHelper.logError(message, exception);
+		ILog.get().error(message, exception);
 		addSourceMarker(source, message);
 	}
 
