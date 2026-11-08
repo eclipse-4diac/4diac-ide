@@ -19,7 +19,7 @@ import java.net.URLConnection;
 import java.util.Dictionary;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.core.runtime.ILog;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -50,7 +50,7 @@ public class FordiacImageURLStreamHandlerService extends AbstractURLStreamHandle
 					.asDictionary(Map.of(URLConstants.URL_HANDLER_PROTOCOL, new String[] { FORDIAC_IMAGE_PROTOCOL }));
 			iconUrlHandler = bundleContext.registerService(URLStreamHandlerService.class, this, properties);
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Could not register icon URL handler.", e); //$NON-NLS-1$
+			ILog.get().error("Could not register icon URL handler.", e); //$NON-NLS-1$
 		}
 	}
 
@@ -61,7 +61,7 @@ public class FordiacImageURLStreamHandlerService extends AbstractURLStreamHandle
 				iconUrlHandler = null;
 			}
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Could not un-register icon URL handler.", e); //$NON-NLS-1$
+			ILog.get().error("Could not un-register icon URL handler.", e); //$NON-NLS-1$
 		}
 	}
 

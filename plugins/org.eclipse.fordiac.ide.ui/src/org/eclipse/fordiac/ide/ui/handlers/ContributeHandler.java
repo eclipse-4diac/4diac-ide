@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.browser.IWebBrowser;
@@ -37,7 +37,7 @@ public class ContributeHandler extends AbstractHandler {
 						.createBrowser(getClass().getName());
 				browser.openURL(new URI(FORDIAC_CONTRIBUTION_URL).toURL());
 			} catch (PartInitException | MalformedURLException | URISyntaxException e) {
-				FordiacLogHelper.logError("Error in opening the Eclipse 4diac contribution web-page!", e); //$NON-NLS-1$
+				ILog.get().error("Error in opening the Eclipse 4diac contribution web-page!", e); //$NON-NLS-1$
 			}
 		}
 
