@@ -23,6 +23,6 @@
 			<VarDeclaration Name="D1" Type="BYTE" Comment="Array in/out" ArraySize="0..20"/>
 		</InOutVars>
 	</InterfaceList>
-	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_INIT_ARR'"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_PROVIDE_ARR'"/>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
