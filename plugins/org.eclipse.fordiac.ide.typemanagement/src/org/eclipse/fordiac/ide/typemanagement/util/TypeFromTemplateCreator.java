@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -37,7 +38,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class TypeFromTemplateCreator {
@@ -78,9 +78,9 @@ public class TypeFromTemplateCreator {
 		try {
 			operation.run(monitor);
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getTargetException().getMessage(), e.getTargetException());
+			ILog.get().error(e.getTargetException().getMessage(), e.getTargetException());
 		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			Thread.currentThread().interrupt();
 		}
 	}

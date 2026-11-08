@@ -37,6 +37,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
@@ -49,7 +50,6 @@ import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -416,7 +416,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				description = description.substring(9, description.length() - 1);
 			}
 		} catch (final FileNotFoundException e) {
-			FordiacLogHelper.logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
+			ILog.get().error(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
 		}
 		return new TemplateInfo(f, name, description);
 	}
