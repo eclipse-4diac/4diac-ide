@@ -19,11 +19,11 @@ import java.util.Map;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.ConnectionsToStructRefactoring;
 import org.eclipse.fordiac.ide.typemanagement.wizards.ConnectionsToStructWizardPage;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
@@ -65,7 +65,7 @@ public class ConnectionsToStructHandler extends AbstractHandler {
 				openOperation.run(HandlerUtil.getActiveShell(event), refactoring.getName());
 			}
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Error during ReplaceStruct refactoring", e); //$NON-NLS-1$
+			ILog.get().error("Error during ReplaceStruct refactoring", e); //$NON-NLS-1$
 		}
 		return null;
 	}

@@ -27,6 +27,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -37,7 +38,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -87,7 +87,7 @@ public class OpenTypeHandler extends AbstractHandler {
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
 				} catch (final PartInitException e1) {
-					FordiacLogHelper.logError(e1.getMessage(), e1);
+					ILog.get().error(e1.getMessage(), e1);
 					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					MessageDialog.openError(shell, Messages.OpenTypeHandler_OPEN_TYPE_ERROR_TITLE,
 							Messages.OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE);
@@ -214,7 +214,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			try {
 				return proj.isOpen() && proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
+				ILog.get().error("Could not read project nature", e); //$NON-NLS-1$
 			}
 			return false;
 		}

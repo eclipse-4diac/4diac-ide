@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
@@ -26,7 +27,6 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.AddStructMemberContext;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.structmember.AddStructMemberRefactoring;
 import org.eclipse.fordiac.ide.util.ErrorMessenger;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
@@ -92,7 +92,7 @@ public final class AddStructMemberRefactoringUI {
 	}
 
 	private static void reportError(final Throwable throwable) {
-		FordiacLogHelper.logError(Messages.AddStructMemberRefactoring_UIError, throwable);
+		ILog.get().error(Messages.AddStructMemberRefactoring_UIError, throwable);
 		ErrorMessenger.popUpErrorMessage(Messages.AddStructMemberRefactoring_UIError);
 	}
 

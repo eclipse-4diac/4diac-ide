@@ -26,7 +26,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.navigator.CommonViewer;
 
@@ -78,7 +78,7 @@ public class FBTypeContentProvider extends LibraryElementContentProvider impleme
 				performViewerRefresh(list);
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Couldn't refresh markers", e); //$NON-NLS-1$
+			ILog.get().error("Couldn't refresh markers", e); //$NON-NLS-1$
 		}
 	}
 

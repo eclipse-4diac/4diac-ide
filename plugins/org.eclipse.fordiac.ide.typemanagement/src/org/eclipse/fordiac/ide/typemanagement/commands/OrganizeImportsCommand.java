@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -29,7 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.search.ISearchSupport;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 public class OrganizeImportsCommand extends Command implements ScopedCommand {
@@ -51,7 +51,7 @@ public class OrganizeImportsCommand extends Command implements ScopedCommand {
 			final Set<String> importedNamespaces = getAllImportedNamespaces(libraryElement);
 			ImportHelper.organizeImports(libraryElement, importedNamespaces, !incompleteResult);
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Error organizing imports", e); //$NON-NLS-1$
+			ILog.get().error("Error organizing imports", e); //$NON-NLS-1$
 		} finally {
 			newImports = ECollections.newBasicEList(ImportHelper.getImports(libraryElement));
 		}
