@@ -24,18 +24,19 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.osgi.framework.Bundle;
 
 public class EclipseProjectLoader {
 	private final IProject eclipseProject;
 
-	public EclipseProjectLoader(final Bundle bundle, final Path bundleRelativeProjectPath) throws CoreException, IOException  {
+	public EclipseProjectLoader(final Bundle bundle, final Path bundleRelativeProjectPath)
+			throws CoreException, IOException {
 		eclipseProject = openProject(bundle, bundleRelativeProjectPath);
 	}
 
@@ -52,18 +53,17 @@ public class EclipseProjectLoader {
 			final IPath projectFilePath = projectPath.append(File.separator + ".project"); //$NON-NLS-1$
 			return workspace.loadProjectDescription(projectFilePath);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		}
 		return null;
 	}
 
-	private static IProject openProject(final Bundle bundle, final Path projectPath) throws IOException, CoreException  {
+	private static IProject openProject(final Bundle bundle, final Path projectPath) throws IOException, CoreException {
 		final var workspace = ResourcesPlugin.getWorkspace();
 		final var myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		final var url = FileLocator.toFileURL(FileLocator.find(bundle, projectPath));
 		final var path = Path.fromOSString(url.getPath());
-		final var description = loadProjectDescription(workspace,
-				path);
+		final var description = loadProjectDescription(workspace, path);
 		if (description != null) {
 			final var eclipseProject = myWorkspaceRoot.getProject(description.getName());
 			if (validateProjectLocation(eclipseProject, path)) {
@@ -75,8 +75,8 @@ public class EclipseProjectLoader {
 		return null;
 	}
 
-	private static void loadProject(final IProjectDescription description, final IProject project, final IPath projectPath)
-			throws CoreException {
+	private static void loadProject(final IProjectDescription description, final IProject project,
+			final IPath projectPath) throws CoreException {
 		final IProgressMonitor monitor = new NullProgressMonitor();
 		setProjectLocation(description, projectPath);
 		project.create(description, monitor);
@@ -87,20 +87,24 @@ public class EclipseProjectLoader {
 		final IPath projectPathInWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation()
 				.append(projectPath.lastSegment());
 		if (!projectPathInWorkspace.equals(projectPath)) {
-			// if projectPath is not in workspace root we need to set the location for correct loading
+			// if projectPath is not in workspace root we need to set the location for
+			// correct loading
 			description.setLocation(projectPath);
 		}
 	}
 
-	private static boolean validateProjectLocation(final IProject project, final IPath projectPath) throws IOException, CoreException {
+	private static boolean validateProjectLocation(final IProject project, final IPath projectPath)
+			throws IOException, CoreException {
 		if (project.exists()) {
-			// if the project already exists we can only import it if it has the same location
+			// if the project already exists we can only import it if it has the same
+			// location
 			if (project.getLocation().equals(projectPath)) {
 				project.open(new NullProgressMonitor());
 				return false;
 			}
 			throw new IOException("Project with same name already exists in workspace!"); //$NON-NLS-1$
-		} else if (!Status.OK_STATUS.equals(project.getWorkspace().validateProjectLocation(project, projectPath))) {
+		}
+		if (!Status.OK_STATUS.equals(project.getWorkspace().validateProjectLocation(project, projectPath))) {
 			throw new IOException(MessageFormat.format("Project location {0} is not valid in workspace!", //$NON-NLS-1$
 					projectPath.toPortableString()));
 		}

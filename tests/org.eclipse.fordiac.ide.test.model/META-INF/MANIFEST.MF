@@ -6,8 +6,7 @@ Bundle-Version: 3.2.200.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-Vendor: Eclipse 4diac
-Import-Package: org.eclipse.fordiac.ide.util,
- org.junit.jupiter.api;version="[6.0.0,7.0.0)",
+Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
  org.junit.jupiter.api.function;version="[6.0.0,7.0.0)",
  org.junit.jupiter.params;version="[6.0.0,7.0.0)",
  org.junit.jupiter.params.provider;version="[6.0.0,7.0.0)",
