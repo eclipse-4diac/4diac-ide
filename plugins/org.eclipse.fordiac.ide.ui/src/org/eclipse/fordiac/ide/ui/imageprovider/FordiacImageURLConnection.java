@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
+import org.eclipse.core.runtime.ILog;
 
 public class FordiacImageURLConnection extends URLConnection {
 
@@ -42,7 +42,7 @@ public class FordiacImageURLConnection extends URLConnection {
 			final FordiacImage selectedIcon = FordiacImage.valueOf(imageName);
 			is = selectedIcon.getImageAsInputStream();
 		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			is = FordiacImage.MISSING.getImageAsInputStream();
 		}
 		return is;
