@@ -11,80 +11,83 @@
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Michael Oberlehner - request GitLab lists in pages of 100 entries
  *   Michael Oberlehner - one downloader per configured endpoint
+ *   Michael Oberlehner - read GitLab with Gson through the common downloader base
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.management;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabResponses.PackageFileResponse;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabResponses.PackageResponse;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabResponses.ProjectResponse;
 import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpoint;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
+import org.eclipse.fordiac.ide.library.LibraryPackageId;
+import org.eclipse.fordiac.ide.library.download.AbstractLibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
-import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
-import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
-import org.osgi.framework.Version;
-import org.osgi.framework.VersionRange;
+import org.eclipse.fordiac.ide.library.download.LibraryPackageRequestException;
+import org.eclipse.fordiac.ide.library.download.LibraryPackageTransport;
+
+import com.google.gson.JsonElement;
 
 /**
  * Downloads libraries from the package registries of one GitLab endpoint.
  *
  * <p>
  * The downloaders of all configured endpoints are created by the
- * {@link GitLabDownloaderProvider}.
+ * {@link GitLabDownloaderProvider}. The catalogue lists the packages of all
+ * projects the token is a member of; projects without package registry are
+ * skipped. Requests, redirects, limits and errors are handled by
+ * {@link AbstractLibraryPackageDownloader}, which sends the access token only
+ * to the configured endpoint.
  */
-public class GitLabDownloader implements ILibraryPackageDownloader {
+public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 
-	private static final String PACKAGE_TYPE = "packageType"; //$NON-NLS-1$
-	private static final String PACKAGE_VERSION = "packageVersion"; //$NON-NLS-1$
-	private static final String PACKAGE_NAME = "packageName"; //$NON-NLS-1$
-	private static final String PACKAGE_ID = "packageID"; //$NON-NLS-1$
-	private static final String PROJECT_NAME = "projectName"; //$NON-NLS-1$
-	private static final String PROJECT_ID = "projectID"; //$NON-NLS-1$
-	private static final String WORKSPACE_PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
-			.toPortableString();
-	private static final String ROOT_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
-	private static final String API_VERSION = "api/v4/projects"; //$NON-NLS-1$
-	private static final String PACKAGES = "/packages/"; //$NON-NLS-1$
-	private static final String PACKAGE_FILES = "/package_files"; //$NON-NLS-1$
-	private static final String MANIFEST_FILENAME = "MANIFEST.MF"; //$NON-NLS-1$
-	private HashMap<Project, List<Package>> projectAndPackageMap;
-	private HashMap<String, List<LeafNode>> packagesAndLeaves;
-	// the maximum page size of the GitLab API, to keep the number of requests low
-	private static final String URL_PARAMETERS = "?per_page=100"; //$NON-NLS-1$
-	private static final String CUSTOM_PARAMETERS = "&membership=true"; //$NON-NLS-1$
-	private static final String URL_PAGE_PARAMETER = "&page="; //$NON-NLS-1$
+	/**
+	 * Name of the system property with the maximum number of pages of a GitLab
+	 * list; 1000 by default.
+	 */
+	public static final String MAX_PAGES_PROPERTY = "org.eclipse.fordiac.ide.gitlab.maxPages"; //$NON-NLS-1$
+
+	private static final long DEFAULT_MAX_PAGES = 1000;
+	private static final String PRIVATE_TOKEN_HEADER = "PRIVATE-TOKEN"; //$NON-NLS-1$
 	private static final String NEXT_PAGE_HEADER = "X-Next-Page"; //$NON-NLS-1$
+	private static final String PROJECTS = "api/v4/projects"; //$NON-NLS-1$
+	private static final String PACKAGES = "/packages/"; //$NON-NLS-1$
+	// the maximum page size of the GitLab API, to keep the number of requests low
+	private static final String PAGE_PARAMETERS = "per_page=100&page="; //$NON-NLS-1$
+	private static final String FIRST_PAGE = "1"; //$NON-NLS-1$
+	private static final String MANIFEST_FILENAME = "MANIFEST.MF"; //$NON-NLS-1$
+	private static final String ZIP_EXTENSION = ".zip"; //$NON-NLS-1$
+	private static final String REGISTRY_DISABLED = "disabled"; //$NON-NLS-1$
+	// names, versions and package types become part of request paths
+	private static final Pattern PATH_SEGMENT = Pattern.compile("[A-Za-z0-9_][A-Za-z0-9._+-]*"); //$NON-NLS-1$
+	private static final Pattern PAGE_NUMBER = Pattern.compile("[1-9]\\d{0,8}"); //$NON-NLS-1$
+	private static final Pattern ID = Pattern.compile("[1-9][0-9]{0,18}"); //$NON-NLS-1$
+	private static final String LOCATOR_SEPARATOR = "/"; //$NON-NLS-1$
 
 	public enum FileFilter {
 		ZIP(Pattern.compile(".*\\.zip")), MANIFEST(Pattern.compile(".*\\.MF")); //$NON-NLS-1$//$NON-NLS-2$
@@ -100,13 +103,15 @@ public class GitLabDownloader implements ILibraryPackageDownloader {
 		}
 	}
 
-	private final VersionComparator versionComparator = new VersionComparator();
+	/** The location of a page of a GitLab list. */
+	@FunctionalInterface
+	private interface Page {
+		URI at(String page) throws IOException;
+	}
 
 	private final GitLabEndpoint endpoint;
-	private final String baseUrl;
-	private final String token;
-
-	private boolean active = true;
+	private Map<Project, List<Package>> projectAndPackageMap;
+	private Map<String, List<LeafNode>> packagesAndLeaves;
 
 	/**
 	 * Creates the downloader of a GitLab endpoint.
@@ -114,9 +119,12 @@ public class GitLabDownloader implements ILibraryPackageDownloader {
 	 * @param endpoint the configured endpoint
 	 */
 	public GitLabDownloader(final GitLabEndpoint endpoint) {
+		this(endpoint, LibraryPackageTransport.getDefault());
+	}
+
+	GitLabDownloader(final GitLabEndpoint endpoint, final LibraryPackageTransport transport) {
+		super(transport);
 		this.endpoint = Objects.requireNonNull(endpoint);
-		baseUrl = withTrailingSlash(endpoint.url());
-		token = endpoint.token();
 	}
 
 	/**
@@ -128,10 +136,6 @@ public class GitLabDownloader implements ILibraryPackageDownloader {
 		return endpoint;
 	}
 
-	private static String withTrailingSlash(final String url) {
-		return url.isBlank() || url.endsWith("/") ? url : url + "/"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {
 		return packagesAndLeaves != null ? packagesAndLeaves : Map.of();
 	}
@@ -140,233 +144,38 @@ public class GitLabDownloader implements ILibraryPackageDownloader {
 		return projectAndPackageMap != null ? projectAndPackageMap : Map.of();
 	}
 
+	/**
+	 * Loads the projects and packages of the endpoint again.
+	 *
+	 * @return the status of the load
+	 */
 	public DownloadResult<Void> fetchProjectsAndPackages() {
-		final boolean missingUrl = baseUrl.isBlank();
-		final boolean missingToken = token.isBlank();
-		if (missingUrl && missingToken) {
-			return new DownloadResult<>(DownloadResult.Status.NO_CONFIG, Messages.No_Config);
-		}
-		if (missingUrl || missingToken) {
-			return new DownloadResult<>(DownloadResult.Status.CONFIG_ERROR, Messages.Configuration_Incomplete);
-		}
-		projectAndPackageMap = new HashMap<>();
-		packagesAndLeaves = new HashMap<>();
-		try {
-			getProjects();
-			for (final Project project : projectAndPackageMap.keySet()) {
-				getPackages(project);
-			}
-		} catch (final IOException e) {
-			// clear the partially populated cache so a failed fetch is never mistaken
-			// for a valid (but empty) cache by later manifest/library requests
-			projectAndPackageMap = null;
-			packagesAndLeaves = null;
-			return new DownloadResult<>(DownloadResult.Status.ERROR,
-					MessageFormat.format(Messages.Download_Error, e.getMessage()));
-		}
-		return new DownloadResult<>(DownloadResult.Status.OK);
+		return refreshCatalogue(null);
 	}
 
-	private static void createDirectory(final Path path) throws IOException {
-		if (!Files.exists(path)) {
-			Files.createDirectories(path);
-		}
-	}
-
-	private HttpURLConnection createConnection(final String target) throws IOException {
-		URL url;
-		try {
-			url = new URI(target).toURL();
-		} catch (final URISyntaxException e) {
-			throw new IOException(e);
-		}
-		final HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-		httpConn.setRequestMethod(Messages.GET);
-		httpConn.setRequestProperty(Messages.Private_Token, token);
-		httpConn.setConnectTimeout(10_000);
-		httpConn.setReadTimeout(30_000);
-		return httpConn;
-	}
-
-	public Path packageDownloader(final Project project, final Package p, final FileFilter filter) throws IOException {
-		for (final String filename : findFilenamesInPackage(p, project, filter)) {
-			return downloadPackageFile(project, p, filename);
-		}
-		return null;
-	}
-
-	private DownloadResult<Path> manifestDownloader(final Project project, final Package pack) {
-		final String manifestUrl = buildDownloadURL(pack, project, MANIFEST_FILENAME);
-		try {
-			return new DownloadResult<>(downloadPackageFile(project, pack, MANIFEST_FILENAME));
-		} catch (final FileNotFoundException e) {
-			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND,
-					MessageFormat.format(Messages.Manifest_Not_Found, manifestUrl));
-		} catch (final IOException e) {
-			final String errorMessage = MessageFormat.format(Messages.Manifest_Download_Failed, manifestUrl);
-			ILog.get().error(errorMessage, e);
-			return new DownloadResult<>(DownloadResult.Status.ERROR,
-					MessageFormat.format(Messages.Download_Error, errorMessage));
-		}
-	}
-
-	private Path downloadPackageFile(final Project project, final Package pack, final String filename)
+	/**
+	 * Downloads the first file of a package that matches a filter.
+	 *
+	 * @param project the project of the package
+	 * @param pack    the package
+	 * @param filter  selects the file
+	 * @return the downloaded file, or {@code null} if no file of the package
+	 *         matches
+	 * @throws IOException if a request fails or a response is invalid
+	 */
+	public Path packageDownloader(final Project project, final Package pack, final FileFilter filter)
 			throws IOException {
-		final Path packageDirPath = Paths
-				.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY, pack.name() + "-" + pack.version()) //$NON-NLS-1$
-				.toAbsolutePath().normalize();
-		final Path targetFile = resolveValidatedPackageFile(packageDirPath, filename);
-
-		final HttpURLConnection httpConn = createConnection(buildDownloadURL(pack, project, filename));
-		try (InputStream responseStream = httpConn.getInputStream()) {
-			createDirectory(Paths.get(WORKSPACE_PATH, ROOT_DOWNLOAD_DIRECTORY));
-			createDirectory(packageDirPath);
-			Files.copy(responseStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
-			return targetFile;
-		} finally {
-			httpConn.disconnect();
+		if (!isValidId(project.id()) || !isValidId(pack.id()) || !isPathSegment(pack.packageType())) {
+			throw new IOException(Messages.Invalid_Locator);
 		}
-	}
-
-	private static boolean validateFileName(final String filename) {
-		if (filename == null || filename.isBlank()) {
-			return false;
+		final LibraryPackageId id = packageId(pack);
+		final Optional<String> fileName = findFileName(project.id(), pack, id, filter, null);
+		if (fileName.isEmpty()) {
+			return null;
 		}
-
-		try {
-			final Path path = Paths.get(filename);
-			return path.getNameCount() == 1 && !path.isAbsolute();
-		} catch (final InvalidPathException e) {
-			return false;
-		}
-	}
-
-	private static Path resolveValidatedPackageFile(final Path packageDir, final String filename) throws IOException {
-		if (!validateFileName(filename)) {
-			throw new IOException("Invalid package filename received from server"); //$NON-NLS-1$
-		}
-
-		final Path baseDir = packageDir.toAbsolutePath().normalize();
-		final Path resolved = baseDir.resolve(filename).normalize();
-
-		if (!resolved.startsWith(baseDir)) {
-			throw new IOException("Resolved package filename escapes target directory"); //$NON-NLS-1$
-		}
-
-		return resolved;
-	}
-
-	private List<String> findFilenamesInPackage(final Package pack, final Project project, final FileFilter filter)
-			throws IOException {
-		final HttpURLConnection httpConn = createConnection(buildPackageFileURL(pack, project));
-		try (InputStream responseStream = httpConn.getInputStream()) {
-			final List<String> filenames = parseResponse(responseStream);
-			httpConn.disconnect();
-			return filenames.stream().filter(filter.getPattern().asMatchPredicate()).toList();
-		}
-	}
-
-	private String buildDownloadURL(final Package p, final Project project, final String filename) {
-		return baseUrl + API_VERSION + "/" + project.id() + PACKAGES + p.packageType() + "/" + p.name() //$NON-NLS-1$//$NON-NLS-2$
-				+ "/" //$NON-NLS-1$
-				+ p.version() + "/" + filename; //$NON-NLS-1$
-	}
-
-	private String buildPackageFileURL(final Package p, final Project project) {
-		return baseUrl + API_VERSION + "/" + project.id() + PACKAGES + p.id() + PACKAGE_FILES; //$NON-NLS-1$
-	}
-
-	private String buildConnectionURL(final String page) {
-		return baseUrl + API_VERSION + URL_PARAMETERS + CUSTOM_PARAMETERS + URL_PAGE_PARAMETER + page;
-	}
-
-	private String buildPackagesForProjectURL(final Project project, final String page) {
-		return baseUrl + API_VERSION + "/" + project.id() + PACKAGES + URL_PARAMETERS + CUSTOM_PARAMETERS //$NON-NLS-1$
-				+ URL_PAGE_PARAMETER + page;
-	}
-
-	private void getProjects() throws IOException {
-		String page = "1"; //$NON-NLS-1$
-		final String regex = "\\{\\\"id\\\"\\s*:\\s*(?<projectID>\\d+)\\s*,\\s*\\\"description\\\".*?,\\s*\\\"name\\\"\\s*:\\s*\\\"(?<projectName>[\\w\\s\\-\\.]+)\\\"\\s*,\\s*\\\"name_with_namespace\\\"\\s*:\\s*\\\"[^\\\"]*\\\"[^}]*\\}"; //$NON-NLS-1$
-		final Pattern p = Pattern.compile(regex);
-
-		while (page != null && !"".equals(page)) { //$NON-NLS-1$
-			final HttpURLConnection httpConn = createConnection(buildConnectionURL(page));
-			try (InputStream responseStream = httpConn.getInputStream()) {
-				String response = ""; //$NON-NLS-1$
-				try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
-					response = reader.readLine();
-				}
-				page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
-				final Matcher m = p.matcher(response);
-				Project project = null;
-				while (m.find()) {
-					project = new Project(Long.valueOf(m.group(PROJECT_ID)), m.group(PROJECT_NAME));
-					projectAndPackageMap.put(project, new ArrayList<>());
-				}
-			} catch (final IOException e) {
-				ILog.get().warn(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
-						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
-				return;
-			} finally {
-				httpConn.disconnect();
-			}
-		}
-	}
-
-	private void getPackages(final Project project) throws IOException {
-		String page = "1"; //$NON-NLS-1$
-		final String regex = "(?<packageID>\\d+),\\\"name\\\":\\\"(?<packageName>[\\w\\s\\-\\.]*)\\\",\\\"version\\\":\\\"(?<packageVersion>[\\w\\s\\-\\.]*)\\\",\\\"package_type\\\":\\\"(?<packageType>[\\w\\s\\-\\.]*)\\\""; //$NON-NLS-1$
-		final Pattern p = Pattern.compile(regex);
-		while (page != null && !"".equals(page)) { //$NON-NLS-1$
-			final HttpURLConnection httpConn = createConnection(buildPackagesForProjectURL(project, page));
-			try {
-				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
-					// Skip projects without package registry
-					return;
-				}
-				try (InputStream responseStream = httpConn.getInputStream()) {
-					String response = ""; //$NON-NLS-1$
-					try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
-						response = reader.readLine();
-					}
-					page = httpConn.getHeaderField(NEXT_PAGE_HEADER);
-					final Matcher m = p.matcher(response);
-					Package pack;
-					while (m.find()) {
-						pack = new Package(Long.valueOf(m.group(PACKAGE_ID)), m.group(PACKAGE_NAME),
-								m.group(PACKAGE_VERSION), m.group(PACKAGE_TYPE));
-						projectAndPackageMap.get(project).add(pack);
-						if (!packagesAndLeaves.containsKey(pack.name())) {
-							packagesAndLeaves.put(pack.name(), new ArrayList<>());
-						}
-						packagesAndLeaves.get(pack.name()).add(new LeafNode(project, pack, pack.version()));
-					}
-				}
-			} catch (final IOException e) {
-				ILog.get().warn(MessageFormat.format("Request to GitLab failed: {0} {1}", //$NON-NLS-1$
-						Integer.valueOf(httpConn.getResponseCode()), httpConn.getResponseMessage()), e);
-				return;
-			} finally {
-				httpConn.disconnect();
-			}
-		}
-	}
-
-	private static List<String> parseResponse(final InputStream responseStream) throws IOException {
-		final List<String> filenames = new ArrayList<>();
-		String response = ""; //$NON-NLS-1$
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
-			response = reader.readLine();
-		}
-
-		final String regex = "\"file_name\":\"([^\"]*)\""; //$NON-NLS-1$
-		final Pattern p = Pattern.compile(regex);
-		final Matcher m = p.matcher(response);
-		while (m.find()) {
-			filenames.add(m.group(1));
-		}
-		return filenames;
+		final URI location = fileUri(project.id(), pack, fileName.get());
+		return filter == FileFilter.MANIFEST ? downloadManifestFile(location, id.folderName(), null)
+				: downloadFile(location, id.folderName(), fileName.get(), null);
 	}
 
 	@Override
@@ -375,119 +184,232 @@ public class GitLabDownloader implements ILibraryPackageDownloader {
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableLibraries(final IProgressMonitor monitor)
-			throws OperationCanceledException {
-		final var fetchResult = fetchProjectsAndPackages();
-		if (fetchResult.status() != DownloadResult.Status.OK) {
-			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
+	protected DownloadResult<URI> getBaseUri() {
+		final boolean missingUrl = endpoint.url().isBlank();
+		final boolean missingToken = endpoint.token().isBlank();
+		if (missingUrl && missingToken) {
+			return new DownloadResult<>(DownloadResult.Status.NO_CONFIG, Messages.No_Config);
 		}
-		return new DownloadResult<>(new ArrayList<>(packagesAndLeaves.keySet()));
+		if (missingUrl || missingToken) {
+			return new DownloadResult<>(DownloadResult.Status.CONFIG_ERROR, Messages.Configuration_Incomplete);
+		}
+		return toBaseUri(endpoint.url());
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableVersions(final String symbolicName, final IProgressMonitor monitor)
-			throws OperationCanceledException {
-		final var fetchResult = fetchProjectsAndPackages();
-		if (fetchResult.status() != DownloadResult.Status.OK) {
-			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
-		}
-		final List<LeafNode> leaves = packagesAndLeaves.get(symbolicName);
-		if (leaves != null) {
-			return new DownloadResult<>(leaves.stream().map(LeafNode::getVersion).toList());
-		}
-		return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
+	protected void addCredentials(final HttpRequest.Builder request) {
+		request.header(PRIVATE_TOKEN_HEADER, endpoint.token());
 	}
 
 	@Override
-	public DownloadResult<Map<String, List<String>>> availableLibrariesAndVersions(final IProgressMonitor monitor)
-			throws OperationCanceledException {
-		final SubMonitor progress = SubMonitor.convert(monitor, "Fetching available libraries and versions", 5); //$NON-NLS-1$
-		final var fetchResult = fetchProjectsAndPackages();
-		progress.worked(4);
-		if (fetchResult.status() != DownloadResult.Status.OK) {
-			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
-		}
-
-		final Map<String, List<String>> versionRegistry = packagesAndLeaves.entrySet().stream()
-				.filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey,
-						e -> e.getValue().stream().map(LeafNode::getVersion).toList()));
-
-		progress.worked(1);
-
-		return new DownloadResult<>(versionRegistry);
-	}
-
-	@Override
-	public DownloadResult<Path> downloadLibrary(final String symbolicName, final VersionRange range,
-			final Version preferredVersion, final IProgressMonitor monitor) throws OperationCanceledException {
-		final SubMonitor progress = SubMonitor.convert(monitor, "Downloading Library from Gitlab", 5); //$NON-NLS-1$
-		final var fetchResult = fetchProjectsAndPackages();
-		progress.worked(4);
-		if (fetchResult.status() != DownloadResult.Status.OK) {
-			return new DownloadResult<>(fetchResult.status(), fetchResult.message());
-		}
-		if (!packagesAndLeaves.containsKey(symbolicName)) {
-			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
-		}
-		Stream<LeafNode> st = packagesAndLeaves.get(symbolicName).stream();
-		if (range != null && !range.isEmpty()) {
-			st = st.filter(l -> VersionComparator.contains(range, l.getVersion()));
-		}
-		final List<LeafNode> nodes = st
-				.sorted(Comparator.comparing(LeafNode::getVersion, (o1, o2) -> versionComparator.compare(o2, o1)))
-				.toList();
-
-		if (nodes.isEmpty()) {
-			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Version_Not_Found);
-		}
-		LeafNode node = null;
-		if (preferredVersion != null) {
-			node = nodes.stream().filter(l -> preferredVersion.compareTo(new Version(l.getVersion())) == 0).findFirst()
-					.orElse(null);
-		}
-		if (node == null) {
-			node = nodes.getFirst();
-		}
-		progress.worked(1);
-		try {
-			return new DownloadResult<>(packageDownloader(node.getProject(), node.getPackage(), FileFilter.ZIP));
-		} catch (final IOException e) {
-			ILog.get().error(e.getMessage(), e);
-			return new DownloadResult<>(DownloadResult.Status.ERROR,
-					MessageFormat.format(Messages.Download_Error, e.getMessage()));
-		}
-	}
-
-	@Override
-	public DownloadResult<Path> downloadManifest(final String symbolicName, final Version version,
-			final IProgressMonitor monitor) throws OperationCanceledException {
-		final SubMonitor progress = SubMonitor.convert(monitor, "Downloading Manifest from Gitlab", 5); //$NON-NLS-1$
-		if (packagesAndLeaves == null || projectAndPackageMap == null) {
-			final var fetchResult = fetchProjectsAndPackages();
-			if (fetchResult.status() != DownloadResult.Status.OK) {
-				return new DownloadResult<>(fetchResult.status(), fetchResult.message());
+	protected List<CatalogueEntry> loadCatalogue(final IProgressMonitor monitor) throws IOException {
+		projectAndPackageMap = null;
+		packagesAndLeaves = null;
+		final SubMonitor progress = SubMonitor.convert(monitor, 2);
+		final List<CatalogueProject> projects = getProjects(progress.split(1));
+		final SubMonitor packageProgress = progress.split(1).setWorkRemaining(projects.size());
+		final Map<Project, List<Package>> projectPackages = new LinkedHashMap<>();
+		final Map<String, List<LeafNode>> leaves = new LinkedHashMap<>();
+		final List<CatalogueEntry> entries = new ArrayList<>();
+		int skippedPackages = 0;
+		for (final CatalogueProject catalogueProject : projects) {
+			final Project project = catalogueProject.project();
+			final Optional<List<PackageResponse>> responses = getPackages(catalogueProject, packageProgress.split(1));
+			if (responses.isPresent()) {
+				final List<Package> packages = responses.get().stream().flatMap(response -> toPackage(response).stream())
+						.collect(Collectors.toCollection(ArrayList::new));
+				skippedPackages += responses.get().size() - packages.size();
+				projectPackages.put(project, packages);
+				for (final Package pack : packages) {
+					leaves.computeIfAbsent(pack.name(), _ -> new ArrayList<>())
+							.add(new LeafNode(project, pack, pack.version()));
+					entries.add(new CatalogueEntry(pack.name(), pack.version(), toLocator(project, pack)));
+				}
 			}
 		}
-		progress.worked(4);
-		if (!packagesAndLeaves.containsKey(symbolicName)) {
-			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
+		if (skippedPackages > 0) {
+			ILog.get().warn(MessageFormat.format(Messages.Skipped_Invalid_Packages, getName(), skippedPackages));
 		}
-		final LeafNode node = packagesAndLeaves.get(symbolicName).stream()
-				.filter(n -> version.toString().equals(n.getVersion())).findAny().orElse(null);
-		if (node == null) {
-			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Version_Not_Found);
-		}
-
-		return manifestDownloader(node.getProject(), node.getPackage());
+		projectAndPackageMap = projectPackages;
+		packagesAndLeaves = leaves;
+		return entries;
 	}
 
 	@Override
-	public boolean isActive() {
-		return active;
+	protected URI getArchiveLocation(final String locator, final IProgressMonitor monitor) throws IOException {
+		final PackageLocation location = fromLocator(locator);
+		final String fileName = findFileName(location.projectId(), location.pack(),
+				packageId(location.pack()), FileFilter.ZIP, monitor)
+				.orElseThrow(() -> new FileNotFoundException(MessageFormat.format(Messages.Archive_Not_Found,
+						location.pack().name(), location.pack().version(), location.projectId().toString())));
+		return fileUri(location.projectId(), location.pack(), fileName);
 	}
 
 	@Override
-	public void setActive(final boolean active) {
-		this.active = active;
+	protected URI getManifestLocation(final String locator, final IProgressMonitor monitor) throws IOException {
+		final PackageLocation location = fromLocator(locator);
+		return fileUri(location.projectId(), location.pack(), MANIFEST_FILENAME);
+	}
+
+	/** {@code <projectId>/<packageId>/<packageType>/<name>/<version>} */
+	private static String toLocator(final Project project, final Package pack) {
+		return String.join(LOCATOR_SEPARATOR, project.id().toString(), pack.id().toString(), pack.packageType(),
+				pack.name(), pack.version());
+	}
+
+	private static PackageLocation fromLocator(final String locator) throws IOException {
+		final String[] parts = locator.split(LOCATOR_SEPARATOR, -1);
+		if (parts.length == 5 && ID.matcher(parts[0]).matches() && ID.matcher(parts[1]).matches()
+				&& isPathSegment(parts[2]) && isPathSegment(parts[3]) && isPathSegment(parts[4])) {
+			try {
+				return new PackageLocation(Long.valueOf(parts[0]),
+						new Package(Long.valueOf(parts[1]), parts[3], parts[4], parts[2]));
+			} catch (final NumberFormatException e) {
+				throw new IOException(Messages.Invalid_Locator);
+			}
+		}
+		throw new IOException(Messages.Invalid_Locator);
+	}
+
+	/** A package of a project, decoded from a locator. */
+	private record PackageLocation(Long projectId, Package pack) {
+	}
+
+	private record CatalogueProject(Project project, boolean registryEnabled) {
+	}
+
+	private List<CatalogueProject> getProjects(final IProgressMonitor monitor) throws IOException {
+		final List<CatalogueProject> projects = new ArrayList<>();
+		for (final ProjectResponse response : listPages(
+				page -> resolve(PROJECTS + "?membership=true&" + PAGE_PARAMETERS + page), //$NON-NLS-1$
+				ProjectResponse[].class, monitor)) {
+			toProject(response).ifPresent(projects::add);
+		}
+		return projects;
+	}
+
+	private Optional<List<PackageResponse>> getPackages(final CatalogueProject catalogueProject, final IProgressMonitor monitor)
+			throws IOException {
+		final Project project = catalogueProject.project();
+		return listPages(page -> resolve(PROJECTS + '/' + project.id() + "/packages?" //$NON-NLS-1$
+				+ PAGE_PARAMETERS + page), PackageResponse[].class, monitor, !catalogueProject.registryEnabled());
+	}
+
+	private Optional<String> findFileName(final Long projectId, final Package pack, final LibraryPackageId id,
+			final FileFilter filter, final IProgressMonitor monitor) throws IOException {
+		final String expected = filter == FileFilter.ZIP ? id.folderName() + ZIP_EXTENSION : MANIFEST_FILENAME;
+		final String legacy = filter == FileFilter.ZIP ? pack.name() + '-' + pack.version() + ZIP_EXTENSION : expected;
+		String selected = null;
+		for (final PackageFileResponse file : listPages(
+				page -> resolve(PROJECTS + '/' + projectId + PACKAGES + pack.id() + "/package_files?" //$NON-NLS-1$
+						+ PAGE_PARAMETERS + page), PackageFileResponse[].class, monitor)) {
+			final JsonElement name = file != null ? file.fileName() : null;
+			if (name == null || !name.isJsonPrimitive() || !name.getAsJsonPrimitive().isString()
+					|| name.getAsString().isBlank()) {
+				throw new IOException(Messages.Invalid_File_Name);
+			}
+			final String fileName = name.getAsString();
+			if (expected.equals(fileName) || (selected == null && legacy.equals(fileName))) {
+				selected = fileName;
+			}
+		}
+		return Optional.ofNullable(selected);
+	}
+
+	private static LibraryPackageId packageId(final Package pack) throws IOException {
+		return LibraryPackageId.parse(pack.name(), pack.version()).orElseThrow(() -> new IOException(Messages.Invalid_Locator));
+	}
+
+	private URI fileUri(final Long projectId, final Package pack, final String fileName) throws IOException {
+		return resolve(PROJECTS + '/' + projectId + PACKAGES + pack.packageType() + '/' + pack.name() + '/'
+				+ pack.version() + '/' + fileName);
+	}
+
+	private <T> List<T> listPages(final Page page, final Class<T[]> pageType, final IProgressMonitor monitor)
+			throws IOException {
+		return listPages(page, pageType, monitor, false).orElseThrow();
+	}
+
+	private <T> Optional<List<T>> listPages(final Page page, final Class<T[]> pageType, final IProgressMonitor monitor,
+			final boolean skipForbiddenFirstPage) throws IOException {
+		final long maxPages = maxPages();
+		final List<T> elements = new ArrayList<>();
+		final URI first = page.at(FIRST_PAGE);
+		URI location = first;
+		for (long count = 1; location != null; count++) {
+			if (count > maxPages) {
+				throw new IOException(MessageFormat.format(Messages.Too_Many_Pages, first.getPath(),
+						Long.toString(maxPages)));
+			}
+			final JsonResponse<T[]> response;
+			try {
+				response = getJson(location, pageType, monitor);
+			} catch (final LibraryPackageRequestException e) {
+				if (skipForbiddenFirstPage && count == 1 && e.getStatusCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+					return Optional.empty();
+				}
+				throw e;
+			}
+			elements.addAll(Arrays.asList(response.body()));
+			location = nextPage(response.headers(), page).orElse(null);
+		}
+		return Optional.of(elements);
+	}
+
+	private static long maxPages() {
+		final long value = Long.getLong(MAX_PAGES_PROPERTY, DEFAULT_MAX_PAGES).longValue();
+		return value > 0 ? value : DEFAULT_MAX_PAGES;
+	}
+
+	private static Optional<URI> nextPage(final HttpHeaders headers, final Page page) throws IOException {
+		final Optional<String> next = headers.firstValue(NEXT_PAGE_HEADER).map(String::strip)
+				.filter(Predicate.not(String::isEmpty));
+		if (next.isEmpty()) {
+			return Optional.empty();
+		}
+		if (!PAGE_NUMBER.matcher(next.get()).matches()) {
+			throw new IOException(Messages.Invalid_Next_Page);
+		}
+		return Optional.of(page.at(next.get()));
+	}
+
+	private Optional<CatalogueProject> toProject(final ProjectResponse response) throws IOException {
+		if (response == null || !isValidId(response.id()) || response.name() == null || response.name().isBlank()) {
+			ILog.get().warn(MessageFormat.format(Messages.Invalid_Project, getName(),
+					response != null ? Objects.toString(response.id()) : null));
+			return Optional.empty();
+		}
+		final JsonElement enabled = response.packagesEnabled();
+		boolean registryEnabled = response.packageRegistryAccessLevel() != null;
+		if (enabled != null && !enabled.isJsonNull()) {
+			if (!enabled.isJsonPrimitive() || !enabled.getAsJsonPrimitive().isBoolean()) {
+				throw new IOException(MessageFormat.format(Messages.Invalid_Registry_State, response.id().toString()));
+			}
+			if (!enabled.getAsBoolean()) {
+				return Optional.empty();
+			}
+			registryEnabled = true;
+		}
+		if (REGISTRY_DISABLED.equals(response.packageRegistryAccessLevel())) {
+			// no request for the packages of a project without package registry
+			return Optional.empty();
+		}
+		return Optional.of(new CatalogueProject(new Project(response.id(), response.name()), registryEnabled));
+	}
+
+	private static Optional<Package> toPackage(final PackageResponse response) {
+		if (response == null || !isValidId(response.id()) || !isPathSegment(response.packageType())
+				|| LibraryPackageId.parse(response.name(), response.version()).isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.of(new Package(response.id(), response.name(), response.version(), response.packageType()));
+	}
+
+	private static boolean isValidId(final Long id) {
+		return id != null && id.longValue() > 0;
+	}
+
+	private static boolean isPathSegment(final String value) {
+		return value != null && PATH_SEGMENT.matcher(value).matches();
 	}
 }
