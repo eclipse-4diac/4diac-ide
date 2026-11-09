@@ -12,7 +12,8 @@ Require-Bundle:
  org.eclipse.jface,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.library,
- org.eclipse.fordiac.ide.library.model
+ org.eclipse.fordiac.ide.library.model,
+ com.google.gson
 Automatic-Module-Name: org.eclipse.fordiac.gitlab
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Bundle-Vendor: Eclipse 4diac
