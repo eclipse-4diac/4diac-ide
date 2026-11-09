@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringWriter;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
@@ -27,6 +28,8 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.UploadImageHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -47,6 +50,8 @@ import org.eclipse.mylyn.wikitext.parser.MarkupParser;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationListener;
+import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -63,6 +68,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -85,6 +91,15 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	public static final String ASCIIDOC_CONTEXT = "org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.context"; //$NON-NLS-1$
 	public static final String TOOLBAR_LOCATION = "toolbar:org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.toolbar"; //$NON-NLS-1$
+	private static final int PREVIEW_DELAY_MS = 300;
+
+	private final AtomicLong renderGeneration = new AtomicLong();
+	private Runnable pendingRefresh; // debounce handle for timerExec
+	private Job previewJob; // background parse job
+	private AsciiDocLanguage previewLanguage; // cached — expensive to construct
+	private String cachedBaseUri; // raw directory URI, computed once
+	private String lastHtml; // skip identical browser updates
+	private boolean skeletonLoaded; // true after first full setText()
 
 	// The editor input of the type file given to us.
 	private IEditorInput originEditorInput;
@@ -114,6 +129,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	// Document Listener tracking (Must be unregistered to prevent memory leaks)
 	private IDocument currentDocument;
 	private IDocumentListener documentListener;
+	private boolean settingText; // true while our own setText() load is in flight
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -220,16 +236,16 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		} else {
 			previewOnlyModeItem.setText("Preview Only"); //$NON-NLS-1$
 		}
-		previewOnlyModeItem.setToolTipText(Messages.Display_SideBySide_Tooltip);
+		previewOnlyModeItem.setToolTipText(Messages.Display_PreviewOnly_Tooltip);
 
-		// Divider Line spanning both columns beneath the toolbar
+		// Divider Line spanning both columns beneath the header
 		final Label separator = new Label(headerComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).span(2, 1).applyTo(separator);
 	}
 
 	private void createSashFormLayout(final Composite parent) {
 		sashForm = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
-		sashForm.setSashWidth(5); // vertical visible divider
+		sashForm.setSashWidth(3); // vertical visible divider
 		sashForm.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(sashForm);
 
@@ -243,6 +259,13 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		previewParent.setLayout(new FillLayout());
 		liveBrowser = new Browser(previewParent, SWT.NONE);
 		liveBrowser.addLocationListener(new ModelLocationListener());
+		liveBrowser.addLocationListener(createPreviewLocationListener());
+		liveBrowser.addProgressListener(ProgressListener.completedAdapter(e -> {
+			if (settingText) { // only our own setText() marks the skeleton as ready
+				settingText = false;
+				skeletonLoaded = true;
+			}
+		}));
 
 		sashForm.setWeights(50, 50);
 	}
@@ -256,25 +279,30 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 			public void controlResized(final ControlEvent e) {
 				if (!editorParent.isDisposed() && !headerComposite.isDisposed()) {
 					final int width = editorParent.getSize().x;
+					final int newHint;
+					final boolean newVisible;
+
 					if (sashForm.getMaximizedControl() == editorParent) {
 						// Edit Only: let formatting toolbar take standard layout space
-						formattingGridData.widthHint = SWT.DEFAULT;
-						formattingToolbarComposite.setVisible(true);
-					} else
-					// Side-by-Side or Preview Only: Limit width strictly to editor pane width
-					if (width <= 0) {
+						newHint = SWT.DEFAULT;
+						newVisible = true;
+					} else if (width <= 0) {
 						// Preview Only: Collapse the width hint to 0, but do not exclude to pin the 3
 						// buttons (source, both, preview) to the right.
-						formattingGridData.widthHint = 0;
-						formattingToolbarComposite.setVisible(false);
+						newHint = 0;
+						newVisible = false;
 					} else {
 						// Side-by-Side: Align formatting toolbar perfectly with the editor's width
-						formattingGridData.widthHint = width;
-						formattingToolbarComposite.setVisible(true);
+						newHint = width;
+						newVisible = true;
 					}
-					// Always keep Column 1 in the layout calculations to prevent column-shifting
-					formattingGridData.exclude = false;
-					headerComposite.layout(true, true);
+					if (formattingGridData.widthHint != newHint
+							|| formattingToolbarComposite.getVisible() != newVisible) {
+						formattingGridData.widthHint = newHint;
+						formattingToolbarComposite.setVisible(newVisible);
+						formattingGridData.exclude = false;
+						headerComposite.layout(true);
+					}
 				}
 			}
 		});
@@ -292,8 +320,10 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 					sashForm.setMaximizedControl(editorParent);
 				} else if (previewOnlyModeItem.getSelection()) {
 					sashForm.setMaximizedControl(previewParent);
+					triggerPreviewRefresh();
 				} else if (splitModeItem.getSelection()) {
 					sashForm.setMaximizedControl(null); // Restore Side-by-Side Split
+					triggerPreviewRefresh();
 				}
 			}
 		};
@@ -316,7 +346,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		final IDocument document = getDocumentProvider().getDocument(getEditorInput());
 		if (document != null) {
 			currentDocument = document; // Retained for unregistering in dispose()
-			refreshLivePreview(liveBrowser, document.get());
+			schedulePreviewRefresh(document.get()); // initial render
 
 			documentListener = new IDocumentListener() {
 				@Override
@@ -326,14 +356,25 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 				@Override
 				public void documentChanged(final DocumentEvent event) {
-					// Safe thread transition back to the main UI thread to access SWT elements
-					// safely
-					Display.getDefault().asyncExec(() -> {
-						if (liveBrowser != null && !liveBrowser.isDisposed() && editOnlyModeItem != null
-								&& !editOnlyModeItem.isDisposed() && !editOnlyModeItem.getSelection()) {
-							refreshLivePreview(liveBrowser, event.getDocument().get());
+					if (liveBrowser == null || liveBrowser.isDisposed()) {
+						return;
+					}
+					// debounce — coalesce bursts of keystrokes into one refresh
+					final Display display = Display.getCurrent();
+					if (display == null) {
+						return;
+					}
+					if (pendingRefresh != null) {
+						display.timerExec(-1, pendingRefresh); // cancel previous schedule
+					}
+					pendingRefresh = () -> {
+						pendingRefresh = null;
+						if (liveBrowser != null && !liveBrowser.isDisposed()
+								&& sashForm.getMaximizedControl() != editorParent) {
+							schedulePreviewRefresh(event.getDocument().get());
 						}
-					});
+					};
+					display.timerExec(PREVIEW_DELAY_MS, pendingRefresh);
 				}
 			};
 			document.addDocumentListener(documentListener);
@@ -358,47 +399,169 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		}
 	}
 
-	/**
-	 * Parses current editor markdown text to HTML dynamically and loads it into the
-	 * Browser. Injects a base URL tag pointing to the assets folder to render local
-	 * images
-	 */
-	private void refreshLivePreview(final Browser browser, final String text) {
-		if (browser == null || browser.isDisposed()) {
-			return;
+	@Override
+	public void setFocus() {
+		if (sashForm != null && !sashForm.isDisposed() && sashForm.getMaximizedControl() == previewParent
+				&& liveBrowser != null && !liveBrowser.isDisposed()) {
+			liveBrowser.setFocus();
+		} else {
+			super.setFocus();
 		}
+		// The type may have been modified on another editor page (e.g. its comment,
+		// rendered via fbt:THIS[comment]). Ordinary model edits do not trigger
+		// reloadType(), so re-render whenever this page becomes active.
+		refreshPreviewOnActivation();
+	}
+
+	private void refreshPreviewOnActivation() {
+		if (liveBrowser == null || liveBrowser.isDisposed() || sashForm == null
+				|| sashForm.getMaximizedControl() == editorParent) {
+			return; // no visible preview to refresh
+		}
+		synchronized (this) {
+			// Drop the cached language so it is re-configured with the current
+			// state of the type (fbt:THIS[...] attributes may have changed).
+			previewLanguage = null;
+		}
+		triggerPreviewRefresh();
+	}
+
+	/**
+	 * Re-renders from the current document, used on mode switches.
+	 */
+	private void triggerPreviewRefresh() {
+		final IDocument document = getDocumentProvider().getDocument(getEditorInput());
+		if (document != null) {
+			schedulePreviewRefresh(document.get());
+		}
+	}
+
+	/**
+	 * Parses in a background Job; only the browser update touches SWT.
+	 */
+	private void schedulePreviewRefresh(final String text) {
+		final long gen = renderGeneration.incrementAndGet();
+
+		if (previewJob != null) {
+			previewJob.cancel();
+		}
+
+		previewJob = Job.create("Render AsciiDoc preview", monitor -> { //$NON-NLS-1$
+			final AsciiDocLanguage language;
+			final String baseTag;
+			// Acquire the lock briefly to capture a snapshot of the required
+			// configuration
+			synchronized (this) {
+				if (monitor.isCanceled() || gen != renderGeneration.get()) {
+					return Status.CANCEL_STATUS;
+				}
+				language = getPreviewLanguage(); // Thread-safe retrieval under lock
+				baseTag = getBaseTag(); // Thread-safe retrieval under lock
+			}
+
+			// Perform the expensive markup parsing outside the synchronized block
+			final String html = renderHtml(text, language, baseTag);
+
+			if (monitor.isCanceled() || gen != renderGeneration.get()) {
+				return Status.CANCEL_STATUS;
+			}
+			Display.getDefault().asyncExec(() -> {
+				if (gen == renderGeneration.get()) {
+					updateBrowser(html);
+				}
+			});
+			return Status.OK_STATUS;
+		});
+		previewJob.setSystem(true);
+		previewJob.schedule();
+	}
+
+	/**
+	 * Parse-only, thread-safe, uses cached language and base tag.
+	 */
+	private synchronized String renderHtml(final String text, final AsciiDocLanguage language, final String baseTag) {
 		try {
 			final StringWriter writer = new StringWriter();
-			final AsciiDocLanguage language = new AsciiDocLanguage();
-			language.configure(new FordiacAsciiDocLanguageConfiguration(getType()));
-
 			final MarkupParser parser = new MarkupParser(language);
 			parser.setBuilder(new HtmlLanguage().createDocumentBuilder(writer));
 			parser.parse(text);
 
 			String htmlContent = writer.toString();
-
-			// Dynamically inject the base href of the hidden .assets folder
-			if (getEditorInput() instanceof final IFileEditorInput fileEI) {
-				final IFile docFile = fileEI.getFile();
-				if (docFile.getLocation() != null) {
-					// Determine the absolute local URI of the parent (.assets) directory
-					final String baseUri = docFile.getParent().getLocation().toFile().toURI().toString();
-					final String baseTag = "<base href=\"" + baseUri + "\"/>"; //$NON-NLS-1$ //$NON-NLS-2$
-
-					// Inject the base tag into the head if it exists, otherwise prepend it
-					final String head = "<head>"; //$NON-NLS-1$
-					if (htmlContent.contains(head)) {
-						htmlContent = htmlContent.replace(head, head + baseTag);
-					} else {
-						htmlContent = baseTag + htmlContent;
-					}
-				}
+			if (baseTag != null) {
+				final String head = "<head>"; //$NON-NLS-1$
+				htmlContent = htmlContent.contains(head) ? htmlContent.replace(head, head + baseTag)
+						: baseTag + htmlContent;
 			}
-			browser.setText(htmlContent);
+			return htmlContent;
 		} catch (final Exception e) {
-			browser.setText("<html><body><p>Error rendering preview: " + e.getMessage() + "</p></body></html>"); //$NON-NLS-1$ //$NON-NLS-2$
+			ILog.get().error("Error rendering AsciiDoc preview", e); //$NON-NLS-1$
+			return "<html><head>" + (baseTag != null ? baseTag : "") + "</head><body><p>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ "Error rendering preview: " + e.getMessage() + "</p></body></html>"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
+	}
+
+	/**
+	 * Cached language — construction compiles regex sets, do it once.
+	 */
+	private synchronized AsciiDocLanguage getPreviewLanguage() {
+		if (previewLanguage == null) {
+			previewLanguage = new AsciiDocLanguage();
+			previewLanguage.configure(new FordiacAsciiDocLanguageConfiguration(getType()));
+		}
+		return previewLanguage;
+	}
+
+	private synchronized String getBaseUri() {
+		if (cachedBaseUri == null && getEditorInput() instanceof final IFileEditorInput fileEI) {
+			final IFile docFile = fileEI.getFile();
+			if (docFile.getLocation() != null) {
+				cachedBaseUri = docFile.getParent().getLocation().toFile().toURI().toString();
+			}
+		}
+		return cachedBaseUri;
+	}
+
+	/**
+	 * Formats the base href tag from the cached assets directory URI.
+	 */
+	private synchronized String getBaseTag() {
+		final String baseUri = getBaseUri();
+		return (baseUri != null) ? "<base href=\"" + baseUri + "\"/>" : null; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	/**
+	 * Skip identical output; patch the DOM instead of full reloads after the
+	 * initial skeleton page has been loaded, preserving scroll position.
+	 */
+	private void updateBrowser(final String html) {
+		if (liveBrowser == null || liveBrowser.isDisposed() || html.equals(lastHtml)) {
+			return;
+		}
+		lastHtml = html;
+
+		// Base64 transport: the payload cannot contain any JS-breaking characters, so
+		// no manual escaping is required at all.
+		final String b64 = java.util.Base64.getEncoder()
+				.encodeToString(extractBody(html).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+		final String script = "var y=window.scrollY;" //$NON-NLS-1$
+				+ "document.body.innerHTML=new TextDecoder().decode(" //$NON-NLS-1$
+				+ "Uint8Array.from(atob('" + b64 + "'),function(c){return c.charCodeAt(0)}));" //$NON-NLS-1$ //$NON-NLS-2$
+				+ "window.scrollTo(0,y);"; //$NON-NLS-1$
+
+		// Fall back to a full reload if the skeleton isn't ready or the JS fails
+		if (!skeletonLoaded || !liveBrowser.execute(script)) {
+			skeletonLoaded = false; // flipped back to true by the ProgressListener for OUR load
+			settingText = true;
+			liveBrowser.setText(html);
+		}
+	}
+
+	/** Returns only the content between <body> and </body>. */
+	private static String extractBody(final String html) {
+		final int start = html.indexOf("<body"); //$NON-NLS-1$
+		final int open = (start >= 0) ? html.indexOf('>', start) : -1;
+		final int end = html.lastIndexOf("</body>"); //$NON-NLS-1$
+		return (open >= 0 && end > open) ? html.substring(open + 1, end) : html;
 	}
 
 	// Helper method to traverse the widget tree and find the CTabFolder control
@@ -419,6 +582,15 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	@Override
 	public void dispose() {
+		if (pendingRefresh != null && liveBrowser != null && !liveBrowser.isDisposed()) {
+			liveBrowser.getDisplay().timerExec(-1, pendingRefresh);
+			pendingRefresh = null;
+		}
+		if (previewJob != null) {
+			previewJob.cancel();
+			previewJob = null;
+		}
+
 		// Unregister the document listener to prevent memory leaks
 		if (currentDocument != null && documentListener != null) {
 			currentDocument.removeDocumentListener(documentListener);
@@ -636,13 +808,11 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	@Override
 	public void doSave(final IProgressMonitor progressMonitor) {
-		// TODO Auto-generated method stub
 		super.doSave(progressMonitor);
 	}
 
 	@Override
 	protected void performSave(final boolean overwrite, final IProgressMonitor progressMonitor) {
-		// TODO Auto-generated method stub
 		super.performSave(overwrite, progressMonitor);
 	}
 
@@ -657,8 +827,9 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	 * Helper method to load images cleanly from the plugin directory.
 	 */
 	private static Image loadImage(final String path) {
-		return AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.fordiac.ide.fbtypeeditor.asciidoc", path) //$NON-NLS-1$
-				.createImage();
+		final var descriptor = AbstractUIPlugin
+				.imageDescriptorFromPlugin("org.eclipse.fordiac.ide.fbtypeeditor.asciidoc", path); //$NON-NLS-1$
+		return (descriptor != null) ? descriptor.createImage() : null;
 	}
 
 	@Override
@@ -681,7 +852,12 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 
 	@Override
 	public void reloadType() {
-		// TODO Auto-generated method stub
+		// drop cached language so it is re-configured with the fresh type
+		synchronized (this) {
+			previewLanguage = null;
+			lastHtml = null; // force a repaint even if HTML happens to match
+		}
+		triggerPreviewRefresh();
 
 	}
 
@@ -689,6 +865,78 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	public Object getSelectableObject() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Returns the fragment if the location is a fragment-only link that resolved
+	 * against the injected base URI, otherwise null.
+	 */
+	private String getLocalFragment(final String location) {
+		final int hashIdx = location.indexOf('#');
+		if (hashIdx < 0) {
+			return null;
+		}
+		final String target = location.substring(0, hashIdx);
+		final String base = getBaseUri();
+		if (target.isEmpty() || "about:blank".equals(target) //$NON-NLS-1$
+				|| (base != null && (target.equals(base) || (target + '/').equals(base)))) {
+			return location.substring(hashIdx + 1);
+		}
+		return null;
+	}
+
+	private void scrollToFragment(final String fragment) {
+		if (liveBrowser == null || liveBrowser.isDisposed()) {
+			return;
+		}
+		final String id = fragment.replace("\\", "\\\\").replace("'", "\\'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		liveBrowser.execute("var id='" + id + "';try{id=decodeURIComponent(id);}catch(e){}" //$NON-NLS-1$ //$NON-NLS-2$
+				+ "var t=document.getElementById(id)||document.getElementsByName(id)[0];" //$NON-NLS-1$
+				+ "if(t){t.scrollIntoView();}"); //$NON-NLS-1$
+	}
+
+	private LocationListener createPreviewLocationListener() {
+		return LocationListener.changingAdapter(event -> {
+			if (!event.top) {
+				return; // only top-level navigation replaces the preview document
+			}
+			final String location = event.location;
+			if (location == null || "about:blank".equals(location) //$NON-NLS-1$
+					|| location.startsWith("fbt-entry://")) { //$NON-NLS-1$
+				return; // own setText() load, or handled by ModelLocationListener
+			}
+			// Keep fragment navigation inside the preview document
+			final String fragment = getLocalFragment(location);
+			if (fragment != null) {
+				event.doit = false;
+				scrollToFragment(fragment);
+				return;
+			}
+			// Open ordinary hyperlinks outside the preview
+			if (isExternalLink(location)) {
+				event.doit = false;
+				Program.launch(location);
+				return;
+			}
+			// Anything else replaces the preview document — invalidate
+			// the cached state so the next refresh performs a full reload instead
+			// of patching a foreign page's body.
+			invalidatePreviewDocumentState();
+		});
+	}
+
+	private static boolean isExternalLink(final String location) {
+		final String lower = location.toLowerCase(java.util.Locale.ROOT);
+		return lower.startsWith("http://") || lower.startsWith("https://") //$NON-NLS-1$ //$NON-NLS-2$
+				|| lower.startsWith("mailto:"); //$NON-NLS-1$
+	}
+
+	private void invalidatePreviewDocumentState() {
+		synchronized (this) {
+			lastHtml = null;
+		}
+		skeletonLoaded = false;
+		settingText = false;
 	}
 
 }
