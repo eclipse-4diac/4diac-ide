@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.library.ui.sources;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
@@ -47,7 +49,6 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 
 	private final GitLabEndpoint endpoint;
 	private GitLabDownloader downloadManager;
-	private String details = "Configured via Preferences → GitLab Endpoints.\n" + "Endpoint: "; //$NON-NLS-1$ //$NON-NLS-2$
 
 	GitLabEndpointSource(final GitLabEndpoint endpoint) {
 		this.endpoint = Objects.requireNonNull(endpoint);
@@ -67,18 +68,18 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 	public void createConfigUI(final Composite parent) {
 		final Label l = new Label(parent, SWT.WRAP);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		l.setText(details + endpoint.name());
+		l.setText("Configured via Preferences → GitLab Endpoints.\nEndpoint: " + endpoint.name()); //$NON-NLS-1$
 	}
 
 	@Override
-	public Object loadLibrarySource(final IProgressMonitor monitor) {
+	public Object loadLibrarySource(final IProgressMonitor monitor) throws IOException {
 		final AdaptableList root = new AdaptableList();
 		// a new downloader per load, as concurrent loads must not share the fetched packages
 		downloadManager = new GitLabDownloader(endpoint);
 		final GitLabDownloader mgr = downloadManager;
 		final DownloadResult<Void> fetchProjectsAndPackages = mgr.fetchProjectsAndPackages();
-		if (fetchProjectsAndPackages.status() == Status.OK) {
-			details = "Connection Sucessfull"; //$NON-NLS-1$
+		if (fetchProjectsAndPackages.status() != Status.OK) {
+			throw new IOException(fetchProjectsAndPackages.message());
 		}
 
 		final Map<Project, List<Package>> projectsAndPackages = mgr.getProjectsAndPackages();
@@ -128,10 +129,12 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 			if (value instanceof final LeafNode leafNode) {
 				final Path path = mgr.packageDownloader(leafNode.getProject(), leafNode.getPackage(),
 						GitLabDownloader.FileFilter.ZIP);
-				if (path != null) {
-					LibraryManager.INSTANCE.extractLibrary(path, targetProject, true, true);
-					deleteDirectoryRecursive(path.getParent());
+				if (path == null) {
+					throw new IOException(MessageFormat.format(Messages.Archive_Not_Found, leafNode.getPackage().name(),
+							leafNode.getPackage().version(), leafNode.getProject().id().toString()));
 				}
+				LibraryManager.INSTANCE.extractLibrary(path, targetProject, true, true);
+				deleteDirectoryRecursive(path.getParent());
 				done++;
 			}
 		}
