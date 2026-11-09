@@ -12,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Michael Oberlehner
  *     - report manifests with an invalid dependency range
+ *     - messages of the common library package downloader
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -82,6 +83,32 @@ public class Messages extends NLS {
 	public static String LibraryManager_UnresolvedDependency;
 
 	public static String LibraryManager_UpdateLibraryPackage;
+
+	public static String LibraryPackageDownloader_EmptyFile;
+	public static String LibraryPackageDownloader_Forbidden;
+	public static String LibraryPackageDownloader_InvalidBaseUri;
+	public static String LibraryPackageDownloader_InvalidCredentials;
+	public static String LibraryPackageDownloader_InvalidEntry;
+	public static String LibraryPackageDownloader_InvalidFileName;
+	public static String LibraryPackageDownloader_InvalidLocation;
+	public static String LibraryPackageDownloader_InvalidRedirect;
+	public static String LibraryPackageDownloader_InvalidResponse;
+	public static String LibraryPackageDownloader_LibraryNotFound;
+	public static String LibraryPackageDownloader_ManifestNotFound;
+	public static String LibraryPackageDownloader_NotFound;
+	public static String LibraryPackageDownloader_ProxyAuthenticationRequired;
+	public static String LibraryPackageDownloader_ReadTimeout;
+	public static String LibraryPackageDownloader_RequestError;
+	public static String LibraryPackageDownloader_RequestFailed;
+	public static String LibraryPackageDownloader_ResponseTooLarge;
+	public static String LibraryPackageDownloader_ServerError;
+	public static String LibraryPackageDownloader_TooManyRedirects;
+	public static String LibraryPackageDownloader_TooManyRequests;
+	public static String LibraryPackageDownloader_TooManyRequestsRetryAfter;
+	public static String LibraryPackageDownloader_TransportError;
+	public static String LibraryPackageDownloader_Unauthorized;
+	public static String LibraryPackageDownloader_UnencryptedRedirect;
+	public static String LibraryPackageDownloader_VersionNotFound;
 
 	public static String LibraryPackageDownloaderProvider_DiscoveryStatus;
 	public static String LibraryPackageDownloaderProvider_SourceError;
