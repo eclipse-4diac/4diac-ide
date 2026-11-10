@@ -23,6 +23,7 @@ public final class Messages extends NLS {
 	public static String EsiFileImporter_NoProjectSelected;
 	public static String EsiFileImporter_ImportFailed;
 	public static String EsiFileImporter_CreateDirectoryFailed;
+	public static String EsiFileImporter_IoLibraryDependencyFailed;
 
 	public static String EsiFileImporterWizardPage_Description;
 	public static String EsiFileImporterWizardPage_Title;
