@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EtherCAT Tests
+Bundle-SymbolicName: org.eclipse.fordiac.ide.test.ethercat
+Bundle-Version: 3.2.0.qualifier
+Fragment-Host: org.eclipse.fordiac.ide.ethercat
+Automatic-Module-Name: org.eclipse.fordiac.ide.test.ethercat
+Bundle-RequiredExecutionEnvironment: JavaSE-25
+Bundle-Vendor: Eclipse 4diac
+Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.api.function;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.params;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.params.provider;version="[6.0.0,7.0.0)",
+ org.opentest4j
