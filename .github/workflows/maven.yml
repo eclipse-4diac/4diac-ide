@@ -23,7 +23,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        # Run on all major platforms for pushes to and PRs targeting release, otherwise Ubuntu only
+        os: ${{ fromJSON(((github.event_name == 'push' && github.ref == 'refs/heads/release') ||
+                (github.event_name == 'pull_request' && github.base_ref == 'release')) &&
+                '["ubuntu-latest", "windows-latest", "macos-latest"]' || '["ubuntu-latest"]') }}
         java: [25]
     runs-on: ${{ matrix.os }}
     name: OS ${{ matrix.os }} Java ${{ matrix.java }} compile
@@ -38,6 +41,7 @@ jobs:
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Initialize CodeQL
+      if: runner.os == 'Linux'
       uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
       with:
         languages: java-kotlin
@@ -55,13 +59,19 @@ jobs:
       with:
         maven-version: 3.9.11
 
-    - name: Build with Maven
+    - name: Build with Maven on Ubuntu
+      if: runner.os == 'Linux'
       uses: coactions/setup-xvfb@b6b4fcfb9f5a895edadc3bc76318fae0ac17c8b3 # v1.0.1
       with:
        run: >-
         mvn -V -B -fae -ntp clean verify
 
+    - name: Build with Maven on Windows and macOS
+      if: runner.os != 'Linux'
+      run: mvn -V -B -fae -ntp clean verify
+
     - name: Perform CodeQL Analysis
+      if: runner.os == 'Linux'
       uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
       with:
         category: "/language:java-kotlin"
