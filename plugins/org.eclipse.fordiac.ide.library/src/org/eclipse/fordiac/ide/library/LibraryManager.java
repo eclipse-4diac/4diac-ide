@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH and others, Osoft e.U.
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH and others, Osoft e.U., MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *   Michael Oberlehner - use configured library package downloader providers
  *   Kaavya Manimathavan - remove stale library cache entries on polling file watchers
  *   Michael Oberlehner - look up the library sources once per dependency resolution
+ *   Tim Grocki - import the newest version of a standard library
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -476,6 +477,30 @@ public enum LibraryManager {
 		}
 
 		return imported;
+	}
+
+	/**
+	 * Import the newest available version of a standard library into
+	 * {@link IProject} and add its dependency to the {@link Manifest}
+	 *
+	 * <p>
+	 * If the project already depends on the library, its dependency is left
+	 * unchanged and the library builder resolves it
+	 *
+	 * @param project      target project
+	 * @param symbolicName symbolic name of the standard library
+	 *
+	 * @return {@code true}, if the project already depends on the library or the
+	 *         library was successfully imported
+	 */
+	public boolean importStandardLibrary(final IProject project, final String symbolicName) {
+		final Manifest projManifest = ManifestHelper.getContainerManifest(project);
+		if (projManifest != null && projManifest.getDependencies() != null && projManifest.getDependencies()
+				.getRequired().stream().anyMatch(required -> symbolicName.equals(required.getSymbolicName()))) {
+			return true;
+		}
+		final LibraryRecord library = getLibraryRecord(stdlibraries, symbolicName, ALL_RANGE);
+		return library != null && importLibrary(project, library.uri(), true, false);
 	}
 
 	/**
