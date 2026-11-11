@@ -116,16 +116,6 @@ public class ArraySizeImpl extends EObjectImpl implements ArraySize {
 	@Override
 	public VarDeclaration getVarDeclaration() {
 		if (eContainerFeatureID() != LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION) return null;
-		return (VarDeclaration)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VarDeclaration basicGetVarDeclaration() {
-		if (eContainerFeatureID() != LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION) return null;
 		return (VarDeclaration)eInternalContainer();
 	}
 
@@ -219,8 +209,7 @@ public class ArraySizeImpl extends EObjectImpl implements ArraySize {
 			case LibraryElementPackage.ARRAY_SIZE__VALUE:
 				return getValue();
 			case LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION:
-				if (resolve) return getVarDeclaration();
-				return basicGetVarDeclaration();
+				return getVarDeclaration();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -277,7 +266,7 @@ public class ArraySizeImpl extends EObjectImpl implements ArraySize {
 			case LibraryElementPackage.ARRAY_SIZE__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 			case LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION:
-				return basicGetVarDeclaration() != null;
+				return getVarDeclaration() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

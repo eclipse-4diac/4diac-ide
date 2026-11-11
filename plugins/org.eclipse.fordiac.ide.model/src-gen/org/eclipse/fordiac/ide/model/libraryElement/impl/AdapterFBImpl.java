@@ -19,8 +19,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -78,23 +76,6 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 */
 	@Override
 	public AdapterDeclaration getAdapterDecl() {
-		if (adapterDecl != null && adapterDecl.eIsProxy()) {
-			InternalEObject oldAdapterDecl = (InternalEObject)adapterDecl;
-			adapterDecl = (AdapterDeclaration)eResolveProxy(oldAdapterDecl);
-			if (adapterDecl != oldAdapterDecl) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, oldAdapterDecl, adapterDecl));
-			}
-		}
-		return adapterDecl;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdapterDeclaration basicGetAdapterDecl() {
 		return adapterDecl;
 	}
 
@@ -160,8 +141,7 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
-				if (resolve) return getAdapterDecl();
-				return basicGetAdapterDecl();
+				return getAdapterDecl();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

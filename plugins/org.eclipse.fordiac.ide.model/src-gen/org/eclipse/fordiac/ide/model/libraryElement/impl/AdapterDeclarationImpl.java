@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -267,7 +267,7 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.ADAPTER_DECLARATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.ADAPTER_DECLARATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -303,7 +303,7 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.ADAPTER_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseEList<Connection>(Connection.class, this, LibraryElementPackage.ADAPTER_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
@@ -316,7 +316,7 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.ADAPTER_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseEList<Connection>(Connection.class, this, LibraryElementPackage.ADAPTER_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
@@ -327,23 +327,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	public DataType getType_() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (DataType)eResolveProxy(oldType);
-			if (type != oldType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__TYPE, oldType, type));
-			}
-		}
-		return type;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetType() {
 		return type;
 	}
 
@@ -367,23 +350,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 */
 	@Override
 	public AdapterFB getAdapterFB() {
-		if (adapterFB != null && adapterFB.eIsProxy()) {
-			InternalEObject oldAdapterFB = (InternalEObject)adapterFB;
-			adapterFB = (AdapterFB)eResolveProxy(oldAdapterFB);
-			if (adapterFB != oldAdapterFB) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, oldAdapterFB, adapterFB));
-			}
-		}
-		return adapterFB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdapterFB basicGetAdapterFB() {
 		return adapterFB;
 	}
 
@@ -407,29 +373,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 */
 	@Override
 	public AdapterFB getInterfaceOnlyAdapterFB() {
-		if (interfaceOnlyAdapterFB != null && interfaceOnlyAdapterFB.eIsProxy()) {
-			InternalEObject oldInterfaceOnlyAdapterFB = (InternalEObject)interfaceOnlyAdapterFB;
-			interfaceOnlyAdapterFB = (AdapterFB)eResolveProxy(oldInterfaceOnlyAdapterFB);
-			if (interfaceOnlyAdapterFB != oldInterfaceOnlyAdapterFB) {
-				InternalEObject newInterfaceOnlyAdapterFB = (InternalEObject)interfaceOnlyAdapterFB;
-				NotificationChain msgs = oldInterfaceOnlyAdapterFB.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, null, null);
-				if (newInterfaceOnlyAdapterFB.eInternalContainer() == null) {
-					msgs = newInterfaceOnlyAdapterFB.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB, oldInterfaceOnlyAdapterFB, interfaceOnlyAdapterFB));
-			}
-		}
-		return interfaceOnlyAdapterFB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdapterFB basicGetInterfaceOnlyAdapterFB() {
 		return interfaceOnlyAdapterFB;
 	}
 
@@ -782,14 +725,11 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__OUTPUT_CONNECTIONS:
 				return getOutputConnections();
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
+				return getType();
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
-				if (resolve) return getAdapterFB();
-				return basicGetAdapterFB();
+				return getAdapterFB();
 			case LibraryElementPackage.ADAPTER_DECLARATION__INTERFACE_ONLY_ADAPTER_FB:
-				if (resolve) return getInterfaceOnlyAdapterFB();
-				return basicGetInterfaceOnlyAdapterFB();
+				return getInterfaceOnlyAdapterFB();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

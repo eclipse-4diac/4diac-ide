@@ -80,7 +80,7 @@ public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
 	@Override
 	public EList<SimpleECState> getSimpleECStates() {
 		if (simpleECStates == null) {
-			simpleECStates = new EObjectContainmentWithInverseEList.Resolving<SimpleECState>(SimpleECState.class, this, LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES, LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE);
+			simpleECStates = new EObjectContainmentWithInverseEList<SimpleECState>(SimpleECState.class, this, LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES, LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE);
 		}
 		return simpleECStates;
 	}

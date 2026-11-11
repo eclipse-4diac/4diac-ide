@@ -42,7 +42,7 @@ public interface PositionableElement extends EObject {
 	 * @return the value of the '<em>Position</em>' containment reference.
 	 * @see #setPosition(Position)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPositionableElement_Position()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='Position' namespace='##targetNamespace'"
 	 * @generated
 	 */

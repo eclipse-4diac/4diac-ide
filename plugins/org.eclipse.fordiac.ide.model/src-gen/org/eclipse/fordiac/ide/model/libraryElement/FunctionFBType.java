@@ -41,7 +41,7 @@ public interface FunctionFBType extends FBType {
 	 * @return the value of the '<em>Body</em>' containment reference.
 	 * @see #setBody(FunctionBody)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFunctionFBType_Body()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	FunctionBody getBody();

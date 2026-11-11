@@ -163,7 +163,7 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	@Override
 	public EList<ITypedElement> getInputParameters() {
 		if (inputParameters == null) {
-			inputParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_METHOD__INPUT_PARAMETERS);
+			inputParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_METHOD__INPUT_PARAMETERS);
 		}
 		return inputParameters;
 	}
@@ -176,7 +176,7 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	@Override
 	public EList<ITypedElement> getOutputParameters() {
 		if (outputParameters == null) {
-			outputParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS);
+			outputParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS);
 		}
 		return outputParameters;
 	}
@@ -189,7 +189,7 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	@Override
 	public EList<ITypedElement> getInOutParameters() {
 		if (inOutParameters == null) {
-			inOutParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS);
+			inOutParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS);
 		}
 		return inOutParameters;
 	}
@@ -201,23 +201,6 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	 */
 	@Override
 	public DataType getReturnType() {
-		if (returnType != null && returnType.eIsProxy()) {
-			InternalEObject oldReturnType = (InternalEObject)returnType;
-			returnType = (DataType)eResolveProxy(oldReturnType);
-			if (returnType != oldReturnType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.TEXT_METHOD__RETURN_TYPE, oldReturnType, returnType));
-			}
-		}
-		return returnType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetReturnType() {
 		return returnType;
 	}
 
@@ -316,8 +299,7 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 			case LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS:
 				return getInOutParameters();
 			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
-				if (resolve) return getReturnType();
-				return basicGetReturnType();
+				return getReturnType();
 			case LibraryElementPackage.TEXT_METHOD__VARARGS:
 				return isVarargs();
 			default:

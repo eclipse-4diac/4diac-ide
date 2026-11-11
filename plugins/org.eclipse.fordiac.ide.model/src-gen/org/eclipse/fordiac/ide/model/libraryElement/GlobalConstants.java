@@ -55,7 +55,7 @@ public interface GlobalConstants extends LibraryElement {
 	 * @return the value of the '<em>Source</em>' containment reference.
 	 * @see #setSource(OriginalSource)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getGlobalConstants_Source()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel"
 	 * @generated
 	 */

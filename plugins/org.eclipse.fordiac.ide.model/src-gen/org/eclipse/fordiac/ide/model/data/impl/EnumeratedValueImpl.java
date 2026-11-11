@@ -140,16 +140,6 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	@Override
 	public EnumeratedType getType() {
 		if (eContainerFeatureID() != DataPackage.ENUMERATED_VALUE__TYPE) return null;
-		return (EnumeratedType)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EnumeratedType basicGetType() {
-		if (eContainerFeatureID() != DataPackage.ENUMERATED_VALUE__TYPE) return null;
 		return (EnumeratedType)eInternalContainer();
 	}
 
@@ -318,8 +308,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 			case DataPackage.ENUMERATED_VALUE__COMMENT:
 				return getComment();
 			case DataPackage.ENUMERATED_VALUE__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
+				return getType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -384,7 +373,7 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 			case DataPackage.ENUMERATED_VALUE__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case DataPackage.ENUMERATED_VALUE__TYPE:
-				return basicGetType() != null;
+				return getType() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

@@ -42,7 +42,7 @@ public interface ColorizableElement extends EObject {
 	 * @return the value of the '<em>Color</em>' containment reference.
 	 * @see #setColor(Color)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getColorizableElement_Color()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	Color getColor();

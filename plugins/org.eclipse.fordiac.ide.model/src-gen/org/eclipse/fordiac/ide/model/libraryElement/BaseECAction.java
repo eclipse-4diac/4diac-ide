@@ -43,7 +43,7 @@ public interface BaseECAction extends EObject {
 	 * @return the value of the '<em>Output</em>' reference.
 	 * @see #setOutput(Event)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBaseECAction_Output()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	Event getOutput();

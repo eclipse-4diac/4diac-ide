@@ -44,7 +44,7 @@ public interface With extends EObject {
 	 * @see #setVariables(VarDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getWith_Variables()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getWiths
-	 * @model opposite="withs" required="true"
+	 * @model opposite="withs" resolveProxies="false" required="true"
 	 * @generated
 	 */
 	VarDeclaration getVariables();

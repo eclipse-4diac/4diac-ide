@@ -46,7 +46,7 @@ public interface TypedSubApp extends SubApp {
 	 * @return the value of the '<em>Sub App Network</em>' containment reference.
 	 * @see #setSubAppNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp_SubAppNetwork()
-	 * @model containment="true" resolveProxies="true" transient="true" derived="true"
+	 * @model containment="true" transient="true" derived="true"
 	 * @generated
 	 */
 	FBNetwork getSubAppNetwork();
@@ -68,7 +68,7 @@ public interface TypedSubApp extends SubApp {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Var Config Params</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp_VarConfigParams()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<VarConfigInstance> getVarConfigParams();
@@ -80,7 +80,7 @@ public interface TypedSubApp extends SubApp {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Override Attributes</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTypedSubApp_OverrideAttributes()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<OverrideAttribute> getOverrideAttributes();

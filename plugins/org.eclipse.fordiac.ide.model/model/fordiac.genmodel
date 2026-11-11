@@ -418,7 +418,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//DeviceType/resource"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//DeviceType/fBNetwork"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//DeviceType/profile"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//DeviceType/attributeDeclarations"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ECAction">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ECAction/eCState"/>
@@ -820,7 +819,6 @@
     <genClasses ecoreClass="lib.ecore#//ResourceType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ResourceType/varDeclaration"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ResourceType/fBNetwork"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ResourceType/supportedFBTypes"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ResourceTypeFB">
       <genOperations ecoreOperation="lib.ecore#//ResourceTypeFB/isResourceTypeFB"

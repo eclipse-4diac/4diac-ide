@@ -191,22 +191,6 @@ public class SimpleECStateImpl extends EObjectImpl implements SimpleECState {
 	 */
 	@Override
 	public Event getInputEvent() {
-		if (inputEvent != null && inputEvent.eIsProxy()) {
-			InternalEObject oldInputEvent = (InternalEObject)inputEvent;
-			inputEvent = (Event)eResolveProxy(oldInputEvent);
-			if (inputEvent != oldInputEvent) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SIMPLE_EC_STATE__INPUT_EVENT, oldInputEvent, inputEvent));
-			}
-		}
-		return inputEvent;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Event basicGetInputEvent() {
 		return inputEvent;
 	}
 
@@ -228,15 +212,6 @@ public class SimpleECStateImpl extends EObjectImpl implements SimpleECState {
 	 */
 	@Override
 	public SimpleFBType getSimpleFBType() {
-		if (eContainerFeatureID() != LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE) return null;
-		return (SimpleFBType)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SimpleFBType basicGetSimpleFBType() {
 		if (eContainerFeatureID() != LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE) return null;
 		return (SimpleFBType)eInternalContainer();
 	}
@@ -425,11 +400,9 @@ public class SimpleECStateImpl extends EObjectImpl implements SimpleECState {
 			case LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_EC_ACTIONS:
 				return getSimpleECActions();
 			case LibraryElementPackage.SIMPLE_EC_STATE__INPUT_EVENT:
-				if (resolve) return getInputEvent();
-				return basicGetInputEvent();
+				return getInputEvent();
 			case LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE:
-				if (resolve) return getSimpleFBType();
-				return basicGetSimpleFBType();
+				return getSimpleFBType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -509,7 +482,7 @@ public class SimpleECStateImpl extends EObjectImpl implements SimpleECState {
 			case LibraryElementPackage.SIMPLE_EC_STATE__INPUT_EVENT:
 				return inputEvent != null;
 			case LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE:
-				return basicGetSimpleFBType() != null;
+				return getSimpleFBType() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

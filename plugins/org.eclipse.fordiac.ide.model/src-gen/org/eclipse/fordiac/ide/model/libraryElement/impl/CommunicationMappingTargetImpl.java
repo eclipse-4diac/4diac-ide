@@ -79,7 +79,7 @@ public class CommunicationMappingTargetImpl extends MappingTargetImpl implements
 	@Override
 	public EList<CommunicationChannel> getMappedElements() {
 		if (mappedElements == null) {
-			mappedElements = new EObjectContainmentEList.Resolving<CommunicationChannel>(CommunicationChannel.class, this, LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS);
+			mappedElements = new EObjectContainmentEList<CommunicationChannel>(CommunicationChannel.class, this, LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS);
 		}
 		return mappedElements;
 	}

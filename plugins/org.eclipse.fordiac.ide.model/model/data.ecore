@@ -30,7 +30,8 @@
         <details key="name" value="InitialValues"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseType" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseType" eType="#//DataType"
+        resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="BaseType1">
     <eLiterals name="DATEANDTIME" literal="DATE_AND_TIME"/>
@@ -72,7 +73,7 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseType" lowerBound="1"
-        eType="#//DataType"/>
+        eType="#//DataType" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral=""/>
   </eClassifiers>
@@ -95,7 +96,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EnumeratedValue" eSuperTypes="lib.ecore#//INamedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//EnumeratedType"
-        eOpposite="#//EnumeratedType/enumeratedValues"/>
+        resolveProxies="false" eOpposite="#//EnumeratedType/enumeratedValues"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorDataType" eSuperTypes="#//AnyDerivedType lib.ecore#//ErrorLibraryElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="StructuredType" eSuperTypes="#//AnyDerivedType">
@@ -186,7 +187,7 @@
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseType" lowerBound="1"
-        eType="#//DataType"/>
+        eType="#//DataType" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventType" eSuperTypes="#//DataType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">

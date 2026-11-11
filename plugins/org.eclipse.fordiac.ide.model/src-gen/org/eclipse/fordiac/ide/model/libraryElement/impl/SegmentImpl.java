@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -160,29 +160,6 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 */
 	@Override
 	public Position getPosition() {
-		if (position != null && position.eIsProxy()) {
-			InternalEObject oldPosition = (InternalEObject)position;
-			position = (Position)eResolveProxy(oldPosition);
-			if (position != oldPosition) {
-				InternalEObject newPosition = (InternalEObject)position;
-				NotificationChain msgs = oldPosition.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__POSITION, null, null);
-				if (newPosition.eInternalContainer() == null) {
-					msgs = newPosition.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__POSITION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__POSITION, oldPosition, position));
-			}
-		}
-		return position;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Position basicGetPosition() {
 		return position;
 	}
 
@@ -228,29 +205,6 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 */
 	@Override
 	public Color getColor() {
-		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject)color;
-			color = (Color)eResolveProxy(oldColor);
-			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject)color;
-				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, null);
-				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COLOR, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__COLOR, oldColor, color));
-			}
-		}
-		return color;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Color basicGetColor() {
 		return color;
 	}
 
@@ -320,7 +274,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.SEGMENT__VAR_DECLARATIONS);
+			varDeclarations = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.SEGMENT__VAR_DECLARATIONS);
 		}
 		return varDeclarations;
 	}
@@ -333,7 +287,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	@Override
 	public EList<Link> getOutConnections() {
 		if (outConnections == null) {
-			outConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this, LibraryElementPackage.SEGMENT__OUT_CONNECTIONS, LibraryElementPackage.LINK__SEGMENT);
+			outConnections = new EObjectWithInverseEList<Link>(Link.class, this, LibraryElementPackage.SEGMENT__OUT_CONNECTIONS, LibraryElementPackage.LINK__SEGMENT);
 		}
 		return outConnections;
 	}
@@ -345,29 +299,6 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 */
 	@Override
 	public CommunicationConfiguration getCommunication() {
-		if (communication != null && communication.eIsProxy()) {
-			InternalEObject oldCommunication = (InternalEObject)communication;
-			communication = (CommunicationConfiguration)eResolveProxy(oldCommunication);
-			if (communication != oldCommunication) {
-				InternalEObject newCommunication = (InternalEObject)communication;
-				NotificationChain msgs = oldCommunication.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COMMUNICATION, null, null);
-				if (newCommunication.eInternalContainer() == null) {
-					msgs = newCommunication.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COMMUNICATION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__COMMUNICATION, oldCommunication, communication));
-			}
-		}
-		return communication;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CommunicationConfiguration basicGetCommunication() {
 		return communication;
 	}
 
@@ -489,11 +420,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.SEGMENT__POSITION:
-				if (resolve) return getPosition();
-				return basicGetPosition();
+				return getPosition();
 			case LibraryElementPackage.SEGMENT__COLOR:
-				if (resolve) return getColor();
-				return basicGetColor();
+				return getColor();
 			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
 				return getVarDeclarations();
 			case LibraryElementPackage.SEGMENT__WIDTH:
@@ -501,8 +430,7 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				return getOutConnections();
 			case LibraryElementPackage.SEGMENT__COMMUNICATION:
-				if (resolve) return getCommunication();
-				return basicGetCommunication();
+				return getCommunication();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

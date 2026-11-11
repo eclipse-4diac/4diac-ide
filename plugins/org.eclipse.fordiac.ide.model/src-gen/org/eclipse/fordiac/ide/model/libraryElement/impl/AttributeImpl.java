@@ -22,8 +22,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -232,23 +230,6 @@ public class AttributeImpl extends EObjectImpl implements Attribute {
 	 */
 	@Override
 	public DataType getType() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (DataType)eResolveProxy(oldType);
-			if (type != oldType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ATTRIBUTE__TYPE, oldType, type));
-			}
-		}
-		return type;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetType() {
 		return type;
 	}
 
@@ -272,23 +253,6 @@ public class AttributeImpl extends EObjectImpl implements Attribute {
 	 */
 	@Override
 	public AttributeDeclaration getAttributeDeclaration() {
-		if (attributeDeclaration != null && attributeDeclaration.eIsProxy()) {
-			InternalEObject oldAttributeDeclaration = (InternalEObject)attributeDeclaration;
-			attributeDeclaration = (AttributeDeclaration)eResolveProxy(oldAttributeDeclaration);
-			if (attributeDeclaration != oldAttributeDeclaration) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION, oldAttributeDeclaration, attributeDeclaration));
-			}
-		}
-		return attributeDeclaration;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AttributeDeclaration basicGetAttributeDeclaration() {
 		return attributeDeclaration;
 	}
 
@@ -405,11 +369,9 @@ public class AttributeImpl extends EObjectImpl implements Attribute {
 			case LibraryElementPackage.ATTRIBUTE__COMMENT:
 				return getComment();
 			case LibraryElementPackage.ATTRIBUTE__ATTRIBUTE_DECLARATION:
-				if (resolve) return getAttributeDeclaration();
-				return basicGetAttributeDeclaration();
+				return getAttributeDeclaration();
 			case LibraryElementPackage.ATTRIBUTE__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
+				return getType();
 			case LibraryElementPackage.ATTRIBUTE__VALUE:
 				return getValue();
 			default:

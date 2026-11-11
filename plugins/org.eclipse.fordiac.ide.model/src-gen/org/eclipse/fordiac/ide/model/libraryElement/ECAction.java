@@ -42,7 +42,7 @@ public interface ECAction extends BaseECAction {
 	 * @see #setECState(ECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECAction_ECState()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction
-	 * @model opposite="eCAction" required="true" transient="false"
+	 * @model opposite="eCAction" resolveProxies="false" required="true" transient="false"
 	 * @generated
 	 */
 	ECState getECState();

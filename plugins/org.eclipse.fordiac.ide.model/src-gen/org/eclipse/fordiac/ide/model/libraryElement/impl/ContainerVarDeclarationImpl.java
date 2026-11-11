@@ -85,7 +85,7 @@ public class ContainerVarDeclarationImpl extends VarDeclarationImpl implements C
 	@Override
 	public EList<VarDeclaration> getCachedMembers() {
 		if (cachedMembers == null) {
-			cachedMembers = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS);
+			cachedMembers = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS);
 		}
 		return cachedMembers;
 	}

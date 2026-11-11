@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -295,7 +295,7 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.ERROR_MARKER_INTERFACE__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.ERROR_MARKER_INTERFACE__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -331,7 +331,7 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.ERROR_MARKER_INTERFACE__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseEList<Connection>(Connection.class, this, LibraryElementPackage.ERROR_MARKER_INTERFACE__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
@@ -344,7 +344,7 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.ERROR_MARKER_INTERFACE__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseEList<Connection>(Connection.class, this, LibraryElementPackage.ERROR_MARKER_INTERFACE__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
@@ -356,23 +356,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 */
 	@Override
 	public DataType getType() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (DataType)eResolveProxy(oldType);
-			if (type != oldType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE, oldType, type));
-			}
-		}
-		return type;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetType() {
 		return type;
 	}
 
@@ -480,29 +463,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 */
 	@Override
 	public Value getValue() {
-		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (Value)eResolveProxy(oldValue);
-			if (value != oldValue) {
-				InternalEObject newValue = (InternalEObject)value;
-				NotificationChain msgs = oldValue.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE, null, null);
-				if (newValue.eInternalContainer() == null) {
-					msgs = newValue.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE, oldValue, value));
-			}
-		}
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Value basicGetValue() {
 		return value;
 	}
 
@@ -731,11 +691,9 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__OUTPUT_CONNECTIONS:
 				return getOutputConnections();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
+				return getType();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
+				return getValue();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

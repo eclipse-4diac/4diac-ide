@@ -19,8 +19,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -168,23 +166,6 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 	 */
 	@Override
 	public ServiceInterface getInterface() {
-		if (interface_ != null && interface_.eIsProxy()) {
-			InternalEObject oldInterface = (InternalEObject)interface_;
-			interface_ = (ServiceInterface)eResolveProxy(oldInterface);
-			if (interface_ != oldInterface) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.PRIMITIVE__INTERFACE, oldInterface, interface_));
-			}
-		}
-		return interface_;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ServiceInterface basicGetInterface() {
 		return interface_;
 	}
 
@@ -234,8 +215,7 @@ public class PrimitiveImpl extends EObjectImpl implements Primitive {
 			case LibraryElementPackage.PRIMITIVE__PARAMETERS:
 				return getParameters();
 			case LibraryElementPackage.PRIMITIVE__INTERFACE:
-				if (resolve) return getInterface();
-				return basicGetInterface();
+				return getInterface();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

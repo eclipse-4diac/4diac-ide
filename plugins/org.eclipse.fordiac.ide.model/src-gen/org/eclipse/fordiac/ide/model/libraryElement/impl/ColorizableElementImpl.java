@@ -79,29 +79,6 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 	 */
 	@Override
 	public Color getColor() {
-		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject)color;
-			color = (Color)eResolveProxy(oldColor);
-			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject)color;
-				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, null);
-				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR, oldColor, color));
-			}
-		}
-		return color;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Color basicGetColor() {
 		return color;
 	}
 
@@ -164,8 +141,7 @@ public class ColorizableElementImpl extends EObjectImpl implements ColorizableEl
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR:
-				if (resolve) return getColor();
-				return basicGetColor();
+				return getColor();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

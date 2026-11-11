@@ -45,7 +45,7 @@ public interface EnumeratedValue extends INamedElement {
 	 * @see #setType(EnumeratedType)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getEnumeratedValue_Type()
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValues
-	 * @model opposite="enumeratedValues" transient="false"
+	 * @model opposite="enumeratedValues" resolveProxies="false" transient="false"
 	 * @generated
 	 */
 	EnumeratedType getType();

@@ -49,7 +49,7 @@ public interface BlockFBNetworkElement extends FBNetworkElement {
 	 * @see #setInterface(InterfaceList)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBlockFBNetworkElement_Interface()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getBlockFBNetworkElement
-	 * @model opposite="BlockFBNetworkElement" containment="true" resolveProxies="true"
+	 * @model opposite="BlockFBNetworkElement" containment="true"
 	 * @generated
 	 */
 	InterfaceList getInterface();

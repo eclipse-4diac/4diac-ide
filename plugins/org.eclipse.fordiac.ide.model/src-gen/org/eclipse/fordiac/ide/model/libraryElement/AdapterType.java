@@ -43,7 +43,7 @@ public interface AdapterType extends DataType, FBType {
 	 * @return the value of the '<em>Plug Type</em>' containment reference.
 	 * @see #setPlugType(AdapterType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterType_PlugType()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	AdapterType getPlugType();

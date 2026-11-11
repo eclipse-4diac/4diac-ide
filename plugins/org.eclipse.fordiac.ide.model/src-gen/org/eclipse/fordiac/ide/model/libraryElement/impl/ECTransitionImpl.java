@@ -193,23 +193,6 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public ECState getSource() {
-		if (source != null && source.eIsProxy()) {
-			InternalEObject oldSource = (InternalEObject)source;
-			source = (ECState)eResolveProxy(oldSource);
-			if (source != oldSource) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_TRANSITION__SOURCE, oldSource, source));
-			}
-		}
-		return source;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ECState basicGetSource() {
 		return source;
 	}
 
@@ -255,23 +238,6 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public ECState getDestination() {
-		if (destination != null && destination.eIsProxy()) {
-			InternalEObject oldDestination = (InternalEObject)destination;
-			destination = (ECState)eResolveProxy(oldDestination);
-			if (destination != oldDestination) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_TRANSITION__DESTINATION, oldDestination, destination));
-			}
-		}
-		return destination;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ECState basicGetDestination() {
 		return destination;
 	}
 
@@ -317,23 +283,6 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public Event getConditionEvent() {
-		if (conditionEvent != null && conditionEvent.eIsProxy()) {
-			InternalEObject oldConditionEvent = (InternalEObject)conditionEvent;
-			conditionEvent = (Event)eResolveProxy(oldConditionEvent);
-			if (conditionEvent != oldConditionEvent) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT, oldConditionEvent, conditionEvent));
-			}
-		}
-		return conditionEvent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Event basicGetConditionEvent() {
 		return conditionEvent;
 	}
 
@@ -357,16 +306,6 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 	 */
 	@Override
 	public ECC getECC() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC) return null;
-		return (ECC)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ECC basicGetECC() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_TRANSITION__ECC) return null;
 		return (ECC)eInternalContainer();
 	}
@@ -495,17 +434,13 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EXPRESSION:
 				return getConditionExpression();
 			case LibraryElementPackage.EC_TRANSITION__SOURCE:
-				if (resolve) return getSource();
-				return basicGetSource();
+				return getSource();
 			case LibraryElementPackage.EC_TRANSITION__DESTINATION:
-				if (resolve) return getDestination();
-				return basicGetDestination();
+				return getDestination();
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT:
-				if (resolve) return getConditionEvent();
-				return basicGetConditionEvent();
+				return getConditionEvent();
 			case LibraryElementPackage.EC_TRANSITION__ECC:
-				if (resolve) return getECC();
-				return basicGetECC();
+				return getECC();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -594,7 +529,7 @@ public class ECTransitionImpl extends PositionableElementImpl implements ECTrans
 			case LibraryElementPackage.EC_TRANSITION__CONDITION_EVENT:
 				return conditionEvent != null;
 			case LibraryElementPackage.EC_TRANSITION__ECC:
-				return basicGetECC() != null;
+				return getECC() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

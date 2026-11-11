@@ -48,7 +48,7 @@ public interface SimpleFBType extends BaseFBType {
 	 * @return the value of the '<em>Simple EC States</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleFBType_SimpleECStates()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleECState#getSimpleFBType
-	 * @model opposite="simpleFBType" containment="true" resolveProxies="true" required="true"
+	 * @model opposite="simpleFBType" containment="true" required="true"
 	 *        extendedMetaData="kind='element' name='SimpleECStates' namespace='##targetNamespace'"
 	 * @generated
 	 */

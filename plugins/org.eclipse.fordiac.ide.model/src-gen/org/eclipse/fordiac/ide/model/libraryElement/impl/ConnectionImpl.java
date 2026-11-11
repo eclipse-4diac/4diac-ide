@@ -191,23 +191,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 */
 	@Override
 	public IInterfaceElement getSource() {
-		if (source != null && source.eIsProxy()) {
-			InternalEObject oldSource = (InternalEObject)source;
-			source = (IInterfaceElement)eResolveProxy(oldSource);
-			if (source != oldSource) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONNECTION__SOURCE, oldSource, source));
-			}
-		}
-		return source;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public IInterfaceElement basicGetSource() {
 		return source;
 	}
 
@@ -263,23 +246,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 */
 	@Override
 	public IInterfaceElement getDestination() {
-		if (destination != null && destination.eIsProxy()) {
-			InternalEObject oldDestination = (InternalEObject)destination;
-			destination = (IInterfaceElement)eResolveProxy(oldDestination);
-			if (destination != oldDestination) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONNECTION__DESTINATION, oldDestination, destination));
-			}
-		}
-		return destination;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public IInterfaceElement basicGetDestination() {
 		return destination;
 	}
 
@@ -336,29 +302,6 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 */
 	@Override
 	public ConnectionRoutingData getRoutingData() {
-		if (routingData != null && routingData.eIsProxy()) {
-			InternalEObject oldRoutingData = (InternalEObject)routingData;
-			routingData = (ConnectionRoutingData)eResolveProxy(oldRoutingData);
-			if (routingData != oldRoutingData) {
-				InternalEObject newRoutingData = (InternalEObject)routingData;
-				NotificationChain msgs = oldRoutingData.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CONNECTION__ROUTING_DATA, null, null);
-				if (newRoutingData.eInternalContainer() == null) {
-					msgs = newRoutingData.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CONNECTION__ROUTING_DATA, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONNECTION__ROUTING_DATA, oldRoutingData, routingData));
-			}
-		}
-		return routingData;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ConnectionRoutingData basicGetRoutingData() {
 		return routingData;
 	}
 
@@ -668,14 +611,11 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
 				return isBrokenConnection();
 			case LibraryElementPackage.CONNECTION__SOURCE:
-				if (resolve) return getSource();
-				return basicGetSource();
+				return getSource();
 			case LibraryElementPackage.CONNECTION__DESTINATION:
-				if (resolve) return getDestination();
-				return basicGetDestination();
+				return getDestination();
 			case LibraryElementPackage.CONNECTION__ROUTING_DATA:
-				if (resolve) return getRoutingData();
-				return basicGetRoutingData();
+				return getRoutingData();
 			case LibraryElementPackage.CONNECTION__COMMENT:
 				return getComment();
 			default:

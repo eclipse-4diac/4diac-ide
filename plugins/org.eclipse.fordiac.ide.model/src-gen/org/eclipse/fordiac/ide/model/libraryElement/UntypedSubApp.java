@@ -42,7 +42,7 @@ public interface UntypedSubApp extends SubApp {
 	 * @return the value of the '<em>Sub App Network</em>' containment reference.
 	 * @see #setSubAppNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getUntypedSubApp_SubAppNetwork()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	FBNetwork getSubAppNetwork();

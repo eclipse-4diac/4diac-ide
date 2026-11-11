@@ -80,29 +80,6 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	 */
 	@Override
 	public FBNetwork getCfbNetwork() {
-		if (cfbNetwork != null && cfbNetwork.eIsProxy()) {
-			InternalEObject oldCfbNetwork = (InternalEObject)cfbNetwork;
-			cfbNetwork = (FBNetwork)eResolveProxy(oldCfbNetwork);
-			if (cfbNetwork != oldCfbNetwork) {
-				InternalEObject newCfbNetwork = (InternalEObject)cfbNetwork;
-				NotificationChain msgs = oldCfbNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, null, null);
-				if (newCfbNetwork.eInternalContainer() == null) {
-					msgs = newCfbNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK, oldCfbNetwork, cfbNetwork));
-			}
-		}
-		return cfbNetwork;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetwork basicGetCfbNetwork() {
 		return cfbNetwork;
 	}
 
@@ -200,8 +177,7 @@ public class CFBInstanceImpl extends FBImpl implements CFBInstance {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.CFB_INSTANCE__CFB_NETWORK:
-				if (resolve) return getCfbNetwork();
-				return basicGetCfbNetwork();
+				return getCfbNetwork();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

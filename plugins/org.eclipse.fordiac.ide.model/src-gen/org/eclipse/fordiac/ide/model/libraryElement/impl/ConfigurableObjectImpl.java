@@ -87,7 +87,7 @@ public class ConfigurableObjectImpl extends EObjectImpl implements ConfigurableO
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES);
 		}
 		return attributes;
 	}

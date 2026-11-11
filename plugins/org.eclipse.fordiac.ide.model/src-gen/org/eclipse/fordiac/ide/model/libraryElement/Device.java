@@ -83,7 +83,7 @@ public interface Device extends TypedConfigureableObject, PositionableElement, C
 	 * @return the value of the '<em>In Connections</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDevice_InConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Link#getDevice
-	 * @model opposite="device"
+	 * @model opposite="device" resolveProxies="false"
 	 * @generated
 	 */
 	EList<Link> getInConnections();

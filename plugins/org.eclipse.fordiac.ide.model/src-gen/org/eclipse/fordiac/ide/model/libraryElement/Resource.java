@@ -116,7 +116,7 @@ public interface Resource extends TypedConfigureableObject, IVarElement, Mapping
 	 * @see #setDevice(Device)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getResource_Device()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Device#getResource
-	 * @model opposite="resource" transient="false"
+	 * @model opposite="resource" resolveProxies="false" transient="false"
 	 * @generated
 	 */
 	Device getDevice();

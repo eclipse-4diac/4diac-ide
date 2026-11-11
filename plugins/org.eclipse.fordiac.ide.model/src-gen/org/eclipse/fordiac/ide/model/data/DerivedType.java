@@ -41,7 +41,7 @@ public interface DerivedType extends ValueType {
 	 * @return the value of the '<em>Base Type</em>' reference.
 	 * @see #setBaseType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDerivedType_BaseType()
-	 * @model required="true"
+	 * @model resolveProxies="false" required="true"
 	 * @generated
 	 */
 	DataType getBaseType();

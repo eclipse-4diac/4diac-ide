@@ -43,7 +43,7 @@ public interface CFBInstance extends FB {
 	 * @return the value of the '<em>Cfb Network</em>' containment reference.
 	 * @see #setCfbNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCFBInstance_CfbNetwork()
-	 * @model containment="true" resolveProxies="true" transient="true" derived="true"
+	 * @model containment="true" transient="true" derived="true"
 	 * @generated
 	 */
 	FBNetwork getCfbNetwork();
