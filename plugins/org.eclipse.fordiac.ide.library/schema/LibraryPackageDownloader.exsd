@@ -135,6 +135,9 @@ A library source with endpoints configured in the preferences:
       </appinfo>
       <documentation>
          Clients implement &lt;code&gt;org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader&lt;/code&gt;, providers implement &lt;code&gt;org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloaderProvider&lt;/code&gt;. Each downloader returned by a provider should have a distinct name, because the name identifies the endpoint in messages.
+&lt;p&gt;
+Downloaders that read a library source over HTTP extend &lt;code&gt;org.eclipse.fordiac.ide.library.download.AbstractLibraryPackageDownloader&lt;/code&gt;. They provide the base URI, optional credentials, the catalogue and the locations of archive and manifest; the base class sends the requests, adds the credentials only to requests for the origin of the base URI, follows redirects itself (never from HTTPS to HTTP), limits response sizes, selects the version and reports errors as non-OK results. The limits can be changed with the system properties &lt;code&gt;org.eclipse.fordiac.ide.library.download.maxMetadataBytes&lt;/code&gt; (4 MiB) and &lt;code&gt;org.eclipse.fordiac.ide.library.download.maxArchiveBytes&lt;/code&gt; (64 MiB). Lists split into pages are read by the downloader itself, as every source pages differently; each page is a separate request through the base class.
+&lt;/p&gt;
       </documentation>
    </annotation>
 
@@ -143,7 +146,7 @@ A library source with endpoints configured in the preferences:
          <meta.section type="implementation"/>
       </appinfo>
       <documentation>
-         The bundle &lt;code&gt;org.eclipse.fordiac.ide.gitlab&lt;/code&gt; registers &lt;code&gt;org.eclipse.fordiac.ide.gitlab.management.GitLabDownloaderProvider&lt;/code&gt;, which creates one &lt;code&gt;GitLabDownloader&lt;/code&gt; per GitLab endpoint configured in the preferences.
+         The bundle &lt;code&gt;org.eclipse.fordiac.ide.gitlab&lt;/code&gt; registers &lt;code&gt;org.eclipse.fordiac.ide.gitlab.management.GitLabDownloaderProvider&lt;/code&gt;, which creates one &lt;code&gt;GitLabDownloader&lt;/code&gt; per GitLab endpoint configured in the preferences. &lt;code&gt;GitLabDownloader&lt;/code&gt; extends &lt;code&gt;AbstractLibraryPackageDownloader&lt;/code&gt;, sends its access token in the &lt;code&gt;PRIVATE-TOKEN&lt;/code&gt; header and follows the &lt;code&gt;X-Next-Page&lt;/code&gt; header through at most 1000 pages per list (system property &lt;code&gt;org.eclipse.fordiac.ide.gitlab.maxPages&lt;/code&gt;). It downloads ZIP files named &lt;code&gt;&amp;lt;symbolicName&amp;gt;-&amp;lt;version&amp;gt;.zip&lt;/code&gt; for the selected package.
       </documentation>
    </annotation>
 
