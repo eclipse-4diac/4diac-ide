@@ -52,6 +52,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.swt.widgets.Display;
 
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
@@ -62,10 +63,14 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				refreshStateTooltip();
-				refresh();
-				revalidateTransitions();
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshStateTooltip();
+						refresh();
+						revalidateTransitions();
+					}
+				});
 			}
 		}
 

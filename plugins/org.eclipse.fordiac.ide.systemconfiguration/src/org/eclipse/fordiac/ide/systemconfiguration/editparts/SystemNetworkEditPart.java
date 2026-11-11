@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.SystemConfXYLayoutEditPolicy;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.swt.widgets.Display;
 
 public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 	private Adapter adapter;
@@ -66,7 +67,11 @@ public class SystemNetworkEditPart extends AbstractDiagramEditPart {
 					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
-						refreshChildren();
+						Display.getDefault().execute(() -> {
+							if (isActive()) {
+								refreshChildren();
+							}
+						});
 						break;
 					case Notification.SET:
 						break;

@@ -57,6 +57,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart, AnnotableGraphicalEditPart {
@@ -166,8 +167,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getValue_Value().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
-				refreshValue();
-				refreshPosition();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshValue();
+						refreshPosition();
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}

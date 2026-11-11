@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.swt.widgets.Display;
 
 public final class TargetInterfaceAdapter extends AdapterImpl {
 
@@ -47,7 +48,11 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
-				refEditPart.refresh();
+				Display.getDefault().execute(() -> {
+					if (refEditPart.isActive()) {
+						refEditPart.refresh();
+					}
+				});
 			}
 			refreshSecondaryTargets();
 		}

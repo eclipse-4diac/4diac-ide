@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractPositionableElementEditPart extends AbstractViewEditPart {
 
@@ -32,7 +33,12 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
-				refreshPosition();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshPosition();
+					}
+				});
+
 			}
 		}
 

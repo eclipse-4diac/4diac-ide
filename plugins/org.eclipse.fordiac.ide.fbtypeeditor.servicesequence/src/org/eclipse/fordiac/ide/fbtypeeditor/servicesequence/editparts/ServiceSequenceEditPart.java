@@ -49,19 +49,23 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 
 public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* ResizableCompartmentEditPart */ {
 
-
 	private boolean isExpanded = true;
-
 
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refresh();
-
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refresh();
+					}
+				});
+			}
 		}
 	};
 
@@ -81,16 +85,13 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 		super.deactivate();
 	}
 
-
-
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteServiceSequenceCommand(getModel().getService().getFBType(),
-						getModel());
+				return new DeleteServiceSequenceCommand(getModel().getService().getFBType(), getModel());
 			}
 
 		});
@@ -167,8 +168,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 	@Override
 	protected DirectEditManager createDirectEditManager() {
 		final DirectEditManager dem = super.createDirectEditManager();
-		final CellEditorLocator locator = new LabelCellEditorLocator(getFigure().getNameLabel(),
-				getZoomManager(), (FigureCanvas) getViewer().getControl());
+		final CellEditorLocator locator = new LabelCellEditorLocator(getFigure().getNameLabel(), getZoomManager(),
+				(FigureCanvas) getViewer().getControl());
 		dem.setLocator(locator);
 		return dem;
 	}

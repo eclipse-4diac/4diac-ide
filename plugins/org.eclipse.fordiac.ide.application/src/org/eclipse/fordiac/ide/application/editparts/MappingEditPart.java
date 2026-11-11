@@ -27,15 +27,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.swt.widgets.Display;
 
 public class MappingEditPart extends AbstractGraphicalEditPart {
 
 	private final Adapter colorChangeListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()
-					&& notification.getNewValue() instanceof final Color col) {
-				setColor(getFigure(), col);
+			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						setColor(getFigure(), getColorizeableElement().getColor());
+					}
+				});
 			}
 		}
 	};

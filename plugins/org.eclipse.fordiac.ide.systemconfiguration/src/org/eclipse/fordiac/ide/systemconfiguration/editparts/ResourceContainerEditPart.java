@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.ResourceContainerLayoutEditPolicy;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.swt.widgets.Display;
 
 public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 
@@ -32,7 +33,13 @@ public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refreshChildren();
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshChildren();
+					}
+				});
+			}
 		}
 	};
 

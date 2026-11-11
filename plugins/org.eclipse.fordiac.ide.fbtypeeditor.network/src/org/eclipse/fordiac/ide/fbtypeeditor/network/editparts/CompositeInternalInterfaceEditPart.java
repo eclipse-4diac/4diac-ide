@@ -36,6 +36,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.swt.widgets.Display;
 
 public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfaceEditPartRO {
 
@@ -119,11 +120,19 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-					refresh();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+						}
+					});
 				}
 				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getAttribute_Value().equals(feature)) {
-					updatePadding(getYPositionFromAttribute(getModel()));
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							updatePadding(getYPositionFromAttribute(getModel()));
+						}
+					});
 				}
 				super.notifyChanged(notification);
 			}

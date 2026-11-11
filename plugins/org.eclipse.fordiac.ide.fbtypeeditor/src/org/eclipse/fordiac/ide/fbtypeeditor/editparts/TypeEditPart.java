@@ -60,6 +60,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.widgets.Display;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart implements AnnotableGraphicalEditPart {
 
@@ -95,7 +96,13 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				refresh();
+				if (!notification.isTouch()) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+						}
+					});
+				}
 			}
 		};
 	}

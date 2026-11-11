@@ -27,6 +27,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InstancePropertySection extends AbstractInstanceSection {
@@ -100,8 +101,14 @@ public class InstancePropertySection extends AbstractInstanceSection {
 			super.notifyChanged(notification);
 			if (!notification.isTouch()) {
 				notifiyRefresh();
-				inputDataMemberAccessViewer.updateVisibility();
-				outputDataMemberAccessViewer.updateVisibility();
+				Display.getDefault().asyncExec(() -> {
+					if (!inputDataMemberAccessViewer.getControl().isDisposed()) {
+						inputDataMemberAccessViewer.updateVisibility();
+					}
+					if (!outputDataMemberAccessViewer.getControl().isDisposed()) {
+						outputDataMemberAccessViewer.updateVisibility();
+					}
+				});
 			}
 		}
 	};

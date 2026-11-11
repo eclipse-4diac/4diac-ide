@@ -42,6 +42,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
@@ -59,7 +60,11 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 					|| !getModel().getRefElement().getOutputConnections().stream().map(Connection::isNegated).toList()
 							.isEmpty()) {
-				refreshVisuals();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshVisuals();
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}

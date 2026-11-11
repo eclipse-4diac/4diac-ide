@@ -122,7 +122,11 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
-						Display.getDefault().asyncExec(FBTypeRootEditPart.this::refreshChildren);
+						Display.getDefault().asyncExec(() -> {
+							if (isActive()) {
+								refreshChildren();
+							}
+						});
 						break;
 					case Notification.SET:
 						break;
@@ -132,8 +136,12 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
 					if (LibraryElementPackage.Literals.VAR_DECLARATION__WITHS == notification.getFeature()
 							|| LibraryElementPackage.Literals.EVENT__WITH == notification.getFeature()) {
-						getFigure().setInputWithColumnWidth(getInputWithColSize());
-						getFigure().setOutputWithColumnWidth(getOutputWithColSize());
+						Display.getDefault().execute(() -> {
+							if (isActive()) {
+								getFigure().setInputWithColumnWidth(getInputWithColSize());
+								getFigure().setOutputWithColumnWidth(getOutputWithColSize());
+							}
+						});
 					}
 
 				}

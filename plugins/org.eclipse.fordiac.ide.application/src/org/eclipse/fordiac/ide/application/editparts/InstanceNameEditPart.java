@@ -42,6 +42,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public class InstanceNameEditPart extends AbstractGraphicalEditPart
@@ -76,7 +77,11 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
-				refreshValue();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshValue();
+					}
+				});
 			}
 		}
 	};

@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.resourceediting.editparts.ResourceDiagramEditPartFactory;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 
 /**
@@ -40,7 +41,11 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
-				updateGridColor();
+				Display.getDefault().execute(() -> {
+					if (!getViewer().getControl().isDisposed()) {
+						updateGridColor();
+					}
+				});
 			}
 		}
 	};

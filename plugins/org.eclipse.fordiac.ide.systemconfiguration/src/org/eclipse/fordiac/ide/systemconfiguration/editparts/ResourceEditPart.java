@@ -39,6 +39,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.widgets.Display;
 
 public class ResourceEditPart extends AbstractViewEditPart {
 	private DiagramFontChangeListener fontChangeListener;
@@ -153,7 +154,13 @@ public class ResourceEditPart extends AbstractViewEditPart {
 		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
-				refresh();
+				if (!notification.isTouch()) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+						}
+					});
+				}
 				super.notifyChanged(notification);
 			}
 		};
