@@ -366,6 +366,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	public void setType(DataType newType) {
 	  java.util.Objects.requireNonNull(newType,
 				"DataType of a VarDeclaration must not be null! " + getQualifiedName());
+		if (newType.eIsProxy()) {
+			throw new IllegalArgumentException("DataType of a VarDeclaration must not be a proxy!");
+		}
 		setTypeGen(newType);
 	}
 
