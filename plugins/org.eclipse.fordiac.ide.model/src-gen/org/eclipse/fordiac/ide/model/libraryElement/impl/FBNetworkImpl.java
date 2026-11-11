@@ -152,7 +152,7 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	@Override
 	public EList<EventConnection> getEventConnections() {
 		if (eventConnections == null) {
-			eventConnections = new EObjectContainmentWithInverseEList.Resolving<EventConnection>(EventConnection.class, this, LibraryElementPackage.FB_NETWORK__EVENT_CONNECTIONS, LibraryElementPackage.EVENT_CONNECTION__FB_NETWORK);
+			eventConnections = new EObjectContainmentWithInverseEList<EventConnection>(EventConnection.class, this, LibraryElementPackage.FB_NETWORK__EVENT_CONNECTIONS, LibraryElementPackage.EVENT_CONNECTION__FB_NETWORK);
 		}
 		return eventConnections;
 	}

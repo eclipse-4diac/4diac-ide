@@ -19,8 +19,6 @@ package org.eclipse.fordiac.ide.model.data.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.data.DataPackage;
@@ -77,23 +75,6 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	 */
 	@Override
 	public DataType getBaseType() {
-		if (baseType != null && baseType.eIsProxy()) {
-			InternalEObject oldBaseType = (InternalEObject)baseType;
-			baseType = (DataType)eResolveProxy(oldBaseType);
-			if (baseType != oldBaseType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DataPackage.DERIVED_TYPE__BASE_TYPE, oldBaseType, baseType));
-			}
-		}
-		return baseType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetBaseType() {
 		return baseType;
 	}
 
@@ -129,8 +110,7 @@ public class DerivedTypeImpl extends ValueTypeImpl implements DerivedType {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DataPackage.DERIVED_TYPE__BASE_TYPE:
-				if (resolve) return getBaseType();
-				return basicGetBaseType();
+				return getBaseType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

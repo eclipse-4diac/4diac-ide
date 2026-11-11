@@ -46,7 +46,7 @@ public interface ContainerVarDeclaration extends VarDeclaration {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cached Members</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getContainerVarDeclaration_CachedMembers()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<VarDeclaration> getCachedMembers();

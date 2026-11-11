@@ -44,7 +44,7 @@ public interface CommunicationMappingTarget extends MappingTarget {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Mapped Elements</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCommunicationMappingTarget_MappedElements()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<CommunicationChannel> getMappedElements();

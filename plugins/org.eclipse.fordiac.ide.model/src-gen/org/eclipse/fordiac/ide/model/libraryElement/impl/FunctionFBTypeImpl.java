@@ -78,29 +78,6 @@ public class FunctionFBTypeImpl extends FBTypeImpl implements FunctionFBType {
 	 */
 	@Override
 	public FunctionBody getBody() {
-		if (body != null && body.eIsProxy()) {
-			InternalEObject oldBody = (InternalEObject)body;
-			body = (FunctionBody)eResolveProxy(oldBody);
-			if (body != oldBody) {
-				InternalEObject newBody = (InternalEObject)body;
-				NotificationChain msgs = oldBody.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FUNCTION_FB_TYPE__BODY, null, null);
-				if (newBody.eInternalContainer() == null) {
-					msgs = newBody.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FUNCTION_FB_TYPE__BODY, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.FUNCTION_FB_TYPE__BODY, oldBody, body));
-			}
-		}
-		return body;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FunctionBody basicGetBody() {
 		return body;
 	}
 
@@ -163,8 +140,7 @@ public class FunctionFBTypeImpl extends FBTypeImpl implements FunctionFBType {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.FUNCTION_FB_TYPE__BODY:
-				if (resolve) return getBody();
-				return basicGetBody();
+				return getBody();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

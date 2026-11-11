@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseECState;
@@ -248,28 +248,6 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	 */
 	@Override
 	public Position getPosition() {
-		if (position != null && position.eIsProxy()) {
-			InternalEObject oldPosition = (InternalEObject)position;
-			position = (Position)eResolveProxy(oldPosition);
-			if (position != oldPosition) {
-				InternalEObject newPosition = (InternalEObject)position;
-				NotificationChain msgs = oldPosition.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EC_STATE__POSITION, null, null);
-				if (newPosition.eInternalContainer() == null) {
-					msgs = newPosition.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.EC_STATE__POSITION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.EC_STATE__POSITION, oldPosition, position));
-			}
-		}
-		return position;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Position basicGetPosition() {
 		return position;
 	}
 
@@ -325,7 +303,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	@Override
 	public EList<ECTransition> getOutTransitions() {
 		if (outTransitions == null) {
-			outTransitions = new EObjectWithInverseResolvingEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.EC_STATE__OUT_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__SOURCE);
+			outTransitions = new EObjectWithInverseEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.EC_STATE__OUT_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__SOURCE);
 		}
 		return outTransitions;
 	}
@@ -337,7 +315,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	@Override
 	public EList<ECTransition> getInTransitions() {
 		if (inTransitions == null) {
-			inTransitions = new EObjectWithInverseResolvingEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.EC_STATE__IN_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__DESTINATION);
+			inTransitions = new EObjectWithInverseEList<ECTransition>(ECTransition.class, this, LibraryElementPackage.EC_STATE__IN_TRANSITIONS, LibraryElementPackage.EC_TRANSITION__DESTINATION);
 		}
 		return inTransitions;
 	}
@@ -348,15 +326,6 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	 */
 	@Override
 	public ECC getECC() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC) return null;
-		return (ECC)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ECC basicGetECC() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_STATE__ECC) return null;
 		return (ECC)eInternalContainer();
 	}
@@ -498,8 +467,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 			case LibraryElementPackage.EC_STATE__COMMENT:
 				return getComment();
 			case LibraryElementPackage.EC_STATE__POSITION:
-				if (resolve) return getPosition();
-				return basicGetPosition();
+				return getPosition();
 			case LibraryElementPackage.EC_STATE__EC_ACTION:
 				return getECAction();
 			case LibraryElementPackage.EC_STATE__OUT_TRANSITIONS:
@@ -507,8 +475,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 			case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 				return getInTransitions();
 			case LibraryElementPackage.EC_STATE__ECC:
-				if (resolve) return getECC();
-				return basicGetECC();
+				return getECC();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -606,7 +573,7 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 			case LibraryElementPackage.EC_STATE__IN_TRANSITIONS:
 				return inTransitions != null && !inTransitions.isEmpty();
 			case LibraryElementPackage.EC_STATE__ECC:
-				return basicGetECC() != null;
+				return getECC() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

@@ -31,7 +31,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -46,7 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getVarDeclaration <em>Var Declaration</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getFBNetwork <em>FB Network</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ResourceTypeImpl#getSupportedFBTypes <em>Supported FB Types</em>}</li>
  * </ul>
  *
  * @generated
@@ -71,16 +69,6 @@ public class ResourceTypeImpl extends LibraryElementImpl implements ResourceType
 	 * @ordered
 	 */
 	protected FBNetwork fBNetwork;
-
-	/**
-	 * The cached value of the '{@link #getSupportedFBTypes() <em>Supported FB Types</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSupportedFBTypes()
-	 * @generated
-	 * @ordered
-	 */
-	protected FBType supportedFBTypes;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -165,46 +153,6 @@ public class ResourceTypeImpl extends LibraryElementImpl implements ResourceType
 	 * @generated
 	 */
 	@Override
-	public FBType getSupportedFBTypes() {
-		if (supportedFBTypes != null && supportedFBTypes.eIsProxy()) {
-			InternalEObject oldSupportedFBTypes = (InternalEObject)supportedFBTypes;
-			supportedFBTypes = (FBType)eResolveProxy(oldSupportedFBTypes);
-			if (supportedFBTypes != oldSupportedFBTypes) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES, oldSupportedFBTypes, supportedFBTypes));
-			}
-		}
-		return supportedFBTypes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBType basicGetSupportedFBTypes() {
-		return supportedFBTypes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSupportedFBTypes(FBType newSupportedFBTypes) {
-		FBType oldSupportedFBTypes = supportedFBTypes;
-		supportedFBTypes = newSupportedFBTypes;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES, oldSupportedFBTypes, supportedFBTypes));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.RESOURCE_TYPE__VAR_DECLARATION:
@@ -228,9 +176,6 @@ public class ResourceTypeImpl extends LibraryElementImpl implements ResourceType
 				return getVarDeclaration();
 			case LibraryElementPackage.RESOURCE_TYPE__FB_NETWORK:
 				return getFBNetwork();
-			case LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES:
-				if (resolve) return getSupportedFBTypes();
-				return basicGetSupportedFBTypes();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -252,9 +197,6 @@ public class ResourceTypeImpl extends LibraryElementImpl implements ResourceType
 			case LibraryElementPackage.RESOURCE_TYPE__FB_NETWORK:
 				setFBNetwork((FBNetwork)newValue);
 				return;
-			case LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES:
-				setSupportedFBTypes((FBType)newValue);
-				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -275,9 +217,6 @@ public class ResourceTypeImpl extends LibraryElementImpl implements ResourceType
 			case LibraryElementPackage.RESOURCE_TYPE__FB_NETWORK:
 				setFBNetwork((FBNetwork)null);
 				return;
-			case LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES:
-				setSupportedFBTypes((FBType)null);
-				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -296,8 +235,6 @@ public class ResourceTypeImpl extends LibraryElementImpl implements ResourceType
 				return varDeclaration != null && !varDeclaration.isEmpty();
 			case LibraryElementPackage.RESOURCE_TYPE__FB_NETWORK:
 				return fBNetwork != null;
-			case LibraryElementPackage.RESOURCE_TYPE__SUPPORTED_FB_TYPES:
-				return supportedFBTypes != null;
 			default:
 				return super.eIsSet(featureID);
 		}

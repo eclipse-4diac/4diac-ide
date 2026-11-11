@@ -71,7 +71,7 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	 * @return the value of the '<em>Out Connections</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_OutConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Link#getSegment
-	 * @model opposite="segment"
+	 * @model opposite="segment" resolveProxies="false"
 	 * @generated
 	 */
 	EList<Link> getOutConnections();
@@ -83,7 +83,7 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	 * @return the value of the '<em>Communication</em>' containment reference.
 	 * @see #setCommunication(CommunicationConfiguration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_Communication()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	CommunicationConfiguration getCommunication();

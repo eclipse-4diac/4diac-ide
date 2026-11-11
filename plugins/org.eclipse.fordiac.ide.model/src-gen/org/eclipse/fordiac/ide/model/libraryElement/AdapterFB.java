@@ -41,7 +41,7 @@ public interface AdapterFB extends FB {
 	 * @return the value of the '<em>Adapter Decl</em>' reference.
 	 * @see #setAdapterDecl(AdapterDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterFB_AdapterDecl()
-	 * @model required="true"
+	 * @model resolveProxies="false" required="true"
 	 * @generated
 	 */
 	AdapterDeclaration getAdapterDecl();

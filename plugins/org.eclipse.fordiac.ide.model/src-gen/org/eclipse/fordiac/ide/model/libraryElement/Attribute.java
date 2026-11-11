@@ -47,7 +47,7 @@ public interface Attribute extends ITypedElement {
 	 * @return the value of the '<em>Attribute Declaration</em>' reference.
 	 * @see #setAttributeDeclaration(AttributeDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute_AttributeDeclaration()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	AttributeDeclaration getAttributeDeclaration();
@@ -69,7 +69,7 @@ public interface Attribute extends ITypedElement {
 	 * @return the value of the '<em>Type</em>' reference.
 	 * @see #setType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAttribute_Type()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	DataType getType();

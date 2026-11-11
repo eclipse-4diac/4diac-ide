@@ -44,7 +44,7 @@ public interface Link extends INamedElement, ConfigurableObject {
 	 * @see #setSegment(Segment)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLink_Segment()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections
-	 * @model opposite="outConnections"
+	 * @model opposite="outConnections" resolveProxies="false"
 	 * @generated
 	 */
 	Segment getSegment();
@@ -68,7 +68,7 @@ public interface Link extends INamedElement, ConfigurableObject {
 	 * @see #setDevice(Device)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLink_Device()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Device#getInConnections
-	 * @model opposite="inConnections"
+	 * @model opposite="inConnections" resolveProxies="false"
 	 * @generated
 	 */
 	Device getDevice();

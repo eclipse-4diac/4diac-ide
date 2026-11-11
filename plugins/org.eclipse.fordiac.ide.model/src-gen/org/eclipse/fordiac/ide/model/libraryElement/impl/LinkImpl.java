@@ -256,7 +256,7 @@ public class LinkImpl extends EObjectImpl implements Link {
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.LINK__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.LINK__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -268,23 +268,6 @@ public class LinkImpl extends EObjectImpl implements Link {
 	 */
 	@Override
 	public Segment getSegment() {
-		if (segment != null && segment.eIsProxy()) {
-			InternalEObject oldSegment = (InternalEObject)segment;
-			segment = (Segment)eResolveProxy(oldSegment);
-			if (segment != oldSegment) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.LINK__SEGMENT, oldSegment, segment));
-			}
-		}
-		return segment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Segment basicGetSegment() {
 		return segment;
 	}
 
@@ -330,23 +313,6 @@ public class LinkImpl extends EObjectImpl implements Link {
 	 */
 	@Override
 	public Device getDevice() {
-		if (device != null && device.eIsProxy()) {
-			InternalEObject oldDevice = (InternalEObject)device;
-			device = (Device)eResolveProxy(oldDevice);
-			if (device != oldDevice) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.LINK__DEVICE, oldDevice, device));
-			}
-		}
-		return device;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Device basicGetDevice() {
 		return device;
 	}
 
@@ -490,11 +456,9 @@ public class LinkImpl extends EObjectImpl implements Link {
 			case LibraryElementPackage.LINK__ATTRIBUTES:
 				return getAttributes();
 			case LibraryElementPackage.LINK__SEGMENT:
-				if (resolve) return getSegment();
-				return basicGetSegment();
+				return getSegment();
 			case LibraryElementPackage.LINK__DEVICE:
-				if (resolve) return getDevice();
-				return basicGetDevice();
+				return getDevice();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

@@ -245,7 +245,7 @@ public class CompilerInfoImpl extends EObjectImpl implements CompilerInfo {
 	@Override
 	public EList<Import> getImports() {
 		if (imports == null) {
-			imports = new EObjectContainmentEList.Resolving<Import>(Import.class, this, LibraryElementPackage.COMPILER_INFO__IMPORTS);
+			imports = new EObjectContainmentEList<Import>(Import.class, this, LibraryElementPackage.COMPILER_INFO__IMPORTS);
 		}
 		return imports;
 	}

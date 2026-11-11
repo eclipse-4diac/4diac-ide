@@ -61,7 +61,7 @@ public interface SimpleECState extends INamedElement, BaseECState<SimpleECAction
 	 * @return the value of the '<em>Input Event</em>' reference.
 	 * @see #setInputEvent(Event)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleECState_InputEvent()
-	 * @model required="true"
+	 * @model resolveProxies="false" required="true"
 	 * @generated
 	 */
 	Event getInputEvent();
@@ -85,7 +85,7 @@ public interface SimpleECState extends INamedElement, BaseECState<SimpleECAction
 	 * @see #setSimpleFBType(SimpleFBType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleECState_SimpleFBType()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getSimpleECStates
-	 * @model opposite="simpleECStates" required="true" transient="false"
+	 * @model opposite="simpleECStates" resolveProxies="false" required="true" transient="false"
 	 * @generated
 	 */
 	SimpleFBType getSimpleFBType();

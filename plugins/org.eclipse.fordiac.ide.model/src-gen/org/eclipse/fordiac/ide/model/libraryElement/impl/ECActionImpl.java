@@ -70,16 +70,6 @@ public class ECActionImpl extends BaseECActionImpl implements ECAction {
 	@Override
 	public ECState getECState() {
 		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE) return null;
-		return (ECState)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ECState basicGetECState() {
-		if (eContainerFeatureID() != LibraryElementPackage.EC_ACTION__EC_STATE) return null;
 		return (ECState)eInternalContainer();
 	}
 
@@ -181,8 +171,7 @@ public class ECActionImpl extends BaseECActionImpl implements ECAction {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				if (resolve) return getECState();
-				return basicGetECState();
+				return getECState();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -231,7 +220,7 @@ public class ECActionImpl extends BaseECActionImpl implements ECAction {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case LibraryElementPackage.EC_ACTION__EC_STATE:
-				return basicGetECState() != null;
+				return getECState() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

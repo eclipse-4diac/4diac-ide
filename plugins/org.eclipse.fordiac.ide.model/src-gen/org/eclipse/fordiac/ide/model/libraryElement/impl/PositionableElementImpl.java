@@ -79,29 +79,6 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	 */
 	@Override
 	public Position getPosition() {
-		if (position != null && position.eIsProxy()) {
-			InternalEObject oldPosition = (InternalEObject)position;
-			position = (Position)eResolveProxy(oldPosition);
-			if (position != oldPosition) {
-				InternalEObject newPosition = (InternalEObject)position;
-				NotificationChain msgs = oldPosition.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, null, null);
-				if (newPosition.eInternalContainer() == null) {
-					msgs = newPosition.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION, oldPosition, position));
-			}
-		}
-		return position;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Position basicGetPosition() {
 		return position;
 	}
 
@@ -164,8 +141,7 @@ public class PositionableElementImpl extends EObjectImpl implements Positionable
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.POSITIONABLE_ELEMENT__POSITION:
-				if (resolve) return getPosition();
-				return basicGetPosition();
+				return getPosition();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

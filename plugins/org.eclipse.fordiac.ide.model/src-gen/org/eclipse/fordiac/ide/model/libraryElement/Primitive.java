@@ -90,7 +90,7 @@ public interface Primitive extends EObject {
 	 * @return the value of the '<em>Interface</em>' reference.
 	 * @see #setInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getPrimitive_Interface()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	ServiceInterface getInterface();

@@ -74,7 +74,7 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @return the value of the '<em>Input Connections</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_InputConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getDestination
-	 * @model opposite="destination"
+	 * @model opposite="destination" resolveProxies="false"
 	 * @generated
 	 */
 	EList<Connection> getInputConnections();
@@ -88,7 +88,7 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @return the value of the '<em>Output Connections</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_OutputConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getSource
-	 * @model opposite="source"
+	 * @model opposite="source" resolveProxies="false"
 	 * @generated
 	 */
 	EList<Connection> getOutputConnections();
@@ -100,7 +100,7 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @return the value of the '<em>Type</em>' reference.
 	 * @see #setType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIInterfaceElement_Type()
-	 * @model required="true"
+	 * @model resolveProxies="false" required="true"
 	 * @generated
 	 */
 	DataType getType();

@@ -24,8 +24,6 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -84,23 +82,6 @@ public abstract class ConfigurableFBImpl extends FBImpl implements ConfigurableF
 	 */
 	@Override
 	public DataType getDataType() {
-		if (dataType != null && dataType.eIsProxy()) {
-			InternalEObject oldDataType = (InternalEObject)dataType;
-			dataType = (DataType)eResolveProxy(oldDataType);
-			if (dataType != oldDataType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONFIGURABLE_FB__DATA_TYPE, oldDataType, dataType));
-			}
-		}
-		return dataType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetDataType() {
 		return dataType;
 	}
 
@@ -166,8 +147,7 @@ public abstract class ConfigurableFBImpl extends FBImpl implements ConfigurableF
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.CONFIGURABLE_FB__DATA_TYPE:
-				if (resolve) return getDataType();
-				return basicGetDataType();
+				return getDataType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

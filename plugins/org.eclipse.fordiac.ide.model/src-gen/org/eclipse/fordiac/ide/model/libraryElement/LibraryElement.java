@@ -50,7 +50,7 @@ public interface LibraryElement extends INamedElement, ConfigurableObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Version Info</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_VersionInfo()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<VersionInfo> getVersionInfo();
@@ -62,7 +62,7 @@ public interface LibraryElement extends INamedElement, ConfigurableObject {
 	 * @return the value of the '<em>Identification</em>' containment reference.
 	 * @see #setIdentification(Identification)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_Identification()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	Identification getIdentification();
@@ -84,7 +84,7 @@ public interface LibraryElement extends INamedElement, ConfigurableObject {
 	 * @return the value of the '<em>Compiler Info</em>' containment reference.
 	 * @see #setCompilerInfo(CompilerInfo)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_CompilerInfo()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	CompilerInfo getCompilerInfo();

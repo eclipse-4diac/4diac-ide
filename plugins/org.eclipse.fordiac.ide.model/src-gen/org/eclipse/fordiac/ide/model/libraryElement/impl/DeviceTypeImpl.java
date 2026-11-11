@@ -30,7 +30,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -51,7 +50,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getResource <em>Resource</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getFBNetwork <em>FB Network</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getProfile <em>Profile</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.DeviceTypeImpl#getAttributeDeclarations <em>Attribute Declarations</em>}</li>
  * </ul>
  *
  * @generated
@@ -116,16 +114,6 @@ public class DeviceTypeImpl extends LibraryElementImpl implements DeviceType {
 	 * @ordered
 	 */
 	protected String profile = PROFILE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getAttributeDeclarations() <em>Attribute Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAttributeDeclarations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AttributeDeclaration> attributeDeclarations;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -259,19 +247,6 @@ public class DeviceTypeImpl extends LibraryElementImpl implements DeviceType {
 	 * @generated
 	 */
 	@Override
-	public EList<AttributeDeclaration> getAttributeDeclarations() {
-		if (attributeDeclarations == null) {
-			attributeDeclarations = new EObjectContainmentEList.Resolving<AttributeDeclaration>(AttributeDeclaration.class, this, LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS);
-		}
-		return attributeDeclarations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.DEVICE_TYPE__VAR_DECLARATION:
@@ -282,8 +257,6 @@ public class DeviceTypeImpl extends LibraryElementImpl implements DeviceType {
 				return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.DEVICE_TYPE__FB_NETWORK:
 				return basicSetFBNetwork(null, msgs);
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				return ((InternalEList<?>)getAttributeDeclarations()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -307,8 +280,6 @@ public class DeviceTypeImpl extends LibraryElementImpl implements DeviceType {
 				return getFBNetwork();
 			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
 				return getProfile();
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				return getAttributeDeclarations();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -341,10 +312,6 @@ public class DeviceTypeImpl extends LibraryElementImpl implements DeviceType {
 			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
 				setProfile((String)newValue);
 				return;
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				getAttributeDeclarations().clear();
-				getAttributeDeclarations().addAll((Collection<? extends AttributeDeclaration>)newValue);
-				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -374,9 +341,6 @@ public class DeviceTypeImpl extends LibraryElementImpl implements DeviceType {
 			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
 				setProfile(PROFILE_EDEFAULT);
 				return;
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				getAttributeDeclarations().clear();
-				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -401,8 +365,6 @@ public class DeviceTypeImpl extends LibraryElementImpl implements DeviceType {
 				return fBNetwork != null;
 			case LibraryElementPackage.DEVICE_TYPE__PROFILE:
 				return PROFILE_EDEFAULT == null ? profile != null : !PROFILE_EDEFAULT.equals(profile);
-			case LibraryElementPackage.DEVICE_TYPE__ATTRIBUTE_DECLARATIONS:
-				return attributeDeclarations != null && !attributeDeclarations.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}

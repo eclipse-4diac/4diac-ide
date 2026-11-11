@@ -131,29 +131,6 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	 */
 	@Override
 	public ServiceInterface getRightInterface() {
-		if (rightInterface != null && rightInterface.eIsProxy()) {
-			InternalEObject oldRightInterface = (InternalEObject)rightInterface;
-			rightInterface = (ServiceInterface)eResolveProxy(oldRightInterface);
-			if (rightInterface != oldRightInterface) {
-				InternalEObject newRightInterface = (InternalEObject)rightInterface;
-				NotificationChain msgs = oldRightInterface.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, null);
-				if (newRightInterface.eInternalContainer() == null) {
-					msgs = newRightInterface.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__RIGHT_INTERFACE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SERVICE__RIGHT_INTERFACE, oldRightInterface, rightInterface));
-			}
-		}
-		return rightInterface;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ServiceInterface basicGetRightInterface() {
 		return rightInterface;
 	}
 
@@ -199,29 +176,6 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	 */
 	@Override
 	public ServiceInterface getLeftInterface() {
-		if (leftInterface != null && leftInterface.eIsProxy()) {
-			InternalEObject oldLeftInterface = (InternalEObject)leftInterface;
-			leftInterface = (ServiceInterface)eResolveProxy(oldLeftInterface);
-			if (leftInterface != oldLeftInterface) {
-				InternalEObject newLeftInterface = (InternalEObject)leftInterface;
-				NotificationChain msgs = oldLeftInterface.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, null);
-				if (newLeftInterface.eInternalContainer() == null) {
-					msgs = newLeftInterface.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SERVICE__LEFT_INTERFACE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SERVICE__LEFT_INTERFACE, oldLeftInterface, leftInterface));
-			}
-		}
-		return leftInterface;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ServiceInterface basicGetLeftInterface() {
 		return leftInterface;
 	}
 
@@ -268,7 +222,7 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	@Override
 	public EList<ServiceSequence> getServiceSequence() {
 		if (serviceSequence == null) {
-			serviceSequence = new EObjectContainmentEList.Resolving<ServiceSequence>(ServiceSequence.class, this, LibraryElementPackage.SERVICE__SERVICE_SEQUENCE);
+			serviceSequence = new EObjectContainmentEList<ServiceSequence>(ServiceSequence.class, this, LibraryElementPackage.SERVICE__SERVICE_SEQUENCE);
 		}
 		return serviceSequence;
 	}
@@ -334,11 +288,9 @@ public class ServiceImpl extends EObjectImpl implements Service {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.SERVICE__RIGHT_INTERFACE:
-				if (resolve) return getRightInterface();
-				return basicGetRightInterface();
+				return getRightInterface();
 			case LibraryElementPackage.SERVICE__LEFT_INTERFACE:
-				if (resolve) return getLeftInterface();
-				return basicGetLeftInterface();
+				return getLeftInterface();
 			case LibraryElementPackage.SERVICE__SERVICE_SEQUENCE:
 				return getServiceSequence();
 			case LibraryElementPackage.SERVICE__COMMENT:

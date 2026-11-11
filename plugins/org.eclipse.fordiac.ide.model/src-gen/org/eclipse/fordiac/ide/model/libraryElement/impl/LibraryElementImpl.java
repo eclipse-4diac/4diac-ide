@@ -242,7 +242,7 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.LIBRARY_ELEMENT__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -255,7 +255,7 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	@Override
 	public EList<VersionInfo> getVersionInfo() {
 		if (versionInfo == null) {
-			versionInfo = new EObjectContainmentEList.Resolving<VersionInfo>(VersionInfo.class, this, LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO);
+			versionInfo = new EObjectContainmentEList<VersionInfo>(VersionInfo.class, this, LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO);
 		}
 		return versionInfo;
 	}
@@ -267,29 +267,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 */
 	@Override
 	public Identification getIdentification() {
-		if (identification != null && identification.eIsProxy()) {
-			InternalEObject oldIdentification = (InternalEObject)identification;
-			identification = (Identification)eResolveProxy(oldIdentification);
-			if (identification != oldIdentification) {
-				InternalEObject newIdentification = (InternalEObject)identification;
-				NotificationChain msgs = oldIdentification.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION, null, null);
-				if (newIdentification.eInternalContainer() == null) {
-					msgs = newIdentification.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION, oldIdentification, identification));
-			}
-		}
-		return identification;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Identification basicGetIdentification() {
 		return identification;
 	}
 
@@ -335,29 +312,6 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 */
 	@Override
 	public CompilerInfo getCompilerInfo() {
-		if (compilerInfo != null && compilerInfo.eIsProxy()) {
-			InternalEObject oldCompilerInfo = (InternalEObject)compilerInfo;
-			compilerInfo = (CompilerInfo)eResolveProxy(oldCompilerInfo);
-			if (compilerInfo != oldCompilerInfo) {
-				InternalEObject newCompilerInfo = (InternalEObject)compilerInfo;
-				NotificationChain msgs = oldCompilerInfo.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, null, null);
-				if (newCompilerInfo.eInternalContainer() == null) {
-					msgs = newCompilerInfo.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO, oldCompilerInfo, compilerInfo));
-			}
-		}
-		return compilerInfo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CompilerInfo basicGetCompilerInfo() {
 		return compilerInfo;
 	}
 
@@ -600,11 +554,9 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			case LibraryElementPackage.LIBRARY_ELEMENT__VERSION_INFO:
 				return getVersionInfo();
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
-				if (resolve) return getIdentification();
-				return basicGetIdentification();
+				return getIdentification();
 			case LibraryElementPackage.LIBRARY_ELEMENT__COMPILER_INFO:
-				if (resolve) return getCompilerInfo();
-				return basicGetCompilerInfo();
+				return getCompilerInfo();
 			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
 				return getTypeEntry();
 			default:

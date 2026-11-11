@@ -48,7 +48,7 @@ public interface TextFunction extends Function, TextSourceElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Input Parameters</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextFunction_InputParameters()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ITypedElement> getInputParameters();
@@ -60,7 +60,7 @@ public interface TextFunction extends Function, TextSourceElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Output Parameters</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextFunction_OutputParameters()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ITypedElement> getOutputParameters();
@@ -72,7 +72,7 @@ public interface TextFunction extends Function, TextSourceElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>In Out Parameters</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextFunction_InOutParameters()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ITypedElement> getInOutParameters();
@@ -84,7 +84,7 @@ public interface TextFunction extends Function, TextSourceElement {
 	 * @return the value of the '<em>Return Type</em>' reference.
 	 * @see #setReturnType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextFunction_ReturnType()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	DataType getReturnType();

@@ -45,7 +45,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * @return the value of the '<em>Mapping</em>' reference.
 	 * @see #setMapping(Mapping)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement_Mapping()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	Mapping getMapping();
@@ -69,7 +69,7 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 * @see #setGroup(Group)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetworkElement_Group()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Group#getGroupElements
-	 * @model opposite="groupElements"
+	 * @model opposite="groupElements" resolveProxies="false"
 	 * @generated
 	 */
 	Group getGroup();

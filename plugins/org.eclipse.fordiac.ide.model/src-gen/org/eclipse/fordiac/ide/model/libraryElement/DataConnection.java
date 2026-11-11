@@ -43,7 +43,7 @@ public interface DataConnection extends Connection {
 	 * @see #setFBNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getDataConnection_FBNetwork()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getDataConnections
-	 * @model opposite="dataConnections" transient="false"
+	 * @model opposite="dataConnections" resolveProxies="false" transient="false"
 	 * @generated
 	 */
 	FBNetwork getFBNetwork();

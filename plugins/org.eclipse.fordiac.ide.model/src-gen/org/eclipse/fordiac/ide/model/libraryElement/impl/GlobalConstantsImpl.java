@@ -109,29 +109,6 @@ public class GlobalConstantsImpl extends LibraryElementImpl implements GlobalCon
 	 */
 	@Override
 	public OriginalSource getSource() {
-		if (source != null && source.eIsProxy()) {
-			InternalEObject oldSource = (InternalEObject)source;
-			source = (OriginalSource)eResolveProxy(oldSource);
-			if (source != oldSource) {
-				InternalEObject newSource = (InternalEObject)source;
-				NotificationChain msgs = oldSource.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE, null, null);
-				if (newSource.eInternalContainer() == null) {
-					msgs = newSource.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE, oldSource, source));
-			}
-		}
-		return source;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public OriginalSource basicGetSource() {
 		return source;
 	}
 
@@ -198,8 +175,7 @@ public class GlobalConstantsImpl extends LibraryElementImpl implements GlobalCon
 			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
 				return getConstants();
 			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
-				if (resolve) return getSource();
-				return basicGetSource();
+				return getSource();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

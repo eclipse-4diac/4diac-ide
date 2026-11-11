@@ -108,29 +108,6 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 */
 	@Override
 	public FBNetwork getSubAppNetwork() {
-		if (subAppNetwork != null && subAppNetwork.eIsProxy()) {
-			InternalEObject oldSubAppNetwork = (InternalEObject)subAppNetwork;
-			subAppNetwork = (FBNetwork)eResolveProxy(oldSubAppNetwork);
-			if (subAppNetwork != oldSubAppNetwork) {
-				InternalEObject newSubAppNetwork = (InternalEObject)subAppNetwork;
-				NotificationChain msgs = oldSubAppNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK, null, null);
-				if (newSubAppNetwork.eInternalContainer() == null) {
-					msgs = newSubAppNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, subAppNetwork));
-			}
-		}
-		return subAppNetwork;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetwork basicGetSubAppNetwork() {
 		return subAppNetwork;
 	}
 
@@ -177,7 +154,7 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	@Override
 	public EList<VarConfigInstance> getVarConfigParams() {
 		if (varConfigParams == null) {
-			varConfigParams = new EObjectContainmentEList.Resolving<VarConfigInstance>(VarConfigInstance.class, this, LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS);
+			varConfigParams = new EObjectContainmentEList<VarConfigInstance>(VarConfigInstance.class, this, LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS);
 		}
 		return varConfigParams;
 	}
@@ -190,7 +167,7 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	@Override
 	public EList<OverrideAttribute> getOverrideAttributes() {
 		if (overrideAttributes == null) {
-			overrideAttributes = new EObjectContainmentEList.Resolving<OverrideAttribute>(OverrideAttribute.class, this, LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES);
+			overrideAttributes = new EObjectContainmentEList<OverrideAttribute>(OverrideAttribute.class, this, LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES);
 		}
 		return overrideAttributes;
 	}
@@ -253,8 +230,7 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.TYPED_SUB_APP__SUB_APP_NETWORK:
-				if (resolve) return getSubAppNetwork();
-				return basicGetSubAppNetwork();
+				return getSubAppNetwork();
 			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
 				return getVarConfigParams();
 			case LibraryElementPackage.TYPED_SUB_APP__OVERRIDE_ATTRIBUTES:

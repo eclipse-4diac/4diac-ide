@@ -107,29 +107,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 */
 	@Override
 	public Position getPosition() {
-		if (position != null && position.eIsProxy()) {
-			InternalEObject oldPosition = (InternalEObject)position;
-			position = (Position)eResolveProxy(oldPosition);
-			if (position != oldPosition) {
-				InternalEObject newPosition = (InternalEObject)position;
-				NotificationChain msgs = oldPosition.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, null, null);
-				if (newPosition.eInternalContainer() == null) {
-					msgs = newPosition.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION, oldPosition, position));
-			}
-		}
-		return position;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Position basicGetPosition() {
 		return position;
 	}
 
@@ -175,23 +152,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 */
 	@Override
 	public Mapping getMapping() {
-		if (mapping != null && mapping.eIsProxy()) {
-			InternalEObject oldMapping = (InternalEObject)mapping;
-			mapping = (Mapping)eResolveProxy(oldMapping);
-			if (mapping != oldMapping) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING, oldMapping, mapping));
-			}
-		}
-		return mapping;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Mapping basicGetMapping() {
 		return mapping;
 	}
 
@@ -215,23 +175,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 */
 	@Override
 	public Group getGroup() {
-		if (group != null && group.eIsProxy()) {
-			InternalEObject oldGroup = (InternalEObject)group;
-			group = (Group)eResolveProxy(oldGroup);
-			if (group != oldGroup) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP, oldGroup, group));
-			}
-		}
-		return group;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Group basicGetGroup() {
 		return group;
 	}
 
@@ -488,14 +431,11 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
-				if (resolve) return getPosition();
-				return basicGetPosition();
+				return getPosition();
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
-				if (resolve) return getMapping();
-				return basicGetMapping();
+				return getMapping();
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP:
-				if (resolve) return getGroup();
-				return basicGetGroup();
+				return getGroup();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

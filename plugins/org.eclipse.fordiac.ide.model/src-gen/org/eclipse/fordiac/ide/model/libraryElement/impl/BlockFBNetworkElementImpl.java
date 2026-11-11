@@ -81,29 +81,6 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 	 */
 	@Override
 	public InterfaceList getInterface() {
-		if (interface_ != null && interface_.eIsProxy()) {
-			InternalEObject oldInterface = (InternalEObject)interface_;
-			interface_ = (InterfaceList)eResolveProxy(oldInterface);
-			if (interface_ != oldInterface) {
-				InternalEObject newInterface = (InternalEObject)interface_;
-				NotificationChain msgs =  oldInterface.eInverseRemove(this, LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT, InterfaceList.class, null);
-				if (newInterface.eInternalContainer() == null) {
-					msgs =  newInterface.eInverseAdd(this, LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT, InterfaceList.class, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE, oldInterface, interface_));
-			}
-		}
-		return interface_;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public InterfaceList basicGetInterface() {
 		return interface_;
 	}
 
@@ -264,8 +241,7 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE:
-				if (resolve) return getInterface();
-				return basicGetInterface();
+				return getInterface();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

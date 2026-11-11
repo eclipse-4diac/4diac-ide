@@ -160,7 +160,7 @@ public interface InterfaceList extends EObject {
 	 * @return the value of the '<em>FB Type</em>' container reference.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_FBType()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBType#getInterfaceList
-	 * @model opposite="interfaceList" transient="false" changeable="false"
+	 * @model opposite="interfaceList" resolveProxies="false" transient="false" changeable="false"
 	 * @generated
 	 */
 	FBType getFBType();
@@ -173,7 +173,7 @@ public interface InterfaceList extends EObject {
 	 * @return the value of the '<em>Block FB Network Element</em>' container reference.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_BlockFBNetworkElement()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement#getInterface
-	 * @model opposite="interface" transient="false" changeable="false"
+	 * @model opposite="interface" resolveProxies="false" transient="false" changeable="false"
 	 * @generated
 	 */
 	BlockFBNetworkElement getBlockFBNetworkElement();

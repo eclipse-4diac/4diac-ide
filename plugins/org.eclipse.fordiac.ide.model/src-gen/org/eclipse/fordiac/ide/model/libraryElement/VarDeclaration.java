@@ -72,7 +72,7 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @return the value of the '<em>Withs</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_Withs()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.With#getVariables
-	 * @model opposite="variables"
+	 * @model opposite="variables" resolveProxies="false"
 	 * @generated
 	 */
 	EList<With> getWiths();

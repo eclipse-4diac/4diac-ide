@@ -62,7 +62,7 @@ public interface ECState extends INamedElement, PositionableElement, BaseECState
 	 * @return the value of the '<em>Out Transitions</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_OutTransitions()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource
-	 * @model opposite="source"
+	 * @model opposite="source" resolveProxies="false"
 	 * @generated
 	 */
 	EList<ECTransition> getOutTransitions();
@@ -76,7 +76,7 @@ public interface ECState extends INamedElement, PositionableElement, BaseECState
 	 * @return the value of the '<em>In Transitions</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_InTransitions()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination
-	 * @model opposite="destination"
+	 * @model opposite="destination" resolveProxies="false"
 	 * @generated
 	 */
 	EList<ECTransition> getInTransitions();
@@ -90,7 +90,7 @@ public interface ECState extends INamedElement, PositionableElement, BaseECState
 	 * @see #setECC(ECC)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_ECC()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState
-	 * @model opposite="eCState" transient="false"
+	 * @model opposite="eCState" resolveProxies="false" transient="false"
 	 * @generated
 	 */
 	ECC getECC();

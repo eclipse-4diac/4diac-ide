@@ -47,7 +47,7 @@ public interface Service extends EObject {
 	 * @return the value of the '<em>Right Interface</em>' containment reference.
 	 * @see #setRightInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_RightInterface()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	ServiceInterface getRightInterface();
@@ -69,7 +69,7 @@ public interface Service extends EObject {
 	 * @return the value of the '<em>Left Interface</em>' containment reference.
 	 * @see #setLeftInterface(ServiceInterface)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_LeftInterface()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	ServiceInterface getLeftInterface();
@@ -91,7 +91,7 @@ public interface Service extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Service Sequence</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_ServiceSequence()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='OutputPrimitive' namespace='##targetNamespace'"
 	 * @generated
 	 */

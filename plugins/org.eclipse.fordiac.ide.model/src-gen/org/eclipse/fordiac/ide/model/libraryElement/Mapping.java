@@ -43,7 +43,7 @@ public interface Mapping extends EObject {
 	 * @return the value of the '<em>From</em>' reference.
 	 * @see #setFrom(FBNetworkElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMapping_From()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	FBNetworkElement getFrom();
@@ -65,7 +65,7 @@ public interface Mapping extends EObject {
 	 * @return the value of the '<em>To</em>' reference.
 	 * @see #setTo(FBNetworkElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMapping_To()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	FBNetworkElement getTo();

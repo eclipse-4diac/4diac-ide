@@ -164,7 +164,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	@Override
 	public EList<ITypedElement> getInputParameters() {
 		if (inputParameters == null) {
-			inputParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS);
+			inputParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__INPUT_PARAMETERS);
 		}
 		return inputParameters;
 	}
@@ -177,7 +177,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	@Override
 	public EList<ITypedElement> getOutputParameters() {
 		if (outputParameters == null) {
-			outputParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS);
+			outputParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__OUTPUT_PARAMETERS);
 		}
 		return outputParameters;
 	}
@@ -190,7 +190,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	@Override
 	public EList<ITypedElement> getInOutParameters() {
 		if (inOutParameters == null) {
-			inOutParameters = new EObjectContainmentEList.Resolving<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS);
+			inOutParameters = new EObjectContainmentEList<ITypedElement>(ITypedElement.class, this, LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS);
 		}
 		return inOutParameters;
 	}
@@ -202,23 +202,6 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 	 */
 	@Override
 	public DataType getReturnType() {
-		if (returnType != null && returnType.eIsProxy()) {
-			InternalEObject oldReturnType = (InternalEObject)returnType;
-			returnType = (DataType)eResolveProxy(oldReturnType);
-			if (returnType != oldReturnType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.TEXT_FUNCTION__RETURN_TYPE, oldReturnType, returnType));
-			}
-		}
-		return returnType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetReturnType() {
 		return returnType;
 	}
 
@@ -317,8 +300,7 @@ public abstract class TextFunctionImpl extends FunctionImpl implements TextFunct
 			case LibraryElementPackage.TEXT_FUNCTION__IN_OUT_PARAMETERS:
 				return getInOutParameters();
 			case LibraryElementPackage.TEXT_FUNCTION__RETURN_TYPE:
-				if (resolve) return getReturnType();
-				return basicGetReturnType();
+				return getReturnType();
 			case LibraryElementPackage.TEXT_FUNCTION__VARARGS:
 				return isVarargs();
 			default:

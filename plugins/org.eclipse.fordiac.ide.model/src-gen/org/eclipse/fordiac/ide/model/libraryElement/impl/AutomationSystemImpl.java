@@ -136,29 +136,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 */
 	@Override
 	public SystemConfiguration getSystemConfiguration() {
-		if (systemConfiguration != null && systemConfiguration.eIsProxy()) {
-			InternalEObject oldSystemConfiguration = (InternalEObject)systemConfiguration;
-			systemConfiguration = (SystemConfiguration)eResolveProxy(oldSystemConfiguration);
-			if (systemConfiguration != oldSystemConfiguration) {
-				InternalEObject newSystemConfiguration = (InternalEObject)systemConfiguration;
-				NotificationChain msgs = oldSystemConfiguration.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION, null, null);
-				if (newSystemConfiguration.eInternalContainer() == null) {
-					msgs = newSystemConfiguration.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION, oldSystemConfiguration, systemConfiguration));
-			}
-		}
-		return systemConfiguration;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SystemConfiguration basicGetSystemConfiguration() {
 		return systemConfiguration;
 	}
 
@@ -249,8 +226,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
 				return getMapping();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
-				if (resolve) return getSystemConfiguration();
-				return basicGetSystemConfiguration();
+				return getSystemConfiguration();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

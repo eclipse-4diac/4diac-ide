@@ -18,8 +18,6 @@ package org.eclipse.fordiac.ide.model.data.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -94,23 +92,6 @@ public class DirectlyDerivedTypeImpl extends AnyDerivedTypeImpl implements Direc
 	 */
 	@Override
 	public DataType getBaseType() {
-		if (baseType != null && baseType.eIsProxy()) {
-			InternalEObject oldBaseType = (InternalEObject)baseType;
-			baseType = (DataType)eResolveProxy(oldBaseType);
-			if (baseType != oldBaseType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DataPackage.DIRECTLY_DERIVED_TYPE__BASE_TYPE, oldBaseType, baseType));
-			}
-		}
-		return baseType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetBaseType() {
 		return baseType;
 	}
 
@@ -169,8 +150,7 @@ public class DirectlyDerivedTypeImpl extends AnyDerivedTypeImpl implements Direc
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DataPackage.DIRECTLY_DERIVED_TYPE__BASE_TYPE:
-				if (resolve) return getBaseType();
-				return basicGetBaseType();
+				return getBaseType();
 			case DataPackage.DIRECTLY_DERIVED_TYPE__INITIAL_VALUE:
 				return getInitialValue();
 			default:

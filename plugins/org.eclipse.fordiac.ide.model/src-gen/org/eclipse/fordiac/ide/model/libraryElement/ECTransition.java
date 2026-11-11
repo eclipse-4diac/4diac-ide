@@ -98,7 +98,7 @@ public interface ECTransition extends PositionableElement {
 	 * @see #setSource(ECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_Source()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions
-	 * @model opposite="outTransitions" required="true"
+	 * @model opposite="outTransitions" resolveProxies="false" required="true"
 	 * @generated
 	 */
 	ECState getSource();
@@ -122,7 +122,7 @@ public interface ECTransition extends PositionableElement {
 	 * @see #setDestination(ECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_Destination()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions
-	 * @model opposite="inTransitions" required="true"
+	 * @model opposite="inTransitions" resolveProxies="false" required="true"
 	 * @generated
 	 */
 	ECState getDestination();
@@ -144,7 +144,7 @@ public interface ECTransition extends PositionableElement {
 	 * @return the value of the '<em>Condition Event</em>' reference.
 	 * @see #setConditionEvent(Event)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_ConditionEvent()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	Event getConditionEvent();
@@ -168,7 +168,7 @@ public interface ECTransition extends PositionableElement {
 	 * @see #setECC(ECC)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_ECC()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getECTransition
-	 * @model opposite="eCTransition" required="true" transient="false"
+	 * @model opposite="eCTransition" resolveProxies="false" required="true" transient="false"
 	 * @generated
 	 */
 	ECC getECC();

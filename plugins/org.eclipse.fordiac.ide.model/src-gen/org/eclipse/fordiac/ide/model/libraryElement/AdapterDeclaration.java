@@ -45,7 +45,7 @@ public interface AdapterDeclaration extends IInterfaceElement {
 	 * @return the value of the '<em>Adapter FB</em>' reference.
 	 * @see #setAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_AdapterFB()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	AdapterFB getAdapterFB();
@@ -67,7 +67,7 @@ public interface AdapterDeclaration extends IInterfaceElement {
 	 * @return the value of the '<em>Interface Only Adapter FB</em>' containment reference.
 	 * @see #setInterfaceOnlyAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_InterfaceOnlyAdapterFB()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	AdapterFB getInterfaceOnlyAdapterFB();

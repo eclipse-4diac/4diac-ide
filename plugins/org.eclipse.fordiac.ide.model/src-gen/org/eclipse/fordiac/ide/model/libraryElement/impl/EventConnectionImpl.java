@@ -69,16 +69,6 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	@Override
 	public FBNetwork getFBNetwork() {
 		if (eContainerFeatureID() != LibraryElementPackage.EVENT_CONNECTION__FB_NETWORK) return null;
-		return (FBNetwork)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetwork basicGetFBNetwork() {
-		if (eContainerFeatureID() != LibraryElementPackage.EVENT_CONNECTION__FB_NETWORK) return null;
 		return (FBNetwork)eInternalContainer();
 	}
 
@@ -190,8 +180,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.EVENT_CONNECTION__FB_NETWORK:
-				if (resolve) return getFBNetwork();
-				return basicGetFBNetwork();
+				return getFBNetwork();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -240,7 +229,7 @@ public class EventConnectionImpl extends ConnectionImpl implements EventConnecti
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case LibraryElementPackage.EVENT_CONNECTION__FB_NETWORK:
-				return basicGetFBNetwork() != null;
+				return getFBNetwork() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

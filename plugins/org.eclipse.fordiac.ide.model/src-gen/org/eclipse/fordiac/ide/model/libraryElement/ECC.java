@@ -77,7 +77,7 @@ public interface ECC extends EObject {
 	 * @return the value of the '<em>Start</em>' reference.
 	 * @see #setStart(ECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECC_Start()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	ECState getStart();
@@ -101,7 +101,7 @@ public interface ECC extends EObject {
 	 * @see #setBasicFBType(BasicFBType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECC_BasicFBType()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.BasicFBType#getECC
-	 * @model opposite="eCC" required="true" transient="false"
+	 * @model opposite="eCC" resolveProxies="false" required="true" transient="false"
 	 * @generated
 	 */
 	BasicFBType getBasicFBType();

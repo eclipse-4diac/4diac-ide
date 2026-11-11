@@ -69,16 +69,6 @@ public class SimpleECActionImpl extends BaseECActionImpl implements SimpleECActi
 	@Override
 	public SimpleECState getSimpleECState() {
 		if (eContainerFeatureID() != LibraryElementPackage.SIMPLE_EC_ACTION__SIMPLE_EC_STATE) return null;
-		return (SimpleECState)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SimpleECState basicGetSimpleECState() {
-		if (eContainerFeatureID() != LibraryElementPackage.SIMPLE_EC_ACTION__SIMPLE_EC_STATE) return null;
 		return (SimpleECState)eInternalContainer();
 	}
 
@@ -170,8 +160,7 @@ public class SimpleECActionImpl extends BaseECActionImpl implements SimpleECActi
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_EC_ACTION__SIMPLE_EC_STATE:
-				if (resolve) return getSimpleECState();
-				return basicGetSimpleECState();
+				return getSimpleECState();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -220,7 +209,7 @@ public class SimpleECActionImpl extends BaseECActionImpl implements SimpleECActi
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case LibraryElementPackage.SIMPLE_EC_ACTION__SIMPLE_EC_STATE:
-				return basicGetSimpleECState() != null;
+				return getSimpleECState() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

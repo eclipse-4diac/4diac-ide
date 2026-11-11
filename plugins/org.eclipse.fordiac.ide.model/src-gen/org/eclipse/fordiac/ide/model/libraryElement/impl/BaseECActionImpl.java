@@ -19,8 +19,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -99,23 +97,6 @@ public abstract class BaseECActionImpl extends EObjectImpl implements BaseECActi
 	 */
 	@Override
 	public Event getOutput() {
-		if (output != null && output.eIsProxy()) {
-			InternalEObject oldOutput = (InternalEObject)output;
-			output = (Event)eResolveProxy(oldOutput);
-			if (output != oldOutput) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.BASE_EC_ACTION__OUTPUT, oldOutput, output));
-			}
-		}
-		return output;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Event basicGetOutput() {
 		return output;
 	}
 
@@ -164,8 +145,7 @@ public abstract class BaseECActionImpl extends EObjectImpl implements BaseECActi
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.BASE_EC_ACTION__OUTPUT:
-				if (resolve) return getOutput();
-				return basicGetOutput();
+				return getOutput();
 			case LibraryElementPackage.BASE_EC_ACTION__ALGORITHM:
 				return getAlgorithm();
 			default:
