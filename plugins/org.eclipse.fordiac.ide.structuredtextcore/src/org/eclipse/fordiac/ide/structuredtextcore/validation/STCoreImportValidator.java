@@ -102,8 +102,7 @@ public class STCoreImportValidator {
 
 	protected boolean existsWildcardImport(final QualifiedName qualifiedName, final EObject context) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(context);
-		return typeLibrary == null
-				|| typeLibrary.getPackages().contains(nameConverter.toString(qualifiedName.skipLast(1)))
+		return typeLibrary == null || typeLibrary.containsPackage(nameConverter.toString(qualifiedName.skipLast(1)))
 				|| typeLibrary.getGlobalConstantsEntry(nameConverter.toString(qualifiedName.skipLast(1))) != null;
 	}
 

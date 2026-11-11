@@ -194,6 +194,10 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		return globalConstants.get(name.toLowerCase());
 	}
 
+	public boolean containsPackage(final String packageName) {
+		return packages.containsKey(packageName.toLowerCase());
+	}
+
 	public TypeEntry getFBOrSubAppType(final String typeName) {
 		final TypeEntry fb = getFBTypeEntry(typeName);
 		return fb != null ? fb : getSubAppTypeEntry(typeName);
