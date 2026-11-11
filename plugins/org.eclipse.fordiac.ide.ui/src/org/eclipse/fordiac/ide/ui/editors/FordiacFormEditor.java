@@ -14,32 +14,12 @@ package org.eclipse.fordiac.ide.ui.editors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.widgets.Item;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.part.MultiPageEditorPart;
 
 /* extension of the form editor for saver getEditor and global notifications on page changes
  *
  */
 public abstract class FordiacFormEditor extends FormEditor {
-
-	/**
-	 * This is a re-implementation of {@link MultiPageEditorPart#getEditor(int)}.
-	 * The original method does not check if the item is already disposed. This can
-	 * lead to a problem if any of the listeners is called and asked for the editor
-	 * during the dispose process.
-	 */
-	@Override
-	protected IEditorPart getEditor(final int pageIndex) {
-		final Item item = ((CTabFolder) getContainer()).getItem(pageIndex); // getItem in MultiPageEditorPart is private
-																			// so we have to do this
-		if (item != null && !item.isDisposed() && item.getData() instanceof final IEditorPart ep) {
-			return ep;
-		}
-		return null;
-	}
 
 	@Override
 	protected void pageChange(final int newPageIndex) {
