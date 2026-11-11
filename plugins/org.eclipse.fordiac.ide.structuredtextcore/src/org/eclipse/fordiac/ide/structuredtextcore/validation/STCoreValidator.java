@@ -993,7 +993,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (resource instanceof final STCoreResource coreResource && coreResource.getInternalLibraryElement() != null) {
 			final String expectedPackageName = PackageNameHelper
 					.getPackageName(coreResource.getInternalLibraryElement());
-			if (!Objects.requireNonNullElse(packageName, "").equals(expectedPackageName)) { //$NON-NLS-1$
+			if (!Objects.requireNonNullElse(packageName, "").equalsIgnoreCase(expectedPackageName)) { //$NON-NLS-1$
 				error(MessageFormat.format(Messages.STCoreValidator_PackageNameTypeMismatch,
 						Objects.requireNonNullElse(packageName, ""), expectedPackageName), source, feature, //$NON-NLS-1$
 						PACKAGE_NAME_TYPE_MISMATCH, expectedPackageName);
