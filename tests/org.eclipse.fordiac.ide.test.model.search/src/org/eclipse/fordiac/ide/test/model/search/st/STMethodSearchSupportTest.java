@@ -25,12 +25,12 @@ class STMethodSearchSupportTest extends StructuredTextSearchSupportTest {
 	@Test
 	void testNameSearch() {
 		final SimpleFBType type = createSimpleFBType("Test");
-		type.getCallables().add(createMethod("TEST", """
+		type.getSourceElements().add(createMethod("TEST", """
 				METHOD TEST
 				END_METHOD
 				"""));
-		assertNoMatch(type.getCallables().getFirst(), new NameMatcher("ABC"));
-		assertMatch(type.getCallables().getFirst(), new NameMatcher("TEST"), 0, 7, 4);
+		assertNoMatch(type.getSourceElements().getFirst(), new NameMatcher("ABC"));
+		assertMatch(type.getSourceElements().getFirst(), new NameMatcher("TEST"), 0, 7, 4);
 	}
 
 	@Test
@@ -40,29 +40,29 @@ class STMethodSearchSupportTest extends StructuredTextSearchSupportTest {
 		final VarDeclaration varDeclaration2 = createVarDeclaration("DO2", ElementaryTypes.DINT);
 		type.getInterfaceList().getOutputVars().add(varDeclaration);
 		type.getInterfaceList().getOutputVars().add(varDeclaration2);
-		type.getCallables().add(createMethod("TEST", """
+		type.getSourceElements().add(createMethod("TEST", """
 				METHOD TEST
 				DO2 := 17;
 				END_METHOD
 				"""));
-		assertNoMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration));
-		assertMatch(type.getCallables().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 12, 3);
+		assertNoMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration));
+		assertMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 12, 3);
 	}
 
 	@Test
 	void testMultiSearch() {
 		final SimpleFBType type = createSimpleFBType("Test");
-		type.getCallables().add(createMethod("TEST1", """
+		type.getSourceElements().add(createMethod("TEST1", """
 				METHOD TEST1
 				DO2 := 17;
 				END_METHOD
 				"""));
-		type.getCallables().add(createMethod("TEST2", """
+		type.getSourceElements().add(createMethod("TEST2", """
 				METHOD TEST2
 				DO2 := 4;
 				END_METHOD
 				"""));
-		assertNoMatch(type.getCallables().getLast(), new NameMatcher("TEST1"));
-		assertMatch(type.getCallables().getLast(), new NameMatcher("TEST2"), 4, 43, 5);
+		assertNoMatch(type.getSourceElements().getLast(), new NameMatcher("TEST1"));
+		assertMatch(type.getSourceElements().getLast(), new NameMatcher("TEST2"), 4, 43, 5);
 	}
 }

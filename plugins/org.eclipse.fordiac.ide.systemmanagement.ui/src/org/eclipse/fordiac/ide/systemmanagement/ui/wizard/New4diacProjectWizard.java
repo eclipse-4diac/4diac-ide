@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizardPage;
@@ -28,7 +29,6 @@ import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.ProjectCreator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.SystemCreator;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -99,7 +99,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			getContainer().run(false, true, op);
 
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return false;
 		} catch (final InterruptedException x) {
 			Thread.currentThread().interrupt(); // mark interruption
@@ -128,7 +128,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 				OpenListenerManager.openEditor(systemCreator.getApplication());
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}

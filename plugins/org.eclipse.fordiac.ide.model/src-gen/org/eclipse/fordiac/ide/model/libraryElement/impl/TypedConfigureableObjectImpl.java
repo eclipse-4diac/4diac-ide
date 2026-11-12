@@ -257,7 +257,7 @@ public class TypedConfigureableObjectImpl extends EObjectImpl implements TypedCo
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES);
 		}
 		return attributes;
 	}

@@ -34,14 +34,13 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getInOutParameters <em>In Out Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#isVarargs <em>Varargs</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText <em>Text</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod()
  * @model abstract="true"
  * @generated
  */
-public interface TextMethod extends Method {
+public interface TextMethod extends Method, TextSourceElement {
 	/**
 	 * Returns the value of the '<em><b>Input Parameters</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement}.
@@ -49,7 +48,7 @@ public interface TextMethod extends Method {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Input Parameters</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_InputParameters()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ITypedElement> getInputParameters();
@@ -61,7 +60,7 @@ public interface TextMethod extends Method {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Output Parameters</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_OutputParameters()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ITypedElement> getOutputParameters();
@@ -73,7 +72,7 @@ public interface TextMethod extends Method {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>In Out Parameters</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_InOutParameters()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ITypedElement> getInOutParameters();
@@ -85,7 +84,7 @@ public interface TextMethod extends Method {
 	 * @return the value of the '<em>Return Type</em>' reference.
 	 * @see #setReturnType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_ReturnType()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	DataType getReturnType();
@@ -121,27 +120,5 @@ public interface TextMethod extends Method {
 	 * @generated
 	 */
 	void setVarargs(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Text</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Text</em>' attribute.
-	 * @see #setText(String)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_Text()
-	 * @model annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData transformer='org.eclipse.fordiac.ide.model.util.StringTransformer'"
-	 * @generated
-	 */
-	String getText();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText <em>Text</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Text</em>' attribute.
-	 * @see #getText()
-	 * @generated
-	 */
-	void setText(String value);
 
 } // TextMethod

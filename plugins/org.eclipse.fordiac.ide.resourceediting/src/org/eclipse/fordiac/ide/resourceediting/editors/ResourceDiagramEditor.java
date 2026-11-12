@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.resourceediting.editors;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
@@ -86,23 +87,28 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 	}
 
 	protected void addColorChangeListener() {
-		if (null != getResource()) {
-			getResource().getDevice().eAdapters().add(colorChangeListener);
+		final Resource res = getResource();
+		if (null != res) {
+			res.getDevice().eAdapters().add(colorChangeListener);
 		}
 	}
 
 	protected void removeColorChangeListener() {
-		if (null != getResource()) {
-			getResource().getDevice().eAdapters().remove(colorChangeListener);
+		// us the target of the adapter as the resource may be removed from the parent
+		// and such we can not access the device
+		final Notifier target = colorChangeListener.getTarget();
+		if (target != null) {
+			target.eAdapters().remove(colorChangeListener);
 		}
 	}
 
 	private void updateGridColor() {
-		if (null != getResource()) {
+		final Resource res = getResource();
+		if (res != null) {
 			final IFigure layer = ((ZoomScalableFreeformRootEditPart) getViewer().getRootEditPart())
 					.getLayer(LayerConstants.GRID_LAYER);
-			if (null != layer) {
-				final Color devColor = getResource().getDevice().getColor();
+			if (layer != null) {
+				final Color devColor = res.getDevice().getColor();
 				if (null != devColor) {
 					final org.eclipse.swt.graphics.Color newColor = new org.eclipse.swt.graphics.Color(
 							devColor.getRed(), devColor.getGreen(), devColor.getBlue());

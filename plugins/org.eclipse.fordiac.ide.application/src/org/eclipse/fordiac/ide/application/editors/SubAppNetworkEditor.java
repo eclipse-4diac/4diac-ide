@@ -13,47 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
-import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.ui.IEditorInput;
 
 public class SubAppNetworkEditor extends FBNetworkEditor {
 
-	private final Adapter adapter = new EditorCloserAdapter(this) {
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-			final int featureId = notification.getFeatureID(TypedConfigureableObject.class);
-			if (((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY == featureId) && (getSubApp().isTyped()))
-					|| isSubAppToggledToExpanded(notification)) {
-				// undo of detached from the subapp type or because of subapp beeing expanded
-				closeEditor();
-			}
-		}
-
-		private boolean isSubAppToggledToExpanded(final Notification msg) {
-			return msg.getOldValue() == null && msg.getNewValue() instanceof final Attribute att
-					&& att.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED
-					&& "true".equals(att.getValue()); //$NON-NLS-1$
-		}
-	};
-
-	private Adapter fbNetworkAdapter;
-
 	@Override
 	public void dispose() {
-		removeAdapters();
 		super.dispose();
 		getEditDomain().setPaletteViewer(null);
 	}
@@ -64,31 +34,8 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 		if (subApp == null) {
 			throw new IllegalArgumentException("SubApp editors only accept sub-applications as valid inputs!"); //$NON-NLS-1$
 		}
-		removeAdapters();
 		setModel(subApp.getSubAppNetwork());
-		addAdapters();
 		super.setInput(input);
-	}
-
-	protected void addAdapters() {
-		if (getSubApp() != null) {
-			getSubApp().eAdapters().add(adapter);
-			final EObject container = getSubApp().eContainer();
-			if (container != null) {
-				fbNetworkAdapter = new FBNElemEditorCloser(this, getSubApp());
-				container.eAdapters().add(fbNetworkAdapter);
-			}
-		}
-	}
-
-	protected void removeAdapters() {
-		if (getSubApp() != null) {
-			getSubApp().eAdapters().remove(adapter);
-			final EObject container = getSubApp().eContainer();
-			if (container != null) {
-				container.eAdapters().remove(fbNetworkAdapter);
-			}
-		}
 	}
 
 	@Override

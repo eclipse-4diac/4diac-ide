@@ -22,6 +22,7 @@ public final class Messages extends NLS {
 
 	public static String Archive_Not_Accessible;
 	public static String Archive_Not_Found;
+	public static String Endpoint_Not_Available;
 	public static String Library_Not_Found;
 	public static String Manifest_Not_Accessible;
 	public static String Manifest_Not_Found;

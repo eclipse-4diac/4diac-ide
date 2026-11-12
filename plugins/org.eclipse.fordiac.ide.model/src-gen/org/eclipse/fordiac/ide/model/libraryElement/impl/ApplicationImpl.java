@@ -245,7 +245,7 @@ public class ApplicationImpl extends EObjectImpl implements Application {
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.APPLICATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.APPLICATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -257,29 +257,6 @@ public class ApplicationImpl extends EObjectImpl implements Application {
 	 */
 	@Override
 	public FBNetwork getFBNetwork() {
-		if (fBNetwork != null && fBNetwork.eIsProxy()) {
-			InternalEObject oldFBNetwork = (InternalEObject)fBNetwork;
-			fBNetwork = (FBNetwork)eResolveProxy(oldFBNetwork);
-			if (fBNetwork != oldFBNetwork) {
-				InternalEObject newFBNetwork = (InternalEObject)fBNetwork;
-				NotificationChain msgs = oldFBNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, null);
-				if (newFBNetwork.eInternalContainer() == null) {
-					msgs = newFBNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.APPLICATION__FB_NETWORK, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.APPLICATION__FB_NETWORK, oldFBNetwork, fBNetwork));
-			}
-		}
-		return fBNetwork;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetwork basicGetFBNetwork() {
 		return fBNetwork;
 	}
 
@@ -410,8 +387,7 @@ public class ApplicationImpl extends EObjectImpl implements Application {
 			case LibraryElementPackage.APPLICATION__ATTRIBUTES:
 				return getAttributes();
 			case LibraryElementPackage.APPLICATION__FB_NETWORK:
-				if (resolve) return getFBNetwork();
-				return basicGetFBNetwork();
+				return getFBNetwork();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -161,29 +161,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 */
 	@Override
 	public Position getPosition() {
-		if (position != null && position.eIsProxy()) {
-			InternalEObject oldPosition = (InternalEObject)position;
-			position = (Position)eResolveProxy(oldPosition);
-			if (position != oldPosition) {
-				InternalEObject newPosition = (InternalEObject)position;
-				NotificationChain msgs = oldPosition.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__POSITION, null, null);
-				if (newPosition.eInternalContainer() == null) {
-					msgs = newPosition.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__POSITION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__POSITION, oldPosition, position));
-			}
-		}
-		return position;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Position basicGetPosition() {
 		return position;
 	}
 
@@ -229,29 +206,6 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	 */
 	@Override
 	public Color getColor() {
-		if (color != null && color.eIsProxy()) {
-			InternalEObject oldColor = (InternalEObject)color;
-			color = (Color)eResolveProxy(oldColor);
-			if (color != oldColor) {
-				InternalEObject newColor = (InternalEObject)color;
-				NotificationChain msgs = oldColor.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, null);
-				if (newColor.eInternalContainer() == null) {
-					msgs = newColor.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.DEVICE__COLOR, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.DEVICE__COLOR, oldColor, color));
-			}
-		}
-		return color;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Color basicGetColor() {
 		return color;
 	}
 
@@ -298,7 +252,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.DEVICE__VAR_DECLARATIONS);
+			varDeclarations = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.DEVICE__VAR_DECLARATIONS);
 		}
 		return varDeclarations;
 	}
@@ -347,7 +301,7 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	@Override
 	public EList<Link> getInConnections() {
 		if (inConnections == null) {
-			inConnections = new EObjectWithInverseResolvingEList<Link>(Link.class, this, LibraryElementPackage.DEVICE__IN_CONNECTIONS, LibraryElementPackage.LINK__DEVICE);
+			inConnections = new EObjectWithInverseEList<Link>(Link.class, this, LibraryElementPackage.DEVICE__IN_CONNECTIONS, LibraryElementPackage.LINK__DEVICE);
 		}
 		return inConnections;
 	}
@@ -447,11 +401,9 @@ public class DeviceImpl extends TypedConfigureableObjectImpl implements Device {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.DEVICE__POSITION:
-				if (resolve) return getPosition();
-				return basicGetPosition();
+				return getPosition();
 			case LibraryElementPackage.DEVICE__COLOR:
-				if (resolve) return getColor();
-				return basicGetColor();
+				return getColor();
 			case LibraryElementPackage.DEVICE__VAR_DECLARATIONS:
 				return getVarDeclarations();
 			case LibraryElementPackage.DEVICE__RESOURCE:

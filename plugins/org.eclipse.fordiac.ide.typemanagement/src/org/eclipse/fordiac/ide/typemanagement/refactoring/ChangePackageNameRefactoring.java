@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.swt.widgets.Shell;
@@ -42,7 +42,7 @@ public class ChangePackageNameRefactoring extends RenameRefactoring {
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Error during package name refactoring", e); //$NON-NLS-1$
+			ILog.get().error("Error during package name refactoring", e); //$NON-NLS-1$
 		}
 	}
 

@@ -70,7 +70,7 @@ public interface AutomationSystem extends LibraryElement {
 	 * @return the value of the '<em>System Configuration</em>' containment reference.
 	 * @see #setSystemConfiguration(SystemConfiguration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem_SystemConfiguration()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	SystemConfiguration getSystemConfiguration();

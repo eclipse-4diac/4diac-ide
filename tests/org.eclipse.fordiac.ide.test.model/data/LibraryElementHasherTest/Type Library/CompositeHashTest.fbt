@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="CompositeHashTest" Comment="Composite FB containing a basic FB">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2026-10-28">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Request">
+				<With Var="DI1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation">
+				<With Var="DO1"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="DINT" InitialValue="DINT#42"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="DINT"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="Basic" Type="BasicHashTest" x="100" y="100">
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="Basic.REQ"/>
+			<Connection Source="Basic.CNF" Destination="CNF"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="DI1" Destination="Basic.DI1"/>
+			<Connection Source="Basic.DO1" Destination="DO1"/>
+		</DataConnections>
+	</FBNetwork>
+	<Attribute Name="eclipse4diac::test::ExpectedTypeHash" Value="'v2:SHA3-512:QMZ0xG0RtpNtNHB-coOmx-FJoMCIoZgKc4YHJZvN3xJqjN2j9YcNwYA8rzcx3ZFNl21dNjBhaa3Zmr50Qbr4cA=='"/>
+</FBType>

@@ -80,7 +80,7 @@ public interface FBNetwork extends EObject {
 	 * @return the value of the '<em>Event Connections</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBNetwork_EventConnections()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.EventConnection#getFBNetwork
-	 * @model opposite="fBNetwork" containment="true" resolveProxies="true"
+	 * @model opposite="fBNetwork" containment="true"
 	 * @generated
 	 */
 	EList<EventConnection> getEventConnections();

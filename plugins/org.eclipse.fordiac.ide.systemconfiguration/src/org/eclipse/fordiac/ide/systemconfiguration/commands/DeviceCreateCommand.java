@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
@@ -41,7 +42,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.fordiac.ide.util.YUV;
 import org.eclipse.gef.commands.Command;
 
@@ -129,7 +129,7 @@ public class DeviceCreateCommand extends Command {
 				final Resource copy = cmd.getResource();
 				copy.setName(res.getName());
 			} else {
-				FordiacLogHelper.logInfo("Referenced Resource Type: " //$NON-NLS-1$
+				ILog.get().info("Referenced Resource Type: " //$NON-NLS-1$
 						+ (res.getName() != null ? res.getName() : "N/A") //$NON-NLS-1$
 						+ (res.getTypeEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						+ " not found. Please check whether your palette contains that type and add it manually to your device!"); //$NON-NLS-1$

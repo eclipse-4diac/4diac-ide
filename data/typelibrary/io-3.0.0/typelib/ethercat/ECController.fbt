@@ -2,6 +2,8 @@
 <FBType Name="ECController" Comment="EtherCAT master configuration function block">
 	<Identification Standard="61499-2" Description="Copyright (c) 2026 Sichuan Qunyuan Technology Co., Ltd.&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
+	<VersionInfo Organization="Cybernetic Solutions GbR" Version="1.1" Author="Tim Grocki" Date="2026-10-29" Remarks="renamed ControllerIndex to ControllerId to match 4diac FORTE">
+	</VersionInfo>
 	<VersionInfo Version="1.0" Author="Zijun Tang" Date="2026-04-09">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::io::ethercat">
@@ -9,7 +11,7 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="INIT" Type="Event" Comment="Initialize the EtherCAT master">
-				<With Var="ControllerIndex"/>
+				<With Var="ControllerId"/>
 				<With Var="UpdateInterval"/>
 				<With Var="QI"/>
 			</Event>
@@ -34,8 +36,8 @@
 		<InputVars>
 			<VarDeclaration Name="QI" Type="BOOL" Comment="Event input qualifier"/>
 			<VarDeclaration Name="Enable" Type="BOOL" Comment="TRUE starts cyclic EtherCAT I/O"/>
-			<VarDeclaration Name="ControllerIndex" Type="UINT" Comment="IgH EtherCAT master index"/>
-			<VarDeclaration Name="UpdateInterval" Type="TIME" InitialValue="T#30us" Comment="Cyclic task period"/>
+			<VarDeclaration Name="ControllerId" Type="UINT" Comment="IgH EtherCAT master index"/>
+			<VarDeclaration Name="UpdateInterval" Type="TIME" InitialValue="T#1ms" Comment="Cyclic task period"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="QO" Type="BOOL" Comment="Event output qualifier"/>

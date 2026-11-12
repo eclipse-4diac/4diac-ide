@@ -41,7 +41,7 @@ public interface Application extends INamedElement, ConfigurableObject {
 	 * @return the value of the '<em>FB Network</em>' containment reference.
 	 * @see #setFBNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getApplication_FBNetwork()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model containment="true" required="true"
 	 *        extendedMetaData="kind='element' name='FBNetwork' namespace='##targetNamespace'"
 	 * @generated
 	 */

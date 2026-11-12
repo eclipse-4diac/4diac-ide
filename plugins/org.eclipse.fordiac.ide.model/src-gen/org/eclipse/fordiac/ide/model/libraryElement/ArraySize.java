@@ -69,7 +69,7 @@ public interface ArraySize extends EObject {
 	 * @see #setVarDeclaration(VarDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getArraySize_VarDeclaration()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration#getArraySize
-	 * @model opposite="arraySize" transient="false"
+	 * @model opposite="arraySize" resolveProxies="false" transient="false"
 	 * @generated
 	 */
 	VarDeclaration getVarDeclaration();

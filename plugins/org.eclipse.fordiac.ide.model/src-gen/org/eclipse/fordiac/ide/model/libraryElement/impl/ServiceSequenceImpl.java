@@ -299,7 +299,7 @@ public class ServiceSequenceImpl extends EObjectImpl implements ServiceSequence 
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.SERVICE_SEQUENCE__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.SERVICE_SEQUENCE__ATTRIBUTES);
 		}
 		return attributes;
 	}

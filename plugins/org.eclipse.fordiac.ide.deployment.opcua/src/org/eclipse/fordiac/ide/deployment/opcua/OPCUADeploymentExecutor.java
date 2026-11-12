@@ -57,13 +57,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
-import org.eclipse.milo.opcua.sdk.client.DiscoveryClient;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
-import org.eclipse.milo.opcua.sdk.client.OpcUaClientConfigBuilder;
 import org.eclipse.milo.opcua.sdk.client.SessionActivityListener;
 import org.eclipse.milo.opcua.sdk.client.UaSession;
 import org.eclipse.milo.opcua.stack.core.NodeIds;
 import org.eclipse.milo.opcua.stack.core.UaException;
+import org.eclipse.milo.opcua.stack.core.channel.EncodingLimits;
+import org.eclipse.milo.opcua.stack.core.types.builtin.LocalizedText;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
 import org.eclipse.milo.opcua.stack.core.types.builtin.Variant;
@@ -74,7 +74,6 @@ import org.eclipse.milo.opcua.stack.core.types.structured.BrowseDescription;
 import org.eclipse.milo.opcua.stack.core.types.structured.CallMethodRequest;
 import org.eclipse.milo.opcua.stack.core.types.structured.CallMethodResult;
 import org.eclipse.milo.opcua.stack.core.types.structured.CallResponse;
-import org.eclipse.milo.opcua.stack.core.types.structured.EndpointDescription;
 import org.eclipse.milo.opcua.stack.core.types.structured.ReferenceDescription;
 import org.xml.sax.InputSource;
 
@@ -98,6 +97,17 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	private final ResponseMapping respMapping = new ResponseMapping();
 
+	private static final String APPLICATION_NAME = "Eclipse 4diac UA Milo Client"; //$NON-NLS-1$
+	private static final String APPLICATION_URI = "urn:eclipse:fordiac:milo:client"; //$NON-NLS-1$
+
+	private static final int MAX_MESSAGE_SIZE = EncodingLimits.DEFAULT_MAX_MESSAGE_SIZE * 8; // Change maximum message
+																								// size from 2MB to 16MB
+																								// for now
+	private static final int MAX_CHUNK_COUNT = MAX_MESSAGE_SIZE / EncodingLimits.DEFAULT_MAX_CHUNK_SIZE;
+
+	private static final EncodingLimits ENCODING_LIMITS = new EncodingLimits(EncodingLimits.DEFAULT_MAX_CHUNK_SIZE,
+			MAX_CHUNK_COUNT, MAX_MESSAGE_SIZE, EncodingLimits.DEFAULT_MAX_RECURSION_DEPTH);
+
 	public OPCUADeploymentExecutor(final Device dev) {
 		this.device = dev;
 		this.client = createClient();
@@ -109,10 +119,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		try {
 			String mgrId = DeploymentHelper.getMgrID(device);
 			mgrId = mgrId.substring(1, mgrId.length() - 1);
-			final List<EndpointDescription> endpoints = DiscoveryClient.getEndpoints(mgrId).get();
-			final OpcUaClientConfigBuilder cfg = new OpcUaClientConfigBuilder();
-			cfg.setEndpoint(endpoints.get(0));
-			final OpcUaClient newClient = OpcUaClient.create(cfg.build());
+
+			final OpcUaClient newClient = OpcUaClient.create(mgrId, endpoints -> endpoints.stream().findFirst(), _ -> {
+				// Can remain empty
+			}, config -> config.setApplicationName(LocalizedText.english(APPLICATION_NAME))
+					.setApplicationUri(APPLICATION_URI).setEncodingLimits(ENCODING_LIMITS));
 
 			newClient.addSessionActivityListener(new SessionActivityListener() {
 				@Override
@@ -130,12 +141,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return newClient;
 		} catch (final DeploymentException e) {
 			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_GetMgrIDFailed, e.getMessage()), e);
-		} catch (final ExecutionException | UaException e) {
+		} catch (final UaException e) {
 			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_CreateClientFailed, e.getMessage()),
-					e);
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();
-			ILog.get().error(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()),
 					e);
 		}
 		return null;
@@ -161,6 +168,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 				listener.connectionOpened(device);
 			}
 		} catch (final UaException e) {
+			try {
+				client.disconnect();
+			} catch (final UaException disconnectError) {
+				e.addSuppressed(disconnectError);
+			}
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_CouldNotConnectToDevice, e);
 		}
 	}

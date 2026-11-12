@@ -72,7 +72,7 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	 * @see #setSource(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Source()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getOutputConnections
-	 * @model opposite="outputConnections"
+	 * @model opposite="outputConnections" resolveProxies="false"
 	 * @generated
 	 */
 	IInterfaceElement getSource();
@@ -96,7 +96,7 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	 * @see #setDestination(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Destination()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getInputConnections
-	 * @model opposite="inputConnections"
+	 * @model opposite="inputConnections" resolveProxies="false"
 	 * @generated
 	 */
 	IInterfaceElement getDestination();
@@ -118,7 +118,7 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	 * @return the value of the '<em>Routing Data</em>' containment reference.
 	 * @see #setRoutingData(ConnectionRoutingData)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_RoutingData()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	ConnectionRoutingData getRoutingData();

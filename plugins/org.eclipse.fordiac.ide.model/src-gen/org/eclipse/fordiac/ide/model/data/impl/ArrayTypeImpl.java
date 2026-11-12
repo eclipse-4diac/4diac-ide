@@ -154,23 +154,6 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 	 */
 	@Override
 	public DataType getBaseType() {
-		if (baseType != null && baseType.eIsProxy()) {
-			InternalEObject oldBaseType = (InternalEObject)baseType;
-			baseType = (DataType)eResolveProxy(oldBaseType);
-			if (baseType != oldBaseType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DataPackage.ARRAY_TYPE__BASE_TYPE, oldBaseType, baseType));
-			}
-		}
-		return baseType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetBaseType() {
 		return baseType;
 	}
 
@@ -225,8 +208,7 @@ public class ArrayTypeImpl extends AnyDerivedTypeImpl implements ArrayType {
 			case DataPackage.ARRAY_TYPE__INITIAL_VALUES:
 				return getInitialValues();
 			case DataPackage.ARRAY_TYPE__BASE_TYPE:
-				if (resolve) return getBaseType();
-				return basicGetBaseType();
+				return getBaseType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

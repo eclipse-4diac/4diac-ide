@@ -44,7 +44,7 @@ public interface IVarElement extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Var Declarations</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIVarElement_VarDeclarations()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<VarDeclaration> getVarDeclarations();

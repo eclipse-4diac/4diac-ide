@@ -263,16 +263,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public FBType getFBType() {
 		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_TYPE) return null;
-		return (FBType)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBType basicGetFBType() {
-		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_TYPE) return null;
 		return (FBType)eInternalContainer();
 	}
 
@@ -283,16 +273,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public BlockFBNetworkElement getBlockFBNetworkElement() {
-		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT) return null;
-		return (BlockFBNetworkElement)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public BlockFBNetworkElement basicGetBlockFBNetworkElement() {
 		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT) return null;
 		return (BlockFBNetworkElement)eInternalContainer();
 	}
@@ -535,11 +515,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return getErrorMarker();
 			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
-				if (resolve) return getFBType();
-				return basicGetFBType();
+				return getFBType();
 			case LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT:
-				if (resolve) return getBlockFBNetworkElement();
-				return basicGetBlockFBNetworkElement();
+				return getBlockFBNetworkElement();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -661,9 +639,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return errorMarker != null && !errorMarker.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
-				return basicGetFBType() != null;
+				return getFBType() != null;
 			case LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT:
-				return basicGetBlockFBNetworkElement() != null;
+				return getBlockFBNetworkElement() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

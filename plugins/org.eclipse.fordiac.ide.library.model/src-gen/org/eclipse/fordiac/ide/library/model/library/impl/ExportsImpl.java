@@ -3,8 +3,10 @@
 package org.eclipse.fordiac.ide.library.model.library.impl;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -16,9 +18,8 @@ import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Exports</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Exports</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -31,8 +32,7 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
 public class ExportsImpl extends EObjectImpl implements Exports {
 	/**
 	 * The cached value of the '{@link #getLibrary() <em>Library</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getLibrary()
 	 * @generated
 	 * @ordered
@@ -40,8 +40,7 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	protected EList<Library> library;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected ExportsImpl() {
@@ -49,8 +48,7 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -59,8 +57,7 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -72,8 +69,16 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateUniqueSymbolicNames(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.library.model.impl.ExportsAnnotations.validateUniqueSymbolicNames(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -87,8 +92,7 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -102,8 +106,7 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -121,8 +124,7 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -138,8 +140,7 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -152,4 +153,4 @@ public class ExportsImpl extends EObjectImpl implements Exports {
 		}
 	}
 
-} //ExportsImpl
+} // ExportsImpl

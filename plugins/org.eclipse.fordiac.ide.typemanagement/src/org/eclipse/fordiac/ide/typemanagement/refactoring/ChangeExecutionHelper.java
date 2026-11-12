@@ -16,12 +16,12 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Display;
@@ -38,6 +38,7 @@ public final class ChangeExecutionHelper {
 		throw new UnsupportedOperationException();
 	}
 
+	@Deprecated(forRemoval = true)
 	public static void executeChange(final Command cmd, final EObject modelObj, final IProgressMonitor pm) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
 
@@ -51,7 +52,7 @@ public final class ChangeExecutionHelper {
 					try {
 						entry.save(elem, pm);
 					} catch (final CoreException e) {
-						FordiacLogHelper.logError(e.getMessage(), e);
+						ILog.get().error(e.getMessage(), e);
 					}
 				} else {
 					editor.getAdapter(CommandStack.class).execute(cmd);

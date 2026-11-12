@@ -19,8 +19,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -90,23 +88,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 */
 	@Override
 	public FBNetworkElement getFrom() {
-		if (from != null && from.eIsProxy()) {
-			InternalEObject oldFrom = (InternalEObject)from;
-			from = (FBNetworkElement)eResolveProxy(oldFrom);
-			if (from != oldFrom) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__FROM, oldFrom, from));
-			}
-		}
-		return from;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetworkElement basicGetFrom() {
 		return from;
 	}
 
@@ -130,23 +111,6 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	 */
 	@Override
 	public FBNetworkElement getTo() {
-		if (to != null && to.eIsProxy()) {
-			InternalEObject oldTo = (InternalEObject)to;
-			to = (FBNetworkElement)eResolveProxy(oldTo);
-			if (to != oldTo) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__TO, oldTo, to));
-			}
-		}
-		return to;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetworkElement basicGetTo() {
 		return to;
 	}
 
@@ -182,11 +146,9 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.MAPPING__FROM:
-				if (resolve) return getFrom();
-				return basicGetFrom();
+				return getFrom();
 			case LibraryElementPackage.MAPPING__TO:
-				if (resolve) return getTo();
-				return basicGetTo();
+				return getTo();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

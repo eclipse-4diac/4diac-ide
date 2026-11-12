@@ -18,10 +18,12 @@ package org.eclipse.fordiac.ide.model.ui.widgets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -54,10 +56,12 @@ public class BreadcrumbWidget implements ISelectionProvider {
 	private final List<BreadcrumbItem> items = new ArrayList<>();
 
 	private final ListenerList<ISelectionChangedListener> selectionChangedListeners = new ListenerList<>();
+	private final Supplier<INamedElement> rootSupplier;
 
-	public BreadcrumbWidget(final Composite parent) {
+	public BreadcrumbWidget(final Composite parent, final Supplier<INamedElement> rootSupplier) {
 		toolbar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		toolbar.addDisposeListener(_ -> items.forEach(BreadcrumbItem::dispose));
+		this.rootSupplier = rootSupplier;
 	}
 
 	public void setInput(final Object input) {
@@ -69,11 +73,13 @@ public class BreadcrumbWidget implements ISelectionProvider {
 			return;
 		}
 
-		if (isValidBreadcrumbInput(input)) {
+		final Object inputToUse = alignInput(input);
+
+		if (isValidBreadcrumbInput(inputToUse)) {
 			items.forEach(BreadcrumbItem::dispose);
 			items.clear();
 			toolbar.requestLayout();
-			createBreadcrumbItems(input);
+			createBreadcrumbItems(inputToUse);
 			toolbar.pack();
 		}
 
@@ -85,10 +91,22 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		}
 	}
 
-	public void openParent() {
-		if (items.size() > 1) {
-			setInput(items.get(items.size() - 2).getModel());
+	private Object alignInput(final Object input) {
+		final INamedElement root = rootSupplier.get();
+		if (!(input instanceof final INamedElement namedElement) || root == null) {
+			return null;
 		}
+
+		if (EcoreUtil.isAncestor(root, namedElement)) {
+			return namedElement;
+		}
+		// we get an out of model object as input. Try to find is corresponding element
+		// in our model
+		final String qualifiedName = namedElement.getQualifiedName();
+		if (qualifiedName.indexOf('.') == -1) {
+			return root;
+		}
+		return root.findByQualifiedName(qualifiedName);
 	}
 
 	private void createBreadcrumbItems(final Object input) {
@@ -114,10 +132,14 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		return labelProvider;
 	}
 
+	public List<EObject> getPath() {
+		return items.stream().map(BreadcrumbItem::getModel).filter(EObject.class::isInstance).map(o -> (EObject) o)
+				.toList();
+	}
+
 	private static boolean isValidBreadcrumbInput(final Object input) {
 		// @formatter:off
-		return   input instanceof IFile
-				|| input instanceof AutomationSystem
+		return input instanceof AutomationSystem
 				|| input instanceof SystemConfiguration
 				|| input instanceof Application
 				|| input instanceof Device

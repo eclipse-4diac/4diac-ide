@@ -577,7 +577,7 @@
                 <objectClass name="org.eclipse.core.resources.IFile" />
             </enablement>
             <description>
-               Show type comment beside the type name.
+               %TypeDecorator_description
             </description>
       </decorator>
    </extension>

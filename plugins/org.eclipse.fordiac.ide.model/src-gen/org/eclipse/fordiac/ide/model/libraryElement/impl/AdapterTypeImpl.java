@@ -197,29 +197,6 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 */
 	@Override
 	public AdapterType getPlugType() {
-		if (plugType != null && plugType.eIsProxy()) {
-			InternalEObject oldPlugType = (InternalEObject)plugType;
-			plugType = (AdapterType)eResolveProxy(oldPlugType);
-			if (plugType != oldPlugType) {
-				InternalEObject newPlugType = (InternalEObject)plugType;
-				NotificationChain msgs = oldPlugType.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, null);
-				if (newPlugType.eInternalContainer() == null) {
-					msgs = newPlugType.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, oldPlugType, plugType));
-			}
-		}
-		return plugType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdapterType basicGetPlugType() {
 		return plugType;
 	}
 
@@ -367,8 +344,7 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 			case LibraryElementPackage.ADAPTER_TYPE__SERVICE:
 				return getService();
 			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
-				if (resolve) return getPlugType();
-				return basicGetPlugType();
+				return getPlugType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

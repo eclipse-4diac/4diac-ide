@@ -21,26 +21,55 @@ import java.lang.StackWalker.Option;
 
 import org.eclipse.core.runtime.ILog;
 
+/**
+ * @deprecated use {@link ILog} directly
+ */
+@Deprecated(forRemoval = true)
 public final class FordiacLogHelper {
 
 	private static final StackWalker STACK_WALKER = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE);
 
+	/**
+	 * @see ILog
+	 * @deprecated replace with `ILog.get().error(...)`
+	 */
+	@Deprecated(forRemoval = true)
 	public static void logError(final String msg, final Throwable t) {
 		ILog.of(STACK_WALKER.getCallerClass()).error(msg, t);
 	}
 
+	/**
+	 * @see ILog
+	 * @deprecated replace with `ILog.get().error(...)`
+	 */
+	@Deprecated
 	public static void logError(final String msg) {
 		ILog.of(STACK_WALKER.getCallerClass()).error(msg);
 	}
 
+	/**
+	 * @see ILog
+	 * @deprecated replace with `ILog.get().warn(...)`
+	 */
+	@Deprecated
 	public static void logWarning(final String msg, final Exception e) {
 		ILog.of(STACK_WALKER.getCallerClass()).warn(msg, e);
 	}
 
+	/**
+	 * @see ILog
+	 * @deprecated replace with `ILog.get().warn(...)`
+	 */
+	@Deprecated
 	public static void logWarning(final String msg) {
 		ILog.of(STACK_WALKER.getCallerClass()).warn(msg);
 	}
 
+	/**
+	 * @see ILog
+	 * @deprecated replace with `ILog.get().info(...)`
+	 */
+	@Deprecated
 	public static void logInfo(final String msg) {
 		ILog.of(STACK_WALKER.getCallerClass()).info(msg);
 	}

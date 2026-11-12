@@ -20,13 +20,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.SystemCreator;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -69,7 +69,7 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			};
 			getContainer().run(false, true, op);
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return false;
 		} catch (final InterruptedException x) {
 			Thread.currentThread().interrupt(); // mark interruption

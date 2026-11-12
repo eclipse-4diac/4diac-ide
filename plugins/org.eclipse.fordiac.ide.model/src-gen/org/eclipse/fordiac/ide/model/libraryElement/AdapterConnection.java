@@ -43,7 +43,7 @@ public interface AdapterConnection extends Connection {
 	 * @see #setFBNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterConnection_FBNetwork()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getAdapterConnections
-	 * @model opposite="adapterConnections" transient="false"
+	 * @model opposite="adapterConnections" resolveProxies="false" transient="false"
 	 * @generated
 	 */
 	FBNetwork getFBNetwork();

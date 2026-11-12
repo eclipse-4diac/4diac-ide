@@ -46,7 +46,7 @@ public interface ConfigurableFB extends FB {
 	 * @return the value of the '<em>Data Type</em>' reference.
 	 * @see #setDataType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConfigurableFB_DataType()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	DataType getDataType();

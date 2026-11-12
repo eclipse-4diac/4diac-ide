@@ -81,29 +81,6 @@ public class UntypedSubAppImpl extends SubAppImpl implements UntypedSubApp {
 	 */
 	@Override
 	public FBNetwork getSubAppNetwork() {
-		if (subAppNetwork != null && subAppNetwork.eIsProxy()) {
-			InternalEObject oldSubAppNetwork = (InternalEObject)subAppNetwork;
-			subAppNetwork = (FBNetwork)eResolveProxy(oldSubAppNetwork);
-			if (subAppNetwork != oldSubAppNetwork) {
-				InternalEObject newSubAppNetwork = (InternalEObject)subAppNetwork;
-				NotificationChain msgs = oldSubAppNetwork.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.UNTYPED_SUB_APP__SUB_APP_NETWORK, null, null);
-				if (newSubAppNetwork.eInternalContainer() == null) {
-					msgs = newSubAppNetwork.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.UNTYPED_SUB_APP__SUB_APP_NETWORK, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.UNTYPED_SUB_APP__SUB_APP_NETWORK, oldSubAppNetwork, subAppNetwork));
-			}
-		}
-		return subAppNetwork;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FBNetwork basicGetSubAppNetwork() {
 		return subAppNetwork;
 	}
 
@@ -206,8 +183,7 @@ public class UntypedSubAppImpl extends SubAppImpl implements UntypedSubApp {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.UNTYPED_SUB_APP__SUB_APP_NETWORK:
-				if (resolve) return getSubAppNetwork();
-				return basicGetSubAppNetwork();
+				return getSubAppNetwork();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

@@ -19,6 +19,8 @@ import org.eclipse.xtext.resource.XtextResource;
 
 public interface STCorePartitioner {
 
+	String LINE_END = "\n"; //$NON-NLS-1$
+
 	String combine(LibraryElement libraryElement);
 
 	Optional<STCorePartition> partition(XtextResource resource);

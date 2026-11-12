@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.typeeditor;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -94,13 +94,13 @@ public class TypeEditorContributor extends GraphicalMultipageEditorContributor {
 
 	private void trace(final String message) {
 		if (traceEnabled) {
-			FordiacLogHelper.logWarning(toString() + " " + message + " in page " + getPage(), new RuntimeException()); //$NON-NLS-1$ //$NON-NLS-2$
+			ILog.get().warn(toString() + " " + message + " in page " + getPage(), new RuntimeException()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	private void trace(final String message, final IEditorPart editorPart) {
 		if (traceEnabled) {
-			FordiacLogHelper.logWarning(toString() + " " + message + " with editor " + editorPart //$NON-NLS-1$ //$NON-NLS-2$
+			ILog.get().warn(toString() + " " + message + " with editor " + editorPart //$NON-NLS-1$ //$NON-NLS-2$
 					+ (editorPart != null ? " (input " + editorPart.getEditorInput() + ")" : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					+ " in page " + getPage(), new RuntimeException()); //$NON-NLS-1$
 		}

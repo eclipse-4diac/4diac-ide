@@ -29,12 +29,12 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
@@ -48,7 +48,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			try {
 				rootDelta.accept(visitor);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Couldn't process resource delta", e); //$NON-NLS-1$
+				ILog.get().error("Couldn't process resource delta", e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -195,7 +195,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		try {
 			delta.accept(projRenameVisitor);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Couldn't handle project rename", e); //$NON-NLS-1$
+			ILog.get().error("Couldn't handle project rename", e); //$NON-NLS-1$
 		}
 	}
 

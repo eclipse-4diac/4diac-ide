@@ -2,6 +2,8 @@
  */
 package org.eclipse.fordiac.ide.library.model.library;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -35,5 +37,13 @@ public interface Exports extends EObject {
 	 * @generated
 	 */
 	EList<Library> getLibrary();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateUniqueSymbolicNames(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // Exports

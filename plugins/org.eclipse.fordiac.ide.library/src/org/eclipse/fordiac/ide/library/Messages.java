@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Patrick Aigner
  *     - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner
+ *     - report manifests with an invalid dependency range
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -80,6 +82,13 @@ public class Messages extends NLS {
 	public static String LibraryManager_UnresolvedDependency;
 
 	public static String LibraryManager_UpdateLibraryPackage;
+
+	public static String LibraryPackageDownloaderProvider_DiscoveryStatus;
+	public static String LibraryPackageDownloaderProvider_SourceError;
+	public static String LibraryPackageDownloaderProvider_UnknownElement;
+
+	public static String OnlineLibraryProvider_InvalidDependencyRange;
+	public static String OnlineLibraryProvider_NoLibrarySource;
 
 	public static String DownloadNullResult;
 	public static String DownloadUnexpectedError;

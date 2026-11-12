@@ -80,7 +80,7 @@ public interface ArrayType extends AnyDerivedType {
 	 * @return the value of the '<em>Base Type</em>' reference.
 	 * @see #setBaseType(DataType)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getArrayType_BaseType()
-	 * @model
+	 * @model resolveProxies="false"
 	 * @generated
 	 */
 	DataType getBaseType();

@@ -138,23 +138,6 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 */
 	@Override
 	public ECState getStart() {
-		if (start != null && start.eIsProxy()) {
-			InternalEObject oldStart = (InternalEObject)start;
-			start = (ECState)eResolveProxy(oldStart);
-			if (start != oldStart) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ECC__START, oldStart, start));
-			}
-		}
-		return start;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ECState basicGetStart() {
 		return start;
 	}
 
@@ -178,16 +161,6 @@ public class ECCImpl extends EObjectImpl implements ECC {
 	 */
 	@Override
 	public BasicFBType getBasicFBType() {
-		if (eContainerFeatureID() != LibraryElementPackage.ECC__BASIC_FB_TYPE) return null;
-		return (BasicFBType)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public BasicFBType basicGetBasicFBType() {
 		if (eContainerFeatureID() != LibraryElementPackage.ECC__BASIC_FB_TYPE) return null;
 		return (BasicFBType)eInternalContainer();
 	}
@@ -293,11 +266,9 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			case LibraryElementPackage.ECC__EC_TRANSITION:
 				return getECTransition();
 			case LibraryElementPackage.ECC__START:
-				if (resolve) return getStart();
-				return basicGetStart();
+				return getStart();
 			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
-				if (resolve) return getBasicFBType();
-				return basicGetBasicFBType();
+				return getBasicFBType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -373,7 +344,7 @@ public class ECCImpl extends EObjectImpl implements ECC {
 			case LibraryElementPackage.ECC__START:
 				return start != null;
 			case LibraryElementPackage.ECC__BASIC_FB_TYPE:
-				return basicGetBasicFBType() != null;
+				return getBasicFBType() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

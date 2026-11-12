@@ -250,7 +250,7 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.ATTRIBUTE_DECLARATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.ATTRIBUTE_DECLARATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -263,7 +263,7 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	@Override
 	public EList<VersionInfo> getVersionInfo() {
 		if (versionInfo == null) {
-			versionInfo = new EObjectContainmentEList.Resolving<VersionInfo>(VersionInfo.class, this, LibraryElementPackage.ATTRIBUTE_DECLARATION__VERSION_INFO);
+			versionInfo = new EObjectContainmentEList<VersionInfo>(VersionInfo.class, this, LibraryElementPackage.ATTRIBUTE_DECLARATION__VERSION_INFO);
 		}
 		return versionInfo;
 	}
@@ -275,29 +275,6 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 */
 	@Override
 	public Identification getIdentification() {
-		if (identification != null && identification.eIsProxy()) {
-			InternalEObject oldIdentification = (InternalEObject)identification;
-			identification = (Identification)eResolveProxy(oldIdentification);
-			if (identification != oldIdentification) {
-				InternalEObject newIdentification = (InternalEObject)identification;
-				NotificationChain msgs = oldIdentification.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ATTRIBUTE_DECLARATION__IDENTIFICATION, null, null);
-				if (newIdentification.eInternalContainer() == null) {
-					msgs = newIdentification.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ATTRIBUTE_DECLARATION__IDENTIFICATION, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ATTRIBUTE_DECLARATION__IDENTIFICATION, oldIdentification, identification));
-			}
-		}
-		return identification;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Identification basicGetIdentification() {
 		return identification;
 	}
 
@@ -343,29 +320,6 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 */
 	@Override
 	public CompilerInfo getCompilerInfo() {
-		if (compilerInfo != null && compilerInfo.eIsProxy()) {
-			InternalEObject oldCompilerInfo = (InternalEObject)compilerInfo;
-			compilerInfo = (CompilerInfo)eResolveProxy(oldCompilerInfo);
-			if (compilerInfo != oldCompilerInfo) {
-				InternalEObject newCompilerInfo = (InternalEObject)compilerInfo;
-				NotificationChain msgs = oldCompilerInfo.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ATTRIBUTE_DECLARATION__COMPILER_INFO, null, null);
-				if (newCompilerInfo.eInternalContainer() == null) {
-					msgs = newCompilerInfo.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ATTRIBUTE_DECLARATION__COMPILER_INFO, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ATTRIBUTE_DECLARATION__COMPILER_INFO, oldCompilerInfo, compilerInfo));
-			}
-		}
-		return compilerInfo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CompilerInfo basicGetCompilerInfo() {
 		return compilerInfo;
 	}
 
@@ -517,29 +471,6 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 */
 	@Override
 	public AnyDerivedType getType() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (AnyDerivedType)eResolveProxy(oldType);
-			if (type != oldType) {
-				InternalEObject newType = (InternalEObject)type;
-				NotificationChain msgs = oldType.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE, null, null);
-				if (newType.eInternalContainer() == null) {
-					msgs = newType.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE, oldType, type));
-			}
-		}
-		return type;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AnyDerivedType basicGetType() {
 		return type;
 	}
 
@@ -742,16 +673,13 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__VERSION_INFO:
 				return getVersionInfo();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__IDENTIFICATION:
-				if (resolve) return getIdentification();
-				return basicGetIdentification();
+				return getIdentification();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__COMPILER_INFO:
-				if (resolve) return getCompilerInfo();
-				return basicGetCompilerInfo();
+				return getCompilerInfo();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE_ENTRY:
 				return getTypeEntry();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
+				return getType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

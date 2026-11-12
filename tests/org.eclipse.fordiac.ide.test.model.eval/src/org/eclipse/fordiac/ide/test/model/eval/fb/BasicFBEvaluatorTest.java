@@ -41,9 +41,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SourceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.junit.jupiter.api.Test;
 
@@ -154,11 +154,11 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
 
-	static TracingBasicFBEvaluator evaluateBasicFB(final ECC ecc, final List<ICallable> callables,
+	static TracingBasicFBEvaluator evaluateBasicFB(final ECC ecc, final List<SourceElement> sourceElements,
 			final List<Event> inputEvents, final List<Variable<?>> variables, final VarDeclaration output)
 			throws EvaluatorException, InterruptedException {
 		return evaluateBasicFB(
-				newBasicFB(ecc, callables,
+				newBasicFB(ecc, sourceElements,
 						Stream.concat(variables.stream().map(
 								variable -> newVarDeclaration(variable.getName(), (DataType) variable.getType(), true)),
 								Stream.of(output)).toList()),
@@ -196,13 +196,13 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		return IntStream.range(0, repeat).mapToObj(_ -> state).flatMap(Collection::stream).toList();
 	}
 
-	static BasicFBType newBasicFB(final ECC ecc, final List<ICallable> callables,
+	static BasicFBType newBasicFB(final ECC ecc, final List<SourceElement> sourceElements,
 			final List<VarDeclaration> variables) {
 		final BasicFBType type = LibraryElementFactory.eINSTANCE.createBasicFBType();
 		type.setName("Test");
 		type.setInterfaceList(newInterfaceList(getContainedEvents(ecc), variables));
 		type.setECC(ecc);
-		type.getCallables().addAll(callables);
+		type.getSourceElements().addAll(sourceElements);
 		return type;
 	}
 

@@ -565,7 +565,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 			final String name = getFeatureText(expression);
 			final LibraryElement type = findNonGenericType(getExpectedFeatureType(expression));
 			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty()
-					&& type instanceof final DataType dataType) {
+					&& type instanceof final DataType dataType && !dataType.eIsProxy()) {
 				createMissingVariable(callable, name, dataType, kind);
 			}
 		}

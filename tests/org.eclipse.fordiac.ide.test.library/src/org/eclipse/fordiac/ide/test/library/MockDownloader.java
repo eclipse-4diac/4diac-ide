@@ -39,17 +39,17 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
-import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
+import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
 /**
- * Archive downloader serving the library archives in the {@code data} folder of
- * this test bundle.
+ * Library package downloader serving the library archives in the {@code data}
+ * folder of this test bundle.
  */
-public class MockDownloader implements IArchiveDownloader {
+public class MockDownloader implements ILibraryPackageDownloader {
 	// The extension registry creates a new downloader instance for every lookup,
 	// so the activation state has to be shared between all instances.
 	private static final AtomicBoolean ACTIVE = new AtomicBoolean(false);
@@ -58,16 +58,32 @@ public class MockDownloader implements IArchiveDownloader {
 	private static final String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
 	private static final String MANIFEST_DIRECTORY_PREFIX = "fordiac-mock-manifests"; //$NON-NLS-1$
 
-	private static Path manifestDirectory;
-
-	private final VersionComparator versionComparator = new VersionComparator();
-
 	@SuppressWarnings("nls")
-	private final Map<String, List<String>> archiveMap = Map.ofEntries(
+	private static final Map<String, List<String>> ARCHIVES = Map.ofEntries(
 			Map.entry("test01", List.of("1.0.0", "1.1.0", "1.5.0", "2.0.0")),
 			Map.entry("test02", List.of("1.0.0", "1.1.0")), Map.entry("test03", List.of("1.0.0", "1.1.0")),
 			Map.entry("test04", List.of("1.0.0", "1.1.0")), Map.entry("test05", List.of("1.0.0")),
 			Map.entry("test06", List.of("1.0.0")), Map.entry("test07", List.of("1.0.0")));
+
+	private static Path manifestDirectory;
+
+	private final VersionComparator versionComparator = new VersionComparator();
+
+	private final Map<String, List<String>> archiveMap;
+
+	public MockDownloader() {
+		this(ARCHIVES);
+	}
+
+	/**
+	 * Creates a downloader serving only some of the test archives.
+	 *
+	 * @param archiveMap the served versions by symbolic name, all of them have to
+	 *                   exist in the {@code data} folder
+	 */
+	protected MockDownloader(final Map<String, List<String>> archiveMap) {
+		this.archiveMap = Map.copyOf(archiveMap);
+	}
 
 	@Override
 	public String getName() {
@@ -135,18 +151,6 @@ public class MockDownloader implements IArchiveDownloader {
 	@Override
 	public void setActive(final boolean active) {
 		ACTIVE.set(active);
-	}
-
-	@Override
-	public boolean hasMultipleEndpoints() {
-		return false;
-	}
-
-	@Override
-	public List<IArchiveDownloader> convertEndpointsToDownloader() {
-		// the mock is a single source: LibraryManager checks hasMultipleEndpoints(),
-		// while OnlineLibraryProvider iterates the converted endpoint downloaders
-		return List.of(this);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -26,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ltk.core.refactoring.participants.RenameRefactoring;
@@ -62,7 +62,7 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Error during refactoring", e); //$NON-NLS-1$
+			ILog.get().error("Error during refactoring", e); //$NON-NLS-1$
 		}
 		return null;
 	}

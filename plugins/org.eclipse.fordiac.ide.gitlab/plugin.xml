@@ -20,9 +20,9 @@
 </extension> -->
    
    <extension
-         point="org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension">
-      <client
-            class="org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader">
-      </client>
+         point="org.eclipse.fordiac.ide.library.LibraryPackageDownloader">
+      <provider
+            class="org.eclipse.fordiac.ide.gitlab.management.GitLabDownloaderProvider">
+      </provider>
    </extension>
 </plugin>

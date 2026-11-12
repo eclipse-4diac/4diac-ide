@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
@@ -25,7 +26,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEditBuilder;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeModelEdit;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.ltk.ui.refactoring.resource.RenameResourceWizard;
 import org.eclipse.swt.widgets.Shell;
@@ -53,7 +53,7 @@ public final class TypeRefactoringHelper {
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (final Exception e) {
-			FordiacLogHelper.logError("Error during type rename refactoring", e); //$NON-NLS-1$
+			ILog.get().error("Error during type rename refactoring", e); //$NON-NLS-1$
 		}
 	}
 
@@ -77,8 +77,8 @@ public final class TypeRefactoringHelper {
 		}
 	}
 
-	public static void addModelEditsForPackageChangedType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
-			final String newPackageName) {
+	public static void addModelEditsForPackageChangedType(final List<ModelEdit<?>> modelEdits,
+			final TypeEntry typeEntry, final String newPackageName) {
 		if (typeEntry instanceof final DataTypeEntry dtEntry) {
 			final String targetTypeName = DataTypeEditBuilder.getFullTypeName(newPackageName, typeEntry.getTypeName());
 			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits, targetTypeName);

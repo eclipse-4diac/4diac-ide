@@ -168,7 +168,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	@Override
 	public EList<VarDeclaration> getVarDeclarations() {
 		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.RESOURCE__VAR_DECLARATIONS);
+			varDeclarations = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.RESOURCE__VAR_DECLARATIONS);
 		}
 		return varDeclarations;
 	}
@@ -271,16 +271,6 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 	 */
 	@Override
 	public Device getDevice() {
-		if (eContainerFeatureID() != LibraryElementPackage.RESOURCE__DEVICE) return null;
-		return (Device)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Device basicGetDevice() {
 		if (eContainerFeatureID() != LibraryElementPackage.RESOURCE__DEVICE) return null;
 		return (Device)eInternalContainer();
 	}
@@ -433,8 +423,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			case LibraryElementPackage.RESOURCE__Y:
 				return getY();
 			case LibraryElementPackage.RESOURCE__DEVICE:
-				if (resolve) return getDevice();
-				return basicGetDevice();
+				return getDevice();
 			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 				return isDeviceTypeResource();
 			default:
@@ -525,7 +514,7 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 			case LibraryElementPackage.RESOURCE__Y:
 				return Y_EDEFAULT == null ? y != null : !Y_EDEFAULT.equals(y);
 			case LibraryElementPackage.RESOURCE__DEVICE:
-				return basicGetDevice() != null;
+				return getDevice() != null;
 			case LibraryElementPackage.RESOURCE__DEVICE_TYPE_RESOURCE:
 				return deviceTypeResource != DEVICE_TYPE_RESOURCE_EDEFAULT;
 			default:

@@ -16,9 +16,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
@@ -46,10 +46,10 @@ public abstract class WorkspaceMarkerResolution extends WorkbenchMarkerResolutio
 		try {
 			operation.run(monitor);
 		} catch (final InvocationTargetException e) {
-			FordiacLogHelper.logError(e.getMessage(), e.getCause());
+			ILog.get().error(e.getMessage(), e.getCause());
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(e.getMessage(), e.getCause());
+			ILog.get().error(e.getMessage(), e.getCause());
 		}
 	}
 

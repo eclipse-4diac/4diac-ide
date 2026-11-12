@@ -19,9 +19,9 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
-import org.eclipse.fordiac.ide.util.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.ocl.OCLMarkerManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -64,7 +64,7 @@ public class OCLValidationPropertyPage extends PropertyPage {
 			try {
 				scopedPreferenceStore.save();
 			} catch (final IOException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 				return false;
 			}
 		}
@@ -76,7 +76,7 @@ public class OCLValidationPropertyPage extends PropertyPage {
 			try {
 				OCLMarkerManager.deleteMarkers(project);
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+				ILog.get().error(e.getMessage(), e);
 				return false;
 			}
 		}
@@ -91,7 +91,7 @@ public class OCLValidationPropertyPage extends PropertyPage {
 			}
 			return true;
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			ILog.get().error(e.getMessage(), e);
 			return false;
 		}
 	}

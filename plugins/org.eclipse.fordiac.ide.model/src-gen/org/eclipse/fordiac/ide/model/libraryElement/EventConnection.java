@@ -43,7 +43,7 @@ public interface EventConnection extends Connection {
 	 * @see #setFBNetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getEventConnection_FBNetwork()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetwork#getEventConnections
-	 * @model opposite="eventConnections" transient="false"
+	 * @model opposite="eventConnections" resolveProxies="false" transient="false"
 	 * @generated
 	 */
 	FBNetwork getFBNetwork();

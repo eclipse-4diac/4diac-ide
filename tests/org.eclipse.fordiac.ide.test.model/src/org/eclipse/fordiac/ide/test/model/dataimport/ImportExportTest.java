@@ -32,8 +32,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
@@ -127,5 +130,37 @@ public class ImportExportTest {
 		assertEquals("legacy input comment", input.getComment());
 		assertFalse(input.isVisible());
 		assertTrue(input.isVarConfig());
+
+		final var adapterDecl = composite.getInterfaceList().getPlugs().get(0);
+		assertNotNull(adapterDecl);
+		assertEquals(1, adapterDecl.getAttributes().size());
+		assertEquals("AdapterAttribute", adapterDecl.getAttributes().get(0).getName());
+		assertEquals("AdapterValue", adapterDecl.getAttributes().get(0).getValue());
+		assertEquals(0, adapterDecl.getAdapterFB().getAttributes().size());
+
+		final var adapterPin = adapterDecl.getAdapterFB().getInterface().getInterfaceElement(List.of("REQD"));
+		assertNotNull(adapterPin);
+		assertEquals("legacy adapter pin comment", adapterPin.getComment());
+		assertFalse(adapterPin.isVisible());
+		assertTrue(((VarDeclaration) adapterPin).isVarConfig());
+	}
+
+	@Test
+	void testAdapterDeclarationAttributes() throws IOException {
+		final IFile file = project.getFolder("Type Library").getFile("BasicTest.fbt");
+		assertTrue(file.exists(), "fixture exists");
+		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+		final LibraryElementResource resource = FordiacTypeResourceFactory.INSTANCE.createResource(uri);
+		resource.load(new HashMap<>());
+		assertTrue(resource.getErrors().isEmpty());
+
+		final FBType fbType = (FBType) resource.getLibraryElement();
+		assertNotNull(fbType);
+		final AdapterDeclaration adapterDecl = fbType.getInterfaceList().getPlugs().get(0);
+		assertNotNull(adapterDecl);
+		assertEquals(1, adapterDecl.getAttributes().size());
+		assertEquals("AdapterAttribute", adapterDecl.getAttributes().get(0).getName());
+		assertEquals("AdapterValue", adapterDecl.getAttributes().get(0).getValue());
+		assertEquals(0, adapterDecl.getAdapterFB().getAttributes().size());
 	}
 }

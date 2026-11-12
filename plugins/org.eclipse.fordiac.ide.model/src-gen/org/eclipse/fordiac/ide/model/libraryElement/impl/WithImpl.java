@@ -79,23 +79,6 @@ public class WithImpl extends EObjectImpl implements With {
 	 */
 	@Override
 	public VarDeclaration getVariables() {
-		if (variables != null && variables.eIsProxy()) {
-			InternalEObject oldVariables = (InternalEObject)variables;
-			variables = (VarDeclaration)eResolveProxy(oldVariables);
-			if (variables != oldVariables) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.WITH__VARIABLES, oldVariables, variables));
-			}
-		}
-		return variables;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VarDeclaration basicGetVariables() {
 		return variables;
 	}
 
@@ -175,8 +158,7 @@ public class WithImpl extends EObjectImpl implements With {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.WITH__VARIABLES:
-				if (resolve) return getVariables();
-				return basicGetVariables();
+				return getVariables();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

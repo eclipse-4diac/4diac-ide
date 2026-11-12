@@ -29,6 +29,8 @@ public final class Messages extends NLS {
 	public static String GitLab_Url_Title;
 	public static String GitLab_Packages_And_Projects;
 
+	public static String GitLabDownloader_Name;
+
 	public static String GitLabEndpointDialog_add;
 
 	public static String GitLabEndpointDialog_configure;

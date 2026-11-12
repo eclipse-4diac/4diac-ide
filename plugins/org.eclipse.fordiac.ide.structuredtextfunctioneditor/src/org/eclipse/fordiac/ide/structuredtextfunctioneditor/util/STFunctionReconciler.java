@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -32,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCorePartition;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreReconciler;
-import org.eclipse.fordiac.ide.structuredtextcore.util.STRecoveringPartitioner;
 
 public class STFunctionReconciler implements STCoreReconciler {
 	private static final String DEFAULT_INPUT_EVENT_NAME = "REQ"; //$NON-NLS-1$
@@ -46,9 +44,9 @@ public class STFunctionReconciler implements STCoreReconciler {
 		}
 	}
 
-	protected static void reconcile(final FunctionFBType dest, final STFunctionPartition source) {
+	private static void reconcile(final FunctionFBType dest, final STFunctionPartition source) {
 		// check duplicates in source (very bad)
-		if (checkDuplicates(source.getFunctions())) {
+		if (STCoreReconciler.hasDuplicates(source.getSourceElements().stream())) {
 			return; // don't even try to attempt this or risk screwing dest up
 		}
 		// update package & imports
@@ -67,16 +65,16 @@ public class STFunctionReconciler implements STCoreReconciler {
 		reconcileType(dest, source);
 	}
 
-	protected static void reconcileType(final FunctionFBType dest, final STFunctionPartition source) {
+	private static void reconcileType(final FunctionFBType dest, final STFunctionPartition source) {
 		findPrimaryFunction(dest, source).ifPresent(function -> reconcileType(dest, function));
 	}
 
-	protected static void reconcileType(final FunctionFBType dest, final STFunction source) {
+	private static void reconcileType(final FunctionFBType dest, final STFunction source) {
 		dest.setComment(source.getComment());
 		reconcileInterface(dest.getInterfaceList(), source);
 	}
 
-	protected static void reconcileInterface(final InterfaceList interfaceList, final STFunction source) {
+	private static void reconcileInterface(final InterfaceList interfaceList, final STFunction source) {
 		ECollections.setEList(interfaceList.getEventInputs(), List.of(createEvent(DEFAULT_INPUT_EVENT_NAME, true)));
 		ECollections.setEList(interfaceList.getEventOutputs(), List.of(createEvent(DEFAULT_OUTPUT_EVENT_NAME, false)));
 		ECollections.setEList(interfaceList.getInputVars(),
@@ -97,7 +95,7 @@ public class STFunctionReconciler implements STCoreReconciler {
 				Stream.concat(interfaceList.getOutputVars().stream(), interfaceList.getOutMappedInOutVars().stream()));
 	}
 
-	protected static Event createEvent(final String name, final boolean input) {
+	private static Event createEvent(final String name, final boolean input) {
 		final Event event = LibraryElementFactory.eINSTANCE.createEvent();
 		event.setName(name);
 		event.setType(EventTypeLibrary.getInstance().getType(null));
@@ -105,7 +103,7 @@ public class STFunctionReconciler implements STCoreReconciler {
 		return event;
 	}
 
-	protected static void addWiths(final Event event, final Stream<VarDeclaration> withs) {
+	private static void addWiths(final Event event, final Stream<VarDeclaration> withs) {
 		withs.forEach(variable -> addWith(event, variable));
 	}
 
@@ -116,14 +114,9 @@ public class STFunctionReconciler implements STCoreReconciler {
 		return with;
 	}
 
-	protected static Optional<STFunction> findPrimaryFunction(final FunctionFBType dest,
+	private static Optional<STFunction> findPrimaryFunction(final FunctionFBType dest,
 			final STFunctionPartition source) {
-		return source.getFunctions().stream().filter(callable -> dest.getName().equals(callable.getName())).findFirst()
-				.or(source.getFunctions().stream().filter(callable -> !callable.getName()
-						.startsWith(STRecoveringPartitioner.LOST_AND_FOUND_NAME))::findFirst);
-	}
-
-	protected static boolean checkDuplicates(final List<? extends ICallable> list) {
-		return list.stream().map(ICallable::getName).distinct().count() != list.size();
+		return source.getFunctions().filter(callable -> dest.getName().equals(callable.getName())).findFirst()
+				.or(source.getFunctions()::findFirst);
 	}
 }

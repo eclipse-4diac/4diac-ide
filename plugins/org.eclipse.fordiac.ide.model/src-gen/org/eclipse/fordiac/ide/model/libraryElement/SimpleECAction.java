@@ -42,7 +42,7 @@ public interface SimpleECAction extends BaseECAction {
 	 * @see #setSimpleECState(SimpleECState)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleECAction_SimpleECState()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleECState#getSimpleECActions
-	 * @model opposite="simpleECActions" required="true" transient="false"
+	 * @model opposite="simpleECActions" resolveProxies="false" required="true" transient="false"
 	 * @generated
 	 */
 	SimpleECState getSimpleECState();

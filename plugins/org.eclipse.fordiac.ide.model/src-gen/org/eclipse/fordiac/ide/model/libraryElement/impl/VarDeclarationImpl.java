@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -281,7 +281,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.VAR_DECLARATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, LibraryElementPackage.VAR_DECLARATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -317,7 +317,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
@@ -330,7 +330,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseEList<Connection>(Connection.class, this, LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
@@ -342,23 +342,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 */
 	@Override
 	public DataType getType() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (DataType)eResolveProxy(oldType);
-			if (type != oldType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.VAR_DECLARATION__TYPE, oldType, type));
-			}
-		}
-		return type;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DataType basicGetType() {
 		return type;
 	}
 
@@ -383,6 +366,9 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	public void setType(DataType newType) {
 	  java.util.Objects.requireNonNull(newType,
 				"DataType of a VarDeclaration must not be null! " + getQualifiedName());
+		if (newType.eIsProxy()) {
+			throw new IllegalArgumentException("DataType of a VarDeclaration must not be a proxy!");
+		}
 		setTypeGen(newType);
 	}
 
@@ -439,7 +425,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
-			withs = new EObjectWithInverseResolvingEList<With>(With.class, this, LibraryElementPackage.VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
+			withs = new EObjectWithInverseEList<With>(With.class, this, LibraryElementPackage.VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
 		}
 		return withs;
 	}
@@ -1017,8 +1003,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 			case LibraryElementPackage.VAR_DECLARATION__OUTPUT_CONNECTIONS:
 				return getOutputConnections();
 			case LibraryElementPackage.VAR_DECLARATION__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
+				return getType();
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
 				return getArraySize();
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
