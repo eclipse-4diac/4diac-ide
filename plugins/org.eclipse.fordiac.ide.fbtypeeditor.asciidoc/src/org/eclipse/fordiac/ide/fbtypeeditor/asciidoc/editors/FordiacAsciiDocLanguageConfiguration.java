@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FbtMacroPatternElement;
+import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FordiacMacroPatternElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.mylyn.wikitext.parser.markup.AbstractMarkupLanguage.PatternBasedSyntax;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguageConfiguration;
@@ -31,7 +31,7 @@ public class FordiacAsciiDocLanguageConfiguration extends MarkupLanguageConfigur
 
 	@Override
 	public void addPhraseModifierExtensions(final PatternBasedSyntax phraseModifierSyntax) {
-		phraseModifierSyntax.add(new FbtMacroPatternElement(libraryElement));
+		phraseModifierSyntax.add(new FordiacMacroPatternElement(libraryElement));
 	}
 
 	@Override
