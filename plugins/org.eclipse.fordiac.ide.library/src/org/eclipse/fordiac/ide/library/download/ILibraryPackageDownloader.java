@@ -35,6 +35,10 @@ import org.osgi.framework.VersionRange;
  * instantiated for every lookup, so state that has to outlive a lookup, such as
  * the activation state, cannot be kept in the instance alone.
  *
+ * <p>
+ * Downloaders that read a library source over HTTP extend
+ * {@link AbstractLibraryPackageDownloader}.
+ *
  * @see LibraryPackageDownloaderProvider#getActiveDownloaders()
  */
 public interface ILibraryPackageDownloader {
