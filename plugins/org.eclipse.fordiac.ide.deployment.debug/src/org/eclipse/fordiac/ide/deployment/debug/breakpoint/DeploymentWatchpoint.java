@@ -104,7 +104,7 @@ public class DeploymentWatchpoint extends Breakpoint {
 		if (location.isEmpty() || targetType.isEmpty()) {
 			return Stream.empty();
 		}
-		return system.findByQualifiedName(location).filter(element -> targetType.get().equals(element.eClass()));
+		return DeploymentDebugWatchUtils.findByQualifiedName(system, location).filter(element -> targetType.get().equals(element.eClass()));
 	}
 
 	public Optional<EClass> getTargetType() {
