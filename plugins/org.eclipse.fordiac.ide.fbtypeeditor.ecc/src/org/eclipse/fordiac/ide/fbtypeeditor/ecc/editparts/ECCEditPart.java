@@ -37,6 +37,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.requests.LocationRequest;
+import org.eclipse.swt.widgets.Display;
 
 public class ECCEditPart extends AbstractDiagramEditPart {
 
@@ -77,8 +78,12 @@ public class ECCEditPart extends AbstractDiagramEditPart {
 					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
-						refreshChildren();
-						revalidateTransitions();
+						Display.getDefault().execute(() -> {
+							if (isActive()) {
+								refreshChildren();
+								revalidateTransitions();
+							}
+						});
 						break;
 					default:
 						break;

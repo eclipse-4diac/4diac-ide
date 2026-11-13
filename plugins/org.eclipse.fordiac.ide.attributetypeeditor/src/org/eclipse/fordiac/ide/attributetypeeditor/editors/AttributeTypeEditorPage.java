@@ -46,6 +46,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -66,12 +67,18 @@ public class AttributeTypeEditorPage extends AbstractTypeEditorPage {
 			super.notifyChanged(notification);
 			if (notification.getOldValue() instanceof AnyDerivedType
 					&& notification.getNewValue() instanceof AnyDerivedType) {
-				if (notification.getNewValue() instanceof StructuredType) {
-					comboBox.select(STRUCT_EDITOR_INDEX);
-				} else {
-					comboBox.select(DIRECTLYDERIVEDTYPE_EDITOR_INDEX);
-				}
-				changeEditingComposite();
+				Display.getDefault().execute(() -> {
+					if (!comboBox.isDisposed()) {
+						final AnyDerivedType type = getType().getType();
+						if (type instanceof StructuredType) {
+							comboBox.select(STRUCT_EDITOR_INDEX);
+						} else {
+							comboBox.select(DIRECTLYDERIVEDTYPE_EDITOR_INDEX);
+						}
+						changeOrUpdateEditingComposite();
+					}
+				});
+
 			}
 		}
 	};
@@ -165,22 +172,38 @@ public class AttributeTypeEditorPage extends AbstractTypeEditorPage {
 		}
 	}
 
-	private void changeEditingComposite() {
+	private void changeOrUpdateEditingComposite() {
 		final AnyDerivedType type = getType().getType();
-		if (structComposite != null && type instanceof final DirectlyDerivedType directlyDerivedType) {
-			createDirectlyDerivedComposite(structComposite.getParent(), directlyDerivedType);
-			if (!structComposite.isDisposed()) {
-				structComposite.dispose();
-			}
-			structComposite = null;
-			directlyDerivedTypeComposite.requestLayout();
-		} else if (directlyDerivedTypeComposite != null && type instanceof final StructuredType structType) {
+		if (type instanceof final StructuredType structType) {
+			changeOrUpdateStructComposite(structType);
+		} else if (type instanceof final DirectlyDerivedType directlyDerivedType) {
+			changeOrUpdateDirectlyDerivedTypeComposite(directlyDerivedType);
+		}
+	}
+
+	private void changeOrUpdateStructComposite(final StructuredType structType) {
+		if (structComposite == null) {
 			createStructComposite(directlyDerivedTypeComposite.getParent(), structType);
-			if (!directlyDerivedTypeComposite.isDisposed()) {
+			if (directlyDerivedTypeComposite != null && !directlyDerivedTypeComposite.isDisposed()) {
 				directlyDerivedTypeComposite.dispose();
+				directlyDerivedTypeComposite = null;
 			}
-			directlyDerivedTypeComposite = null;
 			structComposite.requestLayout();
+		} else {
+			structComposite.setStructType(structType);
+		}
+	}
+
+	private void changeOrUpdateDirectlyDerivedTypeComposite(final DirectlyDerivedType directlyDerivedType) {
+		if (directlyDerivedTypeComposite == null) {
+			createDirectlyDerivedComposite(structComposite.getParent(), directlyDerivedType);
+			if (structComposite != null && !structComposite.isDisposed()) {
+				structComposite.dispose();
+				structComposite = null;
+			}
+			directlyDerivedTypeComposite.requestLayout();
+		} else {
+			directlyDerivedTypeComposite.setDirectlyDerivedType(directlyDerivedType);
 		}
 	}
 
@@ -206,14 +229,7 @@ public class AttributeTypeEditorPage extends AbstractTypeEditorPage {
 	@Override
 	public void reloadType() {
 		removeListenerFromAttributeDeclaration();
-		changeEditingComposite(); // make sure we got the right editing composite for the reloaded type
-		final AnyDerivedType type = getType().getType();
-		if (type instanceof final StructuredType structType) {
-			structComposite.setStructType(structType);
-		}
-		if (type instanceof final DirectlyDerivedType directlyDerivedType) {
-			directlyDerivedTypeComposite.setDirectlyDerivedType(directlyDerivedType);
-		}
+		changeOrUpdateEditingComposite(); // make sure we got the right editing composite for the reloaded type
 		addListenerToAttributeDeclaration();
 	}
 

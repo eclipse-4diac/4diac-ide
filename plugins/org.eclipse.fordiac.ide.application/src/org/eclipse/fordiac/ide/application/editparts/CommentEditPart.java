@@ -53,6 +53,7 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 
@@ -278,7 +279,11 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getComment_Width().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getComment_Height().equals(feature)) {
-					refreshPosition();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshPosition();
+						}
+					});
 				}
 			}
 		};

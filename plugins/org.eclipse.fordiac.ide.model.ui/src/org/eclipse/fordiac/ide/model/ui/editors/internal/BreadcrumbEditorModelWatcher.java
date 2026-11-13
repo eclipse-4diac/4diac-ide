@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.swt.widgets.Display;
 
 public class BreadcrumbEditorModelWatcher extends AdapterImpl {
 
@@ -55,7 +56,7 @@ public class BreadcrumbEditorModelWatcher extends AdapterImpl {
 	public void notifyChanged(final Notification n) {
 		if (!n.isTouch() && n.getFeature() instanceof final EReference ref && ref.isContainment()
 				&& removesFromScope(n)) {
-			processChange.run();
+			Display.getDefault().execute(processChange);
 		}
 	}
 

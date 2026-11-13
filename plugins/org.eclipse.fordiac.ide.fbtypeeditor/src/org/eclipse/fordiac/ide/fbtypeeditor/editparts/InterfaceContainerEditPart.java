@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.swt.widgets.Display;
 
 public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
@@ -63,7 +64,13 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	private final Adapter econtentAdapter = new SingleRecursiveContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			refresh();
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refresh();
+					}
+				});
+			}
 			super.notifyChanged(notification);
 		}
 	};

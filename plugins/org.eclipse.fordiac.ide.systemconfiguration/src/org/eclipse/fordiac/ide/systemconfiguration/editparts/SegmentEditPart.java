@@ -60,6 +60,7 @@ import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.widgets.Display;
 
 public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPart {
 	/** necessary that the gradient pattern can be scaled accordingly */
@@ -101,17 +102,22 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
-				final Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature) && notification
-						.getNewValue() instanceof final org.eclipse.fordiac.ide.model.libraryElement.Color col) {
-					AbstractViewEditPart.setColor(getFigure(), col);
-				}
-				if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
-					refreshVisuals();
-				}
 				super.notifyChanged(notification);
-				refreshSourceConnections();
+				final Object feature = notification.getFeature();
+				if (!notification.isTouch()) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
+								AbstractViewEditPart.setColor(getFigure(), getModel().getColor());
+							}
+							if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)
+									|| LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
+								refreshVisuals();
+							}
+							refreshSourceConnections();
+						}
+					});
+				}
 			}
 
 		};

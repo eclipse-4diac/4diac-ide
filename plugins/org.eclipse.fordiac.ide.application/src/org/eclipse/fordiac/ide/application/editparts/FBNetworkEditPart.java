@@ -45,6 +45,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.requests.SelectionRequest;
+import org.eclipse.swt.widgets.Display;
 
 /** Edit Part for the visualization of FBNetworks. */
 public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
@@ -92,7 +93,11 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 					final int type = notification.getEventType();
 					switch (type) {
 					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
-						refreshChildren();
+						Display.getDefault().execute(() -> {
+							if (isActive()) {
+								refreshChildren();
+							}
+						});
 						break;
 					case Notification.SET:
 						break;

@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.swt.widgets.Display;
 
 public class StructManipulatorEditPart extends AbstractBlockFBNElementEditPart {
 
@@ -84,10 +85,14 @@ public class StructManipulatorEditPart extends AbstractBlockFBNElementEditPart {
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				if (!notification.isTouch()) {
-					refresh();
-					// this ensure that parameters are correctly updated when pins are added or
-					// removed (e.g., errormarkerpins are deleted)
-					getParent().refresh();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+							// this ensure that parameters are correctly updated when pins are added or
+							// removed (e.g., errormarkerpins are deleted)
+							getParent().refresh();
+						}
+					});
 				}
 			}
 		};

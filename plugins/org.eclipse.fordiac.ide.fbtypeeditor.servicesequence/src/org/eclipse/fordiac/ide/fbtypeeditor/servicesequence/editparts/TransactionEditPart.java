@@ -33,6 +33,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.swt.widgets.Display;
 
 public class TransactionEditPart extends AbstractGraphicalEditPart {
 
@@ -40,7 +41,13 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refresh();
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refresh();
+					}
+				});
+			}
 		}
 	};
 
@@ -59,7 +66,6 @@ public class TransactionEditPart extends AbstractGraphicalEditPart {
 		}
 		super.deactivate();
 	}
-
 
 	@Override
 	protected IFigure createFigure() {

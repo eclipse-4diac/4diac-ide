@@ -56,6 +56,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * This class implements an EditPart for an "VirtualInOutput". It is required if
@@ -78,10 +79,16 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				refreshSourceConnections();
-				refreshTargetConnections();
-				refreshVisuals();
-				refreshTooltip();
+				if (!notification.isTouch()) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshSourceConnections();
+							refreshTargetConnections();
+							refreshVisuals();
+							refreshTooltip();
+						}
+					});
+				}
 			}
 
 		};

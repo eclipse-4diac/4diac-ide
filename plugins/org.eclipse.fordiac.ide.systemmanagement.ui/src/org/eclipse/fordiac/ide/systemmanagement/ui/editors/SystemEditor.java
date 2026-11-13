@@ -134,8 +134,12 @@ public class SystemEditor extends EditorPart
 	private final Adapter sysConfListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			if ((null != sysConfTreeViewer) && (!sysConfTreeViewer.getControl().isDisposed())) {
-				sysConfTreeViewer.refresh();
+			if (sysConfTreeViewer != null && !sysConfTreeViewer.getControl().isDisposed()) {
+				Display.getDefault().execute(() -> {
+					if (sysConfTreeViewer != null && !sysConfTreeViewer.getControl().isDisposed()) {
+						sysConfTreeViewer.refresh();
+					}
+				});
 			}
 		}
 	};
@@ -143,7 +147,13 @@ public class SystemEditor extends EditorPart
 	private final Adapter compilerInfoListener = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			typeInfo.refresh();
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (typeInfo != null && !form.isDisposed()) {
+						typeInfo.refresh();
+					}
+				});
+			}
 		}
 	};
 

@@ -688,7 +688,11 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			public void notifyChanged(final Notification notification) {
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
-					refreshLabelText();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshLabelText();
+						}
+					});
 				}
 			}
 		};

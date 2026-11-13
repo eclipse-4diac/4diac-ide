@@ -42,6 +42,7 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 
 public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 
@@ -49,7 +50,13 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refresh();
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refresh();
+					}
+				});
+			}
 		}
 	};
 
@@ -128,13 +135,13 @@ public class SequenceRootEditPart extends AbstractGraphicalEditPart {
 				figure.setLeftLabelText(
 						null != getCastedModel().getLeftInterface() ? getCastedModel().getLeftInterface().getName()
 								: "", //$NON-NLS-1$
-								getCastedModel().getLeftInterface().getComment());
+						getCastedModel().getLeftInterface().getComment());
 			}
 			if (null != getCastedModel().getRightInterface()) {
 				figure.setRightLabelText(
 						null != getCastedModel().getRightInterface() ? getCastedModel().getRightInterface().getName()
 								: "", //$NON-NLS-1$
-								getCastedModel().getRightInterface().getComment());
+						getCastedModel().getRightInterface().getComment());
 			}
 		}
 	}

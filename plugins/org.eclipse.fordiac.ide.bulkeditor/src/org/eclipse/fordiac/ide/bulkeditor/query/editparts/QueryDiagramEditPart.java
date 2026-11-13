@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryTreeLayout;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.SnapToGrid;
+import org.eclipse.swt.widgets.Display;
 
 /** Edit part of the query viewer contents, showing the visible elements. */
 public class QueryDiagramEditPart extends AbstractDiagramEditPart {
@@ -36,7 +37,11 @@ public class QueryDiagramEditPart extends AbstractDiagramEditPart {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (!notification.isTouch()) {
-				handleModelChange(notification);
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						handleModelChange(notification);
+					}
+				});
 			}
 		}
 
