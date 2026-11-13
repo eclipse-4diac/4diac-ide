@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2015 - 2017 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008 Profactor GbmH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Franz Höpfinger - grow the value direct-edit box to fit its content
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
@@ -38,6 +39,7 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 		final ValueEditPart valueEditPart = getValueEditPart();
 		if (null != valueEditPart) {
 			valueEditPart.getFigure().setText(value);
+			valueEditPart.refreshPosition();
 		}
 	}
 
