@@ -21,6 +21,10 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "fbtasciidoc"; //$NON-NLS-1$
 
 	public static String AsciiDoc_Description;
+	public static String Display_EditOnly_Tooltip;
+	public static String Display_SideBySide_Tooltip;
+	public static String Display_PreviewOnly_Tooltip;
+
 	public static String Toolbar_UploadSelectImage;
 	public static String Toolbar_FileAlreadyExists;
 	public static String Toolbar_ErrorMessage;
