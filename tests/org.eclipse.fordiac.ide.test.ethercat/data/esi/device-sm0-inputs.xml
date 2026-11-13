@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EtherCATInfo>
+  <Vendor>
+    <Id>#x00000002</Id>
+    <Name LcId="1033">Test Vendor</Name>
+  </Vendor>
+  <Descriptions>
+    <Devices>
+      <Device Physics="Y">
+        <Type ProductCode="#x00001008" RevisionNo="#x00000001">DigIn8</Type>
+        <Name LcId="1033">8 digital inputs on SM0</Name>
+        <Sm Enable="1" StartAddress="#x1000" ControlByte="#x0" DefaultSize="1">Inputs</Sm>
+        <TxPdo Sm="0" Fixed="1" Mandatory="1">
+          <Index>#x1a00</Index>
+          <Name>Channel 1</Name>
+          <Entry>
+            <Index>#x6000</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>Input</Name>
+            <DataType>BOOL</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Sm="0" Fixed="1" Mandatory="1">
+          <Index>#x1a01</Index>
+          <Name>Channel 2</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>Input</Name>
+            <DataType>BOOL</DataType>
+          </Entry>
+        </TxPdo>
+        <!-- optional mapping without Sm: must be skipped -->
+        <TxPdo Fixed="0">
+          <Index>#x1a10</Index>
+          <Name>Alt Channel</Name>
+          <Entry>
+            <Index>#x6100</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>Input</Name>
+            <DataType>BOOL</DataType>
+          </Entry>
+        </TxPdo>
+      </Device>
+    </Devices>
+  </Descriptions>
+</EtherCATInfo>
