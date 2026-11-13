@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Sichuan Qunyuan Technology Co., Ltd.
+ * Copyright (c) 2026 Sichuan Qunyuan Technology Co., Ltd., MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Zijun Tang - initial API and implementation
+ *   Tim Grocki - add the io library dependency on ESI import
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ethercat;
 
@@ -25,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +54,7 @@ import org.eclipse.fordiac.ide.ethercat.model.Device;
 import org.eclipse.fordiac.ide.ethercat.model.Module;
 import org.eclipse.fordiac.ide.ethercat.model.Pdo;
 import org.eclipse.fordiac.ide.ethercat.model.PdoEntry;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement;
@@ -70,6 +73,7 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 	private static final String DEVICE_CONFIG_TYPE = "eclipse4diac::io::ethercat::ECDeviceConfig"; //$NON-NLS-1$
 	private static final String MODULE_CONFIG_TYPE = "eclipse4diac::io::ethercat::ECModuleConfig"; //$NON-NLS-1$
 	private static final String BUS_ADAPTER_TYPE = "eclipse4diac::io::ethercat::ECBusAdapter"; //$NON-NLS-1$
+	private static final String IO_LIBRARY_SYMBOLIC_NAME = "io"; //$NON-NLS-1$
 	private static final String FORDIAC_NATURE = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	private static final String RESERVED_EXISTING_NAME = ""; //$NON-NLS-1$
 	private static final String REVISION_NO_ATTRIBUTE_FULL_NAME = "eclipse4diac::io::ethercat::RevisionNo"; //$NON-NLS-1$
@@ -175,6 +179,9 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 				existingDeviceKeys.add(deviceKey);
 			}
 
+			if (!importIoLibrary(project, LibraryManager.INSTANCE::importStandardLibrary)) {
+				warnMissingIoLibrary();
+			}
 			project.refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (final Exception e) {
 			Platform.getLog(EsiFileImporter.class).error(Messages.EsiFileImporter_WindowTitle, e);
@@ -183,6 +190,23 @@ public class EsiFileImporter extends Wizard implements IImportWizard {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * The generated types use the EtherCAT types of the IO standard library, so
+	 * the project needs it as dependency.
+	 *
+	 * @return {@code true}, if the IO standard library was imported
+	 */
+	static boolean importIoLibrary(final IProject project,
+			final BiPredicate<IProject, String> importStandardLibrary) {
+		return importStandardLibrary.test(project, IO_LIBRARY_SYMBOLIC_NAME);
+	}
+
+	private void warnMissingIoLibrary() {
+		Platform.getLog(EsiFileImporter.class).warn(Messages.EsiFileImporter_IoLibraryDependencyFailed);
+		MessageDialog.openWarning(getShell(), Messages.EsiFileImporter_WindowTitle,
+				Messages.EsiFileImporter_IoLibraryDependencyFailed);
 	}
 
 	private static boolean hasFordiacNature(final IProject candidate) {

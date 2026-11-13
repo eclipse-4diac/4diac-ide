@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH, Osoft e.U.
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH, Osoft e.U., MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *   Michael Oberlehner - restore the test state after the tests
+ *   Tim Grocki - import of an unavailable standard library
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.library;
 
@@ -163,6 +164,31 @@ class LibraryImportTest {
 		manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_5_0, 0,
 				TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+	}
+
+	@Test
+	void testImportUnavailableStandardLibrary() throws Exception {
+		assertFalse(LibraryManager.INSTANCE.importStandardLibrary(project, TEST01));
+
+		waitForBuild();
+
+		assertFalse(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).getFolder(TEST01).exists());
+		assertFalse(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).getFolder(TEST01).exists());
+	}
+
+	@Test
+	void testImportStandardLibraryKeepsExistingDependency() throws Exception {
+		var manifest = ManifestHelper.getContainerManifest(project);
+		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-1.5.0)")); //$NON-NLS-1$
+		ManifestHelper.saveManifest(manifest);
+
+		assertTrue(LibraryManager.INSTANCE.importStandardLibrary(project, TEST01));
+
+		waitForBuild();
+
+		manifest = ManifestHelper.getContainerManifest(project);
+		assertEquals(1, manifest.getDependencies().getRequired().size());
+		assertEquals("[1.0.0-1.5.0)", manifest.getDependencies().getRequired().get(0).getVersion()); //$NON-NLS-1$
 	}
 
 	@Test
