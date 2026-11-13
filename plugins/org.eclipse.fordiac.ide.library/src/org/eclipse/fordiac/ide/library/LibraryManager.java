@@ -12,6 +12,7 @@
  *   Alexander Fedorov (ArSysOp) - fix "Uncontrolled data used in path expression"
  *   Michael Oberlehner - use configured library package downloader providers
  *   Kaavya Manimathavan - remove stale library cache entries on polling file watchers
+ *   Michael Oberlehner - look up the library sources once per dependency resolution
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -130,9 +131,29 @@ public enum LibraryManager {
 
 	private record LibraryManagerData(Map<String, DependencyNode> dependencyNodes,
 			Map<String, ResolveNode> resolveNodes, Map<String, LinkedLibrary> linked,
-			Map<String, List<Version>> referenced) {
+			Map<String, List<Version>> referenced, DownloadSources sources) {
 		public static LibraryManagerData init() {
-			return new LibraryManagerData(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
+			return new LibraryManagerData(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+					new DownloadSources());
+		}
+	}
+
+	/**
+	 * The library sources of one operation, looked up on first use. Reusing the
+	 * downloaders lets each of them load its catalogue once per operation instead
+	 * of once per downloaded library.
+	 */
+	static final class DownloadSources {
+		private LibraryPackageDownloaderProvider.Result result;
+
+		LibraryPackageDownloaderProvider.Result get() {
+			if (result == null) {
+				result = new LibraryPackageDownloaderProvider().getActiveDownloaders();
+				if (!result.status().isOK()) {
+					ILog.get().log(result.status());
+				}
+			}
+			return result;
 		}
 	}
 
@@ -546,22 +567,20 @@ public enum LibraryManager {
 	 * @param autoImport   if library should be automatically imported into project
 	 * @param resolve      define if dependencies should get resolved on import
 	 *                     (irrelevant if {@code autoImport} is false)
+	 * @param downloadSources the library sources of the current operation
 	 * @param progress     SubMonitor for progress report
 	 * @return {@link java.net.URI} of the extracted library folder encapsulated in
 	 *         a {@link DownloadResult}
 	 */
 	private DownloadResult<java.net.URI> libraryDownload(final String symbolicName, final VersionRange versionRange,
 			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve,
-			final SubMonitor progress) throws OperationCanceledException {
+			final DownloadSources downloadSources, final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(MessageFormat.format(Messages.LibraryManager_LibraryDownload, symbolicName));
 		ILog.get().info("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
 				+ " preferring " + preferred + " Project: " + project.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
-		final var sources = new LibraryPackageDownloaderProvider().getActiveDownloaders();
+		final var sources = downloadSources.get();
 		final List<ILibraryPackageDownloader> downloaders = sources.downloaders();
-		if (!sources.status().isOK()) {
-			ILog.get().log(sources.status());
-		}
 
 		DownloadResult<Path> dlResult;
 		final StringBuilder errors = new StringBuilder();
@@ -610,7 +629,7 @@ public enum LibraryManager {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 				libraryDownload(symbolicName, VersionComparator.parseVersionRange(versionRange), null, project, true,
-						true, SubMonitor.convert(monitor));
+						true, new DownloadSources(), SubMonitor.convert(monitor));
 				return Status.OK_STATUS;
 			}
 
@@ -712,7 +731,7 @@ public enum LibraryManager {
 				// download library
 				libraryDownload(req.getSymbolicName(),
 						new org.eclipse.osgi.service.resolver.VersionRange(version, true, version, true), null, project,
-						true, false, progress.split(1));
+						true, false, libManagerData.sources(), progress.split(1));
 			}
 
 		} else {
@@ -788,7 +807,7 @@ public enum LibraryManager {
 					.map(LinkedLibrary::getVersion).orElse(null);
 			// resolve dependency
 			final var rnode = resolveDependency(project, symbolicName, dnode.getRange(), prefVersion, progress.split(1),
-					data.referenced());
+					data.referenced(), data.sources());
 
 			if (data.resolveNodes().containsKey(symbolicName)) {
 				final var oldRNode = data.resolveNodes().get(symbolicName);
@@ -873,8 +892,13 @@ public enum LibraryManager {
 
 	public java.net.URI getLibraryURI(final IProject project, final String symbolicName, final Version version,
 			final IProgressMonitor progress) {
+		return getLibraryURI(project, symbolicName, version, new DownloadSources(), progress);
+	}
+
+	java.net.URI getLibraryURI(final IProject project, final String symbolicName, final Version version,
+			final DownloadSources sources, final IProgressMonitor progress) {
 		final ResolveNode node = resolveDependency(project, symbolicName, ALL_RANGE, version,
-				SubMonitor.convert(progress), Collections.emptyMap());
+				SubMonitor.convert(progress), Collections.emptyMap(), sources);
 		if (node.isValid()) {
 			return node.getUri();
 		}
@@ -888,10 +912,12 @@ public enum LibraryManager {
 	 * @param range        version range of the dependency
 	 * @param prefVersion  preferred version, can be {@code null}
 	 * @param progress     SubMonitor for progress report
+	 * @param sources      the library sources of the current operation
 	 * @return
 	 */
 	private ResolveNode resolveDependency(final IProject project, final String symbolicName, final VersionRange range,
-			final Version prefVersion, final SubMonitor progress, final Map<String, List<Version>> referenced) {
+			final Version prefVersion, final SubMonitor progress, final Map<String, List<Version>> referenced,
+			final DownloadSources sources) {
 		final boolean usePref = prefVersion != null && range.includes(prefVersion);
 		LibraryRecord rec;
 
@@ -929,7 +955,7 @@ public enum LibraryManager {
 		progress.worked(5);
 
 		final DownloadResult<java.net.URI> dlResult = libraryDownload(symbolicName, range, prefVersion, project, false,
-				false, progress.split(95));
+				false, sources, progress.split(95));
 
 		if (dlResult.status() == DownloadResult.Status.OK) {
 			rec = getLibraryRecord(libraries, symbolicName, dlResult.result());
