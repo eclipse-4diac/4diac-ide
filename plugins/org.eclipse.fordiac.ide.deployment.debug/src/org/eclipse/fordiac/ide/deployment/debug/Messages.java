@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Johannes Kepler University Linz
+ * Copyright (c) 2024 Johannes Kepler University Linz, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -54,6 +54,19 @@ public class Messages extends NLS {
 	public static String DeploymentStreamsProxy_DeployedElements;
 	public static String DeploymentStreamsProxy_Deploying;
 	public static String DeploymentStreamsProxy_DisconnectedFromDevice;
+	public static String FBSnapshotReader_InvalidValue;
+	public static String FBSnapshotReader_NotInRuntime;
+	public static String FBSnapshotValidator_Adapters;
+	public static String FBSnapshotValidator_NoInputEvents;
+	public static String FBSnapshotValidator_NotAFunctionBlock;
+	public static String FBSnapshotValidator_NotMapped;
+	public static String FBSnapshotValidator_RequiresRuntime;
+	public static String FBSnapshotValidator_TypedContainer;
+	public static String FBSnapshotValidator_UnsupportedAlgorithm;
+	public static String FBSnapshotValidator_UnsupportedBody;
+	public static String FBSnapshotValidator_UnsupportedInternalFB;
+	public static String FBSnapshotValidator_UnsupportedType;
+	public static String FBSnapshotValidator_VariableLengthArray;
 	public static String VarDeclarationWatch_ClearForceError;
 	public static String VarDeclarationWatch_ForceError;
 	public static String VarDeclarationWatch_WriteError;
