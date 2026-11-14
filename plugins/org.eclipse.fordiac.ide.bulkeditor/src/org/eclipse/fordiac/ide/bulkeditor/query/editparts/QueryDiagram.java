@@ -19,19 +19,20 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
 
 /** Contents of the query viewer: the query and its collapsed elements. */
 public class QueryDiagram {
 
-	private final EObject queryRoot;
+	private final Query query;
 	private final Set<EObject> collapsedElements = new HashSet<>();
 
-	public QueryDiagram(final EObject queryRoot) {
-		this.queryRoot = queryRoot;
+	public QueryDiagram(final Query query) {
+		this.query = query;
 	}
 
-	public EObject getQueryRoot() {
-		return queryRoot;
+	public Query getQuery() {
+		return query;
 	}
 
 	public boolean isCollapsed(final EObject element) {
@@ -50,11 +51,8 @@ public class QueryDiagram {
 
 	/** @return all elements shown as node, parents before their children */
 	public List<EObject> getVisibleElements() {
-		if (queryRoot == null) {
-			return List.of();
-		}
 		final List<EObject> elements = new ArrayList<>();
-		collectVisibleElements(queryRoot, elements);
+		collectVisibleElements(query, elements);
 		return elements;
 	}
 
