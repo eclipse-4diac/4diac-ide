@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="MCC128" Comment="MCC 128 DAQ HAT, 8 analog inputs">
+	<Identification Description="Copyright (c) 2026 Thomas Oellinger&#10;&#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="Thomas Oellinger" Version="1.0" Author="Thomas Oellinger" Date="2026-11-14">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::io::mccdaqhat">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="MAP" Type="Event" Comment="Map Pins">
+				<With Var="QI"/>
+				<With Var="Address"/>
+				<With Var="InputMode"/>
+				<With Var="InputRange"/>
+				<With Var="AI_0"/>
+				<With Var="AI_1"/>
+				<With Var="AI_2"/>
+				<With Var="AI_3"/>
+				<With Var="AI_4"/>
+				<With Var="AI_5"/>
+				<With Var="AI_6"/>
+				<With Var="AI_7"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="MAPO" Type="Event" Comment="Confirm Pin Mapping">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="Address" Type="USINT" Comment="HAT address on the stack (0-7)" InitialValue="0"/>
+			<VarDeclaration Name="InputMode" Type="USINT" Comment="0 = single-ended, 1 = differential" InitialValue="0"/>
+			<VarDeclaration Name="InputRange" Type="USINT" Comment="0 = +/-10 V, 1 = +/-5 V, 2 = +/-2 V, 3 = +/-1 V" InitialValue="0"/>
+			<VarDeclaration Name="AI_0" Type="STRING" Comment="IO ID of analog input 0, empty = unused"/>
+			<VarDeclaration Name="AI_1" Type="STRING" Comment="IO ID of analog input 1, empty = unused"/>
+			<VarDeclaration Name="AI_2" Type="STRING" Comment="IO ID of analog input 2, empty = unused"/>
+			<VarDeclaration Name="AI_3" Type="STRING" Comment="IO ID of analog input 3, empty = unused"/>
+			<VarDeclaration Name="AI_4" Type="STRING" Comment="IO ID of analog input 4, empty = unused"/>
+			<VarDeclaration Name="AI_5" Type="STRING" Comment="IO ID of analog input 5, empty = unused"/>
+			<VarDeclaration Name="AI_6" Type="STRING" Comment="IO ID of analog input 6, empty = unused"/>
+			<VarDeclaration Name="AI_7" Type="STRING" Comment="IO ID of analog input 7, empty = unused"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status"/>
+		</OutputVars>
+		<Plugs>
+			<AdapterDeclaration Name="BusAdapterOut" Type="eclipse4diac::io::mccdaqhat::MCCBusAdapter"/>
+		</Plugs>
+		<Sockets>
+			<AdapterDeclaration Name="BusAdapterIn" Type="eclipse4diac::io::mccdaqhat::MCCBusAdapter"/>
+		</Sockets>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
