@@ -27,8 +27,11 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,6 +45,7 @@ import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.DocumentationAssetHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -149,24 +153,69 @@ public class LibraryExporter {
 
 	private void exportType(final TypeEntry typeEntry, final Path targetFolder) throws IOException {
 		final IFile sourceFile = typeEntry.getFile();
-		final Path targetFile = targetFolder.resolve(getTargetPath(typeEntry));
+		Path targetFile = targetFolder.resolve(getTargetPath(typeEntry));
 
 		Files.createDirectories(targetFile.getParent());
 
 		if (exportAsSIFB && canExportAsSIFB(typeEntry)) {
 			try {
 				LibraryExportUtil.exportTypeAsSIFB(typeEntry, targetFile.getParent().toFile());
-				return;
+				targetFile = targetFile.resolveSibling(LibraryExportUtil.getExportFileName(typeEntry));
 			} catch (final LibraryElementHashException e) {
 				throw new IOException(e);
 			}
+		} else {
+			copyFileToTarget(sourceFile, targetFile);
 		}
 
+		exportDocumentation(sourceFile, targetFile);
+	}
+
+	private static void copyFileToTarget(final IFile sourceFile, final Path targetFile) throws IOException {
 		try (InputStream input = sourceFile.getContents()) {
 			Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);
 		} catch (final CoreException e) {
 			throw new IOException(MessageFormat.format(Messages.LibraryExporter_ErrorFile, sourceFile.getFullPath()),
 					e);
+		}
+	}
+
+	private static void exportDocumentation(final IFile sourceFile, final Path targetFile) throws IOException {
+		if (!(sourceFile.getParent() instanceof final IFolder folder)) {
+			return;
+		}
+
+		final IFolder docFolder = folder
+				.getFolder(DocumentationAssetHelper.getDocumentationAssetFolderName(sourceFile.getName()));
+
+		if (!docFolder.exists()) {
+			return;
+		}
+
+		final Path target = targetFile.resolveSibling(
+				DocumentationAssetHelper.getDocumentationAssetFolderName(targetFile.getFileName().toString()));
+
+		try {
+			copyAssets(docFolder, target);
+		} catch (final CoreException e) {
+			throw new IOException(MessageFormat.format(Messages.LibraryExporter_ErrorAssets, docFolder.getFullPath()),
+					e);
+		}
+	}
+
+	private static void copyAssets(final IContainer source, final Path target) throws CoreException, IOException {
+		Files.createDirectories(target);
+
+		for (final IResource resource : source.members()) {
+			final Path destination = target.resolve(resource.getName());
+
+			if (resource instanceof final IContainer container) {
+				copyAssets(container, destination);
+			} else if (resource instanceof final IFile file) {
+				try (InputStream input = file.getContents()) {
+					Files.copy(input, destination, StandardCopyOption.REPLACE_EXISTING);
+				}
+			}
 		}
 	}
 

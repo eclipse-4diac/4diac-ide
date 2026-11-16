@@ -57,7 +57,7 @@ public class LibraryExportUtil {
 		resource.save(null);
 	}
 
-	private static String getExportFileName(final TypeEntry entry) {
+	static String getExportFileName(final TypeEntry entry) {
 		final IFile file = entry.getFile();
 
 		return file.getName();

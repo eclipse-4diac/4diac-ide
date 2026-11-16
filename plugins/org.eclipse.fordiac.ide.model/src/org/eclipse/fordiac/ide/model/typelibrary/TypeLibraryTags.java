@@ -82,6 +82,8 @@ public final class TypeLibraryTags {
 	/** Folder containing external libraries linked in the project */
 	public static final String EXTERNAL_LIB_FOLDER_NAME = "External Libraries"; //$NON-NLS-1$
 
+	public static final String DOCUMENTATION_ASSET_FOLDER_SUFFIX = ".assets"; //$NON-NLS-1$
+
 	public static final String TYPE_HASH_ATTRIBUTE_NAME = "TypeHash"; //$NON-NLS-1$
 	public static final String TYPE_HASH_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::TypeHash"; //$NON-NLS-1$
 
