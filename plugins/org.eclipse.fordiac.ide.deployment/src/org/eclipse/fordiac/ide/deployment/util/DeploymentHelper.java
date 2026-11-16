@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018, 2025 fortiss GmbH, Johannes Kepler University
- *                          Martin Erich Jobst
+ *                          Martin Erich Jobst, MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *   Martin Jobst - adopt new ST editor for values
  *                - rework initial value handling
  *                - add connection source suffix for delegate connections
+ *   Tim Grocki - deploy initial values of FB types with ForteTypeOverride
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.util;
 
@@ -22,12 +23,15 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class DeploymentHelper {
@@ -53,9 +57,13 @@ public final class DeploymentHelper {
 
 	public static String getVariableValue(final VarDeclaration source, final VarDeclaration destination,
 			final boolean negate) throws DeploymentException {
+		// the FORTE type of an overridden FB type does not know the IDE type's initial
+		// values, so these have to be deployed as well
+		final boolean typeOverridden = hasDeployTypeOverride(destination.getBlockFBNetworkElement());
 		// deploy if source is different from destination (e.g., subapp connection)
 		// or when there is an initial value on the source
-		if (source != destination || VariableOperations.hasDeclaredInitialValue(source)) {
+		if (source != destination || VariableOperations.hasDeclaredInitialValue(source)
+				|| (typeOverridden && VariableOperations.hasInheritedInitialValue(source))) {
 			try {
 				// get source value
 				Value value = VariableOperations.newVariable(source).getValue();
@@ -66,20 +74,45 @@ public final class DeploymentHelper {
 				// deploy only if
 				// - destination is generic
 				// - designated value is not equal with initial value of destination type
-				if (!GenericTypes.isAnyType(destination.getType()) && equalsTypeValue(value, destination)) {
+				// - or the destination FB type is deployed as another FORTE type
+				if (!typeOverridden && !GenericTypes.isAnyType(destination.getType())
+						&& equalsTypeValue(value, destination)) {
 					return null;
 				}
 				// convert to destination string
 				return VariableOperations.newVariable(destination, value).toString(false);
 			} catch (final Exception e) {
-				if (forceDeployement()) {
-					return source.getValue().getValue();
+				final String sourceValue = source.getValueString();
+				if (forceDeployement() && !sourceValue.isEmpty()) {
+					return sourceValue;
 				}
 				throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
-						source.getValue().getValue(), destination.getQualifiedName(), e.getMessage()), e);
+						sourceValue, destination.getQualifiedName(), e.getMessage()), e);
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Checks whether the FB's type sets
+	 * {@code eclipse4diac::core::ForteTypeOverride}, so that the FB is deployed as
+	 * another FORTE type.
+	 *
+	 * @param fb the FB, may be {@code null}
+	 * @return {@code true} if the FB's type has a non-empty override or one that
+	 *         cannot be resolved; {@code false} for {@code null} and configurable
+	 *         FBs
+	 */
+	private static boolean hasDeployTypeOverride(final FBNetworkElement fb) {
+		if (fb == null || fb instanceof ConfigurableFB) {
+			return false; // configurable FBs ignore the override
+		}
+		try {
+			return ForteTypeNameCreator.getDeployTypeOverride(fb.getType()) != null;
+		} catch (final DeploymentException e) {
+			// an invalid override is reported when the type name is resolved
+			return true;
+		}
 	}
 
 	private static boolean equalsTypeValue(final Value value, final VarDeclaration variable) {

@@ -80,8 +80,14 @@ public class ForteTypeNameCreator implements TypeNameCreator {
 	 * Resolve a deploy type name from {@code eclipse4diac::core::ForteTypeOverride}.
 	 * The attribute is dedicated to FORTE deployment and may be package-qualified or
 	 * unqualified.
+	 *
+	 * @param type the type, may be {@code null}
+	 * @return the FORTE type name to deploy instead of the type, or {@code null} if
+	 *         the type sets no override or an empty one
+	 * @throws DeploymentException if the override is not a valid string literal or
+	 *                             type name
 	 */
-	private static String getDeployTypeOverride(final LibraryElement type) throws DeploymentException {
+	public static String getDeployTypeOverride(final LibraryElement type) throws DeploymentException {
 		if (type == null) {
 			return null;
 		}
