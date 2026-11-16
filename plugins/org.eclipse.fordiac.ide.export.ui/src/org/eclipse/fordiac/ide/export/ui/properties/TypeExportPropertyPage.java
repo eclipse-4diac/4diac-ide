@@ -257,7 +257,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 		}
 		if (!AdditionalSourceDirectories.validatePaths(getProject(), exportFilterId,
 				new Path(outputDirectoryEditor.getStringValue().trim()),
-				additionalSourceDirectoriesSection.getDirectories(), true)) {
+				additionalSourceDirectoriesSection.getDirectories(), false)) {
 			setErrorMessage(Messages.TypeExport_InvalidSourceDirectories);
 			setValid(false);
 			return false;
