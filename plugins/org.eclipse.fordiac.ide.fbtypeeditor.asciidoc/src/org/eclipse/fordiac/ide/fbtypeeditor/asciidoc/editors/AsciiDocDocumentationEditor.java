@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.handlers.UploadImageHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.DocumentationAssetHelper;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -623,7 +624,7 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 	private static IFolder getAssetsFolder(final IFile file) throws CoreException {
 		final IContainer parent = file.getParent();
 
-		final String assetFolderName = "." + file.getName() + ".assets"; //$NON-NLS-1$ //$NON-NLS-2$
+		final String assetFolderName = DocumentationAssetHelper.getDocumentationAssetFolderName(file.getName());
 		final IFolder assetFolder = parent.getFolder(new Path(assetFolderName));
 		if (!assetFolder.exists()) {
 			assetFolder.create(true, true, new NullProgressMonitor());
