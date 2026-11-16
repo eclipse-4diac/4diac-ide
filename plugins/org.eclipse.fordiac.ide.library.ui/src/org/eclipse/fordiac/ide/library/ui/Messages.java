@@ -116,6 +116,7 @@ public class Messages extends NLS {
 	public static String UnifiedLibraryImportWizardPage_work_with;
 
 	public static String LibraryExporter_Title;
+	public static String LibraryExporter_CollectingTypes;
 	public static String LibraryExporter_Description;
 	public static String LibraryExporter_Preview_Title;
 	public static String LibraryExporter_Preview_Description;
