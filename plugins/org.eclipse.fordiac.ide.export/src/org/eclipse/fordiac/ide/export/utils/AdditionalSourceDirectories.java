@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
-import org.osgi.service.prefs.BackingStoreException;
 
 public final class AdditionalSourceDirectories {
 
@@ -64,30 +63,6 @@ public final class AdditionalSourceDirectories {
 		return String.join(SERIALIZED_PATH_SEPARATOR, paths.stream().map(IPath::toPortableString).toList());
 	}
 
-	public static List<IPath> getSourceDirectories(final IProject project) {
-		return parsePaths(getPreferences(project).get(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, "")); //$NON-NLS-1$
-	}
-
-	public static IPath getOutputDirectory(final IProject project) {
-		return new Path(getPreferences(project).get(PreferenceConstants.OUTPUT_FOLDER,
-				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME));
-	}
-
-	public static void setSourceDirectories(final IProject project, final Collection<IPath> sourceDirectories)
-			throws BackingStoreException {
-		final IEclipsePreferences preferences = getPreferences(project);
-		preferences.put(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, formatPaths(sourceDirectories));
-		preferences.flush();
-	}
-
-	public static void setExportDirectories(final IProject project, final IPath outputDirectory,
-			final Collection<IPath> sourceDirectories) throws BackingStoreException {
-		final IEclipsePreferences preferences = getPreferences(project);
-		preferences.put(PreferenceConstants.OUTPUT_FOLDER, outputDirectory.toPortableString());
-		preferences.put(PreferenceConstants.ADDITIONAL_SOURCE_DIRECTORIES, formatPaths(sourceDirectories));
-		preferences.flush();
-	}
-
 	private static IEclipsePreferences getPreferences(final IProject project) {
 		return new ProjectScope(project).getNode(PreferenceConstants.EXPORT_PREFERENCES_ID);
 	}
@@ -107,10 +82,12 @@ public final class AdditionalSourceDirectories {
 		}
 
 		for (final IPath sourceDirectory : additionalSourceDirectories) {
-			if (sourceDirectory.equals(outputDirectory) || !outputDirectory.isPrefixOf(sourceDirectory)
+			if (!isValidProjectRelativePath(sourceDirectory)
+					|| sourceDirectory.segmentCount() <= outputDirectory.segmentCount()
+					|| !outputDirectory.isPrefixOf(sourceDirectory)
 					|| isGeneratedDirectory(exportFilterId, outputDirectory, sourceDirectory)
-					|| !isValidRelativeDirectory(java.nio.file.Path
-							.of(sourceDirectory.makeRelativeTo(outputDirectory).toPortableString()))) {
+					|| !Arrays.stream(sourceDirectory.segments()).skip(outputDirectory.segmentCount())
+							.allMatch(AdditionalSourceDirectories::isValidDirectoryName)) {
 				return false;
 			}
 
@@ -127,20 +104,22 @@ public final class AdditionalSourceDirectories {
 	public static void cleanOutputDirectory(final IFolder outputDirectory,
 			final List<IPath> additionalSourceDirectories, final IProgressMonitor monitor) throws CoreException {
 		final SubMonitor progress = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
-		if (additionalSourceDirectories.isEmpty()) {
-			if (outputDirectory.exists()) {
-				outputDirectory.delete(IResource.FORCE, progress);
-			}
-			return;
+		if (!additionalSourceDirectories.isEmpty()) {
+			outputDirectory.refreshLocal(IResource.DEPTH_INFINITE, progress);
 		}
-
-		outputDirectory.refreshLocal(IResource.DEPTH_INFINITE, progress);
 		if (!outputDirectory.exists()) {
 			return;
 		}
 
+		final List<IPath> existingSourceDirectories = additionalSourceDirectories.stream()
+				.filter(path -> outputDirectory.getProject().getFolder(path).exists()).toList();
+		if (existingSourceDirectories.isEmpty()) {
+			outputDirectory.delete(IResource.FORCE, progress);
+			return;
+		}
+
 		for (final IResource member : outputDirectory.members()) {
-			cleanResource(member, additionalSourceDirectories, progress);
+			cleanResource(member, existingSourceDirectories, progress);
 		}
 	}
 
@@ -202,11 +181,6 @@ public final class AdditionalSourceDirectories {
 	 *
 	 * @see #getGeneratedDirectories(IProject)
 	 */
-	public static boolean isGeneratedDirectory(final IProject project, final IPath outputDirectory,
-			final IPath directory) {
-		return isGeneratedDirectory(getExportFilterId(project), outputDirectory, directory);
-	}
-
 	public static boolean isGeneratedDirectory(final String exportFilterId, final IPath outputDirectory,
 			final IPath directory) {
 		return outputDirectory.isPrefixOf(directory) && directory.segmentCount() > outputDirectory.segmentCount()
