@@ -27,8 +27,11 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -153,6 +156,8 @@ public class LibraryExporter {
 
 		Files.createDirectories(targetFile.getParent());
 
+		exportDocumentation(sourceFile, targetFile);
+
 		if (exportAsSIFB && canExportAsSIFB(typeEntry)) {
 			try {
 				LibraryExportUtil.exportTypeAsSIFB(typeEntry, targetFile.getParent().toFile());
@@ -167,6 +172,43 @@ public class LibraryExporter {
 		} catch (final CoreException e) {
 			throw new IOException(MessageFormat.format(Messages.LibraryExporter_ErrorFile, sourceFile.getFullPath()),
 					e);
+		}
+	}
+
+	private static void exportDocumentation(final IFile sourceFile, final Path targetFile) throws IOException {
+		if (!(sourceFile.getParent() instanceof final IFolder folder)) {
+			return;
+		}
+
+		final IFolder docFolder = folder.getFolder("." + sourceFile.getName() + ".assets"); //$NON-NLS-1$ //$NON-NLS-2$
+
+		if (!docFolder.exists()) {
+			return;
+		}
+
+		final Path target = targetFile.getParent().resolve(docFolder.getName());
+
+		try {
+			copyAssets(docFolder, target);
+		} catch (final CoreException e) {
+			throw new IOException(MessageFormat.format(Messages.LibraryExporter_ErrorAssets, docFolder.getFullPath()),
+					e);
+		}
+	}
+
+	private static void copyAssets(final IContainer source, final Path target) throws CoreException, IOException {
+		Files.createDirectories(target);
+
+		for (final IResource resource : source.members()) {
+			final Path destination = target.resolve(resource.getName());
+
+			if (resource instanceof final IContainer container) {
+				copyAssets(container, destination);
+			} else if (resource instanceof final IFile file) {
+				try (InputStream input = file.getContents()) {
+					Files.copy(input, destination, StandardCopyOption.REPLACE_EXISTING);
+				}
+			}
 		}
 	}
 
