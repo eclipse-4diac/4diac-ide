@@ -163,21 +163,6 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 	 * @param project the project of the package
 	 * @param pack    the package
 	 * @param filter  selects the file
-	 * @return the downloaded file, or {@code null} if no file of the package
-	 *         matches
-	 * @throws IOException if a request fails or a response is invalid
-	 */
-	public Path packageDownloader(final Project project, final Package pack, final FileFilter filter)
-			throws IOException {
-		return packageDownloader(project, pack, filter, null);
-	}
-
-	/**
-	 * Downloads the first file of a package that matches a filter.
-	 *
-	 * @param project the project of the package
-	 * @param pack    the package
-	 * @param filter  selects the file
 	 * @param monitor the progress monitor, can be {@code null}
 	 * @return the downloaded file, or {@code null} if no file of the package
 	 *         matches

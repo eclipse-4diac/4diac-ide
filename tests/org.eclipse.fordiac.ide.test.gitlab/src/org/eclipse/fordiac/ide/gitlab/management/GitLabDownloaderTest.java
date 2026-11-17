@@ -454,7 +454,7 @@ class GitLabDownloaderTest {
 		assertEquals(Status.OK, result.status(), result::message);
 		final var entry = downloader.getProjectsAndPackages().entrySet().iterator().next();
 		final Path wizardDownload = downloader.packageDownloader(entry.getKey(), entry.getValue().getFirst(),
-				GitLabDownloader.FileFilter.ZIP);
+				GitLabDownloader.FileFilter.ZIP, null);
 		assertEquals(result.result(), wizardDownload);
 		assertArrayEquals(ARCHIVE, Files.readAllBytes(wizardDownload));
 		assertEquals(List.of(MOTOR_1_0 + archiveName, MOTOR_1_0 + archiveName),
