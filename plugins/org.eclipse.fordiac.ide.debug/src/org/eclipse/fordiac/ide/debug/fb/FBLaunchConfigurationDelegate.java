@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2024 Martin Erich Jobst, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -50,8 +50,7 @@ public class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
 			final var repeatEvent = FBLaunchConfigurationAttributes.isRepeatEvent(configuration);
 			final var keepRunningWhenIdle = FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration);
-			final var defaultArguments = getDefaultArguments(type);
-			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
+			final var variables = getArguments(configuration, type);
 			final FBDebugClockMode clockMode = FBLaunchConfigurationAttributes.getClockMode(configuration);
 			final Duration clockInterval = FBLaunchConfigurationAttributes.getClockInterval(configuration);
 			final Instant clockRealtimeOffset = FBLaunchConfigurationAttributes.getClockRealtimeOffset(configuration);
@@ -64,6 +63,21 @@ public class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 			evaluator.setEventQueue(eventQueue);
 			launch(evaluator, realtimeClock, monotonicClock, configuration, mode, launch, resource, monitor);
 		}
+	}
+
+	/**
+	 * Get the arguments of the launch: the variables of the type with the values
+	 * of the launch configuration.
+	 *
+	 * @param configuration the launch configuration
+	 * @param type          the type
+	 * @return the arguments
+	 * @throws CoreException if the variables of the type cannot be created
+	 */
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected List<Variable<?>> getArguments(final ILaunchConfiguration configuration, final FBType type)
+			throws CoreException {
+		return LaunchConfigurationAttributes.getArguments(configuration, getDefaultArguments(type));
 	}
 
 	@SuppressWarnings("static-method") // allow subclasses to override
