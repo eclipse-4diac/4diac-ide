@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
@@ -75,9 +76,9 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 	public Object loadLibrarySource(final IProgressMonitor monitor) throws IOException {
 		final AdaptableList root = new AdaptableList();
 		// a new downloader per load, as concurrent loads must not share the fetched packages
-		downloadManager = new GitLabDownloader(endpoint);
-		final GitLabDownloader mgr = downloadManager;
-		final DownloadResult<Void> fetchProjectsAndPackages = mgr.fetchProjectsAndPackages();
+		final GitLabDownloader mgr = new GitLabDownloader(endpoint);
+		downloadManager = mgr;
+		final DownloadResult<Void> fetchProjectsAndPackages = mgr.fetchProjectsAndPackages(monitor);
 		if (fetchProjectsAndPackages.status() != Status.OK) {
 			throw new IOException(fetchProjectsAndPackages.message());
 		}
@@ -122,13 +123,13 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 		for (final Object o : selectedLeafElements) {
 			monitor.worked(0);
 			if (monitor.isCanceled()) {
-				return;
+				throw new OperationCanceledException();
 			}
 
 			final Object value = LibraryTreeNode.unwrapNode(o);
 			if (value instanceof final LeafNode leafNode) {
 				final Path path = mgr.packageDownloader(leafNode.getProject(), leafNode.getPackage(),
-						GitLabDownloader.FileFilter.ZIP);
+						GitLabDownloader.FileFilter.ZIP, monitor);
 				if (path == null) {
 					throw new IOException(MessageFormat.format(Messages.Archive_Not_Found, leafNode.getPackage().name(),
 							leafNode.getPackage().version(), leafNode.getProject().id().toString()));

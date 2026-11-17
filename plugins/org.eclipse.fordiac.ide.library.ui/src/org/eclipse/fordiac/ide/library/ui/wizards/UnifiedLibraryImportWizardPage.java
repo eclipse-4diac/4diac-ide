@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.LibraryRecord;
@@ -91,6 +92,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	private Text detailsText;
 
 	private ILibrarySource activeSource;
+	private Job sourceLoadJob;
 
 	private Object[] lastExpandedElements = new Object[0];
 	private Object lastSelectedElement = null;
@@ -144,6 +146,8 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		final IRunnableWithProgress op = monitor -> {
 			try {
 				activeSource.install(targetProject, selectedLeafs, monitor);
+			} catch (final OperationCanceledException _) {
+				throw new InterruptedException();
 			} catch (final Exception e) {
 				throw new InvocationTargetException(e);
 			}
@@ -156,9 +160,9 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			final Throwable cause = ite.getCause() != null ? ite.getCause() : ite;
 			setErrorMessage(cause.getMessage() != null ? cause.getMessage() : cause.toString());
 			return false;
-		} catch (final InterruptedException ie) {
-			Thread.currentThread().interrupt();
-			setErrorMessage(Messages.UnifiedLibraryImportWizardPage_op_cancled);
+		} catch (final InterruptedException _) {
+			setErrorMessage(null);
+			setMessage(Messages.UnifiedLibraryImportWizardPage_op_cancled);
 			return false;
 		}
 	}
@@ -402,6 +406,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	}
 
 	private void rebuildSourcesKeepingSelection() {
+		cancelSourceLoad();
 		final String previousId = activeSource != null ? activeSource.id() : null;
 
 		for (final ILibrarySource s : sources) {
@@ -433,6 +438,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	}
 
 	private void scheduleRefresh() {
+		cancelSourceLoad();
 		if (activeSource == null || viewer == null || viewer.getControl().isDisposed() || targetProject == null) {
 			return;
 		}
@@ -457,11 +463,11 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 				try {
 					final Object model = sourceSnapshot.loadLibrarySource(monitor);
 					if (monitor.isCanceled()) {
-						return Status.CANCEL_STATUS;
+						throw new OperationCanceledException();
 					}
 
 					Display.getDefault().asyncExec(() -> {
-						if (getControl() == null || getControl().isDisposed()) {
+						if (!isCurrentSourceLoad(this)) {
 							return;
 						}
 						try {
@@ -480,9 +486,16 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 						}
 					});
 					return Status.OK_STATUS;
+				} catch (final OperationCanceledException _) {
+					Display.getDefault().asyncExec(() -> {
+						if (isCurrentSourceLoad(this)) {
+							detailsText.setText(Messages.UnifiedLibraryImportWizardPage_op_cancled);
+						}
+					});
+					return Status.CANCEL_STATUS;
 				} catch (final Exception ex) {
 					Display.getDefault().asyncExec(() -> {
-						if (getControl() == null || getControl().isDisposed()) {
+						if (!isCurrentSourceLoad(this)) {
 							return;
 						}
 						setErrorMessage(ex.getMessage());
@@ -494,8 +507,20 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			}
 		};
 
+		sourceLoadJob = job;
 		job.setUser(true);
 		job.schedule();
+	}
+
+	private boolean isCurrentSourceLoad(final Job job) {
+		return sourceLoadJob == job && getControl() != null && !getControl().isDisposed();
+	}
+
+	private void cancelSourceLoad() {
+		if (sourceLoadJob != null) {
+			sourceLoadJob.cancel();
+			sourceLoadJob = null;
+		}
 	}
 
 	private void restoreTreeStateAfterRefresh() {
@@ -643,6 +668,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 	@Override
 	public void dispose() {
+		cancelSourceLoad();
 		for (final ILibrarySource s : sources) {
 			s.dispose();
 		}

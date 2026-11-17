@@ -394,6 +394,17 @@ class GitLabDownloaderTest {
 	}
 
 	@Test
+	void stopsWizardCatalogueRefreshWhenCanceled() {
+		givenCatalogue();
+		final NullProgressMonitor monitor = new NullProgressMonitor();
+		transport.onRequest(() -> monitor.setCanceled(true));
+
+		assertThrows(OperationCanceledException.class, () -> downloader.fetchProjectsAndPackages(monitor));
+		assertEquals(List.of(PROJECTS_PAGE + 1), requestedUris());
+		assertTrue(downloader.getProjectsAndPackages().isEmpty());
+	}
+
+	@Test
 	void incompleteConfigurationSendsNoRequest() {
 		final GitLabDownloader withoutToken = downloader(ENDPOINT, ""); //$NON-NLS-1$
 
@@ -458,6 +469,28 @@ class GitLabDownloaderTest {
 		final var result = downloader.downloadLibrary(MOTOR, BELOW_2, null, null);
 		assertEquals(expected, result.status(), result::message);
 		assertTrue(requestedUris().stream().noneMatch(uri -> uri.endsWith(".zip"))); //$NON-NLS-1$
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { FILES_101, MOTOR_1_0 + ARCHIVE_NAME })
+	void stopsWizardDownloadWhenCanceled(final String canceledRequest) {
+		givenCatalogue();
+		givenArchiveFiles();
+		transport.respond(MOTOR_1_0 + ARCHIVE_NAME, 200, ARCHIVE);
+		final var catalogue = downloader.fetchProjectsAndPackages();
+		assertEquals(Status.OK, catalogue.status(), catalogue::message);
+		final var entry = downloader.getProjectsAndPackages().entrySet().iterator().next();
+		final NullProgressMonitor monitor = new NullProgressMonitor();
+		transport.onRequest(() -> {
+			if (canceledRequest.equals(requestedUris().getLast())) {
+				monitor.setCanceled(true);
+			}
+		});
+
+		assertThrows(OperationCanceledException.class, () -> downloader.packageDownloader(entry.getKey(),
+				entry.getValue().getFirst(), GitLabDownloader.FileFilter.ZIP, monitor));
+		assertEquals(canceledRequest, requestedUris().getLast());
+		assertFalse(Files.exists(downloadFolder.resolve(ARCHIVE_NAME)));
 	}
 
 	@ParameterizedTest

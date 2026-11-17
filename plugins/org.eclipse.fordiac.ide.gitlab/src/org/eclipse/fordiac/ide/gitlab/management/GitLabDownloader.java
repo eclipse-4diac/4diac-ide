@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
@@ -91,17 +92,7 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 	private static final String LOCATOR_SEPARATOR = "/"; //$NON-NLS-1$
 
 	public enum FileFilter {
-		ZIP(Pattern.compile(".*\\.zip")), MANIFEST(Pattern.compile(".*\\.MF")); //$NON-NLS-1$//$NON-NLS-2$
-
-		private final Pattern pattern;
-
-		FileFilter(final Pattern pattern) {
-			this.pattern = pattern;
-		}
-
-		public Pattern getPattern() {
-			return pattern;
-		}
+		ZIP, MANIFEST
 	}
 
 	/** The location of a page of a GitLab list. */
@@ -152,7 +143,18 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 	 * @return the status of the load
 	 */
 	public DownloadResult<Void> fetchProjectsAndPackages() {
-		return refreshCatalogue(null);
+		return fetchProjectsAndPackages(null);
+	}
+
+	/**
+	 * Loads the projects and packages of the endpoint again.
+	 *
+	 * @param monitor the progress monitor, can be {@code null}
+	 * @return the status of the load
+	 * @throws OperationCanceledException if the monitor is canceled
+	 */
+	public DownloadResult<Void> fetchProjectsAndPackages(final IProgressMonitor monitor) {
+		return refreshCatalogue(monitor);
 	}
 
 	/**
@@ -167,17 +169,34 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 	 */
 	public Path packageDownloader(final Project project, final Package pack, final FileFilter filter)
 			throws IOException {
+		return packageDownloader(project, pack, filter, null);
+	}
+
+	/**
+	 * Downloads the first file of a package that matches a filter.
+	 *
+	 * @param project the project of the package
+	 * @param pack    the package
+	 * @param filter  selects the file
+	 * @param monitor the progress monitor, can be {@code null}
+	 * @return the downloaded file, or {@code null} if no file of the package
+	 *         matches
+	 * @throws IOException if a request fails or a response is invalid
+	 * @throws OperationCanceledException if the monitor is canceled
+	 */
+	public Path packageDownloader(final Project project, final Package pack, final FileFilter filter,
+			final IProgressMonitor monitor) throws IOException {
 		if (!isValidId(project.id()) || !isValidId(pack.id()) || !isPathSegment(pack.packageType())) {
 			throw new IOException(Messages.Invalid_Locator);
 		}
 		final LibraryPackageId id = packageId(pack);
-		final Optional<String> fileName = findFileName(project.id(), pack, id, filter, null);
+		final Optional<String> fileName = findFileName(project.id(), pack, id, filter, monitor);
 		if (fileName.isEmpty()) {
 			return null;
 		}
 		final URI location = fileUri(project.id(), pack, fileName.get());
-		return filter == FileFilter.MANIFEST ? downloadManifestFile(location, id.folderName(), null)
-				: downloadFile(location, id.folderName(), fileName.get(), null);
+		return filter == FileFilter.MANIFEST ? downloadManifestFile(location, id.folderName(), monitor)
+				: downloadFile(location, id.folderName(), fileName.get(), monitor);
 	}
 
 	@Override
