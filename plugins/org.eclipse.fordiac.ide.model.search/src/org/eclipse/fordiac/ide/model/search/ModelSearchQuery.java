@@ -415,7 +415,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
 					.map(match -> new SearchResultTextMatch(modelElement, match.getLine() + 1, match.getOffset(),
-							match.getLength(), match.getType()))
+							match.getLength(), match.getType(), match.getText()))
 					.forEach(match -> searchResult.addFordiacMatch(match));
 			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}

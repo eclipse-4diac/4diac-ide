@@ -16,21 +16,18 @@ import java.util.Objects;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 
 public class SearchResultTextMatch extends TextMatch {
 	private final String elementKind;
 	private final String elementName;
 	private final String elementComment;
-	private final String elementText;
 
 	public SearchResultTextMatch(final INamedElement obj, final int line, final int offset, final int length,
-			final String type) {
-		super(EcoreUtil.getURI(obj), line, offset, length, type);
+			final String type, final String text) {
+		super(EcoreUtil.getURI(obj), line, offset, length, type, text);
 		elementKind = obj.getClass().getSimpleName();
 		elementName = obj.getName();
 		elementComment = obj.getComment();
-		elementText = createElementText(obj, line);
 	}
 
 	public String getElementKind() {
@@ -43,10 +40,6 @@ public class SearchResultTextMatch extends TextMatch {
 
 	public String getElementComment() {
 		return elementComment;
-	}
-
-	public String getElementText() {
-		return elementText;
 	}
 
 	@Override
@@ -62,19 +55,5 @@ public class SearchResultTextMatch extends TextMatch {
 	@Override
 	public int hashCode() {
 		return super.hashCode() + Objects.hash(elementKind, elementName, elementComment);
-	}
-
-	private static final String createElementText(final INamedElement obj, final int line) {
-		if (obj instanceof final STAlgorithm algorithm) {
-			if (line <= 0) {
-				return null;
-			}
-			final String algorithmText = algorithm.getText();
-			if (algorithmText == null || algorithmText.isEmpty()) {
-				return null;
-			}
-			return algorithmText.lines().skip(line - 1L).findFirst().orElse(null);
-		}
-		return null;
 	}
 }
