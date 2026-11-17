@@ -105,6 +105,13 @@ public class QuerySwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case QueryPackage.CONSTRAINT_INSTANCE: {
+				ConstraintInstance constraintInstance = (ConstraintInstance)theEObject;
+				T result = caseConstraintInstance(constraintInstance);
+				if (result == null) result = caseConstraint(constraintInstance);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case QueryPackage.OCCURRENCE: {
 				Occurrence occurrence = (Occurrence)theEObject;
 				T result = caseOccurrence(occurrence);
@@ -141,6 +148,12 @@ public class QuerySwitch<T> extends Switch<T> {
 			case QueryPackage.PLACEHOLDER: {
 				Placeholder placeholder = (Placeholder)theEObject;
 				T result = casePlaceholder(placeholder);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case QueryPackage.CONSTRAINT_DECLARATION: {
+				ConstraintDeclaration constraintDeclaration = (ConstraintDeclaration)theEObject;
+				T result = caseConstraintDeclaration(constraintDeclaration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -418,6 +431,21 @@ public class QuerySwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constraint Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constraint Instance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConstraintInstance(ConstraintInstance object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Occurrence</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -504,6 +532,21 @@ public class QuerySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePlaceholder(Placeholder object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constraint Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constraint Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConstraintDeclaration(ConstraintDeclaration object) {
 		return null;
 	}
 

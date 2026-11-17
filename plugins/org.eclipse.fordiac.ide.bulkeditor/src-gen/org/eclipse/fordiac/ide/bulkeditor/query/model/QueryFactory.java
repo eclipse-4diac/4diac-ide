@@ -61,6 +61,15 @@ public interface QueryFactory extends EFactory {
 	AttributeConstraint createAttributeConstraint();
 
 	/**
+	 * Returns a new object of class '<em>Constraint Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Constraint Instance</em>'.
+	 * @generated
+	 */
+	ConstraintInstance createConstraintInstance();
+
+	/**
 	 * Returns a new object of class '<em>Application Occurrence</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -104,6 +113,15 @@ public interface QueryFactory extends EFactory {
 	 * @generated
 	 */
 	Placeholder createPlaceholder();
+
+	/**
+	 * Returns a new object of class '<em>Constraint Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Constraint Declaration</em>'.
+	 * @generated
+	 */
+	ConstraintDeclaration createConstraintDeclaration();
 
 	/**
 	 * Returns a new object of class '<em>Target</em>'.

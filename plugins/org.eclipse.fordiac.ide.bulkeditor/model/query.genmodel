@@ -27,6 +27,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//FieldConstraint/regex"/>
     </genClasses>
     <genClasses ecoreClass="query.ecore#//AttributeConstraint"/>
+    <genClasses ecoreClass="query.ecore#//ConstraintInstance">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference query.ecore#//ConstraintInstance/declaration"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="query.ecore#//Occurrence">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Occurrence/constraint"/>
     </genClasses>
@@ -37,10 +40,15 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Query/placeholder"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Query/target"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Query/place"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Query/constraintDeclaration"/>
     </genClasses>
     <genClasses ecoreClass="query.ecore#//Placeholder">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Placeholder/key"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Placeholder/val"/>
+    </genClasses>
+    <genClasses ecoreClass="query.ecore#//ConstraintDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//ConstraintDeclaration/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//ConstraintDeclaration/constraint"/>
     </genClasses>
     <genClasses ecoreClass="query.ecore#//Target">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Target/target"/>

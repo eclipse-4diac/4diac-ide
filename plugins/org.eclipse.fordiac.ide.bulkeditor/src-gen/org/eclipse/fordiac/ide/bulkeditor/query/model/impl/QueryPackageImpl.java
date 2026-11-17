@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.bulkeditor.query.model.CompositeFBOccurrence;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.CompositeType;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Connection;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.FieldConstraint;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.FunctionFB;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.FunctionType;
@@ -100,6 +102,13 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass constraintInstanceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass occurrenceEClass = null;
 
 	/**
@@ -136,6 +145,13 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	private EClass placeholderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass constraintDeclarationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -552,6 +568,26 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getConstraintInstance() {
+		return constraintInstanceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getConstraintInstance_Declaration() {
+		return (EReference)constraintInstanceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getOccurrence() {
 		return occurrenceEClass;
 	}
@@ -642,6 +678,16 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getQuery_ConstraintDeclaration() {
+		return (EReference)queryEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPlaceholder() {
 		return placeholderEClass;
 	}
@@ -664,6 +710,36 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	@Override
 	public EAttribute getPlaceholder_Val() {
 		return (EAttribute)placeholderEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getConstraintDeclaration() {
+		return constraintDeclarationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConstraintDeclaration_Name() {
+		return (EAttribute)constraintDeclarationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getConstraintDeclaration_Constraint() {
+		return (EReference)constraintDeclarationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1275,6 +1351,9 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 
 		attributeConstraintEClass = createEClass(ATTRIBUTE_CONSTRAINT);
 
+		constraintInstanceEClass = createEClass(CONSTRAINT_INSTANCE);
+		createEReference(constraintInstanceEClass, CONSTRAINT_INSTANCE__DECLARATION);
+
 		occurrenceEClass = createEClass(OCCURRENCE);
 		createEReference(occurrenceEClass, OCCURRENCE__CONSTRAINT);
 
@@ -1288,10 +1367,15 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		createEReference(queryEClass, QUERY__PLACEHOLDER);
 		createEReference(queryEClass, QUERY__TARGET);
 		createEReference(queryEClass, QUERY__PLACE);
+		createEReference(queryEClass, QUERY__CONSTRAINT_DECLARATION);
 
 		placeholderEClass = createEClass(PLACEHOLDER);
 		createEAttribute(placeholderEClass, PLACEHOLDER__KEY);
 		createEAttribute(placeholderEClass, PLACEHOLDER__VAL);
+
+		constraintDeclarationEClass = createEClass(CONSTRAINT_DECLARATION);
+		createEAttribute(constraintDeclarationEClass, CONSTRAINT_DECLARATION__NAME);
+		createEReference(constraintDeclarationEClass, CONSTRAINT_DECLARATION__CONSTRAINT);
 
 		targetEClass = createEClass(TARGET);
 		createEReference(targetEClass, TARGET__TARGET);
@@ -1407,6 +1491,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		// Add supertypes to classes
 		propertyConstraintEClass.getESuperTypes().add(this.getConstraint());
 		attributeConstraintEClass.getESuperTypes().add(this.getPropertyConstraint());
+		constraintInstanceEClass.getESuperTypes().add(this.getConstraint());
 		applicationOccurrenceEClass.getESuperTypes().add(this.getOccurrence());
 		compositeFBOccurrenceEClass.getESuperTypes().add(this.getOccurrence());
 		typedSubappOccurrenceEClass.getESuperTypes().add(this.getOccurrence());
@@ -1455,6 +1540,9 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 
 		initEClass(attributeConstraintEClass, AttributeConstraint.class, "AttributeConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
+		initEClass(constraintInstanceEClass, ConstraintInstance.class, "ConstraintInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getConstraintInstance_Declaration(), this.getConstraintDeclaration(), null, "declaration", null, 1, 1, ConstraintInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(occurrenceEClass, Occurrence.class, "Occurrence", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getOccurrence_Constraint(), this.getConstraint(), null, "constraint", null, 0, 1, Occurrence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -1468,10 +1556,15 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		initEReference(getQuery_Placeholder(), this.getPlaceholder(), null, "placeholder", null, 0, -1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getQuery_Target(), this.getTarget(), null, "target", null, 1, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getQuery_Place(), this.getPlace(), null, "place", null, 1, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getQuery_ConstraintDeclaration(), this.getConstraintDeclaration(), null, "constraintDeclaration", null, 0, -1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(placeholderEClass, Placeholder.class, "Placeholder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getPlaceholder_Key(), ecorePackage.getEString(), "key", null, 0, 1, Placeholder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getPlaceholder_Val(), ecorePackage.getEString(), "val", null, 0, 1, Placeholder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(constraintDeclarationEClass, ConstraintDeclaration.class, "ConstraintDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getConstraintDeclaration_Name(), ecorePackage.getEString(), "name", null, 1, 1, ConstraintDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getConstraintDeclaration_Constraint(), this.getConstraint(), null, "constraint", null, 0, 1, ConstraintDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(targetEClass, Target.class, "Target", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getTarget_Target(), this.getTargetOption(), null, "target", null, 1, 1, Target.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
