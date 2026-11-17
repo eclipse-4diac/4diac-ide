@@ -30,6 +30,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreTypeUsageColl
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.LanguageInfo;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
+import org.eclipse.xtext.nodemodel.ICompositeNode;
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.DefaultLocationInFileProvider;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
@@ -58,8 +60,9 @@ public abstract class StructuredTextSearchSupport implements ISearchSupport {
 	protected Match createMatch(final EObject object) {
 		if (locationInFileProvider
 				.getSignificantTextRegion(object) instanceof final ITextRegionWithLineInformation region) {
-			return new TextMatch(EcoreUtil.getURI(object), region.getLineNumber(), region.getOffset(),
-					region.getLength(), getMatchType(object));
+			final int offset = region.getOffset();
+			return new TextMatch(EcoreUtil.getURI(object), region.getLineNumber(), offset, region.getLength(),
+					getMatchType(object), getCodeLine(object, offset, region.getEndOffset()));
 		}
 		return new Match(EcoreUtil.getURI(object), FordiacMarkerHelper.getLocation(object), getMatchType(object));
 	}
@@ -88,5 +91,23 @@ public abstract class StructuredTextSearchSupport implements ISearchSupport {
 		final String languageName = languageInfo.getLanguageName();
 		final int lastIndex = languageName.lastIndexOf('.');
 		return languageName.substring(0, lastIndex + 1);
+	}
+
+	private static String getCodeLine(final EObject object, final int offset, final int endOffset) {
+		final ICompositeNode node = NodeModelUtils.getNode(object);
+		if (node == null) {
+			return null;
+		}
+
+		final String text = node.getRootNode().getText();
+		int lineStart = offset;
+		while (lineStart > 0 && text.charAt(lineStart - 1) != '\n' && text.charAt(lineStart - 1) != '\r') {
+			lineStart--;
+		}
+		int lineEnd = endOffset;
+		while (lineEnd < text.length() && text.charAt(lineEnd) != '\n' && text.charAt(lineEnd) != '\r') {
+			lineEnd++;
+		}
+		return text.substring(lineStart, lineEnd).strip();
 	}
 }
