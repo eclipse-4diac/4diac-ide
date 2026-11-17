@@ -68,6 +68,11 @@ public class Messages extends NLS {
 	public static String FBSnapshotValidator_UnsupportedTransition;
 	public static String FBSnapshotValidator_UnsupportedType;
 	public static String FBSnapshotValidator_VariableLengthArray;
+	public static String SnapshotFBLaunchConfigurationAttributes_InstanceNotFound;
+	public static String SnapshotFBLaunchConfigurationAttributes_TypeMismatch;
+	public static String SnapshotFBLaunchConfigurationDelegate_Missing;
+	public static String SnapshotFBLaunchConfigurations_Name;
+	public static String SnapshotRuntimeProvider_NoRuntime;
 	public static String VarDeclarationWatch_ClearForceError;
 	public static String VarDeclarationWatch_ForceError;
 	public static String VarDeclarationWatch_WriteError;

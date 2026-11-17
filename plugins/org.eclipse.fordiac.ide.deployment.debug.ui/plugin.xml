@@ -55,6 +55,15 @@
 				perspective="org.eclipse.debug.ui.DebugPerspective">
 			</launchMode>
 		</launchConfigurationTabGroup>
+		<launchConfigurationTabGroup
+			class="org.eclipse.fordiac.ide.debug.ui.fb.FBLaunchConfigurationTabGroup"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.snapshotFBLaunchConfigurationTabGroup"
+			type="org.eclipse.fordiac.ide.deployment.debug.snapshotFBLaunch">
+			<launchMode
+				mode="debug"
+				perspective="org.eclipse.debug.ui.DebugPerspective">
+			</launchMode>
+		</launchConfigurationTabGroup>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchShortcuts">
@@ -206,6 +215,11 @@
 			configTypeID="org.eclipse.fordiac.ide.deployment.debug.deploySubAppLaunch"
 			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_subapplication_typed_run.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageDeploySubApp">
+		</launchConfigurationTypeImage>
+		<launchConfigurationTypeImage
+			configTypeID="org.eclipse.fordiac.ide.deployment.debug.snapshotFBLaunch"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageSnapshotFB">
 		</launchConfigurationTypeImage>
 	</extension>
 	<extension
@@ -1067,6 +1081,12 @@
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.LaunchActiveStatusHandler"
 			code="200"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.statusHandlerLaunchActive"
+			plugin="org.eclipse.fordiac.ide.deployment.debug">
+		</statusHandler>
+		<statusHandler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.IncompleteSnapshotStatusHandler"
+			code="201"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.statusHandlerIncompleteSnapshot"
 			plugin="org.eclipse.fordiac.ide.deployment.debug">
 		</statusHandler>
 	</extension>
