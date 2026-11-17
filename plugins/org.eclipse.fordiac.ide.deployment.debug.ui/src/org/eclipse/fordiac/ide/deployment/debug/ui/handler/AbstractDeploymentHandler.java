@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024 Martin Erich Jobst, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -57,16 +57,26 @@ public abstract class AbstractDeploymentHandler<T extends INamedElement> extends
 	@Override
 	public final Object execute(final ExecutionEvent event) throws ExecutionException {
 		if (HandlerUtil.getCurrentSelection(event) instanceof final IStructuredSelection selection) {
-			final Shell shell = HandlerUtil.getActiveShell(event);
-			try {
-				for (final Object selectedElement : selection) {
-					execute(selectedElement, shell);
-				}
-			} catch (final DeploymentException e) {
-				ErrorDialog.openError(shell, null, null, Status.error(e.getLocalizedMessage(), e));
-			}
+			execute(selection, HandlerUtil.getActiveShell(event));
 		}
 		return null;
+	}
+
+	/**
+	 * Execute the handler for the selected elements, e.g. from a launch shortcut.
+	 *
+	 * @param selection the selected elements
+	 * @param shell     the shell for dialogs
+	 * @throws ExecutionException if waiting for the monitoring session fails
+	 */
+	public final void execute(final IStructuredSelection selection, final Shell shell) throws ExecutionException {
+		try {
+			for (final Object selectedElement : selection) {
+				execute(selectedElement, shell);
+			}
+		} catch (final DeploymentException e) {
+			ErrorDialog.openError(shell, null, null, Status.error(e.getLocalizedMessage(), e));
+		}
 	}
 
 	private void execute(final Object selectedElement, final Shell shell)
