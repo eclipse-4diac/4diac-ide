@@ -29,10 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Flow;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLSession;
 
@@ -119,6 +121,9 @@ final class FakeTransport implements LibraryPackageTransport {
 		final HttpHeaders headers = HttpHeaders.of(fixture.headers(), (_, _) -> true);
 		final BodySubscriber<T> subscriber = handler
 				.apply(new Info(fixture.status(), headers, HttpClient.Version.HTTP_1_1));
+		// the JDK client asks for the body before any data arrives
+		final CompletionStage<T> body = subscriber.getBody();
+		final AtomicBoolean canceled = new AtomicBoolean();
 		subscriber.onSubscribe(new Flow.Subscription() {
 			@Override
 			public void request(final long n) {
@@ -127,14 +132,18 @@ final class FakeTransport implements LibraryPackageTransport {
 
 			@Override
 			public void cancel() {
-				// nothing to stop
+				canceled.set(true);
 			}
 		});
+		if (canceled.get()) {
+			// like the JDK client on HTTP/2, which resets the stream and fails the request
+			throw new IOException("Stream 1 cancelled"); //$NON-NLS-1$
+		}
 		subscriber.onNext(List.of(ByteBuffer.wrap(fixture.body())));
 		subscriber.onComplete();
 		try {
 			return new Response<>(fixture.status(), request, headers,
-					subscriber.getBody().toCompletableFuture().get(5, TimeUnit.SECONDS));
+					body.toCompletableFuture().get(5, TimeUnit.SECONDS));
 		} catch (final ExecutionException e) {
 			if (e.getCause() instanceof final IOException cause) {
 				throw cause;
