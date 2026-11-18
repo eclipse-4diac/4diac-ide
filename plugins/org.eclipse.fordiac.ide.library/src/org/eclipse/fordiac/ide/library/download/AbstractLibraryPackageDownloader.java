@@ -17,7 +17,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -554,15 +553,14 @@ public abstract class AbstractLibraryPackageDownloader implements ILibraryPackag
 		}
 	}
 
+	/**
+	 * Reads a response body to its end and drops it.
+	 *
+	 * @param <T> the body type of the response
+	 * @return the subscriber, completing with {@code null}
+	 */
 	private static <T> HttpResponse.BodySubscriber<T> discardBody() {
-		return BodySubscribers.mapping(BodySubscribers.ofInputStream(), stream -> {
-			try {
-				stream.close();
-			} catch (final IOException e) {
-				throw new UncheckedIOException(e);
-			}
-			return null;
-		});
+		return BodySubscribers.replacing(null);
 	}
 
 	private static URI redirectTarget(final URI current, final HttpHeaders headers) throws IOException {
