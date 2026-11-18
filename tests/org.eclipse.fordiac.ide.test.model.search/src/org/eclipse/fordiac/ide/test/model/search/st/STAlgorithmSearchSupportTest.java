@@ -30,7 +30,7 @@ class STAlgorithmSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_ALGORITHM
 				"""));
 		assertNoMatch(type.getSourceElements().getFirst(), new NameMatcher("ABC"));
-		assertMatch(type.getSourceElements().getFirst(), new NameMatcher("REQ"), 0, 10, 3);
+		assertMatch(type.getSourceElements().getFirst(), new NameMatcher("REQ"), 0, 10, 3, "ALGORITHM REQ");
 	}
 
 	@Test
@@ -46,7 +46,8 @@ class STAlgorithmSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_ALGORITHM
 				"""));
 		assertNoMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration));
-		assertMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 14, 3);
+		assertMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 14, 3,
+				"DO2 := 17;");
 	}
 
 	@Test
@@ -63,7 +64,7 @@ class STAlgorithmSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_ALGORITHM
 				"""));
 		assertNoMatch(type.getSourceElements().getLast(), new NameMatcher("REQ"));
-		assertMatch(type.getSourceElements().getLast(), new NameMatcher("INIT"), 4, 50, 4);
+		assertMatch(type.getSourceElements().getLast(), new NameMatcher("INIT"), 4, 50, 4, "ALGORITHM INIT");
 	}
 
 }

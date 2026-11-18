@@ -40,7 +40,7 @@ class VarDeclarationSearchSupportTest extends StructuredTextSearchSupportTest {
 		type.getInterfaceList().getInputVars().add(varDeclaration);
 		assertNoMatch(type.getInterfaceList().getInputVars().getFirst(), new CrossReferenceMatcher(varDeclaration));
 		assertMatch(type.getInterfaceList().getInputVars().getFirst(), new CrossReferenceMatcher(varDeclarationConst),
-				0, 0, 14);
+				0, 0, 14, "INTERNALCONST1 * 2");
 	}
 
 	@Test
@@ -54,7 +54,7 @@ class VarDeclarationSearchSupportTest extends StructuredTextSearchSupportTest {
 	@Test
 	void testVarConfigInstanceHasSearchSupport() {
 		final VarConfigInstance varConfigInstance = LibraryElementFactory.eINSTANCE.createVarConfigInstance();
-		assertInstanceOf(VarDeclarationSearchSupport.class, ISearchFactory.createSearchSupport(varConfigInstance,
-				varConfigInstance.eClass().getInstanceClass()));
+		assertInstanceOf(VarDeclarationSearchSupport.class,
+				ISearchFactory.createSearchSupport(varConfigInstance, varConfigInstance.eClass().getInstanceClass()));
 	}
 }

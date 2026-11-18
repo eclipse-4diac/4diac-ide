@@ -26,6 +26,6 @@ class STFunctionSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_FUNCTION
 				""");
 		assertNoMatch(type.getBody(), new NameMatcher("ABC"));
-		assertMatch(type.getBody(), new NameMatcher("TEST_FUNC"), 0, 9, 9);
+		assertMatch(type.getBody(), new NameMatcher("TEST_FUNC"), 0, 9, 9, "FUNCTION TEST_FUNC");
 	}
 }
