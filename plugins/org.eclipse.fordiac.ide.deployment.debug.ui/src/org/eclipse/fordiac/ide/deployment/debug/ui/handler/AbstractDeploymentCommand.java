@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 				 2019 Johannes Kepler University
+ * 				 2026 Zijun Tang
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,6 +12,7 @@
  * Contributors:
  *   Jose Cabral - initial API and implementation and/or initial documentation
  *   Alois Zoitl - re-enabled monitoring after command execution
+ *   Zijun Tang - reuse the monitoring connection for online commands
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
@@ -18,12 +20,14 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
@@ -121,6 +125,15 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		final List<Object> list = getObjectSelectionArray(event);
 		for (final Object currentElement : list) {
 			if (prepareParametersToExecute(currentElement)) {
+				final Optional<DeploymentDebugDevice> activeDevice = AbstractDeploymentHandler.findActiveDevice(device);
+				if (activeDevice.isPresent()) {
+					// Callbacks on this connection run on the monitoring executor. Do not register
+					// a listener there; it could open a dialog off the UI thread, and monitoring
+					// polls the same listener list.
+					executeOnMonitoredDevice(activeDevice.get());
+					continue;
+				}
+
 				final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 						.getDeviceManagementInteractor(device);
 				if (null != interactor) {
@@ -141,6 +154,15 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			}
 		}
 		return null;
+	}
+
+	private void executeOnMonitoredDevice(final DeploymentDebugDevice activeDevice) {
+		try {
+			executeCommand(activeDevice.getDeviceManagementExecutorService());
+		} catch (final DeploymentException e) {
+			new OnlineDeploymentErrorCheckListener(this).showDeploymentError(e.getMessage(),
+					DeploymentHelper.getMgrIDSafe(device), this);
+		}
 	}
 
 	private static List<Object> getObjectSelectionArray(final ExecutionEvent event) {
