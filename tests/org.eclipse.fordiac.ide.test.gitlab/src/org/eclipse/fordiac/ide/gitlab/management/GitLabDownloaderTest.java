@@ -278,17 +278,53 @@ class GitLabDownloaderTest {
 		assertEquals(Map.of(MOTOR, List.of("1.0.0", "2.0.0")), result.result()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	@ParameterizedTest
-	@ValueSource(booleans = { false, true })
-	void reportsForbiddenPackagesForEnabledRegistryOrLaterPage(final boolean secondPage) {
+	@Test
+	void skipsForbiddenProjectWithEnabledRegistryAndWarns() {
 		givenCatalogue();
-		if (secondPage) {
-			transport.respond(PROJECTS_PAGE + 1, 200, "[{\"id\":11,\"name\":\"Motors\"}]"); //$NON-NLS-1$
-			transport.respond(PACKAGES_11, 200, MOTOR_PACKAGES, NEXT_PAGE, "2"); //$NON-NLS-1$
+		transport.respond(PACKAGES_11, 403, ""); //$NON-NLS-1$
+
+		final List<IStatus> warnings = new ArrayList<>();
+		final ILogListener listener = (status, _) -> {
+			if (status.getSeverity() == IStatus.WARNING) {
+				warnings.add(status);
+			}
+		};
+		Platform.addLogListener(listener);
+		try {
+			final var result = downloader.availableLibrariesAndVersions(null);
+			assertEquals(Status.OK, result.status(), result::message);
+			assertEquals(Map.of(ROBOT, List.of("3.0.1")), result.result()); //$NON-NLS-1$
+		} finally {
+			Platform.removeLogListener(listener);
 		}
-		transport.respond(secondPage ? BASE + "/11/packages?per_page=100&page=2" : PACKAGES_11, 403, ""); //$NON-NLS-1$ //$NON-NLS-2$
-		assertEquals(Status.CONFIG_ERROR, downloader.availableLibraries(null).status());
-		assertTrue(downloader.getProjectsAndPackages().isEmpty());
+
+		assertEquals(List.of(MessageFormat.format(Messages.Skipped_Forbidden_Project, downloader.getName(), "Motors", //$NON-NLS-1$
+				"11")), warnings.stream().map(IStatus::getMessage).toList()); //$NON-NLS-1$
+	}
+
+	@Test
+	void keepsPackagesBeforeForbiddenLaterPageAndContinues() {
+		givenCatalogue();
+		transport.respond(PACKAGES_11, 200, MOTOR_PACKAGES, NEXT_PAGE, "2"); //$NON-NLS-1$
+		transport.respond(BASE + "/11/packages?per_page=100&page=2", 403, ""); //$NON-NLS-1$ //$NON-NLS-2$
+
+		final List<IStatus> warnings = new ArrayList<>();
+		final ILogListener listener = (status, _) -> {
+			if (status.getSeverity() == IStatus.WARNING) {
+				warnings.add(status);
+			}
+		};
+		Platform.addLogListener(listener);
+		try {
+			final var result = downloader.availableLibrariesAndVersions(null);
+			assertEquals(Status.OK, result.status(), result::message);
+			assertEquals(Map.of(MOTOR, List.of("1.0.0", "2.0.0"), ROBOT, List.of("3.0.1")), result.result()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		} finally {
+			Platform.removeLogListener(listener);
+		}
+
+		assertEquals(List.of(MessageFormat.format(Messages.Incomplete_Forbidden_Project, downloader.getName(), "Motors", //$NON-NLS-1$
+				"11", "2")), warnings.stream().map(IStatus::getMessage).toList()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Test

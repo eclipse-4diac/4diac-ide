@@ -61,8 +61,10 @@ import com.google.gson.JsonElement;
  * <p>
  * The downloaders of all configured endpoints are created by the
  * {@link GitLabDownloaderProvider}. The catalogue lists the packages of all
- * projects the token is a member of; projects without package registry are
- * skipped. Requests, redirects, limits and errors are handled by
+ * projects the token is a member of; projects without package registry, and
+ * projects whose packages the token may not read, are skipped. If a later page
+ * of a package list is forbidden, the packages read before it are kept.
+ * Requests, redirects, limits and errors are handled by
  * {@link AbstractLibraryPackageDownloader}, which sends the access token only
  * to the configured endpoint.
  */
@@ -294,6 +296,16 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 	private record CatalogueProject(Project project, boolean registryEnabled) {
 	}
 
+	/** The elements of a paged list up to the first forbidden page, if any. */
+	private record PagedList<T>(List<T> elements, long forbiddenPage) {
+
+		private static final long NONE = 0;
+
+		boolean forbiddenFirstPage() {
+			return forbiddenPage == 1;
+		}
+	}
+
 	private List<CatalogueProject> getProjects(final IProgressMonitor monitor) throws IOException {
 		final List<CatalogueProject> projects = new ArrayList<>();
 		for (final ProjectResponse response : listPages(
@@ -307,8 +319,21 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 	private Optional<List<PackageResponse>> getPackages(final CatalogueProject catalogueProject, final IProgressMonitor monitor)
 			throws IOException {
 		final Project project = catalogueProject.project();
-		return listPages(page -> resolve(PROJECTS + '/' + project.id() + "/packages?" //$NON-NLS-1$
-				+ PAGE_PARAMETERS + page), PackageResponse[].class, monitor, !catalogueProject.registryEnabled());
+		final PagedList<PackageResponse> packages = listPages(
+				page -> resolve(PROJECTS + '/' + project.id() + "/packages?" + PAGE_PARAMETERS + page), //$NON-NLS-1$
+				PackageResponse[].class, monitor, true);
+		if (packages.forbiddenFirstPage()) {
+			if (catalogueProject.registryEnabled()) {
+				ILog.get().warn(MessageFormat.format(Messages.Skipped_Forbidden_Project, getName(), project.name(),
+						project.id().toString()));
+			}
+			return Optional.empty();
+		}
+		if (packages.forbiddenPage() != PagedList.NONE) {
+			ILog.get().warn(MessageFormat.format(Messages.Incomplete_Forbidden_Project, getName(), project.name(),
+					project.id().toString(), Long.toString(packages.forbiddenPage())));
+		}
+		return Optional.of(packages.elements());
 	}
 
 	private Optional<String> findFileName(final Long projectId, final Package pack, final LibraryPackageId id,
@@ -343,11 +368,11 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 
 	private <T> List<T> listPages(final Page page, final Class<T[]> pageType, final IProgressMonitor monitor)
 			throws IOException {
-		return listPages(page, pageType, monitor, false).orElseThrow();
+		return listPages(page, pageType, monitor, false).elements();
 	}
 
-	private <T> Optional<List<T>> listPages(final Page page, final Class<T[]> pageType, final IProgressMonitor monitor,
-			final boolean skipForbiddenFirstPage) throws IOException {
+	private <T> PagedList<T> listPages(final Page page, final Class<T[]> pageType, final IProgressMonitor monitor,
+			final boolean stopAtForbiddenPage) throws IOException {
 		final long maxPages = maxPages();
 		final List<T> elements = new ArrayList<>();
 		final URI first = page.at(FIRST_PAGE);
@@ -361,15 +386,15 @@ public class GitLabDownloader extends AbstractLibraryPackageDownloader {
 			try {
 				response = getJson(location, pageType, monitor);
 			} catch (final LibraryPackageRequestException e) {
-				if (skipForbiddenFirstPage && count == 1 && e.getStatusCode() == HttpURLConnection.HTTP_FORBIDDEN) {
-					return Optional.empty();
+				if (stopAtForbiddenPage && e.getStatusCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+					return new PagedList<>(elements, count);
 				}
 				throw e;
 			}
 			elements.addAll(Arrays.asList(response.body()));
 			location = nextPage(response.headers(), page).orElse(null);
 		}
-		return Optional.of(elements);
+		return new PagedList<>(elements, PagedList.NONE);
 	}
 
 	private static long maxPages() {
