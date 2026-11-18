@@ -32,6 +32,7 @@ class AttributeSearchSupportTest extends StructuredTextSearchSupportTest {
 		type.getInternalVars().add(varDeclarationConst2);
 		type.getAttributes().add(createAttribute("TestAttribute", ElementaryTypes.DINT, "INTERNALCONST2 * 2"));
 		assertNoMatch(type.getAttributes().getFirst(), new CrossReferenceMatcher(varDeclarationConst));
-		assertMatch(type.getAttributes().getFirst(), new CrossReferenceMatcher(varDeclarationConst2), 0, 0, 14);
+		assertMatch(type.getAttributes().getFirst(), new CrossReferenceMatcher(varDeclarationConst2), 0, 0, 14,
+				"INTERNALCONST2 * 2");
 	}
 }

@@ -72,7 +72,7 @@ abstract class StructuredTextSearchSupportTest {
 	}
 
 	protected static <T extends EObject> void assertMatch(final T source, final IModelMatcher matcher, final int line,
-			final int offset, final int length) {
+			final int offset, final int length, final String text) {
 		final List<Match> matches = assertDoesNotThrow(() -> ISearchFactory
 				.createSearchSupport(source, source.eClass().getInstanceClass()).search(matcher).toList());
 		assertEquals(1, matches.size(), "expected exactly one match");
@@ -81,6 +81,7 @@ abstract class StructuredTextSearchSupportTest {
 		assertEquals(line, match.getLine(), "line");
 		assertEquals(offset, match.getOffset(), "offset");
 		assertEquals(length, match.getLength(), "length");
+		assertEquals(text, match.getText(), "text");
 	}
 
 	protected static VarDeclaration createVarDeclaration(final String name, final DataType type) {
