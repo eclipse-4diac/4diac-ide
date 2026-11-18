@@ -99,6 +99,8 @@ public final class Messages extends NLS {
 	public static String Invalid_Locator;
 	public static String Invalid_Next_Page;
 	public static String Skipped_Invalid_Packages;
+	public static String Skipped_Forbidden_Project;
+	public static String Incomplete_Forbidden_Project;
 	public static String Invalid_Project;
 	public static String Invalid_Registry_State;
 	public static String No_Config;
