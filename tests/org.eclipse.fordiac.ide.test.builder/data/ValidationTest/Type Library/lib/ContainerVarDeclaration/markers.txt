@@ -1,0 +1,3 @@
+MemberInitialValues.fbt ERROR A member already has an initial value
+MemberInputConnections.fbt ERROR A member is already connected for this input
+MemberInputConnections.fbt ERROR Pin 'Member' is hidden but has a connection

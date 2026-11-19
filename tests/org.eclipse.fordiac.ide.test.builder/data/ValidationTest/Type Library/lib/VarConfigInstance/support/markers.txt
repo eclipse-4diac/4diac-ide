@@ -1,0 +1,2 @@
+SubType.sub WARNING Multiple output connections on event may lead to undefined execution order
+SubType.sub WARNING Name: 'Invalid_' must not have a trailing underscore

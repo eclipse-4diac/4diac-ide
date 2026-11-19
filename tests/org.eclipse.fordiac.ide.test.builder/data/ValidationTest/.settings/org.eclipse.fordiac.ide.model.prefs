@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+validation/ProjectStoreActive=true
+validation/eventMultipleOutputConnections=warning
+validation/packagenameMismatchFolder=warning
+validation/noValueForGenericTypeVariable=warning

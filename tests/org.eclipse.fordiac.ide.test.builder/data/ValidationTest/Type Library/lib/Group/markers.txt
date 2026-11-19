@@ -1,0 +1,3 @@
+Collisions.fbt WARNING Collision between Second and First
+Collisions.fbt WARNING The instance 'First' is never executed, since it has no incoming event connections
+Collisions.fbt WARNING The instance 'Second' is never executed, since it has no incoming event connections

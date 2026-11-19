@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="TypeMismatch">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2026-11-18">
+	</VersionInfo>
+	<CompilerInfo packageName="lib::Connection"/>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event"/>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="BlockCNF" Type="Event"/>
+			<Event Name="GenericInputBlockCNF" Type="Event"/>
+			<Event Name="GenericSourceCNF" Type="Event"/>
+			<Event Name="GenericDestinationCNF" Type="Event"/>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BOOL"/>
+			<VarDeclaration Name="GenericBlockIN" Type="ANY"/>
+			<VarDeclaration Name="GenericIN" Type="ANY"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="GenericOUT" Type="ANY"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="Block" Type="lib::Connection::support::SimpleTest" x="0" y="0"/>
+		<FB Name="GenericInputBlock" Type="lib::Connection::support::SimpleTest" x="1000" y="0"/>
+		<FB Name="GenericSource" Type="lib::Connection::support::GenericTest" x="2000" y="0"/>
+		<FB Name="GenericDestination" Type="lib::Connection::support::GenericTest" x="3000" y="0"/>
+		<FB Name="InOutDINT" Type="lib::Connection::support::InOutDINT" x="4000" y="0"/>
+		<FB Name="InOutLREAL" Type="lib::Connection::support::InOutLREAL" x="5000" y="0"/>
+		<EventConnections>
+			<Connection Source="REQ" Destination="Block.REQ"/>
+			<Connection Source="REQ" Destination="GenericInputBlock.REQ"/>
+			<Connection Source="REQ" Destination="GenericSource.REQ"/>
+			<Connection Source="REQ" Destination="GenericDestination.REQ"/>
+			<Connection Source="Block.CNF" Destination="BlockCNF"/>
+			<Connection Source="GenericInputBlock.CNF" Destination="GenericInputBlockCNF"/>
+			<Connection Source="GenericSource.CNF" Destination="GenericSourceCNF"/>
+			<Connection Source="GenericDestination.CNF" Destination="GenericDestinationCNF"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="IN" Destination="Block.DI1"/>
+			<Connection Source="GenericBlockIN" Destination="GenericInputBlock.DI1"/>
+			<Connection Source="Block.DO1" Destination="GenericOUT"/>
+			<Connection Source="GenericIN" Destination="GenericSource.IN"/>
+			<Connection Source="GenericSource.OUT" Destination="GenericDestination.IN"/>
+			<Connection Source="InOutDINT.IO" Destination="InOutLREAL.IO"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>

@@ -1,0 +1,2 @@
+Name.fbt WARNING Name: 'Invalid__Instance' must not contain consecutive underscores
+ValidateType.fbt ERROR Type 'MissingType' not found
