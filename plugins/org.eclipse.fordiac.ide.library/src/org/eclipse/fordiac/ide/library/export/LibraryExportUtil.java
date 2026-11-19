@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Mario Kastner - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - export functions as service interface functions again
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.export;
 
@@ -21,7 +22,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -59,11 +59,6 @@ public class LibraryExportUtil {
 
 	private static String getExportFileName(final TypeEntry entry) {
 		final IFile file = entry.getFile();
-
-		if (entry.getTypeEClass() == LibraryElementPackage.Literals.FUNCTION_FB_TYPE) {
-			return file.getFullPath().removeFileExtension()
-					.addFileExtension(TypeLibraryTags.FB_TYPE_FILE_ENDING.toLowerCase()).lastSegment();
-		}
 
 		return file.getName();
 	}
