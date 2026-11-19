@@ -89,7 +89,7 @@ public class ECCTransitionRouter extends BendpointConnectionRouter {
 
 		final PointList curve = routeAroundStatesCached(conn, p1, p4, p7);
 
-		conn.setPoints(curve);
+		conn.setPoints(curve.getCopy());
 		updateEffectiveEdges(conn, curve);
 	}
 
