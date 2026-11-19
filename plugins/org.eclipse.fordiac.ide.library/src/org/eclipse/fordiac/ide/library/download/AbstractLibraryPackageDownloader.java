@@ -103,12 +103,12 @@ public abstract class AbstractLibraryPackageDownloader implements ILibraryPackag
 
 	/**
 	 * Name of the system property with the maximum size of a library archive in
-	 * bytes; 64 MiB by default.
+	 * bytes; 1 GiB by default.
 	 */
 	public static final String MAX_ARCHIVE_BYTES_PROPERTY = "org.eclipse.fordiac.ide.library.download.maxArchiveBytes"; //$NON-NLS-1$
 
 	private static final long DEFAULT_MAX_METADATA_BYTES = 4L * 1024 * 1024;
-	private static final long DEFAULT_MAX_ARCHIVE_BYTES = 64L * 1024 * 1024;
+	private static final long DEFAULT_MAX_ARCHIVE_BYTES = 1024L * 1024 * 1024;
 	private static final int MAX_REDIRECTS = 5;
 	private static final Set<Integer> REDIRECTS = Set.of(Integer.valueOf(301), Integer.valueOf(302),
 			Integer.valueOf(303), Integer.valueOf(307), Integer.valueOf(308));
