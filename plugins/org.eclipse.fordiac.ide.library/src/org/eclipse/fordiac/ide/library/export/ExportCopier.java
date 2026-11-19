@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2025 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - export functions as service interface functions again
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.export;
 
@@ -33,8 +34,7 @@ public class ExportCopier extends EcoreUtil.Copier {
 				|| eClass == LibraryElementPackage.Literals.BASIC_FB_TYPE
 				|| eClass == LibraryElementPackage.Literals.SIMPLE_FB_TYPE
 				|| eClass == LibraryElementPackage.Literals.COMPOSITE_FB_TYPE
-				|| eClass == LibraryElementPackage.Literals.SUB_APP_TYPE
-				|| eClass == LibraryElementPackage.Literals.FUNCTION_FB_TYPE) {
+				|| eClass == LibraryElementPackage.Literals.SUB_APP_TYPE) {
 			return LibraryElementPackage.Literals.SERVICE_INTERFACE_FB_TYPE;
 		}
 		return super.getTarget(eClass);

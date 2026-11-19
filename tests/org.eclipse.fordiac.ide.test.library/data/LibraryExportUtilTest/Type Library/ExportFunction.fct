@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ExportFunction" Comment="Function exported as service interface function">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Osoft e.U.&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Michael Oberlehner" Date="2026-11-19" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IN1"/>
+				<With Var="IN2"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="REAL"/>
+			<VarDeclaration Name="IN2" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="REAL"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[FUNCTION ExportFunction : REAL
+VAR_INPUT
+	IN1 : REAL;
+	IN2 : REAL;
+END_VAR
+
+ExportFunction := IN1 + IN2;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+</Function>
