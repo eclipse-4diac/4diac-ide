@@ -1,0 +1,3 @@
+Name.sub ERROR Name: 'Invalid_' must not have a trailing underscore in segment of qualified name 'Nested.Invalid_'
+Name.sub WARNING Multiple output connections on event may lead to undefined execution order
+Name.sub WARNING Name: 'Invalid_' must not have a trailing underscore

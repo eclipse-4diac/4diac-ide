@@ -1,0 +1,3 @@
+InternalFBs.fbt ERROR Unsupported type 'lib::BaseFBType::support::Composite' for internal FB 'Composite'
+InternalFBs.fbt WARNING The variable Composite is never used
+InternalFBs.fbt WARNING The variable Valid is never used
