@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - Bulk Editor navigation to ST function declarations
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.handler;
 
@@ -20,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
@@ -35,9 +37,11 @@ public class GoToElementHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final var selection = HandlerUtil.getCurrentStructuredSelection(event);
 		if (selection != null && selection.getFirstElement() instanceof final EObject rowObject) {
-			final var root = EcoreUtil.getRootContainer(rowObject);
+			final EObject element = HandlerUtil.getActiveEditor(event) instanceof final BulkEditor bulkEditor
+					? bulkEditor.getNavigationTarget(rowObject) : rowObject;
+			final var root = EcoreUtil.getRootContainer(element);
 			final IEditorPart editor = OpenListenerManager.openEditor(root);
-			gotoElement(rowObject, editor);
+			gotoElement(element, editor);
 		}
 
 		return null;
