@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2023 Martin Erich Jobst, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,14 +9,20 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - Bulk Editor navigation to ST function declarations
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.st;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsEditor;
@@ -80,6 +86,30 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor
 		}
 		super.reloadType();
 		installFBTypeUpdater();
+	}
+
+	@Override
+	public boolean isMarkerTarget(final IMarker marker) {
+		return super.isMarkerTarget(marker) || getFunctionDeclaration(marker) != null;
+	}
+
+	@Override
+	@SuppressWarnings("deprecation") // the text editor still handles all other markers
+	public void gotoMarker(final IMarker marker) {
+		final VarDeclaration declaration = getFunctionDeclaration(marker);
+		if (declaration == null || !selectAndReveal(declaration, false)) {
+			super.gotoMarker(marker);
+		}
+	}
+
+	// the ST code of a function defines its interface declarations
+	private VarDeclaration getFunctionDeclaration(final IMarker marker) {
+		if (getType() instanceof final FunctionFBType type
+				&& FordiacErrorMarker.isTargetOfType(marker, LibraryElementPackage.Literals.VAR_DECLARATION)
+				&& FordiacErrorMarker.getTargetRelative(marker, type) instanceof final VarDeclaration declaration) {
+			return declaration;
+		}
+		return null;
 	}
 
 	@Override
