@@ -330,7 +330,8 @@ public class BulkEditor extends MultiPageEditorPart
 		}
 
 		final List<ConfigurableObject> result = Arrays.stream(addAttributeDialog.getResult())
-				.filter(ConfigurableObject.class::isInstance).map(ConfigurableObject.class::cast).toList();
+				.filter(ConfigurableObject.class::isInstance).map(ConfigurableObject.class::cast)
+				.filter(object -> !BulkEditorHelper.isReadOnly(object)).toList();
 
 		connectEditorInputs(result);
 
@@ -350,7 +351,7 @@ public class BulkEditor extends MultiPageEditorPart
 	}
 
 	private Command handleDeleteAttribute(final Object refElement) {
-		if (refElement instanceof final Attribute attribute
+		if (refElement instanceof final Attribute attribute && !BulkEditorHelper.isReadOnly(attribute)
 				&& attribute.eContainer() instanceof final ConfigurableObject configurableObject) {
 			return new DeleteAttributeBulkEditorCommand(natTable, configurableObject, attribute);
 		}

@@ -22,6 +22,7 @@ import java.util.Objects;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -56,6 +57,16 @@ public class BulkEditorHelper {
 			return (T) EcoreUtil.getEObject(editorLibraryElement, relativeFragment);
 		}
 		return null;
+	}
+
+	/**
+	 * The ST source of a function defines its interface declarations and their
+	 * attributes, and ST reconciliation removes replaced rows from their library
+	 * element, so the Bulk Editor must not change such rows.
+	 */
+	public static boolean isReadOnly(final EObject row) {
+		return !(EcoreUtil.getRootContainer(row) instanceof LibraryElement) || isFunctionDeclaration(row)
+				|| (row instanceof Attribute && isFunctionDeclaration(row.eContainer()));
 	}
 
 	static boolean isFunctionDeclaration(final EObject element) {
