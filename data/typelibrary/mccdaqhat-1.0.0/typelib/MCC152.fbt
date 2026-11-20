@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="MCC152" Comment="MCC 152 DAQ HAT, 8 digital I/O and 2 analog outputs">
+	<Identification Description="Copyright (c) 2026 Thomas Oellinger&#10;&#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="Thomas Oellinger" Version="1.0" Author="Thomas Oellinger" Date="2026-11-14">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::io::mccdaqhat">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="MAP" Type="Event" Comment="Map Pins">
+				<With Var="QI"/>
+				<With Var="Address"/>
+				<With Var="PullEnable"/>
+				<With Var="PullConfig"/>
+				<With Var="DI_0"/>
+				<With Var="DI_1"/>
+				<With Var="DI_2"/>
+				<With Var="DI_3"/>
+				<With Var="DI_4"/>
+				<With Var="DI_5"/>
+				<With Var="DI_6"/>
+				<With Var="DI_7"/>
+				<With Var="DO_0"/>
+				<With Var="DO_1"/>
+				<With Var="DO_2"/>
+				<With Var="DO_3"/>
+				<With Var="DO_4"/>
+				<With Var="DO_5"/>
+				<With Var="DO_6"/>
+				<With Var="DO_7"/>
+				<With Var="AO_0"/>
+				<With Var="AO_1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="MAPO" Type="Event" Comment="Confirm Pin Mapping">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="Address" Type="USINT" Comment="HAT address on the stack (0-7)" InitialValue="0"/>
+			<VarDeclaration Name="PullEnable" Type="BYTE" Comment="Bit n = 1: pull resistor of bit n enabled" InitialValue="16#FF"/>
+			<VarDeclaration Name="PullConfig" Type="BYTE" Comment="Bit n = 1: pull-up, 0: pull-down" InitialValue="16#FF"/>
+			<VarDeclaration Name="DI_0" Type="STRING" Comment="IO ID of digital input 0, empty = unused"/>
+			<VarDeclaration Name="DI_1" Type="STRING" Comment="IO ID of digital input 1, empty = unused"/>
+			<VarDeclaration Name="DI_2" Type="STRING" Comment="IO ID of digital input 2, empty = unused"/>
+			<VarDeclaration Name="DI_3" Type="STRING" Comment="IO ID of digital input 3, empty = unused"/>
+			<VarDeclaration Name="DI_4" Type="STRING" Comment="IO ID of digital input 4, empty = unused"/>
+			<VarDeclaration Name="DI_5" Type="STRING" Comment="IO ID of digital input 5, empty = unused"/>
+			<VarDeclaration Name="DI_6" Type="STRING" Comment="IO ID of digital input 6, empty = unused"/>
+			<VarDeclaration Name="DI_7" Type="STRING" Comment="IO ID of digital input 7, empty = unused"/>
+			<VarDeclaration Name="DO_0" Type="STRING" Comment="IO ID of digital output 0, empty = unused"/>
+			<VarDeclaration Name="DO_1" Type="STRING" Comment="IO ID of digital output 1, empty = unused"/>
+			<VarDeclaration Name="DO_2" Type="STRING" Comment="IO ID of digital output 2, empty = unused"/>
+			<VarDeclaration Name="DO_3" Type="STRING" Comment="IO ID of digital output 3, empty = unused"/>
+			<VarDeclaration Name="DO_4" Type="STRING" Comment="IO ID of digital output 4, empty = unused"/>
+			<VarDeclaration Name="DO_5" Type="STRING" Comment="IO ID of digital output 5, empty = unused"/>
+			<VarDeclaration Name="DO_6" Type="STRING" Comment="IO ID of digital output 6, empty = unused"/>
+			<VarDeclaration Name="DO_7" Type="STRING" Comment="IO ID of digital output 7, empty = unused"/>
+			<VarDeclaration Name="AO_0" Type="STRING" Comment="IO ID of analog output 0, empty = unused"/>
+			<VarDeclaration Name="AO_1" Type="STRING" Comment="IO ID of analog output 1, empty = unused"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status"/>
+		</OutputVars>
+		<Plugs>
+			<AdapterDeclaration Name="BusAdapterOut" Type="eclipse4diac::io::mccdaqhat::MCCBusAdapter"/>
+		</Plugs>
+		<Sockets>
+			<AdapterDeclaration Name="BusAdapterIn" Type="eclipse4diac::io::mccdaqhat::MCCBusAdapter"/>
+		</Sockets>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
