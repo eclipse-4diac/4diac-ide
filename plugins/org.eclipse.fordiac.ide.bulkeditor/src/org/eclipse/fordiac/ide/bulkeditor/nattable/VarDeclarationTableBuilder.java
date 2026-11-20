@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025, 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2025, 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - make function declarations read-only in the Bulk Editor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.nattable;
 
@@ -64,7 +65,8 @@ public class VarDeclarationTableBuilder {
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
 
 		final NatTable natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-				new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(provider), columns,
+				new NatTableColumnEditableRule<>(
+						new ReadOnlyElementsEditableRule(new LinkedElementsEditableRule(provider), provider), columns,
 						VarDeclarationTableColumn.defaultEditableWithout(VarDeclarationTableColumn.FILE_PATH,
 								VarDeclarationTableColumn.LOCATION)),
 				null, null, sorterModel, false);
