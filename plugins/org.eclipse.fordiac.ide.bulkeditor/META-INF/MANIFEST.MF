@@ -21,7 +21,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.search,
  org.eclipse.ltk.core.refactoring,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.xtext.util
 Bundle-RequiredExecutionEnvironment: JavaSE-25
 Automatic-Module-Name: org.eclipse.fordiac.ide.bulkeditor
 Bundle-ActivationPolicy: lazy
