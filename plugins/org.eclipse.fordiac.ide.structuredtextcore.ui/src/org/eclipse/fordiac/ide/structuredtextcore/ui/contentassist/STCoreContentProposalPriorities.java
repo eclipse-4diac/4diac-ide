@@ -10,13 +10,20 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ *   Franz Höpfinger
+ *       - boost proposals whose declared type matches the expected type
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.xtext.ui.editor.contentassist.ConfigurableCompletionProposal;
 import org.eclipse.xtext.ui.editor.contentassist.ContentProposalPriorities;
 
 public class STCoreContentProposalPriorities extends ContentProposalPriorities {
+
+	/** Priority boost applied to a proposal whose declared type matches the expected type, so it sorts to the top. */
+	private static final int TYPE_MATCH_PRIORITY_BOOST = 100;
+
 	@Override
 	protected void adjustPriority(final ICompletionProposal proposal, final String prefix, final int priority) {
 		final var additionalData = proposal != null ? proposal.getAdditionalProposalInfo() : null;
@@ -26,6 +33,17 @@ public class STCoreContentProposalPriorities extends ContentProposalPriorities {
 			super.adjustPriority(proposal, prefix, 2000);
 		}
 		super.adjustPriority(proposal, prefix, priority);
+	}
+
+	/**
+	 * Boosts, but never lowers or removes, a proposal whose declared type matches
+	 * (or is assignable to) the expected type at the completion position, so it
+	 * sorts above otherwise equally ranked proposals.
+	 */
+	public void adjustTypeMatchPriority(final ICompletionProposal proposal, final boolean matchesExpectedType) {
+		if (matchesExpectedType && proposal instanceof final ConfigurableCompletionProposal configurableProposal) {
+			configurableProposal.setPriority(configurableProposal.getPriority() + TYPE_MATCH_PRIORITY_BOOST);
+		}
 	}
 
 }
