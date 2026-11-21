@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.fordiac.ide.library.LibraryManager.DownloadSources;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.osgi.framework.Version;
 
@@ -135,6 +136,7 @@ public class LibraryChange {
 		final Map<String, LinkedLibrary> linkedLibraries = LinkedLibrary.getAll(project, progress.split(1))
 				.collect(Collectors.toMap(LinkedLibrary::getSymbolicName, f -> f));
 
+		final DownloadSources sources = new DownloadSources();
 		for (final LibraryChange change : changes) {
 			if (progress.isCanceled()) {
 				throw new OperationCanceledException();
@@ -144,11 +146,12 @@ public class LibraryChange {
 
 			switch (change.getType()) {
 			case REMOVE -> removeLibrary(linkedLibraries.get(change.getSymbolicName()), progress.split(1));
-			case ADD -> addLibrary(change.getSymbolicName(), change.getTargetVersion(), project, progress.split(1));
+			case ADD -> addLibrary(change.getSymbolicName(), change.getTargetVersion(), project, sources,
+					progress.split(1));
 			case UPDATE, DOWNGRADE -> {
 				final SubMonitor changeProgress = progress.split(1).setWorkRemaining(2);
 				removeLibrary(linkedLibraries.get(change.getSymbolicName()), changeProgress.split(1));
-				addLibrary(change.getSymbolicName(), change.getTargetVersion(), project, changeProgress.split(1));
+				addLibrary(change.getSymbolicName(), change.getTargetVersion(), project, sources, changeProgress.split(1));
 			}
 			default -> progress.worked(1);
 			}
@@ -163,9 +166,9 @@ public class LibraryChange {
 	}
 
 	private static void addLibrary(final String symbolicName, final String version, final IProject project,
-			final IProgressMonitor monitor) throws CoreException {
+			final DownloadSources sources, final IProgressMonitor monitor) throws CoreException {
 		final java.net.URI libUri = LibraryManager.INSTANCE.getLibraryURI(project, symbolicName, new Version(version),
-				monitor);
+				sources, monitor);
 
 		if ((libUri != null) && !LibraryManager.INSTANCE.importLibrary(project, libUri, false, false)) {
 			throw new CoreException(Status
