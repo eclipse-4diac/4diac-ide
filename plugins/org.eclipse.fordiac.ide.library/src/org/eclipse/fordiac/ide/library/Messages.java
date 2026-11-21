@@ -53,6 +53,7 @@ public class Messages extends NLS {
 	public static String LibraryChange_Update_fullText;
 	public static String LibraryChange_Add_fullText;
 
+	public static String LibraryExporter_ErrorAssets;
 	public static String LibraryExporter_ExportingLibrary;
 	public static String LibraryExporter_ExportingTypes;
 	public static String LibraryExporter_ErrorFile;
