@@ -52,6 +52,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 
 public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForFBNetwork {
 
@@ -67,17 +68,29 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)) {
-					refresh();
-					if (getParent() instanceof final SubAppForFBNetworkEditPart subappEP) {
-						subappEP.layoutExpandedInterface();
-					}
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+							if (getParent() instanceof final SubAppForFBNetworkEditPart subappEP) {
+								subappEP.layoutExpandedInterface();
+							}
+						}
+					});
 				} else if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-					refresh();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+						}
+					});
 				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
-					updateConnectorBorderColor();
-					getFigure().setToolTip(new ToolTipFigure(getModel(),
-							FordiacAnnotationUtil.getAnnotationModel(UntypedSubAppInterfaceElementEditPart.this)));
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							updateConnectorBorderColor();
+							getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil
+									.getAnnotationModel(UntypedSubAppInterfaceElementEditPart.this)));
+						}
+					});
 				}
 			}
 			super.notifyChanged(notification);

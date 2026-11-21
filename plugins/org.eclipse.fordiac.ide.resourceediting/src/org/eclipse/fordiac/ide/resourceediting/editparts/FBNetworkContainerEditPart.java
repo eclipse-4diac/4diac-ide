@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class FBNetworkContainerEditPart.
@@ -57,8 +58,12 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 							|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 							|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections()
 									.equals(feature)) {
-						refreshChildren();
-						refreshVisuals();
+						Display.getDefault().execute(() -> {
+							if (isActive()) {
+								refreshChildren();
+								refreshVisuals();
+							}
+						});
 					}
 				}
 			};

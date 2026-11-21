@@ -30,6 +30,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
@@ -106,7 +107,11 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 
 				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getAttribute_Value().equals(feature)) {
-					updatePadding(getYPositionFromAttribute(getModel()));
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							updatePadding(getYPositionFromAttribute(getModel()));
+						}
+					});
 				}
 				super.notifyChanged(notification);
 			}

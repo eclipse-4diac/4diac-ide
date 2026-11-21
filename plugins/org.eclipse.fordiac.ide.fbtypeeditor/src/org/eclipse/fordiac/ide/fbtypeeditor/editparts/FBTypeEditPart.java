@@ -48,6 +48,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.widgets.Display;
 
 public class FBTypeEditPart extends AbstractConnectableEditPart {
 
@@ -62,7 +63,11 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 			final Object feature = notification.getFeature();
 			if (!notification.isTouch() && (LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getLibraryElement_VersionInfo().equals(feature))) {
-				getFigure().updateVersionInfoLabel();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						getFigure().updateVersionInfoLabel();
+					}
+				});
 			}
 		}
 

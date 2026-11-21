@@ -34,6 +34,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 
@@ -54,12 +55,19 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 			if (notification.getNotifier().equals(getINamedElement())) {
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
-					refreshName();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshName();
+						}
+					});
 				}
 				if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-					refreshComment();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshComment();
+						}
+					});
 				}
-
 				super.notifyChanged(notification);
 			}
 		}

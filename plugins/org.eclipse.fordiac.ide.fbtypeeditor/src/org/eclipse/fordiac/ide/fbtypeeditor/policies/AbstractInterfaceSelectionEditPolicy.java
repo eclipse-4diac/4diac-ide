@@ -21,7 +21,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.handles.PlusHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -146,7 +145,7 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 		}
 		final Command cmd = getIECreateCommand(getModel().getType(), ref);
 		if (null != cmd) {
-			AbstractDirectEditableEditPart.executeCommand(cmd);
+			getHost().getViewer().getEditDomain().getCommandStack().execute(cmd);
 		}
 	}
 

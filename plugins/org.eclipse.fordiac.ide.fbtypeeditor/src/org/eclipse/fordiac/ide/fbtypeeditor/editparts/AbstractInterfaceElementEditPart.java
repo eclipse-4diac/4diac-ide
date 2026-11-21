@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.swt.widgets.Display;
 
 abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEditPart {
 	public abstract IInterfaceElement getCastedModel();
@@ -41,7 +42,13 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				refresh();
+				if (!notification.isTouch()) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+						}
+					});
+				}
 			}
 		};
 	}

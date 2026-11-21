@@ -20,9 +20,6 @@ import java.util.Map.Entry;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
@@ -56,22 +53,6 @@ import org.eclipse.ui.IEditorInput;
 public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEditorPart {
 
 	private TypeLibrary typeLib;
-	private final Adapter adapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			// only refresh propertypage (page) if the event is not an
-			// REMOVING_ADAPTER event - otherwise, the remove adapter in the
-			// dispose method (called when closing the editor) will fail
-			if ((notification.getEventType() != Notification.REMOVING_ADAPTER) && (((notification.getNewValue() == null)
-					&& (notification.getNewValue() != notification.getOldValue()))
-					|| ((notification.getNewValue() != null)
-							&& !(notification.getNewValue().equals(notification.getOldValue()))))) {
-				super.notifyChanged(notification);
-			}
-
-		}
-	};
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
@@ -81,12 +62,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// currently nothing needs to be done here
-	}
-
-	@Override
-	public void dispose() {
-		getModel().eAdapters().remove(adapter);
-		super.dispose();
 	}
 
 	@Override
@@ -135,7 +110,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 					"CompositeFBType editors only accept composite FB types as valid inputs!"); //$NON-NLS-1$
 		}
 		setModel(compositeFBType.getFBNetwork());
-		getModel().eAdapters().add(adapter);
 		typeLib = compositeFBType.getTypeEntry().getTypeLibrary();
 		super.setInput(input);
 	}
@@ -201,10 +175,8 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	public void reloadType() {
 		if (getType() instanceof final CompositeFBType cfbTye) {
-			getModel().eAdapters().remove(adapter);
 			setModel(cfbTye.getFBNetwork());
 			if (getModel() != null) {
-				getModel().eAdapters().add(adapter);
 				getGraphicalViewer().setContents(getModel());
 			} else {
 				EditorUtils.CloseEditor.run(this);

@@ -53,6 +53,7 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.widgets.Display;
 
 public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	private static final Insets ALG_INSETS = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
@@ -67,8 +68,14 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refreshAlgLabel();
-			refreshAlgorithmToolTip(getFigure());
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshAlgLabel();
+						refreshAlgorithmToolTip(getFigure());
+					}
+				});
+			}
 		}
 	};
 
@@ -80,7 +87,11 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			super.notifyChanged(notification);
 			if ((notification.getEventType() == Notification.SET) && (null != getAction().getAlgorithm())
 					&& getAction().getAlgorithm().equals(notification.getNewValue())) {
-				refreshAlgLabel();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshAlgLabel();
+					}
+				});
 			}
 		}
 	};

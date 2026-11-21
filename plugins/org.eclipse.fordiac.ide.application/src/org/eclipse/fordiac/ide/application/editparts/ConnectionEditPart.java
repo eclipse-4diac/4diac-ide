@@ -91,6 +91,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
@@ -102,33 +103,38 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 
-			refreshVisuals();
-			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
-				refreshTooltip();
-			}
-			if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
-				addSourceAdapters();
-			}
-			if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
-				addDestinationAdapters();
-				setConnectionColor(getFigure());
-				// reset the line width so that any to struct connections have the right width
-				getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
-			}
+			Display.getDefault().execute(() -> {
+				if (!isActive()) {
+					return;
+				}
+				refreshVisuals();
+				if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+					refreshTooltip();
+				}
+				if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+					addSourceAdapters();
+				}
+				if (LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)) {
+					addDestinationAdapters();
+					setConnectionColor(getFigure());
+					// reset the line width so that any to struct connections have the right width
+					getFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+				}
 
-			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)) {
-				// the hidden property was changed inform source and destination so that all
-				// labels are updated
-				handleVisibilityUpdate();
-			}
+				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(feature)) {
+					// the hidden property was changed inform source and destination so that all
+					// labels are updated
+					handleVisibilityUpdate();
+				}
 
-			if (LibraryElementPackage.eINSTANCE.getDataConnection_FBNetwork().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getEventConnection_FBNetwork().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getAdapterConnection_FBNetwork().equals(feature)) {
-				getFigure().handleVisibilityChange(!getModel().isVisible());
-			}
+				if (LibraryElementPackage.eINSTANCE.getDataConnection_FBNetwork().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getEventConnection_FBNetwork().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getAdapterConnection_FBNetwork().equals(feature)) {
+					getFigure().handleVisibilityChange(!getModel().isVisible());
+				}
+			});
 		}
 
 		private void handleVisibilityUpdate() {
@@ -158,19 +164,27 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)) {
-				if ((getSource() instanceof final InterfaceEditPartForFBNetwork editPart
-						&& !editPart.getModel().isIsInput())) {
-					updateConnectionLables(editPart.getSourceConnections());
-				}
-				if ((getTargetEP() instanceof final InterfaceEditPartForFBNetwork editPart
-						&& editPart.getModel().isIsInput())) {
-					updateConnectionLables(editPart.getTargetConnections());
-				}
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						if ((getSource() instanceof final InterfaceEditPartForFBNetwork editPart
+								&& !editPart.getModel().isIsInput())) {
+							updateConnectionLables(editPart.getSourceConnections());
+						}
+						if ((getTargetEP() instanceof final InterfaceEditPartForFBNetwork editPart
+								&& editPart.getModel().isIsInput())) {
+							updateConnectionLables(editPart.getTargetConnections());
+						}
+					}
+				});
 			}
 			if (LibraryElementPackage.eINSTANCE.getFBNetworkElement_Group().equals(feature)
 					|| (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
 							.equals(notification.getFeature()) && unfoldedStateChanged(notification))) {
-				getFigure().handleVisibilityChange(getFigure().isHidden()); // triggers new label creation
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						getFigure().handleVisibilityChange(getFigure().isHidden()); // triggers new label creation
+					}
+				});
 			}
 		}
 

@@ -51,9 +51,10 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractPrimitiveEditPart extends AbstractDirectEditableEditPart
-implements NodeEditPart, IChangeStringEditPart {
+		implements NodeEditPart, IChangeStringEditPart {
 
 	private final PrimitiveConnection connection;
 	protected FixedAnchor srcAnchor;
@@ -65,7 +66,13 @@ implements NodeEditPart, IChangeStringEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refresh();
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refresh();
+					}
+				});
+			}
 		}
 	};
 
@@ -213,7 +220,6 @@ implements NodeEditPart, IChangeStringEditPart {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 	}
 
-
 	@Override
 	protected DirectEditManager createDirectEditManager() {
 		return new ServicePrimitiveDirectEditManager(this, getModel(), getFigure().getNameLabel(), getZoomManager(),
@@ -227,13 +233,11 @@ implements NodeEditPart, IChangeStringEditPart {
 	private static List<String> getRelevantEvents(final EditPart editPart, final Primitive primitive) {
 		final List<String> events = new ArrayList<>();
 		if (editPart instanceof InputPrimitiveEditPart) {
-			for (final Event event : primitive.getService().getFBType().getInterfaceList()
-					.getEventInputs()) {
+			for (final Event event : primitive.getService().getFBType().getInterfaceList().getEventInputs()) {
 				events.add(event.getName());
 			}
 		} else if (editPart instanceof OutputPrimitiveEditPart) {
-			for (final Event event : primitive.getService().getFBType().getInterfaceList()
-					.getEventOutputs()) {
+			for (final Event event : primitive.getService().getFBType().getInterfaceList().getEventOutputs()) {
 				events.add(event.getName());
 			}
 		}

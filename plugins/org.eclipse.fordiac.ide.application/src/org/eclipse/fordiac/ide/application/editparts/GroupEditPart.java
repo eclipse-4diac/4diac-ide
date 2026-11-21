@@ -59,6 +59,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class GroupEditPart extends AbstractPositionableElementEditPart
 		implements IContainerEditPart, AnnotableGraphicalEditPart {
@@ -159,12 +160,20 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getGroup_GroupElements().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) { // Tooltip stuff
-					// group elements changed tell the parent that fbs may now be at different
-					// places
-					getParent().refresh();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							// group elements changed tell the parent that fbs may now be at different
+							// places
+							getParent().refresh();
+						}
+					});
 				} else if (LibraryElementPackage.eINSTANCE.getGroup_Width().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getGroup_Height().equals(feature)) {
-					refreshPosition();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshPosition();
+						}
+					});
 				}
 			}
 		};

@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteLinkEditPolicy
 import org.eclipse.fordiac.ide.systemconfiguration.routers.LinkConnectionRouter;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
+import org.eclipse.swt.widgets.Display;
 
 public class LinkEditPart extends AbstractConnectionEditPart {
 	private final Adapter adapter = new AdapterImpl() {
@@ -33,10 +34,17 @@ public class LinkEditPart extends AbstractConnectionEditPart {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			final Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
-				updateLinkColor(getFigure());
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
+							updateLinkColor(getFigure());
+						}
+						refreshVisuals();
+					}
+				});
 			}
-			refreshVisuals();
+
 		}
 	};
 
