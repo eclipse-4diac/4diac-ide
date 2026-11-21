@@ -1,0 +1,8 @@
+MultipleInputConnections.sub ERROR Multiple input connections on adapter
+MultipleInputConnections.sub WARNING The pin 'Destination.Destination' is unused, since it is not connected on the inside
+MultipleInputConnections.sub WARNING The pin 'Source.Source1' is unused, since it is not connected on the inside
+MultipleInputConnections.sub WARNING The pin 'Source.Source2' is unused, since it is not connected on the inside
+MultipleOutputConnections.sub ERROR Multiple output connections on adapter
+MultipleOutputConnections.sub WARNING The pin 'Destination.Destination1' is unused, since it is not connected on the inside
+MultipleOutputConnections.sub WARNING The pin 'Destination.Destination2' is unused, since it is not connected on the inside
+MultipleOutputConnections.sub WARNING The pin 'Source.Source' is unused, since it is not connected on the inside

@@ -1,0 +1,2 @@
+Name.fbt WARNING Name: 'Invalid__Event' must not contain consecutive underscores
+Unused.fbt WARNING The pin 'Unused' is unused, since it is not connected on the inside

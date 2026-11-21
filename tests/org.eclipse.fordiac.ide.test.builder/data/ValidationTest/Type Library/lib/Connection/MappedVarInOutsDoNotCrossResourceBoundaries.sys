@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="MappedVarInOutsDoNotCrossResourceBoundaries">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2026-11-18">
+	</VersionInfo>
+	<CompilerInfo packageName="lib::Connection"/>
+	<Application Name="Application">
+		<SubAppNetwork>
+			<FB Name="Source" Type="lib::Connection::support::InOut4" x="0" y="0"/>
+			<FB Name="Destination" Type="lib::Connection::support::InOut4" x="1000" y="0"/>
+			<DataConnections><Connection Source="Source.IO" Destination="Destination.IO"/></DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="Device" Type="lib::Connection::support::MappingDevice">
+		<Attribute Name="Color" Type="STRING" Value="127,0,0"/>
+		<Resource Name="Resource1" Type="lib::Connection::support::MappingResource"><FBNetwork/></Resource>
+		<Resource Name="Resource2" Type="lib::Connection::support::MappingResource"><FBNetwork/></Resource>
+	</Device>
+	<Mapping From="Application.Source" To="Device.Resource1"/>
+	<Mapping From="Application.Destination" To="Device.Resource2"/>
+</System>

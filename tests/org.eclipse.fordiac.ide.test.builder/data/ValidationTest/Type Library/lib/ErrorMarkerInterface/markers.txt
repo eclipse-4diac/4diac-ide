@@ -1,0 +1,6 @@
+Attributes.fbt ERROR Missing variable for attribute: Visible
+Attributes.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections
+Comment.fbt ERROR Missing variable for comment: Recovered comment
+Comment.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections
+Value.fbt ERROR Missing variable for value: DINT#7
+Value.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections

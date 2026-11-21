@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="TypeScopeTest" Comment="Basic FB validating current type lookup">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2026-11-18">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Request">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="enabled" Type="BOOL" InitialValue="TRUE"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="done" Type="BOOL" InitialValue="initialState"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="state" Type="BOOL" InitialValue="initialState"/>
+		</InternalVars>
+		<InternalConstVars>
+			<VarDeclaration Name="initialState" Type="BOOL" InitialValue="TRUE"/>
+		</InternalConstVars>
+		<ECC>
+			<ECState Name="START">
+			</ECState>
+			<ECState Name="RUN">
+				<ECAction Algorithm="REQ" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="RUN" Condition="REQ[enabled]"/>
+			<ECTransition Source="RUN" Destination="START" Condition="1"/>
+		</ECC>
+		<Algorithm Name="REQ">
+			<ST><![CDATA[
+state := enabled;
+done := state;
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

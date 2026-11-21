@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="InOut4">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2026-11-18">
+	</VersionInfo>
+	<CompilerInfo packageName="lib::VarDeclaration::support"/>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IO"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="IO"/>
+			</Event>
+		</EventOutputs>
+		<InOutVars>
+			<VarDeclaration Name="IO" Type="DINT" ArraySize="4"/>
+		</InOutVars>
+	</InterfaceList>
+</FBType>

@@ -1,0 +1,3 @@
+AttributeDeclaration.fbt ERROR Attribute Declaration 'UnregisteredAttribute' not found
+AttributeDeclaration.fbt ERROR Cannot convert from BOOL to UnregisteredAttribute
+Name.fbt WARNING Name: 'Invalid__Attribute' must not contain consecutive underscores

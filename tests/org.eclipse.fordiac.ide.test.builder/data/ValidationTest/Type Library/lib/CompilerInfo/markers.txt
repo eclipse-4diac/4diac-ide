@@ -1,0 +1,2 @@
+PackageName.fbt ERROR Package Name: 'Bad__Package' must not contain consecutive underscores in segment of package name 'lib::CompilerInfo::Bad__Package'
+PackageName.fbt WARNING The package name does not match the folder structure
