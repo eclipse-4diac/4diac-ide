@@ -17,7 +17,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FbtMacroProcessor;
+import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FordiacMacroProcessor;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
@@ -33,15 +33,25 @@ final class ModelLocationListener extends LocationAdapter {
 
 	@Override
 	public void changing(final LocationEvent event) {
-		if (event.location != null && event.location.startsWith(FbtMacroProcessor.FBT_TYPE_ENTRY_URI)) {
-			final String typeFileUri = event.location.substring(FbtMacroProcessor.FBT_TYPE_ENTRY_URI.length());
-			PlatformUI.getWorkbench().getDisplay().asyncExec(() -> {
-				if (PlatformUI.isWorkbenchRunning()) {
-					openFbtEntry(typeFileUri);
-				}
-			});
-			event.doit = false;
+		if (event.location != null) {
+			if (event.location.startsWith(FordiacMacroProcessor.FBT_TYPE_ENTRY_URI)) {
+				openTypeEntry(event, FordiacMacroProcessor.FBT_TYPE_ENTRY_URI);
+			} else if (event.location.startsWith(FordiacMacroProcessor.ATP_TYPE_ENTRY_URI)) {
+				openTypeEntry(event, FordiacMacroProcessor.ATP_TYPE_ENTRY_URI);
+			} else if (event.location.startsWith(FordiacMacroProcessor.GCF_TYPE_ENTRY_URI)) {
+				openTypeEntry(event, FordiacMacroProcessor.GCF_TYPE_ENTRY_URI);
+			}
 		}
+	}
+
+	private static void openTypeEntry(final LocationEvent event, final String typeEntryUri) {
+		final String typeFileUri = event.location.substring(typeEntryUri.length());
+		PlatformUI.getWorkbench().getDisplay().asyncExec(() -> {
+			if (PlatformUI.isWorkbenchRunning()) {
+				openFbtEntry(typeFileUri);
+			}
+		});
+		event.doit = false;
 	}
 
 	private static void openFbtEntry(final String substring) {
