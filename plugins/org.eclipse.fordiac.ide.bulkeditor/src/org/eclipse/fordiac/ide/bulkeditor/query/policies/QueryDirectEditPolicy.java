@@ -24,9 +24,12 @@ public class QueryDirectEditPolicy extends DirectEditPolicy {
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
 		if (request.getDirectEditFeature() instanceof final EditableValue editableValue
-				&& request.getCellEditor().getValue() instanceof final String value
-				&& !value.equals(editableValue.getText())) {
-			return new ChangeQueryFeatureCommand(editableValue.element(), editableValue.attribute(), value);
+				&& request.getCellEditor().getValue() instanceof final String text
+				&& !text.equals(editableValue.getText())) {
+			final Object value = editableValue.toValue(text);
+			if (value != null) {
+				return new ChangeQueryFeatureCommand(editableValue.element(), editableValue.feature(), value);
+			}
 		}
 		return null;
 	}

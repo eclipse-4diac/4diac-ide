@@ -126,6 +126,7 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 			Map.entry(QueryPackage.Literals.PROPERTY_CONSTRAINT__VALUE, Messages.QueryMenu_Value),
 			Map.entry(QueryPackage.Literals.PROPERTY_CONSTRAINT, Messages.QueryMenu_PropertyConstraint),
 			Map.entry(QueryPackage.Literals.ATTRIBUTE_CONSTRAINT, Messages.QueryMenu_AttributeConstraint),
+			Map.entry(QueryPackage.Literals.CONSTRAINT_INSTANCE, Messages.QueryMenu_ConstraintInstance),
 			Map.entry(QueryPackage.Literals.PLACE__SIMPLE_FB, Messages.QueryMenu_SimpleFB),
 			Map.entry(QueryPackage.Literals.PLACE__BASIC_FB, Messages.QueryMenu_BasicFB),
 			Map.entry(QueryPackage.Literals.PLACE__COMPOSITE_FB, Messages.QueryMenu_CompositeFB),
@@ -148,6 +149,7 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 			Map.entry(QueryPackage.Literals.TYPE__PIN, Messages.QueryMenu_Pin),
 			Map.entry(QueryPackage.Literals.INSTANCE__PIN, Messages.QueryMenu_Pin),
 			Map.entry(QueryPackage.Literals.QUERY__PLACEHOLDER, Messages.QueryMenu_Placeholder),
+			Map.entry(QueryPackage.Literals.QUERY__CONSTRAINT_DECLARATION, Messages.QueryMenu_ConstraintDeclaration),
 			Map.entry(QueryPackage.Literals.PIN_TARGET, Messages.QueryMenu_PinTarget),
 			Map.entry(QueryPackage.Literals.ATTRIBUTE, Messages.QueryMenu_Attribute),
 			Map.entry(QueryPackage.Literals.ATTRIBUTE_DECLARATION, Messages.QueryMenu_AttributeDeclaration));

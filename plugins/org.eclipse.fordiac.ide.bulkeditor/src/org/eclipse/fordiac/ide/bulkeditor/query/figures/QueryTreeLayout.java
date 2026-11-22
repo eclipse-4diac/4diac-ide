@@ -25,6 +25,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
@@ -34,7 +35,8 @@ import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
  * Places the query nodes as tree: the children of a place side by side, AND
  * constraints right of their constraint and all other children below their
  * parent. The placeholders of the query are placed in a grid above the tree,
- * which fills the width of the drawing area around the tree.
+ * which fills the width of the drawing area around the tree. The constraint
+ * declarations of the query are placed below the tree, each as tree of its own.
  */
 public class QueryTreeLayout extends AbstractLayout {
 
@@ -43,6 +45,7 @@ public class QueryTreeLayout extends AbstractLayout {
 	private static final double CHILD_INDENT = 60;
 	private static final double PADDING = 25;
 	private static final double PLACEHOLDER_GAP = 25;
+	private static final double DECLARATION_GAP = 50;
 	// the drawing area of the 4diac root edit part (ModuloFreeformFigure) is a
 	// multiple of 400 wide, but at least 1200
 	private static final double DRAWING_AREA_UNIT = 400;
@@ -65,12 +68,15 @@ public class QueryTreeLayout extends AbstractLayout {
 		}
 		final EObject root = findRoot();
 		if (root != null) {
-			final List<EObject> placeholders = getPlaceholders(root);
+			final List<EObject> placeholders = getSeparatelyPlacedChildren(root, Placeholder.class);
+			final List<EObject> declarations = getSeparatelyPlacedChildren(root, ConstraintDeclaration.class);
 			placeholders.forEach(this::computeSubtreeSize);
-			final double treeRight = PADDING + computeSubtreeSize(root).width();
+			declarations.forEach(this::computeSubtreeSize);
+			final double treeRight = PADDING + Math.max(computeSubtreeSize(root).width(), getMaxWidth(declarations));
 			final double gridWidth = getDrawingAreaWidth(container, treeRight) - 2 * PADDING;
 			final double treeY = positionPlaceholders(placeholders, gridWidth, PADDING, PADDING);
 			position(root, PADDING, treeY);
+			positionVertical(declarations, PADDING, treeY + subtreeSizes.get(root).height() + DECLARATION_GAP);
 		}
 	}
 
@@ -203,9 +209,9 @@ public class QueryTreeLayout extends AbstractLayout {
 	}
 
 	private List<EObject> getLaidOutChildren(final EObject element) {
-		// the placeholders are laid out in rows above the tree
+		// the placeholders and constraint declarations are laid out around the tree
 		return QueryModelHelper.getChildNodes(element).stream().filter(nodeFigures::containsKey)
-				.filter(child -> !(child instanceof Placeholder)).toList();
+				.filter(QueryModelHelper::isConnectedToContainer).toList();
 	}
 
 	/** @return the width of the drawing area around a tree ending at treeRight */
@@ -221,9 +227,9 @@ public class QueryTreeLayout extends AbstractLayout {
 		return treeRight + PADDING;
 	}
 
-	private List<EObject> getPlaceholders(final EObject root) {
-		return QueryModelHelper.getChildNodes(root).stream().filter(nodeFigures::containsKey)
-				.filter(Placeholder.class::isInstance).toList();
+	private List<EObject> getSeparatelyPlacedChildren(final EObject root, final Class<? extends EObject> type) {
+		return QueryModelHelper.getChildNodes(root).stream().filter(nodeFigures::containsKey).filter(type::isInstance)
+				.toList();
 	}
 
 	private Size getNodeSize(final EObject element) {

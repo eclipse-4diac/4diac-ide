@@ -26,12 +26,16 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryAttributeDeclarationNodeFigure;
+import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintDeclarationNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintNodeFigure;
+import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintInstanceNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure.EditableValue;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceholderNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeDeclaration;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.DeleteQueryNodeEditPolicy;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.QueryDirectEditPolicy;
@@ -54,6 +58,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.LocationRequest;
 import org.eclipse.gef.tools.SelectEditPartTracker;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
+import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.swt.SWT;
 
 /** Edit part of a query element shown as node of the query viewer. */
@@ -85,7 +90,9 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	protected QueryNodeFigure createNodeFigure() {
 		return switch (getModel()) {
+		case final ConstraintInstance instance -> new QueryConstraintInstanceNodeFigure(instance);
 		case final Constraint constraint -> new QueryConstraintNodeFigure(constraint);
+		case final ConstraintDeclaration declaration -> new QueryConstraintDeclarationNodeFigure(declaration);
 		case final Placeholder placeholder -> new QueryPlaceholderNodeFigure(placeholder);
 		case final AttributeDeclaration declaration -> new QueryAttributeDeclarationNodeFigure(declaration);
 		case final EObject element -> new QueryNodeFigure(element);
@@ -154,15 +161,14 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 
 	@Override
 	protected List<QueryConnection> getModelSourceConnections() {
-		// placeholders are shown in rows above the query without connections
-		return getDiagram().getVisibleChildren(getModel()).stream().filter(child -> !(child instanceof Placeholder))
+		return getDiagram().getVisibleChildren(getModel()).stream().filter(QueryModelHelper::isConnectedToContainer)
 				.map(child -> new QueryConnection(getModel(), child)).toList();
 	}
 
 	@Override
 	protected List<QueryConnection> getModelTargetConnections() {
 		final EObject container = getModel().eContainer();
-		if (container == null || getModel() instanceof Placeholder) {
+		if (container == null || !QueryModelHelper.isConnectedToContainer(getModel())) {
 			return List.of();
 		}
 		return List.of(new QueryConnection(container, getModel()));
@@ -224,13 +230,26 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 	}
 
 	private void performDirectEdit(final EditableValue editableValue) {
-		if (editableValue.element() instanceof AttributeDeclaration) {
-			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(this::getTypeLibrary,
-					AttributeSelectionContentProvider.INSTANCE);
-			new QueryDirectEditManager(this, editableValue, proposalProvider).show();
-		} else {
-			new QueryDirectEditManager(this, editableValue).show();
-		}
+		new QueryDirectEditManager(this, editableValue, createProposalProvider(editableValue.element())).show();
+	}
+
+	private IContentProposalProvider createProposalProvider(final EObject element) {
+		return switch (element) {
+		case final AttributeDeclaration _ ->
+			new TypeSelectionProposalProvider(this::getTypeLibrary, AttributeSelectionContentProvider.INSTANCE);
+		case final ConstraintInstance instance -> createConstraintDeclarationProposalProvider(instance);
+		default -> null;
+		};
+	}
+
+	private static IContentProposalProvider createConstraintDeclarationProposalProvider(
+			final ConstraintInstance instance) {
+		final String[] names = QueryModelHelper.getUsableConstraintDeclarations(instance).stream()
+				.map(ConstraintDeclaration::getName).filter(name -> name != null && !name.isBlank()).distinct()
+				.toArray(String[]::new);
+		final SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider(names);
+		proposalProvider.setFiltering(true);
+		return proposalProvider;
 	}
 
 	private void toggleCollapsed() {

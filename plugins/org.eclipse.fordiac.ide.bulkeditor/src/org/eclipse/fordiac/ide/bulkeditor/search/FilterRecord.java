@@ -32,10 +32,19 @@ public class FilterRecord {
 	private final Pattern valuePattern;
 	private final FilterRecord orConstraint;
 	private final FilterRecord andConstraint;
+	private final FilterRecord declaration;
 
 	public FilterRecord(final boolean selected, final boolean negate, final boolean attributeConstraint,
 			final MatcherConfig nameConfig, final MatcherConfig typeConfig, final MatcherConfig commentConfig,
 			final MatcherConfig valueConfig, final FilterRecord orConstraint, final FilterRecord andConstraint) {
+		this(selected, negate, attributeConstraint, nameConfig, typeConfig, commentConfig, valueConfig, orConstraint,
+				andConstraint, null);
+	}
+
+	private FilterRecord(final boolean selected, final boolean negate, final boolean attributeConstraint,
+			final MatcherConfig nameConfig, final MatcherConfig typeConfig, final MatcherConfig commentConfig,
+			final MatcherConfig valueConfig, final FilterRecord orConstraint, final FilterRecord andConstraint,
+			final FilterRecord declaration) {
 		this.selected = selected;
 		this.negate = negate;
 		this.attributeConstraint = attributeConstraint;
@@ -50,6 +59,13 @@ public class FilterRecord {
 
 		this.orConstraint = orConstraint;
 		this.andConstraint = andConstraint;
+		this.declaration = declaration;
+	}
+
+	public static FilterRecord ofInstance(final boolean negate, final FilterRecord declaration,
+			final FilterRecord orConstraint, final FilterRecord andConstraint) {
+		return new FilterRecord(true, negate, false, MatcherConfig.INACTIVE, MatcherConfig.INACTIVE,
+				MatcherConfig.INACTIVE, MatcherConfig.INACTIVE, orConstraint, andConstraint, declaration);
 	}
 
 	public boolean accepts(final MatchTarget target) {
@@ -62,6 +78,9 @@ public class FilterRecord {
 	}
 
 	private boolean matchesConstraint(final MatchTarget element) {
+		if (declaration != null) {
+			return declaration.matches(element) != negate;
+		}
 		if (attributeConstraint) {
 			return element.attributes().stream().map(MatchTarget::ofAttribute).anyMatch(this::matchesFields) != negate;
 		}

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -42,10 +43,19 @@ public class QueryNodeFigure extends Figure {
 		void changeFeature(EObject element, EStructuralFeature feature, Object value);
 	}
 
-	/** Attribute value shown in a label that can be edited directly. */
-	public record EditableValue(Label label, EObject element, EAttribute attribute) {
+	public record EditableValue(Label label, EObject element, EStructuralFeature feature,
+			Function<Object, String> formatter, Function<String, Object> parser) {
+
+		public EditableValue(final Label label, final EObject element, final EAttribute attribute) {
+			this(label, element, attribute, value -> Objects.toString(value, ""), text -> text); //$NON-NLS-1$
+		}
+
 		public String getText() {
-			return Objects.toString(element.eGet(attribute), ""); //$NON-NLS-1$
+			return formatter.apply(element.eGet(feature));
+		}
+
+		public Object toValue(final String text) {
+			return parser.apply(text);
 		}
 	}
 
@@ -135,17 +145,6 @@ public class QueryNodeFigure extends Figure {
 		body.setBorder(new MarginBorder(2, 6, 4, 6));
 		body.setOpaque(true);
 		return body;
-	}
-
-	protected static Figure createValueRow(final String featureName, final Label valueLabel) {
-		final Figure row = new Figure();
-		final GridLayout layout = new GridLayout(2, false);
-		layout.marginHeight = 2;
-		layout.marginWidth = 4;
-		row.setLayoutManager(layout);
-		row.add(new Label(featureName + ":"), new GridData(SWT.BEGINNING, SWT.CENTER, false, false)); //$NON-NLS-1$
-		row.add(valueLabel, new GridData(SWT.FILL, SWT.CENTER, true, false));
-		return row;
 	}
 
 	private void paintCollapsedIndicator(final Graphics graphics) {
