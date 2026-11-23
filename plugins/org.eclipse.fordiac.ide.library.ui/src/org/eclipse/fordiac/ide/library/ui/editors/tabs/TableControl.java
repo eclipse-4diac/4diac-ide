@@ -217,7 +217,10 @@ public final class TableControl {
 			protected void setValue(final Object element, final Object value) {
 				if (type.isInstance(element)) {
 					final T typedElement = type.cast(element);
-					page.execute(operationFactory.apply(typedElement, Objects.toString(value, ""))); //$NON-NLS-1$
+					final String newValue = Objects.toString(value, ""); //$NON-NLS-1$
+					if (!Objects.equals(newValue, getValue(element))) {
+						page.execute(operationFactory.apply(typedElement, newValue));
+					}
 				}
 			}
 		};
