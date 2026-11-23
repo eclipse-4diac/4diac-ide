@@ -34,8 +34,7 @@ public class AddElementOperation<T> extends AbstractOperation {
 
 	@Override
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
-		elements.add(element);
-		return Status.OK_STATUS;
+		return elements.add(element) ? Status.OK_STATUS : Status.CANCEL_STATUS;
 	}
 
 	@Override

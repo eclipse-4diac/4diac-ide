@@ -39,17 +39,17 @@ public class RemoveElementOperation<T> extends AbstractOperation {
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		index = elements.indexOf(element);
 
-		if (index >= 0) {
-			elements.remove(index);
+		if (index < 0) {
+			return Status.CANCEL_STATUS;
 		}
 
+		elements.remove(index);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
-		elements.remove(element);
-		return Status.OK_STATUS;
+		return execute(monitor, info);
 	}
 
 	@Override
