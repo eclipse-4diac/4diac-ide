@@ -465,7 +465,12 @@ public final class ManifestHelper {
 			ILog.get().warn("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
 			return null;
 		}
-		return (Manifest) resource.getContents().get(0);
+
+		if (!resource.getContents().isEmpty() && resource.getContents().getFirst() instanceof final Manifest manifest) {
+			return manifest;
+		}
+
+		return null;
 	}
 
 	/**

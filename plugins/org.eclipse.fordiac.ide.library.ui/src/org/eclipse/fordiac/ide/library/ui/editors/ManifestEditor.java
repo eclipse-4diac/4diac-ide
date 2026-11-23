@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -45,6 +46,7 @@ import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -54,7 +56,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class ManifestEditor extends FormEditor implements IGotoMarker {
 
@@ -71,7 +72,6 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	@Override
 	protected void addPages() {
-		loadManifest();
 		validateModel();
 
 		savePosition = null;
@@ -99,7 +99,12 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		ManifestHelper.saveManifest(manifest);
+		if (!ManifestHelper.saveManifest(manifest)) {
+			MessageDialog.openError(getSite().getShell(), Messages.ManifestEditor_SaveErrorTitle,
+					Messages.ManifestEditor_SaveError);
+			return;
+		}
+
 		savePosition = OperationHistoryFactory.getOperationHistory().getUndoOperation(getUndoContext());
 		firePropertyChange(PROP_DIRTY);
 
@@ -135,19 +140,17 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		});
 	}
 
-	private void loadManifest() {
-		if (getEditorInput() instanceof final FileEditorInput input) {
-			manifest = ManifestHelper.getManifest(input.getFile());
-		} else {
-			manifest = ManifestHelper.getManifest(getEditorInputURI(getEditorInput()));
-		}
-	}
+	private static Manifest loadManifest(final IEditorInput input) throws PartInitException {
+		final Manifest loadedManifest = switch (input) {
+		case final IFileEditorInput fileInput -> ManifestHelper.getManifest(fileInput.getFile());
+		case final IURIEditorInput uriInput -> ManifestHelper.getManifest(URI.createURI(uriInput.getURI().toString()));
+		default -> null;
+		};
 
-	private static URI getEditorInputURI(final IEditorInput input) {
-		if (input instanceof final IURIEditorInput uriInput) {
-			return URI.createURI(uriInput.getURI().toString());
+		if (loadedManifest == null) {
+			throw new PartInitException(MessageFormat.format(Messages.ManifestEditor_OpenError, input.getName()));
 		}
-		throw new IllegalArgumentException("Unsupported editor input"); //$NON-NLS-1$
+		return loadedManifest;
 	}
 
 	private Stream<ManifestEditorPage<?>> getPages() {
@@ -174,7 +177,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	}
 
 	public IProject getProject() {
-		if (getEditorInput() instanceof final FileEditorInput input && input.getFile() != null) {
+		if (getEditorInput() instanceof final IFileEditorInput input && input.getFile() != null) {
 			return input.getFile().getProject();
 		}
 		return null;
@@ -199,6 +202,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
+		manifest = loadManifest(input);
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(buildListener, IResourceChangeEvent.POST_BUILD);
 		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(operationHistoryListener);
 	}

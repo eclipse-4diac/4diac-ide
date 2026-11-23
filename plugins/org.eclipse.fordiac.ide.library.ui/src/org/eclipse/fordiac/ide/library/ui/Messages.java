@@ -183,10 +183,13 @@ public class Messages extends NLS {
 	public static String ManifestEditor_Library;
 	public static String ManifestEditor_Libraries;
 	public static String ManifestEditor_Name;
+	public static String ManifestEditor_OpenError;
 	public static String ManifestEditor_Product;
 	public static String ManifestEditor_ProductInformation;
 	public static String ManifestEditor_RefreshLibraries;
 	public static String ManifestEditor_RemoveLibrary;
+	public static String ManifestEditor_SaveError;
+	public static String ManifestEditor_SaveErrorTitle;
 	public static String ManifestEditor_RequiredDependencies;
 	public static String ManifestEditor_SetPattern;
 	public static String ManifestEditor_SymbolicName;
