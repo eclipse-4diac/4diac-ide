@@ -40,6 +40,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.library.LibraryValidation;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -66,15 +67,15 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	private static final String LIBRARY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorLibraryPage"; //$NON-NLS-1$
 
 	private Manifest manifest;
+	private Manifest savedManifest;
 	private List<Diagnostic> validationResult;
 
 	private IUndoableOperation savePosition;
+	private boolean dirty;
 
 	@Override
 	protected void addPages() {
 		validateModel();
-
-		savePosition = null;
 
 		try {
 			addPage(new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, Messages.ManifestEditor_Product));
@@ -105,7 +106,9 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 			return;
 		}
 
+		savedManifest = EcoreUtil.copy(manifest);
 		savePosition = OperationHistoryFactory.getOperationHistory().getUndoOperation(getUndoContext());
+		dirty = false;
 		firePropertyChange(PROP_DIRTY);
 
 		if (getEditorInput() instanceof final IFileEditorInput input) {
@@ -159,7 +162,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 	@Override
 	public boolean isDirty() {
-		return OperationHistoryFactory.getOperationHistory().getUndoOperation(getUndoContext()) != savePosition;
+		return dirty;
 	}
 
 	@Override
@@ -203,6 +206,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		manifest = loadManifest(input);
+		savedManifest = EcoreUtil.copy(manifest);
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(buildListener, IResourceChangeEvent.POST_BUILD);
 		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(operationHistoryListener);
 	}
@@ -240,6 +244,9 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		switch (event.getEventType()) {
 		case OperationHistoryEvent.OPERATION_ADDED, OperationHistoryEvent.UNDONE, OperationHistoryEvent.REDONE,
 				OperationHistoryEvent.OPERATION_REMOVED -> {
+			final IUndoableOperation position = event.getHistory().getUndoOperation(undoContext);
+			// An empty undo stack can also mean older edits were discarded.
+			dirty = position == null ? !EcoreUtil.equals(manifest, savedManifest) : position != savePosition;
 			firePropertyChange(PROP_DIRTY);
 			validateModel();
 		}
