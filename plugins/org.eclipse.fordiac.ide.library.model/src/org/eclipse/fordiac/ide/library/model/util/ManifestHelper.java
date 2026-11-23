@@ -17,14 +17,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -545,16 +547,33 @@ public final class ManifestHelper {
 
 	public static Library createExportLibrary(final Manifest manifest) {
 		final Exports exports = manifest.getExports();
-		final int libraryCount = exports == null ? 0 : exports.getLibrary().size();
+		final Stream<String> existingNames = exports == null ? Stream.empty()
+				: exports.getLibrary().stream().map(Library::getSymbolicName);
+
 		final var lib = factory.createLibrary();
 		lib.setExcludes(factory.createExcludes());
 		lib.setIncludes(factory.createIncludes());
 		final Dependencies projectDependencies = manifest.getDependencies();
 		lib.setDependencies(
 				projectDependencies == null ? factory.createDependencies() : EcoreUtil.copy(projectDependencies));
-		lib.setSymbolicName(MessageFormat.format("lib{0}", Integer.valueOf(libraryCount))); //$NON-NLS-1$
+		final String symName = createUniqueLibraryName(existingNames);
+		lib.setSymbolicName(symName);
 
 		return lib;
+	}
+
+	private static String createUniqueLibraryName(final Stream<String> names) {
+		final Set<String> usedNames = new HashSet<>();
+		names.forEach(usedNames::add);
+
+		int suffix = 0;
+		String symbolicName;
+		do {
+			symbolicName = "lib" + suffix; //$NON-NLS-1$
+			suffix++;
+		} while (usedNames.contains(symbolicName));
+
+		return symbolicName;
 	}
 
 	public static Exports createExports(final Library library) {

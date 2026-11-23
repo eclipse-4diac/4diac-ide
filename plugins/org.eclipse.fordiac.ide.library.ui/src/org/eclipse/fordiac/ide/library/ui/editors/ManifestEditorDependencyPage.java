@@ -282,8 +282,7 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 		final TreeViewerColumn symbolicNameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 		symbolicNameColumn.getColumn().setText(Messages.ManifestEditor_SymbolicName);
 		symbolicNameColumn.setLabelProvider(createLabelProvider(Required::getSymbolicName, cell -> {
-			if (cell.getElement() instanceof LibContainer(final String name, final List<Required> children)
-					&& !children.isEmpty()) {
+			if (cell.getElement() instanceof LibContainer(final String name, final List<Required> children)) {
 				cell.setText(MessageFormat.format("{0} ({1})", name, Integer.valueOf(children.size()))); //$NON-NLS-1$
 			}
 		}, false));

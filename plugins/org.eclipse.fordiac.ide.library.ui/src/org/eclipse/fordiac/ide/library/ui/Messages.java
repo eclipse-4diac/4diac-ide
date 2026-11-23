@@ -181,6 +181,8 @@ public class Messages extends NLS {
 	public static String ManifestEditor_LatestInRange;
 	public static String ManifestEditor_Latest;
 	public static String ManifestEditor_Library;
+	public static String ManifestEditor_LibraryName;
+	public static String ManifestEditor_LibrarySymbolicName;
 	public static String ManifestEditor_Libraries;
 	public static String ManifestEditor_Name;
 	public static String ManifestEditor_OpenError;

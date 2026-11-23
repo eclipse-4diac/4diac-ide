@@ -135,11 +135,11 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 
 	private void createLibraryColumns() {
 		createLibraryColumn(Messages.ManifestEditor_Name, 40, Library::getName,
-				(library, value) -> new SetValueOperation<>("Set name", //$NON-NLS-1$
-						library::getName, library::setName, value));
+				(library, value) -> new SetValueOperation<>(Messages.ManifestEditor_LibraryName, library::getName,
+						library::setName, value));
 
 		createLibraryColumn(Messages.ManifestEditor_SymbolicName, 60, Library::getSymbolicName,
-				(library, value) -> new SetValueOperation<>("Set symbolic name", //$NON-NLS-1$
+				(library, value) -> new SetValueOperation<>(Messages.ManifestEditor_LibrarySymbolicName,
 						library::getSymbolicName, library::setSymbolicName, value));
 	}
 
