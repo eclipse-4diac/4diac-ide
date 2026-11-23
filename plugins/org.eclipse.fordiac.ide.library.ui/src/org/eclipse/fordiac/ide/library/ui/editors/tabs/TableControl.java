@@ -143,7 +143,9 @@ public final class TableControl {
 	}
 
 	public void setInput(final Object input) {
-		viewer.setInput(input);
+		if (viewer.getInput() != input) {
+			viewer.setInput(input);
+		}
 		updateButtonEnablement();
 	}
 

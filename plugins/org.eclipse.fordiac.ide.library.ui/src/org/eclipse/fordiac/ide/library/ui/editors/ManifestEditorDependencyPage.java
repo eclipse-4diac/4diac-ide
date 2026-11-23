@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
 import org.eclipse.fordiac.ide.library.model.library.Dependencies;
@@ -60,7 +59,6 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -115,19 +113,20 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 	}
 
 	@Override
-	public void updateValidation(final List<Diagnostic> diagnostics) {
-		super.updateValidation(diagnostics);
-		refresh();
-	}
-
-	@Override
 	public void refresh() {
 		if (treeViewer == null || treeViewer.getControl().isDisposed()) {
 			return;
 		}
 		collectLinkedLibraryVersions();
-		treeViewer.setInput(createViewerInput());
-		treeViewer.expandAll();
+		final List<LibContainer> input = createViewerInput();
+		if (input.equals(treeViewer.getInput())) {
+			treeViewer.refresh();
+		} else {
+			final var selection = treeViewer.getStructuredSelection();
+			treeViewer.setInput(input);
+			treeViewer.expandAll();
+			treeViewer.setSelection(selection);
+		}
 	}
 
 	private List<LibContainer> createViewerInput() {
@@ -303,8 +302,6 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 
 					ManifestEditorDependencyPage.this.execute(new SetValueOperation<>(
 							Messages.ManifestEditor_VersionRange, required::getVersion, required::setVersion, version));
-
-					getViewer().setSelection(StructuredSelection.EMPTY);
 				}
 			}
 
@@ -381,7 +378,10 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 					final String message = status.isOK() ? null : getMessage(status);
 					form.getForm().setMessage(message, toMessageProviderSeverity(status));
 
-					treeViewer.refresh();
+					final Dependencies dependencies = getModel();
+					if (dependencies != null) {
+						treeViewer.update(dependencies.getRequired().toArray(), null);
+					}
 				});
 				return Status.OK_STATUS;
 			}

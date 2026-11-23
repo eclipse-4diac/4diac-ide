@@ -57,7 +57,7 @@ public final class DependenciesTab {
 
 	public void setInput(final Library library) {
 		this.library = library;
-		dependencyTable.getViewer().setInput(getDependencies());
+		dependencyTable.setInput(getDependencies());
 		dependencyTable.setEnabled(library != null);
 	}
 
