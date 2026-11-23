@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.library.ui.editors.tabs;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.common.util.ECollections;
@@ -53,19 +54,18 @@ public class ContentTab {
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(control);
 
 		includesTable = createPatternTable(toolkit, Messages.ManifestEditor_IncludePattern, this::getIncludes,
-				Messages.ManifestEditor_IncludePatternAdd, Messages.ManifestEditor_IncludePatternRemove);
+				this::addInclude, Messages.ManifestEditor_IncludePatternRemove);
 
 		excludesTable = createPatternTable(toolkit, Messages.ManifestEditor_ExcludePattern, this::getExcludes,
-				Messages.ManifestEditor_ExcludePatternAdd, Messages.ManifestEditor_ExcludePatternRemove);
+				this::addExclude, Messages.ManifestEditor_ExcludePatternRemove);
 	}
 
 	private TableControl createPatternTable(final FormToolkit toolkit, final String title,
-			final java.util.function.Supplier<EList<LibraryElement>> elements, final String addLabel,
-			final String removeLabel) {
+			final Supplier<EList<LibraryElement>> elements, final Runnable addHandler, final String removeLabel) {
 
 		final TableControl table = new TableControl(control, toolkit);
 
-		table.setAddHandler(() -> addPattern(elements.get(), addLabel));
+		table.setAddHandler(addHandler);
 		table.setRemoveHandler(() -> removePattern(table, elements.get(), removeLabel));
 
 		createPatternColumn(table, title);
@@ -113,12 +113,34 @@ public class ContentTab {
 				: ECollections.emptyEList();
 	}
 
-	private void addPattern(final EList<LibraryElement> elements, final String label) {
-		if (library == null) {
+	private void addInclude() {
+		final Library selectedLibrary = library;
+		if (selectedLibrary == null) {
 			return;
 		}
 
-		page.execute(new AddElementOperation<>(label, elements, ManifestHelper.createPattern(EXAMPLE_PATTERN)));
+		final LibraryElement pattern = ManifestHelper.createPattern(EXAMPLE_PATTERN);
+		if (selectedLibrary.getIncludes() == null) {
+			page.execute(new SetValueOperation<>(Messages.ManifestEditor_IncludePatternAdd, selectedLibrary::getIncludes,
+					selectedLibrary::setIncludes, ManifestHelper.createIncludes(pattern)));
+		} else {
+			page.execute(new AddElementOperation<>(Messages.ManifestEditor_IncludePatternAdd, getIncludes(), pattern));
+		}
+	}
+
+	private void addExclude() {
+		final Library selectedLibrary = library;
+		if (selectedLibrary == null) {
+			return;
+		}
+
+		final LibraryElement pattern = ManifestHelper.createPattern(EXAMPLE_PATTERN);
+		if (selectedLibrary.getExcludes() == null) {
+			page.execute(new SetValueOperation<>(Messages.ManifestEditor_ExcludePatternAdd, selectedLibrary::getExcludes,
+					selectedLibrary::setExcludes, ManifestHelper.createExcludes(pattern)));
+		} else {
+			page.execute(new AddElementOperation<>(Messages.ManifestEditor_ExcludePatternAdd, getExcludes(), pattern));
+		}
 	}
 
 	private void removePattern(final TableControl table, final List<LibraryElement> elements, final String label) {

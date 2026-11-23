@@ -90,13 +90,20 @@ public final class DependenciesTab {
 	}
 
 	private void addDependency() {
-		if (library == null || library.getDependencies() == null) {
+		final Library selectedLibrary = library;
+		if (selectedLibrary == null) {
 			return;
 		}
 
 		final Required required = ManifestHelper.createRequired("dependency", "1.0.0"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		page.execute(new AddElementOperation<>(Messages.ManifestEditor_DependencyAdd, getDependencies(), required));
+		if (selectedLibrary.getDependencies() == null) {
+			page.execute(new SetValueOperation<>(Messages.ManifestEditor_DependencyAdd,
+					selectedLibrary::getDependencies, selectedLibrary::setDependencies,
+					ManifestHelper.createDependencies(required)));
+		} else {
+			page.execute(new AddElementOperation<>(Messages.ManifestEditor_DependencyAdd, getDependencies(), required));
+		}
 
 		dependencyTable.getViewer().setSelection(new StructuredSelection(required), true);
 	}

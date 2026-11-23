@@ -36,6 +36,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.IMessageManager;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -95,31 +96,35 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		manager.removeAllMessages();
 
 		for (final Diagnostic diagnostic : diagnostics) {
-			final EObject target = FordiacMarkerHelper.getDiagnosticTarget(diagnostic);
-
-			if (!containsElement(target)) {
-				continue;
-			}
-
-			final EStructuralFeature feature = FordiacMarkerHelper.getDiagnosticFeature(diagnostic);
-
-			final int severity = toMessageProviderSeverity(diagnostic.getSeverity());
-
-			if (severity == IMessageProvider.NONE) {
-				continue;
-			}
-
-			final ValidationControl registration = validationControls.stream()
-					.filter(entry -> entry.element() == target && entry.feature() == feature).findFirst().orElse(null);
-
-			if (registration != null && !registration.control().isDisposed()) {
-				manager.addMessage(diagnostic, diagnostic.getMessage(), null, severity, registration.control());
-			} else {
-				manager.addMessage(diagnostic, diagnostic.getMessage(), null, severity);
-			}
+			addMessage(diagnostic, manager);
 		}
 
 		manager.update();
+	}
+
+	private void addMessage(final Diagnostic diagnostic, final IMessageManager manager) {
+		final EObject target = FordiacMarkerHelper.getDiagnosticTarget(diagnostic);
+
+		if (!containsElement(target)) {
+			return;
+		}
+
+		final EStructuralFeature feature = FordiacMarkerHelper.getDiagnosticFeature(diagnostic);
+
+		final int severity = toMessageProviderSeverity(diagnostic.getSeverity());
+
+		if (severity == IMessageProvider.NONE) {
+			return;
+		}
+
+		final ValidationControl registration = validationControls.stream()
+				.filter(entry -> entry.element() == target && entry.feature() == feature).findFirst().orElse(null);
+
+		if (registration != null && !registration.control().isDisposed()) {
+			manager.addMessage(diagnostic, diagnostic.getMessage(), null, severity, registration.control());
+		} else {
+			manager.addMessage(diagnostic, diagnostic.getMessage(), null, severity);
+		}
 	}
 
 	private void createProductInformationSection(final Composite parent, final FormToolkit toolkit) {

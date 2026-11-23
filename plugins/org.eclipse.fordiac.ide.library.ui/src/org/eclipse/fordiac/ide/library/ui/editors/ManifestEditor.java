@@ -207,6 +207,7 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 		super.init(site, input);
 		manifest = loadManifest(input);
 		savedManifest = EcoreUtil.copy(manifest);
+		dirty = ManifestHelper.ensureProductInformation(manifest);
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(buildListener, IResourceChangeEvent.POST_BUILD);
 		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(operationHistoryListener);
 	}

@@ -17,7 +17,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -129,10 +128,12 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 	}
 
 	private List<LibContainer> createViewerInput() {
-		if (getModel() == null) {
-			return Collections.emptyList();
+		final Dependencies dependencies = getModel();
+		if (dependencies == null) {
+			return List.of(new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME),
+					new LibContainer(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME));
 		}
-		final Map<Boolean, List<Required>> libraries = getModel().getRequired().stream()
+		final Map<Boolean, List<Required>> libraries = dependencies.getRequired().stream()
 				.collect(Collectors.partitioningBy(r -> isStandardLib(r.getSymbolicName())));
 
 		return List.of(new LibContainer(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, libraries.get(Boolean.TRUE)),

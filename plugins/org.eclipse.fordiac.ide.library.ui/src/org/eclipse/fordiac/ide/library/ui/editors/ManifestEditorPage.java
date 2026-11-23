@@ -99,7 +99,6 @@ public abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 				d -> messageManager.addMessage(d, d.getMessage(), null, toMessageProviderSeverity(d.getSeverity())));
 	}
 
-	// TODO needs feature addtionally!
 	public static boolean targets(final Diagnostic diagnostic, final EObject element) {
 		return FordiacMarkerHelper.getDiagnosticTarget(diagnostic) == element;
 	}

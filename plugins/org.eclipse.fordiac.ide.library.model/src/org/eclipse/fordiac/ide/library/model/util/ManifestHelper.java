@@ -41,6 +41,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.fordiac.ide.library.model.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Attribute;
+import org.eclipse.fordiac.ide.library.model.library.Dependencies;
+import org.eclipse.fordiac.ide.library.model.library.Excludes;
+import org.eclipse.fordiac.ide.library.model.library.Exports;
+import org.eclipse.fordiac.ide.library.model.library.Includes;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryFactory;
@@ -322,6 +326,26 @@ public final class ManifestHelper {
 	public static Manifest createManifest(final String scope) {
 		final Manifest manifest = factory.createManifest();
 		manifest.setScope(scope);
+		ensureProductInformation(manifest);
+		return manifest;
+	}
+
+	/**
+	 * Creates the required product and version information if needed.
+	 *
+	 * @param manifest manifest to complete
+	 * @return whether the manifest was changed
+	 */
+	public static boolean ensureProductInformation(final Manifest manifest) {
+		Product product = manifest.getProduct();
+		if (product == null) {
+			product = factory.createProduct();
+			manifest.setProduct(product);
+		}
+
+		if (product.getVersionInfo() != null) {
+			return false;
+		}
 
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //$NON-NLS-1$
 		final VersionInfo versionInfo = factory.createVersionInfo();
@@ -329,11 +353,8 @@ public final class ManifestHelper {
 		versionInfo.setVersion(BASE_VERSION);
 		versionInfo.setDate(formatter.format(LocalDate.now(ZoneId.systemDefault())));
 
-		final Product product = factory.createProduct();
 		product.setVersionInfo(versionInfo);
-		manifest.setProduct(product);
-
-		return manifest;
+		return true;
 	}
 
 	/**
@@ -366,7 +387,8 @@ public final class ManifestHelper {
 	 */
 	public static boolean addDependency(final Manifest manifest, final Required dependency) {
 		if (manifest.getDependencies() == null) {
-			manifest.setDependencies(factory.createDependencies());
+			manifest.setDependencies(createDependencies(dependency));
+			return true;
 		}
 		final EList<Required> reqList = manifest.getDependencies().getRequired();
 		int index = 0;
@@ -412,7 +434,8 @@ public final class ManifestHelper {
 	 */
 	public static void updateDependency(final Manifest manifest, final Required dependency) {
 		if (manifest.getDependencies() == null) {
-			manifest.setDependencies(factory.createDependencies());
+			manifest.setDependencies(createDependencies(dependency));
+			return;
 		}
 		sortManifestDependencies(manifest);
 		final EList<Required> reqList = manifest.getDependencies().getRequired();
@@ -459,7 +482,7 @@ public final class ManifestHelper {
 		final Resource resource = createResource(uri);
 		try {
 			resource.load(null);
-		} catch (final FileNotFoundException e) {
+		} catch (final FileNotFoundException _) {
 			return null; // suppress logging of file not found exception
 		} catch (final IOException e) {
 			ILog.get().warn("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
@@ -521,17 +544,41 @@ public final class ManifestHelper {
 	}
 
 	public static Library createExportLibrary(final Manifest manifest) {
-		if (manifest.getExports() == null) {
-			manifest.setExports(factory.createExports());
-		}
-
+		final Exports exports = manifest.getExports();
+		final int libraryCount = exports == null ? 0 : exports.getLibrary().size();
 		final var lib = factory.createLibrary();
 		lib.setExcludes(factory.createExcludes());
 		lib.setIncludes(factory.createIncludes());
-		lib.setDependencies(factory.createDependencies());
-		lib.setSymbolicName(MessageFormat.format("lib{0}", Integer.valueOf(manifest.getExports().getLibrary().size()))); //$NON-NLS-1$
+		final Dependencies projectDependencies = manifest.getDependencies();
+		lib.setDependencies(
+				projectDependencies == null ? factory.createDependencies() : EcoreUtil.copy(projectDependencies));
+		lib.setSymbolicName(MessageFormat.format("lib{0}", Integer.valueOf(libraryCount))); //$NON-NLS-1$
 
 		return lib;
+	}
+
+	public static Exports createExports(final Library library) {
+		final Exports exports = factory.createExports();
+		exports.getLibrary().add(library);
+		return exports;
+	}
+
+	public static Includes createIncludes(final LibraryElement pattern) {
+		final Includes includes = factory.createIncludes();
+		includes.getLibraryElement().add(pattern);
+		return includes;
+	}
+
+	public static Excludes createExcludes(final LibraryElement pattern) {
+		final Excludes excludes = factory.createExcludes();
+		excludes.getLibraryElement().add(pattern);
+		return excludes;
+	}
+
+	public static Dependencies createDependencies(final Required required) {
+		final Dependencies dependencies = factory.createDependencies();
+		dependencies.getRequired().add(required);
+		return dependencies;
 	}
 
 	public static LibraryElement createPattern(final String pattern) {

@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.library.model.library.Exports;
 import org.eclipse.fordiac.ide.library.model.library.Library;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -217,11 +216,12 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 		final Manifest manifest = getManifestEditor().getManifest();
 		final Library library = ManifestHelper.createExportLibrary(manifest);
 
-		if (manifest.getDependencies() != null) {
-			library.setDependencies(EcoreUtil.copy(manifest.getDependencies()));
+		if (manifest.getExports() == null) {
+			execute(new SetValueOperation<>(Messages.ManifestEditor_AddLibrary, manifest::getExports,
+					manifest::setExports, ManifestHelper.createExports(library)));
+		} else {
+			execute(new AddElementOperation<>(Messages.ManifestEditor_AddLibrary, getLibraries(), library));
 		}
-
-		execute(new AddElementOperation<>(Messages.ManifestEditor_AddLibrary, getLibraries(), library));
 
 		libraryTable.getViewer().setSelection(new StructuredSelection(library), true);
 	}
