@@ -239,10 +239,6 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 	private void updateSelection() {
 		final Library selection = getSelection();
 
-		if (selection == selectedLibrary) {
-			return;
-		}
-
 		selectedLibrary = selection;
 
 		detailSection.setVisible(selection != null);
