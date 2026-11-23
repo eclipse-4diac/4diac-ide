@@ -268,15 +268,8 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 			return;
 		}
 
-		final String value = commentText.getText();
-
-		if (Objects.equals(selectedLibrary.getComment(), value)) {
-			return;
-		}
-
 		final Library library = selectedLibrary;
-
-		setValue(Messages.ManifestEditor_Comment, library::getComment, library::setComment, value);
+		setTextValue(Messages.ManifestEditor_Comment, library::getComment, library::setComment, commentText.getText());
 	}
 
 	private Library getSelection() {

@@ -103,7 +103,7 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 
 			final EStructuralFeature feature = FordiacMarkerHelper.getDiagnosticFeature(diagnostic);
 
-			final int severity = toMessageType(diagnostic.getSeverity());
+			final int severity = toMessageProviderSeverity(diagnostic.getSeverity());
 
 			if (severity == IMessageProvider.NONE) {
 				continue;
@@ -120,19 +120,6 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 		}
 
 		manager.update();
-	}
-
-	private static int toMessageType(final int severity) {
-		if ((severity & Diagnostic.ERROR) != 0) {
-			return IMessageProvider.ERROR;
-		}
-		if ((severity & Diagnostic.WARNING) != 0) {
-			return IMessageProvider.WARNING;
-		}
-		if ((severity & Diagnostic.INFO) != 0) {
-			return IMessageProvider.INFORMATION;
-		}
-		return IMessageProvider.NONE;
 	}
 
 	private void createProductInformationSection(final Composite parent, final FormToolkit toolkit) {
@@ -201,7 +188,7 @@ public class ManifestEditorProductPage extends ManifestEditorPage<Product> {
 
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		text.addModifyListener(_ -> setValue(label, getter, setter, text.getText()));
+		text.addModifyListener(_ -> setTextValue(label, getter, setter, text.getText()));
 
 		textBindings.add(new TextBinding(text, getter));
 		validationControls.add(new ValidationControl(text, element, feature));

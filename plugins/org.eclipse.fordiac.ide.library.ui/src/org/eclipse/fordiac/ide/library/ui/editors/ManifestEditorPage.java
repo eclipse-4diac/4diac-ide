@@ -76,9 +76,9 @@ public abstract class ManifestEditorPage<T extends EObject> extends FormPage {
 		getManifestEditor().execute(operation);
 	}
 
-	public final <V> void setValue(final String label, final Supplier<V> getter, final Consumer<V> setter,
-			final V value) {
-		if (!Objects.equals(value, getter.get())) {
+	protected final void setTextValue(final String label, final Supplier<String> getter, final Consumer<String> setter,
+			final String value) {
+		if (!Objects.toString(value, "").equals(Objects.toString(getter.get(), ""))) { //$NON-NLS-1$ //$NON-NLS-2$
 			execute(new SetValueOperation<>(label, getter, setter, value));
 		}
 	}

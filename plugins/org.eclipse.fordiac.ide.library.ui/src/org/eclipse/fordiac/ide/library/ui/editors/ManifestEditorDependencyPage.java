@@ -45,7 +45,6 @@ import org.eclipse.fordiac.ide.library.provider.ILibraryProvider.LibraryDescript
 import org.eclipse.fordiac.ide.library.provider.OfflineLibraryProvider;
 import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
-import org.eclipse.fordiac.ide.library.ui.editors.operations.SetValueOperation;
 import org.eclipse.fordiac.ide.library.ui.wizards.ManageLibraryWizard;
 import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -300,8 +299,8 @@ class ManifestEditorDependencyPage extends ManifestEditorPage<Dependencies> {
 				if (element instanceof final Required required) {
 					final String version = value.toString();
 
-					ManifestEditorDependencyPage.this.execute(new SetValueOperation<>(
-							Messages.ManifestEditor_VersionRange, required::getVersion, required::setVersion, version));
+					setTextValue(Messages.ManifestEditor_VersionRange, required::getVersion, required::setVersion,
+							version);
 				}
 			}
 
