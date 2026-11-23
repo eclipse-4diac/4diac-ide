@@ -44,7 +44,7 @@ public final class DependenciesTab {
 
 		this.page = page;
 
-		dependencyTable = new TableControl(parent, toolkit, ""); //$NON-NLS-1$
+		dependencyTable = new TableControl(parent, toolkit);
 		dependencyTable.setAddHandler(this::addDependency);
 		dependencyTable.setRemoveHandler(this::removeDependency);
 
@@ -96,7 +96,7 @@ public final class DependenciesTab {
 
 		final Required required = ManifestHelper.createRequired("dependency", "1.0.0"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		page.execute(new AddElementOperation<>("Add Dependency", getDependencies(), required)); //$NON-NLS-1$
+		page.execute(new AddElementOperation<>(Messages.ManifestEditor_DependencyAdd, getDependencies(), required));
 
 		dependencyTable.getViewer().setSelection(new StructuredSelection(required), true);
 	}
@@ -105,8 +105,8 @@ public final class DependenciesTab {
 		final Object selection = dependencyTable.getViewer().getStructuredSelection().getFirstElement();
 
 		if (selection instanceof final Required required) {
-			page.execute(new RemoveElementOperation<>("Remove Dependency", //$NON-NLS-1$
-					getDependencies(), required));
+			page.execute(new RemoveElementOperation<>(Messages.ManifestEditor_DependencyRemove, getDependencies(),
+					required));
 		}
 	}
 
@@ -116,14 +116,12 @@ public final class DependenciesTab {
 	}
 
 	private IUndoableOperation createModifyNameOperation(final Required dependency, final String value) {
-
-		return new SetValueOperation<>("Set dependency name", //$NON-NLS-1$
-				dependency::getSymbolicName, dependency::setSymbolicName, value);
+		return new SetValueOperation<>(Messages.ManifestEditor_DependencyName, dependency::getSymbolicName,
+				dependency::setSymbolicName, value);
 	}
 
 	private IUndoableOperation createModifyVersionOperation(final Required dependency, final String value) {
-
-		return new SetValueOperation<>("Set dependency version", //$NON-NLS-1$
-				dependency::getVersion, dependency::setVersion, value);
+		return new SetValueOperation<>(Messages.ManifestEditor_DependencyVersion, dependency::getVersion,
+				dependency::setVersion, value);
 	}
 }

@@ -19,6 +19,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.editors.ManifestEditorPage;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -45,12 +46,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public final class TableControl {
 
-	private final Group group;
+	private final Composite container;
 	private final TableViewer viewer;
 	private final TableColumnLayout columnLayout;
 
@@ -64,16 +64,15 @@ public final class TableControl {
 	private Runnable removeHandler = () -> {
 		/* nothing */ };
 
-	public TableControl(final Composite parent, final FormToolkit toolkit, final String title) {
-		group = new Group(parent, SWT.NONE);
-		group.setText(title);
-		group.setLayout(new GridLayout(2, false));
+	public TableControl(final Composite parent, final FormToolkit toolkit) {
+		container = new Composite(parent, SWT.NONE);
+		container.setLayout(new GridLayout(2, false));
 
-		GridDataFactory.fillDefaults().grab(true, true).align(SWT.FILL, SWT.FILL).applyTo(group);
+		GridDataFactory.fillDefaults().grab(true, true).align(SWT.FILL, SWT.FILL).applyTo(container);
 
-		toolkit.adapt(group);
+		toolkit.adapt(container);
 
-		final Composite tableComposite = toolkit.createComposite(group);
+		final Composite tableComposite = toolkit.createComposite(container);
 		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		columnLayout = new TableColumnLayout();
@@ -85,14 +84,14 @@ public final class TableControl {
 		viewer.getTable().setLinesVisible(true);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 
-		final Composite buttons = toolkit.createComposite(group);
+		final Composite buttons = toolkit.createComposite(container);
 		buttons.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		GridLayoutFactory.fillDefaults().applyTo(buttons);
 
-		addButton = toolkit.createButton(buttons, "Add", SWT.PUSH); //$NON-NLS-1$
+		addButton = toolkit.createButton(buttons, Messages.ManifestEditor_TableAdd, SWT.PUSH);
 		addButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		removeButton = toolkit.createButton(buttons, "Remove", SWT.PUSH); //$NON-NLS-1$
+		removeButton = toolkit.createButton(buttons, Messages.ManifestEditor_TableRemove, SWT.PUSH);
 		removeButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		final ColumnViewerEditorActivationStrategy activationStrategy = new ColumnViewerEditorActivationStrategy(
@@ -129,7 +128,7 @@ public final class TableControl {
 	}
 
 	public Control getControl() {
-		return group;
+		return container;
 	}
 
 	public TableViewer getViewer() {

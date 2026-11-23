@@ -52,29 +52,29 @@ public class ContentTab {
 		GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(true).applyTo(control);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(control);
 
-		includesTable = createPatternTable(toolkit, Messages.ManifestEditor_Includes, this::getIncludes, "Add include", //$NON-NLS-1$
-				"Remove include"); //$NON-NLS-1$
+		includesTable = createPatternTable(toolkit, Messages.ManifestEditor_IncludePattern, this::getIncludes,
+				Messages.ManifestEditor_IncludePatternAdd, Messages.ManifestEditor_IncludePatternRemove);
 
-		excludesTable = createPatternTable(toolkit, Messages.ManifestEditor_Excludes, this::getExcludes, "Add exclude", //$NON-NLS-1$
-				"Remove exclude"); //$NON-NLS-1$
+		excludesTable = createPatternTable(toolkit, Messages.ManifestEditor_ExcludePattern, this::getExcludes,
+				Messages.ManifestEditor_ExcludePatternAdd, Messages.ManifestEditor_ExcludePatternRemove);
 	}
 
 	private TableControl createPatternTable(final FormToolkit toolkit, final String title,
 			final java.util.function.Supplier<EList<LibraryElement>> elements, final String addLabel,
 			final String removeLabel) {
 
-		final TableControl table = new TableControl(control, toolkit, title);
+		final TableControl table = new TableControl(control, toolkit);
 
 		table.setAddHandler(() -> addPattern(elements.get(), addLabel));
 		table.setRemoveHandler(() -> removePattern(table, elements.get(), removeLabel));
 
-		createPatternColumn(table);
+		createPatternColumn(table, title);
 
 		return table;
 	}
 
-	private void createPatternColumn(final TableControl table) {
-		final var column = table.createColumn(Messages.ManifestEditor_Pattern, 100);
+	private void createPatternColumn(final TableControl table, final String title) {
+		final var column = table.createColumn(title, 100);
 
 		column.setLabelProvider(TableControl.createLabelProvider(LibraryElement.class, LibraryElement::getValue,
 				element -> ManifestEditorPage.targets(page.getManifestEditor().getValidationResult(), element)));
@@ -130,7 +130,6 @@ public class ContentTab {
 	}
 
 	private static IUndoableOperation createSetOperation(final LibraryElement element, final String value) {
-		return new SetValueOperation<>("Set pattern", //$NON-NLS-1$
-				element::getValue, element::setValue, value);
+		return new SetValueOperation<>(Messages.ManifestEditor_SetPattern, element::getValue, element::setValue, value);
 	}
 }

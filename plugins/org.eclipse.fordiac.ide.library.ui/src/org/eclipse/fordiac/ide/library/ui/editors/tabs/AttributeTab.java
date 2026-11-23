@@ -44,7 +44,7 @@ public class AttributeTab {
 	public AttributeTab(final Composite parent, final FormToolkit toolkit, final ManifestEditorPage<Exports> page) {
 		this.page = page;
 
-		attributeTable = new TableControl(parent, toolkit, ""); //$NON-NLS-1$
+		attributeTable = new TableControl(parent, toolkit);
 		attributeTable.setAddHandler(this::addAttribute);
 		attributeTable.setRemoveHandler(this::removeAttribute);
 
@@ -67,19 +67,19 @@ public class AttributeTab {
 
 	private void createColumns() {
 		createColumn(Messages.ManifestEditor_Name, 30, Attribute::getName,
-				(attribute, value) -> new SetValueOperation<>("Set attribute name", //$NON-NLS-1$
-						attribute::getName, attribute::setName, value));
+				(attribute, value) -> new SetValueOperation<>(Messages.ManifestEditor_AttributeName, attribute::getName,
+						attribute::setName, value));
 
 		createColumn(Messages.ManifestEditor_Type, 20, Attribute::getType,
-				(attribute, value) -> new SetValueOperation<>("Set attribute type", //$NON-NLS-1$
-						attribute::getType, attribute::setType, value));
+				(attribute, value) -> new SetValueOperation<>(Messages.ManifestEditor_AttributeType, attribute::getType,
+						attribute::setType, value));
 
 		createColumn(Messages.ManifestEditor_Value, 20, Attribute::getValue,
-				(attribute, value) -> new SetValueOperation<>("Set attribute value", //$NON-NLS-1$
+				(attribute, value) -> new SetValueOperation<>(Messages.ManifestEditor_AttributeValue,
 						attribute::getValue, attribute::setValue, value));
 
 		createColumn(Messages.ManifestEditor_Comment, 40, Attribute::getComment,
-				(attribute, value) -> new SetValueOperation<>("Set attribute comment", //$NON-NLS-1$
+				(attribute, value) -> new SetValueOperation<>(Messages.ManifestEditor_AttributeComment,
 						attribute::getComment, attribute::setComment, value));
 	}
 
@@ -104,16 +104,16 @@ public class AttributeTab {
 			return;
 		}
 
-		page.execute(new AddElementOperation<>("Add attribute", //$NON-NLS-1$
-				getAttributes(), ManifestHelper.createAttribute("attribute1"))); //$NON-NLS-1$
+		page.execute(new AddElementOperation<>(Messages.ManifestEditor_AttributeAdd, getAttributes(),
+				ManifestHelper.createAttribute("attribute1"))); //$NON-NLS-1$
 	}
 
 	private void removeAttribute() {
 		final Object selected = attributeTable.getViewer().getStructuredSelection().getFirstElement();
 
 		if (selected instanceof final Attribute attribute) {
-			page.execute(new RemoveElementOperation<>("Remove attribute", //$NON-NLS-1$
-					getAttributes(), attribute));
+			page.execute(
+					new RemoveElementOperation<>(Messages.ManifestEditor_AttributeRemove, getAttributes(), attribute));
 		}
 	}
 }

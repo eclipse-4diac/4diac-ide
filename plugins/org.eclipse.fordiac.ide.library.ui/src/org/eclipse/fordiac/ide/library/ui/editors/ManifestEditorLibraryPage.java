@@ -68,6 +68,7 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 
 	private TableControl libraryTable;
 	private Text commentText;
+	private Section detailSection;
 
 	private DependenciesTab dependenciesTab;
 	private AttributeTab attributeTab;
@@ -122,7 +123,7 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 		client.setLayout(new GridLayout(1, false));
 		section.setClient(client);
 
-		libraryTable = new TableControl(client, toolkit, ""); //$NON-NLS-1$
+		libraryTable = new TableControl(client, toolkit);
 		createLibraryColumns();
 
 		libraryTable.setAddHandler(this::addLibrary);
@@ -167,21 +168,22 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 	}
 
 	private void createDetailSection(final Composite parent, final FormToolkit toolkit) {
-		final Section section = toolkit.createSection(parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
+		detailSection = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
 
-		section.setText(Messages.ManifestEditor_Details);
-		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		detailSection.setText(Messages.ManifestEditor_Details);
+		detailSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Composite client = toolkit.createComposite(section);
+		final Composite client = toolkit.createComposite(detailSection);
 		client.setLayout(new GridLayout(1, false));
-		section.setClient(client);
+		detailSection.setClient(client);
 
 		toolkit.createLabel(client, Messages.ManifestEditor_Comment);
 
 		commentText = toolkit.createText(client, "", SWT.SINGLE | SWT.BORDER); //$NON-NLS-1$
 		commentText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		commentText.addModifyListener(_ -> updateComment());
+
+		detailSection.setVisible(selectedLibrary != null);
 
 		createTabs(client, toolkit);
 	}
@@ -242,6 +244,8 @@ public class ManifestEditorLibraryPage extends ManifestEditorPage<Exports> {
 		}
 
 		selectedLibrary = selection;
+
+		detailSection.setVisible(selection != null);
 
 		updateCommentText();
 
