@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,15 +9,18 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.search;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public record PlaceConfig( //@formatter:off
+        TypeConfig allTypes,
         TypeConfig simpleType,
         TypeConfig basicType,
         TypeConfig compositeType,
@@ -26,6 +29,7 @@ public record PlaceConfig( //@formatter:off
         TypeConfig subappType,
         TypeConfig structType,
         TypeConfig attributeType,
+        InstanceConfig allInstances,
         InstanceConfig simpleFB,
         InstanceConfig basicFB,
         InstanceConfig compositeFB,
@@ -57,14 +61,36 @@ public record PlaceConfig( //@formatter:off
 
 	public boolean anyInstanceSelected() {
 		return simpleFB.selected() || basicFB.selected() || compositeFB.selected() || serviceInterfaceFB.selected()
-				|| functionFB.selected() || typedSubapp.selected() || untypedSubapp.selected();
+				|| functionFB.selected() || typedSubapp.selected() || untypedSubapp.selected()
+				|| allInstances.selected();
+	}
+
+	/** Whether the type category is searched by its own node or by the AllTypes node. */
+	public boolean isSelected(final TypeConfig category) {
+		return category.selected() || allTypes.selected();
+	}
+
+	/** Whether the node of the type category or the AllTypes node accepts the target. */
+	public boolean matches(final TypeConfig category, final MatchTarget target) {
+		return typeBranches(category).stream().anyMatch(branch -> branch.matches(target));
+	}
+
+	/** The selected nodes searching the type category: its own node and the AllTypes node. */
+	public List<TypeConfig> typeBranches(final TypeConfig category) {
+		return Stream.of(category, allTypes).filter(TypeConfig::selected).toList();
+	}
+
+	/** The selected nodes searching the instance category: its own node and the AllInstances node. */
+	public List<InstanceConfig> instanceBranches(final InstanceConfig category) {
+		return Stream.of(category, allInstances).filter(InstanceConfig::selected).toList();
 	}
 
 	private boolean hasOccurrence(final String occurrence) {
 		return simpleFB.hasOccurrence(occurrence) || basicFB.hasOccurrence(occurrence)
 				|| compositeFB.hasOccurrence(occurrence) || serviceInterfaceFB.hasOccurrence(occurrence)
 				|| functionFB.hasOccurrence(occurrence) || typedSubapp.hasOccurrence(occurrence)
-				|| untypedSubapp.hasOccurrence(occurrence) || connection.hasOccurrence(occurrence);
+				|| untypedSubapp.hasOccurrence(occurrence) || connection.hasOccurrence(occurrence)
+				|| allInstances.hasOccurrence(occurrence);
 	}
 
 	public record TypeConfig(boolean selected, FilterRecord constraint, PinConfig pin) {

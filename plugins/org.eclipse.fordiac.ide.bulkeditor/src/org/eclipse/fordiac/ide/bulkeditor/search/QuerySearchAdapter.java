@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.search;
 
@@ -139,6 +140,7 @@ public class QuerySearchAdapter {
 
 		//@formatter:off
 		return new PlaceConfig(
+		        buildTypeConfig(place.getAllTypes(), placeholders, pinsImplicit),
 		        buildTypeConfig(place.getSimpleType(), placeholders, pinsImplicit),
 		        buildTypeConfig(place.getBasicType(), placeholders, pinsImplicit),
 		        buildTypeConfig(place.getCompositeType(), placeholders, pinsImplicit),
@@ -147,6 +149,7 @@ public class QuerySearchAdapter {
 		        buildTypeConfig(place.getSubappType(), placeholders, pinsImplicit),
 		        buildTypeConfig(place.getStructType(), placeholders, pinsImplicit),
 		        buildTypeConfig(place.getAttributeType(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getAllInstances(), placeholders, pinsImplicit),
 		        buildInstanceConfig(place.getSimpleFB(), placeholders, pinsImplicit),
 		        buildInstanceConfig(place.getBasicFB(), placeholders, pinsImplicit),
 		        buildInstanceConfig(place.getCompositeFB(), placeholders, pinsImplicit),
