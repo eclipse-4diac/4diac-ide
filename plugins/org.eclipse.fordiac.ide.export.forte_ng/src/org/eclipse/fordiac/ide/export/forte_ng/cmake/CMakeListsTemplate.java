@@ -52,7 +52,11 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	private final Manifest manifest;
 
 	protected CMakeListsTemplate(final IProject project, final Path output, final Path prefix) {
-		super("CMakeLists.txt", prefix); //$NON-NLS-1$
+		this("CMakeLists.txt", project, output, prefix); //$NON-NLS-1$
+	}
+
+	protected CMakeListsTemplate(final String name, final IProject project, final Path output, final Path prefix) {
+		super(name, prefix);
 		this.project = project;
 		this.output = output;
 		manifest = ManifestHelper.getContainerManifest(getProject());
@@ -133,6 +137,13 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 			final boolean required) {
 		return "if (NOT TARGET " + name + ")" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$
 				+ ("find_package(" + name + " " + version + (required ? " REQUIRED" : "") + ")" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						+ System.lineSeparator()).indent(INDENT) //
+				+ "endif ()" + System.lineSeparator(); //$NON-NLS-1$
+	}
+
+	protected static CharSequence generateFindDependency(final CharSequence name, final CharSequence version) {
+		return "if (NOT TARGET " + name + ")" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$
+				+ ("find_dependency(" + name + " " + version + ")" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						+ System.lineSeparator()).indent(INDENT) //
 				+ "endif ()" + System.lineSeparator(); //$NON-NLS-1$
 	}
