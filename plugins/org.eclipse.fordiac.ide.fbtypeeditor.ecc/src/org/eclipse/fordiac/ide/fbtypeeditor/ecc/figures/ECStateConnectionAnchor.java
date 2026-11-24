@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.draw2d.AbstractConnectionAnchor;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -97,12 +98,21 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 		final int index = transition == null ? 0 : Math.max(0, ordered.indexOf(current));
 		final int count = Math.max(1, ordered.size());
 
+		int triangleOffset = 0;
+		if (!sourceEnd) {
+			final Dimension offset = new Dimension(ECTransitionFigure.TRIANGLE_TIP_HEIGHT, 0);
+			getOwner().getNameLabel().translateToAbsolute(offset);
+			triangleOffset = offset.width;
+		}
+
 		return switch (edge) {
-		case TOP -> new Point(interpolatedCoordinate(bounds.x, bounds.width, index, count), bounds.y);
-		case BOTTOM ->
-			new Point(interpolatedCoordinate(bounds.x, bounds.width, index, count), bounds.y + bounds.height);
-		case LEFT -> new Point(bounds.x, interpolatedCoordinate(bounds.y, bounds.height, index, count));
-		case RIGHT -> new Point(bounds.x + bounds.width, interpolatedCoordinate(bounds.y, bounds.height, index, count));
+		case TOP -> new Point(interpolatedCoordinate(bounds.x, bounds.width, index, count), bounds.y - triangleOffset);
+		case BOTTOM -> new Point(interpolatedCoordinate(bounds.x, bounds.width, index, count),
+				bounds.y + bounds.height + triangleOffset);
+		case LEFT ->
+			new Point(bounds.x - triangleOffset, interpolatedCoordinate(bounds.y, bounds.height, index, count));
+		case RIGHT -> new Point(bounds.x + bounds.width + triangleOffset,
+				interpolatedCoordinate(bounds.y, bounds.height, index, count));
 		};
 	}
 

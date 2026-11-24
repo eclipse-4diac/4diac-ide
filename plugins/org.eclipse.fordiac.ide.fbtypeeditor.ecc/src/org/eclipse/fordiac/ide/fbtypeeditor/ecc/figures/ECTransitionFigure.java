@@ -28,7 +28,6 @@ import org.eclipse.draw2d.Ellipse;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PolygonDecoration;
-import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -85,19 +84,6 @@ public class ECTransitionFigure extends SplineConnection {
 			final int radius = size.width() / 2;
 			p.x -= radius;
 			p.y -= radius;
-
-			if (getParent() instanceof final PolylineConnection conn) {
-				final PointList points = conn.getPoints();
-
-				if (points.size() >= 2) {
-					final Point start = points.getFirstPoint();
-					final Point next = points.getPoint(1);
-					final double angle = Math.atan2((double) next.x - start.x, (double) next.y - start.y);
-
-					p.x += (int) Math.cos(angle) * radius;
-					p.y += (int) Math.sin(angle) * radius;
-				}
-			}
 			super.setLocation(p);
 		}
 
@@ -111,6 +97,10 @@ public class ECTransitionFigure extends SplineConnection {
 			}
 		}
 	}
+
+	public static final PointList BASE_TRIANGLE_TIP = new PointList(1, 0, 0, 1, 0, -1);
+	public static final int TRIANGLE_TIP_WIDTH = 4;
+	public static final int TRIANGLE_TIP_HEIGHT = 7;
 
 	private SetableAlphaLabel conditionBackground;
 	private Label condition;
@@ -150,9 +140,8 @@ public class ECTransitionFigure extends SplineConnection {
 
 	private static PolygonDecoration createTargetDecorator() {
 		final PolygonDecoration rectDec = new PolygonDecoration();
-		rectDec.setTemplate(PolygonDecoration.TRIANGLE_TIP);
-		rectDec.setScale(7, 4);
-		rectDec.setFill(true);
+		rectDec.setTemplate(BASE_TRIANGLE_TIP);
+		rectDec.setScale(TRIANGLE_TIP_HEIGHT, TRIANGLE_TIP_WIDTH);
 		return rectDec;
 	}
 
