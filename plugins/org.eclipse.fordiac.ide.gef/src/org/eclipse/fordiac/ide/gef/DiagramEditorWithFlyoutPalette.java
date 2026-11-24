@@ -30,8 +30,6 @@ import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
-import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
-import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
@@ -41,7 +39,6 @@ import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
-import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
@@ -67,8 +64,6 @@ import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.rulers.RulerComposite;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -193,16 +188,8 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
 
-		final IFontUpdateListener rootFigureListener = new FigureFontUpdateListener(
-				((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
-				UIPreferenceConstants.DIAGRAM_FONT);
-		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(rootFigureListener);
-
-		rootFigureListener.updateFonts(); // ensure that root figure has the right font set
-
-		JFaceResources.getFontRegistry().addListener(fontChangeListener);
-		viewer.getControl()
-				.addDisposeListener(_ -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
+		DiagramFontChangeListener.createForFigure(((GraphicalEditPart) viewer.getRootEditPart()).getFigure())
+				.setupListeners(viewer.getControl());
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}

@@ -111,7 +111,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		this.maxTypeLabelSize = maxTypeLabelSize;
 		configureMainFigure();
 		createFBFigureShape(typeEntry);
-		setTypeLabelFont();
+		setFonts();
 		setBorder(new FBShapeShadowBorder());
 		setBackgroundColor(UIPreferenceConstants.getFBColor());
 	}
@@ -226,12 +226,13 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	@Override
 	public void updateFonts() {
-		setTypeLabelFont();
+		setFonts();
 		invalidateTree();
 		revalidate();
 	}
 
-	private void setTypeLabelFont() {
+	private void setFonts() {
+		setFont(JFaceResources.getFontRegistry().get(UIPreferenceConstants.DIAGRAM_FONT));
 		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(UIPreferenceConstants.DIAGRAM_FONT));
 	}
 

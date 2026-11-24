@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalViewerAnnotationModelEven
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
+import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
@@ -192,6 +193,9 @@ public abstract class DiagramEditor extends GraphicalEditor
 		configureGraphicalViewer();
 		hookGraphicalViewer();
 		initializeGraphicalViewer();
+
+		DiagramFontChangeListener.createForFigure(((GraphicalEditPart) viewer.getRootEditPart()).getFigure())
+				.setupListeners(viewer.getControl());
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
 	}
