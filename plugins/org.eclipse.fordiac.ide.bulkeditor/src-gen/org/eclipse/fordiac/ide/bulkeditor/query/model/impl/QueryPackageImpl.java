@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model.impl;
@@ -21,6 +22,8 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AllInstances;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AllTypes;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.ApplicationOccurrence;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Attribute;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeConstraint;
@@ -325,6 +328,20 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	private EClass attributeDeclarationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass allTypesEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass allInstancesEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -742,7 +759,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_SimpleFB() {
+	public EReference getPlace_AllInstances() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -752,7 +769,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_BasicFB() {
+	public EReference getPlace_SimpleFB() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -762,7 +779,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_CompositeFB() {
+	public EReference getPlace_BasicFB() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -772,7 +789,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_ServiceInterfaceFB() {
+	public EReference getPlace_CompositeFB() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -782,7 +799,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_FunctionFB() {
+	public EReference getPlace_ServiceInterfaceFB() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -792,7 +809,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_TypedSubapp() {
+	public EReference getPlace_FunctionFB() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -802,7 +819,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_UntypedSubapp() {
+	public EReference getPlace_TypedSubapp() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -812,7 +829,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_Connection() {
+	public EReference getPlace_UntypedSubapp() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -822,7 +839,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_SimpleType() {
+	public EReference getPlace_Connection() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -832,7 +849,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_BasicType() {
+	public EReference getPlace_AllTypes() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -842,7 +859,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_CompositeType() {
+	public EReference getPlace_SimpleType() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -852,7 +869,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_ServiceInterfaceType() {
+	public EReference getPlace_BasicType() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -862,7 +879,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_FunctionType() {
+	public EReference getPlace_CompositeType() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -872,7 +889,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_SubappType() {
+	public EReference getPlace_ServiceInterfaceType() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(16);
 	}
 
@@ -882,7 +899,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_StructType() {
+	public EReference getPlace_FunctionType() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(17);
 	}
 
@@ -892,8 +909,28 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPlace_AttributeType() {
+	public EReference getPlace_SubappType() {
 		return (EReference)placeEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPlace_StructType() {
+		return (EReference)placeEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPlace_AttributeType() {
+		return (EReference)placeEClass.getEStructuralFeatures().get(20);
 	}
 
 	/**
@@ -1232,6 +1269,26 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getAllTypes() {
+		return allTypesEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAllInstances() {
+		return allInstancesEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public QueryFactory getQueryFactory() {
 		return (QueryFactory)getEFactoryInstance();
 	}
@@ -1302,6 +1359,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		createEAttribute(placeEClass, PLACE__IGNORE_LINKED_LIBRARIES);
 		createEAttribute(placeEClass, PLACE__SUBAPP_HIERARCHY);
 		createEAttribute(placeEClass, PLACE__SUBAPP_HIERARCHY_ELEMENTS);
+		createEReference(placeEClass, PLACE__ALL_INSTANCES);
 		createEReference(placeEClass, PLACE__SIMPLE_FB);
 		createEReference(placeEClass, PLACE__BASIC_FB);
 		createEReference(placeEClass, PLACE__COMPOSITE_FB);
@@ -1310,6 +1368,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		createEReference(placeEClass, PLACE__TYPED_SUBAPP);
 		createEReference(placeEClass, PLACE__UNTYPED_SUBAPP);
 		createEReference(placeEClass, PLACE__CONNECTION);
+		createEReference(placeEClass, PLACE__ALL_TYPES);
 		createEReference(placeEClass, PLACE__SIMPLE_TYPE);
 		createEReference(placeEClass, PLACE__BASIC_TYPE);
 		createEReference(placeEClass, PLACE__COMPOSITE_TYPE);
@@ -1375,6 +1434,10 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 
 		attributeDeclarationEClass = createEClass(ATTRIBUTE_DECLARATION);
 		createEAttribute(attributeDeclarationEClass, ATTRIBUTE_DECLARATION__NAME);
+
+		allTypesEClass = createEClass(ALL_TYPES);
+
+		allInstancesEClass = createEClass(ALL_INSTANCES);
 	}
 
 	/**
@@ -1433,6 +1496,8 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		pinTargetEClass.getESuperTypes().add(this.getTargetOption());
 		attributeEClass.getESuperTypes().add(this.getTargetOption());
 		attributeDeclarationEClass.getESuperTypes().add(this.getTargetOption());
+		allTypesEClass.getESuperTypes().add(this.getType());
+		allInstancesEClass.getESuperTypes().add(this.getInstance());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(constraintEClass, Constraint.class, "Constraint", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1482,6 +1547,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		initEAttribute(getPlace_IgnoreLinkedLibraries(), ecorePackage.getEBoolean(), "ignoreLinkedLibraries", "true", 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getPlace_SubappHierarchy(), ecorePackage.getEBoolean(), "subappHierarchy", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getPlace_SubappHierarchyElements(), ecorePackage.getEString(), "subappHierarchyElements", null, 0, -1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPlace_AllInstances(), this.getAllInstances(), null, "allInstances", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_SimpleFB(), this.getSimpleFB(), null, "simpleFB", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_BasicFB(), this.getBasicFB(), null, "basicFB", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_CompositeFB(), this.getCompositeFB(), null, "compositeFB", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1490,6 +1556,7 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 		initEReference(getPlace_TypedSubapp(), this.getTypedSubapp(), null, "typedSubapp", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_UntypedSubapp(), this.getUntypedSubapp(), null, "untypedSubapp", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_Connection(), this.getConnection(), null, "connection", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPlace_AllTypes(), this.getAllTypes(), null, "allTypes", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_SimpleType(), this.getSimpleType(), null, "simpleType", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_BasicType(), this.getBasicType(), null, "basicType", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPlace_CompositeType(), this.getCompositeType(), null, "compositeType", null, 0, 1, Place.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1555,6 +1622,10 @@ public class QueryPackageImpl extends EPackageImpl implements QueryPackage {
 
 		initEClass(attributeDeclarationEClass, AttributeDeclaration.class, "AttributeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getAttributeDeclaration_Name(), ecorePackage.getEString(), "name", null, 1, 1, AttributeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(allTypesEClass, AllTypes.class, "AllTypes", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(allInstancesEClass, AllInstances.class, "AllInstances", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

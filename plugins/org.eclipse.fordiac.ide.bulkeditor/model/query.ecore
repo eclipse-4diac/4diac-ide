@@ -57,6 +57,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="subappHierarchy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="subappHierarchyElements"
         upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allInstances" eType="#//AllInstances"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFB" eType="#//SimpleFB"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="basicFB" eType="#//BasicFB"
@@ -72,6 +74,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="untypedSubapp" eType="#//UntypedSubapp"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//Connection"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allTypes" eType="#//AllTypes"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleType" eType="#//SimpleType"
         containment="true"/>
@@ -136,4 +140,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="AttributeDeclaration" eSuperTypes="#//TargetOption">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AllTypes" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AllInstances" eSuperTypes="#//Instance"/>
 </ecore:EPackage>

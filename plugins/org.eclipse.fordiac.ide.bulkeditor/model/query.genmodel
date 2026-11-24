@@ -50,6 +50,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Place/ignoreLinkedLibraries"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Place/subappHierarchy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//Place/subappHierarchyElements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/allInstances"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/simpleFB"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/basicFB"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/compositeFB"/>
@@ -58,6 +59,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/typedSubapp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/untypedSubapp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/connection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/allTypes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/simpleType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/basicType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference query.ecore#//Place/compositeType"/>
@@ -107,5 +109,7 @@
     <genClasses ecoreClass="query.ecore#//AttributeDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute query.ecore#//AttributeDeclaration/name"/>
     </genClasses>
+    <genClasses ecoreClass="query.ecore#//AllTypes"/>
+    <genClasses ecoreClass="query.ecore#//AllInstances"/>
   </genPackages>
 </genmodel:GenModel>

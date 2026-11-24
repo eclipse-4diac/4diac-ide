@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model.impl;
@@ -98,6 +99,8 @@ public class QueryFactoryImpl extends EFactoryImpl implements QueryFactory {
 			case QueryPackage.PIN_TARGET: return createPinTarget();
 			case QueryPackage.ATTRIBUTE: return createAttribute();
 			case QueryPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
+			case QueryPackage.ALL_TYPES: return createAllTypes();
+			case QueryPackage.ALL_INSTANCES: return createAllInstances();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -431,6 +434,28 @@ public class QueryFactoryImpl extends EFactoryImpl implements QueryFactory {
 	public AttributeDeclaration createAttributeDeclaration() {
 		AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
 		return attributeDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AllTypes createAllTypes() {
+		AllTypesImpl allTypes = new AllTypesImpl();
+		return allTypes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AllInstances createAllInstances() {
+		AllInstancesImpl allInstances = new AllInstancesImpl();
+		return allInstances;
 	}
 
 	/**

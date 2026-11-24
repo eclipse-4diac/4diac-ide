@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model;
@@ -30,6 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#isIgnoreLinkedLibraries <em>Ignore Linked Libraries</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#isSubappHierarchy <em>Subapp Hierarchy</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getSubappHierarchyElements <em>Subapp Hierarchy Elements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllInstances <em>All Instances</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getSimpleFB <em>Simple FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getBasicFB <em>Basic FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getCompositeFB <em>Composite FB</em>}</li>
@@ -38,6 +40,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getTypedSubapp <em>Typed Subapp</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getUntypedSubapp <em>Untyped Subapp</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getConnection <em>Connection</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllTypes <em>All Types</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getSimpleType <em>Simple Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getBasicType <em>Basic Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getCompositeType <em>Composite Type</em>}</li>
@@ -109,6 +112,28 @@ public interface Place extends EObject {
 	 * @generated
 	 */
 	EList<String> getSubappHierarchyElements();
+
+	/**
+	 * Returns the value of the '<em><b>All Instances</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>All Instances</em>' containment reference.
+	 * @see #setAllInstances(AllInstances)
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage#getPlace_AllInstances()
+	 * @model containment="true"
+	 * @generated
+	 */
+	AllInstances getAllInstances();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllInstances <em>All Instances</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>All Instances</em>' containment reference.
+	 * @see #getAllInstances()
+	 * @generated
+	 */
+	void setAllInstances(AllInstances value);
 
 	/**
 	 * Returns the value of the '<em><b>Simple FB</b></em>' containment reference.
@@ -285,6 +310,28 @@ public interface Place extends EObject {
 	 * @generated
 	 */
 	void setConnection(Connection value);
+
+	/**
+	 * Returns the value of the '<em><b>All Types</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>All Types</em>' containment reference.
+	 * @see #setAllTypes(AllTypes)
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage#getPlace_AllTypes()
+	 * @model containment="true"
+	 * @generated
+	 */
+	AllTypes getAllTypes();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllTypes <em>All Types</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>All Types</em>' containment reference.
+	 * @see #getAllTypes()
+	 * @generated
+	 */
+	void setAllTypes(AllTypes value);
 
 	/**
 	 * Returns the value of the '<em><b>Simple Type</b></em>' containment reference.

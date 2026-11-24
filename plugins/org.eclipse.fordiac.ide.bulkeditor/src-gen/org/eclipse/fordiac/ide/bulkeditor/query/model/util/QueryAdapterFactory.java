@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model.util;
@@ -226,6 +227,14 @@ public class QueryAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAttributeDeclaration(AttributeDeclaration object) {
 				return createAttributeDeclarationAdapter();
+			}
+			@Override
+			public Adapter caseAllTypes(AllTypes object) {
+				return createAllTypesAdapter();
+			}
+			@Override
+			public Adapter caseAllInstances(AllInstances object) {
+				return createAllInstancesAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -762,6 +771,34 @@ public class QueryAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAttributeDeclarationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.AllTypes <em>All Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.AllTypes
+	 * @generated
+	 */
+	public Adapter createAllTypesAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.AllInstances <em>All Instances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.AllInstances
+	 * @generated
+	 */
+	public Adapter createAllInstancesAdapter() {
 		return null;
 	}
 

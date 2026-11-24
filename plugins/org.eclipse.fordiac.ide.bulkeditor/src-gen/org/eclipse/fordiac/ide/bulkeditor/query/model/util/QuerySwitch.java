@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model.util;
@@ -350,6 +351,23 @@ public class QuerySwitch<T> extends Switch<T> {
 				AttributeDeclaration attributeDeclaration = (AttributeDeclaration)theEObject;
 				T result = caseAttributeDeclaration(attributeDeclaration);
 				if (result == null) result = caseTargetOption(attributeDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case QueryPackage.ALL_TYPES: {
+				AllTypes allTypes = (AllTypes)theEObject;
+				T result = caseAllTypes(allTypes);
+				if (result == null) result = caseType(allTypes);
+				if (result == null) result = caseSearchTarget(allTypes);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case QueryPackage.ALL_INSTANCES: {
+				AllInstances allInstances = (AllInstances)theEObject;
+				T result = caseAllInstances(allInstances);
+				if (result == null) result = caseInstance(allInstances);
+				if (result == null) result = caseNetworkElement(allInstances);
+				if (result == null) result = caseSearchTarget(allInstances);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -909,6 +927,36 @@ public class QuerySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAttributeDeclaration(AttributeDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>All Types</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>All Types</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAllTypes(AllTypes object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>All Instances</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>All Instances</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAllInstances(AllInstances object) {
 		return null;
 	}
 
