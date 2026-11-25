@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -123,6 +124,8 @@ public abstract class STCoreToBeBuiltComputerContribution implements IToBeBuiltC
 					updateAttribute(toBeBuilt, attribute);
 				} else if (next instanceof final VarDeclaration varDeclaration) {
 					updateVarDeclaration(toBeBuilt, varDeclaration);
+				} else if (next instanceof final ECTransition transition) {
+					updateConditionExpression(toBeBuilt, transition);
 				}
 			}
 		}
@@ -136,6 +139,13 @@ public abstract class STCoreToBeBuiltComputerContribution implements IToBeBuiltC
 		}
 		if (!STCoreUtil.isSimpleInitialValue(varDeclaration, false)) {
 			updateElement(toBeBuilt, varDeclaration.getValue());
+		}
+	}
+
+	protected static void updateConditionExpression(final ToBeBuilt toBeBuilt, final ECTransition transition) {
+		final String conditionExpression = transition.getConditionExpression();
+		if (conditionExpression != null && !conditionExpression.isBlank() && !conditionExpression.equals("1")) { //$NON-NLS-1$
+			updateElement(toBeBuilt, transition);
 		}
 	}
 

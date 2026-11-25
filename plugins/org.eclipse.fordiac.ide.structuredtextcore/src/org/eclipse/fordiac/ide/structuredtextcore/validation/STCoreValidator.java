@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -76,7 +77,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
-import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
@@ -1112,9 +1112,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				return IsAssignableResult.CONST_NOT_ASSIGNABLE;
 			}
 			if (feature.eContainmentFeature() == LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS
-					&& featureExpression.eResource() instanceof final LibraryElementXtextResource libResource
-					&& EcoreUtil2.getContainerOfType(feature, LibraryElement.class) == libResource
-							.getInternalLibraryElement()) {
+					&& isSameUri(feature.eResource(), featureExpression.eResource())) {
 				return IsAssignableResult.INPUT_NOT_ASSIGNABLE;
 			}
 		} else if (feature instanceof final STVarDeclaration varDeclaration
@@ -1128,6 +1126,19 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			}
 		}
 		return IsAssignableResult.ASSIGNABLE;
+	}
+
+	private static boolean isSameUri(final Resource resource, final Resource other) {
+		if (resource == null || other == null) {
+			return false;
+		}
+		if (resource == other) {
+			return true;
+		}
+		final URI resourceUri = resource.getURI();
+		final URI otherUri = other.getURI();
+		return resourceUri != null && otherUri != null
+				&& resourceUri.trimFragment().trimQuery().equals(otherUri.trimFragment().trimQuery());
 	}
 
 	private static IsAssignableResult isBuiltinFeatureExpressionAssignable(
