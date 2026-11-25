@@ -14,63 +14,34 @@
  *   Bianca Wiesmayr
  *               -  consistent dropdown menu edit, redesign ECC
  *   Alois Zoitl - modernized and reworked ECC look
+ *   Tisya Gupta - extracted common EC action edit part base class
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
-
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_HORIZONTAL;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_VERTICAL;
 
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECAlgorithmToolTipFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
-public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
-	private static final Insets ALG_INSETS = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
-			MARGIN_HORIZONTAL);
+public class ECActionAlgorithmEditPart extends AbstractECActionElementEditPart {
 
 	// the tooltip to be shown when we have an algorithm
 	private ECAlgorithmToolTipFigure algToolTip;
-
-	/** The adapter. */
-	private final Adapter adapter = new AdapterImpl() {
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			refreshAlgLabel();
-			refreshAlgorithmToolTip(getFigure());
-		}
-	};
 
 	/** The algorithm adapter. */
 	private final Adapter fbAdapter = new EContentAdapter() {
@@ -80,41 +51,27 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			super.notifyChanged(notification);
 			if ((notification.getEventType() == Notification.SET) && (null != getAction().getAlgorithm())
 					&& getAction().getAlgorithm().equals(notification.getNewValue())) {
-				refreshAlgLabel();
+				refreshVisuals();
 			}
 		}
 	};
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
-	 */
 	@Override
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			getAction().eAdapters().add(adapter);
-			if (getINamedElement() != null) {
-				// We don't want that the the base class registers to the algorithm as it is
-				// hard to track if algorithm changes
-				getINamedElement().eAdapters().remove(getNameAdapter());
+			// adapt to the fbtype so that we get informed on alg name changes
+			final FBType fbType = ECCContentAndLabelProvider.getFBType(getAction());
+			if (fbType != null) {
+				fbType.eAdapters().add(fbAdapter);
 			}
-			// addapt to the fbtype so that we get informed on alg name changes
-			ECCContentAndLabelProvider.getFBType(getAction()).eAdapters().add(fbAdapter);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
-	 */
 	@Override
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			getAction().eAdapters().remove(adapter);
 			final FBType fbtype = ECCContentAndLabelProvider.getFBType(getAction());
 			if (fbtype != null) {
 				fbtype.eAdapters().remove(fbAdapter);
@@ -122,70 +79,28 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
-	 */
 	@Override
-	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
-			@Override
-			protected Command getDeleteCommand(final GroupRequest request) {
-				return new DeleteECActionCommand<>(getAction(), getAction().getECState());
-			}
-		});
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
+	protected DirectEditPolicy createDirectEditPolicy() {
+		return new DirectEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					final List<Algorithm> algorithms = ECCContentAndLabelProvider
-							.getAlgorithms(ECCContentAndLabelProvider.getFBType(getAction()));
-					final int selected = ((Integer) request.getCellEditor().getValue()).intValue();
-					Algorithm alg = null;
-					if (selected < algorithms.size()) {
-						alg = algorithms.get(selected);
-					}
-					return new ChangeAlgorithmCommand(getAction(), alg);
+				final List<Algorithm> algorithms = ECCContentAndLabelProvider
+						.getAlgorithms(ECCContentAndLabelProvider.getFBType(getAction()));
+				final int selected = ((Integer) request.getCellEditor().getValue()).intValue();
+				Algorithm alg = null;
+				if (selected < algorithms.size()) {
+					alg = algorithms.get(selected);
 				}
-				return null;
+				return new ChangeAlgorithmCommand(getAction(), alg);
 			}
 
 			@Override
 			protected void showCurrentEditValue(final DirectEditRequest request) {
 				// handled by the direct edit manager
 			}
-		});
+		};
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef
-	 * .Request)
-	 */
-	@Override
-	public void performRequest(final Request request) {
-		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
-		// REQ_OPEN -> doubleclick
-
-		if (request.getType() == RequestConstants.REQ_OPEN) {
-			// transform doubleclick to direct edit
-			request.setType(RequestConstants.REQ_DIRECT_EDIT);
-		}
-		super.performRequest(request);
-	}
-
-	@Override
-	protected ComboDirectEditManager createDirectEditManager() {
-		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
-				getNameLabel());
-	}
-
-	/**
-	 * performs the directEdit.
-	 */
 	@Override
 	public void performDirectEdit() {
 		final List<String> algNames = ECCContentAndLabelProvider
@@ -204,6 +119,7 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		return (ECActionAlgorithm) getModel();
 	}
 
+	@Override
 	public ECAction getAction() {
 		return getCastedModel().getAction();
 	}
@@ -213,34 +129,27 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 	}
 
 	@Override
-	public INamedElement getINamedElement() {
-		return getAction().getAlgorithmModel();
-	}
-
-	@Override
-	public Label getNameLabel() {
-		return (Label) getFigure();
-	}
-
-	@Override
-	protected IFigure createFigure() {
-		final Label algorithmLabel = new Label();
-		algorithmLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
-		algorithmLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
-		algorithmLabel.setOpaque(true);
-		algorithmLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
-		algorithmLabel.setBorder(new MarginBorder(ALG_INSETS));
-		algorithmLabel.setTextAlignment(PositionConstants.LEFT);
-		algorithmLabel.setLabelAlignment(PositionConstants.LEFT);
+	protected void setupFigure(final Label label) {
+		label.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
+		label.setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
+		label.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
 
 		algToolTip = new ECAlgorithmToolTipFigure();
-		refreshAlgorithmToolTip(algorithmLabel);
+		refreshAlgorithmToolTip(label);
+	}
 
-		return algorithmLabel;
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		refreshAlgLabel();
+		refreshAlgorithmToolTip(getFigure());
 	}
 
 	private void refreshAlgLabel() {
-		getNameLabel().setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
+		final Label nameLabel = getNameLabel();
+		if (nameLabel != null) {
+			nameLabel.setText(getAction().getAlgorithm() != null ? getAction().getAlgorithm() : ""); //$NON-NLS-1$
+		}
 	}
 
 	private void refreshAlgorithmToolTip(final IFigure iFigure) {
