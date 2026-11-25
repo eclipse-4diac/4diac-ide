@@ -45,11 +45,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
-import org.eclipse.fordiac.ide.util.STStringTokenHandling;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -118,14 +115,8 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 						.isAdapterNotification(notification.getOldValue(), getModel().getConditionEvent())) {
 					AbstractDirectEditableEditPart.executeCommand(new ChangeConditionEventCommand(getModel(), "")); //$NON-NLS-1$
 				}
-			} else if (notification.getEventType() == Notification.SET) {
-				if (null != getModel().getConditionEvent()) {
-					handleConditionEventUpdate(notification);
-				}
-
-				if (notification.getNotifier() instanceof VarDeclaration) {
-					checkConditionExpression(notification);
-				}
+			} else if (notification.getEventType() == Notification.SET && getModel().getConditionEvent() != null) {
+				handleConditionEventUpdate(notification);
 			}
 		}
 
@@ -135,20 +126,6 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 				if ((ce.getName().equals(newValue))
 						|| ((ce.getBlockFBNetworkElement() instanceof final AdapterFB adapterFB)
 								&& (adapterFB.getName().equals(newValue)))) {
-					refresh();
-				}
-			}
-		}
-
-		private void checkConditionExpression(final Notification notification) {
-			if (notification.getNewValue() instanceof String) {
-				final Object feature = notification.getFeature();
-				if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
-						&& (null != getModel().getConditionExpression())
-						&& (-1 != getModel().getConditionExpression().indexOf(notification.getOldStringValue()))) {
-					final String expresion = STStringTokenHandling.replaceSTToken(getModel().getConditionExpression(),
-							notification.getOldStringValue(), notification.getNewStringValue());
-					getModel().setConditionExpression(expresion);
 					refresh();
 				}
 			}
