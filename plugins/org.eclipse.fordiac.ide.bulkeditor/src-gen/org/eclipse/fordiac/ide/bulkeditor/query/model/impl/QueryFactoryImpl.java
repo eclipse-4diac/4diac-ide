@@ -71,11 +71,13 @@ public class QueryFactoryImpl extends EFactoryImpl implements QueryFactory {
 			case QueryPackage.PROPERTY_CONSTRAINT: return createPropertyConstraint();
 			case QueryPackage.FIELD_CONSTRAINT: return createFieldConstraint();
 			case QueryPackage.ATTRIBUTE_CONSTRAINT: return createAttributeConstraint();
+			case QueryPackage.CONSTRAINT_INSTANCE: return createConstraintInstance();
 			case QueryPackage.APPLICATION_OCCURRENCE: return createApplicationOccurrence();
 			case QueryPackage.COMPOSITE_FB_OCCURRENCE: return createCompositeFBOccurrence();
 			case QueryPackage.TYPED_SUBAPP_OCCURRENCE: return createTypedSubappOccurrence();
 			case QueryPackage.QUERY: return createQuery();
 			case QueryPackage.PLACEHOLDER: return createPlaceholder();
+			case QueryPackage.CONSTRAINT_DECLARATION: return createConstraintDeclaration();
 			case QueryPackage.TARGET: return createTarget();
 			case QueryPackage.PLACE: return createPlace();
 			case QueryPackage.SIMPLE_TYPE: return createSimpleType();
@@ -142,6 +144,17 @@ public class QueryFactoryImpl extends EFactoryImpl implements QueryFactory {
 	 * @generated
 	 */
 	@Override
+	public ConstraintInstance createConstraintInstance() {
+		ConstraintInstanceImpl constraintInstance = new ConstraintInstanceImpl();
+		return constraintInstance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ApplicationOccurrence createApplicationOccurrence() {
 		ApplicationOccurrenceImpl applicationOccurrence = new ApplicationOccurrenceImpl();
 		return applicationOccurrence;
@@ -189,6 +202,17 @@ public class QueryFactoryImpl extends EFactoryImpl implements QueryFactory {
 	public Placeholder createPlaceholder() {
 		PlaceholderImpl placeholder = new PlaceholderImpl();
 		return placeholder;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ConstraintDeclaration createConstraintDeclaration() {
+		ConstraintDeclarationImpl constraintDeclaration = new ConstraintDeclarationImpl();
+		return constraintDeclaration;
 	}
 
 	/**

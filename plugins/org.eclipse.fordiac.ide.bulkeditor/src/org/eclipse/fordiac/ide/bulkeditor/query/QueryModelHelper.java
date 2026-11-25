@@ -12,22 +12,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Attribute;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeConstraint;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Connection;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.FieldConstraint;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Instance;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Occurrence;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.PinTarget;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.PropertyConstraint;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryFactory;
@@ -83,8 +90,13 @@ public final class QueryModelHelper {
 	}
 
 	private static boolean isChildTypeAllowed(final EObject parent, final EClass childType) {
-		return childType != QueryPackage.Literals.ATTRIBUTE_CONSTRAINT
-				|| !(findConstraintOwner(parent) instanceof Attribute);
+		if (childType == QueryPackage.Literals.ATTRIBUTE_CONSTRAINT) {
+			return !(findConstraintOwner(parent) instanceof Attribute);
+		}
+		if (childType == QueryPackage.Literals.CONSTRAINT_INSTANCE) {
+			return !getUsableConstraintDeclarations(parent).isEmpty();
+		}
+		return true;
 	}
 
 	private static EObject findConstraintOwner(final EObject element) {
@@ -117,6 +129,50 @@ public final class QueryModelHelper {
 
 	public static boolean hasCollapsibleChildren(final EObject element) {
 		return !getChildNodes(element).isEmpty();
+	}
+
+	public static boolean isConnectedToContainer(final EObject element) {
+		return !(element instanceof Placeholder || element instanceof ConstraintDeclaration);
+	}
+
+	// constraint declarations
+	public static ConstraintDeclaration findConstraintDeclaration(final EObject element, final String name) {
+		return getUsableConstraintDeclarations(element).stream()
+				.filter(declaration -> name.equals(declaration.getName())).findFirst().orElse(null);
+	}
+
+	public static List<ConstraintDeclaration> getUsableConstraintDeclarations(final EObject element) {
+		if (EcoreUtil.getRootContainer(element) instanceof final Query query) {
+			final ConstraintDeclaration enclosingDeclaration = findEnclosingDeclaration(element);
+			return query.getConstraintDeclaration().stream().filter(declaration -> enclosingDeclaration == null
+					|| !uses(declaration, enclosingDeclaration, new HashSet<>())).toList();
+		}
+		return List.of();
+	}
+
+	public static ConstraintDeclaration getUsableDeclaration(final ConstraintInstance instance) {
+		final ConstraintDeclaration declaration = instance.getDeclaration();
+		return getUsableConstraintDeclarations(instance).contains(declaration) ? declaration : null;
+	}
+
+	private static ConstraintDeclaration findEnclosingDeclaration(final EObject element) {
+		return findConstraintOwner(element) instanceof final ConstraintDeclaration declaration ? declaration : null;
+	}
+
+	private static boolean uses(final ConstraintDeclaration declaration, final ConstraintDeclaration other,
+			final Set<ConstraintDeclaration> visited) {
+		return declaration == other || (visited.add(declaration)
+				&& getUsedDeclarations(declaration).anyMatch(used -> uses(used, other, visited)));
+	}
+
+	private static Stream<ConstraintDeclaration> getUsedDeclarations(final ConstraintDeclaration declaration) {
+		final List<ConstraintDeclaration> usedDeclarations = new ArrayList<>();
+		declaration.eAllContents().forEachRemaining(content -> {
+			if (content instanceof final ConstraintInstance instance && instance.getDeclaration() != null) {
+				usedDeclarations.add(instance.getDeclaration());
+			}
+		});
+		return usedDeclarations.stream();
 	}
 
 	// child creation

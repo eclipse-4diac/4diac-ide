@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeConstraint;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeDeclaration;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Connection;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.FieldConstraint;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Instance;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.NetworkElement;
@@ -202,6 +204,9 @@ public class QuerySearchAdapter {
 		if (constraint == null) {
 			return FilterRecord.INACTIVE;
 		}
+		if (constraint instanceof final ConstraintInstance instance) {
+			return readConstraintInstance(instance, placeholders);
+		}
 		return new FilterRecord(true, constraint.isNegate(), constraint instanceof AttributeConstraint,
 				readConstraintField(constraint, PropertyConstraint::getName, placeholders),
 				readConstraintField(constraint, PropertyConstraint::getType, placeholders),
@@ -213,6 +218,15 @@ public class QuerySearchAdapter {
 
 	private static FilterRecord readSubConstraint(final Constraint constraint, final Map<String, String> placeholders) {
 		return constraint != null ? readConstraintTree(constraint, placeholders) : null;
+	}
+
+	private static FilterRecord readConstraintInstance(final ConstraintInstance instance,
+			final Map<String, String> placeholders) {
+		final ConstraintDeclaration declaration = QueryModelHelper.getUsableDeclaration(instance);
+		return FilterRecord.ofInstance(instance.isNegate(),
+				readConstraintTree(declaration != null ? declaration.getConstraint() : null, placeholders),
+				readSubConstraint(instance.getOrConstraint(), placeholders),
+				readSubConstraint(instance.getAndConstraint(), placeholders));
 	}
 
 	private static OccurrencesConfig readOccurrencesConfig(final NetworkElement networkElement,

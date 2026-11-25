@@ -96,6 +96,10 @@ public class QueryAdapterFactory extends AdapterFactoryImpl {
 				return createAttributeConstraintAdapter();
 			}
 			@Override
+			public Adapter caseConstraintInstance(ConstraintInstance object) {
+				return createConstraintInstanceAdapter();
+			}
+			@Override
 			public Adapter caseOccurrence(Occurrence object) {
 				return createOccurrenceAdapter();
 			}
@@ -118,6 +122,10 @@ public class QueryAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePlaceholder(Placeholder object) {
 				return createPlaceholderAdapter();
+			}
+			@Override
+			public Adapter caseConstraintDeclaration(ConstraintDeclaration object) {
+				return createConstraintDeclarationAdapter();
 			}
 			@Override
 			public Adapter caseTarget(Target object) {
@@ -304,6 +312,20 @@ public class QueryAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance <em>Constraint Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance
+	 * @generated
+	 */
+	public Adapter createConstraintInstanceAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Occurrence <em>Occurrence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -384,6 +406,20 @@ public class QueryAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPlaceholderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration <em>Constraint Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration
+	 * @generated
+	 */
+	public Adapter createConstraintDeclarationAdapter() {
 		return null;
 	}
 

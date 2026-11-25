@@ -342,6 +342,61 @@ public interface QueryPackage extends EPackage {
 	int ATTRIBUTE_CONSTRAINT_FEATURE_COUNT = PROPERTY_CONSTRAINT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintInstanceImpl <em>Constraint Instance</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintInstanceImpl
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getConstraintInstance()
+	 * @generated
+	 */
+	int CONSTRAINT_INSTANCE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Negate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_INSTANCE__NEGATE = CONSTRAINT__NEGATE;
+
+	/**
+	 * The feature id for the '<em><b>Or Constraint</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_INSTANCE__OR_CONSTRAINT = CONSTRAINT__OR_CONSTRAINT;
+
+	/**
+	 * The feature id for the '<em><b>And Constraint</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_INSTANCE__AND_CONSTRAINT = CONSTRAINT__AND_CONSTRAINT;
+
+	/**
+	 * The feature id for the '<em><b>Declaration</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_INSTANCE__DECLARATION = CONSTRAINT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Constraint Instance</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_INSTANCE_FEATURE_COUNT = CONSTRAINT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.OccurrenceImpl <em>Occurrence</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -349,7 +404,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getOccurrence()
 	 * @generated
 	 */
-	int OCCURRENCE = 4;
+	int OCCURRENCE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -377,7 +432,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getApplicationOccurrence()
 	 * @generated
 	 */
-	int APPLICATION_OCCURRENCE = 5;
+	int APPLICATION_OCCURRENCE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -405,7 +460,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getCompositeFBOccurrence()
 	 * @generated
 	 */
-	int COMPOSITE_FB_OCCURRENCE = 6;
+	int COMPOSITE_FB_OCCURRENCE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -433,7 +488,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getTypedSubappOccurrence()
 	 * @generated
 	 */
-	int TYPED_SUBAPP_OCCURRENCE = 7;
+	int TYPED_SUBAPP_OCCURRENCE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -461,7 +516,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getQuery()
 	 * @generated
 	 */
-	int QUERY = 8;
+	int QUERY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Placeholder</b></em>' containment reference list.
@@ -491,13 +546,22 @@ public interface QueryPackage extends EPackage {
 	int QUERY__PLACE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Constraint Declaration</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int QUERY__CONSTRAINT_DECLARATION = 3;
+
+	/**
 	 * The number of structural features of the '<em>Query</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int QUERY_FEATURE_COUNT = 3;
+	int QUERY_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceholderImpl <em>Placeholder</em>}' class.
@@ -507,7 +571,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getPlaceholder()
 	 * @generated
 	 */
-	int PLACEHOLDER = 9;
+	int PLACEHOLDER = 10;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -537,6 +601,43 @@ public interface QueryPackage extends EPackage {
 	int PLACEHOLDER_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintDeclarationImpl <em>Constraint Declaration</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintDeclarationImpl
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getConstraintDeclaration()
+	 * @generated
+	 */
+	int CONSTRAINT_DECLARATION = 11;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_DECLARATION__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_DECLARATION__CONSTRAINT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Constraint Declaration</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT_DECLARATION_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.TargetImpl <em>Target</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -544,7 +645,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getTarget()
 	 * @generated
 	 */
-	int TARGET = 10;
+	int TARGET = 12;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' containment reference.
@@ -572,7 +673,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getTargetOption()
 	 * @generated
 	 */
-	int TARGET_OPTION = 11;
+	int TARGET_OPTION = 13;
 
 	/**
 	 * The number of structural features of the '<em>Target Option</em>' class.
@@ -591,7 +692,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getPlace()
 	 * @generated
 	 */
-	int PLACE = 12;
+	int PLACE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Ignore Linked Libraries</b></em>' attribute.
@@ -781,7 +882,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getSearchTarget()
 	 * @generated
 	 */
-	int SEARCH_TARGET = 13;
+	int SEARCH_TARGET = 15;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -809,7 +910,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getType()
 	 * @generated
 	 */
-	int TYPE = 14;
+	int TYPE = 16;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -846,7 +947,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getSimpleType()
 	 * @generated
 	 */
-	int SIMPLE_TYPE = 15;
+	int SIMPLE_TYPE = 17;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -883,7 +984,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getBasicType()
 	 * @generated
 	 */
-	int BASIC_TYPE = 16;
+	int BASIC_TYPE = 18;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -920,7 +1021,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getCompositeType()
 	 * @generated
 	 */
-	int COMPOSITE_TYPE = 17;
+	int COMPOSITE_TYPE = 19;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -957,7 +1058,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getServiceInterfaceType()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE_TYPE = 18;
+	int SERVICE_INTERFACE_TYPE = 20;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -994,7 +1095,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getFunctionType()
 	 * @generated
 	 */
-	int FUNCTION_TYPE = 19;
+	int FUNCTION_TYPE = 21;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1031,7 +1132,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getSubappType()
 	 * @generated
 	 */
-	int SUBAPP_TYPE = 20;
+	int SUBAPP_TYPE = 22;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1068,7 +1169,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getStructType()
 	 * @generated
 	 */
-	int STRUCT_TYPE = 21;
+	int STRUCT_TYPE = 23;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1105,7 +1206,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getAttributeType()
 	 * @generated
 	 */
-	int ATTRIBUTE_TYPE = 22;
+	int ATTRIBUTE_TYPE = 24;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1142,7 +1243,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getNetworkElement()
 	 * @generated
 	 */
-	int NETWORK_ELEMENT = 23;
+	int NETWORK_ELEMENT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1197,7 +1298,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getInstance()
 	 * @generated
 	 */
-	int INSTANCE = 24;
+	int INSTANCE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1261,7 +1362,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getSimpleFB()
 	 * @generated
 	 */
-	int SIMPLE_FB = 25;
+	int SIMPLE_FB = 27;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1325,7 +1426,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getBasicFB()
 	 * @generated
 	 */
-	int BASIC_FB = 26;
+	int BASIC_FB = 28;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1389,7 +1490,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getCompositeFB()
 	 * @generated
 	 */
-	int COMPOSITE_FB = 27;
+	int COMPOSITE_FB = 29;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1453,7 +1554,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getServiceInterfaceFB()
 	 * @generated
 	 */
-	int SERVICE_INTERFACE_FB = 28;
+	int SERVICE_INTERFACE_FB = 30;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1517,7 +1618,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getFunctionFB()
 	 * @generated
 	 */
-	int FUNCTION_FB = 29;
+	int FUNCTION_FB = 31;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1581,7 +1682,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getTypedSubapp()
 	 * @generated
 	 */
-	int TYPED_SUBAPP = 30;
+	int TYPED_SUBAPP = 32;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1645,7 +1746,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getUntypedSubapp()
 	 * @generated
 	 */
-	int UNTYPED_SUBAPP = 31;
+	int UNTYPED_SUBAPP = 33;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1709,7 +1810,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getConnection()
 	 * @generated
 	 */
-	int CONNECTION = 32;
+	int CONNECTION = 34;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1764,7 +1865,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getPIN()
 	 * @generated
 	 */
-	int PIN = 33;
+	int PIN = 35;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1792,7 +1893,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getPinTarget()
 	 * @generated
 	 */
-	int PIN_TARGET = 34;
+	int PIN_TARGET = 36;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1820,7 +1921,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getAttribute()
 	 * @generated
 	 */
-	int ATTRIBUTE = 35;
+	int ATTRIBUTE = 37;
 
 	/**
 	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
@@ -1848,7 +1949,7 @@ public interface QueryPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getAttributeDeclaration()
 	 * @generated
 	 */
-	int ATTRIBUTE_DECLARATION = 36;
+	int ATTRIBUTE_DECLARATION = 38;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2042,6 +2143,27 @@ public interface QueryPackage extends EPackage {
 	EClass getAttributeConstraint();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance <em>Constraint Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Constraint Instance</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance
+	 * @generated
+	 */
+	EClass getConstraintInstance();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance#getDeclaration <em>Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Declaration</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance#getDeclaration()
+	 * @see #getConstraintInstance()
+	 * @generated
+	 */
+	EReference getConstraintInstance_Declaration();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Occurrence <em>Occurrence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2136,6 +2258,17 @@ public interface QueryPackage extends EPackage {
 	EReference getQuery_Place();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Query#getConstraintDeclaration <em>Constraint Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Constraint Declaration</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.Query#getConstraintDeclaration()
+	 * @see #getQuery()
+	 * @generated
+	 */
+	EReference getQuery_ConstraintDeclaration();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder <em>Placeholder</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2166,6 +2299,38 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPlaceholder_Val();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration <em>Constraint Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Constraint Declaration</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration
+	 * @generated
+	 */
+	EClass getConstraintDeclaration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration#getName()
+	 * @see #getConstraintDeclaration()
+	 * @generated
+	 */
+	EAttribute getConstraintDeclaration_Name();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration#getConstraint <em>Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Constraint</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration#getConstraint()
+	 * @see #getConstraintDeclaration()
+	 * @generated
+	 */
+	EReference getConstraintDeclaration_Constraint();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Target <em>Target</em>}'.
@@ -2915,6 +3080,24 @@ public interface QueryPackage extends EPackage {
 		EClass ATTRIBUTE_CONSTRAINT = eINSTANCE.getAttributeConstraint();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintInstanceImpl <em>Constraint Instance</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintInstanceImpl
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getConstraintInstance()
+		 * @generated
+		 */
+		EClass CONSTRAINT_INSTANCE = eINSTANCE.getConstraintInstance();
+
+		/**
+		 * The meta object literal for the '<em><b>Declaration</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONSTRAINT_INSTANCE__DECLARATION = eINSTANCE.getConstraintInstance_Declaration();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.OccurrenceImpl <em>Occurrence</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2997,6 +3180,14 @@ public interface QueryPackage extends EPackage {
 		EReference QUERY__PLACE = eINSTANCE.getQuery_Place();
 
 		/**
+		 * The meta object literal for the '<em><b>Constraint Declaration</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference QUERY__CONSTRAINT_DECLARATION = eINSTANCE.getQuery_ConstraintDeclaration();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceholderImpl <em>Placeholder</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3021,6 +3212,32 @@ public interface QueryPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PLACEHOLDER__VAL = eINSTANCE.getPlaceholder_Val();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintDeclarationImpl <em>Constraint Declaration</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.ConstraintDeclarationImpl
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getConstraintDeclaration()
+		 * @generated
+		 */
+		EClass CONSTRAINT_DECLARATION = eINSTANCE.getConstraintDeclaration();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONSTRAINT_DECLARATION__NAME = eINSTANCE.getConstraintDeclaration_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Constraint</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONSTRAINT_DECLARATION__CONSTRAINT = eINSTANCE.getConstraintDeclaration_Constraint();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.TargetImpl <em>Target</em>}' class.

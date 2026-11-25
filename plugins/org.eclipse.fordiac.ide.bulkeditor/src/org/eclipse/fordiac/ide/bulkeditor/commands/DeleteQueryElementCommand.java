@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.bulkeditor.commands;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -33,6 +33,6 @@ public class DeleteQueryElementCommand extends EMFCommandWrapper {
 		if (containment != null && !containment.isMany()) {
 			return SetCommand.create(editingDomain, element.eContainer(), containment, SetCommand.UNSET_VALUE);
 		}
-		return RemoveCommand.create(editingDomain, element);
+		return DeleteCommand.create(editingDomain, element);
 	}
 }

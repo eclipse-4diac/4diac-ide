@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
@@ -47,6 +48,7 @@ import org.eclipse.fordiac.ide.bulkeditor.query.model.Target;
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryImpl#getPlaceholder <em>Placeholder</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryImpl#getTarget <em>Target</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryImpl#getPlace <em>Place</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryImpl#getConstraintDeclaration <em>Constraint Declaration</em>}</li>
  * </ul>
  *
  * @generated
@@ -81,6 +83,16 @@ public class QueryImpl extends EObjectImpl implements Query {
 	 * @ordered
 	 */
 	protected Place place;
+
+	/**
+	 * The cached value of the '{@link #getConstraintDeclaration() <em>Constraint Declaration</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getConstraintDeclaration()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ConstraintDeclaration> constraintDeclaration;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -210,6 +222,19 @@ public class QueryImpl extends EObjectImpl implements Query {
 	 * @generated
 	 */
 	@Override
+	public EList<ConstraintDeclaration> getConstraintDeclaration() {
+		if (constraintDeclaration == null) {
+			constraintDeclaration = new EObjectContainmentEList<ConstraintDeclaration>(ConstraintDeclaration.class, this, QueryPackage.QUERY__CONSTRAINT_DECLARATION);
+		}
+		return constraintDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case QueryPackage.QUERY__PLACEHOLDER:
@@ -218,6 +243,8 @@ public class QueryImpl extends EObjectImpl implements Query {
 				return basicSetTarget(null, msgs);
 			case QueryPackage.QUERY__PLACE:
 				return basicSetPlace(null, msgs);
+			case QueryPackage.QUERY__CONSTRAINT_DECLARATION:
+				return ((InternalEList<?>)getConstraintDeclaration()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -237,6 +264,8 @@ public class QueryImpl extends EObjectImpl implements Query {
 				return getTarget();
 			case QueryPackage.QUERY__PLACE:
 				return getPlace();
+			case QueryPackage.QUERY__CONSTRAINT_DECLARATION:
+				return getConstraintDeclaration();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -261,6 +290,10 @@ public class QueryImpl extends EObjectImpl implements Query {
 			case QueryPackage.QUERY__PLACE:
 				setPlace((Place)newValue);
 				return;
+			case QueryPackage.QUERY__CONSTRAINT_DECLARATION:
+				getConstraintDeclaration().clear();
+				getConstraintDeclaration().addAll((Collection<? extends ConstraintDeclaration>)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -284,6 +317,9 @@ public class QueryImpl extends EObjectImpl implements Query {
 			case QueryPackage.QUERY__PLACE:
 				setPlace((Place)null);
 				return;
+			case QueryPackage.QUERY__CONSTRAINT_DECLARATION:
+				getConstraintDeclaration().clear();
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -304,6 +340,8 @@ public class QueryImpl extends EObjectImpl implements Query {
 				return target != null;
 			case QueryPackage.QUERY__PLACE:
 				return place != null;
+			case QueryPackage.QUERY__CONSTRAINT_DECLARATION:
+				return constraintDeclaration != null && !constraintDeclaration.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}

@@ -72,6 +72,7 @@ public final class Messages extends NLS {
 	public static String QueryMenu_Value;
 	public static String QueryMenu_PropertyConstraint;
 	public static String QueryMenu_AttributeConstraint;
+	public static String QueryMenu_ConstraintInstance;
 	public static String QueryMenu_SimpleFB;
 	public static String QueryMenu_BasicFB;
 	public static String QueryMenu_CompositeFB;
@@ -93,6 +94,7 @@ public final class Messages extends NLS {
 	public static String QueryMenu_TypedSubappOccurrence;
 	public static String QueryMenu_Pin;
 	public static String QueryMenu_Placeholder;
+	public static String QueryMenu_ConstraintDeclaration;
 	public static String QueryMenu_PinTarget;
 	public static String QueryMenu_Attribute;
 	public static String QueryMenu_AttributeDeclaration;

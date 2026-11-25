@@ -23,7 +23,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConnectionRouter;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryTreeLayout;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintInstance;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.FieldConstraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.SnapToGrid;
@@ -48,6 +50,9 @@ public class QueryDiagramEditPart extends AbstractDiagramEditPart {
 					&& getViewer().getEditPartRegistry().get(getNodeElement(element)) instanceof final EditPart node) {
 				node.refresh();
 			}
+			if (notification.getFeature() == QueryPackage.Literals.CONSTRAINT_DECLARATION__NAME) {
+				refreshConstraintInstanceNodes();
+			}
 		}
 
 		private static EObject getNodeElement(final EObject element) {
@@ -55,6 +60,11 @@ public class QueryDiagramEditPart extends AbstractDiagramEditPart {
 			return element instanceof FieldConstraint ? element.eContainer() : element;
 		}
 	};
+
+	private void refreshConstraintInstanceNodes() {
+		getChildren().stream().filter(child -> child.getModel() instanceof ConstraintInstance)
+				.forEach(EditPart::refresh);
+	}
 
 	@Override
 	public QueryDiagram getModel() {

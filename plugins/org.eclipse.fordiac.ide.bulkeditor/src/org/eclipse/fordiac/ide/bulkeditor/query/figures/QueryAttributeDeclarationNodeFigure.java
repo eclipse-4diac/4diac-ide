@@ -12,40 +12,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query.figures;
 
-import java.util.List;
-
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeDeclaration;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 
 /** Node of an attribute declaration showing the attribute name. */
-public class QueryAttributeDeclarationNodeFigure extends QueryNodeFigure {
+public class QueryAttributeDeclarationNodeFigure extends QueryValueNodeFigure {
 
 	private static final int MIN_VALUE_WIDTH = 160;
 
-	private final Label nameLabel = QueryValueLabel.createGrowing(MIN_VALUE_WIDTH);
-
 	public QueryAttributeDeclarationNodeFigure(final AttributeDeclaration attributeDeclaration) {
 		super(attributeDeclaration);
-		final Figure body = createBody();
-		body.add(createValueRow(QueryPackage.Literals.ATTRIBUTE_DECLARATION__NAME.getName(), nameLabel));
-		add(body);
-	}
-
-	@Override
-	public AttributeDeclaration getElement() {
-		return (AttributeDeclaration) super.getElement();
-	}
-
-	@Override
-	public void refresh() {
-		super.refresh();
-		nameLabel.setText(getElement().getName() != null ? getElement().getName() : ""); //$NON-NLS-1$
-	}
-
-	@Override
-	protected List<EditableValue> getEditableValues() {
-		return List.of(new EditableValue(nameLabel, getElement(), QueryPackage.Literals.ATTRIBUTE_DECLARATION__NAME));
+		addValue(QueryPackage.Literals.ATTRIBUTE_DECLARATION__NAME, QueryValueLabel.createGrowing(MIN_VALUE_WIDTH));
 	}
 }

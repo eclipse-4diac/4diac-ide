@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Query#getPlaceholder <em>Placeholder</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Query#getTarget <em>Target</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Query#getPlace <em>Place</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Query#getConstraintDeclaration <em>Constraint Declaration</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage#getQuery()
@@ -92,5 +93,17 @@ public interface Query extends EObject {
 	 * @generated
 	 */
 	void setPlace(Place value);
+
+	/**
+	 * Returns the value of the '<em><b>Constraint Declaration</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.bulkeditor.query.model.ConstraintDeclaration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Constraint Declaration</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage#getQuery_ConstraintDeclaration()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ConstraintDeclaration> getConstraintDeclaration();
 
 } // Query
