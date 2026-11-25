@@ -16,14 +16,14 @@ import java.nio.file.Path;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.export.ExportException;
-import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportTemplate;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
+import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 
-public class CMakeConfigTemplate extends ForteNgExportTemplate {
+public class CMakeConfigTemplate extends CMakeListsTemplate {
 
 	public CMakeConfigTemplate(final IProject project) {
-		super(generateConfigTemplateName(project), Path.of("")); //$NON-NLS-1$
+		super(generateConfigTemplateName(project), project, Path.of(""), Path.of("")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -31,6 +31,14 @@ public class CMakeConfigTemplate extends ForteNgExportTemplate {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("# ").append(HEADER_TEXT).append(System.lineSeparator()).append(System.lineSeparator()); //$NON-NLS-1$
 		builder.append("@PACKAGE_INIT@").append(System.lineSeparator()); //$NON-NLS-1$
+		builder.append(System.lineSeparator());
+		builder.append("include(CMakeFindDependencyMacro)"); //$NON-NLS-1$
+		builder.append(System.lineSeparator());
+		builder.append(generateFindDependency(FORTE, FORTE_VERSION));
+		for (final Required dep : getExternalDependencies()) {
+			builder.append(generateFindDependency(generateTargetName(dep.getSymbolicName()),
+					generateVersionRange(dep.getVersion())));
+		}
 		builder.append(System.lineSeparator());
 		builder.append("include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@-export.cmake)"); //$NON-NLS-1$
 		builder.append(System.lineSeparator());
