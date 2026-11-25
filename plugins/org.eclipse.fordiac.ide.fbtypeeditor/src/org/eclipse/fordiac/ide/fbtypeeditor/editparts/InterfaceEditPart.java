@@ -59,6 +59,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.swt.widgets.Display;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 		implements NodeEditPart, AnnotableGraphicalEditPart {
@@ -140,9 +141,15 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 			@Override
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
-				refresh();
-				if (LibraryElementPackage.eINSTANCE.getEvent_With().equals(notification.getFeature())) {
-					refreshWiths();
+				if (!notification.isTouch()) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refresh();
+							if (LibraryElementPackage.eINSTANCE.getEvent_With().equals(notification.getFeature())) {
+								refreshWiths();
+							}
+						}
+					});
 				}
 			}
 

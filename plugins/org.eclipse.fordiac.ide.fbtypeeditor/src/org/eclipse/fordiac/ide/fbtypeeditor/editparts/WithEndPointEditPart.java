@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
+import org.eclipse.swt.widgets.Display;
 
 public class WithEndPointEditPart extends AbstractConnectableEditPart {
 
@@ -41,7 +42,11 @@ public class WithEndPointEditPart extends AbstractConnectableEditPart {
 
 			if (LibraryElementPackage.Literals.IINTERFACE_ELEMENT__TYPE == notification.getFeature()
 					&& !notification.isTouch()) {
-				updateLineColor(getFigure());
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						updateLineColor(getFigure());
+					}
+				});
 			}
 		}
 	};

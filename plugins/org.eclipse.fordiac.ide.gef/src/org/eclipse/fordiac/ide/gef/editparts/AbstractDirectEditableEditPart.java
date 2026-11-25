@@ -23,14 +23,11 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.swt.widgets.Display;
 
 /** The Class AbstractDirectEditableEditPart. */
 public abstract class AbstractDirectEditableEditPart extends AbstractConnectableEditPart {
@@ -41,7 +38,11 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
-				refreshName();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshName();
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}
@@ -56,14 +57,18 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 		getNameLabel().setText(getINamedElement().getName());
 	}
 
-	/** Gets the i named element.
+	/**
+	 * Gets the i named element.
 	 *
-	 * @return the i named element */
+	 * @return the i named element
+	 */
 	public abstract INamedElement getINamedElement();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate() */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
+	 */
 	@Override
 	public void activate() {
 		super.activate();
@@ -73,9 +78,11 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate() */
+	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
+	 */
 	@Override
 	public void deactivate() {
 		super.deactivate();
@@ -94,9 +101,13 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef. Request) */
+	 * @see
+	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef.
+	 * Request)
+	 */
 	@Override
 	public void performRequest(final Request request) {
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT && isDirectEditable()) {
@@ -110,27 +121,16 @@ public abstract class AbstractDirectEditableEditPart extends AbstractConnectable
 		return new LabelDirectEditManager(this, getNameLabel());
 	}
 
-	/** Gets the name label.
+	/**
+	 * Gets the name label.
 	 *
-	 * @return the name label */
+	 * @return the name label
+	 */
 	public abstract Label getNameLabel();
 
 	/** performs the directEdit. */
 	public void performDirectEdit() {
 		createDirectEditManager().show();
-	}
-
-	// TODO already duplicated on several places put it into a util class
-	public static void executeCommand(final Command cmd) {
-		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
-		if (currentActiveEditor != null) {
-			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
-			if (viewer != null) {
-				viewer.getEditDomain().getCommandStack().execute(cmd);
-				return;
-			}
-		}
-		cmd.execute();
 	}
 
 	@SuppressWarnings("static-method") // can be overridden by subclasses

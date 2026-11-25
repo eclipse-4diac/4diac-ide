@@ -54,6 +54,7 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.widgets.Display;
 
 public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart {
 	private static final Insets OUTPUT_EVENT_INSETS = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
@@ -63,7 +64,13 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refreshEventLabel(getNameLabel());
+			if (!notification.isTouch()) {
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshEventLabel(getNameLabel());
+					}
+				});
+			}
 		}
 	};
 
@@ -86,7 +93,11 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		private void handleSet(final Notification notification) {
 			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
 					&& (isOutputEvent(notification) || isAdapterOutputEvent(notification))) {
-				refreshEventLabel(getNameLabel());
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshEventLabel(getNameLabel());
+					}
+				});
 			}
 		}
 
@@ -99,9 +110,15 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		}
 
 		private void handleRemove(final Notification notification) {
-			if ((notification.getOldValue() == getAction().getOutput())
+			if (notification.getOldValue() == getAction().getOutput()
 					|| isAdapterNotification(notification.getOldValue(), getAction().getOutput())) {
-				executeCommand(new ChangeOutputCommand(getAction(), null));
+				Display.getDefault().execute(() -> {
+					if (isActive() && (notification.getOldValue() == getAction().getOutput()
+							|| isAdapterNotification(notification.getOldValue(), getAction().getOutput()))) {
+						getViewer().getEditDomain().getCommandStack()
+								.execute(new ChangeOutputCommand(getAction(), null));
+					}
+				});
 			}
 		}
 	};

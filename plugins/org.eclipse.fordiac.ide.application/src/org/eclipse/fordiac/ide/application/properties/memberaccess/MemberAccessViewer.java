@@ -37,6 +37,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.ScrollBar;
@@ -194,14 +195,13 @@ public class MemberAccessViewer {
 		});
 	}
 
-	private static void forwardScrollEvent(Scrollable scrollable, MouseEvent event) {
+	private static void forwardScrollEvent(final Scrollable scrollable, final MouseEvent event) {
 		Composite p = scrollable.getParent();
 		while (p != null) {
 			if (p instanceof final ScrolledComposite sc) {
 				final ScrollBar parentVBar = sc.getVerticalBar();
 				if (parentVBar != null && parentVBar.isVisible()) {
-					parentVBar
-							.setSelection(parentVBar.getSelection() + parentVBar.getIncrement() * -event.count);
+					parentVBar.setSelection(parentVBar.getSelection() + parentVBar.getIncrement() * -event.count);
 					final Event fwd = new Event();
 					fwd.widget = parentVBar;
 					fwd.detail = SWT.NONE;
@@ -213,4 +213,7 @@ public class MemberAccessViewer {
 		}
 	}
 
+	public Control getControl() {
+		return viewer.getControl();
+	}
 }

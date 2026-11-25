@@ -47,11 +47,16 @@ public class FBTypeContentOutline extends ContentOutlinePage {
 			final int type = notification.getEventType();
 			if ((type == Notification.ADD || type == Notification.ADD_MANY)
 					&& !getTreeViewer().getControl().isDisposed()) {
-				// trigger expandAll after viewer has been refreshed
-				// use a larger delay than AdapterFactoryContentProvider#getViewerRefreshDelay()
-				Display.getDefault().timerExec(300, () -> {
+				// scheduling a timer with timerExec must also be done on the Display thread
+				Display.getDefault().execute(() -> {
 					if (!getTreeViewer().getControl().isDisposed()) {
-						getTreeViewer().expandAll();
+						// trigger expandAll after viewer has been refreshed
+						// use a larger delay than AdapterFactoryContentProvider#getViewerRefreshDelay()
+						Display.getDefault().timerExec(300, () -> {
+							if (!getTreeViewer().getControl().isDisposed()) {
+								getTreeViewer().expandAll();
+							}
+						});
 					}
 				});
 			}

@@ -95,7 +95,7 @@ public class StructEditingComposite extends Composite implements CommandExecutor
 	};
 
 	private void notifyRefresh() {
-		Display.getDefault().syncExec(() -> {
+		Display.getDefault().execute(() -> {
 			if (null != structType && natTable != null && !natTable.isDisposed() && !blockRefresh) {
 				natTable.refresh();
 			}

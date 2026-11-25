@@ -70,6 +70,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditPart {
 	private static final int TOP_BOTTOM_MARGIN = 1;
@@ -180,10 +181,18 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			switch (notification.getEventType()) {
 			case Notification.ADD, Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE,
 					Notification.REMOVE_MANY:
-				refreshChildren();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshChildren();
+					}
+				});
 				break;
 			case Notification.SET:
-				refreshVisuals();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshVisuals();
+					}
+				});
 				break;
 			default:
 				break;
@@ -199,12 +208,20 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 			case Notification.ADD:
 				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
 						.equals(notification.getFeature())) {
-					refreshVisuals();
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshVisuals();
+						}
+					});
 					break;
 				}
 				//$FALL-THROUGH$
 			case Notification.ADD_MANY, Notification.MOVE, Notification.REMOVE, Notification.REMOVE_MANY:
-				refreshChildren();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshChildren();
+					}
+				});
 				break;
 			default:
 				break;

@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.widgets.Display;
 
 public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditPart {
 
@@ -53,7 +54,11 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_RoutingData().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getFBNetwork_NetworkElements().equals(feature)) {
-				getParent().layoutExpandedInterface();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						getParent().layoutExpandedInterface();
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}

@@ -37,14 +37,15 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEdi
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
@@ -66,10 +67,14 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.swt.widgets.Display;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 
 	private DirectEditManager manager;
+
+	private ECC adaptedECC;
+	private InterfaceList adaptedInterfaceList;
 
 	private static final int NORMAL_WIDTH = 2;
 
@@ -81,12 +86,20 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 				// if newValue is null we are in the deletion process
 				// refresh only when the event was deleted, must not refresh deleted transition
 				if ((notification.getOldValue() instanceof Event) || "1".equals(notification.getOldValue())) { //$NON-NLS-1$
-					refresh();
-					// tooltip does not contain transition condition, no refresh needed
+					Display.getDefault().execute(() -> {
+						if (isActive() && getModel().getECC() != null && getModel().getSource() != null) {
+							refresh();
+							// tooltip does not contain transition condition, no refresh needed
+						}
+					});
 				}
 			} else {
-				refreshTransitionTooltip();
-				refresh();
+				Display.getDefault().execute(() -> {
+					if (isActive() && getModel().getECC() != null && getModel().getSource() != null) {
+						refreshTransitionTooltip();
+						refresh();
+					}
+				});
 			}
 		}
 	};
@@ -114,9 +127,17 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.REMOVE) {
-				if ((notification.getOldValue() == getModel().getConditionEvent()) || ECActionOutputEventEditPart
+				if (notification.getOldValue() == getModel().getConditionEvent() || ECActionOutputEventEditPart
 						.isAdapterNotification(notification.getOldValue(), getModel().getConditionEvent())) {
-					AbstractDirectEditableEditPart.executeCommand(new ChangeConditionEventCommand(getModel(), "")); //$NON-NLS-1$
+					Display.getDefault().execute(() -> {
+						if (isActive() && getModel().getECC() != null
+								&& (notification.getOldValue() == getModel().getConditionEvent()
+										|| ECActionOutputEventEditPart.isAdapterNotification(notification.getOldValue(),
+												getModel().getConditionEvent()))) {
+							getViewer().getEditDomain().getCommandStack()
+									.execute(new ChangeConditionEventCommand(getModel(), "")); //$NON-NLS-1$
+						}
+					});
 				}
 			} else if (notification.getEventType() == Notification.SET) {
 				if (null != getModel().getConditionEvent()) {
@@ -135,7 +156,11 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 				if ((ce.getName().equals(newValue))
 						|| ((ce.getBlockFBNetworkElement() instanceof final AdapterFB adapterFB)
 								&& (adapterFB.getName().equals(newValue)))) {
-					refresh();
+					Display.getDefault().execute(() -> {
+						if (isActive() && getModel().getECC() != null && getModel().getSource() != null) {
+							refresh();
+						}
+					});
 				}
 			}
 		}
@@ -149,7 +174,11 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 					final String expresion = STStringTokenHandling.replaceSTToken(getModel().getConditionExpression(),
 							notification.getOldStringValue(), notification.getNewStringValue());
 					getModel().setConditionExpression(expresion);
-					refresh();
+					Display.getDefault().execute(() -> {
+						if (isActive() && getModel().getECC() != null && getModel().getSource() != null) {
+							refresh();
+						}
+					});
 				}
 			}
 		}
@@ -311,11 +340,12 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			getModel().eAdapters().add(adapter);
-			getModel().getECC().eAdapters().add(adapter);
+			adaptedECC = getModel().getECC();
+			adaptedInterfaceList = adaptedECC.getBasicFBType().getInterfaceList();
 
-			// Adapt to the fbtype so that we get informed on interface changes
-			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().add(interfaceAdapter);
+			getModel().eAdapters().add(adapter);
+			adaptedECC.eAdapters().add(adapter);
+			adaptedInterfaceList.eAdapters().add(interfaceAdapter);
 		}
 	}
 
@@ -324,8 +354,10 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(adapter);
-			getModel().getECC().eAdapters().remove(adapter);
-			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
+			adaptedECC.eAdapters().remove(adapter);
+			adaptedInterfaceList.eAdapters().remove(interfaceAdapter);
+			adaptedECC = null;
+			adaptedInterfaceList = null;
 		}
 	}
 

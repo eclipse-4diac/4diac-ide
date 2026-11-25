@@ -67,6 +67,7 @@ import org.eclipse.gef.Request;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 
 public class DeviceEditPart extends AbstractPositionableElementEditPart implements NodeEditPart {
 	private ResourceContainer resContainer;
@@ -104,14 +105,21 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		return new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
 				final Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature) && notification
-						.getNewValue() instanceof final org.eclipse.fordiac.ide.model.libraryElement.Color col) {
-					AbstractViewEditPart.setColor(getFigure(), col);
-				} else {
-					super.notifyChanged(notification);
-					refreshChildren();
-					refreshTargetConnections();
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							AbstractViewEditPart.setColor(getFigure(), getModel().getColor());
+						}
+					});
+				} else if (!notification.isTouch()) {
+					Display.getDefault().execute(() -> {
+						if (isActive()) {
+							refreshChildren();
+							refreshTargetConnections();
+						}
+					});
 				}
 			}
 		};

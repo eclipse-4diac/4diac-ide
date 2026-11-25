@@ -35,6 +35,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.requests.DirectEditRequest;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public class InstanceCommentEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
@@ -76,7 +77,11 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-				refreshValue();
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						refreshValue();
+					}
+				});
 			}
 		}
 	};

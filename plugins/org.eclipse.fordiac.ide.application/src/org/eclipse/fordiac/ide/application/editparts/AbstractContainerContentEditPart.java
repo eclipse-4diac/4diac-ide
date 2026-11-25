@@ -37,6 +37,7 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart {
 	private static class ContainerMarqueeDragTracker extends FBNetworkRootEditPart.FBNetworkMarqueeDragTracker {
@@ -57,7 +58,11 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
-				getChildren().forEach(GraphicalEditPart::refresh);
+				Display.getDefault().execute(() -> {
+					if (isActive()) {
+						getChildren().forEach(GraphicalEditPart::refresh);
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}
