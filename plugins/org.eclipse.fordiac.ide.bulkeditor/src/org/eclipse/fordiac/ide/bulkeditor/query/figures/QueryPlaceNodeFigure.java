@@ -20,9 +20,9 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 import org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler;
 import org.eclipse.osgi.util.NLS;
 
@@ -42,7 +42,7 @@ public class QueryPlaceNodeFigure extends QueryNodeFigure {
 	};
 	private Predicate<String> subappHierarchyElementExists = _ -> true;
 
-	public QueryPlaceNodeFigure(final EObject place) {
+	public QueryPlaceNodeFigure(final Place place) {
 		super(place);
 		ignoreLinkedLibrariesToggle.addActionListener(_ -> changeIgnoreLinkedLibraries());
 		projectToggle.addActionListener(_ -> changeScope(false));
@@ -61,6 +61,11 @@ public class QueryPlaceNodeFigure extends QueryNodeFigure {
 		add(body);
 	}
 
+	@Override
+	public Place getElement() {
+		return (Place) super.getElement();
+	}
+
 	public void setSubappHierarchyButtonAction(final Runnable subappHierarchyButtonAction) {
 		this.subappHierarchyButtonAction = subappHierarchyButtonAction;
 	}
@@ -72,11 +77,10 @@ public class QueryPlaceNodeFigure extends QueryNodeFigure {
 	@Override
 	public void refresh() {
 		super.refresh();
-		final boolean isSubappHierarchyScope = QueryModelHelper.isSubappHierarchyScope(getElement());
+		final boolean isSubappHierarchyScope = getElement().isSubappHierarchy();
 		projectToggle.setSelected(!isSubappHierarchyScope);
 		subappHierarchyToggle.setSelected(isSubappHierarchyScope);
-		ignoreLinkedLibrariesToggle.setSelected(
-				QueryModelHelper.getBooleanFeature(getElement(), QueryModelHelper.FEATURE_IGNORE_LINKED_LIBRARIES));
+		ignoreLinkedLibrariesToggle.setSelected(getElement().isIgnoreLinkedLibraries());
 		showOption(isSubappHierarchyScope ? selectSubappHierarchyButton : ignoreLinkedLibrariesToggle);
 		refreshSubappHierarchy(isSubappHierarchyScope);
 	}
@@ -93,7 +97,7 @@ public class QueryPlaceNodeFigure extends QueryNodeFigure {
 		if (!shown) {
 			return;
 		}
-		final List<String> hierarchy = QueryModelHelper.getSubappHierarchy(getElement());
+		final List<String> hierarchy = getElement().getSubappHierarchyElements();
 		if (hierarchy.isEmpty()) {
 			subappHierarchyFigure.add(createElementLabel(Messages.QueryScope_NoSubappHierarchy, true));
 		}
@@ -129,12 +133,12 @@ public class QueryPlaceNodeFigure extends QueryNodeFigure {
 	}
 
 	private void changeIgnoreLinkedLibraries() {
-		changeFeature(getElement(), QueryModelHelper.FEATURE_IGNORE_LINKED_LIBRARIES,
+		changeFeature(getElement(), QueryPackage.Literals.PLACE__IGNORE_LINKED_LIBRARIES,
 				Boolean.valueOf(ignoreLinkedLibrariesToggle.isSelected()));
 	}
 
 	private void changeScope(final boolean subappHierarchy) {
-		changeFeature(getElement(), QueryModelHelper.FEATURE_SUBAPP_HIERARCHY, Boolean.valueOf(subappHierarchy));
+		changeFeature(getElement(), QueryPackage.Literals.PLACE__SUBAPP_HIERARCHY, Boolean.valueOf(subappHierarchy));
 		refresh();
 	}
 }

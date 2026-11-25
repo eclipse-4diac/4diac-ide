@@ -14,11 +14,9 @@ package org.eclipse.fordiac.ide.bulkeditor.query;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.bulkeditor.query.editparts.QueryDiagram;
 import org.eclipse.fordiac.ide.bulkeditor.query.editparts.QueryEditPartFactory;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
@@ -60,10 +58,9 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 	}
 
 	/** Shows the query, keeping the collapsed nodes if it is already shown. */
-	public void setQuery(final Resource resource) {
-		final EObject queryRoot = resource.getContents().isEmpty() ? null : resource.getContents().get(0);
-		if (diagram == null || diagram.getQueryRoot() != queryRoot) {
-			diagram = new QueryDiagram(queryRoot);
+	public void setQuery(final Query query) {
+		if (diagram == null || diagram.getQuery() != query) {
+			diagram = new QueryDiagram(query);
 			setContents(diagram);
 		}
 	}
@@ -72,10 +69,8 @@ public final class QueryGraphicalViewer extends AdvancedScrollingGraphicalViewer
 		return ((ScalableFreeformRootEditPart) getRootEditPart()).getZoomManager();
 	}
 
-	public void createContextMenu(final EPackage queryPackage, final Runnable onSave, final Runnable onLoad,
-			final Runnable onSearch) {
-		setContextMenu(new QueryContextMenuProvider(this, getZoomManager(), actionRegistry, queryPackage, onSave,
-				onLoad, onSearch));
+	public void createContextMenu(final Runnable onSave, final Runnable onLoad, final Runnable onSearch) {
+		setContextMenu(new QueryContextMenuProvider(this, getZoomManager(), actionRegistry, onSave, onLoad, onSearch));
 	}
 
 	private KeyHandler createKeyHandler(final IEditorPart editor) {

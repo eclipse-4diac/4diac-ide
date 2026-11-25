@@ -24,7 +24,14 @@
   </extension>
   <extension point="org.eclipse.mylyn.wikitext.ui.contentAssist">
     <templates markupLanguage="AsciiDoc">
-       <template name="fbt" description="%template.fbt.macro" content="fbt:${text}[${param}] $"/>
+       <template name="adp" description="%template.adp.macro" content="adp:${type_name}[${info_identifier}] $"/>
+       <template name="atp" description="%template.atp.macro" content="atp:${type_name}[${info_identifier}] $"/>
+       <template name="dtp" description="%template.dtp.macro" content="dtp:${type_name}[${info_identifier}] $"/>
+       <template name="fbt" description="%template.fbt.macro" content="fbt:${type_name}[${info_identifier}] $"/>
+       <template name="fct" description="%template.fct.macro" content="fct:${type_name}[${info_identifier}] $"/>
+       <template name="gcf" description="%template.gcf.macro" content="gcf:${type_name}[${info_identifier}] $"/>
+       <template name="sub" description="%template.sub.macro" content="sub:${type_name}[${info_identifier}] $"/>
+       <template name="sys" description="%template.sys.macro" content="sys:${type_name}[${info_identifier}] $"/>
      </templates>
   </extension>
 

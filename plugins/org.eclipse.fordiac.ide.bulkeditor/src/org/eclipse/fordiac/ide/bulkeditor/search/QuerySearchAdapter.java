@@ -15,13 +15,27 @@ package org.eclipse.fordiac.ide.bulkeditor.search;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorMode;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeConstraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Connection;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.FieldConstraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Instance;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.NetworkElement;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Occurrence;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.PIN;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.PinTarget;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.PropertyConstraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Type;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.ConnectionConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.InstanceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig.OccurrenceConfig;
@@ -42,23 +56,13 @@ public class QuerySearchAdapter {
 	private QuerySearchAdapter() {
 	}
 
-	public static Map<String, String> resolvePlaceholders(final EObject queryRoot) {
+	public static Map<String, String> resolvePlaceholders(final Query query) {
 		final Map<String, String> result = new HashMap<>();
-		if (queryRoot == null) {
-			return result;
-		}
-		final EStructuralFeature feature = queryRoot.eClass()
-				.getEStructuralFeature(QueryModelHelper.FEATURE_PLACEHOLDER);
-		if (feature == null || !(queryRoot.eGet(feature) instanceof final List<?> placeholders)) {
-			return result;
-		}
-		for (final Object obj : placeholders) {
-			if (obj instanceof final EObject placeholder) {
-				final String key = (String) QueryModelHelper.getFeatureValue(placeholder, QueryModelHelper.FEATURE_KEY);
-				final String val = (String) QueryModelHelper.getFeatureValue(placeholder, QueryModelHelper.FEATURE_VAL);
-				if (key != null && !key.isBlank()) {
-					result.put(key, val != null ? val : ""); //$NON-NLS-1$
-				}
+		for (final Placeholder placeholder : query.getPlaceholder()) {
+			final String key = placeholder.getKey();
+			final String val = placeholder.getVal();
+			if (key != null && !key.isBlank()) {
+				result.put(key, val != null ? val : ""); //$NON-NLS-1$
 			}
 		}
 		return result;
@@ -79,59 +83,44 @@ public class QuerySearchAdapter {
 		return sb.toString();
 	}
 
-	public static BulkEditorMode resolveTargetMode(final EObject queryRoot) {
-		final EObject target = getContainedChild(queryRoot, QueryModelHelper.REF_TARGET);
-		final EObject targetOption = (target != null) ? getContainedChild(target, QueryModelHelper.REF_TARGET) : null;
-
-		if (targetOption == null) {
-			return BulkEditorMode.VARIABLE;
-		}
-
-		return switch (targetOption.eClass().getName()) {
-		case QueryModelHelper.ATTRIBUTE_DECLARATION -> BulkEditorMode.SIMPLE_ATTRIBUTE;
-		case QueryModelHelper.ATTRIBUTE -> BulkEditorMode.ADVANCED_ATTRIBUTE;
-		default -> BulkEditorMode.VARIABLE;
+	public static BulkEditorMode resolveTargetMode(final Query query) {
+		return switch (query.getTarget().getTarget()) {
+		case final AttributeDeclaration _ -> BulkEditorMode.SIMPLE_ATTRIBUTE;
+		case final org.eclipse.fordiac.ide.bulkeditor.query.model.Attribute _ -> BulkEditorMode.ADVANCED_ATTRIBUTE;
+		case null, default -> BulkEditorMode.VARIABLE;
 		};
 	}
 
-	public static IEC61499SearchFilter buildTargetSearchFilter(final EObject queryRoot) {
-		final EObject target = getContainedChild(queryRoot, QueryModelHelper.REF_TARGET);
-		final EObject targetOption = (target != null) ? getContainedChild(target, QueryModelHelper.REF_TARGET) : null;
+	public static IEC61499SearchFilter buildTargetSearchFilter(final Query query) {
+		final Map<String, String> placeholders = resolvePlaceholders(query);
 
-		if (targetOption == null) {
-			return _ -> false;
-		}
-
-		final Map<String, String> placeholders = resolvePlaceholders(queryRoot);
-		final String targetType = targetOption.eClass().getName();
-
-		return switch (targetType) {
-		case QueryModelHelper.PIN_TARGET -> buildDefaultFilter(targetOption, BulkEditorMode.VARIABLE, placeholders);
-		case QueryModelHelper.ATTRIBUTE ->
-			buildDefaultFilter(targetOption, BulkEditorMode.ADVANCED_ATTRIBUTE, placeholders);
-		case QueryModelHelper.ATTRIBUTE_DECLARATION -> buildAttributeDeclarationFilter(targetOption, placeholders);
-		default -> _ -> false;
+		return switch (query.getTarget().getTarget()) {
+		case final PinTarget pinTarget ->
+			buildDefaultFilter(pinTarget.getConstraint(), BulkEditorMode.VARIABLE, placeholders);
+		case final org.eclipse.fordiac.ide.bulkeditor.query.model.Attribute attribute ->
+			buildDefaultFilter(attribute.getConstraint(), BulkEditorMode.ADVANCED_ATTRIBUTE, placeholders);
+		case final AttributeDeclaration declaration -> buildAttributeDeclarationFilter(declaration, placeholders);
+		case null, default -> _ -> false;
 		};
 	}
 
-	private static IEC61499SearchFilter buildDefaultFilter(final EObject targetOption, final BulkEditorMode mode,
+	private static IEC61499SearchFilter buildDefaultFilter(final Constraint constraint, final BulkEditorMode mode,
 			final Map<String, String> placeholders) {
-		final FilterRecord constraint = readFilterRecord(targetOption, QueryModelHelper.REF_CONSTRAINT, placeholders);
+		final FilterRecord filter = readConstraintTree(constraint, placeholders);
 
 		return searchCandidate -> switch (searchCandidate) {
 		case final Attribute attribute when mode == BulkEditorMode.ADVANCED_ATTRIBUTE ->
-			constraint.accepts(MatchTarget.ofAttribute(attribute));
+			filter.accepts(MatchTarget.ofAttribute(attribute));
 		case final VarDeclaration varDecl when mode == BulkEditorMode.VARIABLE ->
-			constraint.accepts(MatchTarget.of(varDecl.getName(), varDecl.getTypeName(), varDecl.getComment(),
+			filter.accepts(MatchTarget.of(varDecl.getName(), varDecl.getTypeName(), varDecl.getComment(),
 					InitialValueHelper.getInitialOrDefaultValue(varDecl), varDecl));
 		case null, default -> false;
 		};
 	}
 
-	private static IEC61499SearchFilter buildAttributeDeclarationFilter(final EObject targetOption,
+	private static IEC61499SearchFilter buildAttributeDeclarationFilter(final AttributeDeclaration declaration,
 			final Map<String, String> placeholders) {
-		final String rawName = (String) QueryModelHelper.getFeatureValue(targetOption, QueryModelHelper.FEATURE_NAME);
-		final String declName = substitutePlaceholders(rawName, placeholders);
+		final String declName = substitutePlaceholders(declaration.getName(), placeholders);
 
 		if (declName == null || declName.isBlank()) {
 			return _ -> false;
@@ -142,161 +131,114 @@ public class QuerySearchAdapter {
 				&& declName.equalsIgnoreCase(PackageNameHelper.getFullTypeName(attribute.getAttributeDeclaration())));
 	}
 
-	public static PlaceConfig buildPlaceConfig(final EObject queryRoot) {
-		final EObject place = getContainedChild(queryRoot, QueryModelHelper.REF_PLACE);
-		final Map<String, String> placeholders = resolvePlaceholders(queryRoot);
+	public static PlaceConfig buildPlaceConfig(final Query query) {
+		final Place place = query.getPlace();
+		final Map<String, String> placeholders = resolvePlaceholders(query);
 		// in attribute mode traverse pins only with pin node
-		final boolean pinsImplicit = QueryModelHelper.isPinTargetQuery(queryRoot);
+		final boolean pinsImplicit = QueryModelHelper.isPinTargetQuery(query);
 
 		//@formatter:off
 		return new PlaceConfig(
-		        buildTypeConfig(place, QueryModelHelper.REF_SIMPLE_TYPE, placeholders, pinsImplicit),
-		        buildTypeConfig(place, QueryModelHelper.REF_BASIC_TYPE, placeholders, pinsImplicit),
-		        buildTypeConfig(place, QueryModelHelper.REF_COMPOSITE_TYPE, placeholders, pinsImplicit),
-		        buildTypeConfig(place, QueryModelHelper.REF_SERVICE_INTERFACE_TYPE, placeholders, pinsImplicit),
-		        buildTypeConfig(place, QueryModelHelper.REF_FUNCTION_TYPE, placeholders, pinsImplicit),
-		        buildTypeConfig(place, QueryModelHelper.REF_SUBAPP_TYPE, placeholders, pinsImplicit),
-		        buildTypeConfig(place, QueryModelHelper.REF_STRUCT_TYPE, placeholders, pinsImplicit),
-		        buildTypeConfig(place, QueryModelHelper.REF_ATTRIBUTE_TYPE, placeholders, pinsImplicit),
-		        buildInstanceConfig(place, QueryModelHelper.REF_SIMPLE_FB, placeholders, pinsImplicit),
-		        buildInstanceConfig(place, QueryModelHelper.REF_BASIC_FB, placeholders, pinsImplicit),
-		        buildInstanceConfig(place, QueryModelHelper.REF_COMPOSITE_FB, placeholders, pinsImplicit),
-		        buildInstanceConfig(place, QueryModelHelper.REF_SERVICE_INTERFACE_FB, placeholders, pinsImplicit),
-		        buildInstanceConfig(place, QueryModelHelper.REF_FUNCTION_FB, placeholders, pinsImplicit),
-		        buildInstanceConfig(place, QueryModelHelper.REF_TYPED_SUBAPP, placeholders, pinsImplicit),
-		        buildInstanceConfig(place, QueryModelHelper.REF_UNTYPED_SUBAPP, placeholders, pinsImplicit),
-		        buildConnectionConfig(place, placeholders),
-		        readIgnoreLinkedLibraries(queryRoot),
-		        QueryModelHelper.isSubappHierarchyScope(place),
-		        QueryModelHelper.getSubappHierarchy(place));
+		        buildTypeConfig(place.getSimpleType(), placeholders, pinsImplicit),
+		        buildTypeConfig(place.getBasicType(), placeholders, pinsImplicit),
+		        buildTypeConfig(place.getCompositeType(), placeholders, pinsImplicit),
+		        buildTypeConfig(place.getServiceInterfaceType(), placeholders, pinsImplicit),
+		        buildTypeConfig(place.getFunctionType(), placeholders, pinsImplicit),
+		        buildTypeConfig(place.getSubappType(), placeholders, pinsImplicit),
+		        buildTypeConfig(place.getStructType(), placeholders, pinsImplicit),
+		        buildTypeConfig(place.getAttributeType(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getSimpleFB(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getBasicFB(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getCompositeFB(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getServiceInterfaceFB(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getFunctionFB(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getTypedSubapp(), placeholders, pinsImplicit),
+		        buildInstanceConfig(place.getUntypedSubapp(), placeholders, pinsImplicit),
+		        buildConnectionConfig(place.getConnection(), placeholders),
+		        place.isIgnoreLinkedLibraries(),
+		        place.isSubappHierarchy(),
+		        List.copyOf(place.getSubappHierarchyElements()));
 		//@formatter:on
 	}
 
-	private static boolean readIgnoreLinkedLibraries(final EObject queryRoot) {
-		final EObject place = getContainedChild(queryRoot, QueryModelHelper.REF_PLACE);
-		if (place == null) {
-			return true;
-		}
-		final var feature = place.eClass().getEStructuralFeature(QueryModelHelper.FEATURE_IGNORE_LINKED_LIBRARIES);
-		if (feature == null || !(place.eGet(feature) instanceof final Boolean ignore)) {
-			return true;
-		}
-
-		return ignore.booleanValue();
-	}
-
-	private static TypeConfig buildTypeConfig(final EObject place, final String refName,
-			final Map<String, String> placeholders, final boolean pinsImplicit) {
-		if (place == null) {
+	private static TypeConfig buildTypeConfig(final Type type, final Map<String, String> placeholders,
+			final boolean pinsImplicit) {
+		if (type == null) {
 			return TypeConfig.INACTIVE;
 		}
-		final EObject child = getContainedChild(place, refName);
-		if (child == null) {
-			return TypeConfig.INACTIVE;
-		}
-		final FilterRecord constraintRecord = readFilterRecord(child, QueryModelHelper.REF_CONSTRAINT, placeholders);
-
-		return new TypeConfig(true, constraintRecord, buildPinConfig(child, placeholders, pinsImplicit));
+		return new TypeConfig(true, readConstraintTree(type.getConstraint(), placeholders),
+				buildPinConfig(type.getPin(), placeholders, pinsImplicit));
 	}
 
-	private static InstanceConfig buildInstanceConfig(final EObject place, final String refName,
-			final Map<String, String> placeholders, final boolean pinsImplicit) {
-		if (place == null) {
+	private static InstanceConfig buildInstanceConfig(final Instance instance, final Map<String, String> placeholders,
+			final boolean pinsImplicit) {
+		if (instance == null) {
 			return InstanceConfig.INACTIVE;
 		}
-		final EObject child = getContainedChild(place, refName);
-		if (child == null) {
-			return InstanceConfig.INACTIVE;
-		}
-		final FilterRecord constraintRecord = readFilterRecord(child, QueryModelHelper.REF_CONSTRAINT, placeholders);
-
-		return new InstanceConfig(true, constraintRecord, readOccurrencesConfig(child, placeholders),
-				buildPinConfig(child, placeholders, pinsImplicit));
+		return new InstanceConfig(true, readConstraintTree(instance.getConstraint(), placeholders),
+				readOccurrencesConfig(instance, placeholders),
+				buildPinConfig(instance.getPin(), placeholders, pinsImplicit));
 	}
 
-	private static ConnectionConfig buildConnectionConfig(final EObject place, final Map<String, String> placeholders) {
-		final EObject child = getContainedChild(place, QueryModelHelper.REF_CONNECTION);
-		if (child == null) {
+	private static ConnectionConfig buildConnectionConfig(final Connection connection,
+			final Map<String, String> placeholders) {
+		if (connection == null) {
 			return ConnectionConfig.INACTIVE;
 		}
-		final FilterRecord constraintRecord = readFilterRecord(child, QueryModelHelper.REF_CONSTRAINT, placeholders);
-
-		return new ConnectionConfig(true, constraintRecord, readOccurrencesConfig(child, placeholders));
+		return new ConnectionConfig(true, readConstraintTree(connection.getConstraint(), placeholders),
+				readOccurrencesConfig(connection, placeholders));
 	}
 
-	private static PinConfig buildPinConfig(final EObject searchTarget, final Map<String, String> placeholders,
+	private static PinConfig buildPinConfig(final PIN pin, final Map<String, String> placeholders,
 			final boolean pinsImplicit) {
-		final EObject pin = (searchTarget != null) ? getContainedChild(searchTarget, QueryModelHelper.REF_PIN) : null;
 		if (pin == null) {
 			return pinsImplicit ? PinConfig.ACTIVE_UNFILTERED : PinConfig.INACTIVE;
 		}
-
-		final FilterRecord constraintRecord = readFilterRecord(pin, QueryModelHelper.REF_CONSTRAINT, placeholders);
-
-		return new PinConfig(true, constraintRecord);
+		return new PinConfig(true, readConstraintTree(pin.getConstraint(), placeholders));
 	}
 
-	private static FilterRecord readFilterRecord(final EObject parent, final String constraintRefName,
+	private static FilterRecord readConstraintTree(final Constraint constraint,
 			final Map<String, String> placeholders) {
-		final EObject constraint = QueryModelHelper.getContainedChild(parent, constraintRefName);
-		return readConstraintTree(constraint, placeholders);
-	}
-
-	private static FilterRecord readConstraintTree(final EObject constraint, final Map<String, String> placeholders) {
 		if (constraint == null) {
 			return FilterRecord.INACTIVE;
 		}
-		return new FilterRecord(true, QueryModelHelper.isNegatedConstraint(constraint),
-				QueryModelHelper.isAttributeConstraint(constraint),
-				readConstraintField(constraint, QueryModelHelper.FEATURE_NAME, placeholders),
-				readConstraintField(constraint, QueryModelHelper.FEATURE_TYPE, placeholders),
-				readConstraintField(constraint, QueryModelHelper.FEATURE_COMMENT, placeholders),
-				readConstraintField(constraint, QueryModelHelper.FEATURE_VALUE, placeholders),
-				readSubConstraints(constraint, QueryModelHelper.REF_OR_CONSTRAINTS, placeholders),
-				readSubConstraints(constraint, QueryModelHelper.REF_AND_CONSTRAINTS, placeholders));
+		return new FilterRecord(true, constraint.isNegate(), constraint instanceof AttributeConstraint,
+				readConstraintField(constraint, PropertyConstraint::getName, placeholders),
+				readConstraintField(constraint, PropertyConstraint::getType, placeholders),
+				readConstraintField(constraint, PropertyConstraint::getComment, placeholders),
+				readConstraintField(constraint, PropertyConstraint::getValue, placeholders),
+				readSubConstraint(constraint.getOrConstraint(), placeholders),
+				readSubConstraint(constraint.getAndConstraint(), placeholders));
 	}
 
-	private static FilterRecord readSubConstraints(final EObject constraint, final String refName,
-			final Map<String, String> placeholders) {
-		final EStructuralFeature feature = constraint.eClass().getEStructuralFeature(refName);
-		if (feature == null || !(constraint.eGet(feature) instanceof final EObject eobj)) {
-			return null;
-		}
-		return readConstraintTree(eobj, placeholders);
+	private static FilterRecord readSubConstraint(final Constraint constraint, final Map<String, String> placeholders) {
+		return constraint != null ? readConstraintTree(constraint, placeholders) : null;
 	}
 
-	private static OccurrencesConfig readOccurrencesConfig(final EObject networkElement,
+	private static OccurrencesConfig readOccurrencesConfig(final NetworkElement networkElement,
 			final Map<String, String> placeholders) {
-		return new OccurrencesConfig(
-				readOccurrenceConfig(networkElement, QueryModelHelper.REF_APPLICATION_OCCURRENCE, placeholders),
-				readOccurrenceConfig(networkElement, QueryModelHelper.REF_COMPOSITE_FB_OCCURRENCE, placeholders),
-				readOccurrenceConfig(networkElement, QueryModelHelper.REF_TYPED_SUBAPP_OCCURRENCE, placeholders));
+		return new OccurrencesConfig(readOccurrenceConfig(networkElement.getApplicationOccurrence(), placeholders),
+				readOccurrenceConfig(networkElement.getCompositeFBOccurrence(), placeholders),
+				readOccurrenceConfig(networkElement.getTypedSubappOccurrence(), placeholders));
 	}
 
-	private static OccurrenceConfig readOccurrenceConfig(final EObject networkElement, final String refName,
+	private static OccurrenceConfig readOccurrenceConfig(final Occurrence occurrence,
 			final Map<String, String> placeholders) {
-		final EObject occ = QueryModelHelper.getContainedChild(networkElement, refName);
-		if (occ == null) {
+		if (occurrence == null) {
 			return OccurrenceConfig.INACTIVE;
 		}
-		return new OccurrenceConfig(true, readFilterRecord(occ, QueryModelHelper.REF_CONSTRAINT, placeholders));
+		return new OccurrenceConfig(true, readConstraintTree(occurrence.getConstraint(), placeholders));
 	}
 
-	private static MatcherConfig readConstraintField(final EObject constraint, final String fieldName,
-			final Map<String, String> placeholders) {
-		if (constraint == null) {
-			return MatcherConfig.INACTIVE;
+	private static MatcherConfig readConstraintField(final Constraint constraint,
+			final Function<PropertyConstraint, FieldConstraint> field, final Map<String, String> placeholders) {
+		// only property constraints have field constraints
+		if (constraint instanceof final PropertyConstraint propertyConstraint
+				&& field.apply(propertyConstraint) instanceof final FieldConstraint fieldConstraint) {
+			return new MatcherConfig(true, substitutePlaceholders(fieldConstraint.getValue(), placeholders),
+					fieldConstraint.isCaseSensitive(), fieldConstraint.isWholeWord(), fieldConstraint.isEntire(),
+					fieldConstraint.isRegex());
 		}
-		final EObject fc = getContainedChild(constraint, fieldName);
-		if (fc == null) {
-			return MatcherConfig.INACTIVE;
-		}
-		final var data = QueryModelHelper.readFieldConstraint(fc);
-		return new MatcherConfig(true, substitutePlaceholders(data.value(), placeholders), data.caseSensitive(),
-				data.wholeWord(), data.entire(), data.regex());
-	}
-
-	private static EObject getContainedChild(final EObject parent, final String refName) {
-		return QueryModelHelper.getContainedChild(parent, refName);
+		return MatcherConfig.INACTIVE;
 	}
 }

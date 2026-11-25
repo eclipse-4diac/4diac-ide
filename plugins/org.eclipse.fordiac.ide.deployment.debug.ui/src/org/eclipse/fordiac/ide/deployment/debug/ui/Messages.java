@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023 Martin Erich Jobst, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -97,6 +97,9 @@ public class Messages extends NLS {
 	public static String RuntimeLaunchConfigurationTab_RuntimeGroup;
 	public static String RuntimeLaunchConfigurationTab_RuntimeTabName;
 	public static String RuntimeLaunchConfigurationTab_TraceLabel;
+	public static String SnapshotDebugHandler_Title;
+	public static String SnapshotDebugJob_Name;
+	public static String SnapshotDebugJob_NotMonitored;
 	public static String TogglePinnedHandler_PinWatch;
 	public static String TogglePinnedHandler_UnpinWatch;
 	public static String ToggleWatchSubElementsHandler_RemoveSubElementWatches;

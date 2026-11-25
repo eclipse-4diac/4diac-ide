@@ -55,6 +55,15 @@
 				perspective="org.eclipse.debug.ui.DebugPerspective">
 			</launchMode>
 		</launchConfigurationTabGroup>
+		<launchConfigurationTabGroup
+			class="org.eclipse.fordiac.ide.debug.ui.fb.FBLaunchConfigurationTabGroup"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.snapshotFBLaunchConfigurationTabGroup"
+			type="org.eclipse.fordiac.ide.deployment.debug.snapshotFBLaunch">
+			<launchMode
+				mode="debug"
+				perspective="org.eclipse.debug.ui.DebugPerspective">
+			</launchMode>
+		</launchConfigurationTabGroup>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchShortcuts">
@@ -189,6 +198,34 @@
 				</enablement>
 			</contextualLaunch>
 		</shortcut>
+		<shortcut
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.SnapshotFBLaunchShortcut"
+			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/elcl16/debuglast_co.svg"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.snapshotFBLaunchShortcut"
+			label="%snapshotFBLaunchShortcut.label"
+			modes="debug">
+			<contextualLaunch>
+				<contextLabel
+					label="%snapshotFBLaunchShortcut.debug.label"
+					mode="debug">
+				</contextLabel>
+				<enablement>
+					<or>
+						<with
+							variable="selection">
+							<reference
+								definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.SnapshotDebugDefinition" />
+						</with>
+						<!-- the selection is the editor input in editors -->
+						<with
+							variable="activeMenuSelection">
+							<reference
+								definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.SnapshotDebugDefinition" />
+						</with>
+					</or>
+				</enablement>
+			</contextualLaunch>
+		</shortcut>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -206,6 +243,11 @@
 			configTypeID="org.eclipse.fordiac.ide.deployment.debug.deploySubAppLaunch"
 			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_subapplication_typed_run.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageDeploySubApp">
+		</launchConfigurationTypeImage>
+		<launchConfigurationTypeImage
+			configTypeID="org.eclipse.fordiac.ide.deployment.debug.snapshotFBLaunch"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageSnapshotFB">
 		</launchConfigurationTypeImage>
 	</extension>
 	<extension
@@ -247,6 +289,13 @@
 		</factory>
 		<factory
 			class=""
+			adaptableType="org.eclipse.fordiac.ide.model.libraryElement.FB">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+		<factory
+			class=""
 			adaptableType="org.eclipse.fordiac.ide.systemconfiguration.editparts.DeviceEditPart">
 			<adapter
 				type="org.eclipse.debug.ui.actions.ILaunchable">
@@ -255,6 +304,13 @@
 		<factory
 			class=""
 			adaptableType="org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceEditPart">
+			<adapter
+				type="org.eclipse.debug.ui.actions.ILaunchable">
+			</adapter>
+		</factory>
+		<factory
+			class=""
+			adaptableType="org.eclipse.fordiac.ide.application.editparts.FBEditPart">
 			<adapter
 				type="org.eclipse.debug.ui.actions.ILaunchable">
 			</adapter>
@@ -298,6 +354,11 @@
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
 			name="%onlineStartFB.name">
+		</command>
+		<command
+			categoryId="org.eclipse.debug.ui.category.run"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.relaunchSnapshot"
+			name="%relaunchSnapshot.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
@@ -395,6 +456,14 @@
 			<activeWhen>
 				<reference
 					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.FBDefinition" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.RelaunchSnapshotHandler"
+			commandId="org.eclipse.fordiac.ide.deployment.debug.ui.relaunchSnapshot">
+			<activeWhen>
+				<reference
+					definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.SnapshotLaunchDefinition" />
 			</activeWhen>
 		</handler>
 		<handler
@@ -881,6 +950,20 @@
 				tooltip="%triggerEvent.tooltip">
 			</command>
 		</menuContribution>
+		<menuContribution
+			allPopups="false"
+			locationURI="popup:org.eclipse.debug.ui.DebugView?after=launchGroup">
+			<command
+				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.relaunchSnapshot"
+				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/elcl16/runlast_co.svg"
+				style="push">
+				<visibleWhen
+					checkEnabled="false">
+					<reference
+						definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.SnapshotLaunchDefinition" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
 	</extension>
 	<extension
 		point="org.eclipse.core.expressions.definitions">
@@ -907,6 +990,35 @@
 							</not>
 						</and>
 					</or>
+				</iterate>
+			</with>
+		</definition>
+		<definition
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.SnapshotDebugDefinition">
+			<and>
+				<count
+					value="1">
+				</count>
+				<iterate>
+					<test
+						forcePluginActivation="true"
+						property="org.eclipse.fordiac.ide.deployment.debug.ui.snapshot.isSnapshotDebuggable">
+					</test>
+				</iterate>
+			</and>
+		</definition>
+		<definition
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.SnapshotLaunchDefinition">
+			<with
+				variable="selection">
+				<count
+					value="1">
+				</count>
+				<iterate>
+					<test
+						forcePluginActivation="true"
+						property="org.eclipse.fordiac.ide.deployment.debug.ui.snapshot.isSnapshotLaunch">
+					</test>
 				</iterate>
 			</with>
 		</definition>
@@ -1069,6 +1181,12 @@
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.statusHandlerLaunchActive"
 			plugin="org.eclipse.fordiac.ide.deployment.debug">
 		</statusHandler>
+		<statusHandler
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.handler.IncompleteSnapshotStatusHandler"
+			code="201"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.statusHandlerIncompleteSnapshot"
+			plugin="org.eclipse.fordiac.ide.deployment.debug">
+		</statusHandler>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.detailPaneFactories">
@@ -1216,6 +1334,20 @@
 			namespace="org.eclipse.fordiac.ide.deployment.debug.ui.varDeclaration"
 			properties="inOutVar"
 			type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+		</propertyTester>
+		<propertyTester
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.propertytester.SnapshotLaunchPropertyTester"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.snapshotLaunch"
+			namespace="org.eclipse.fordiac.ide.deployment.debug.ui.snapshot"
+			properties="isSnapshotLaunch"
+			type="java.lang.Object">
+		</propertyTester>
+		<propertyTester
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.propertytester.SnapshotDebugPropertyTester"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.snapshotDebug"
+			namespace="org.eclipse.fordiac.ide.deployment.debug.ui.snapshot"
+			properties="isSnapshotDebuggable"
+			type="java.lang.Object">
 		</propertyTester>
 	</extension>
 	<extension point="org.eclipse.debug.ui.toggleBreakpointsTargetFactories">

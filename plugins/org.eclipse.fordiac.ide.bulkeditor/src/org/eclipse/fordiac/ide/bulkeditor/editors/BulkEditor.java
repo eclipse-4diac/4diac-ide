@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2025, 2026 Primetals Technologies Austria GmbH
- *                          Martin Erich Jobst
+ *                          Martin Erich Jobst, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,13 +11,16 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *   Martin Erich Jobst - use library element provider
+ *   Michael Oberlehner - Bulk Editor navigation to ST function declarations
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -33,12 +36,14 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.commands.CreateAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.commands.DeleteAttributeBulkEditorCommand;
 import org.eclipse.fordiac.ide.bulkeditor.nattable.BulkEditorNatTable;
 import org.eclipse.fordiac.ide.bulkeditor.nattable.DelegatingSelectionProvider;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryViewer;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
 import org.eclipse.fordiac.ide.bulkeditor.search.EditorSearchExecutor;
 import org.eclipse.fordiac.ide.bulkeditor.search.PlaceConfig;
 import org.eclipse.fordiac.ide.bulkeditor.search.QuerySearchAdapter;
@@ -113,6 +118,7 @@ public class BulkEditor extends MultiPageEditorPart
 
 	// Latest successful search result (mapped to editable counterparts).
 	private List<EObject> editableSearchResult;
+	private final Map<EObject, EObject> functionDeclarationTargets = new IdentityHashMap<>();
 	private Set<URI> searchScope;
 	private PlaceConfig latestQueryConfig;
 
@@ -233,14 +239,14 @@ public class BulkEditor extends MultiPageEditorPart
 	}
 
 	private boolean performSearch() {
-		final EObject queryRoot = queryViewer.getQueryRoot();
-		if (queryRoot == null) {
+		final Query query = queryViewer.getQuery();
+		if (query == null) {
 			return false;
 		}
 
-		final var mode = QuerySearchAdapter.resolveTargetMode(queryRoot);
+		final var mode = QuerySearchAdapter.resolveTargetMode(query);
 
-		final EditorSearchExecutor.Result result = EditorSearchExecutor.search(queryRoot, project);
+		final EditorSearchExecutor.Result result = EditorSearchExecutor.search(query, project);
 		if (result == null) {
 			return false;
 		}
@@ -254,7 +260,7 @@ public class BulkEditor extends MultiPageEditorPart
 		disconnectEditorInputs();
 		connectEditorInputs(result.searchResult());
 
-		editableSearchResult = BulkEditorHelper.findEditableResults(result.searchResult());
+		updateEditableSearchResult(result.searchResult());
 		natTable.updateList(editableSearchResult);
 
 		final String infoText = result.searchResult().isEmpty() ? Messages.NoUsage : ""; //$NON-NLS-1$
@@ -262,6 +268,35 @@ public class BulkEditor extends MultiPageEditorPart
 		commandStack.flush();
 		firePropertyChange(PROP_DIRTY);
 		return true;
+	}
+
+	private void updateEditableSearchResult(final List<? extends EObject> searchResults) {
+		functionDeclarationTargets.clear();
+		editableSearchResult = new ArrayList<>(searchResults.size());
+		for (final EObject result : searchResults) {
+			final EObject editable = BulkEditorHelper.findEditableResult(result);
+			if (editable != null) {
+				editableSearchResult.add(editable);
+				if (BulkEditorHelper.isFunctionDeclaration(result)) {
+					functionDeclarationTargets.put(editable, result);
+				}
+			}
+		}
+	}
+
+	public EObject getNavigationTarget(final EObject row) {
+		final EObject searchResult = functionDeclarationTargets.get(row);
+		if (searchResult == null || row.eContainer() != null) {
+			return row;
+		}
+		// ST reconciliation replaced the row; markers resolve by index, so find the declaration by name
+		final EObject declaration = BulkEditorHelper.findEditableResult(searchResult);
+		return declaration != null ? declaration : EcoreUtil.getRootContainer(searchResult);
+	}
+
+	private List<EObject> getResultsToRemap() {
+		// ST reconciliation can replace function declarations, so remap them from their search results.
+		return editableSearchResult.stream().map(row -> functionDeclarationTargets.getOrDefault(row, row)).toList();
 	}
 
 	public void reloadType() {
@@ -295,7 +330,8 @@ public class BulkEditor extends MultiPageEditorPart
 		}
 
 		final List<ConfigurableObject> result = Arrays.stream(addAttributeDialog.getResult())
-				.filter(ConfigurableObject.class::isInstance).map(ConfigurableObject.class::cast).toList();
+				.filter(ConfigurableObject.class::isInstance).map(ConfigurableObject.class::cast)
+				.filter(object -> !BulkEditorHelper.isReadOnly(object)).toList();
 
 		connectEditorInputs(result);
 
@@ -315,7 +351,7 @@ public class BulkEditor extends MultiPageEditorPart
 	}
 
 	private Command handleDeleteAttribute(final Object refElement) {
-		if (refElement instanceof final Attribute attribute
+		if (refElement instanceof final Attribute attribute && !BulkEditorHelper.isReadOnly(attribute)
 				&& attribute.eContainer() instanceof final ConfigurableObject configurableObject) {
 			return new DeleteAttributeBulkEditorCommand(natTable, configurableObject, attribute);
 		}
@@ -499,7 +535,7 @@ public class BulkEditor extends MultiPageEditorPart
 		@Override
 		public void elementContentReplaced(final IEditorInput input) {
 			if (editorInputs.contains(input)) {
-				editableSearchResult = BulkEditorHelper.findEditableResults(editableSearchResult);
+				updateEditableSearchResult(getResultsToRemap());
 				natTable.updateList(editableSearchResult);
 				natTable.setSearchInformationText(Messages.Search_Changes);
 			}
@@ -511,7 +547,9 @@ public class BulkEditor extends MultiPageEditorPart
 				fireSaveablesEvent(SaveablesLifecycleEvent.POST_CLOSE, new LibraryElementSaveable(input));
 				LibraryElementProvider.INSTANCE.disconnect(input);
 				editableSearchResult = editableSearchResult.stream()
-						.filter(result -> !input.equals(BulkEditorHelper.getEditorInput(result))).toList();
+						.filter(result -> !input.equals(BulkEditorHelper.getEditorInput(getNavigationTarget(result))))
+						.toList();
+				functionDeclarationTargets.keySet().retainAll(editableSearchResult);
 				natTable.updateList(editableSearchResult);
 			}
 		}
@@ -521,8 +559,9 @@ public class BulkEditor extends MultiPageEditorPart
 			if (editorInputs.remove(originalInput)) {
 				fireSaveablesEvent(SaveablesLifecycleEvent.POST_CLOSE, new LibraryElementSaveable(originalInput));
 				LibraryElementProvider.INSTANCE.disconnect(originalInput);
-				connectEditorInputs(editableSearchResult);
-				editableSearchResult = BulkEditorHelper.findEditableResults(editableSearchResult);
+				final List<EObject> resultsToRemap = getResultsToRemap();
+				connectEditorInputs(resultsToRemap);
+				updateEditableSearchResult(resultsToRemap);
 				natTable.updateList(editableSearchResult);
 			}
 		}

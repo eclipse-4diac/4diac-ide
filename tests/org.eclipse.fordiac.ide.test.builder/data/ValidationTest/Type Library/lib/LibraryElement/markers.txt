@@ -1,0 +1,2 @@
+Name.fbt ERROR Element 'DifferentName' does not match its filename 'Name.fbt'
+Package.fbt WARNING The package name does not match the folder structure

@@ -1,0 +1,3 @@
+StructScopeTest.fbt:3 ERROR The variable unavailableInitializerMember is undefined for the type StructScopeType
+StructScopeTest.fbt:6 ERROR The variable unavailableReceiverMember is undefined for the type StructScopeType
+StructScopeTest.fbt:8 ERROR The variable visibleMember is undefined for the type StructB

@@ -22,6 +22,7 @@ import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryAttributeDeclarationNodeFigure;
@@ -29,6 +30,9 @@ import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryConstraintNodeFigur
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryNodeFigure.EditableValue;
 import org.eclipse.fordiac.ide.bulkeditor.query.figures.QueryPlaceholderNodeFigure;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Placeholder;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.DeleteQueryNodeEditPolicy;
 import org.eclipse.fordiac.ide.bulkeditor.query.policies.QueryDirectEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
@@ -80,17 +84,12 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 	}
 
 	protected QueryNodeFigure createNodeFigure() {
-		final EObject element = getModel();
-		if (QueryModelHelper.isConstraint(element)) {
-			return new QueryConstraintNodeFigure(element);
-		}
-		if (QueryModelHelper.isPlaceholder(element)) {
-			return new QueryPlaceholderNodeFigure(element);
-		}
-		if (QueryModelHelper.isAttributeDeclaration(element)) {
-			return new QueryAttributeDeclarationNodeFigure(element);
-		}
-		return new QueryNodeFigure(element);
+		return switch (getModel()) {
+		case final Constraint constraint -> new QueryConstraintNodeFigure(constraint);
+		case final Placeholder placeholder -> new QueryPlaceholderNodeFigure(placeholder);
+		case final AttributeDeclaration declaration -> new QueryAttributeDeclarationNodeFigure(declaration);
+		case final EObject element -> new QueryNodeFigure(element);
+		};
 	}
 
 	@Override
@@ -156,15 +155,14 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 	@Override
 	protected List<QueryConnection> getModelSourceConnections() {
 		// placeholders are shown in rows above the query without connections
-		return getDiagram().getVisibleChildren(getModel()).stream()
-				.filter(child -> !QueryModelHelper.isPlaceholder(child))
+		return getDiagram().getVisibleChildren(getModel()).stream().filter(child -> !(child instanceof Placeholder))
 				.map(child -> new QueryConnection(getModel(), child)).toList();
 	}
 
 	@Override
 	protected List<QueryConnection> getModelTargetConnections() {
 		final EObject container = getModel().eContainer();
-		if (container == null || QueryModelHelper.isPlaceholder(getModel())) {
+		if (container == null || getModel() instanceof Placeholder) {
 			return List.of();
 		}
 		return List.of(new QueryConnection(container, getModel()));
@@ -198,10 +196,10 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 		return TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 	}
 
-	protected void changeFeature(final EObject element, final String featureName, final Object value) {
-		if (!Objects.equals(QueryModelHelper.getFeatureValue(element, featureName), value)) {
+	protected void changeFeature(final EObject element, final EStructuralFeature feature, final Object value) {
+		if (!Objects.equals(element.eGet(feature), value)) {
 			getViewer().getEditDomain().getCommandStack()
-					.execute(new ChangeQueryFeatureCommand(element, featureName, value));
+					.execute(new ChangeQueryFeatureCommand(element, feature, value));
 		}
 	}
 
@@ -226,7 +224,7 @@ public class QueryNodeEditPart extends AbstractGraphicalEditPart implements Node
 	}
 
 	private void performDirectEdit(final EditableValue editableValue) {
-		if (QueryModelHelper.isAttributeDeclaration(editableValue.element())) {
+		if (editableValue.element() instanceof AttributeDeclaration) {
 			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(this::getTypeLibrary,
 					AttributeSelectionContentProvider.INSTANCE);
 			new QueryDirectEditManager(this, editableValue, proposalProvider).show();

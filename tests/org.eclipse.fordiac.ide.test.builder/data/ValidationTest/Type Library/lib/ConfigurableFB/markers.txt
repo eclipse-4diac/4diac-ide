@@ -1,0 +1,3 @@
+DataType.fbt ERROR Type 'MissingDataType' not found
+DataType.fbt ERROR Type 'MissingDataType' not found
+DataType.fbt ERROR Type 'MissingDataType' not found

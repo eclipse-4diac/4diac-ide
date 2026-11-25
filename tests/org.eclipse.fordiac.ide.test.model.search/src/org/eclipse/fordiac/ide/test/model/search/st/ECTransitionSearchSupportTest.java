@@ -30,6 +30,7 @@ class ECTransitionSearchSupportTest extends StructuredTextSearchSupportTest {
 		type.getInterfaceList().getInputVars().add(varDeclaration2);
 		type.getECC().getECTransition().add(createECTransition("DI2 < 17"));
 		assertNoMatch(type.getECC().getECTransition().getFirst(), new CrossReferenceMatcher(varDeclaration));
-		assertMatch(type.getECC().getECTransition().getFirst(), new CrossReferenceMatcher(varDeclaration2), 0, 0, 3);
+		assertMatch(type.getECC().getECTransition().getFirst(), new CrossReferenceMatcher(varDeclaration2), 0, 0, 3,
+				"DI2 < 17");
 	}
 }

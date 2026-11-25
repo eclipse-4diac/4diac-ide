@@ -14,20 +14,19 @@ package org.eclipse.fordiac.ide.bulkeditor.query.editparts;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 
 /** Connection from a query element to one of its contained elements. */
 public record QueryConnection(EObject source, EObject target) {
 
 	public String getLabel() {
 		final EReference containment = target.eContainmentFeature();
-		if (containment == null) {
-			return null;
+		if (containment == QueryPackage.Literals.CONSTRAINT__AND_CONSTRAINT) {
+			return "AND"; //$NON-NLS-1$
 		}
-		return switch (containment.getName()) {
-		case QueryModelHelper.REF_AND_CONSTRAINTS -> "AND"; //$NON-NLS-1$
-		case QueryModelHelper.REF_OR_CONSTRAINTS -> "OR"; //$NON-NLS-1$
-		default -> null;
-		};
+		if (containment == QueryPackage.Literals.CONSTRAINT__OR_CONSTRAINT) {
+			return "OR"; //$NON-NLS-1$
+		}
+		return null;
 	}
 }

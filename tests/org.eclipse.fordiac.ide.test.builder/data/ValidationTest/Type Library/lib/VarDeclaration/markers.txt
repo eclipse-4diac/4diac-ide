@@ -1,0 +1,36 @@
+DestinationTypeMismatch.fbt ERROR Cannot connect from 'ANY' to different types 'DINT', 'BOOL' in connections from 'IN' to 'OutDINT', 'OutBOOL'
+HiddenPinConnected.fbt ERROR Pin 'DI1' is hidden but has a connection
+HiddenPinConnected.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections
+IllegalVariableLengthArrayVariable.fbt ERROR An array with variable length is not allowed in this context
+IllegalVariableLengthArrayVariable.fbt WARNING The pin 'Bad' is unused, since it is not connected on the inside
+IllegalVariableLengthArrayVariable.fbt WARNING The pin 'Control' is unused, since it is not connected on the inside
+MultipleInputConnections.fbt ERROR Multiple input connections on variable
+MultipleInputConnections.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections
+NoValueForGenericTypeVariable.fbt WARNING Should not specify a value for variable of generic type in defining type
+NoValueForGenericTypeVariable.fbt WARNING The pin 'Bad' is unused, since it is not connected on the inside
+NoValueForGenericTypeVariable.fbt WARNING The pin 'Control' is unused, since it is not connected on the inside
+NoValueForVariableLengthArrayVariable.fbt ERROR Must not specify a value for variable with variable array bounds
+ValueForGenericInstanceVariable.fbt ERROR VAR_IN_OUT of type ANY at source FB is not well defined
+ValueForGenericInstanceVariable.fbt ERROR VAR_IN_OUT of type ANY at source FB is not well defined
+ValueForGenericInstanceVariable.fbt WARNING Should specify a value for unconnected variable of generic type in instance
+ValueForGenericInstanceVariable.fbt WARNING Should specify a value for unconnected variable of generic type in instance
+ValueForGenericInstanceVariable.fbt WARNING Should specify a value for unconnected variable of generic type in instance
+ValueForGenericInstanceVariable.fbt WARNING The instance 'Bad' is never executed, since it has no incoming event connections
+ValueForGenericInstanceVariable.fbt WARNING The instance 'Control' is never executed, since it has no incoming event connections
+ValueOverriddenBySubAppInput.sub WARNING Specified value is overridden by the connected subapp input
+ValueOverriddenBySubAppInput.sub WARNING The instance 'Nested.Block' is never executed, since it has no incoming event connections
+ValueOverriddenBySubAppInput.sub WARNING The pin 'Nested.IN' is unused, since it is not connected on the outside
+VarInOutIsWithed.fbt ERROR VAR_IN_OUT 'Bad' of function block type 'VarInOutIsWithed' has no WITH on the input side
+VarInOutIsWithed.fbt ERROR VAR_IN_OUT 'Bad' of function block type 'VarInOutIsWithed' has no WITH on the output side
+VarInOutSourceTypeIsWellDefined.fbt ERROR VAR_IN_OUT of type ANY at source FB is not well defined
+VarInOutSourceTypeIsWellDefined.fbt WARNING Should specify a value for unconnected variable of generic type in instance
+VarInOutSourceTypeIsWellDefined.fbt WARNING Should specify a value for unconnected variable of generic type in instance
+VarInOutSourceTypeIsWellDefined.fbt WARNING The instance 'Bad' is never executed, since it has no incoming event connections
+VarInOutSubappInterface.sub ERROR VAR_IN_OUT 'IO' must be connected on the left, since it is connected on the inside
+VarInOutSubappInterface.sub ERROR VAR_IN_OUT 'IO' must not be connected on the right, since it is not connected on the inside
+VarInOutSubappInterface.sub WARNING The instance 'Nested.Block' is never executed, since it has no incoming event connections
+VarInOutSubappInterface.sub WARNING The pin 'Nested.IO' is unused, since it is not connected on the outside
+VarInOutSubappInterface.sub WARNING The pin 'OutputConnectedOutside.IO' is unused, since it is not connected on the inside
+VarInOutSubappNetwork.sub ERROR VAR_IN_OUT 'IO' must form a single network inside subapp
+VarInOutSubappNetwork.sub WARNING The instance 'First' is never executed, since it has no incoming event connections
+VarInOutSubappNetwork.sub WARNING The instance 'Second' is never executed, since it has no incoming event connections

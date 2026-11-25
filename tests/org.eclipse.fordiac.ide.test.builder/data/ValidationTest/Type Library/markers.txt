@@ -1,0 +1,1 @@
+SimpleTest.fbt:2 ERROR Cannot convert from DINT to BOOL

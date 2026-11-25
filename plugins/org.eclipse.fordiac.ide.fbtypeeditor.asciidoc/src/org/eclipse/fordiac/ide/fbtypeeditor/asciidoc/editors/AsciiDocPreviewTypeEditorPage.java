@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.DocumentationAssetHelper;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -148,7 +149,7 @@ public class AsciiDocPreviewTypeEditorPage extends EditorPart implements ITypeEd
 
 	private static IFolder getAssetsFolder(final IFile file) {
 		final IContainer parent = file.getParent();
-		final String assetFolderName = "." + file.getName() + ".assets"; //$NON-NLS-1$ //$NON-NLS-2$
+		final String assetFolderName = DocumentationAssetHelper.getDocumentationAssetFolderName(file.getName());
 		return parent.getFolder(new Path(assetFolderName));
 	}
 

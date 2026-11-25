@@ -1,0 +1,3 @@
+ValidateType.fbt ERROR Type 'MissingDataType' not found
+ValidateType.fbt WARNING The pin 'Missing' is unused, since it is not connected on the inside
+ValidateType.fbt WARNING The pin 'Valid' is unused, since it is not connected on the inside

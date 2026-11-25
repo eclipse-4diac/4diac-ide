@@ -1,0 +1,36 @@
+Duplicate.fbt ERROR Duplicate connection from IN to Block.REQ
+Duplicate.fbt ERROR Duplicate connection from IN to Block.REQ
+Duplicate.fbt WARNING Multiple output connections on event may lead to undefined execution order
+MappedVarInOutsDoNotCrossResourceBoundaries.sys ERROR VAR_IN_OUT connection crosses resource boundaries
+MappedVarInOutsDoNotCrossResourceBoundaries.sys WARNING The instance 'Application.Destination' is never executed, since it has no incoming event connections
+MappedVarInOutsDoNotCrossResourceBoundaries.sys WARNING The instance 'Application.Source' is never executed, since it has no incoming event connections
+MissingDestination.fbt ERROR Connection destination element missing: Missing
+MissingDestinationEndpoint.fbt ERROR Connection destination endpoint missing: Missing
+MissingDestinationEndpoint.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections
+MissingSource.fbt ERROR Connection source element missing: Missing
+MissingSourceEndpoint.fbt ERROR Connection source endpoint missing: Missing
+MissingSourceEndpoint.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections
+NegatedConnection.fbt ERROR Only connections between normal BOOL variables may be negated
+NegatedConnection.fbt WARNING The instance 'Block' is never executed, since it has no incoming event connections
+TypeMismatch.fbt ERROR Cannot connect from 'BOOL' to wider generic type 'ANY' on interface in connection from 'Block.DO1' to 'GenericOUT'
+TypeMismatch.fbt ERROR Cannot connect from wider generic type 'ANY' on interface to 'DINT' in connection from 'GenericBlockIN' to 'GenericInputBlock.DI1'
+TypeMismatch.fbt ERROR Cannot convert from 'BOOL' to 'DINT' in connection from 'IN' to 'Block.DI1'
+TypeMismatch.fbt ERROR Cannot convert from 'DINT' to 'LREAL' in connection from defining variable 'InOutDINT.IO' to 'InOutLREAL.IO'
+TypeMismatch.fbt ERROR Cannot infer type based on 'GenericSource.OUT' (ANY) and 'GenericDestination.IN' (ANY)
+TypeMismatch.fbt WARNING Multiple output connections on event may lead to undefined execution order
+TypeMismatch.fbt WARNING The instance 'InOutDINT' is never executed, since it has no incoming event connections
+TypeMismatch.fbt WARNING The instance 'InOutLREAL' is never executed, since it has no incoming event connections
+VarInOutArraySizesAreCompatible.fbt WARNING Array sizes ARRAY [0..7] OF DINT do not match with source FB type ARRAY [0..3] OF DINT
+VarInOutArraySizesAreCompatible.fbt WARNING The instance 'Destination' is never executed, since it has no incoming event connections
+VarInOutArraySizesAreCompatible.fbt WARNING The instance 'Source' is never executed, since it has no incoming event connections
+VarInOutConnectionsFormsNoLoop.fbt ERROR The VAR_IN_OUT connection is part of a loop! The defining type cannot be computed.
+VarInOutConnectionsFormsNoLoop.fbt ERROR The VAR_IN_OUT connection is part of a loop! The defining type cannot be computed.
+VarInOutConnectionsFormsNoLoop.fbt WARNING The instance 'First' is never executed, since it has no incoming event connections
+VarInOutConnectionsFormsNoLoop.fbt WARNING The instance 'Second' is never executed, since it has no incoming event connections
+VarInOutStringLengthsMatch.fbt WARNING String length 16 does not match with source FB type string length 8
+VarInOutStringLengthsMatch.fbt WARNING The instance 'Destination' is never executed, since it has no incoming event connections
+VarInOutStringLengthsMatch.fbt WARNING The instance 'Source' is never executed, since it has no incoming event connections
+VarInOutsAreNotConnectedToOuts.fbt ERROR Cannot convert from 'BOOL' to 'ARRAY [0..3] OF DINT' in connection from 'Source.DO1' to 'Destination.IO'
+VarInOutsAreNotConnectedToOuts.fbt ERROR Outputs cannot be connected to VAR_IN_OUTs!
+VarInOutsAreNotConnectedToOuts.fbt WARNING The instance 'Destination' is never executed, since it has no incoming event connections
+VarInOutsAreNotConnectedToOuts.fbt WARNING The instance 'Source' is never executed, since it has no incoming event connections

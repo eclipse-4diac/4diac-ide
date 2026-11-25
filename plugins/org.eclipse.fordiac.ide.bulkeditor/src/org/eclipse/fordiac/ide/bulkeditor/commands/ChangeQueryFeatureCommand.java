@@ -13,14 +13,14 @@
 package org.eclipse.fordiac.ide.bulkeditor.commands;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 
 /** Changes the value of a feature of a query element. */
 public class ChangeQueryFeatureCommand extends EMFCommandWrapper {
 
-	public ChangeQueryFeatureCommand(final EObject element, final String featureName, final Object value) {
-		super(SetCommand.create(AdapterFactoryEditingDomain.getEditingDomainFor(element), element,
-				element.eClass().getEStructuralFeature(featureName), value));
+	public ChangeQueryFeatureCommand(final EObject element, final EStructuralFeature feature, final Object value) {
+		super(SetCommand.create(AdapterFactoryEditingDomain.getEditingDomainFor(element), element, feature, value));
 	}
 }

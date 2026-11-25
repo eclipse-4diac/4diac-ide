@@ -34,6 +34,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.fordiac.ide.library.LibraryChange;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LibraryMarkerFactory;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
@@ -65,6 +66,8 @@ class LibraryDownloadTest {
 	private static final String TEST01 = "test01"; //$NON-NLS-1$
 	private static final String TEST02 = "test02"; //$NON-NLS-1$
 	private static final String TEST02_ARCHIVE = "test02-1.1.0"; //$NON-NLS-1$
+	private static final String TEST06 = "test06"; //$NON-NLS-1$
+	private static final String V1_0_0 = "1.0.0"; //$NON-NLS-1$
 	private static final String V1_1_0 = "1.1.0"; //$NON-NLS-1$
 	private static final String V1_5_0 = "1.5.0"; //$NON-NLS-1$
 
@@ -182,6 +185,38 @@ class LibraryDownloadTest {
 		final IMarker[] markers = findManifestMarkers();
 		assertEquals(1, markers.length, () -> describe(markers));
 		assertEquals(TEST01, markers[0].getAttribute(LibraryMarkerFactory.MARKER_ATTRIBUTE, null));
+	}
+
+	@Test
+	void looksUpLibrarySourcesOncePerResolution() throws Exception {
+		// test06 requires test05, test05 requires test02 1.0.0, test02 1.0.0 requires test01 1.0.0
+		final Manifest manifest = ManifestHelper.getContainerManifest(project);
+		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST06, V1_0_0));
+		ManifestHelper.saveManifest(manifest);
+		final int lookupsBefore = MockDownloader.getRegistryInstances();
+		new MockDownloader();
+		assertEquals(lookupsBefore, MockDownloader.getRegistryInstances());
+
+		buildProject();
+
+		LibraryAssert.assertLibraryLinked(project, TEST06, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		final IMarker[] markers = findManifestMarkers();
+		assertEquals(0, markers.length, () -> describe(markers));
+		// four libraries are downloaded with the downloaders of one lookup
+		assertEquals(1, MockDownloader.getRegistryInstances() - lookupsBefore);
+	}
+
+	@Test
+	void looksUpLibrarySourcesOnceWhenApplyingLibraryChanges() throws CoreException {
+		final int lookupsBefore = MockDownloader.getRegistryInstances();
+
+		LibraryChange.performChanges(List.of(LibraryChange.createAdd(TEST01, V1_0_0),
+				LibraryChange.createAdd(TEST02, V1_0_0)), project, new NullProgressMonitor());
+
+		LibraryAssert.assertLibraryLinked(project, TEST01, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		LibraryAssert.assertLibraryLinked(project, TEST02, V1_0_0, TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
+		assertEquals(1, MockDownloader.getRegistryInstances() - lookupsBefore);
 	}
 
 	@SuppressWarnings("static-method")

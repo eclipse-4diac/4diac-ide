@@ -19,8 +19,8 @@ import org.eclipse.gef.GraphicalEditPart;
 public class FBNValueEditPart extends ValueEditPart {
 
 	@Override
-	protected Point calculatePos() {
-		final Point pos = super.calculatePos();
+	protected Point calculatePos(final int width) {
+		final Point pos = super.calculatePos(width);
 		if (getParent() instanceof AbstractContainerContentEditPart) {
 			final Point topLeft = ((GraphicalEditPart) getParent()).getFigure().getClientArea().getTopLeft();
 			pos.performTranslate(-topLeft.x, -topLeft.y);

@@ -20,7 +20,8 @@ import java.util.stream.Stream;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.bulkeditor.query.QueryModelHelper;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeDeclaration;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -39,10 +40,10 @@ public class EditorSearchExecutor {
 	private EditorSearchExecutor() {
 	}
 
-	public static Result search(final EObject queryRoot, final IProject project) {
-		final IEC61499SearchFilter filter = QuerySearchAdapter.buildTargetSearchFilter(queryRoot);
+	public static Result search(final Query query, final IProject project) {
+		final IEC61499SearchFilter filter = QuerySearchAdapter.buildTargetSearchFilter(query);
 
-		final PlaceConfig placeConfig = QuerySearchAdapter.buildPlaceConfig(queryRoot);
+		final PlaceConfig placeConfig = QuerySearchAdapter.buildPlaceConfig(query);
 		final List<ISearchContext> contexts = List.of(SearchHelper.createSearchContext(project, placeConfig));
 
 		final Stream<? extends EObject> result = contexts.stream().flatMap(
@@ -59,24 +60,18 @@ public class EditorSearchExecutor {
 		final Set<URI> searchScope = contexts.stream().flatMap(ISearchContext::getTypes)
 				.collect(Collectors.toUnmodifiableSet());
 
-		final AttributeTypeEntry attrDeclType = resolveAttributeDeclarationType(queryRoot, project);
+		final AttributeTypeEntry attrDeclType = resolveAttributeDeclarationType(query, project);
 
 		return new Result(res, searchScope, placeConfig, attrDeclType);
 	}
 
-	private static AttributeTypeEntry resolveAttributeDeclarationType(final EObject queryRoot, final IProject project) {
-		final EObject target = QueryModelHelper.getContainedChild(queryRoot, QueryModelHelper.REF_TARGET);
-		final EObject targetOption = (target != null)
-				? QueryModelHelper.getContainedChild(target, QueryModelHelper.REF_TARGET)
-				: null;
-
-		if (targetOption == null || !targetOption.eClass().getName().equals(QueryModelHelper.ATTRIBUTE_DECLARATION)) {
+	private static AttributeTypeEntry resolveAttributeDeclarationType(final Query query, final IProject project) {
+		if (!(query.getTarget().getTarget() instanceof final AttributeDeclaration declaration)) {
 			return null;
 		}
 
-		final String rawName = (String) QueryModelHelper.getFeatureValue(targetOption, QueryModelHelper.FEATURE_NAME);
-		final String name = QuerySearchAdapter.substitutePlaceholders(rawName,
-				QuerySearchAdapter.resolvePlaceholders(queryRoot));
+		final String name = QuerySearchAdapter.substitutePlaceholders(declaration.getName(),
+				QuerySearchAdapter.resolvePlaceholders(query));
 		if (name == null || name.isBlank()) {
 			return null;
 		}

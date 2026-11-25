@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GbmH, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GbmH, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -49,7 +49,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -63,14 +62,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	private InterfaceEditPart parentPart;
 	private InitialValueRefreshJob refreshJob;
-
-	public int getMaxWidth() {
-		final int maxLabelSize = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
-				.getMaxValueLabelSize();
-		final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry()
-				.get(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
-		return (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth());
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -110,12 +101,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		refreshValue();
 	}
 
-	protected Point calculatePos() {
+	protected Point calculatePos(final int width) {
 		if (parentPart != null) {
 			final Rectangle bounds = parentPart.getFigure().getBounds();
 			int x = 0;
 			if (isInput()) {
-				x = bounds.x - 2 - calculateWidth();
+				x = bounds.x - 2 - width;
 			} else {
 				x = (bounds.x + bounds.width + 2);
 			}
@@ -123,22 +114,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			return new Point(x, y);
 		}
 		return new Point(0, 0);
-	}
-
-	protected void refreshPosition() {
-		if (getParent() != null) {
-			Rectangle bounds = null;
-			final Point p = calculatePos();
-			bounds = new Rectangle(p.x, p.y, calculateWidth(), -1);
-			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
-		}
-	}
-
-	private int calculateWidth() {
-		int width = getFigure().getPreferredSize().width;
-		width = Math.max(40, width);
-		width = Math.min(width, getMaxWidth());
-		return width;
 	}
 
 	/*
@@ -167,14 +142,15 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			if (LibraryElementPackage.eINSTANCE.getValue_Value().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 				refreshValue();
-				refreshPosition();
 			}
 			super.notifyChanged(notification);
 		}
 	};
 
 	/** The Class ValueFigure. */
-	private static class ValueFigure extends Label {
+	private class ValueFigure extends Label {
+
+		private static final int MIN_CHARS = 5;
 
 		/** Instantiates a new value figure. */
 		public ValueFigure(final boolean input) {
@@ -182,7 +158,6 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			if (input) {
 				setLabelAlignment(PositionConstants.RIGHT);
 				setTextAlignment(PositionConstants.CENTER);
-				setTextPlacement(PositionConstants.EAST);
 			} else {
 				setLabelAlignment(PositionConstants.LEFT);
 				setTextAlignment(PositionConstants.LEFT);
@@ -193,6 +168,39 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		protected String getTruncationString() {
 			return "\u2026"; //$NON-NLS-1$
 		}
+
+		@Override
+		public void setText(final String s) {
+			super.setText(s);
+			refreshPosition();
+		}
+
+		private void refreshPosition() {
+			if (getParent() != null) {
+				Rectangle bounds = null;
+				final int width = getWidth();
+				final Point p = calculatePos(width);
+				bounds = new Rectangle(p.x, p.y, width, -1);
+				getParent().setConstraint(this, bounds);
+			}
+		}
+
+		private int getWidth() {
+			return Math.clamp(getPreferredSize().width, getMinWidth(), getMaxWidth());
+		}
+
+		private int getMaxWidth() {
+			final int maxLabelSize = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+					.getMaxValueLabelSize();
+			final FontMetrics fm = FigureUtilities.getFontMetrics(getFont());
+			return (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth());
+		}
+
+		private int getMinWidth() {
+			final FontMetrics fm = FigureUtilities.getFontMetrics(getFont());
+			return (int) (MIN_CHARS * fm.getAverageCharacterWidth());
+		}
+
 	}
 
 	@Override
@@ -208,11 +216,10 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			setVisible(true);
 			if (getOuterConnections().isEmpty() || valueHasAnnotation()) {
 				if (!getModel().getValue().isBlank()) {
-					getFigure().setText(getModel().getValue());
 					getFigure().setFont(null);
 					getFigure().setForegroundColor(ColorConstants.menuForeground);
+					getFigure().setText(getModel().getValue());
 				} else {
-					getFigure().setText(FordiacMessages.ComputingPlaceholderValue);
 					final InitialValueRefreshJob valueRefresh = getRefreshJob();
 					if (valueRefresh != null) {
 						valueRefresh.refresh();
@@ -220,6 +227,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 					getFigure().setFont(JFaceResources.getFontRegistry()
 							.getItalic(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT));
 					getFigure().setForegroundColor(ColorConstants.gray);
+					getFigure().setText(FordiacMessages.ComputingPlaceholderValue);
 				}
 			} else {
 				getFigure().setText(""); //$NON-NLS-1$
@@ -258,16 +266,10 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		return model.getOutputConnections();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#refresh()
-	 */
 	@Override
 	public void refresh() {
 		super.refresh();
 		refreshValue();
-		refreshPosition();
 	}
 
 	@Override
@@ -287,7 +289,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		refreshPosition();
+		((ValueFigure) getFigure()).refreshPosition();
 	}
 
 	@Override

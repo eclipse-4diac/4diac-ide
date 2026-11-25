@@ -30,7 +30,7 @@ class STMethodSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_METHOD
 				"""));
 		assertNoMatch(type.getSourceElements().getFirst(), new NameMatcher("ABC"));
-		assertMatch(type.getSourceElements().getFirst(), new NameMatcher("TEST"), 0, 7, 4);
+		assertMatch(type.getSourceElements().getFirst(), new NameMatcher("TEST"), 0, 7, 4, "METHOD TEST");
 	}
 
 	@Test
@@ -46,7 +46,8 @@ class STMethodSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_METHOD
 				"""));
 		assertNoMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration));
-		assertMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 12, 3);
+		assertMatch(type.getSourceElements().getFirst(), new CrossReferenceMatcher(varDeclaration2), 1, 12, 3,
+				"DO2 := 17;");
 	}
 
 	@Test
@@ -63,6 +64,6 @@ class STMethodSearchSupportTest extends StructuredTextSearchSupportTest {
 				END_METHOD
 				"""));
 		assertNoMatch(type.getSourceElements().getLast(), new NameMatcher("TEST1"));
-		assertMatch(type.getSourceElements().getLast(), new NameMatcher("TEST2"), 4, 43, 5);
+		assertMatch(type.getSourceElements().getLast(), new NameMatcher("TEST2"), 4, 43, 5, "METHOD TEST2");
 	}
 }

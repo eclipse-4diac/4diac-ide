@@ -52,8 +52,8 @@ public class STCoreFindReferencesHandler extends FindReferencesHandler {
 					true, 					// Type
 					false, 					// Comments
 					false, 					// Case Sensitive
-					true, 					// ExaktMatching
-					true, 					// Search Initial Value
+					true, 					// ExactMatching
+					true, 					// Check Interface Values
 					config.scope(), 		// Search Scope
 					config.source(),		// Source
 					target 					// Reference Object

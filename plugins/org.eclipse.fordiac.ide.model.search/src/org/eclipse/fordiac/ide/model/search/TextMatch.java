@@ -24,6 +24,7 @@ public class TextMatch extends Match {
 	private final int line;
 	private final int offset;
 	private final int length;
+	private final String text;
 
 	/**
 	 * Create a new text match
@@ -33,13 +34,16 @@ public class TextMatch extends Match {
 	 * @param offset The offset of the match (may be -1 if unknown)
 	 * @param length The length of the match (may be -1 if unknown)
 	 * @param type   The type of the match
+	 * @param text   The line text of the match
 	 */
-	public TextMatch(final URI uri, final int line, final int offset, final int length, final String type) {
+	public TextMatch(final URI uri, final int line, final int offset, final int length, final String type,
+			final String text) {
 		super(uri, MessageFormat.format(Messages.TextMatch_Location, Integer.valueOf(line), Integer.valueOf(offset),
 				Integer.valueOf(length)), type);
 		this.line = line;
 		this.offset = offset;
 		this.length = length;
+		this.text = text;
 	}
 
 	/**
@@ -69,6 +73,15 @@ public class TextMatch extends Match {
 		return length;
 	}
 
+	/**
+	 * Get the line text of the match
+	 *
+	 * @return The line text (may be null if unknown)
+	 */
+	public String getText() {
+		return text;
+	}
+
 	@Override
 	public int hashCode() {
 		return super.hashCode() + offset + length + line;
@@ -92,6 +105,7 @@ public class TextMatch extends Match {
 	@Override
 	public String toString() {
 		return String.format("%s [uri=%s, location=%s, type=%s, line=%s, offset=%s, length=%s]", getClass().getName(), //$NON-NLS-1$
-				getUri(), getLocation(), getType(), Integer.valueOf(line), Integer.valueOf(offset), Integer.valueOf(length));
+				getUri(), getLocation(), getType(), Integer.valueOf(line), Integer.valueOf(offset),
+				Integer.valueOf(length));
 	}
 }

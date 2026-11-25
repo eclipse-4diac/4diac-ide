@@ -169,9 +169,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof final SearchResultTextMatch textMatch) {
-					final String elementText = textMatch.getElementText();
-					return (elementText != null && !elementText.isEmpty())
-							? MessageFormat.format("{0} : {1}", textMatch.getElementName(), elementText) //$NON-NLS-1$
+					final String text = textMatch.getText();
+					return (text != null && !text.isEmpty())
+							? MessageFormat.format("{0} : {1}", textMatch.getElementName(), text) //$NON-NLS-1$
 							: textMatch.getElementName();
 				}
 				if (element instanceof final INamedElement ne) {

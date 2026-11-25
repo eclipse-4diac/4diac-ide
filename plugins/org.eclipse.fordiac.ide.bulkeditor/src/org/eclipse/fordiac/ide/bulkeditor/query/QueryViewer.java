@@ -26,8 +26,6 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -39,6 +37,8 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.commands.ChangeQueryFeatureCommand;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Place;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.Query;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryFactory;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.QueryPackage;
 import org.eclipse.gef.commands.CommandStack;
@@ -62,28 +62,25 @@ public class QueryViewer {
 	private final IProject project;
 	private final BulkEditor editor;
 	private final AdapterFactoryEditingDomain editingDomain;
-	private final EPackage queryPackage;
 	private final QueryGraphicalViewer graphicalViewer;
 	private Resource queryResource;
-	private EObject queryRoot;
+	private Query query;
 	private boolean restoredDirty;
 
 	public QueryViewer(final Composite parent, final IProject project, final BulkEditor editor) {
 		this.project = project;
 		this.editor = editor;
 		editingDomain = createEditingDomain(createAdapterFactory());
-		queryPackage = QueryPackage.eINSTANCE;
 
 		graphicalViewer = new QueryGraphicalViewer(parent, editor, project);
 		graphicalViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		graphicalViewer.createContextMenu(queryPackage, this::saveQueryToFile, this::loadQueryFromFile,
-				editor::onSearchRequested);
+		graphicalViewer.createContextMenu(this::saveQueryToFile, this::loadQueryFromFile, editor::onSearchRequested);
 
 		showQuery(createEmptyQuery());
 	}
 
-	public EObject getQueryRoot() {
-		return queryRoot;
+	public Query getQuery() {
+		return query;
 	}
 
 	public ISelectionProvider getSelectionProvider() {
@@ -107,11 +104,11 @@ public class QueryViewer {
 	}
 
 	public void setSubappHierarchyScope(final List<String> hierarchy) {
-		final EObject place = QueryModelHelper.getContainedChild(queryRoot, QueryModelHelper.REF_PLACE);
+		final Place place = query.getPlace();
 		final CompoundCommand command = new CompoundCommand(Messages.QueryScope_SubappHierarchy);
-		command.add(new ChangeQueryFeatureCommand(place, QueryModelHelper.FEATURE_SUBAPP_HIERARCHY, Boolean.TRUE));
-		command.add(
-				new ChangeQueryFeatureCommand(place, QueryModelHelper.FEATURE_SUBAPP_HIERARCHY_ELEMENTS, hierarchy));
+		command.add(new ChangeQueryFeatureCommand(place, QueryPackage.Literals.PLACE__SUBAPP_HIERARCHY, Boolean.TRUE));
+		command.add(new ChangeQueryFeatureCommand(place, QueryPackage.Literals.PLACE__SUBAPP_HIERARCHY_ELEMENTS,
+				hierarchy));
 		getCommandStack().execute(command);
 	}
 
@@ -132,7 +129,7 @@ public class QueryViewer {
 			getResourceSet().getResources().remove(restored);
 			return;
 		}
-		if (restored.getContents().isEmpty()) {
+		if (!containsQuery(restored)) {
 			getResourceSet().getResources().remove(restored);
 			return;
 		}
@@ -191,7 +188,7 @@ public class QueryViewer {
 		}
 
 		// detach the query before a resource of the same file is unloaded
-		queryResource.getContents().remove(queryRoot);
+		queryResource.getContents().remove(query);
 		final Resource existing = getResourceSet().getResource(fileUri, false);
 		if (existing != null) {
 			existing.unload();
@@ -199,7 +196,7 @@ public class QueryViewer {
 		}
 
 		final Resource fileResource = getResourceSet().createResource(fileUri);
-		fileResource.getContents().add(queryRoot);
+		fileResource.getContents().add(query);
 		showQuery(fileResource);
 		saveQueryResource();
 		return true;
@@ -245,8 +242,8 @@ public class QueryViewer {
 				throw new IOException("Could not create resource for file" + fileUri); //$NON-NLS-1$
 			}
 			candidate.load(getResourceSet().getLoadOptions());
-			if (candidate.getContents().isEmpty()) {
-				throw new IOException("Query file is empty: " + fileUri); //$NON-NLS-1$
+			if (!containsQuery(candidate)) {
+				throw new IOException("Query file contains no query: " + fileUri); //$NON-NLS-1$
 			}
 		} catch (final IOException | RuntimeException e) {
 			if (candidate != null) {
@@ -274,9 +271,13 @@ public class QueryViewer {
 
 	private void showQuery(final Resource resource) {
 		queryResource = resource;
-		queryRoot = resource.getContents().get(0);
-		QueryModelHelper.ensureMandatoryChildren(queryPackage, queryRoot);
-		graphicalViewer.setQuery(resource);
+		query = (Query) resource.getContents().get(0);
+		QueryModelHelper.ensureMandatoryChildren(query);
+		graphicalViewer.setQuery(query);
+	}
+
+	private static boolean containsQuery(final Resource resource) {
+		return !resource.getContents().isEmpty() && resource.getContents().get(0) instanceof Query;
 	}
 
 	private Resource createEmptyQuery() {

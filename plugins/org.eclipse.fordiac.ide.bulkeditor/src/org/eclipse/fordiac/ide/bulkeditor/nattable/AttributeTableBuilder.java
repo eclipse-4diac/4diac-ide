@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025, 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2025, 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - make function declarations read-only in the Bulk Editor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.nattable;
 
@@ -94,7 +95,8 @@ public class AttributeTableBuilder {
 		final AtomicReference<NatTable> natTableRef = new AtomicReference<>();
 
 		final NatTable natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
-				new AttributeEditableRule(new LinkedElementsEditableRule(provider),
+				new AttributeEditableRule(
+						new ReadOnlyElementsEditableRule(new LinkedElementsEditableRule(provider), provider),
 						AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION, AttributeTableColumn.EDITABLE_COMMENT_VALUE,
 						provider),
 				new TypeSelectionButton(() -> BulkEditorNatTable.typeLibraryForSelection(provider, natTableRef.get()),

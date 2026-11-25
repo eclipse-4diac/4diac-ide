@@ -29,6 +29,14 @@
 			name="%deploySubAppLaunch.name"
 			sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
 		</launchConfigurationType>
+		<launchConfigurationType
+			delegate="org.eclipse.fordiac.ide.deployment.debug.snapshot.SnapshotFBLaunchConfigurationDelegate"
+			delegateName="%snapshotFBLaunch.name"
+			id="org.eclipse.fordiac.ide.deployment.debug.snapshotFBLaunch"
+			modes="debug"
+			name="%snapshotFBLaunch.name"
+			sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+		</launchConfigurationType>
 	</extension>
 	<extension
 		point="org.eclipse.debug.core.launchModes">

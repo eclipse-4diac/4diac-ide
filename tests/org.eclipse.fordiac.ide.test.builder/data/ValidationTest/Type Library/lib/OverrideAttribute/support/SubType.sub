@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="SubType">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 Martin Erich Jobst&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Martin Jobst" Date="2026-11-18">
+	</VersionInfo>
+	<CompilerInfo packageName="lib::OverrideAttribute::support"/>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="REQ" Type="Event"/>
+		</SubAppEventInputs>
+		<InputVars>
+			<VarDeclaration Name="Valid" Type="DINT"/>
+			<VarDeclaration Name="Invalid" Type="DINT"/>
+		</InputVars>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<SubApp Name="Nested" x="0" y="0">
+			<SubAppInterfaceList>
+				<SubAppEventInputs>
+					<SubAppEvent Name="REQ" Type="Event"/>
+				</SubAppEventInputs>
+				<InputVars>
+					<VarDeclaration Name="ValidInput" Type="DINT"/>
+					<VarDeclaration Name="InvalidInput" Type="DINT"/>
+				</InputVars>
+			</SubAppInterfaceList>
+			<SubAppNetwork>
+				<FB Name="ValidSink" Type="lib::OverrideAttribute::support::SimpleTest" x="0" y="0"/>
+				<FB Name="InvalidSink" Type="lib::OverrideAttribute::support::SimpleTest" x="1000" y="0"/>
+				<EventConnections>
+					<Connection Source="REQ" Destination="ValidSink.REQ"/>
+					<Connection Source="REQ" Destination="InvalidSink.REQ"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="ValidInput" Destination="ValidSink.DI1"/>
+					<Connection Source="InvalidInput" Destination="InvalidSink.DI1"/>
+				</DataConnections>
+			</SubAppNetwork>
+		</SubApp>
+		<EventConnections>
+			<Connection Source="REQ" Destination="Nested.REQ"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="Valid" Destination="Nested.ValidInput"/>
+			<Connection Source="Invalid" Destination="Nested.InvalidInput"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>
