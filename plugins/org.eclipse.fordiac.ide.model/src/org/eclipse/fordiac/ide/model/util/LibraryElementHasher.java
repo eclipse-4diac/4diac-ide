@@ -43,7 +43,7 @@ public final class LibraryElementHasher {
 	 * @implNote increment this whenever anything is changed in the hashing
 	 *           algorithm
 	 */
-	public static final String CURRENT_HASH_VERSION = "v2"; //$NON-NLS-1$
+	public static final String CURRENT_HASH_VERSION = "v3"; //$NON-NLS-1$
 
 	/**
 	 * The default hash algorithm
