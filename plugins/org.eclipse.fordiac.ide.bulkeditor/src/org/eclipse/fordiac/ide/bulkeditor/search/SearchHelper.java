@@ -411,7 +411,7 @@ public class SearchHelper {
 		private Stream<? extends EObject> getFBTypeChildren(final FBType fbType) {
 			Stream<? extends EObject> children = Stream.empty();
 
-			if (isTypeSelected(fbType)) {
+			if (isTypeAccepted(fbType)) {
 				final List<PinConfig> pinCfgs = getTypePinConfigs(fbType, getTypeConfig(fbType));
 
 				children = getFilteredInterfaceChildren(fbType.getInterfaceList(), pinCfgs);
@@ -456,6 +456,18 @@ public class SearchHelper {
 				return cfg.isSelected(cfg.functionType());
 			}
 			return false;
+		}
+
+		/**
+		 * Whether a type node accepts the type. Composite and subapp types that are only searched for instances do
+		 * not list their own pins and attributes.
+		 */
+		private boolean isTypeAccepted(final FBType fbType) {
+			if (!isTypeSelected(fbType)) {
+				return false;
+			}
+			final TypeEntry entry = fbType.getTypeEntry();
+			return entry == null || cfg.matches(getTypeConfig(fbType), PlaceAwareSearchContext.typeTarget(entry));
 		}
 
 		private Stream<? extends EObject> getApplicationChildren(final Application application) {
@@ -524,17 +536,14 @@ public class SearchHelper {
 		}
 
 		/**
-		 * PIN configurations of the nodes whose constraint accepts the type. A single node is used without matching
-		 * the type again. Types that no node accepts (searched for instance occurrences) use all nodes.
+		 * PIN configurations of the nodes whose constraint accepts the type. Only called for accepted types, so a
+		 * single node is used without matching the type again.
 		 */
 		private List<PinConfig> getTypePinConfigs(final LibraryElement type, final TypeConfig category) {
 			final List<TypeConfig> branches = cfg.typeBranches(category);
 			if (branches.size() > 1 && type.getTypeEntry() != null) {
 				final MatchTarget target = PlaceAwareSearchContext.typeTarget(type.getTypeEntry());
-				final List<TypeConfig> matching = branches.stream().filter(branch -> branch.matches(target)).toList();
-				if (!matching.isEmpty()) {
-					return matching.stream().map(TypeConfig::pin).toList();
-				}
+				return branches.stream().filter(branch -> branch.matches(target)).map(TypeConfig::pin).toList();
 			}
 			return branches.stream().map(TypeConfig::pin).toList();
 		}
