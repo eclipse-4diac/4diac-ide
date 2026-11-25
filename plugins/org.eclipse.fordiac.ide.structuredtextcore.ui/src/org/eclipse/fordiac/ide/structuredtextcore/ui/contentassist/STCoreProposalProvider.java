@@ -15,18 +15,25 @@
  *       - exclude proposals based disallowing qualified names only
  *       - add proposal for callables
  *       - enable proposals for global variables in packages
+ *   Franz Höpfinger
+ *       - rank feature expression and typed-literal proposals by expected
+ *         type, without excluding any candidate based on it
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist;
 
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -34,7 +41,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STImport;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreRegionString;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.viewers.StyledString;
@@ -43,6 +54,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
+import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
@@ -87,7 +99,156 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 	@Override
 	public void completeSTFeatureExpression_Feature(final EObject model, final Assignment assignment,
 			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
-		lookupCrossReference((CrossReference) assignment.getTerminal(), context, acceptor, this::isVisible);
+		final LibraryElement expectedType = getExpectedType(model);
+		final Function<IEObjectDescription, ICompletionProposal> factory = getTypeRankedProposalFactory(context,
+				grammarAccess.getSTFeatureNameRule().getName(), model, expectedType);
+		lookupCrossReference((CrossReference) assignment.getTerminal(), context, acceptor, this::isVisible, factory);
+	}
+
+	protected Function<IEObjectDescription, ICompletionProposal> getTypeRankedProposalFactory(
+			final ContentAssistContext context, final String ruleName, final EObject model,
+			final LibraryElement expectedType) {
+		return new STCoreProposalCreator(context, ruleName, getQualifiedNameConverter()) {
+			@Override
+			public ICompletionProposal apply(final IEObjectDescription candidate) {
+				final ICompletionProposal proposal = super.apply(candidate);
+				getContentProposalPriorities().adjustTypeMatchPriority(proposal,
+						isExpectedType(model, candidate, expectedType));
+				return proposal;
+			}
+		};
+	}
+
+	protected STCoreContentProposalPriorities getContentProposalPriorities() {
+		return (STCoreContentProposalPriorities) getPriorityHelper();
+	}
+
+	@Override
+	public void completeSTStructInitializerExpression_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		completeTypedLiteralType(model, assignment, context, acceptor);
+	}
+
+	@Override
+	public void completeSTNumericLiteral_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		completeTypedLiteralType(model, assignment, context, acceptor);
+	}
+
+	@Override
+	public void completeSTDateLiteral_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		completeTypedLiteralType(model, assignment, context, acceptor);
+	}
+
+	@Override
+	public void completeSTTimeLiteral_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		completeTypedLiteralType(model, assignment, context, acceptor);
+	}
+
+	@Override
+	public void completeSTTimeOfDayLiteral_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		completeTypedLiteralType(model, assignment, context, acceptor);
+	}
+
+	@Override
+	public void completeSTDateAndTimeLiteral_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		completeTypedLiteralType(model, assignment, context, acceptor);
+	}
+
+	@Override
+	public void completeSTStringLiteral_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		completeTypedLiteralType(model, assignment, context, acceptor);
+	}
+
+	protected void completeTypedLiteralType(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		final LibraryElement expectedType = getExpectedType(model);
+		final CrossReference crossReference = (CrossReference) assignment.getTerminal();
+		final Function<IEObjectDescription, ICompletionProposal> factory = getLiteralTypeRankedProposalFactory(
+				context, GrammarUtil.containingParserRule(crossReference).getName(), expectedType);
+		lookupCrossReference(crossReference, context, acceptor, this::isVisible, factory);
+	}
+
+	protected Function<IEObjectDescription, ICompletionProposal> getLiteralTypeRankedProposalFactory(
+			final ContentAssistContext context, final String ruleName, final LibraryElement expectedType) {
+		return new STCoreProposalCreator(context, ruleName, getQualifiedNameConverter()) {
+			@Override
+			public ICompletionProposal apply(final IEObjectDescription candidate) {
+				final ICompletionProposal proposal = super.apply(candidate);
+				getContentProposalPriorities().adjustTypeMatchPriority(proposal,
+						isExpectedLiteralType(candidate, expectedType));
+				return proposal;
+			}
+		};
+	}
+
+	/**
+	 * Ranking signal only - never used to exclude a candidate. A "TypeName#value"
+	 * typed literal (numeric/date/time/string) is only ever syntactically valid
+	 * with its own exact declared type (none of these types have subtyping), but
+	 * the expected type at this position may be incomplete or simply wrong, so a
+	 * non-matching literal type is still proposed - just not promoted to the top.
+	 */
+	protected static boolean isExpectedLiteralType(final IEObjectDescription description,
+			final LibraryElement expectedType) {
+		if (!(expectedType instanceof final DataType expectedDataType)) {
+			return false;
+		}
+		final URI candidateUri = description.getEObjectURI();
+		return candidateUri != null && candidateUri.toString().equals(EcoreUtil.getURI(expectedDataType).toString());
+	}
+
+	protected static LibraryElement getExpectedType(final EObject model) {
+		if (model instanceof final STExpression expression) {
+			return STCoreUtil.getExpectedType(expression);
+		}
+		if (model instanceof final STInitializerExpression initializerExpression) {
+			return STCoreUtil.getExpectedType(initializerExpression);
+		}
+		if (model.eResource() instanceof final STResource resource) {
+			// no expression parsed yet at all (e.g. completing on an empty value field)
+			return resource.getExpectedType();
+		}
+		return null;
+	}
+
+	/**
+	 * Ranking signal only - never used to exclude a candidate. Returns whether the
+	 * candidate's declared type matches (or is assignable to) the expected type, so
+	 * matching proposals can be sorted to the top. A struct-typed candidate that
+	 * does not match is still a perfectly valid start of a member access
+	 * (e.g. "aStruct.field"), so this deliberately does not look at struct members
+	 * or numeric widening rules - it only ever promotes a proposal, never demotes
+	 * or removes one.
+	 */
+	protected static boolean isExpectedType(final EObject model, final IEObjectDescription description,
+			final LibraryElement expectedType) {
+		if (!(expectedType instanceof final DataType expectedDataType)) {
+			return false;
+		}
+		final String typeUri = description.getUserData(STCoreResourceDescriptionStrategy.TYPE_URI);
+		if (typeUri == null) {
+			return false;
+		}
+		// Compare the declared-type URI directly, without resolving it: elementary
+		// types (e.g. UINT) are in-memory singletons addressed by a synthetic URI
+		// that cannot be loaded as a resource at all, so an exact URI match is the
+		// only reliable and fast way to recognize "same type" for those.
+		final String expectedTypeUri = EcoreUtil.getURI(expectedDataType).toString();
+		if (typeUri.equals(expectedTypeUri)) {
+			return true;
+		}
+		// Different declared type: only worth resolving for a broader (e.g. numeric
+		// widening) match if it is already loaded - never force a load during
+		// content assist just to decide on a priority boost.
+		final EObject candidateType = model.eResource().getResourceSet().getEObject(URI.createURI(typeUri), false);
+		return candidateType instanceof final DataType candidateDataType && !candidateType.eIsProxy()
+				&& expectedDataType.isAssignableFrom(candidateDataType);
 	}
 
 	@Override
