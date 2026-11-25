@@ -57,6 +57,8 @@ public final class Messages extends NLS {
 	public static String TransitionSection_Comment;
 	public static String TransitionSection_Condition;
 	public static String EventActionsSection_EventInputs;
+	public static String ECCActions_Copy;
+	public static String ECCActions_Paste;
 
 	static {
 		// initialize resource bundle
