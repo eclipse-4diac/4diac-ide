@@ -41,7 +41,7 @@
 		<sonar.java.source>25</sonar.java.source>
 		<sonar.java.binaries>${project.build.outputDirectory}</sonar.java.binaries>
 		<sonar.organization>eclipse</sonar.organization>
-		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.4</org.eclipse.justj.jre.repository>
+		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.5.v20261124-1128</org.eclipse.justj.jre.repository>
 		<xtend-version>2.44.0</xtend-version>
 		<xtend-maven-plugin.version>2.44.0</xtend-maven-plugin.version>
 		<xtend-java-version>25</xtend-java-version>
