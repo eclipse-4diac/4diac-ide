@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Martin Erich Jobst
+ * Copyright (c) 2024 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,9 +9,12 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Franz Höpfinger - resolve watches of mapped elements in resources
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -20,6 +23,8 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -47,6 +52,42 @@ public final class DeploymentDebugWatchUtils {
 		case final FBNetworkElement networkElement -> networkElement.getResource();
 		case null, default -> null;
 		};
+	}
+
+	/**
+	 * Find an element by qualified name, including the resource-side copies of
+	 * mapped elements, which are named after the resource followed by the
+	 * qualified name of their application-side opposite.
+	 */
+	public static Stream<INamedElement> findByQualifiedName(final AutomationSystem system,
+			final String qualifiedName) {
+		final List<INamedElement> found = system.findByQualifiedName(qualifiedName).toList();
+		if (!found.isEmpty() || system.getSystemConfiguration() == null) {
+			return found.stream();
+		}
+		return system.getSystemConfiguration().getDevices().stream()
+				.flatMap(device -> device.getResource().stream())
+				.filter(resource -> qualifiedName.startsWith(resource.getQualifiedName() + '.'))
+				.flatMap(resource -> system
+						.findByQualifiedName(qualifiedName.substring(resource.getQualifiedName().length() + 1))
+						.map(element -> getMappedResourceElement(element, resource)))
+				.filter(Objects::nonNull);
+	}
+
+	private static INamedElement getMappedResourceElement(final INamedElement element, final Resource resource) {
+		return switch (element) {
+		case final BlockFBNetworkElement networkElement when isMappedTo(networkElement, resource) ->
+			networkElement.getOpposite();
+		case final IInterfaceElement interfaceElement when isMappedTo(interfaceElement.getBlockFBNetworkElement(),
+				resource) ->
+			getOppositeInterfaceElement(interfaceElement.getBlockFBNetworkElement().getOpposite(), interfaceElement);
+		case null, default -> null;
+		};
+	}
+
+	private static boolean isMappedTo(final BlockFBNetworkElement element, final Resource resource) {
+		return element != null && element.isMapped() && element.getMapping().getTo() != null
+				&& element.getMapping().getTo().getResource() == resource;
 	}
 
 	public static Device getDevice(final INamedElement element) {
@@ -81,6 +122,8 @@ public final class DeploymentDebugWatchUtils {
 		}
 		return switch (element.getBlockFBNetworkElement()) {
 		case null -> Stream.empty();
+		case final SubApp subapp when isMappedResourceSubApp(subapp) ->
+			resolveSubappInterfaceConnections(getMappedSourceInterfaceElement(element, subapp));
 		case final SubApp subapp -> {
 			subapp.loadSubAppNetwork(); // ensure network is loaded
 			if (element.isIsInput()) {
@@ -112,6 +155,8 @@ public final class DeploymentDebugWatchUtils {
 		}
 		return switch (element.getBlockFBNetworkElement()) {
 		case null -> Stream.empty();
+		case final SubApp subapp when isMappedResourceSubApp(subapp) ->
+			resolveSubappInterfaceEndpoints(getMappedSourceInterfaceElement(element, subapp), negate);
 		case final SubApp subapp -> {
 			subapp.loadSubAppNetwork(); // ensure network is loaded
 			yield element.isIsInput()
@@ -131,9 +176,32 @@ public final class DeploymentDebugWatchUtils {
 		case final AdapterFB adapterFB -> resolveSubappInterfaceConnections(adapterFB.getAdapterDecl())
 				.map(AdapterDeclaration::getAdapterFB).flatMap(resolved -> resolved.findBySimpleName(element.getName()))
 				.filter(IInterfaceElement.class::isInstance)
-				.map(resolved -> new SubAppConnectionEndpoint<>((T) resolved));
+				.map(resolved -> new SubAppConnectionEndpoint<>((T) resolved, negate));
 		default -> Stream.of(new SubAppConnectionEndpoint<>(element, negate));
 		};
+	}
+
+	/**
+	 * A subapp mapped to a resource only holds a copy of the interface but not the
+	 * inner network, which is only available in the application.
+	 */
+	private static boolean isMappedResourceSubApp(final SubApp subapp) {
+		return subapp.isMapped() && subapp.getMapping().getTo() == subapp;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends IInterfaceElement> T getMappedSourceInterfaceElement(final T element,
+			final SubApp subapp) {
+		return (T) getOppositeInterfaceElement(subapp.getOpposite(), element);
+	}
+
+	private static IInterfaceElement getOppositeInterfaceElement(final BlockFBNetworkElement opposite,
+			final IInterfaceElement element) {
+		// the mapping may be incomplete, e.g., in a broken system file
+		if (opposite == null || opposite.getInterface() == null) {
+			return null;
+		}
+		return opposite.getInterface().getInterfaceElement(element);
 	}
 
 	public static LibraryElement evaluateWatchType(final VarDeclaration varDeclaration) {
