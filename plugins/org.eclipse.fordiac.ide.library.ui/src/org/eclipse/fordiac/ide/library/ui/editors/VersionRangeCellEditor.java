@@ -18,15 +18,17 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-class VersionRangeCellEditor extends CellEditor {
+public class VersionRangeCellEditor extends CellEditor {
 
 	private Text text;
+	private boolean dialogOpen;
 
 	public VersionRangeCellEditor(final Composite parent) {
 		super(parent);
@@ -61,17 +63,41 @@ class VersionRangeCellEditor extends CellEditor {
 			}
 		});
 
+		// Check focus after SWT has finished transferring it between controls.
+		final FocusListener focusListener = FocusListener.focusLostAdapter(_ -> {
+			if (dialogOpen) {
+				return;
+			}
+			container.getDisplay().asyncExec(() -> {
+				if (!container.isDisposed() && isActivated() && !dialogOpen && !text.isFocusControl()
+						&& !dialogButton.isFocusControl()) {
+					focusLost();
+				}
+			});
+		});
+		text.addFocusListener(focusListener);
+		dialogButton.addFocusListener(focusListener);
+
 		return container;
 	}
 
 	private void openDialog() {
 		final VersionRangeSelectionDialog dialog = new VersionRangeSelectionDialog(text.getShell(), text.getText());
 
-		if (dialog.open() == Window.OK) {
-			text.setText(dialog.getVersionRange());
-			fireApplyEditorValue();
-			deactivate();
+		dialogOpen = true;
+		try {
+			if (dialog.open() == Window.OK) {
+				text.setText(dialog.getVersionRange());
+			}
+			text.setFocus();
+		} finally {
+			dialogOpen = false;
 		}
+	}
+
+	@Override
+	protected boolean dependsOnExternalFocusListener() {
+		return false;
 	}
 
 	@Override

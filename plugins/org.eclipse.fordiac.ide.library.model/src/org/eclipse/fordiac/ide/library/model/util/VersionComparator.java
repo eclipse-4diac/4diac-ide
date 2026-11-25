@@ -109,7 +109,7 @@ public class VersionComparator implements Comparator<String> {
 				return false;
 			}
 			return range.isExact() || range.getLeft().compareTo(range.getRight()) < 0;
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException _) {
 			return false;
 		}
 	}

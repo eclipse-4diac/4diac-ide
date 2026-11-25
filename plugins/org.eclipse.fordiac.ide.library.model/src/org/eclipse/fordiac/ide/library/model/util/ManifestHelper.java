@@ -18,11 +18,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -38,7 +42,13 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.fordiac.ide.library.model.Messages;
+import org.eclipse.fordiac.ide.library.model.library.Attribute;
+import org.eclipse.fordiac.ide.library.model.library.Dependencies;
+import org.eclipse.fordiac.ide.library.model.library.Excludes;
+import org.eclipse.fordiac.ide.library.model.library.Exports;
+import org.eclipse.fordiac.ide.library.model.library.Includes;
 import org.eclipse.fordiac.ide.library.model.library.Library;
+import org.eclipse.fordiac.ide.library.model.library.LibraryElement;
 import org.eclipse.fordiac.ide.library.model.library.LibraryFactory;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Product;
@@ -127,7 +137,7 @@ public final class ManifestHelper {
 			if (it.hasNext()) {
 				return getManifest(it.next());
 			}
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			// empty
 		}
 		return null;
@@ -185,7 +195,7 @@ public final class ManifestHelper {
 					return manifest;
 				}
 			}
-		} catch (final CoreException e) {
+		} catch (final CoreException _) {
 			// do nothing
 		}
 		return null;
@@ -233,7 +243,7 @@ public final class ManifestHelper {
 		}
 		try {
 			return new Version(manifest.getProduct().getVersionInfo().getVersion());
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException _) {
 			return defaultValue;
 		}
 	}
@@ -318,18 +328,35 @@ public final class ManifestHelper {
 	public static Manifest createManifest(final String scope) {
 		final Manifest manifest = factory.createManifest();
 		manifest.setScope(scope);
+		ensureProductInformation(manifest);
+		return manifest;
+	}
+
+	/**
+	 * Creates the required product and version information if needed.
+	 *
+	 * @param manifest manifest to complete
+	 * @return whether the manifest was changed
+	 */
+	public static boolean ensureProductInformation(final Manifest manifest) {
+		Product product = manifest.getProduct();
+		if (product == null) {
+			product = factory.createProduct();
+			manifest.setProduct(product);
+		}
+
+		if (product.getVersionInfo() != null) {
+			return false;
+		}
 
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); //$NON-NLS-1$
 		final VersionInfo versionInfo = factory.createVersionInfo();
-		versionInfo.setAuthor(""); //$NON-NLS-1$
+		versionInfo.setAuthor(System.getProperty("user.name")); //$NON-NLS-1$
 		versionInfo.setVersion(BASE_VERSION);
-		versionInfo.setDate(formatter.format(LocalDate.now()));
+		versionInfo.setDate(formatter.format(LocalDate.now(ZoneId.systemDefault())));
 
-		final Product product = factory.createProduct();
 		product.setVersionInfo(versionInfo);
-		manifest.setProduct(product);
-
-		return manifest;
+		return true;
 	}
 
 	/**
@@ -362,7 +389,8 @@ public final class ManifestHelper {
 	 */
 	public static boolean addDependency(final Manifest manifest, final Required dependency) {
 		if (manifest.getDependencies() == null) {
-			manifest.setDependencies(factory.createDependencies());
+			manifest.setDependencies(createDependencies(dependency));
+			return true;
 		}
 		final EList<Required> reqList = manifest.getDependencies().getRequired();
 		int index = 0;
@@ -408,7 +436,8 @@ public final class ManifestHelper {
 	 */
 	public static void updateDependency(final Manifest manifest, final Required dependency) {
 		if (manifest.getDependencies() == null) {
-			manifest.setDependencies(factory.createDependencies());
+			manifest.setDependencies(createDependencies(dependency));
+			return;
 		}
 		sortManifestDependencies(manifest);
 		final EList<Required> reqList = manifest.getDependencies().getRequired();
@@ -455,13 +484,18 @@ public final class ManifestHelper {
 		final Resource resource = createResource(uri);
 		try {
 			resource.load(null);
-		} catch (final FileNotFoundException e) {
+		} catch (final FileNotFoundException _) {
 			return null; // suppress logging of file not found exception
 		} catch (final IOException e) {
 			ILog.get().warn("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
 			return null;
 		}
-		return (Manifest) resource.getContents().get(0);
+
+		if (!resource.getContents().isEmpty() && resource.getContents().getFirst() instanceof final Manifest manifest) {
+			return manifest;
+		}
+
+		return null;
 	}
 
 	/**
@@ -473,7 +507,7 @@ public final class ManifestHelper {
 	public static boolean saveManifest(final Manifest manifest) {
 		try {
 			manifest.eResource().save(null);
-		} catch (final IOException e) {
+		} catch (final IOException _) {
 			return false;
 		}
 		return true;
@@ -511,6 +545,76 @@ public final class ManifestHelper {
 		return required;
 	}
 
+	public static Library createExportLibrary(final Manifest manifest) {
+		final Exports exports = manifest.getExports();
+		final Stream<String> existingNames = exports == null ? Stream.empty()
+				: exports.getLibrary().stream().map(Library::getSymbolicName);
+
+		final var lib = factory.createLibrary();
+		lib.setExcludes(factory.createExcludes());
+		lib.setIncludes(factory.createIncludes());
+		final Dependencies projectDependencies = manifest.getDependencies();
+		lib.setDependencies(
+				projectDependencies == null ? factory.createDependencies() : EcoreUtil.copy(projectDependencies));
+		final String symName = createUniqueLibraryName(existingNames);
+		lib.setSymbolicName(symName);
+
+		return lib;
+	}
+
+	private static String createUniqueLibraryName(final Stream<String> names) {
+		final Set<String> usedNames = new HashSet<>();
+		names.forEach(usedNames::add);
+
+		int suffix = 0;
+		String symbolicName;
+		do {
+			symbolicName = "lib" + suffix; //$NON-NLS-1$
+			suffix++;
+		} while (usedNames.contains(symbolicName));
+
+		return symbolicName;
+	}
+
+	public static Exports createExports(final Library library) {
+		final Exports exports = factory.createExports();
+		exports.getLibrary().add(library);
+		return exports;
+	}
+
+	public static Includes createIncludes(final LibraryElement pattern) {
+		final Includes includes = factory.createIncludes();
+		includes.getLibraryElement().add(pattern);
+		return includes;
+	}
+
+	public static Excludes createExcludes(final LibraryElement pattern) {
+		final Excludes excludes = factory.createExcludes();
+		excludes.getLibraryElement().add(pattern);
+		return excludes;
+	}
+
+	public static Dependencies createDependencies(final Required required) {
+		final Dependencies dependencies = factory.createDependencies();
+		dependencies.getRequired().add(required);
+		return dependencies;
+	}
+
+	public static LibraryElement createPattern(final String pattern) {
+		final var exclude = factory.createLibraryElement();
+		exclude.setValue(pattern);
+		return exclude;
+	}
+
+	public static Attribute createAttribute(final String name) {
+		final var attribute = factory.createAttribute();
+		attribute.setName(name);
+		attribute.setType(""); //$NON-NLS-1$
+		attribute.setValue(""); //$NON-NLS-1$
+		attribute.setComment(""); //$NON-NLS-1$
+		return attribute;
+	}
+
 	/**
 	 * Checks if given project has the Fordiac project nature
 	 *
@@ -520,7 +624,7 @@ public final class ManifestHelper {
 	private static boolean isFordiacProject(final IProject project) {
 		try {
 			return project.getNature(FORDIAC_PROJECT_NATURE_ID) != null;
-		} catch (final CoreException e) {
+		} catch (final CoreException _) {
 			// empty
 		}
 		return false;

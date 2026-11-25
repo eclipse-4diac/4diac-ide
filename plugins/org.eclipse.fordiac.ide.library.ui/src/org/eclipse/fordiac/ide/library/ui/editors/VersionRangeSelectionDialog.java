@@ -52,7 +52,7 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 
 	@Override
 	protected Control createDialogArea(final Composite parent) {
-		setTitle(Messages.ManifestEditor_VersionRange_Title);
+		setTitle(Messages.ManifestEditor_ConfigureVersionRange);
 		setMessage(Messages.ManifestEditor_VersionRange_Description);
 
 		final Composite area = (Composite) super.createDialogArea(parent);
@@ -66,6 +66,8 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 		createPreviewGroup(container);
 
 		initializeValues();
+		minVersionText.addVerifyListener(VERSION_CHARACTER_FILTER);
+		maxVersionText.addVerifyListener(VERSION_CHARACTER_FILTER);
 		addUpdateListeners();
 		updatePreview();
 
@@ -81,7 +83,6 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 		minVersionText = new Text(group, SWT.BORDER);
 		minVersionText.setMessage("e.g. 1.0.0"); //$NON-NLS-1$
 		minVersionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		minVersionText.addVerifyListener(VERSION_CHARACTER_FILTER);
 
 		includeMinVersion = new Button(group, SWT.CHECK);
 		includeMinVersion.setText(Messages.ManifestEditor_VersionRange_IncludeInRange);
@@ -96,7 +97,6 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 		maxVersionText = new Text(group, SWT.BORDER);
 		maxVersionText.setMessage("e.g. 2.0.0"); //$NON-NLS-1$
 		maxVersionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		maxVersionText.addVerifyListener(VERSION_CHARACTER_FILTER);
 
 		includeMaxVersion = new Button(group, SWT.CHECK);
 		includeMaxVersion.setText(Messages.ManifestEditor_VersionRange_IncludeInRange);
@@ -125,8 +125,8 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 
 			includeMinVersion.setSelection(input.getLeftType() == VersionRange.LEFT_CLOSED);
 			includeMaxVersion.setSelection(input.getRightType() == VersionRange.RIGHT_CLOSED);
-		} catch (final IllegalArgumentException e) {
-			// ignore invalid initial value
+		} catch (final IllegalArgumentException _) {
+			minVersionText.setText(versionRange);
 		}
 	}
 
@@ -139,7 +139,9 @@ class VersionRangeSelectionDialog extends TitleAreaDialog {
 	}
 
 	private void updatePreview() {
-		rangePreviewLabel.setText(buildVersionRange());
+		final String range = buildVersionRange();
+		rangePreviewLabel.setText(range);
+		setErrorMessage(VersionComparator.isValidRange(range) ? null : Messages.ManifestEditor_InvalidVersion);
 		rangePreviewLabel.getParent().layout();
 	}
 

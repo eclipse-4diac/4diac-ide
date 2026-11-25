@@ -15,6 +15,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistoryListener;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryEvent;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -25,77 +36,133 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.fordiac.ide.library.model.library.LibraryPackage;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.library.LibraryValidation;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
-import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class ManifestEditor extends FormEditor implements IGotoMarker {
 
+	private final IUndoContext undoContext = new ObjectUndoContext(this);
+
 	private static final String DEPENDENCY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorDependencyPage"; //$NON-NLS-1$
-	ManifestEditorDependencyPage dependencyPage;
+	private static final String PRODUCT_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorProductPage"; //$NON-NLS-1$
+	private static final String LIBRARY_PAGE_ID = "fordiac.ide.library.ui.editors.manifestEditorLibraryPage"; //$NON-NLS-1$
 
 	private Manifest manifest;
-	private IProject project;
-	private boolean isDirty;
+	private Manifest savedManifest;
+	private List<Diagnostic> validationResult;
+
+	private IUndoableOperation savePosition;
+	private boolean dirty;
 
 	@Override
 	protected void addPages() {
-		loadManifest();
-		isDirty = false;
-		dependencyPage = new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, "Dependencies"); //$NON-NLS-1$
+		validateModel();
 
 		try {
-			final int index = addPage(dependencyPage);
-			setPageText(index, dependencyPage.getTitle());
-			setPageImage(index, dependencyPage.getTitleImage());
+			addPage(new ManifestEditorProductPage(this, PRODUCT_PAGE_ID, Messages.ManifestEditor_Product));
+			addPage(new ManifestEditorDependencyPage(this, DEPENDENCY_PAGE_ID, Messages.ManifestEditor_Dependencies));
+
+			// do not create library editing page for library manifest
+			if (ManifestHelper.isProject(manifest)) {
+				addPage(new ManifestEditorLibraryPage(this, LIBRARY_PAGE_ID, Messages.ManifestEditor_Library));
+			}
 		} catch (final PartInitException e) {
 			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
 	@Override
+	public int addPage(final IFormPage page) throws PartInitException {
+		super.addPage(page);
+		final int index = getPageCount() - 1;
+		setPageImage(index, page.getTitleImage());
+		return index;
+	}
+
+	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if (isDirty() && canSave()) {
-			ManifestHelper.saveManifest(manifest);
-			setDirty(false);
+		if (!ManifestHelper.saveManifest(manifest)) {
+			MessageDialog.openError(getSite().getShell(), Messages.ManifestEditor_SaveErrorTitle,
+					Messages.ManifestEditor_SaveError);
+			return;
+		}
+
+		savedManifest = EcoreUtil.copy(manifest);
+		savePosition = OperationHistoryFactory.getOperationHistory().getUndoOperation(getUndoContext());
+		dirty = false;
+		firePropertyChange(PROP_DIRTY);
+
+		if (getEditorInput() instanceof final IFileEditorInput input) {
+			LibraryValidation.validate(manifest, input.getFile());
+		}
+
+	}
+
+	public void execute(final IUndoableOperation operation) {
+		operation.addContext(getUndoContext());
+		try {
+			OperationHistoryFactory.getOperationHistory().execute(operation, null, null);
+		} catch (final ExecutionException e) {
+			ILog.get().error(e.getMessage(), e);
 		}
 	}
 
-	private void loadManifest() {
-		if (getEditorInput() instanceof final FileEditorInput input) {
-			manifest = ManifestHelper.getManifest(input.getFile());
-		}
+	public IUndoContext getUndoContext() {
+		return undoContext;
 	}
 
-	private boolean canSave() {
-		return manifest != null && manifest.getDependencies() != null && manifest.getDependencies().getRequired()
-				.stream().map(Required::getVersion).allMatch(VersionComparator::isValidRange);
+	public List<Diagnostic> getValidationResult() {
+		return validationResult;
+	}
+
+	private void validateModel() {
+		validationResult = flatten(LibraryValidation.validate(manifest)).toList();
+
+		getPages().forEach(page -> {
+			page.updateValidation(validationResult);
+			page.refresh();
+		});
+	}
+
+	private static Manifest loadManifest(final IEditorInput input) throws PartInitException {
+		final Manifest loadedManifest = switch (input) {
+		case final IFileEditorInput fileInput -> ManifestHelper.getManifest(fileInput.getFile());
+		case final IURIEditorInput uriInput -> ManifestHelper.getManifest(URI.createURI(uriInput.getURI().toString()));
+		default -> null;
+		};
+
+		if (loadedManifest == null) {
+			throw new PartInitException(MessageFormat.format(Messages.ManifestEditor_OpenError, input.getName()));
+		}
+		return loadedManifest;
+	}
+
+	private Stream<ManifestEditorPage<?>> getPages() {
+		return pages.stream().filter(ManifestEditorPage.class::isInstance).map(ManifestEditorPage.class::cast);
 	}
 
 	@Override
 	public boolean isDirty() {
-		return isDirty;
-	}
-
-	public void setDirty(final boolean dirty) {
-		if (isDirty != dirty) {
-			isDirty = dirty;
-			firePropertyChange(PROP_DIRTY);
-		}
+		return dirty;
 	}
 
 	@Override
@@ -113,32 +180,42 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 	}
 
 	public IProject getProject() {
-		if (project == null && getEditorInput() instanceof final FileEditorInput input && input.getFile() != null) {
-			project = input.getFile().getProject();
+		if (getEditorInput() instanceof final IFileEditorInput input && input.getFile() != null) {
+			return input.getFile().getProject();
 		}
-		return project;
+		return null;
 	}
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		if (!FordiacErrorMarker.isTargetOfType(marker, LibraryPackage.Literals.REQUIRED)) {
+		final EObject markerElement = resolveModelElement(marker);
+
+		if (markerElement == null) {
 			return;
 		}
 
-		if (resolveModelElement(marker) instanceof final Required required) {
-			setActivePage(DEPENDENCY_PAGE_ID);
-			dependencyPage.reveal(required);
-		}
+		getPages().filter(p -> p.containsElement(markerElement)).findFirst().ifPresent(p -> setActivePage(p.getId()));
+	}
+
+	private static Stream<Diagnostic> flatten(final Stream<Diagnostic> diagnostics) {
+		return diagnostics.flatMap(
+				diagnostic -> Stream.concat(Stream.of(diagnostic), flatten(diagnostic.getChildren().stream())));
 	}
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
+		manifest = loadManifest(input);
+		savedManifest = EcoreUtil.copy(manifest);
+		dirty = ManifestHelper.ensureProductInformation(manifest);
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(buildListener, IResourceChangeEvent.POST_BUILD);
+		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(operationHistoryListener);
 	}
 
 	@Override
 	public void dispose() {
+		OperationHistoryFactory.getOperationHistory().removeOperationHistoryListener(operationHistoryListener);
+		OperationHistoryFactory.getOperationHistory().dispose(getUndoContext(), true, true, true);
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(buildListener);
 		super.dispose();
 	}
@@ -157,6 +234,28 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 
 		return resource.getEObject(targetUri.fragment());
 	}
+
+	private final IOperationHistoryListener operationHistoryListener = event -> {
+		final IUndoableOperation operation = event.getOperation();
+
+		if (operation == null || !operation.hasContext(undoContext)) {
+			return;
+		}
+
+		switch (event.getEventType()) {
+		case OperationHistoryEvent.OPERATION_ADDED, OperationHistoryEvent.UNDONE, OperationHistoryEvent.REDONE,
+				OperationHistoryEvent.OPERATION_REMOVED -> {
+			final IUndoableOperation position = event.getHistory().getUndoOperation(undoContext);
+			// An empty undo stack can also mean older edits were discarded.
+			dirty = position == null ? !EcoreUtil.equals(manifest, savedManifest) : position != savePosition;
+			firePropertyChange(PROP_DIRTY);
+			validateModel();
+		}
+		default -> {
+			// do nothing
+		}
+		}
+	};
 
 	private final IResourceChangeListener buildListener = new IResourceChangeListener() {
 		private final IPath externalLibPath = new Path(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
@@ -182,9 +281,11 @@ public class ManifestEditor extends FormEditor implements IGotoMarker {
 			}
 
 			display.asyncExec(() -> {
-				if (dependencyPage != null) {
-					dependencyPage.refresh();
+				if (getContainer().isDisposed()) {
+					return;
 				}
+
+				getPages().forEach(ManifestEditorPage::refresh);
 			});
 		}
 	};
