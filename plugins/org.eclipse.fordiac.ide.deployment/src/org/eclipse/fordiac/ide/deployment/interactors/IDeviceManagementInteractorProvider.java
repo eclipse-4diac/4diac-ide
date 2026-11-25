@@ -33,6 +33,17 @@ public interface IDeviceManagementInteractorProvider {
 	String getProfileName();
 
 	/**
+	 * Check if the interactors of this provider write to an override handler given
+	 * to {@link #createInteractor(Device, IDeviceManagementCommunicationHandler)}
+	 * instead of communicating with the device itself.
+	 *
+	 * @return true, if an override handler is honored
+	 */
+	default boolean supportsOverrideHandler() {
+		return true;
+	}
+
+	/**
 	 * Create an instance of the device managment interactor this provider is
 	 * providing
 	 * 

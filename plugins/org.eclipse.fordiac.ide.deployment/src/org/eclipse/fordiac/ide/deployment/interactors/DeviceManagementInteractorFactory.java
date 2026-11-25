@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Franz Höpfinger - fall back to HOLOBLOC for unsupported override handlers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
@@ -36,6 +37,7 @@ public enum DeviceManagementInteractorFactory {
 	INSTANCE;
 
 	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.deployment"; //$NON-NLS-1$
+	private static final String OVERRIDE_HANDLER_FALLBACK_PROFILE = "HOLOBLOC"; //$NON-NLS-1$
 	private List<IDeviceManagementInteractorProvider> deviceManagementInteractorProviders = null;
 
 	/**
@@ -44,19 +46,25 @@ public enum DeviceManagementInteractorFactory {
 	 * @param device             the device for which a deployment executor should
 	 *                           be get
 	 * @param overrideComHandler if not null this com handler will be given to the
-	 *                           executor
+	 *                           executor, falling back to the HOLOBLOC profile if
+	 *                           the device's profile does not support it
 	 *
 	 * @return the deployment executor
 	 */
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device,
 			final IDeviceManagementCommunicationHandler overrideComHandler, final String profile) {
-		final String profileToUse = (null != profile) ? profile : device.getProfile();
-		for (final IDeviceManagementInteractorProvider idepExec : getDeviceManagementInteractorList()) {
-			if (idepExec.supports(profileToUse)) {
-				return idepExec.createInteractor(device, overrideComHandler);
-			}
+		IDeviceManagementInteractorProvider provider = getProvider(
+				(null != profile) ? profile : device.getProfile());
+		if (null != overrideComHandler && null != provider && !provider.supportsOverrideHandler()) {
+			// e.g., boot files are written in the FORTE line protocol for any profile
+			provider = getProvider(OVERRIDE_HANDLER_FALLBACK_PROFILE);
 		}
-		return null;
+		return (null != provider) ? provider.createInteractor(device, overrideComHandler) : null;
+	}
+
+	private IDeviceManagementInteractorProvider getProvider(final String profile) {
+		return getDeviceManagementInteractorList().stream().filter(provider -> provider.supports(profile))
+				.findFirst().orElse(null);
 	}
 
 	public IDeviceManagementInteractor getDeviceManagementInteractor(final Device device) {
