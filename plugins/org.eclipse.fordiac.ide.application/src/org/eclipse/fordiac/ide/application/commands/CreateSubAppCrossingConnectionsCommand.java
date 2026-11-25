@@ -81,7 +81,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		this.destination = Objects.requireNonNull(destination);
 		this.sourceNetworks = Objects.requireNonNull(sourceNetworks);
 		this.destinationNetworks = Objects.requireNonNull(destinationNetworks);
-		this.match = Objects.requireNonNull(match);
+		this.match = match;
 	}
 
 	public static CreateSubAppCrossingConnectionsCommand createProcessBorderCrossingConnection(
@@ -123,6 +123,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	@Override
 	public boolean canExecute() {
+		if (match == null) {
+			return false;
+		}
+
 		// as not all checks of the createconnection command are valid we need to do our
 		// own checks
 
@@ -160,6 +164,10 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	@Override
 	public void execute() {
+		if (match == null) {
+			return;
+		}
+
 		final IInterfaceElement leftTemplate = resolveTemplate(source, destination);
 		final IInterfaceElement rightTemplate = resolveTemplate(destination, source);
 
@@ -178,8 +186,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 			}
 		}
 		// check if template is generic
-		if ((IecTypes.GenericTypes.isAnyType(template.getType())
-				|| EventTypeLibrary.isGenericEventType(template.getType()))
+		if (template.getType() != null && opposite.getType() != null
+				&& (IecTypes.GenericTypes.isAnyType(template.getType())
+						|| EventTypeLibrary.isGenericEventType(template.getType()))
 				&& !(IecTypes.GenericTypes.isAnyType(opposite.getType())
 						|| EventTypeLibrary.isGenericEventType(opposite.getType()))) {
 			return opposite; // use opposite if template is generic and opposite is not
@@ -211,7 +220,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 		int sourceIndex = sourceNetworks.size() - 1;
 		int destinationIndex = destinationNetworks.size() - 1;
-		FBNetwork match = sourceNetworks.get(0);
+		FBNetwork match = null;
 
 		// breaks when the networks don't match anymore
 		while ((sourceIndex >= 0) && (destinationIndex >= 0)
@@ -265,7 +274,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		int i = 0;
 
 		while (network != match) {
-			final SubApp subapp = (SubApp) network.eContainer();
+			if (!(network.eContainer() instanceof final SubApp subapp)) {
+				break;
+			}
 
 			final IInterfaceElement existingConnection = existingConnection(ie, subapp, oppositePin, isRightPath);
 
@@ -284,6 +295,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 			}
 
 			i++;
+			if (i >= networks.size()) {
+				break;
+			}
 			network = networks.get(i);
 		}
 		return ie;

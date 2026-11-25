@@ -82,13 +82,17 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 			final var sinks = new ArrayList<IInterfaceElement>();
 			collectSinksRec(connection, sinks);
 			for (final var sink : sinks) {
-				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, sink));
+				if (CreateSubAppCrossingConnectionsCommand.hasCommonFBNetwork(source, sink)) {
+					add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, sink));
+				}
 			}
 		} else {
 			final var sources = new ArrayList<IInterfaceElement>();
 			collectSourcesRec(connection, sources, true);
 			for (final var src : sources) {
-				add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(src, target));
+				if (CreateSubAppCrossingConnectionsCommand.hasCommonFBNetwork(src, target)) {
+					add(CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(src, target));
+				}
 			}
 		}
 	}
