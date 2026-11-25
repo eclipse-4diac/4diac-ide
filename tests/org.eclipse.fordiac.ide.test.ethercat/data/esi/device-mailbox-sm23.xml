@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EtherCATInfo>
+  <Vendor>
+    <Id>#x00000002</Id>
+    <Name LcId="1033">Test Vendor</Name>
+  </Vendor>
+  <Descriptions>
+    <Devices>
+      <Device Physics="YY">
+        <Type ProductCode="#x00003001" RevisionNo="#x00000001">MailboxIO</Type>
+        <Name LcId="1033">Mailbox device with SM2/SM3 process data</Name>
+        <Sm Enable="1" StartAddress="#x1000" ControlByte="#x26" DefaultSize="128">MBoxOut</Sm>
+        <Sm Enable="1" StartAddress="#x1400" ControlByte="#x22" DefaultSize="128">MBoxIn</Sm>
+        <Sm Enable="1" StartAddress="#x1800" ControlByte="#x64" DefaultSize="0">Outputs</Sm>
+        <Sm Enable="1" StartAddress="#x1c00" ControlByte="#x20" DefaultSize="0">Inputs</Sm>
+        <RxPdo Sm="2" Fixed="1" Mandatory="1">
+          <Index>#x1600</Index>
+          <Name>Output</Name>
+          <Entry>
+            <Index>#x7000</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>8</BitLen>
+            <Name>Value</Name>
+            <DataType>USINT</DataType>
+          </Entry>
+        </RxPdo>
+        <TxPdo Sm="3" Fixed="1" Mandatory="1">
+          <Index>#x1a00</Index>
+          <Name>Input</Name>
+          <Entry>
+            <Index>#x6000</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>8</BitLen>
+            <Name>Value</Name>
+            <DataType>USINT</DataType>
+          </Entry>
+        </TxPdo>
+      </Device>
+    </Devices>
+  </Descriptions>
+</EtherCATInfo>

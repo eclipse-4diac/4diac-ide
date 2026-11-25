@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Sichuan Qunyuan Technology Co., Ltd.
+ * Copyright (c) 2026 Sichuan Qunyuan Technology Co., Ltd., MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Zijun Tang - initial API and implementation
+ *   Tim Grocki - keep PDOs assigned to any sync manager
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ethercat;
 
@@ -45,6 +46,9 @@ public class EsiFileParser {
 	private static final String VENDOR_ENGLISH_NAME_XPATH = "//Vendor/Name[@LcId='1033']/text()"; //$NON-NLS-1$
 	private static final String VENDOR_NORMAL_NAME_XPATH = "//Vendor/Name/text()"; //$NON-NLS-1$
 	private static final String VENDOR_ID_XPATH = "//Vendor/Id/text()"; //$NON-NLS-1$
+	private static final String RX_PDO_TAG = "RxPdo"; //$NON-NLS-1$
+	private static final String TX_PDO_TAG = "TxPdo"; //$NON-NLS-1$
+	private static final String SYNC_MANAGER_ATTRIBUTE = "Sm"; //$NON-NLS-1$
 
 	private Document document;
 	private XPath xpath;
@@ -216,14 +220,11 @@ public class EsiFileParser {
 			}
 			final Element childElement = (Element) childNodes.item(i);
 			final String tagName = childElement.getTagName();
-			if("RxPdo".equals(tagName) || "TxPdo".equals(tagName)) { //$NON-NLS-1$ //$NON-NLS-2$
-				final String smValue = childElement.getAttribute("Sm"); //$NON-NLS-1$
-				if("2".equals(smValue) || "3".equals(smValue)) { //$NON-NLS-1$ //$NON-NLS-2$
-					final Pdo.PdoType pdoType = "RxPdo".equals(tagName) ? Pdo.PdoType.RxPdo : Pdo.PdoType.TxPdo; //$NON-NLS-1$
-					final Pdo pdo = parsePdo(childElement, pdoType);
-					if(pdo != null) {
-						device.addPdo(pdo);
-					}
+			if ((RX_PDO_TAG.equals(tagName) || TX_PDO_TAG.equals(tagName)) && isAssignedToSyncManager(childElement)) {
+				final Pdo.PdoType pdoType = RX_PDO_TAG.equals(tagName) ? Pdo.PdoType.RxPdo : Pdo.PdoType.TxPdo;
+				final Pdo pdo = parsePdo(childElement, pdoType);
+				if (pdo != null) {
+					device.addPdo(pdo);
 				}
 			}
 		}
@@ -256,18 +257,25 @@ public class EsiFileParser {
 			}
 			final Element childElement = (Element) childNodes.item(i);
 			final String tagName = childElement.getTagName();
-			if("RxPdo".equals(tagName) && "2".equals(childElement.getAttribute("Sm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			if (!isAssignedToSyncManager(childElement)) {
+				continue;
+			}
+			if (RX_PDO_TAG.equals(tagName)) {
 				final Pdo pdo = parsePdo(childElement, Pdo.PdoType.RxPdo);
 				if(pdo != null) {
 					module.addPdo(pdo);
 				}
-			} else if("TxPdo".equals(tagName) && "3".equals(childElement.getAttribute("Sm"))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			} else if (TX_PDO_TAG.equals(tagName)) {
 				final Pdo pdo = parsePdo(childElement, Pdo.PdoType.TxPdo);
 				if(pdo != null) {
 					module.addPdo(pdo);
 				}
 			}
 		}
+	}
+
+	private static boolean isAssignedToSyncManager(final Element pdoElement) {
+		return !pdoElement.getAttribute(SYNC_MANAGER_ATTRIBUTE).isBlank();
 	}
 
 	private Pdo parsePdo(final Element pdoElement, final Pdo.PdoType pdoType) {
