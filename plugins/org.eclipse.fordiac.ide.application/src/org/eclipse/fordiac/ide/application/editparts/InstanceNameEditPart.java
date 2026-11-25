@@ -47,6 +47,25 @@ import org.eclipse.ui.IEditorPart;
 public class InstanceNameEditPart extends AbstractGraphicalEditPart
 		implements NodeEditPart, AnnotableGraphicalEditPart {
 
+	private static final class InstanceNameDirectEditPolicy extends AbstractViewRenameEditPolicy {
+		@Override
+		protected Command getDirectEditCommand(final DirectEditRequest request) {
+			return ChangeNameCommand.forName(getHost().getModel().getRefElement(),
+					(String) request.getCellEditor().getValue());
+		}
+
+		@Override
+		protected void showCurrentEditValue(final DirectEditRequest request) {
+			final String value = (String) request.getCellEditor().getValue();
+			getHost().getFigure().setText(value);
+		}
+
+		@Override
+		public InstanceNameEditPart getHost() {
+			return (InstanceNameEditPart) super.getHost();
+		}
+	}
+
 	private DiagramFontChangeListener fontChangeListener;
 
 	@Override
@@ -107,16 +126,7 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart
 		// FBNetwork elements need a special rename command therefore we remove the
 		// standard edit policy and add a adjusted one
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof final InstanceNameEditPart instanceNameEditPart) {
-					return ChangeNameCommand.forName(instanceNameEditPart.getModel().getRefElement(),
-							(String) request.getCellEditor().getValue());
-				}
-				return null;
-			}
-		});
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new InstanceNameDirectEditPolicy());
 	}
 
 	@Override
