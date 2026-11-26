@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.deployment.debug.ui.handler;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -67,11 +68,19 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	private static class OnlineDeploymentErrorCheckListener implements IDeploymentListener {
 
 		private final AbstractDeploymentCommand currentObject;
+		private final boolean deferDialog;
+		private final List<String> deferredMessages = new ArrayList<>();
 		private String lastMessage = ""; //$NON-NLS-1$
 		private String lastCommand = ""; //$NON-NLS-1$
 
 		public OnlineDeploymentErrorCheckListener(final AbstractDeploymentCommand currentObject) {
+			this(currentObject, false);
+		}
+
+		private OnlineDeploymentErrorCheckListener(final AbstractDeploymentCommand currentObject,
+				final boolean deferDialog) {
 			this.currentObject = currentObject;
+			this.deferDialog = deferDialog;
 		}
 
 		@Override
@@ -112,10 +121,25 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			if (!lastMessage.equals(currentMessage)) {
 				// when deleting Resources two messages are sent (KILL and delete Resource) and
 				// both failed creating two popups with the same information
-				final Shell shell = Display.getDefault().getActiveShell();
-				MessageDialog.openError(shell, currentElement.getErrorMessageHeader(), currentMessage);
+				if (deferDialog) {
+					deferredMessages.add(currentMessage);
+				} else {
+					openError(currentElement, currentMessage);
+				}
 				lastMessage = currentMessage;
 			}
+		}
+
+		public void showDeferredErrors() {
+			for (final String message : deferredMessages) {
+				openError(currentObject, message);
+			}
+			deferredMessages.clear();
+		}
+
+		private static void openError(final AbstractDeploymentCommand currentElement, final String message) {
+			final Shell shell = Display.getDefault().getActiveShell();
+			MessageDialog.openError(shell, currentElement.getErrorMessageHeader(), message);
 		}
 	}
 
@@ -127,9 +151,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 			if (prepareParametersToExecute(currentElement)) {
 				final Optional<DeploymentDebugDevice> activeDevice = AbstractDeploymentHandler.findActiveDevice(device);
 				if (activeDevice.isPresent()) {
-					// Callbacks on this connection run on the monitoring executor. Do not register
-					// a listener there; it could open a dialog off the UI thread, and monitoring
-					// polls the same listener list.
+					// Collect response errors on the monitoring executor and show them here.
 					executeOnMonitoredDevice(activeDevice.get());
 					continue;
 				}
@@ -157,12 +179,20 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 	}
 
 	private void executeOnMonitoredDevice(final DeploymentDebugDevice activeDevice) {
+		final OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(this, true);
 		try {
-			executeCommand(activeDevice.getDeviceManagementExecutorService());
+			activeDevice.getDeviceManagementExecutorService().executeSerially(delegate -> {
+				delegate.addDeploymentListener(errorChecker);
+				try {
+					executeCommand(delegate);
+				} finally {
+					delegate.removeDeploymentListener(errorChecker);
+				}
+			});
 		} catch (final DeploymentException e) {
-			new OnlineDeploymentErrorCheckListener(this).showDeploymentError(e.getMessage(),
-					DeploymentHelper.getMgrIDSafe(device), this);
+			errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrIDSafe(device), this);
 		}
+		errorChecker.showDeferredErrors();
 	}
 
 	private static List<Object> getObjectSelectionArray(final ExecutionEvent event) {

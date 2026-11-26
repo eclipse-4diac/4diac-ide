@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Zijun Tang - run a direct call on the monitoring executor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
@@ -397,4 +398,30 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 * @throws DeploymentException if an error occurred
 	 */
 	Future<Optional<String>> replayNextEventAsync(final Resource resource) throws DeploymentException;
+
+	/**
+	 * Run {@code call} on this executor's thread against the underlying interactor.
+	 *
+	 * Scheduled monitoring tasks wait until the call returns, so a listener added and
+	 * removed inside it does not race with a poll. The call must not use this service
+	 * again, or the single thread deadlocks.
+	 *
+	 * @param call the action to run
+	 * @throws DeploymentException if the action fails
+	 */
+	void executeSerially(SerialCall call) throws DeploymentException;
+
+	/**
+	 * An action invoked on the executor thread with the underlying interactor.
+	 */
+	@FunctionalInterface
+	interface SerialCall {
+		/**
+		 * Run against the underlying interactor.
+		 *
+		 * @param interactor the interactor, not the executor service
+		 * @throws DeploymentException if the action fails
+		 */
+		void accept(IDeviceManagementInteractor interactor) throws DeploymentException;
+	}
 }
