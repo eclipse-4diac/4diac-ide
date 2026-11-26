@@ -14,6 +14,7 @@
  *   Alois Zoitl - changed inheritence to DiagramEditorWithFlyoutPalette,
  *                 removed duplicated code
  *   Vikash Kumar Sinha - forward the open request to the ECC edit part
+ *                      - added copy and paste actions for ECC states
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
@@ -26,9 +27,11 @@ import org.eclipse.draw2d.FreeformFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.AddECCActionAction;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.CopyECCAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.DeleteECCAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.ECCSelectAllAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.NewStateAction;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.actions.PasteECCAction;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithm;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPartFactory;
@@ -70,10 +73,13 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
@@ -148,6 +154,36 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		// position for state creation
 		final IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
 		((NewStateAction) action).setViewerControl((FigureCanvas) viewer.getControl());
+
+		// the paste action needs the control to know where the last right click was
+		((PasteECCAction) getActionRegistry().getAction(ActionFactory.PASTE.getId()))
+				.setViewerControl((FigureCanvas) viewer.getControl());
+
+		viewer.getControl().addListener(SWT.Activate, this::handleActivationChanged);
+		viewer.getControl().addListener(SWT.Deactivate, this::handleActivationChanged);
+	}
+
+	private void handleActivationChanged(final Event event) {
+		if (PlatformUI.getWorkbench().isClosing()) {
+			return;
+		}
+		final boolean activated = event.type == SWT.Activate;
+
+		setAction(ActionFactory.COPY.getId(), activated);
+		setAction(ActionFactory.PASTE.getId(), activated);
+
+		getEditorSite().getActionBars().updateActionBars();
+	}
+
+	private void setAction(final String actionId, final boolean activated) {
+		final IAction action = getActionRegistry().getAction(actionId);
+		final IActionBars actionBars = getEditorSite().getActionBars();
+
+		if (activated && actionBars.getGlobalActionHandler(actionId) != action) {
+			actionBars.setGlobalActionHandler(actionId, action);
+		} else if (!activated && actionBars.getGlobalActionHandler(actionId) == action) {
+			actionBars.setGlobalActionHandler(actionId, null);
+		}
 	}
 
 	@Override
@@ -172,6 +208,12 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 				action = getRegistry().getAction(AddECCActionAction.ADD_ECC_ACTION);
+				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getRegistry().getAction(ActionFactory.COPY.getId());
+				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+				action = getRegistry().getAction(ActionFactory.PASTE.getId());
 				menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 				action = getRegistry().getAction(ActionFactory.DELETE.getId());
@@ -210,6 +252,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		registry.registerAction(action);
 
 		action = new AddECCActionAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new CopyECCAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new PasteECCAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
@@ -354,5 +404,4 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	public void setInput(final IEditorInput input) {
 		super.setInput(input);
 	}
-
 }
