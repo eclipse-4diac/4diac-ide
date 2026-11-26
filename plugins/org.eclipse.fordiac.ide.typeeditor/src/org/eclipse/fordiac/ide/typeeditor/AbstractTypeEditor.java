@@ -355,14 +355,47 @@ public abstract class AbstractTypeEditor extends FordiacFormEditor
 			LibraryElementProvider.INSTANCE.connect(input);
 			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(input));
 		} catch (final CoreException e) {
+			ILog.get().error(e.getMessage(), e);
 			commandStack.setUndoContext(new UndoContext());
 		}
-		if (getEditorPages() != null) {
+		setInputWithNotify(input);
+		final LibraryElement newType = getType();
+		if (getEditorPages() != null && isValidLibraryElement(newType)) {
 			getEditorPages().forEach(e -> e.setInput(input));
+		}
+		if (mainComposite != null) {
+			reloadEditorContent(newType);
+		}
+		setPartName(newType != null ? newType.getName() : TypeEntry.getTypeNameFromFileName(input.getName()));
+	}
+
+	private void reloadEditorContent(final LibraryElement newType) {
+		if (!isValidLibraryElement(newType) || getPageCount() == 0) {
+			// we have now an error type or had one before
+			clearEditorContent();
+			createEditorContent();
+			if (mainComposite != null) {
+				mainComposite.layout(true, true);
+			}
+		} else {
 			getEditorPages().forEach(ITypeEditorPage::reloadType);
 		}
-		setInputWithNotify(input);
-		setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+	}
+
+	private void clearEditorContent() {
+		readOnly = false;
+		for (int i = getPageCount() - 1; i >= 0; i--) {
+			removePage(i);
+		}
+		pages.clear();
+		editorPages = null;
+
+		if (mainComposite != null) {
+			for (final Control child : mainComposite.getChildren()) {
+				child.dispose();
+			}
+			mainComposite.layout(true, true);
+		}
 	}
 
 	public void showLoadErrorMessage(final Composite parent) {
@@ -415,14 +448,7 @@ public abstract class AbstractTypeEditor extends FordiacFormEditor
 			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
 			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
 
-			if (!isValidLibraryElement(newType) || getPageCount() == 0) {
-				// we have now an error type or had one before
-				clearEditorContent();
-				createEditorContent();
-				mainComposite.layout(true, true);
-			} else {
-				getEditorPages().forEach(ITypeEditorPage::reloadType);
-			}
+			reloadEditorContent(newType);
 			setPartName(newType != null ? newType.getName() : input.getName());
 
 			if (isValidLibraryElement(newType)) {
@@ -447,20 +473,6 @@ public abstract class AbstractTypeEditor extends FordiacFormEditor
 			if (originalInput.equals(getEditorInput())) {
 				setInput(movedInput);
 			}
-		}
-
-		private void clearEditorContent() {
-			readOnly = false;
-			for (int i = getPageCount() - 1; i >= 0; i--) {
-				removePage(i);
-			}
-			pages.clear();
-			editorPages = null;
-
-			for (final Control child : mainComposite.getChildren()) {
-				child.dispose();
-			}
-			mainComposite.layout(true, true);
 		}
 	}
 }
