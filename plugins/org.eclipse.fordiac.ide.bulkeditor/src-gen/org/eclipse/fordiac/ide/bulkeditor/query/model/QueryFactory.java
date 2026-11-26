@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model;
@@ -302,6 +303,24 @@ public interface QueryFactory extends EFactory {
 	 * @generated
 	 */
 	AttributeDeclaration createAttributeDeclaration();
+
+	/**
+	 * Returns a new object of class '<em>All Types</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>All Types</em>'.
+	 * @generated
+	 */
+	AllTypes createAllTypes();
+
+	/**
+	 * Returns a new object of class '<em>All Instances</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>All Instances</em>'.
+	 * @generated
+	 */
+	AllInstances createAllInstances();
 
 	/**
 	 * Returns the package supported by this factory.

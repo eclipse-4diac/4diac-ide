@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model;
@@ -621,13 +622,22 @@ public interface QueryPackage extends EPackage {
 	int PLACE__SUBAPP_HIERARCHY_ELEMENTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>All Instances</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PLACE__ALL_INSTANCES = 3;
+
+	/**
 	 * The feature id for the '<em><b>Simple FB</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__SIMPLE_FB = 3;
+	int PLACE__SIMPLE_FB = 4;
 
 	/**
 	 * The feature id for the '<em><b>Basic FB</b></em>' containment reference.
@@ -636,7 +646,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__BASIC_FB = 4;
+	int PLACE__BASIC_FB = 5;
 
 	/**
 	 * The feature id for the '<em><b>Composite FB</b></em>' containment reference.
@@ -645,7 +655,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__COMPOSITE_FB = 5;
+	int PLACE__COMPOSITE_FB = 6;
 
 	/**
 	 * The feature id for the '<em><b>Service Interface FB</b></em>' containment reference.
@@ -654,7 +664,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__SERVICE_INTERFACE_FB = 6;
+	int PLACE__SERVICE_INTERFACE_FB = 7;
 
 	/**
 	 * The feature id for the '<em><b>Function FB</b></em>' containment reference.
@@ -663,7 +673,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__FUNCTION_FB = 7;
+	int PLACE__FUNCTION_FB = 8;
 
 	/**
 	 * The feature id for the '<em><b>Typed Subapp</b></em>' containment reference.
@@ -672,7 +682,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__TYPED_SUBAPP = 8;
+	int PLACE__TYPED_SUBAPP = 9;
 
 	/**
 	 * The feature id for the '<em><b>Untyped Subapp</b></em>' containment reference.
@@ -681,7 +691,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__UNTYPED_SUBAPP = 9;
+	int PLACE__UNTYPED_SUBAPP = 10;
 
 	/**
 	 * The feature id for the '<em><b>Connection</b></em>' containment reference.
@@ -690,7 +700,16 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__CONNECTION = 10;
+	int PLACE__CONNECTION = 11;
+
+	/**
+	 * The feature id for the '<em><b>All Types</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PLACE__ALL_TYPES = 12;
 
 	/**
 	 * The feature id for the '<em><b>Simple Type</b></em>' containment reference.
@@ -699,7 +718,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__SIMPLE_TYPE = 11;
+	int PLACE__SIMPLE_TYPE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Basic Type</b></em>' containment reference.
@@ -708,7 +727,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__BASIC_TYPE = 12;
+	int PLACE__BASIC_TYPE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Composite Type</b></em>' containment reference.
@@ -717,7 +736,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__COMPOSITE_TYPE = 13;
+	int PLACE__COMPOSITE_TYPE = 15;
 
 	/**
 	 * The feature id for the '<em><b>Service Interface Type</b></em>' containment reference.
@@ -726,7 +745,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__SERVICE_INTERFACE_TYPE = 14;
+	int PLACE__SERVICE_INTERFACE_TYPE = 16;
 
 	/**
 	 * The feature id for the '<em><b>Function Type</b></em>' containment reference.
@@ -735,7 +754,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__FUNCTION_TYPE = 15;
+	int PLACE__FUNCTION_TYPE = 17;
 
 	/**
 	 * The feature id for the '<em><b>Subapp Type</b></em>' containment reference.
@@ -744,7 +763,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__SUBAPP_TYPE = 16;
+	int PLACE__SUBAPP_TYPE = 18;
 
 	/**
 	 * The feature id for the '<em><b>Struct Type</b></em>' containment reference.
@@ -753,7 +772,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__STRUCT_TYPE = 17;
+	int PLACE__STRUCT_TYPE = 19;
 
 	/**
 	 * The feature id for the '<em><b>Attribute Type</b></em>' containment reference.
@@ -762,7 +781,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE__ATTRIBUTE_TYPE = 18;
+	int PLACE__ATTRIBUTE_TYPE = 20;
 
 	/**
 	 * The number of structural features of the '<em>Place</em>' class.
@@ -771,7 +790,7 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PLACE_FEATURE_COUNT = 19;
+	int PLACE_FEATURE_COUNT = 21;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.SearchTargetImpl <em>Search Target</em>}' class.
@@ -1870,6 +1889,108 @@ public interface QueryPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllTypesImpl <em>All Types</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllTypesImpl
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getAllTypes()
+	 * @generated
+	 */
+	int ALL_TYPES = 37;
+
+	/**
+	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_TYPES__CONSTRAINT = TYPE__CONSTRAINT;
+
+	/**
+	 * The feature id for the '<em><b>Pin</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_TYPES__PIN = TYPE__PIN;
+
+	/**
+	 * The number of structural features of the '<em>All Types</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_TYPES_FEATURE_COUNT = TYPE_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllInstancesImpl <em>All Instances</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllInstancesImpl
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getAllInstances()
+	 * @generated
+	 */
+	int ALL_INSTANCES = 38;
+
+	/**
+	 * The feature id for the '<em><b>Constraint</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_INSTANCES__CONSTRAINT = INSTANCE__CONSTRAINT;
+
+	/**
+	 * The feature id for the '<em><b>Application Occurrence</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_INSTANCES__APPLICATION_OCCURRENCE = INSTANCE__APPLICATION_OCCURRENCE;
+
+	/**
+	 * The feature id for the '<em><b>Composite FB Occurrence</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_INSTANCES__COMPOSITE_FB_OCCURRENCE = INSTANCE__COMPOSITE_FB_OCCURRENCE;
+
+	/**
+	 * The feature id for the '<em><b>Typed Subapp Occurrence</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_INSTANCES__TYPED_SUBAPP_OCCURRENCE = INSTANCE__TYPED_SUBAPP_OCCURRENCE;
+
+	/**
+	 * The feature id for the '<em><b>Pin</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_INSTANCES__PIN = INSTANCE__PIN;
+
+	/**
+	 * The number of structural features of the '<em>All Instances</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_INSTANCES_FEATURE_COUNT = INSTANCE_FEATURE_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Constraint <em>Constraint</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2242,6 +2363,17 @@ public interface QueryPackage extends EPackage {
 	EAttribute getPlace_SubappHierarchyElements();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllInstances <em>All Instances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>All Instances</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllInstances()
+	 * @see #getPlace()
+	 * @generated
+	 */
+	EReference getPlace_AllInstances();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getSimpleFB <em>Simple FB</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2328,6 +2460,17 @@ public interface QueryPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPlace_Connection();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllTypes <em>All Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>All Types</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getAllTypes()
+	 * @see #getPlace()
+	 * @generated
+	 */
+	EReference getPlace_AllTypes();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.Place#getSimpleType <em>Simple Type</em>}'.
@@ -2757,6 +2900,26 @@ public interface QueryPackage extends EPackage {
 	EAttribute getAttributeDeclaration_Name();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.AllTypes <em>All Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>All Types</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.AllTypes
+	 * @generated
+	 */
+	EClass getAllTypes();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.AllInstances <em>All Instances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>All Instances</em>'.
+	 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.AllInstances
+	 * @generated
+	 */
+	EClass getAllInstances();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3085,6 +3248,14 @@ public interface QueryPackage extends EPackage {
 		EAttribute PLACE__SUBAPP_HIERARCHY_ELEMENTS = eINSTANCE.getPlace_SubappHierarchyElements();
 
 		/**
+		 * The meta object literal for the '<em><b>All Instances</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PLACE__ALL_INSTANCES = eINSTANCE.getPlace_AllInstances();
+
+		/**
 		 * The meta object literal for the '<em><b>Simple FB</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3147,6 +3318,14 @@ public interface QueryPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PLACE__CONNECTION = eINSTANCE.getPlace_Connection();
+
+		/**
+		 * The meta object literal for the '<em><b>All Types</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PLACE__ALL_TYPES = eINSTANCE.getPlace_AllTypes();
 
 		/**
 		 * The meta object literal for the '<em><b>Simple Type</b></em>' containment reference feature.
@@ -3523,6 +3702,26 @@ public interface QueryPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ATTRIBUTE_DECLARATION__NAME = eINSTANCE.getAttributeDeclaration_Name();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllTypesImpl <em>All Types</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllTypesImpl
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getAllTypes()
+		 * @generated
+		 */
+		EClass ALL_TYPES = eINSTANCE.getAllTypes();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllInstancesImpl <em>All Instances</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.AllInstancesImpl
+		 * @see org.eclipse.fordiac.ide.bulkeditor.query.model.impl.QueryPackageImpl#getAllInstances()
+		 * @generated
+		 */
+		EClass ALL_INSTANCES = eINSTANCE.getAllInstances();
 
 	}
 

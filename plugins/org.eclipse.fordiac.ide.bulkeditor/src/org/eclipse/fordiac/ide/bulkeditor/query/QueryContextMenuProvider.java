@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.query;
 
@@ -126,6 +127,7 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 			Map.entry(QueryPackage.Literals.PROPERTY_CONSTRAINT__VALUE, Messages.QueryMenu_Value),
 			Map.entry(QueryPackage.Literals.PROPERTY_CONSTRAINT, Messages.QueryMenu_PropertyConstraint),
 			Map.entry(QueryPackage.Literals.ATTRIBUTE_CONSTRAINT, Messages.QueryMenu_AttributeConstraint),
+			Map.entry(QueryPackage.Literals.PLACE__ALL_INSTANCES, Messages.QueryMenu_AllInstances),
 			Map.entry(QueryPackage.Literals.PLACE__SIMPLE_FB, Messages.QueryMenu_SimpleFB),
 			Map.entry(QueryPackage.Literals.PLACE__BASIC_FB, Messages.QueryMenu_BasicFB),
 			Map.entry(QueryPackage.Literals.PLACE__COMPOSITE_FB, Messages.QueryMenu_CompositeFB),
@@ -134,6 +136,7 @@ public class QueryContextMenuProvider extends FordiacContextMenuProvider {
 			Map.entry(QueryPackage.Literals.PLACE__TYPED_SUBAPP, Messages.QueryMenu_TypedSubapp),
 			Map.entry(QueryPackage.Literals.PLACE__UNTYPED_SUBAPP, Messages.QueryMenu_UntypedSubapp),
 			Map.entry(QueryPackage.Literals.PLACE__CONNECTION, Messages.QueryMenu_Connection),
+			Map.entry(QueryPackage.Literals.PLACE__ALL_TYPES, Messages.QueryMenu_AllTypes),
 			Map.entry(QueryPackage.Literals.PLACE__SIMPLE_TYPE, Messages.QueryMenu_SimpleType),
 			Map.entry(QueryPackage.Literals.PLACE__BASIC_TYPE, Messages.QueryMenu_BasicType),
 			Map.entry(QueryPackage.Literals.PLACE__COMPOSITE_TYPE, Messages.QueryMenu_CompositeType),

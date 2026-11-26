@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2025 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor;
 
@@ -72,6 +73,7 @@ public final class Messages extends NLS {
 	public static String QueryMenu_Value;
 	public static String QueryMenu_PropertyConstraint;
 	public static String QueryMenu_AttributeConstraint;
+	public static String QueryMenu_AllInstances;
 	public static String QueryMenu_SimpleFB;
 	public static String QueryMenu_BasicFB;
 	public static String QueryMenu_CompositeFB;
@@ -80,6 +82,7 @@ public final class Messages extends NLS {
 	public static String QueryMenu_TypedSubapp;
 	public static String QueryMenu_UntypedSubapp;
 	public static String QueryMenu_Connection;
+	public static String QueryMenu_AllTypes;
 	public static String QueryMenu_SimpleType;
 	public static String QueryMenu_BasicType;
 	public static String QueryMenu_CompositeType;

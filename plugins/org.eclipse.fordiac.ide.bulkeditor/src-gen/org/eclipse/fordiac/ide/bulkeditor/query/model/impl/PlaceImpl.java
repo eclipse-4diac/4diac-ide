@@ -1,6 +1,6 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * 
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - add AllTypes and AllInstances
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.bulkeditor.query.model.impl;
@@ -29,6 +30,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AllInstances;
+import org.eclipse.fordiac.ide.bulkeditor.query.model.AllTypes;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.AttributeType;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.BasicFB;
 import org.eclipse.fordiac.ide.bulkeditor.query.model.BasicType;
@@ -59,6 +62,7 @@ import org.eclipse.fordiac.ide.bulkeditor.query.model.UntypedSubapp;
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#isIgnoreLinkedLibraries <em>Ignore Linked Libraries</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#isSubappHierarchy <em>Subapp Hierarchy</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getSubappHierarchyElements <em>Subapp Hierarchy Elements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getAllInstances <em>All Instances</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getSimpleFB <em>Simple FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getBasicFB <em>Basic FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getCompositeFB <em>Composite FB</em>}</li>
@@ -67,6 +71,7 @@ import org.eclipse.fordiac.ide.bulkeditor.query.model.UntypedSubapp;
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getTypedSubapp <em>Typed Subapp</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getUntypedSubapp <em>Untyped Subapp</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getConnection <em>Connection</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getAllTypes <em>All Types</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getSimpleType <em>Simple Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getBasicType <em>Basic Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.bulkeditor.query.model.impl.PlaceImpl#getCompositeType <em>Composite Type</em>}</li>
@@ -129,6 +134,16 @@ public class PlaceImpl extends EObjectImpl implements Place {
 	 * @ordered
 	 */
 	protected EList<String> subappHierarchyElements;
+
+	/**
+	 * The cached value of the '{@link #getAllInstances() <em>All Instances</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllInstances()
+	 * @generated
+	 * @ordered
+	 */
+	protected AllInstances allInstances;
 
 	/**
 	 * The cached value of the '{@link #getSimpleFB() <em>Simple FB</em>}' containment reference.
@@ -209,6 +224,16 @@ public class PlaceImpl extends EObjectImpl implements Place {
 	 * @ordered
 	 */
 	protected Connection connection;
+
+	/**
+	 * The cached value of the '{@link #getAllTypes() <em>All Types</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllTypes()
+	 * @generated
+	 * @ordered
+	 */
+	protected AllTypes allTypes;
 
 	/**
 	 * The cached value of the '{@link #getSimpleType() <em>Simple Type</em>}' containment reference.
@@ -366,6 +391,51 @@ public class PlaceImpl extends EObjectImpl implements Place {
 			subappHierarchyElements = new EDataTypeUniqueEList<String>(String.class, this, QueryPackage.PLACE__SUBAPP_HIERARCHY_ELEMENTS);
 		}
 		return subappHierarchyElements;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AllInstances getAllInstances() {
+		return allInstances;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetAllInstances(AllInstances newAllInstances, NotificationChain msgs) {
+		AllInstances oldAllInstances = allInstances;
+		allInstances = newAllInstances;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QueryPackage.PLACE__ALL_INSTANCES, oldAllInstances, newAllInstances);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAllInstances(AllInstances newAllInstances) {
+		if (newAllInstances != allInstances) {
+			NotificationChain msgs = null;
+			if (allInstances != null)
+				msgs = ((InternalEObject)allInstances).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QueryPackage.PLACE__ALL_INSTANCES, null, msgs);
+			if (newAllInstances != null)
+				msgs = ((InternalEObject)newAllInstances).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QueryPackage.PLACE__ALL_INSTANCES, null, msgs);
+			msgs = basicSetAllInstances(newAllInstances, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, QueryPackage.PLACE__ALL_INSTANCES, newAllInstances, newAllInstances));
 	}
 
 	/**
@@ -726,6 +796,51 @@ public class PlaceImpl extends EObjectImpl implements Place {
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, QueryPackage.PLACE__CONNECTION, newConnection, newConnection));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AllTypes getAllTypes() {
+		return allTypes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetAllTypes(AllTypes newAllTypes, NotificationChain msgs) {
+		AllTypes oldAllTypes = allTypes;
+		allTypes = newAllTypes;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, QueryPackage.PLACE__ALL_TYPES, oldAllTypes, newAllTypes);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAllTypes(AllTypes newAllTypes) {
+		if (newAllTypes != allTypes) {
+			NotificationChain msgs = null;
+			if (allTypes != null)
+				msgs = ((InternalEObject)allTypes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - QueryPackage.PLACE__ALL_TYPES, null, msgs);
+			if (newAllTypes != null)
+				msgs = ((InternalEObject)newAllTypes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - QueryPackage.PLACE__ALL_TYPES, null, msgs);
+			msgs = basicSetAllTypes(newAllTypes, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, QueryPackage.PLACE__ALL_TYPES, newAllTypes, newAllTypes));
 	}
 
 	/**
@@ -1096,6 +1211,8 @@ public class PlaceImpl extends EObjectImpl implements Place {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case QueryPackage.PLACE__ALL_INSTANCES:
+				return basicSetAllInstances(null, msgs);
 			case QueryPackage.PLACE__SIMPLE_FB:
 				return basicSetSimpleFB(null, msgs);
 			case QueryPackage.PLACE__BASIC_FB:
@@ -1112,6 +1229,8 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				return basicSetUntypedSubapp(null, msgs);
 			case QueryPackage.PLACE__CONNECTION:
 				return basicSetConnection(null, msgs);
+			case QueryPackage.PLACE__ALL_TYPES:
+				return basicSetAllTypes(null, msgs);
 			case QueryPackage.PLACE__SIMPLE_TYPE:
 				return basicSetSimpleType(null, msgs);
 			case QueryPackage.PLACE__BASIC_TYPE:
@@ -1147,6 +1266,8 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				return isSubappHierarchy();
 			case QueryPackage.PLACE__SUBAPP_HIERARCHY_ELEMENTS:
 				return getSubappHierarchyElements();
+			case QueryPackage.PLACE__ALL_INSTANCES:
+				return getAllInstances();
 			case QueryPackage.PLACE__SIMPLE_FB:
 				return getSimpleFB();
 			case QueryPackage.PLACE__BASIC_FB:
@@ -1163,6 +1284,8 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				return getUntypedSubapp();
 			case QueryPackage.PLACE__CONNECTION:
 				return getConnection();
+			case QueryPackage.PLACE__ALL_TYPES:
+				return getAllTypes();
 			case QueryPackage.PLACE__SIMPLE_TYPE:
 				return getSimpleType();
 			case QueryPackage.PLACE__BASIC_TYPE:
@@ -1203,6 +1326,9 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				getSubappHierarchyElements().clear();
 				getSubappHierarchyElements().addAll((Collection<? extends String>)newValue);
 				return;
+			case QueryPackage.PLACE__ALL_INSTANCES:
+				setAllInstances((AllInstances)newValue);
+				return;
 			case QueryPackage.PLACE__SIMPLE_FB:
 				setSimpleFB((SimpleFB)newValue);
 				return;
@@ -1226,6 +1352,9 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				return;
 			case QueryPackage.PLACE__CONNECTION:
 				setConnection((Connection)newValue);
+				return;
+			case QueryPackage.PLACE__ALL_TYPES:
+				setAllTypes((AllTypes)newValue);
 				return;
 			case QueryPackage.PLACE__SIMPLE_TYPE:
 				setSimpleType((SimpleType)newValue);
@@ -1274,6 +1403,9 @@ public class PlaceImpl extends EObjectImpl implements Place {
 			case QueryPackage.PLACE__SUBAPP_HIERARCHY_ELEMENTS:
 				getSubappHierarchyElements().clear();
 				return;
+			case QueryPackage.PLACE__ALL_INSTANCES:
+				setAllInstances((AllInstances)null);
+				return;
 			case QueryPackage.PLACE__SIMPLE_FB:
 				setSimpleFB((SimpleFB)null);
 				return;
@@ -1297,6 +1429,9 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				return;
 			case QueryPackage.PLACE__CONNECTION:
 				setConnection((Connection)null);
+				return;
+			case QueryPackage.PLACE__ALL_TYPES:
+				setAllTypes((AllTypes)null);
 				return;
 			case QueryPackage.PLACE__SIMPLE_TYPE:
 				setSimpleType((SimpleType)null);
@@ -1342,6 +1477,8 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				return subappHierarchy != SUBAPP_HIERARCHY_EDEFAULT;
 			case QueryPackage.PLACE__SUBAPP_HIERARCHY_ELEMENTS:
 				return subappHierarchyElements != null && !subappHierarchyElements.isEmpty();
+			case QueryPackage.PLACE__ALL_INSTANCES:
+				return allInstances != null;
 			case QueryPackage.PLACE__SIMPLE_FB:
 				return simpleFB != null;
 			case QueryPackage.PLACE__BASIC_FB:
@@ -1358,6 +1495,8 @@ public class PlaceImpl extends EObjectImpl implements Place {
 				return untypedSubapp != null;
 			case QueryPackage.PLACE__CONNECTION:
 				return connection != null;
+			case QueryPackage.PLACE__ALL_TYPES:
+				return allTypes != null;
 			case QueryPackage.PLACE__SIMPLE_TYPE:
 				return simpleType != null;
 			case QueryPackage.PLACE__BASIC_TYPE:
