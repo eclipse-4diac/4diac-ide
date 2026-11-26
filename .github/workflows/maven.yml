@@ -84,3 +84,12 @@ jobs:
         if-no-files-found: error
         path: |
           ${{ github.workspace }}/**/target/surefire-reports/*.xml
+
+    - name: Upload SBOM
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: sbom-${{ matrix.os }}-java${{ matrix.java }}
+        if-no-files-found: error
+        path: |
+          plugins/org.eclipse.fordiac.ide.product/target/*-sbom.json
+          plugins/org.eclipse.fordiac.ide.product/target/*-sbom.xml
