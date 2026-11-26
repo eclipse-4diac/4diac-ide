@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Zijun Tang - run a direct call on the monitoring executor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
@@ -495,6 +496,14 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	@Override
 	public Future<Optional<String>> replayNextEventAsync(final Resource resource) throws DeploymentException {
 		return executorService.submit(() -> getDelegate().replayNextEvent(resource));
+	}
+
+	@Override
+	public void executeSerially(final SerialCall call) throws DeploymentException {
+		unwrap(() -> executorService.submit(() -> {
+			call.accept(getDelegate());
+			return null;
+		}));
 	}
 
 	private static <T> T unwrap(final Supplier<Future<T>> future) throws DeploymentException {
