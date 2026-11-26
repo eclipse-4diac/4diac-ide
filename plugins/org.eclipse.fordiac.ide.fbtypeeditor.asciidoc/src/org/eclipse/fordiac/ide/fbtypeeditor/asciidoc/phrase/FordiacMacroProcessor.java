@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Andrea Zoitl - Renamed class and updated to support class
- *                  FordiacMacroPatternElement
+ *                  FordiacMacroPatternElement and macros for IEC61499 elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase;
 
@@ -165,29 +165,63 @@ public class FordiacMacroProcessor extends PatternBasedElementProcessor {
 
 		final String elementAccess = getElementAccess();
 		if (elementAccess == null || elementAccess.isEmpty()) {
-			return libElement;
+			return isMatchingTarget(getMacroType(), libElement) ? libElement : null;
 		}
 
-		if (libElement != null) {
-			// Strip the leading '.' to resolve the path
-			String subPath = elementAccess.startsWith(".") ? elementAccess.substring(1) : elementAccess; //$NON-NLS-1$
-
-			// Clean off array subscripts '[]' and bit access indicators (e.g., '.%x1')
-			subPath = subPath.replace("[]", "").replaceAll("\\.(?:%[xbwdl])?\\d+$", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-
-			return libElement.findByQualifiedName(subPath).findFirst().orElse(null);
+		if (libElement == null) {
+			return null;
 		}
-		return null;
+
+		// Strip the leading '.' to resolve the path
+		String subPath = elementAccess.startsWith(".") ? elementAccess.substring(1) : elementAccess; //$NON-NLS-1$
+
+		// Clean off array subscripts '[]' and bit access indicators (e.g., '.%x1')
+		subPath = subPath.replace("[]", "").replaceAll("\\.(?:%[xbwdl])?\\d+$", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+
+		// Split the path into individual segments
+		final String[] segments = subPath.split("\\."); //$NON-NLS-1$
+		final EObject current = libElement;
+
+		return resolvePathSegments(current, segments);
+
+	}
+
+	private static EObject resolvePathSegments(EObject root, final String[] segments) {
+		for (final String segment : segments) {
+			if (segment.isEmpty()) {
+				continue;
+			}
+
+			EObject next = null;
+
+			// Step 1: Instance-First Search (handles standard containment, subapps,
+			// instances, and pins)
+			if (root instanceof final INamedElement namedElement) {
+				next = namedElement.findByQualifiedName(segment).findFirst().orElse(null);
+			}
+
+			// Step 2: Fallback Type Transition
+			if (next == null && root instanceof final ITypedElement typedElement) {
+				final LibraryElement type = typedElement.getType();
+				if (type != null) {
+					next = type.findByQualifiedName(segment).findFirst().orElse(null);
+				}
+			}
+
+			if (next == null) {
+				// Resolution broken: segment does not exist in current scope
+				return null;
+			}
+
+			root = next;
+		}
+		return root;
 	}
 
 	private LibraryElement getLibElement(final String libElementName) {
 		// Use case-insensitive check for THIS
 		if (THIS.equalsIgnoreCase(libElementName)) {
-			// Only return target if the active editor's type matches the macro prefix
-			if (isMatchingTarget(getMacroType(), target)) {
-				return target;
-			}
-			return null;
+			return target; // Return the active editor's element to allow nested path traversal
 		}
 
 		final MacroType type = MacroType.fromString(getMacroType());
