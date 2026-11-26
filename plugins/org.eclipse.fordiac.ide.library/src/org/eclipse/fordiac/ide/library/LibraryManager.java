@@ -25,6 +25,8 @@ import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -96,6 +98,13 @@ public enum LibraryManager {
 	public static final String LIB_TYPELIB_FOLDER_NAME = "typelib"; //$NON-NLS-1$
 	public static final String PACKAGE_DOWNLOAD_DIRECTORY = ".download"; //$NON-NLS-1$
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
+	private static final String MACOS_METADATA_FOLDER = "__MACOSX"; //$NON-NLS-1$
+	/**
+	 * Folder in {@link #EXTRACTED_LIB_DIRECTORY} for the extraction, on the same file
+	 * system as the libraries. A library is staged one level deeper, so it is never
+	 * found as a library.
+	 */
+	private static final String STAGING_DIRECTORY = ".staging"; //$NON-NLS-1$
 	public static final String MANIFEST = "MANIFEST.MF"; //$NON-NLS-1$
 	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.LibraryPackageDownloader"; //$NON-NLS-1$
 
@@ -325,49 +334,61 @@ public enum LibraryManager {
 
 		ILog.get().info("Extracting library at " + archive); //$NON-NLS-1$
 		final byte[] buffer = new byte[1024];
-		String folderName;
-		Path extractedFolder = null;
-		try (InputStream inputStream = Files.newInputStream(archive);
-				ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
-			ZipEntry entry = zipInputStream.getNextEntry();
-			folderName = ""; //$NON-NLS-1$
-			if (entry != null) {
-				folderName = entry.getName();
-				extractedFolder = newPath(libraryPath, entry);
-				deleteLibFolder(extractedFolder);
-			}
-			while (entry != null) {
-				final Path newFile = newPath(libraryPath, entry);
-				if (entry.isDirectory()) {
-					if (!Files.isDirectory(newFile)) {
-						Files.createDirectories(newFile);
-					}
-				} else {
-					final Path parent = newFile.getParent();
-					if (!Files.isDirectory(parent)) {
-						Files.createDirectories(parent);
-					}
-					try (OutputStream fileOutputStream = Files.newOutputStream(newFile)) {
-						int len;
-						while ((len = zipInputStream.read(buffer)) > 0) {
-							fileOutputStream.write(buffer, 0, len);
-						}
-					}
-					LibraryPermission.setPathReadOnly(newFile);
+		final String folderName;
+		final Path extractedFolder;
+		// The archive is extracted into a staging folder first. The installed library is
+		// only replaced when the whole archive was extracted.
+		final Path stagingRoot = libraryPath.resolve(STAGING_DIRECTORY);
+		Files.createDirectories(stagingRoot);
+		final Path staging = Files.createTempDirectory(stagingRoot, "extract-"); //$NON-NLS-1$
+		try {
+			try (InputStream inputStream = Files.newInputStream(archive);
+					ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
+				ZipEntry entry = nextContentEntry(zipInputStream);
+				if (entry == null) {
+					throw new IOException("Archive does not contain a library folder: " + archive.getFileName()); //$NON-NLS-1$
 				}
-				entry = zipInputStream.getNextEntry();
+				// the library folder is the first path segment of the first entry; never the
+				// library root itself
+				extractedFolder = libraryFolderOf(libraryPath, entry);
+				folderName = extractedFolder.getFileName().toString();
+				if (STAGING_DIRECTORY.equalsIgnoreCase(folderName)) {
+					throw new IOException("Archive uses a reserved folder name: " + entry.getName()); //$NON-NLS-1$
+				}
+				final Path stagedFolder = staging.resolve(folderName);
+				Files.createDirectories(stagedFolder);
+				while (entry != null) {
+					final Path target = newPath(libraryPath, entry);
+					if (!target.startsWith(extractedFolder)) {
+						// a library is one folder; another folder could be the one of another library
+						throw new IOException("Entry is not inside the library folder " + folderName //$NON-NLS-1$
+								+ ": " + entry.getName()); //$NON-NLS-1$
+					}
+					extractEntry(zipInputStream, entry, stagedFolder.resolve(extractedFolder.relativize(target)),
+							buffer);
+					entry = nextContentEntry(zipInputStream);
+				}
 			}
+			// The path of the library as the library map knows it. Two extractions of the same
+			// library must not move its folder at the same time, and the map is updated before
+			// anyone can read it again.
+			final Path installedFolder = libraryPath.resolve(folderName);
+			Path backup = null;
+			try {
+				synchronized (libraries) {
+					backup = replaceLibraryFolder(staging.resolve(folderName), installedFolder, stagingRoot);
+					// File system notifications may arrive after the dependency is resolved.
+					refreshLibrary(installedFolder);
+				}
+			} finally {
+				if (backup != null) {
+					deleteQuietly(backup);
+				}
+			}
+		} finally {
+			deleteQuietly(staging);
 		}
 		checkLibChanges(SubMonitor.convert(null));
-		if (extractedFolder != null) {
-			// File system notifications may arrive after the dependency is resolved.
-			refreshLibrary(extractedFolder);
-		}
-
-		// strip potential trailing slash
-		if (folderName.endsWith("/")) { //$NON-NLS-1$
-			folderName = folderName.substring(0, folderName.length() - 1);
-		}
 
 		final java.net.URI importURI = URIUtil.append(workspaceLibraryURI, folderName);
 
@@ -376,6 +397,154 @@ public enum LibraryManager {
 			importLibrary(project, importURI, true, resolve);
 		}
 		return importURI;
+	}
+
+	/** Write a directory or the content of a file entry of the archive to {@code newFile}. */
+	private static void extractEntry(final ZipInputStream zipInputStream, final ZipEntry entry, final Path newFile,
+			final byte[] buffer) throws IOException {
+		if (isDirectoryEntry(entry)) {
+			if (!Files.isDirectory(newFile)) {
+				Files.createDirectories(newFile);
+			}
+			return;
+		}
+		final Path parent = newFile.getParent();
+		if (!Files.isDirectory(parent)) {
+			Files.createDirectories(parent);
+		}
+		try (OutputStream fileOutputStream = Files.newOutputStream(newFile)) {
+			int len;
+			while ((len = zipInputStream.read(buffer)) > 0) {
+				fileOutputStream.write(buffer, 0, len);
+			}
+		}
+		LibraryPermission.setPathReadOnly(newFile);
+	}
+
+	/**
+	 * Replace the library folder with the staged one. An existing folder is moved
+	 * to a backup first and moved back if the staged folder cannot be put in place.
+	 *
+	 * @return the folder with the backup that the caller deletes, or {@code null}
+	 *         if there was no library folder before
+	 */
+	private static Path replaceLibraryFolder(final Path staged, final Path target, final Path stagingRoot)
+			throws IOException {
+		if (!Files.exists(target, LinkOption.NOFOLLOW_LINKS)) {
+			Files.createDirectories(target.getParent());
+			Files.move(staged, target);
+			return null;
+		}
+		final Path backupFolder = Files.createTempDirectory(stagingRoot, "backup-"); //$NON-NLS-1$
+		final Path backup = backupFolder.resolve(target.getFileName());
+		try {
+			Files.move(target, backup);
+		} catch (final IOException | RuntimeException e) {
+			// for example a file of the installed library is in use: it stays as it is
+			deleteQuietly(backupFolder);
+			throw e;
+		}
+		try {
+			Files.move(staged, target);
+		} catch (final IOException | RuntimeException e) {
+			try {
+				Files.move(backup, target);
+			} catch (final IOException | RuntimeException restoreError) {
+				e.addSuppressed(restoreError);
+				ILog.get().error("The previous library folder could not be restored, it is kept in " + backup, //$NON-NLS-1$
+						restoreError);
+				throw e;
+			}
+			deleteQuietly(backupFolder);
+			throw e;
+		}
+		return backupFolder;
+	}
+
+	private static void deleteQuietly(final Path folder) {
+		try {
+			deleteLibFolder(folder);
+		} catch (final IOException e) {
+			ILog.get().warn("Could not delete " + folder, e); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * Get the next entry of the archive that belongs to a library folder. Skipped
+	 * are the entries that are not content of a library: the library root itself
+	 * (for example {@code ./}), files directly in the root of the archive (such as
+	 * {@code LICENSE} or {@code .DS_Store}) and the {@code __MACOSX} metadata folder
+	 * that macOS adds to archives. Entries outside of the target folder are
+	 * returned, so that {@link #newPath} rejects them.
+	 */
+	private ZipEntry nextContentEntry(final ZipInputStream zipInputStream) throws IOException {
+		ZipEntry entry = zipInputStream.getNextEntry();
+		while (entry != null && !isLibraryContent(libraryPath, entry)) {
+			entry = zipInputStream.getNextEntry();
+		}
+		return entry;
+	}
+
+	private static boolean isLibraryContent(final Path destinationDir, final ZipEntry zipEntry) {
+		if (isUnsafeName(zipEntry)) {
+			return true; // not ignored: newPath rejects it
+		}
+		final Path normalizedDestinationDir = destinationDir.toAbsolutePath().normalize();
+		final Path destPath;
+		try {
+			destPath = normalizedDestinationDir.resolve(zipEntry.getName().replace('\\', '/')).normalize();
+		} catch (final InvalidPathException e) {
+			return true; // not ignored: newPath rejects it
+		}
+		if (!destPath.startsWith(normalizedDestinationDir)) {
+			return true; // not ignored: newPath rejects it
+		}
+		final Path relative = normalizedDestinationDir.relativize(destPath);
+		if (relative.getNameCount() == 0 || relative.getName(0).toString().isEmpty()
+				|| MACOS_METADATA_FOLDER.equals(relative.getName(0).toString())) {
+			return false;
+		}
+		return relative.getNameCount() > 1 || isDirectoryEntry(zipEntry);
+	}
+
+	/**
+	 * An entry name with a parent segment ({@code ..}) is never valid: after the
+	 * normalization it could name a folder of another library. The same holds for
+	 * an absolute name.
+	 */
+	private static boolean isUnsafeName(final ZipEntry zipEntry) {
+		final String name = zipEntry.getName().replace('\\', '/');
+		if (name.startsWith("/") || (name.length() > 1 && name.charAt(1) == ':')) { //$NON-NLS-1$
+			return true; // an absolute name is not relative to the library store either
+		}
+		for (final String segment : name.split("/")) { //$NON-NLS-1$
+			if ("..".equals(segment)) { //$NON-NLS-1$
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Archives written on Windows may separate the entry names with a backslash,
+	 * so a directory entry does not necessarily end with a slash
+	 */
+	private static boolean isDirectoryEntry(final ZipEntry zipEntry) {
+		return zipEntry.isDirectory() || zipEntry.getName().endsWith("\\"); //$NON-NLS-1$
+	}
+
+	/**
+	 * Get the library folder an entry belongs to: the first path segment below
+	 * {@code destinationDir}. The result is always a folder inside
+	 * {@code destinationDir}, never {@code destinationDir} itself.
+	 */
+	private static Path libraryFolderOf(final Path destinationDir, final ZipEntry zipEntry) throws IOException {
+		final Path normalizedDestinationDir = destinationDir.toAbsolutePath().normalize();
+		final Path relative = normalizedDestinationDir.relativize(newPath(destinationDir, zipEntry));
+		if (relative.getNameCount() == 0 || relative.getName(0).toString().isEmpty()) {
+			throw new IOException("Entry does not name a library folder: " + zipEntry.getName()); //$NON-NLS-1$
+		}
+		return normalizedDestinationDir.resolve(relative.getName(0).toString());
 	}
 
 	private static void deleteLibFolder(final Path folder) throws IOException {
@@ -409,9 +578,18 @@ public enum LibraryManager {
 	 * @throws IOException if an I/O error occurs
 	 */
 	private static Path newPath(final Path destinationDir, final ZipEntry zipEntry) throws IOException {
+		if (isUnsafeName(zipEntry)) {
+			// the name may not lead into another folder, also not if the result is inside the target dir
+			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName()); //$NON-NLS-1$
+		}
 		final Path normalizedDestinationDir = destinationDir.toAbsolutePath().normalize();
 		final String entryName = zipEntry.getName().replace('\\', '/');
-		final Path destPath = normalizedDestinationDir.resolve(entryName).normalize();
+		final Path destPath;
+		try {
+			destPath = normalizedDestinationDir.resolve(entryName).normalize();
+		} catch (final InvalidPathException e) {
+			throw new IOException("Entry has an invalid name: " + zipEntry.getName(), e); //$NON-NLS-1$
+		}
 
 		if (!destPath.startsWith(normalizedDestinationDir)) {
 			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName()); //$NON-NLS-1$
