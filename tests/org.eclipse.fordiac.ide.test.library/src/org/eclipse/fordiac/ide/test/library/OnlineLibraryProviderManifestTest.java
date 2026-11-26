@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
@@ -25,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -36,6 +38,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.Messages;
+import org.eclipse.fordiac.ide.library.download.AbstractLibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
@@ -55,21 +58,22 @@ import org.osgi.framework.VersionRange;
  */
 class OnlineLibraryProviderManifestTest {
 	private static final String SOURCE = "Archives only"; //$NON-NLS-1$
-	// a source of its own: archives without a manifest are remembered per source for the session
+	// archives without a usable manifest are remembered by source for the session: see unique()
 	private static final String BROKEN_SOURCE = "Archives without manifest"; //$NON-NLS-1$
+	private static final String LIMITED_SOURCE = "Archives with a small metadata limit"; //$NON-NLS-1$
 	private static final String TEST01 = "test01"; //$NON-NLS-1$
 	private static final String TEST02 = "test02"; //$NON-NLS-1$
 	private static final String V1_0_0 = "1.0.0"; //$NON-NLS-1$
 	private static final String V1_1_0 = "1.1.0"; //$NON-NLS-1$
 
-	private Path emptyArchiveFolder;
+	private Path archiveFolder;
 	private String previousPreference;
 
 	@BeforeEach
 	void setup() throws IOException {
 		previousPreference = preferences().get(LibraryPreferenceConstants.DOWNLOAD_ARCHIVE_WITHOUT_MANIFEST, null);
 		deleteCachedManifests();
-		emptyArchiveFolder = Files.createTempDirectory("archives"); //$NON-NLS-1$
+		archiveFolder = Files.createTempDirectory("archives"); //$NON-NLS-1$
 	}
 
 	@AfterEach
@@ -81,7 +85,7 @@ class OnlineLibraryProviderManifestTest {
 		}
 		preferences().flush();
 		deleteCachedManifests();
-		try (Stream<Path> paths = Files.walk(emptyArchiveFolder)) {
+		try (Stream<Path> paths = Files.walk(archiveFolder)) {
 			for (final Path path : paths.sorted(Comparator.reverseOrder()).toList()) {
 				Files.delete(path);
 			}
@@ -129,19 +133,111 @@ class OnlineLibraryProviderManifestTest {
 
 	@Test
 	void reportsAnArchiveWithoutManifest() throws Exception {
+		assertArchiveProblem(Messages.OnlineLibraryProvider_ArchiveWithoutManifest,
+				(name, version) -> Map.of(name + "-" + version + "/typelib/", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	@Test
+	void reportsAnArchiveWithAnEmptyManifest() throws Exception {
+		assertArchiveProblem(Messages.OnlineLibraryProvider_ArchiveInvalidManifest,
+				(name, version) -> Map.of(name + "-" + version + "/" + LibraryManager.MANIFEST, "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	@Test
+	void reportsAnArchiveWithAManifestThatCannotBeRead() throws Exception {
+		assertArchiveProblem(Messages.OnlineLibraryProvider_ArchiveInvalidManifest,
+				(name, version) -> Map.of(name + "-" + version + "/" + LibraryManager.MANIFEST, "this is no manifest")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	}
+
+	@Test
+	void reportsAnArchiveWithSeveralManifests() throws Exception {
+		assertArchiveProblem(Messages.OnlineLibraryProvider_ArchiveAmbiguousManifest,
+				(name, version) -> Map.of("first/" + LibraryManager.MANIFEST, "<a/>", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						"second/" + LibraryManager.MANIFEST, "<b/>")); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	@Test
+	void rejectsAManifestAboveTheMetadataLimit() throws Exception {
 		setReadArchives(true);
-		final ArchivesWithoutManifest source = new ArchivesWithoutManifest();
+		final String limited = unique(LIMITED_SOURCE);
+		final ArchivesOnly source = new ArchivesOnly(limited);
+
+		final IStatus status = refreshWithMetadataLimit(source, "16"); //$NON-NLS-1$
+
+		assertEquals(IStatus.ERROR, status.getSeverity(), status::toString);
+		final String tooLarge = MessageFormat.format(Messages.OnlineLibraryProvider_ManifestTooLarge,
+				TEST02 + "-" + V1_1_0 + "/" + LibraryManager.MANIFEST, Long.valueOf(16), //$NON-NLS-1$ //$NON-NLS-2$
+				AbstractLibraryPackageDownloader.MAX_METADATA_BYTES_PROPERTY);
+		final String expected = MessageFormat.format(Messages.OnlineLibraryProvider_ArchiveDownloadFailed, limited,
+				TEST02, new Version(V1_1_0), tooLarge);
+		assertTrue(Stream.of(status.getChildren()).anyMatch(child -> expected.equals(child.getMessage())),
+				status::toString);
+		assertEquals(3, source.archiveDownloads.get());
+		assertFalse(Files.exists(cachedManifest(TEST02, V1_1_0)));
+		assertNoPartialFiles();
+	}
+
+	@Test
+	void readsTheManifestWithAMetadataLimitAboveTheIntegerRange() throws Exception {
+		setReadArchives(true);
+		final ArchivesOnly source = new ArchivesOnly(unique(LIMITED_SOURCE));
+
+		// 8 GiB: a limit above Integer.MAX_VALUE must not wrap around
+		final IStatus status = refreshWithMetadataLimit(source, "8589934592"); //$NON-NLS-1$
+
+		assertTrue(status.getSeverity() < IStatus.WARNING, status::toString);
+		assertTrue(Files.isRegularFile(cachedManifest(TEST02, V1_1_0)));
+	}
+
+	private void assertArchiveProblem(final String pattern, final BiFunction<String, Version, Map<String, String>> entries)
+			throws Exception {
+		setReadArchives(true);
+		final String name = unique(BROKEN_SOURCE);
+		final ArchivesWith source = new ArchivesWith(name, entries);
 		final OnlineLibraryProvider catalogue = catalogue(source);
 
 		final IStatus status = catalogue.refresh(new NullProgressMonitor(), true);
 
 		assertEquals(IStatus.ERROR, status.getSeverity(), status::toString);
-		final String expected = MessageFormat.format(Messages.OnlineLibraryProvider_ArchiveWithoutManifest, BROKEN_SOURCE,
-				TEST02, new Version(V1_1_0));
+		final String expected = MessageFormat.format(pattern, name, TEST02, new Version(V1_1_0));
 		assertTrue(Stream.of(status.getChildren()).anyMatch(child -> expected.equals(child.getMessage())),
 				status::toString);
 		assertEquals(3, source.archiveDownloads.get());
 		assertFalse(Files.exists(cachedManifest(TEST02, V1_1_0)));
+		assertNoPartialFiles();
+
+		// the archive is not downloaded again in this session
+		assertEquals(IStatus.ERROR, catalogue(source).refresh(new NullProgressMonitor(), true).getSeverity());
+		assertEquals(3, source.archiveDownloads.get());
+	}
+
+	private static IStatus refreshWithMetadataLimit(final MockEndpoint source, final String limit) {
+		final String previousLimit = System.getProperty(AbstractLibraryPackageDownloader.MAX_METADATA_BYTES_PROPERTY);
+		System.setProperty(AbstractLibraryPackageDownloader.MAX_METADATA_BYTES_PROPERTY, limit);
+		try {
+			return catalogue(source).refresh(new NullProgressMonitor(), true);
+		} finally {
+			if (previousLimit == null) {
+				System.clearProperty(AbstractLibraryPackageDownloader.MAX_METADATA_BYTES_PROPERTY);
+			} else {
+				System.setProperty(AbstractLibraryPackageDownloader.MAX_METADATA_BYTES_PROPERTY, previousLimit);
+			}
+		}
+	}
+
+	/** archives without a manifest are remembered by source name: use one per run */
+	private static String unique(final String name) {
+		return name + " " + System.nanoTime(); //$NON-NLS-1$
+	}
+
+	/** no staging file of a failed manifest copy is left in the cache */
+	private static void assertNoPartialFiles() throws IOException {
+		final Path folder = cachedManifest(TEST02, V1_1_0).getParent();
+		if (Files.isDirectory(folder)) {
+			try (Stream<Path> files = Files.list(folder)) {
+				assertEquals(List.of(), files.filter(file -> file.getFileName().toString().endsWith(".part")).toList()); //$NON-NLS-1$
+			}
+		}
 	}
 
 	private static OnlineLibraryProvider catalogue(final MockEndpoint endpoint) {
@@ -206,20 +302,26 @@ class OnlineLibraryProviderManifestTest {
 		}
 	}
 
-	/** Offers archives that contain no manifest. */
-	private class ArchivesWithoutManifest extends ArchivesOnly {
-		ArchivesWithoutManifest() {
-			super(BROKEN_SOURCE);
+	/** Offers archives with the given entries (entry name to content). */
+	private class ArchivesWith extends ArchivesOnly {
+		private final BiFunction<String, Version, Map<String, String>> entries;
+
+		ArchivesWith(final String name, final BiFunction<String, Version, Map<String, String>> entries) {
+			super(name);
+			this.entries = entries;
 		}
 
 		@Override
 		public DownloadResult<Path> downloadLibrary(final String symbolicName, final VersionRange range,
 				final Version preferredVersion, final IProgressMonitor monitor) throws OperationCanceledException {
 			archiveDownloads.incrementAndGet();
-			final Path archive = emptyArchiveFolder.resolve(symbolicName + "-" + preferredVersion + ".zip"); //$NON-NLS-1$ //$NON-NLS-2$
+			final Path archive = archiveFolder.resolve(symbolicName + "-" + preferredVersion + ".zip"); //$NON-NLS-1$ //$NON-NLS-2$
 			try (OutputStream out = Files.newOutputStream(archive); ZipOutputStream zip = new ZipOutputStream(out)) {
-				zip.putNextEntry(new ZipEntry(symbolicName + "-" + preferredVersion + "/typelib/")); //$NON-NLS-1$ //$NON-NLS-2$
-				zip.closeEntry();
+				for (final var entry : entries.apply(symbolicName, preferredVersion).entrySet()) {
+					zip.putNextEntry(new ZipEntry(entry.getKey()));
+					zip.write(entry.getValue().getBytes(StandardCharsets.UTF_8));
+					zip.closeEntry();
+				}
 			} catch (final IOException e) {
 				return new DownloadResult<>(DownloadResult.Status.ERROR, e.getMessage());
 			}

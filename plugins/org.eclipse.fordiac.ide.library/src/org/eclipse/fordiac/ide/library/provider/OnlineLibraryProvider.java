@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.library.provider;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.Messages;
+import org.eclipse.fordiac.ide.library.download.AbstractLibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.download.ILibraryPackageDownloader;
 import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
@@ -57,15 +58,14 @@ import org.osgi.framework.VersionRange;
 
 public class OnlineLibraryProvider extends AbstractLibraryProvider {
 
-	/** a manifest is small; a larger entry is not read (the limit of a manifest download) */
-	private static final int MAX_MANIFEST_BYTES = 4 * 1024 * 1024;
 	private static final String MACOS_METADATA_FOLDER = "__MACOSX"; //$NON-NLS-1$
 
 	/**
-	 * Versions whose archive has no manifest, by source: such an archive is not
-	 * downloaded again in this session
+	 * The problem with the manifest of an archive (none, several, unreadable) by
+	 * source, library and version: such an archive is not downloaded again in this
+	 * session
 	 */
-	private static final Set<String> ARCHIVES_WITHOUT_MANIFEST = ConcurrentHashMap.newKeySet();
+	private static final Map<String, String> ARCHIVE_PROBLEMS = new ConcurrentHashMap<>();
 
 	private final AtomicReference<Map<String, List<LibraryDescriptor>>> availableLibs = new AtomicReference<>(Map.of());
 	private final LibraryPackageDownloaderProvider downloaderProvider;
@@ -260,9 +260,9 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 			final Version version) {
 		final String source = lookup.downloader().getName();
 		final String key = String.join("\n", source, symbolicName, version.toString()); //$NON-NLS-1$
-		if (ARCHIVES_WITHOUT_MANIFEST.contains(key)) {
-			lookup.status().add(Status.error(MessageFormat
-					.format(Messages.OnlineLibraryProvider_ArchiveWithoutManifest, source, symbolicName, version)));
+		final String knownProblem = ARCHIVE_PROBLEMS.get(key);
+		if (knownProblem != null) {
+			lookup.status().add(Status.error(knownProblem));
 			return null;
 		}
 		final DownloadResult<Path> archive = lookup.downloader().downloadLibrary(symbolicName,
@@ -274,14 +274,13 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 			return null;
 		}
 		try {
-			final Path manifest = extractManifest(archive.result(), symbolicName + "-" + version, //$NON-NLS-1$
+			return extractManifest(archive.result(), symbolicName + "-" + version, //$NON-NLS-1$
 					manifestCachePath(symbolicName, version), lookup.monitor());
-			if (manifest == null) {
-				ARCHIVES_WITHOUT_MANIFEST.add(key);
-				lookup.status().add(Status.error(MessageFormat
-						.format(Messages.OnlineLibraryProvider_ArchiveWithoutManifest, source, symbolicName, version)));
-			}
-			return manifest;
+		} catch (final ArchiveContentException e) {
+			final String message = e.format(source, symbolicName, version);
+			ARCHIVE_PROBLEMS.put(key, message);
+			lookup.status().add(Status.error(message));
+			return null;
 		} catch (final IOException e) {
 			lookup.status().add(Status.error(MessageFormat.format(Messages.OnlineLibraryProvider_ArchiveDownloadFailed,
 					source, symbolicName, version, e.getMessage())));
@@ -294,11 +293,18 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 	 * manifest lies directly in a top-level folder of the archive: the folder named
 	 * after the library version, otherwise the only folder that has one.
 	 *
-	 * @return {@code target}, or {@code null} if the archive contains no manifest
-	 *         or the manifests of several other folders
+	 * @return {@code target}
+	 * @throws ArchiveContentException if the archive has no such manifest, the
+	 *                                 manifests of several other folders, or a
+	 *                                 manifest that is empty or cannot be read
+	 * @throws IOException             if the archive cannot be read, the manifest
+	 *                                 is too large or cannot be written
 	 */
 	private static Path extractManifest(final Path archive, final String folderName, final Path target,
 			final IProgressMonitor monitor) throws IOException {
+		if (monitor != null && monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 		try (ZipFile zip = new ZipFile(archive.toFile())) {
 			final List<ZipEntry> candidates = new ArrayList<>();
 			ZipEntry expected = null;
@@ -313,30 +319,85 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 					}
 				}
 			}
-			final ZipEntry manifest = expected != null ? expected : candidates.size() == 1 ? candidates.getFirst() : null;
-			if (manifest == null) {
-				return null;
+			if (expected == null && candidates.isEmpty()) {
+				throw new ArchiveContentException(Messages.OnlineLibraryProvider_ArchiveWithoutManifest);
 			}
-			if (monitor != null && monitor.isCanceled()) {
-				throw new OperationCanceledException();
+			if (expected == null && candidates.size() > 1) {
+				throw new ArchiveContentException(Messages.OnlineLibraryProvider_ArchiveAmbiguousManifest);
 			}
-			final byte[] content;
-			try (InputStream in = zip.getInputStream(manifest)) {
-				content = in.readNBytes(MAX_MANIFEST_BYTES + 1);
-			}
-			if (content.length > MAX_MANIFEST_BYTES) {
-				throw new IOException(MessageFormat.format(Messages.OnlineLibraryProvider_ManifestTooLarge,
-						manifest.getName(), Integer.valueOf(MAX_MANIFEST_BYTES)));
-			}
-			Files.createDirectories(target.getParent());
-			final Path partial = Files.createTempFile(target.getParent(), "manifest-", ".part"); //$NON-NLS-1$ //$NON-NLS-2$
-			try {
-				Files.write(partial, content);
-				Files.move(partial, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-			} finally {
-				Files.deleteIfExists(partial);
-			}
+			final ZipEntry manifest = expected != null ? expected : candidates.getFirst();
+			copyManifest(zip, manifest, target, monitor);
 			return target;
+		}
+	}
+
+	/**
+	 * Copy a manifest of an archive to {@code target}: the size is limited as for a
+	 * manifest download, and the file appears only if it is a readable manifest.
+	 */
+	private static void copyManifest(final ZipFile zip, final ZipEntry manifest, final Path target,
+			final IProgressMonitor monitor) throws IOException {
+		final long limit = AbstractLibraryPackageDownloader.maxMetadataBytes();
+		if (manifest.getSize() > limit) {
+			throw manifestTooLarge(manifest, limit);
+		}
+		Files.createDirectories(target.getParent());
+		final Path partial = Files.createTempFile(target.getParent(), "manifest-", ".part"); //$NON-NLS-1$ //$NON-NLS-2$
+		try {
+			long total = 0;
+			try (InputStream in = zip.getInputStream(manifest); OutputStream out = Files.newOutputStream(partial)) {
+				final byte[] buffer = new byte[8192];
+				int read;
+				while ((read = in.read(buffer)) != -1) {
+					total += read;
+					if (total > limit) {
+						throw manifestTooLarge(manifest, limit);
+					}
+					if (monitor != null && monitor.isCanceled()) {
+						throw new OperationCanceledException();
+					}
+					out.write(buffer, 0, read);
+				}
+			}
+			if (total == 0 || !isReadableManifest(partial)) {
+				throw new ArchiveContentException(Messages.OnlineLibraryProvider_ArchiveInvalidManifest);
+			}
+			Files.move(partial, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+		} finally {
+			Files.deleteIfExists(partial);
+		}
+	}
+
+	private static boolean isReadableManifest(final Path manifest) {
+		try {
+			return ManifestHelper.getManifest(manifest) != null;
+		} catch (final RuntimeException e) {
+			return false;
+		}
+	}
+
+	private static IOException manifestTooLarge(final ZipEntry manifest, final long limit) {
+		return new IOException(MessageFormat.format(Messages.OnlineLibraryProvider_ManifestTooLarge,
+				manifest.getName(), Long.valueOf(limit), AbstractLibraryPackageDownloader.MAX_METADATA_BYTES_PROPERTY));
+	}
+
+	/**
+	 * The archive has no manifest that can be used. Another download of the archive
+	 * gives the same result, unlike the other failures.
+	 */
+	private static final class ArchiveContentException extends IOException {
+		private static final long serialVersionUID = 1L;
+
+		/** the message with the placeholders source, library and version */
+		private final String pattern;
+
+		ArchiveContentException(final String pattern) {
+			super(pattern);
+			this.pattern = pattern;
+		}
+
+		String format(final String source, final String symbolicName, final Version version) {
+			return MessageFormat.format(pattern, source, symbolicName, version);
 		}
 	}
 

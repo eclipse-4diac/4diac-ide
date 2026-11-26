@@ -369,6 +369,8 @@ public class LibraryPlanningPage extends WizardPage {
 		};
 
 		job.setUser(false);
+		// the lookup can download archives: stop it when the page is closed
+		treeViewer.getTree().addDisposeListener(_ -> job.cancel());
 		job.schedule();
 	}
 
