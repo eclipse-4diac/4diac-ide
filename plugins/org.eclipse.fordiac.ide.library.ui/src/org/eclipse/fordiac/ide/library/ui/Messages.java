@@ -66,6 +66,7 @@ public class Messages extends NLS {
 
 	public static String LibrarySourceBuilder_version;
 
+	public static String PreferenceDownloadArchive;
 	public static String PreferenceForceLoad;
 	public static String PreferenceLoadingGroup;
 

@@ -115,7 +115,11 @@ public class Messages extends NLS {
 	public static String LibraryPackageDownloaderProvider_SourceError;
 	public static String LibraryPackageDownloaderProvider_UnknownElement;
 
+	public static String OnlineLibraryProvider_ArchiveDownloadFailed;
+	public static String OnlineLibraryProvider_ArchiveWithoutManifest;
 	public static String OnlineLibraryProvider_InvalidDependencyRange;
+	public static String OnlineLibraryProvider_ManifestsNotFound;
+	public static String OnlineLibraryProvider_ManifestTooLarge;
 	public static String OnlineLibraryProvider_NoLibrarySource;
 
 	public static String DownloadNullResult;
