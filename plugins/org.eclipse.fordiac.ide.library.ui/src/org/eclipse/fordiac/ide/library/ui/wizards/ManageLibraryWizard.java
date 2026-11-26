@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  * 	Mario Kastner - initial API and implementation and/or initial documentation
+ * 	Michael Oberlehner - reuse the online catalogue of the manifest editor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
@@ -23,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.fordiac.ide.library.LibraryChange;
 import org.eclipse.fordiac.ide.library.LibraryResolver;
+import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -38,8 +40,22 @@ public class ManageLibraryWizard extends Wizard {
 	private List<LibraryChange> changesIncludingTransitive = List.of();
 
 	public static int openDialog(final IProject project, final Shell shell) {
+		return openDialog(project, shell, null);
+	}
+
+	/**
+	 * Opens the wizard for a project.
+	 *
+	 * @param project   the project whose libraries are managed
+	 * @param shell     the parent shell
+	 * @param catalogue an online catalogue whose library sources the wizard
+	 *                  reuses, e.g. the one of an open manifest editor, or
+	 *                  {@code null} to look up the sources
+	 * @return the return code of the dialog
+	 */
+	public static int openDialog(final IProject project, final Shell shell, final OnlineLibraryProvider catalogue) {
 		if (project != null) {
-			final ManageLibraryWizard wizard = new ManageLibraryWizard(project);
+			final ManageLibraryWizard wizard = new ManageLibraryWizard(project, catalogue);
 			wizard.setWindowTitle("Manage Linked Libraries"); //$NON-NLS-1$
 			final WizardDialog dialog = new WizardDialog(shell, wizard);
 			dialog.setBlockOnOpen(false);
@@ -51,8 +67,20 @@ public class ManageLibraryWizard extends Wizard {
 	}
 
 	public ManageLibraryWizard(final IProject project) {
+		this(project, null);
+	}
+
+	/**
+	 * Creates the wizard.
+	 *
+	 * @param project   the project whose libraries are managed
+	 * @param catalogue an online catalogue whose library sources the wizard
+	 *                  reuses, or {@code null} to look up the sources
+	 */
+	public ManageLibraryWizard(final IProject project, final OnlineLibraryProvider catalogue) {
 		this.project = project;
-		this.planningPage = new LibraryPlanningPage(Messages.ManageLibraryWizard_PlannigPage_Titel, project);
+		this.planningPage = new LibraryPlanningPage(Messages.ManageLibraryWizard_PlannigPage_Titel, project,
+				catalogue);
 		this.previewPage = new LibraryChangePreviewPage(Messages.ManageLibraryWizard_PreviewPage_Titel);
 
 	}

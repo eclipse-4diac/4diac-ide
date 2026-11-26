@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Mario Kastner
  *   	- initial API and implementation and/or initial documentation
+ *   Michael Oberlehner
+ *   	- pass the online catalogue to the Manage Libraries wizard
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.editors;
 
@@ -74,7 +76,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 class ManifestEditorDependencyPage extends FormPage {
 
 	private final ILibraryProvider offlineLibraryProvider = new OfflineLibraryProvider();
-	private final ILibraryProvider onlineLibraryProvider = new OnlineLibraryProvider();
+	private final OnlineLibraryProvider onlineLibraryProvider = new OnlineLibraryProvider();
 	private final List<ILibraryProvider> libraryProviders = List.of(offlineLibraryProvider, onlineLibraryProvider);
 	private static final Comparator<LibraryDescriptor> VERSION_DESCENDING = Comparator
 			.comparing(LibraryDescriptor::version).reversed();
@@ -200,8 +202,10 @@ class ManifestEditorDependencyPage extends FormPage {
 		final Button manageLibrariesButton = new Button(buttonBar, SWT.PUSH);
 		manageLibrariesButton.setText(Messages.ManageLibraryWizard_Label);
 		manageLibrariesButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		manageLibrariesButton.addListener(SWT.Selection, _ -> ManageLibraryWizard
-				.openDialog(getManifestEditor().getProject(), getEditor().getSite().getShell()));
+		// the wizard reuses the library sources of this page instead of loading their catalogues again
+		manageLibrariesButton.addListener(SWT.Selection,
+				_ -> ManageLibraryWizard.openDialog(getManifestEditor().getProject(),
+						getEditor().getSite().getShell(), onlineLibraryProvider));
 
 		final Button importLibrariesButton = new Button(buttonBar, SWT.PUSH);
 		importLibrariesButton.setText(Messages.ManifestEditor_ImportLibraries);

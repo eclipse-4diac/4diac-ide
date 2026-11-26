@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Primetals Technologies Austria GmbH, Osoft e.U.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Mario Kastner - initial API and implementation and/or initial documentation
+ *   Michael Oberlehner - reuse the online catalogue of the manifest editor
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
@@ -78,10 +79,24 @@ public class LibraryPlanningPage extends WizardPage {
 	private ResolveResult resolveResult;
 
 	protected LibraryPlanningPage(final String pageName, final IProject project) {
+		this(pageName, project, null);
+	}
+
+	/**
+	 * Creates the page.
+	 *
+	 * @param pageName  the name of the page
+	 * @param project   the project whose libraries are managed
+	 * @param catalogue an online catalogue whose library sources are reused, or
+	 *                  {@code null} to look up the sources
+	 */
+	protected LibraryPlanningPage(final String pageName, final IProject project,
+			final OnlineLibraryProvider catalogue) {
 		super(pageName);
 		setTitle(Messages.ManageLibraryWizard_PlannigPage_Titel);
 		this.offlineLibraryProvider = new OfflineLibraryProvider();
-		this.onlineLibraryProvider = new OnlineLibraryProvider();
+		this.onlineLibraryProvider = catalogue != null ? new OnlineLibraryProvider(catalogue)
+				: new OnlineLibraryProvider();
 		this.project = project;
 	}
 
