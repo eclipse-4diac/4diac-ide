@@ -11,6 +11,7 @@
  *   Mario Kastner - initial API and implementation and/or initial documentation
  *   Michael Oberlehner - use the shared downloader lookup
  *   Michael Oberlehner - keep the libraries of all sources in the catalogue
+ *   Michael Oberlehner - reuse the library sources of another catalogue
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.provider;
 
@@ -47,6 +48,9 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 
 	private final AtomicReference<Map<String, List<LibraryDescriptor>>> availableLibs = new AtomicReference<>(Map.of());
 	private final LibraryPackageDownloaderProvider downloaderProvider;
+	private final OnlineLibraryProvider sharedSources;
+	// the library sources of the last refresh, guarded by this
+	private LibraryPackageDownloaderProvider.Result lastSources;
 
 	public OnlineLibraryProvider() {
 		this(new LibraryPackageDownloaderProvider());
@@ -54,14 +58,33 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 
 	public OnlineLibraryProvider(final LibraryPackageDownloaderProvider downloaderProvider) {
 		this.downloaderProvider = Objects.requireNonNull(downloaderProvider);
+		this.sharedSources = null;
+	}
+
+	/**
+	 * Creates a catalogue that reuses the library sources of another catalogue.
+	 *
+	 * <p>
+	 * A refresh uses the downloaders of the last refresh of the other catalogue
+	 * and waits for a refresh of it that is still running. As a downloader keeps
+	 * the catalogue it has loaded, the catalogues of the sources are not loaded
+	 * again. If the other catalogue has not been refreshed yet, the sources are
+	 * looked up as the other catalogue would look them up.
+	 *
+	 * @param sharedSources the catalogue whose library sources are reused
+	 */
+	public OnlineLibraryProvider(final OnlineLibraryProvider sharedSources) {
+		this.downloaderProvider = Objects.requireNonNull(sharedSources).downloaderProvider;
+		this.sharedSources = sharedSources;
 	}
 
 	@Override
-	public IStatus refresh(final IProgressMonitor monitor, final boolean fetchDependencies) {
+	public synchronized IStatus refresh(final IProgressMonitor monitor, final boolean fetchDependencies) {
 		final Map<String, List<LibraryDescriptor>> refreshedLibs = new HashMap<>();
 		final MultiStatus status = new MultiStatus(PLUGIN_ID, IStatus.OK, "Download versions status"); //$NON-NLS-1$
 		boolean sourceConfigured = false;
-		final var sources = downloaderProvider.getActiveDownloaders();
+		final var sources = lookUpSources();
+		lastSources = sources;
 		status.merge(sources.status());
 
 		for (final ILibraryPackageDownloader downloader : sources.downloaders()) {
@@ -94,6 +117,23 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 		availableLibs.set(Map.copyOf(refreshedLibs));
 
 		return status;
+	}
+
+	private LibraryPackageDownloaderProvider.Result lookUpSources() {
+		final LibraryPackageDownloaderProvider.Result shared = sharedSources != null ? sharedSources.getLastSources()
+				: null;
+		return shared != null ? shared : downloaderProvider.getActiveDownloaders();
+	}
+
+	/**
+	 * Returns the library sources of the last refresh. Waits for a refresh that
+	 * is still running.
+	 *
+	 * @return the sources, or {@code null} if this catalogue has not been
+	 *         refreshed yet
+	 */
+	private synchronized LibraryPackageDownloaderProvider.Result getLastSources() {
+		return lastSources;
 	}
 
 	private static Map<String, List<LibraryDescriptor>> toLibraryDescriptors(final Map<String, List<String>> versions,
