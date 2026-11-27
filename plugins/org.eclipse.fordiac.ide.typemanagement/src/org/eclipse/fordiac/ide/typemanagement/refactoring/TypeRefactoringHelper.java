@@ -71,7 +71,7 @@ public final class TypeRefactoringHelper {
 			final IPath newPath) {
 		if (typeEntry instanceof final DataTypeEntry dtEntry) {
 			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
-					DataTypeEditBuilder.getFullTypeName(typeEntry, newPath));
+					DataTypeEditBuilder.getFullTypeName(newPath));
 		} else {
 			addInstanceChanges(modelEdits, typeEntry);
 		}

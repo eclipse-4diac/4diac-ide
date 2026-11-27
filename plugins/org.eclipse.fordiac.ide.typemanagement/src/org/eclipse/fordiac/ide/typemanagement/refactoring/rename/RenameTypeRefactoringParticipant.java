@@ -107,6 +107,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			final String newPackageName = PackageNameHelper.getPackageNameFromFile(newFile);
 
 			TypeRefactoringHelper.addPackageNameModelEdit(modelEdits, typeEntry, newPackageName);
+			TypeRefactoringHelper.addModelEditsForRenamedType(modelEdits, typeEntry, path);
 			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, newFile));
 		});
 		// add model edits before(!) UpdateTypeEntryFileChange
@@ -118,20 +119,13 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	public Change createChange(final IProgressMonitor monitor) throws CoreException, OperationCanceledException {
 		try {
 			monitor.beginTask("Creating change...", 1); //$NON-NLS-1$
-			final CompositeChange change = new CompositeChange(Messages.Refactoring_RenameChangeName);
-
 			// rename type if only single file was renamed...
 			if (resource instanceof final IFile file) {
 				final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 				final String newTypeName = TypeEntry.getTypeNameFromFileName(newName);
-				change.add(new UpdateTypeEntryChange(entry.getFile(), entry, newTypeName, entry.getTypeName()));
+				return new UpdateTypeEntryChange(entry.getFile(), entry, newTypeName, entry.getTypeName());
 			}
-
-			final List<ModelEdit<?>> modelEdits = new ArrayList<>();
-			processTypeFiles(resource, resource.getFullPath(), (typeEntry, path) -> TypeRefactoringHelper
-					.addModelEditsForRenamedType(modelEdits, typeEntry, path));
-			change.add(ModelEditChange.fromModelEdits(Messages.Refactoring_StructUsers, modelEdits));
-			return change;
+			return null;
 		} finally {
 			monitor.done();
 		}

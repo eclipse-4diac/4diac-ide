@@ -85,6 +85,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 			final IFile destinationFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			final String newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
 			TypeRefactoringHelper.addPackageNameModelEdit(modelEdits, typeEntry, newPackageName);
+			TypeRefactoringHelper.addModelEditsForMovedType(modelEdits, typeEntry, path);
 			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, destinationFile));
 		});
 		// add model edits before(!) UpdateTypeEntryFileChange
@@ -94,10 +95,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
-		processTypeFiles(resource, destination.getFullPath(),
-				(typeEntry, path) -> TypeRefactoringHelper.addModelEditsForMovedType(modelEdits, typeEntry, path));
-		return ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage_UpdateInstances, modelEdits);
+		return null;
 	}
 
 	private void processTypeFiles(final IResource resource, final IPath newPath,
