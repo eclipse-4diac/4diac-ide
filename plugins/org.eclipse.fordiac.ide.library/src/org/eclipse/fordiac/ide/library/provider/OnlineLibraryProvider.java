@@ -23,6 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,19 +76,16 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 		this(new LibraryPackageDownloaderProvider());
 	}
 
-	/**
-	 * @param project project whose library preferences apply, or {@code null} for
-	 *                the workspace preferences
-	 */
-	public OnlineLibraryProvider(final IProject project) {
-		this(new LibraryPackageDownloaderProvider(), project);
-	}
-
 	public OnlineLibraryProvider(final LibraryPackageDownloaderProvider downloaderProvider) {
 		this(downloaderProvider, null);
 	}
 
-	private OnlineLibraryProvider(final LibraryPackageDownloaderProvider downloaderProvider, final IProject project) {
+	/**
+	 * @param downloaderProvider looks up the library sources
+	 * @param project            project whose library preferences apply, or
+	 *                           {@code null} for the workspace preferences
+	 */
+	public OnlineLibraryProvider(final LibraryPackageDownloaderProvider downloaderProvider, final IProject project) {
 		this.downloaderProvider = Objects.requireNonNull(downloaderProvider);
 		this.project = project;
 	}
@@ -308,7 +306,11 @@ public class OnlineLibraryProvider extends AbstractLibraryProvider {
 		try (ZipFile zip = new ZipFile(archive.toFile())) {
 			final List<ZipEntry> candidates = new ArrayList<>();
 			ZipEntry expected = null;
-			for (final ZipEntry entry : Collections.list(zip.entries())) {
+			for (final Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
+				if (monitor != null && monitor.isCanceled()) {
+					throw new OperationCanceledException();
+				}
+				final ZipEntry entry = entries.nextElement();
 				final List<String> segments = new ArrayList<>(List.of(entry.getName().replace('\\', '/').split("/"))); //$NON-NLS-1$
 				segments.removeIf(segment -> segment.isEmpty() || ".".equals(segment)); //$NON-NLS-1$
 				if (!entry.isDirectory() && segments.size() == 2 && LibraryManager.MANIFEST.equals(segments.get(1))

@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.library.LibraryChange.ChangeType;
 import org.eclipse.fordiac.ide.library.LibraryResolver;
 import org.eclipse.fordiac.ide.library.LibraryResolver.ResolveResult;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
+import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
@@ -82,7 +83,7 @@ public class LibraryPlanningPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.ManageLibraryWizard_PlannigPage_Titel);
 		this.offlineLibraryProvider = new OfflineLibraryProvider();
-		this.onlineLibraryProvider = new OnlineLibraryProvider(project);
+		this.onlineLibraryProvider = new OnlineLibraryProvider(new LibraryPackageDownloaderProvider(), project);
 		this.project = project;
 	}
 

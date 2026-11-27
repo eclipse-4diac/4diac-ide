@@ -31,6 +31,9 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -44,6 +47,7 @@ import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.library.preferences.LibraryPreferenceConstants;
 import org.eclipse.fordiac.ide.library.provider.OnlineLibraryProvider;
+import org.eclipse.fordiac.ide.model.preferences.PreferenceProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,6 +65,7 @@ class OnlineLibraryProviderManifestTest {
 	// archives without a usable manifest are remembered by source for the session: see unique()
 	private static final String BROKEN_SOURCE = "Archives without manifest"; //$NON-NLS-1$
 	private static final String LIMITED_SOURCE = "Archives with a small metadata limit"; //$NON-NLS-1$
+	private static final String PROJECT = "OnlineLibraryProviderManifestTest"; //$NON-NLS-1$
 	private static final String TEST01 = "test01"; //$NON-NLS-1$
 	private static final String TEST02 = "test02"; //$NON-NLS-1$
 	private static final String V1_0_0 = "1.0.0"; //$NON-NLS-1$
@@ -104,8 +109,8 @@ class OnlineLibraryProviderManifestTest {
 		final List<IStatus> warnings = Stream.of(status.getChildren())
 				.filter(child -> child.getSeverity() == IStatus.WARNING).toList();
 		assertEquals(1, warnings.size(), status::toString);
-		assertTrue(warnings.getFirst().getMessage().startsWith(SOURCE + ": "), warnings.getFirst()::getMessage); //$NON-NLS-1$
-		assertTrue(warnings.getFirst().getMessage().contains("3 library versions"), warnings.getFirst()::getMessage); //$NON-NLS-1$
+		assertEquals(MessageFormat.format(Messages.OnlineLibraryProvider_ManifestsNotFound, SOURCE, Integer.valueOf(3)),
+				warnings.getFirst().getMessage());
 		// the versions are offered without dependencies, no archive is downloaded
 		assertEquals(Map.of(), catalogue.getLibrary(TEST02, new Version(V1_1_0)).orElseThrow().dependencies());
 		assertEquals(0, source.archiveDownloads.get());
@@ -189,6 +194,21 @@ class OnlineLibraryProviderManifestTest {
 		assertTrue(Files.isRegularFile(cachedManifest(TEST02, V1_1_0)));
 	}
 
+	@Test
+	void theProjectSettingReadsTheArchivesIfTheWorkspaceSettingDoesNot() throws Exception {
+		assertProjectSetting(false, true, true, true);
+	}
+
+	@Test
+	void theProjectSettingKeepsTheArchivesIfTheWorkspaceSettingReadsThem() throws Exception {
+		assertProjectSetting(true, true, false, false);
+	}
+
+	@Test
+	void theWorkspaceSettingAppliesIfTheProjectSettingsAreDisabled() throws Exception {
+		assertProjectSetting(true, false, false, true);
+	}
+
 	private void assertArchiveProblem(final String pattern, final BiFunction<String, Version, Map<String, String>> entries)
 			throws Exception {
 		setReadArchives(true);
@@ -240,9 +260,43 @@ class OnlineLibraryProviderManifestTest {
 		}
 	}
 
+	private static void assertProjectSetting(final boolean workspaceValue, final boolean projectSettingsActive,
+			final boolean projectValue, final boolean readsArchives) throws Exception {
+		setReadArchives(workspaceValue);
+		// a project of its own, no project of the workspace is touched
+		final IProject testProject = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(PROJECT + System.nanoTime());
+		testProject.create(null);
+		try {
+			testProject.open(null);
+			final org.osgi.service.prefs.Preferences node = new ProjectScope(testProject)
+					.getNode(LibraryPreferenceConstants.LIBRARY_PREFERENCES_ID);
+			node.putBoolean(PreferenceProvider.PROJECT_STORE_ACTIVE, projectSettingsActive);
+			node.putBoolean(LibraryPreferenceConstants.DOWNLOAD_ARCHIVE_WITHOUT_MANIFEST, projectValue);
+			node.flush();
+			final ArchivesOnly source = new ArchivesOnly(unique(SOURCE));
+
+			final IStatus status = new OnlineLibraryProvider(downloaders(source), testProject)
+					.refresh(new NullProgressMonitor(), true);
+
+			if (readsArchives) {
+				assertTrue(status.getSeverity() < IStatus.WARNING, status::toString);
+				assertEquals(3, source.archiveDownloads.get());
+			} else {
+				assertEquals(IStatus.WARNING, status.getSeverity(), status::toString);
+				assertEquals(0, source.archiveDownloads.get());
+			}
+		} finally {
+			testProject.delete(true, true, null);
+		}
+	}
+
 	private static OnlineLibraryProvider catalogue(final MockEndpoint endpoint) {
-		return new OnlineLibraryProvider(
-				new LibraryPackageDownloaderProvider(List.of(new MockDownloaderProvider(List.of(endpoint)))));
+		return new OnlineLibraryProvider(downloaders(endpoint));
+	}
+
+	private static LibraryPackageDownloaderProvider downloaders(final MockEndpoint endpoint) {
+		return new LibraryPackageDownloaderProvider(List.of(new MockDownloaderProvider(List.of(endpoint))));
 	}
 
 	private static org.osgi.service.prefs.Preferences preferences() {
