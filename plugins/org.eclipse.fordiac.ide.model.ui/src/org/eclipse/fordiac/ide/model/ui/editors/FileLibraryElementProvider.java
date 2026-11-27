@@ -131,11 +131,23 @@ public class FileLibraryElementProvider
 	}
 
 	protected void handleLibraryElementMoved(final FileLibraryElementInfo info, final IFileEditorInput movedInput) {
-		fireLibraryElementStateChange(listener -> listener.elementMoved(info.getEditorInput(), movedInput));
+		if (!info.getEditorInput().getFile().exists()) {
+			if (movedInput.getFile().exists()) {
+				fireLibraryElementStateChange(listener -> listener.elementMoved(info.getEditorInput(), movedInput));
+			} else {
+				fireLibraryElementStateChange(listener -> listener.elementDeleted(info.getEditorInput()));
+			}
+		} else {
+			handleLibraryElementContentChanged(info);
+		}
 	}
 
 	protected void handleLibraryElementDeleted(final FileLibraryElementInfo info) {
-		fireLibraryElementStateChange(listener -> listener.elementDeleted(info.getEditorInput()));
+		if (!info.getEditorInput().getFile().exists()) {
+			fireLibraryElementStateChange(listener -> listener.elementDeleted(info.getEditorInput()));
+		} else {
+			handleLibraryElementContentChanged(info);
+		}
 	}
 
 	protected static LibraryElement loadLibraryElement(final IFile file) throws CoreException {
