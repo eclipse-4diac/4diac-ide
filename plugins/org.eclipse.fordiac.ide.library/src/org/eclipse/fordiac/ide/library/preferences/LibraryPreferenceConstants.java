@@ -17,6 +17,13 @@ public class LibraryPreferenceConstants {
 
 	public static final String FORCE_LOAD_DEPENDENCIES = "ForceLoadDependencies"; //$NON-NLS-1$
 
+	/**
+	 * Download the archive of a library version to read its manifest if the
+	 * manifest is not offered next to the archive (default: off, archives can be
+	 * large)
+	 */
+	public static final String DOWNLOAD_ARCHIVE_WITHOUT_MANIFEST = "DownloadArchiveWithoutManifest"; //$NON-NLS-1$
+
 	private LibraryPreferenceConstants() {
 	}
 }

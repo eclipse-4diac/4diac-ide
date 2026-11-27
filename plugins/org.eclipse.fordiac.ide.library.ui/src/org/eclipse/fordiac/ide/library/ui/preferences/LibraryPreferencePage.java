@@ -44,8 +44,10 @@ public class LibraryPreferencePage extends FordiacPropertyPreferencePage {
 
 		addField(new BooleanFieldEditor(LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES,
 				Messages.PreferenceForceLoad, load));
+		addField(new BooleanFieldEditor(LibraryPreferenceConstants.DOWNLOAD_ARCHIVE_WITHOUT_MANIFEST,
+				Messages.PreferenceDownloadArchive, load));
 
-		final GridLayout gridLayout = new GridLayout(2, false);
+		final GridLayout gridLayout = new GridLayout(1, false);
 		final GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 

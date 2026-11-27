@@ -24,5 +24,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 				.getNode(LibraryPreferenceConstants.LIBRARY_PREFERENCES_ID);
 
 		preferences.putBoolean(LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES, false);
+		preferences.putBoolean(LibraryPreferenceConstants.DOWNLOAD_ARCHIVE_WITHOUT_MANIFEST, false);
 	}
 }

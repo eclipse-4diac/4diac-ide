@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.library.ui.wizards;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.library.LibraryChange.ChangeType;
 import org.eclipse.fordiac.ide.library.LibraryResolver;
 import org.eclipse.fordiac.ide.library.LibraryResolver.ResolveResult;
 import org.eclipse.fordiac.ide.library.LinkedLibrary;
+import org.eclipse.fordiac.ide.library.download.LibraryPackageDownloaderProvider;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
@@ -81,7 +83,7 @@ public class LibraryPlanningPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.ManageLibraryWizard_PlannigPage_Titel);
 		this.offlineLibraryProvider = new OfflineLibraryProvider();
-		this.onlineLibraryProvider = new OnlineLibraryProvider();
+		this.onlineLibraryProvider = new OnlineLibraryProvider(new LibraryPackageDownloaderProvider(), project);
 		this.project = project;
 	}
 
@@ -368,14 +370,20 @@ public class LibraryPlanningPage extends WizardPage {
 		};
 
 		job.setUser(false);
+		// the lookup can download archives: stop it when the page is closed
+		treeViewer.getTree().addDisposeListener(_ -> job.cancel());
 		job.schedule();
 	}
 
 	private static String getMessage(final IStatus status) {
 		if (status.isMultiStatus()) {
 			final int severity = status.getSeverity();
-			return Arrays.stream(status.getChildren()).filter(child -> child.getSeverity() == severity)
-					.map(IStatus::getMessage).collect(Collectors.joining(System.lineSeparator()));
+			// a warning stays visible next to errors, errors first
+			return Arrays.stream(status.getChildren())
+					.filter(child -> child.getSeverity() == severity
+							|| (severity == IStatus.ERROR && child.getSeverity() == IStatus.WARNING))
+					.sorted(Comparator.comparingInt(IStatus::getSeverity).reversed()).map(IStatus::getMessage)
+					.collect(Collectors.joining(System.lineSeparator()));
 		}
 		return status.getMessage();
 	}

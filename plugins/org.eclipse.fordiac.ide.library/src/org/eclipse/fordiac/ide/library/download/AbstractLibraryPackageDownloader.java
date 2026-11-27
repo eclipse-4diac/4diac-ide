@@ -693,7 +693,14 @@ public abstract class AbstractLibraryPackageDownloader implements ILibraryPackag
 		return HTTPS.equalsIgnoreCase(uri.getScheme()) ? 443 : 80;
 	}
 
-	private static long maxMetadataBytes() {
+	/**
+	 * The maximum size of a JSON response or a manifest in bytes, see
+	 * {@link #MAX_METADATA_BYTES_PROPERTY}.
+	 *
+	 * @return the configured limit, or the default if the property is not a
+	 *         positive number
+	 */
+	public static long maxMetadataBytes() {
 		return limit(MAX_METADATA_BYTES_PROPERTY, DEFAULT_MAX_METADATA_BYTES);
 	}
 
