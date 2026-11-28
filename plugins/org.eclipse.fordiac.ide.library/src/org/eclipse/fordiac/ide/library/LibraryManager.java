@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH and others, Osoft e.U.
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH and others, Osoft e.U., MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *   Michael Oberlehner - use configured library package downloader providers
  *   Kaavya Manimathavan - remove stale library cache entries on polling file watchers
  *   Michael Oberlehner - look up the library sources once per dependency resolution
+ *   Andrii Kozhushko - report libraries that depend on each other
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -33,19 +34,29 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.MessageFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Queue;
+import java.util.SequencedSet;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -129,13 +140,30 @@ public enum LibraryManager {
 
 	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
 
+	/** The cause of the libraries that the project requires. */
+	private static final String PROJECT_CAUSE = "Project"; //$NON-NLS-1$
+
+	/**
+	 * @param blocked libraries that require themselves or each other, or whose versions cannot be resolved
+	 *                consistently: they are not resolved and not linked
+	 * @param reports the error messages about these libraries, with the library the marker refers to
+	 * @param conflicts the dependency nodes of blocked libraries whose version range was empty, as they were then
+	 */
 	private record LibraryManagerData(Map<String, DependencyNode> dependencyNodes,
 			Map<String, ResolveNode> resolveNodes, Map<String, LinkedLibrary> linked,
-			Map<String, List<Version>> referenced, DownloadSources sources) {
+			Map<String, List<Version>> referenced, DownloadSources sources, Set<String> blocked,
+			Map<String, String> reports, Map<String, DependencyNode> conflicts) {
 		public static LibraryManagerData init() {
 			return new LibraryManagerData(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-					new DownloadSources());
+					new DownloadSources(), new HashSet<>(), new LinkedHashMap<>(), new HashMap<>());
 		}
+	}
+
+	/**
+	 * A library visited by the resolution: the libraries its resolved version requires and, if the range of
+	 * versions was empty, the dependency node as it was then.
+	 */
+	private record Visit(String symbolicName, Set<String> requirements, DependencyNode conflict) {
 	}
 
 	/**
@@ -663,7 +691,7 @@ public enum LibraryManager {
 
 		final LibraryManagerData libManagerData = LibraryManagerData.init();
 
-		final Queue<String> queue = new LinkedList<>(); // symbolicNames
+		final SequencedSet<String> queue = new LinkedHashSet<>(); // symbolicNames, each library once
 
 		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryManager_ResolvingLibraryDependencies,
 				100);
@@ -684,7 +712,7 @@ public enum LibraryManager {
 
 		projectManifest.getDependencies().getRequired().forEach(req -> {
 			libManagerData.dependencyNodes().put(req.getSymbolicName(),
-					new DependencyNode(req.getSymbolicName(), "Project", //$NON-NLS-1$
+					new DependencyNode(req.getSymbolicName(), PROJECT_CAUSE,
 							VersionComparator.parseVersionRange(req.getVersion())));
 			queue.add(req.getSymbolicName());
 		});
@@ -711,6 +739,7 @@ public enum LibraryManager {
 			// force load explicitly defined dependencies
 			final List<Required> explicitDeps = projectManifest.getDependencies().getRequired().stream()
 					.filter(r -> !r.getVersion().contains("-") //$NON-NLS-1$
+							&& !libManagerData.blocked().contains(r.getSymbolicName())
 							&& !libManagerData.dependencyNodes().get(r.getSymbolicName()).isValid())
 					.toList();
 			progress.setWorkRemaining(explicitDeps.size());
@@ -773,71 +802,339 @@ public enum LibraryManager {
 		});
 	}
 
-	private void buildDependencies(final IProject project, final LibraryManagerData data, final Queue<String> queue,
-			final SubMonitor progress) throws OperationCanceledException {
+	/**
+	 * Resolves the libraries of the queue and the libraries they require until the
+	 * queue is empty. Libraries that require themselves or each other are reported
+	 * and not resolved. The resolution stops if a library cannot be resolved, then
+	 * the queue is not empty.
+	 */
+	private void buildDependencies(final IProject project, final LibraryManagerData data,
+			final SequencedSet<String> queue, final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(Messages.LibraryManager_BuildingDependencyGraph);
 
-		while (!queue.isEmpty()) {
-			progress.setWorkRemaining(Math.max(queue.size(), 10));
-			final String symbolicName = queue.poll();
-
-			final var dnode = data.dependencyNodes().get(symbolicName);
-
-			if (!dnode.isChanged()) {
-				continue;
-			}
-
-			if (!dnode.isValid()) {
-				final var rnode = data.resolveNodes().get(symbolicName);
-				if (rnode != null) {
-					rnode.getDependencies().keySet().forEach(symb -> {
-						final var dn = data.dependencyNodes().get(symb);
-						if (dn != null) {
-							dn.removeCause(symbolicName);
-							if (dn.isChanged()) {
-								queue.add(symb);
-							}
-						}
-					});
+		// The state is only compared for repeated visits: there are at most as many first visits as libraries,
+		// so skipping them delays the detection of a resolution that does not end, but does not miss it.
+		final Set<String> visited = new HashSet<>();
+		// the state in front of each repeated visit, with the number of visits before it
+		final Map<String, Integer> states = new HashMap<>();
+		final List<Visit> trace = new ArrayList<>();
+		while (true) {
+			while (!queue.isEmpty()) {
+				if (progress.isCanceled()) {
+					throw new OperationCanceledException();
 				}
-				continue;
-			}
+				progress.setWorkRemaining(Math.max(queue.size(), 10));
+				final String symbolicName = queue.removeFirst();
+				final var dnode = data.dependencyNodes().get(symbolicName);
 
-			final Version prefVersion = Optional.ofNullable(data.linked().get(symbolicName))
-					.map(LinkedLibrary::getVersion).orElse(null);
-			// resolve dependency
-			final var rnode = resolveDependency(project, symbolicName, dnode.getRange(), prefVersion, progress.split(1),
-					data.referenced(), data.sources());
+				if (!dnode.isChanged()) {
+					continue;
+				}
+				dnode.resetChanged();
 
-			if (data.resolveNodes().containsKey(symbolicName)) {
-				final var oldRNode = data.resolveNodes().get(symbolicName);
-				oldRNode.getDependencies().keySet().forEach(old -> {
-					if (!rnode.getDependencies().containsKey(old)) {
-						data.dependencyNodes().get(old).removeCause(symbolicName);
+				if (!visited.add(symbolicName)) {
+					final Integer before = states.put(visitState(data, symbolicName, queue),
+							Integer.valueOf(trace.size()));
+					if (before != null) {
+						// the resolution returns to a state it had before and does not end
+						blockUnstable(data, queue, trace.subList(before.intValue(), trace.size()));
+						states.clear();
+						trace.clear();
 					}
-				});
+				}
+
+				final DependencyNode conflict = dnode.isRangeEmpty() ? snapshot(dnode) : null;
+				final boolean resolved = visit(project, data, queue, symbolicName, dnode, progress);
+				final var rnode = data.resolveNodes().get(symbolicName);
+				trace.add(new Visit(symbolicName, rnode == null ? Set.of() : rnode.getDependencies().keySet(),
+						conflict));
+				if (!resolved) {
+					return;
+				}
 			}
+			// the states are kept over the rounds of removeUnneeded: they are part of the resolution that does not end
+			if (!removeUnneeded(data, queue)) {
+				if (!blockCycles(data, queue)) {
+					return;
+				}
+				// the blocked libraries are part of every state from now on, the states before cannot return
+				states.clear();
+				trace.clear();
+			}
+		}
+	}
 
-			data.resolveNodes().put(symbolicName, rnode);
+	/**
+	 * Resolves a library and adds its requirements as causes to the libraries it
+	 * requires. A library that requires itself keeps the requirement in its
+	 * resolved node, it is no cause.
+	 *
+	 * @return {@code false} if the resolution has to stop, because the library
+	 *         cannot be resolved
+	 */
+	private boolean visit(final IProject project, final LibraryManagerData data, final Set<String> queue,
+			final String symbolicName, final DependencyNode dnode, final SubMonitor progress) {
+		if (data.blocked().contains(symbolicName) || !dnode.isValid()) {
+			release(data, queue, symbolicName);
+			return true;
+		}
 
-			// updated dependencies
-			rnode.getDependencies().forEach((symb, val) -> {
+		final Version prefVersion = Optional.ofNullable(data.linked().get(symbolicName)).map(LinkedLibrary::getVersion)
+				.orElse(null);
+		// resolve dependency
+		final var rnode = resolveDependency(project, symbolicName, dnode.getRange(), prefVersion, progress.split(1),
+				data.referenced(), data.sources());
+
+		final var oldRNode = data.resolveNodes().put(symbolicName, rnode);
+		if (oldRNode != null) {
+			// a library that the new version does not require any more is visited again: if it is not needed
+			// any more, its requirements are removed as well
+			oldRNode.getDependencies().keySet().stream().filter(old -> !rnode.getDependencies().containsKey(old))
+					.forEach(old -> dropCause(data, queue, old, symbolicName));
+		}
+
+		// updated dependencies
+		rnode.getDependencies().forEach((symb, val) -> {
+			if (!symb.equals(symbolicName)) {
 				final var dn = data.dependencyNodes().computeIfAbsent(symb, _ -> new DependencyNode(symb));
 				dn.putCause(symbolicName, val);
 				if (dn.isChanged()) {
 					queue.add(symb);
 				}
-			});
+			}
+		});
 
-			if (rnode.getError() != null) {
-				break;
+		return rnode.getError() == null;
+	}
+
+	/** The library is not resolved: the libraries it required lose it as a cause. */
+	private static void release(final LibraryManagerData data, final Set<String> queue, final String symbolicName) {
+		final var rnode = data.resolveNodes().remove(symbolicName);
+		if (rnode != null) {
+			rnode.getDependencies().keySet().forEach(symb -> dropCause(data, queue, symb, symbolicName));
+		}
+	}
+
+	private static void dropCause(final LibraryManagerData data, final Set<String> queue, final String dependency,
+			final String requirer) {
+		final var dn = data.dependencyNodes().get(dependency);
+		// the cause of the project is not the cause of a library of the same name
+		if (dn != null && !requirer.equals(PROJECT_CAUSE)) {
+			dn.removeCause(requirer);
+			if (dn.isChanged()) {
+				queue.add(dependency);
 			}
 		}
 	}
 
+	private static DependencyNode snapshot(final DependencyNode dnode) {
+		final var copy = new DependencyNode(dnode.getSymbolicName());
+		dnode.getCauses().forEach(copy::putCause);
+		return copy;
+	}
+
+	/**
+	 * Libraries that require each other keep each other alive, also if nothing the
+	 * project needs requires them any more (a new version of a library does not
+	 * require them): their requirements narrow the ranges of libraries that are
+	 * needed. The causes of such libraries are removed.
+	 *
+	 * @return {@code true} if causes were removed
+	 */
+	private static boolean removeUnneeded(final LibraryManagerData data, final Set<String> queue) {
+		final Map<String, Set<String>> graph = requirementGraph(data, true);
+		final Set<String> needed = new HashSet<>();
+		data.dependencyNodes().values().stream().filter(dnode -> dnode.getCauses().containsKey(PROJECT_CAUSE))
+				.forEach(dnode -> {
+					needed.add(dnode.getSymbolicName());
+					needed.addAll(reachable(graph, dnode.getSymbolicName()).keySet());
+				});
+		boolean removed = false;
+		for (final var dnode : data.dependencyNodes().values()) {
+			if (!needed.contains(dnode.getSymbolicName()) && !dnode.getCauses().isEmpty()) {
+				new ArrayList<>(dnode.getCauses().keySet()).forEach(dnode::removeCause);
+				queue.add(dnode.getSymbolicName());
+				removed = true;
+			}
+		}
+		return removed;
+	}
+
+	/**
+	 * The requirements of the resolved libraries as they are now, without the
+	 * libraries that are blocked.
+	 *
+	 * @param self whether a library that requires itself has an edge to itself
+	 */
+	private static Map<String, Set<String>> requirementGraph(final LibraryManagerData data, final boolean self) {
+		final Map<String, Set<String>> graph = new TreeMap<>();
+		data.resolveNodes().forEach((name, rnode) -> {
+			if (!data.blocked().contains(name)) {
+				rnode.getDependencies().keySet().stream()
+						.filter(other -> (self || !other.equals(name)) && !data.blocked().contains(other))
+						.forEach(other -> graph.computeIfAbsent(name, _ -> new TreeSet<>()).add(other));
+			}
+		});
+		return graph;
+	}
+
+	/**
+	 * The resolution converged: libraries that require themselves or each other
+	 * are reported and blocked, in the versions that are resolved. Only cycles that
+	 * cannot be reached from another cycle are blocked, a cycle behind them may be
+	 * caused by their requirements and is looked for again afterwards.
+	 *
+	 * @return {@code true} if libraries were blocked
+	 */
+	private static boolean blockCycles(final LibraryManagerData data, final Set<String> queue) {
+		final Map<String, Set<String>> graph = requirementGraph(data, true);
+		final List<List<String>> cycles = upstreamCycles(graph, _ -> true);
+		for (final List<String> cycle : cycles) {
+			data.reports().put(cycleMessage(data, graph, cycle), cycle.get(0));
+			block(data, queue, cycle);
+		}
+		return !cycles.isEmpty();
+	}
+
+	/**
+	 * The resolution does not end, the same state is reached again after the
+	 * visits of the window. The libraries that are on a cycle of the requirements
+	 * of these visits and of the current requirements are blocked, if the cycle
+	 * contains a library of the window. This does not mean that there is no
+	 * solution, only that this resolution does not find it.
+	 */
+	private static void blockUnstable(final LibraryManagerData data, final Set<String> queue,
+			final List<Visit> window) {
+		final Map<String, Set<String>> graph = requirementGraph(data, false);
+		window.forEach(visit -> visit.requirements().stream()
+				.filter(name -> !name.equals(visit.symbolicName()) && !data.blocked().contains(name))
+				.forEach(name -> graph.computeIfAbsent(visit.symbolicName(), _ -> new TreeSet<>()).add(name)));
+		final Set<String> visited = window.stream().map(Visit::symbolicName).collect(Collectors.toSet());
+		List<List<String>> groups = upstreamCycles(graph, cycle -> cycle.stream().anyMatch(visited::contains));
+		if (groups.isEmpty()) {
+			// not expected: a repeated state has a cycle of requirements
+			groups = List.of(visited.stream().filter(name -> !data.blocked().contains(name)).sorted().toList());
+		}
+		for (final List<String> group : groups) {
+			window.stream().filter(visit -> visit.conflict() != null && group.contains(visit.symbolicName()))
+					.forEach(visit -> data.conflicts().put(visit.symbolicName(), visit.conflict()));
+			data.reports().put(MessageFormat.format(Messages.ErrorMarkerUnstableDependency,
+					String.join(", ", group)), group.get(0)); //$NON-NLS-1$
+			block(data, queue, group);
+		}
+	}
+
+	private static void block(final LibraryManagerData data, final Set<String> queue, final Collection<String> names) {
+		data.blocked().addAll(names);
+		names.forEach(name -> release(data, queue, name));
+	}
+
+	/**
+	 * The libraries that are on a cycle: the strongly connected components that
+	 * contain a cycle and cannot be reached from another one, each sorted by name,
+	 * ordered by their first name.
+	 */
+	private static List<List<String>> upstreamCycles(final Map<String, Set<String>> graph,
+			final Predicate<List<String>> relevant) {
+		final Map<String, Set<String>> reach = new TreeMap<>();
+		graph.keySet().forEach(name -> reach.put(name, reachable(graph, name).keySet()));
+		final List<List<String>> cycles = new ArrayList<>();
+		final Set<String> listed = new HashSet<>();
+		reach.forEach((name, reached) -> {
+			if ((reached.contains(name) || graph.get(name).contains(name)) && listed.add(name)) {
+				final List<String> cycle = Stream
+						.concat(Stream.of(name),
+								reached.stream().filter(other -> reach.getOrDefault(other, Set.of()).contains(name)))
+						.distinct().sorted().toList();
+				listed.addAll(cycle);
+				cycles.add(cycle);
+			}
+		});
+		final List<List<String>> wanted = cycles.stream().filter(relevant).toList();
+		return wanted.stream().filter(cycle -> wanted.stream()
+				.noneMatch(other -> other != cycle && reach.get(other.get(0)).contains(cycle.get(0)))).toList();
+	}
+
+	/**
+	 * The libraries that are reached over one or more requirements of other libraries, each with the
+	 * library it was reached from (breadth first, so the way is the shortest).
+	 */
+	private static Map<String, String> reachable(final Map<String, Set<String>> graph, final String start) {
+		final Map<String, String> from = new LinkedHashMap<>();
+		final Deque<String> todo = new ArrayDeque<>(List.of(start));
+		while (!todo.isEmpty()) {
+			final String current = todo.poll();
+			for (final String next : graph.getOrDefault(current, Set.of())) {
+				if (!next.equals(current) && from.putIfAbsent(next, current) == null) {
+					todo.add(next);
+				}
+			}
+		}
+		return from;
+	}
+
+	/** The message about libraries that depend on each other, or about a library that requires itself. */
+	private static String cycleMessage(final LibraryManagerData data, final Map<String, Set<String>> graph,
+			final List<String> cycle) {
+		final String first = cycle.get(0);
+		if (cycle.size() == 1) {
+			final var rnode = data.resolveNodes().get(first);
+			return MessageFormat.format(Messages.ErrorMarkerRequiresItself, first, rnode.getVersion(),
+					VersionComparator.formatVersionRange(rnode.getDependencies().get(first)));
+		}
+		// the shortest cycle through the first library
+		final Map<String, String> from = reachable(graph, first);
+		final LinkedList<String> path = new LinkedList<>(List.of(first));
+		for (String name = from.get(first); !name.equals(first); name = from.get(name)) {
+			path.add(1, name);
+		}
+		final String text = Stream.concat(path.stream(), Stream.of(first))
+				.map(name -> name + ' ' + data.resolveNodes().get(name).getVersion())
+				.collect(Collectors.joining(" -> ")); //$NON-NLS-1$
+		final List<String> others = cycle.stream().filter(name -> !path.contains(name)).toList();
+		return others.isEmpty() ? MessageFormat.format(Messages.ErrorMarkerCyclicDependency, text)
+				: MessageFormat.format(Messages.ErrorMarkerCyclicDependencyMembers, text,
+						String.join(", ", others)); //$NON-NLS-1$
+	}
+
+	/**
+	 * The state of the resolution when a library is visited: everything a visit
+	 * reads (the library, the registry of the libraries, the blocked libraries, the
+	 * causes and resolved versions of all libraries and the libraries that are
+	 * still to be visited in their order). The same text means the same state, and
+	 * from the same state the resolution goes the same way again.
+	 */
+	private String visitState(final LibraryManagerData data, final String symbolicName, final Set<String> queue) {
+		final StringBuilder state = new StringBuilder(symbolicName).append('\n');
+		synchronized (libraries) {
+			state.append(libraries.values().stream().mapToInt(List::size).sum());
+		}
+		state.append('\n').append(new TreeSet<>(data.blocked())).append('\n');
+		new TreeMap<>(data.dependencyNodes()).forEach((name, dnode) -> {
+			state.append(name).append(dnode.isChanged() ? '*' : ' ');
+			new TreeMap<>(dnode.getCauses())
+					.forEach((cause, range) -> state.append(cause).append('=').append(range).append(' '));
+			final var rnode = data.resolveNodes().get(name);
+			state.append(rnode == null ? "" : rnode.getVersion()).append('\n'); //$NON-NLS-1$
+		});
+		return state.append(queue).toString();
+	}
+
 	private void importDependencyNodes(final IProject project, final LibraryManagerData data,
 			final Manifest projectManifest, final List<ErrorMarkerBuilder> markerList, final SubMonitor progress) {
+		Stream.concat(
+				data.reports().entrySet().stream().map(report -> LibraryMarkerFactory
+						.createCyclicDependencyMarker(projectManifest, report.getValue(), report.getKey())),
+				data.conflicts().values().stream()
+						.map(conflict -> LibraryMarkerFactory.createDependencyMarker(projectManifest, conflict)))
+				.forEach(marker -> {
+					markerList.add(marker);
+					ILog.get().error(marker.getMessage());
+				});
 		for (final var dnode : data.dependencyNodes().values()) {
+			if (data.blocked().contains(dnode.getSymbolicName())) {
+				continue;
+			}
 			if (dnode.isValid()) {
 				final var rnode = data.resolveNodes().get(dnode.getSymbolicName());
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025, 2026 Primetals Technologies Austria GmbH
+ * Copyright (c) 2025 Primetals Technologies Austria GmbH, MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *   Mario Kastner - extracted code from LibraryManager + add broken link marker
+ *   Andrii Kozhushko - marker for libraries that depend on each other
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -61,6 +62,20 @@ public class LibraryMarkerFactory {
 				MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
 				.setTarget(manifest.getDependencies())
 				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, dnode.getSymbolicName()));
+	}
+
+	/**
+	 * Creates error marker for libraries that depend on each other or on themselves
+	 *
+	 * @param manifest     manifest to attach marker
+	 * @param symbolicName symbolic name of the library the marker refers to
+	 * @param message      message that names the libraries
+	 * @return {@link ErrorMarkerBuilder} for error
+	 */
+	static ErrorMarkerBuilder createCyclicDependencyMarker(final Manifest manifest, final String symbolicName,
+			final String message) {
+		return createLibraryMarker(message).setTarget(manifest.getDependencies())
+				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, symbolicName));
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2026 Osoft e.U.
+ * Copyright (c) 2026 Osoft e.U., MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Andrii Kozhushko - create libraries with requirements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.library;
 
@@ -18,14 +19,18 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -62,6 +67,9 @@ public final class LibraryTestFixtures {
 			"test01-2.0.0", "test02-1.0.0", "test02-1.1.0", "test03-1.0.0", "test03-1.1.0", "test04-1.0.0",
 			"test04-1.1.0", "test05-1.0.0", "test06-1.0.0", "test07-1.0.0");
 
+	/** Libraries created by {@link #createLibrary}, named {@code <symbolic name>-<version>}. */
+	private static final List<String> CREATED = new ArrayList<>();
+
 	private static final String BUNDLE_ID = "org.eclipse.fordiac.ide.test.library"; //$NON-NLS-1$
 	private static final String DATA_FOLDER = "data/"; //$NON-NLS-1$
 	private static final long REGISTRY_TIMEOUT_MILLIS = 5000;
@@ -88,16 +96,91 @@ public final class LibraryTestFixtures {
 	}
 
 	/**
-	 * Removes all extracted test archives from the workspace library folder and
-	 * waits until the library manager no longer lists them.
+	 * Creates a library that requires other libraries and extracts it into the
+	 * workspace library folder.
+	 *
+	 * @param symbolicName the symbolic name of the library
+	 * @param version      the version of the library
+	 * @param required     the required libraries, each as symbolic name and version
+	 *                     range separated by a space, for example
+	 *                     {@code "test01 [1.0.0-2.0.0)"}
+	 * @return the URI of the extracted library
+	 */
+	@SuppressWarnings("nls")
+	public static URI createLibrary(final String symbolicName, final String version, final String... required)
+			throws IOException {
+		final String folder = symbolicName + "-" + version;
+		final Path archive = Files.createTempDirectory("library").resolve(folder + ".zip");
+		try (ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(archive))) {
+			addEntry(zip, folder + "/", "");
+			addEntry(zip, folder + "/MANIFEST.MF", createManifest(symbolicName, version, required));
+			addEntry(zip, folder + "/typelib/", "");
+			addEntry(zip, folder + "/typelib/Block.fbt", """
+					<?xml version="1.0" encoding="UTF-8"?>
+					<FBType Name="Block" Comment="Simple FB">
+						<Identification Standard="61499-1">
+						</Identification>
+						<VersionInfo Version="1.0" Author="Eclipse 4diac" Date="2026-11-27">
+						</VersionInfo>
+						<CompilerInfo packageName="%s">
+						</CompilerInfo>
+						<InterfaceList>
+						</InterfaceList>
+						<SimpleFB>
+						</SimpleFB>
+					</FBType>
+					""".formatted(symbolicName));
+		}
+		CREATED.add(folder);
+		try {
+			return LibraryManager.INSTANCE.extractLibrary(archive, null, false, false);
+		} finally {
+			Files.delete(archive);
+			Files.delete(archive.getParent());
+		}
+	}
+
+	@SuppressWarnings("nls")
+	private static String createManifest(final String symbolicName, final String version, final String... required) {
+		final StringBuilder manifest = new StringBuilder(
+				"""
+						<?xml version="1.0" encoding="UTF-8"?>
+						<Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="platform:/resource/org.eclipse.fordiac.ide.library.model/model/library.xsd" Scope="Library">
+						""");
+		if (required.length > 0) {
+			manifest.append("  <Dependencies>\n");
+			for (final String requirement : required) {
+				final int space = requirement.indexOf(' ');
+				manifest.append("    <Required SymbolicName=\"").append(requirement.substring(0, space))
+						.append("\" Version=\"").append(requirement.substring(space + 1)).append("\"/>\n");
+			}
+			manifest.append("  </Dependencies>\n");
+		}
+		return manifest.append("  <Product Name=\"").append(symbolicName).append("\" SymbolicName=\"")
+				.append(symbolicName).append("\" Comment=\"\">\n    <VersionInfo Version=\"").append(version)
+				.append("\" Author=\"Eclipse 4diac\" Date=\"2026-11-27\"/>\n  </Product>\n</Manifest>\n").toString();
+	}
+
+	private static void addEntry(final ZipOutputStream zip, final String name, final String content)
+			throws IOException {
+		zip.putNextEntry(new ZipEntry(name));
+		zip.write(content.getBytes(StandardCharsets.UTF_8));
+		zip.closeEntry();
+	}
+
+	/**
+	 * Removes all extracted test archives and created libraries from the workspace
+	 * library folder and waits until the library manager no longer lists them.
 	 */
 	public static void removeFixtureLibraries() throws IOException {
 		final Path libraryFolder = getWorkspacePath().resolve(LibraryManager.EXTRACTED_LIB_DIRECTORY);
-		for (final String archive : ARCHIVES) {
+		final List<String> removed = Stream.concat(ARCHIVES.stream(), CREATED.stream()).toList();
+		for (final String archive : removed) {
 			deleteReadOnlyTree(libraryFolder.resolve(archive));
 		}
-		awaitExtractedLibraries(libraries -> ARCHIVES.stream().noneMatch(archive -> isListed(libraries, archive)),
+		awaitExtractedLibraries(libraries -> removed.stream().noneMatch(archive -> isListed(libraries, archive)),
 				"removed fixture libraries are no longer listed"); //$NON-NLS-1$
+		CREATED.clear();
 	}
 
 	/**
@@ -128,7 +211,7 @@ public final class LibraryTestFixtures {
 
 	public static boolean hasFixtureLibraries() {
 		final Map<String, List<LibraryRecord>> libraries = LibraryManager.INSTANCE.getExtractedLibraries();
-		return ARCHIVES.stream().anyMatch(archive -> isListed(libraries, archive));
+		return Stream.concat(ARCHIVES.stream(), CREATED.stream()).anyMatch(archive -> isListed(libraries, archive));
 	}
 
 	public static Path getDownloadFolder() {
