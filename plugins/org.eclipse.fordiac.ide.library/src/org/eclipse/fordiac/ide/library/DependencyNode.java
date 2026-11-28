@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH, MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *   Andrii Kozhushko - visit a dependency again only if it changed
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -25,6 +26,7 @@ class DependencyNode {
 	private VersionRange range;
 	private final Map<String, VersionRange> causes;
 	private boolean changed;
+	private boolean valid;
 
 	public DependencyNode(final String symbolicName) {
 		this.symbolicName = symbolicName;
@@ -65,6 +67,11 @@ class DependencyNode {
 		return recalculate();
 	}
 
+	/** The node was visited with its current range and causes. */
+	public void resetChanged() {
+		changed = false;
+	}
+
 	public boolean isValid() {
 		return !causes.isEmpty() && !range.isEmpty();
 	}
@@ -89,11 +96,13 @@ class DependencyNode {
 		for (final VersionRange r : causes.values()) {
 			calc = calc.intersection(r);
 		}
-		if (range.equals(calc)) {
-			return false;
-		}
+		final boolean rangeChanged = !range.equals(calc);
 		range = calc;
-		changed = true;
-		return true;
+		// a node that becomes needed or not needed has to be visited again, also if the range stays the same
+		if (rangeChanged || valid != isValid()) {
+			changed = true;
+		}
+		valid = isValid();
+		return rangeChanged;
 	}
 }

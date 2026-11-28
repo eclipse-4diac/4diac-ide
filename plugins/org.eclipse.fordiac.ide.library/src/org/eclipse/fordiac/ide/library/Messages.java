@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH, Osoft e.U.
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH, Osoft e.U., MSR Software GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,8 @@
  *   Michael Oberlehner
  *     - report manifests with an invalid dependency range
  *     - messages of the common library package downloader
+ *   Andrii Kozhushko
+ *     - messages of libraries that depend on each other
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -28,8 +30,12 @@ public class Messages extends NLS {
 	public static String DeleteLibraryParticipant_Change_Title;
 	public static String DeleteLibraryParticipant_Block_Delete;
 
+	public static String ErrorMarkerCyclicDependency;
+	public static String ErrorMarkerCyclicDependencyMembers;
 	public static String ErrorMarkerLibNotAvailable;
+	public static String ErrorMarkerRequiresItself;
 	public static String ErrorMarkerStandardLibNotAvailable;
+	public static String ErrorMarkerUnstableDependency;
 	public static String ErrorMarkerVersionRangeEmpty;
 
 	public static String ImportFailedOnLinkCreation;
