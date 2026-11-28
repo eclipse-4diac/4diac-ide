@@ -174,7 +174,10 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public void reloadType() {
-		getGraphicalViewer().setContents(getType());
+		final FBType type = getType();
+		if (type != null) {
+			getGraphicalViewer().setContents(type);
+		}
 	}
 
 	@Override
